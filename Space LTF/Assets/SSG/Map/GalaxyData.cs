@@ -97,7 +97,7 @@ public class GalaxyData
             {
                 var xx = i * step;
                 var zz = j * step;
-                var distToStart = xx + zz;
+                var distToStart = i + j;
                 ShipConfig shipConfig = GetConfig(i,j, sectorsCount);
                 var subSector = new SectorData(xx, zz, sizeSector,_eventsCount,  shipConfig,id);
                 id++;
@@ -136,7 +136,7 @@ public class GalaxyData
         for (int i = 0; i < coreCells; i++)
         {
             var secrosDist = maxDist - 1 - i;
-            var coreSector = allSubSectors.Where(x => x.StartX + x.StartZ == secrosDist).ToList().RandomElement();
+            var coreSector = allSubSectors.Where(x => x.StartX/ sizeSector + x.StartZ / sizeSector == secrosDist).ToList().RandomElement();
             if (coreSector == null)
             {
                 Debug.LogError($"can't find sector with dist:{secrosDist}");

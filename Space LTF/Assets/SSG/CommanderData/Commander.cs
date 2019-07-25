@@ -137,10 +137,10 @@ public class Commander
             case ShipType.Heavy:
             case ShipType.Middle:
             case ShipType.Light:
-                ship1 = DataBaseController.GetItem<ShipBase>(shipPrefab);
+                ship1 = DataBaseController.GetItem<ShipBase>(shipPrefab, position);
                 break;
             case ShipType.Base:
-                ship1 = DataBaseController.GetItem<ShipBase>(shipPrefab);
+                ship1 = DataBaseController.GetItem<ShipBase>(shipPrefab, position);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

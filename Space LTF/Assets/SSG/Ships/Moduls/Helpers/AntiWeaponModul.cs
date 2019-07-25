@@ -7,8 +7,8 @@ using UnityEngine;
 
 public abstract class AntiWeaponModul : TimerModul
 {
-    private const float RADIUS_BASE = 5;
-    private float _radSqrt = 1;
+    private const float RADIUS_BASE = 20;
+    private float _radSqrt = 400;
 
 //    private float _nextCheckTime;
     private BattleController _battleController;
@@ -22,11 +22,12 @@ public abstract class AntiWeaponModul : TimerModul
     }
 
     protected abstract BulletKiller GetEffect();
+    protected abstract float destroyTime { get; }
 
     private void KillBullet(Bullet closestBullet)
     {
         var bulletKiller = DataBaseController.GetItem(GetEffect());
-        bulletKiller.Init(_owner,closestBullet,1.2f);
+        bulletKiller.Init(_owner,closestBullet, destroyTime);
     }
 
     public override void Apply(ShipParameters Parameters, ShipBase owner)
@@ -40,7 +41,8 @@ public abstract class AntiWeaponModul : TimerModul
     {
         var closestBullet = _battleController.ClosestBulletToPos(_owner.Position, _damageType,
             BattleController.OppositeIndex(_owner.TeamIndex));
-        if (closestBullet != null && Time.time - closestBullet.StartTime > 0.7f)
+
+        if (closestBullet != null && Time.time - closestBullet.StartTime > 0.05f)
         {
             var d = closestBullet.transform.position - _owner.Position;
             if (d.sqrMagnitude < _radSqrt)

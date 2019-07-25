@@ -16,6 +16,7 @@ public class AntiPhysicalModul : AntiWeaponModul
         _damageType = BulletDamageType.physical;
     }
 
+    protected override float destroyTime => 1f;
     protected override float Delay()
     {
         return DELAY_BASE - ModulData.Level * DELAY_DELTA;

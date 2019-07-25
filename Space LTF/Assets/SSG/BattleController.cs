@@ -444,8 +444,9 @@ public class BattleController :Singleton<BattleController>
             var b = ActiveBullet[i];
             if (b.Weapon.TeamIndex == index)
             {
-//                var r = (flags & b.WeaponType) != 0;
-                if (b.IsAcive && b.IsUsing && b.DamageType == dmgType)
+//                Debug.LogError($"Check bullet {b} IsAcive:{b.IsAcive} Id:{b.ID_Pool} {b.IsUsing} {b.DamageType} targetType:{dmgType}.");
+                //                var r = (flags & b.WeaponType) != 0;
+                if (b.gameObject.activeSelf && b.IsUsing && b.DamageType == dmgType)
                 {
                     var xx = p.x - b.Position.x;
                     var zz = p.z - b.Position.z;
@@ -458,6 +459,7 @@ public class BattleController :Singleton<BattleController>
                 }
             }
         }
+//        Debug.LogError($"ClosestBulletToPos {bullet}.");
         return bullet;
     }
 

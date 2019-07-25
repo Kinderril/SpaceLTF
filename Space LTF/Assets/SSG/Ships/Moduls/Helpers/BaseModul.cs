@@ -121,7 +121,8 @@ public abstract class BaseModul
             case SimpleModulType.ResistDamages:
                 return new ResistDamagesModul(baseModulInv);
             default:
-                throw new ArgumentOutOfRangeException("slot", baseModulInv.Type, null);
+                Debug.LogError($"Can't cerate base modul {baseModulInv.Type.ToString()}");
+                throw new ArgumentOutOfRangeException(baseModulInv.Type.ToString(), baseModulInv.Type, null);
         }
         return null;
     }

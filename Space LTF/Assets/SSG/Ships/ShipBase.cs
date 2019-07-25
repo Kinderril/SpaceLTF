@@ -103,6 +103,7 @@ public class ShipBase : MovingObject
     public void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos,
         IPilotParameters pilotParams, Commander commander, Action<ShipBase> dealthCallback)
     {
+//        gameObject.SetActive(false);
         SelfCamera = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.SelfCameraPrefab);
         SelfCamera.transform.SetParent(ShipVisual.transform,false);
         SelfCamera.transform.localPosition = Vector3.zero;
@@ -198,6 +199,7 @@ public class ShipBase : MovingObject
     public void Launch(Action<ShipBase> OnShipLauched)
     {
         IsInited = true;
+//        gameObject.SetActive(true);
         OnShipLauched(this);
     }
     

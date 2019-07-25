@@ -121,9 +121,9 @@ public class DataStructPrefabs : MonoBehaviour
             WeaponTypeIconsDic.Add(actionIcon.WeaponType,actionIcon.Icon);
         }
 //        var values4 = Enum.GetValues(typeof(WeaponType)).Length;
-        if (5 != WeaponTypeIcons.Count)
+        if (6 != WeaponTypeIcons.Count)
         {
-            Debug.LogError("not enought icons WeaponTypeIconsDic: 5");
+            Debug.LogError("not enought icons WeaponTypeIconsDic: 6");
         }
         //----------
 

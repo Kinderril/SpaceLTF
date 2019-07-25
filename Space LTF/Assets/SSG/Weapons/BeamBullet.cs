@@ -8,18 +8,28 @@ using UnityEngine;
 public class BeamBullet : Bullet
 {
     private bool _targetIsDead;
+    private bool _canActivate;
     protected float _deathTime;
     private float _baseDist = 10;
 //    public GameObject LineObject;
     public BaseEffectAbsorber ProcessEvent;
 
+    public override void Init()
+    {
+        _canActivate = false;
+        ProcessEvent.gameObject.SetActive(false);
+        base.Init();
+    }
+
+
     public override void LateInit()
     {
         _deathTime = Time.time + 2f;
         _targetIsDead = false;
-        ProcessEvent.Play();
         base.LateInit();
+        _canActivate = true;
         Target.OnDeath += OnDeathTarget;
+//        Debug.LogError($"Beam start {Time.time}");
     }
 
     public override BulletType GetType => BulletType.beam;
@@ -34,22 +44,34 @@ public class BeamBullet : Bullet
     {
         if (!TimeEndCheck())
         {
+            if (_canActivate)
+            {
+                ProcessEvent.Play();
+                _canActivate = false;
+                ProcessEvent.gameObject.SetActive(true);
+            }
             MoveTo(Target.Position, Weapon.CurPosition); 
         }
     }
 
     private void MoveTo(Vector3 target, Vector3 @from)
     {
+
         ProcessEvent.UpdatePositions(from, target);
     }
 
     private bool TimeEndCheck()
     {
-        if (Time.time > _deathTime || !_targetIsDead)
+        if (Time.time > _deathTime)
         {
             Target.GetHit(Weapon,this);
             Death();
             return true;
+        }
+
+        if (_targetIsDead)
+        {
+            Death();
         }
         return false;
     }
@@ -77,6 +99,14 @@ public class BeamBullet : Bullet
         {
             Target.OnDeath -= OnDeathTarget;
         }
+    }
+
+    public override void Death()
+    {
+        ProcessEvent.gameObject.SetActive(false);
+        _canActivate = false;
+        //        Debug.LogError($"Beam dead {Time.time}");
+        base.Death();
     }
 }
 

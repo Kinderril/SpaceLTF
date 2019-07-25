@@ -15,11 +15,14 @@ public class BulletKiller : MonoBehaviour
     public BaseEffectAbsorber HitEffect;
     public BaseEffectAbsorber ProcessEvent;
     private ShipBase _lauchShip;
+    private bool _killing;
 
     public void Init(ShipBase from, Bullet bulletTarget, float delta)
     {
+//        Debug.LogError($"Kill bullet {Time.time}");
         _lauchShip = from;
-//        _from = from.Position;
+        _killing = true;
+        //        _from = from.Position;
         _bulletTarget = bulletTarget;
 //        _period = delta;
         _endTime = Time.time + delta;
@@ -43,10 +46,21 @@ public class BulletKiller : MonoBehaviour
 
     void Update()
     {
-        ProcessEvent.UpdatePositions(_lauchShip.transform.position, _bulletTarget.transform.position);
-        if (_endTime < Time.time)
+        if (_killing)
         {
-            KillBullet();
+            if (!_bulletTarget.IsUsing)
+            {
+//                Debug.LogError($"Bullet dead {Time.time}");
+                GameObject.Destroy(gameObject);
+                _killing = false;
+                return;
+            }
+
+            ProcessEvent.UpdatePositions(_lauchShip.transform.position, _bulletTarget.transform.position);
+            if (_endTime < Time.time)
+            {
+                KillBullet();
+            }
         }
 
 //        var p = (Time.time - _startTime) /_period;
@@ -62,7 +76,9 @@ public class BulletKiller : MonoBehaviour
 
     private void KillBullet()
     {
-        if (_bulletTarget.IsAcive)
+        _killing = false;
+//        Debug.LogError($"Kill COMPLETE {Time.time}");
+        if (_bulletTarget.gameObject.activeSelf)
         {
             _bulletTarget.Death();
         }

@@ -23,12 +23,13 @@ public class EngineEffect : MonoBehaviour
         {
             _lastFrameSpeed = _mobj.CurSpeed/3f;
             var spd = _lastFrameSpeed*1f;
-            var m = new ParticleSystem.MinMaxCurve(spd * 0.8f, spd * 1.2f);
             for (int i = 0; i < Particles.Length; i++)
             {
                 var p = Particles[i];
                 var main = p.main;
+                var m = new ParticleSystem.MinMaxCurve(spd * 0.8f, spd * 1.2f);
                 main.startSpeed = m;
+//                main.startSpeed.constantMin = spd * 0.8f;
             }
         }
     }

@@ -26,5 +26,7 @@ public class AntiEnergyModul : AntiWeaponModul
     {
         return DataBaseController.Instance.SpellDataBase.AntiEnergyEffect;
     }
+
+    protected override float destroyTime => 0.5f;
 }
 

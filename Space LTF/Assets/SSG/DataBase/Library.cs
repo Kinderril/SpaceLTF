@@ -145,7 +145,7 @@ public static class Library
                 parametes = new WeaponInventoryParameters(2, 2, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 7);
                 return new EMIRocketInventory(parametes, 1);
             case WeaponType.beam:
-                parametes = new WeaponInventoryParameters(2, 4, BEAM_ANG, BEAM_DELAY, 0.4f, 2, BEAM_SPEED, 3.5f);
+                parametes = new WeaponInventoryParameters(2, 4, BEAM_ANG, BEAM_DELAY, 0.4f, 2, BEAM_SPEED, 2.5f);
                 return new BeamWeaponInventory(parametes, 1);
                 //            case WeaponType.beam://NO USABLE
                 //                return new WeaponInv(2,7, MINE_ANG, BEAM_DELAY, 0.5f, 1, BEAM_SPEED,4, weapon, 1);
@@ -201,7 +201,7 @@ public static class Library
                     case ShipType.Light:
                         return new ShipInventory(new StartShipParamsDebug(shipType, config, 15, 5, 3.2f, 89,1, 0, 0, 1, 0.0f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 18, 6, 2.8f, 71, 1, 0, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 18, 7, 2.8f, 71, 1, 0, 0, 1, 0.0f), player);
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParamsDebug(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f), player);
                     case ShipType.Base:

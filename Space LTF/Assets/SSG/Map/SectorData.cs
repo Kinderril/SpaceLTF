@@ -126,7 +126,7 @@ public class SectorData
             }
         }
 
-        if (repairCount == 1)
+        if (repairCount == 1 && remainFreeCells.Count >= 1)
         {
             var cellForRepair = remainFreeCells.RandomElement();
             var cellRepair = new RepairStationGlobalCell(Utils.GetId(), StartX + cellForRepair.indX, StartZ + cellForRepair.indZ);
@@ -134,7 +134,7 @@ public class SectorData
             remainFreeCells.Remove(cellForRepair);
         }
 
-        if (minorEventsCount > 0)
+        if (minorEventsCount > 0 && remainFreeCells.Count >= minorEventsCount)
         {
             var cellsForEvents = remainFreeCells.RandomElement(minorEventsCount).ToList();
             foreach (var cellContainerForEvent in cellsForEvents)

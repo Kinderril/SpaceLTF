@@ -102,7 +102,7 @@ public class ShipModulsUI : MonoBehaviour
     private void ModulsDraw(ShipBase ship)
     {
         int index = 0;
-        ModulsLayout.gameObject.SetActive(ship.ShipModuls.Moduls.Count > 0);
+        ModulsLayout.gameObject.SetActive(ShowModuls);
         foreach (var baseModul in ship.ShipModuls.Moduls)
         {
             var m = _moduls[index];
@@ -113,7 +113,7 @@ public class ShipModulsUI : MonoBehaviour
     private void ModulsSupportDraw(ShipBase ship)
     {
         int index = 0;
-        ModulsLayout.gameObject.SetActive(ship.ShipModuls.SupportModuls.Count > 0);
+        ModulsLayout.gameObject.SetActive(ShowModuls);
         foreach (var baseModul in ship.ShipModuls.SupportModuls)
         {
             var m = _supportModuls[index];
@@ -121,6 +121,8 @@ public class ShipModulsUI : MonoBehaviour
             index++;
         }
     }
+
+    private bool ShowModuls => _ship.ShipModuls.SupportModuls.Count > 0 || _ship.ShipModuls.Moduls.Count > 0;
 
     private void OnStop(MovingObject arg1, bool arg2)
     {
