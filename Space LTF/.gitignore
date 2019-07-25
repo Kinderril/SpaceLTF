@@ -1,0 +1,37 @@
+Library
+Temp
+obj
+Build
+Builds
+ExportedScenes
+Logs
+.vs
+obj
+
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor.csproj
+
+TestProject.csproj
+TestProject.Editor.csproj
+TestProject.Editor.Plugins.csproj
+TestProject.Plugins.csproj
+TestProject.CSharp.csproj
+TestProject.CSharp.Editor.csproj
+TestProject.CSharp.Editor.Plugins.csproj
+TestProject.CSharp.Plugins.csproj
+TestProject.sln
+TestProject.sln.DotSettings
+TestProject.sln.DotSettings.user
+
+Space LTF.csproj
+Space LTF.Editor.csproj
+Space LTF.Editor.Plugins.csproj
+Space LTF.Plugins.csproj
+Space LTF.CSharp.csproj
+Space LTF.CSharp.Editor.csproj
+Space LTF.CSharp.Editor.Plugins.csproj
+Space LTF.CSharp.Plugins.csproj
+Space LTF.sln
+Space LTF.sln.DotSettings
+Space LTF.sln.DotSettings.user
+

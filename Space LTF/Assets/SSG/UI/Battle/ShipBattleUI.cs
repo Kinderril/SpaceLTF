@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+
+public class ShipBattleUI : MonoBehaviour
+{
+    public TextMeshProUGUI ShipType;
+    public TextMeshProUGUI MaxSpeed;
+    public TextMeshProUGUI ShieldRegenPerSec;
+    public TextMeshProUGUI LevelField;
+
+    public void Init(ShipParameters shipParameters,IPilotParameters pilotParams)
+    {
+        LevelField.text = "Level:" + pilotParams.CurLevel.ToString();
+        ShipType.text = "Type:" + shipParameters.StartParams.ShipType.ToString();
+        MaxSpeed.text = "Speed:" + shipParameters.MaxSpeed.ToString("0.0");
+        ShieldRegenPerSec.text = "Regen:" + shipParameters.ShieldRegenPerSec.ToString("0.0");
+    }
+
+}
+

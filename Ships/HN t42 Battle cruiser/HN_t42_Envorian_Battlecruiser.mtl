@@ -1,0 +1,107 @@
+newmtl default
+d 0.8
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0 0 0
+Ks 1 1 1
+Km 0
+
+newmtl default_vent_rear
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.101961 0.0941176 0.0823529
+Ks 1 1 1
+Km 0
+
+newmtl default_gate
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.227451 0.247059 0.286275
+Ks 1 1 1
+Km 0
+map_Kd /Maps/c114_07_01_01_01_01_01_01_01_03.jpg
+
+newmtl default_ship_exoskeleton
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.698039 0.752941 0.611765
+Ks 1 1 1
+Km 0
+map_Kd /Maps/bldg6_Form22_1_mtl1_diffcol.jpg
+
+newmtl default_ship_endoskeleton
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.227451 0.247059 0.286275
+Ks 1 1 1
+Km 0
+map_Kd /Maps/c2b_03_01.jpg
+
+newmtl material_1
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/cockpit_mtl1_diffcol.jpg
+
+newmtl material_2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/cockpit_mtl2_diffcol.jpg
+
+newmtl material_3
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.466667 0.466667 0.466667
+Ks 1 1 1
+Km 0
+map_Kd /Maps/cockpit_mtl3_diffcol.jpg
+
+newmtl default_cruiser_defense
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/jp1.jpg
+
+newmtl default_ship_protetion_grid
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/sd1.jpg
+
+newmtl default_fire_engines
+d 1
+Ns 1
+Ni 0
+Ka 0 1 1
+Kd 0 1 1
+Ks 1 1 1
+Km 0
+

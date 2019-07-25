@@ -1,0 +1,25 @@
+<03.29.2004>
+
+The mesh contained in this zip file is not to be sold or modified for the purpose of reselling or redistribution as a 3D mesh or 3D object.  This mesh may be freely distributed as long as this text file accompanies it. This mesh is copyrighted by the author. If you use renderings or animations of this mesh in a commerical product please list the author in the credits.
+========================================================
+File Name:		: drift.3ds
+
+Description:		: Genosha Drift Trading Outpost
+
+Format:			: 3DS [3D Studio]
+
+Polygons:		: 295,392
+
+Vertices:		: 148,781
+
+Mutiple Layers:		: Yes
+
+Textures:        	: no
+
+Author:			: Stephen Hetzel
+
+Email Address: 		: stephen@syntheticgraphics.com
+
+Web Site:		: www.syntheticgraphics.com
+
+========================================================

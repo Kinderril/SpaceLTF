@@ -1,0 +1,69 @@
+# Blender MTL File: 'untitled242.blend'
+# Material Count: 6
+
+newmtl d4enginemat
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 0
+map_Kd d5engine.jpg
+map_Ka d5engine.jpg
+map_Ke d5engine.jpg
+
+newmtl d5main
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd d5wing1.jpg
+
+newmtl d5main_NONE
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl d5redmat
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 0
+map_Kd d5red.jpg
+map_Ka d5red.jpg
+map_Ke d5red.jpg
+
+newmtl d5weaponmat
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 0
+map_Kd d5weapon.jpg
+map_Ka d5weapon.jpg
+map_Ke d5weapon.jpg
+
+newmtl d5whitemat
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 0
+map_Kd d5white.jpg
+map_Ka d5white.jpg
+map_Ke d5white.jpg

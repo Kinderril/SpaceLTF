@@ -1,0 +1,22 @@
+This high detail model is a free sample of my artistic ability. Reviews would be much appreciated.
+
+This pirate vessel is designed to disable a target and then lock on and deploy a boarding party.
+The airlock is large enough to accomidate heavy assault vehicles for this purpose.
+The ship has a rather junked up, hodge-podge look due to constant jury-rigged repairs and salvaged scrap metal leaves protecting the hull.
+With the skull and crossbones across the hull and an impressive array of fire power including anti-fighter turrets,
+EMP emiters, and a heavy assault cannon salvaged from an alien cruiser, this ship would strike fear into the heart of any opponent.
+
+File Size 8,684 k
+Objects 287
+Materials 288
+Vertices 256264
+Faces 262565
+
+Very high complexity mesh.
+500meg processor system with 256+megs of RAM strongly recomended.
+
+Textures are included. Lights should be colored ambient white.
+
+3ds format.
+
+Free. Please review.

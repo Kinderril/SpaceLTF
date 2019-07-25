@@ -1,0 +1,192 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 12.04.2019 22:16:18
+
+newmtl default
+	Ns 1.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl default_windshield
+	Ns 0.7500
+	Ni 1.5000
+	d 0.8000
+	Tr 0.2000
+	Tf 0.8000 0.8000 0.8000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0000 0.0000 0.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1_09.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1_09.jpg
+
+newmtl default_cushion
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\yx1_02_02_01.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\yx1_02_02_01.jpg
+
+newmtl default_seat
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1_09_01.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1_09_01.jpg
+
+newmtl default_comp1_panel
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\pn2_04.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\pn2_04.jpg
+
+newmtl default_skin
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.4196 0.4196 0.5020
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\cp1_01.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\cp1_01.jpg
+
+newmtl default_red_lights
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 0.0000 0.0000
+	Kd 1.0000 0.0000 0.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl default_gate
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.4196 0.4196 0.5020
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1_01_02_01_04.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1_01_02_01_04.jpg
+
+newmtl default_yellow_lights
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 0.0000
+	Kd 1.0000 1.0000 0.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl default_ship
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.4196 0.4196 0.5020
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1ecv1.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1ecv1.jpg
+
+newmtl default_exhaust2
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\angar_bo4ka_09_01_01_03.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\angar_bo4ka_09_01_01_03.jpg
+
+newmtl default_feed2
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c3_12.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c3_12.jpg
+
+newmtl default_compresor2
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1_09_01_01.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\c1_09_01_01.jpg
+
+newmtl default_engines
+	Ns 0.7500
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.4196 0.4196 0.5020
+	Ks 1.0000 1.0000 1.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\ang1_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01.jpg
+	map_Kd G:\UnityProjects\Space LTF\Ships\starcruiser military\Maps\ang1_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01_01.jpg

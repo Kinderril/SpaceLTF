@@ -1,0 +1,75 @@
+newmtl default
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+
+newmtl default_eng_rear
+d 1
+Ns 1
+Ni 0
+Ka 0 1 1
+Kd 0.501961 1 1
+Ks 1 1 1
+Km 0
+
+newmtl default_bdc3
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/c6a1e.jpg
+
+newmtl default_bdc3_windows
+d 0.8
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0 0 0
+Ks 1 1 1
+Km 0
+
+newmtl default_bdc3_skin2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.0117647 0.356863 1
+Ks 1 1 1
+Km 0
+
+newmtl default_bdc3_bottom2
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/wa3.jpg
+
+newmtl default_noozle
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/av2.jpg
+
+newmtl default_sign
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.054902 0.0627451 0.0666667
+Ks 1 1 1
+Km 0
+

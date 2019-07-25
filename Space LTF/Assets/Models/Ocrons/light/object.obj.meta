@@ -1,0 +1,531 @@
+fileFormatVersion: 2
+guid: 2613f5778d49db94e8df6e0155a10d88
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: walkyrie_body_front
+    100004: walkyrie_bottom_sphere
+    100006: walkyrie_center_details
+    100008: walkyrie_center_low_detail
+    100010: walkyrie_center_radar
+    100012: walkyrie_center_tube
+    100014: walkyrie_center_tube_detail
+    100016: walkyrie_center_tube_horiz
+    100018: walkyrie_engine_c_box
+    100020: walkyrie_engine_details
+    100022: walkyrie_engine_holder
+    100024: walkyrie_engine_L
+    100026: walkyrie_engine_low_box
+    100028: walkyrie_engine_R
+    100030: walkyrie_gun_holder_left
+    100032: walkyrie_gun_holder_right
+    100034: walkyrie_gun_left
+    100036: walkyrie_gun_right
+    100038: walkyrie_head
+    100040: walkyrie_head_center
+    100042: walkyrie_head_details
+    100044: walkyrie_left_side_details
+    100046: walkyrie_low_tube
+    100048: walkyrie_radar
+    100050: walkyrie_rear_radar
+    100052: walkyrie_right_side_details
+    100054: walkyrie_top_box
+    100056: walkyrie_top_box_bump
+    100058: walkyrie_top_flatplane
+    100060: walkyrie_tube_horiz_detail
+    400000: //RootNode
+    400002: walkyrie_body_front
+    400004: walkyrie_bottom_sphere
+    400006: walkyrie_center_details
+    400008: walkyrie_center_low_detail
+    400010: walkyrie_center_radar
+    400012: walkyrie_center_tube
+    400014: walkyrie_center_tube_detail
+    400016: walkyrie_center_tube_horiz
+    400018: walkyrie_engine_c_box
+    400020: walkyrie_engine_details
+    400022: walkyrie_engine_holder
+    400024: walkyrie_engine_L
+    400026: walkyrie_engine_low_box
+    400028: walkyrie_engine_R
+    400030: walkyrie_gun_holder_left
+    400032: walkyrie_gun_holder_right
+    400034: walkyrie_gun_left
+    400036: walkyrie_gun_right
+    400038: walkyrie_head
+    400040: walkyrie_head_center
+    400042: walkyrie_head_details
+    400044: walkyrie_left_side_details
+    400046: walkyrie_low_tube
+    400048: walkyrie_radar
+    400050: walkyrie_rear_radar
+    400052: walkyrie_right_side_details
+    400054: walkyrie_top_box
+    400056: walkyrie_top_box_bump
+    400058: walkyrie_top_flatplane
+    400060: walkyrie_tube_horiz_detail
+    2100000: mid_side
+    2100002: def_bump
+    2100004: rear_bump
+    2100006: mid
+    2100008: mid_bumped
+    2100010: rear_front_top
+    2100012: rear_front_bottom
+    2100014: rear_bottom
+    2100016: rear__top
+    2100018: horiz
+    2100020: front_bump
+    2100022: wert_top
+    2100024: horiz_flat
+    2100026: horiz_light
+    2100028: details__4
+    2100030: color_default
+    2100032: details__1
+    2100034: details__3
+    2100036: details__5
+    2100038: yellow_light
+    2100040: red_light
+    2100042: blue_light
+    2100044: top_light
+    2100046: default
+    2100048: details__2
+    2100050: metal
+    2100052: top_bump
+    2100054: wert_light
+    2100056: holder
+    2100058: base
+    2100060: glow_hip
+    2100062: ext
+    2100064: noir
+    2100066: panels
+    2100068: hyd
+    2100070: glow_sim
+    2100072: panels_small
+    2100074: gun__1
+    2100076: details__20
+    2100078: head_base
+    2100080: front
+    2100082: bumped
+    2100084: sides
+    2100086: head_lights
+    2100088: center
+    2100090: glass
+    2100092: white_light
+    2100094: centerbox
+    2300000: walkyrie_body_front
+    2300002: walkyrie_bottom_sphere
+    2300004: walkyrie_center_details
+    2300006: walkyrie_center_low_detail
+    2300008: walkyrie_center_radar
+    2300010: walkyrie_center_tube
+    2300012: walkyrie_center_tube_detail
+    2300014: walkyrie_center_tube_horiz
+    2300016: walkyrie_engine_c_box
+    2300018: walkyrie_engine_details
+    2300020: walkyrie_engine_holder
+    2300022: walkyrie_engine_L
+    2300024: walkyrie_engine_low_box
+    2300026: walkyrie_engine_R
+    2300028: walkyrie_gun_holder_left
+    2300030: walkyrie_gun_holder_right
+    2300032: walkyrie_gun_left
+    2300034: walkyrie_gun_right
+    2300036: walkyrie_head
+    2300038: walkyrie_head_center
+    2300040: walkyrie_head_details
+    2300042: walkyrie_left_side_details
+    2300044: walkyrie_low_tube
+    2300046: walkyrie_radar
+    2300048: walkyrie_rear_radar
+    2300050: walkyrie_right_side_details
+    2300052: walkyrie_top_box
+    2300054: walkyrie_top_box_bump
+    2300056: walkyrie_top_flatplane
+    2300058: walkyrie_tube_horiz_detail
+    3300000: walkyrie_body_front
+    3300002: walkyrie_bottom_sphere
+    3300004: walkyrie_center_details
+    3300006: walkyrie_center_low_detail
+    3300008: walkyrie_center_radar
+    3300010: walkyrie_center_tube
+    3300012: walkyrie_center_tube_detail
+    3300014: walkyrie_center_tube_horiz
+    3300016: walkyrie_engine_c_box
+    3300018: walkyrie_engine_details
+    3300020: walkyrie_engine_holder
+    3300022: walkyrie_engine_L
+    3300024: walkyrie_engine_low_box
+    3300026: walkyrie_engine_R
+    3300028: walkyrie_gun_holder_left
+    3300030: walkyrie_gun_holder_right
+    3300032: walkyrie_gun_left
+    3300034: walkyrie_gun_right
+    3300036: walkyrie_head
+    3300038: walkyrie_head_center
+    3300040: walkyrie_head_details
+    3300042: walkyrie_left_side_details
+    3300044: walkyrie_low_tube
+    3300046: walkyrie_radar
+    3300048: walkyrie_rear_radar
+    3300050: walkyrie_right_side_details
+    3300052: walkyrie_top_box
+    3300054: walkyrie_top_box_bump
+    3300056: walkyrie_top_flatplane
+    3300058: walkyrie_tube_horiz_detail
+    4300000: walkyrie_body_front
+    4300002: walkyrie_bottom_sphere
+    4300004: walkyrie_center_details
+    4300006: walkyrie_center_low_detail
+    4300008: walkyrie_center_radar
+    4300010: walkyrie_center_tube
+    4300012: walkyrie_center_tube_detail
+    4300014: walkyrie_center_tube_horiz
+    4300016: walkyrie_engine_c_box
+    4300018: walkyrie_engine_details
+    4300020: walkyrie_engine_holder
+    4300022: walkyrie_engine_L
+    4300024: walkyrie_engine_low_box
+    4300026: walkyrie_engine_R
+    4300028: walkyrie_gun_holder_left
+    4300030: walkyrie_gun_holder_right
+    4300032: walkyrie_gun_left
+    4300034: walkyrie_gun_right
+    4300036: walkyrie_head
+    4300038: walkyrie_head_center
+    4300040: walkyrie_head_details
+    4300042: walkyrie_left_side_details
+    4300044: walkyrie_low_tube
+    4300046: walkyrie_radar
+    4300048: walkyrie_rear_radar
+    4300050: walkyrie_right_side_details
+    4300052: walkyrie_top_box
+    4300054: walkyrie_top_box_bump
+    4300056: walkyrie_top_flatplane
+    4300058: walkyrie_tube_horiz_detail
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: base
+    second: {fileID: 2100000, guid: 00fe215bed44dfc4fbe610141493e24f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blue_light
+    second: {fileID: 2100000, guid: 9e17c45e95e17054a80e7b9edcb2e579, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bumped
+    second: {fileID: 2100000, guid: 8cca6f3deef51e4438f3156a83e3dea9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: center
+    second: {fileID: 2100000, guid: a49e40fe40cf29e40a4f134d6998286d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: centerbox
+    second: {fileID: 2100000, guid: 0929eaeb1223d4e4283989cf64a2ed6c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: color_default
+    second: {fileID: 2100000, guid: fb4cb3648f212814fbe6d2198f1acc89, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: def_bump
+    second: {fileID: 2100000, guid: d960588e4de0be5438a867d072cd7268, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: default
+    second: {fileID: 2100000, guid: f201c24768fd1694dbe7b576d6cd155a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: details__1
+    second: {fileID: 2100000, guid: 8268cf9e237ec134e88bf3848fa284ba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: details__2
+    second: {fileID: 2100000, guid: 179c3ed9273e200459031a3c0c159f13, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: details__20
+    second: {fileID: 2100000, guid: 901a854010109254c92f3bfdd56778aa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: details__3
+    second: {fileID: 2100000, guid: 0ec66722d4990cf4ca7c4e4a37c42578, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: details__4
+    second: {fileID: 2100000, guid: 03ac465ef8bbc8142b75486abbf8537c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: details__5
+    second: {fileID: 2100000, guid: db7f359ad0e510444b500ff64d40cbec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ext
+    second: {fileID: 2100000, guid: 0f08b573985b99849a9a548c4c4746fb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: front
+    second: {fileID: 2100000, guid: 3fb83a9cd37caaa42af542a28135df3c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: front_bump
+    second: {fileID: 2100000, guid: 71fc86e69fc73ea4e81ef9a76e2e2e87, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glass
+    second: {fileID: 2100000, guid: 0ef971b8cf63dcd4bb48bd1a8bb581ea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glow_hip
+    second: {fileID: 2100000, guid: bbab7271422780a42931c245bf3aedb9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glow_sim
+    second: {fileID: 2100000, guid: 93c81e54436a0fc479a72c368eb2ce11, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gun__1
+    second: {fileID: 2100000, guid: 074520b8b67a5544cbf097cb574a1e04, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: head_base
+    second: {fileID: 2100000, guid: d0b4778f2ca634b41b5b10ff75a11152, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: head_lights
+    second: {fileID: 2100000, guid: 8f6c32b3200cfbb4d904abb6bffc3b08, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: holder
+    second: {fileID: 2100000, guid: 0a272569518f7ea4687f12ba6a21cd1c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: horiz
+    second: {fileID: 2100000, guid: c2cfcb15e21fd2b4799c45f24b710a06, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: horiz_flat
+    second: {fileID: 2100000, guid: 306ccc68fbc35fc4293c21dba8bb1975, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: horiz_light
+    second: {fileID: 2100000, guid: fa8c3def8d47b534fb4d7b3732770fc4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hyd
+    second: {fileID: 2100000, guid: 91c234e163daafc488783267d3c302d2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal
+    second: {fileID: 2100000, guid: 6283bea808ead184eb5c2475a935cffc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mid
+    second: {fileID: 2100000, guid: 3f16114ec07633440aa18e667f7d8744, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mid_bumped
+    second: {fileID: 2100000, guid: 8f7b68b3ae06f004e9aed361a9c56861, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mid_side
+    second: {fileID: 2100000, guid: 5a497b93b971d2845a108db7d264e1cf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: noir
+    second: {fileID: 2100000, guid: 7095a175ff5c7cd4f820e2ed200d7ec1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: panels
+    second: {fileID: 2100000, guid: 867f355d690ea684db2459028eb91eb1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: panels_small
+    second: {fileID: 2100000, guid: 59f09f8a0a4efbd47ac4e995aac9b6c8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rear__top
+    second: {fileID: 2100000, guid: 6be489b91a32d464bbd535651e326728, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rear_bottom
+    second: {fileID: 2100000, guid: caf8cb0d2c2b3184285f35e6111cfaec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rear_bump
+    second: {fileID: 2100000, guid: 1ba9de28d4f29d04faf782b30e4ddde5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rear_front_bottom
+    second: {fileID: 2100000, guid: 0f9b92ea28a1f9642b678a0ffaea1afe, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rear_front_top
+    second: {fileID: 2100000, guid: 71e6536430f98d4429fa02a6a5e04cd0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: red_light
+    second: {fileID: 2100000, guid: 0ffd8ef483643304fa905dbd68d2269e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sides
+    second: {fileID: 2100000, guid: 017b6782c3c698f488cb3d9137450132, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: top_bump
+    second: {fileID: 2100000, guid: 0e97968662db57b4980f5a9c79fd8437, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: top_light
+    second: {fileID: 2100000, guid: ab94fe1f72522cd409d6a9a450100c35, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wert_light
+    second: {fileID: 2100000, guid: 0acb0dfe26b7b5a4187a0316ac727d72, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wert_top
+    second: {fileID: 2100000, guid: dce0f7d93f139ec45bdf8f12dd8ab036, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: white_light
+    second: {fileID: 2100000, guid: aee15b0cfa0fac2449774e3e5c6e68b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: yellow_light
+    second: {fileID: 2100000, guid: 351dc7d4b4b0ec04db62e2c98792b356, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

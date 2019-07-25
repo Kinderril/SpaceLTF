@@ -1,0 +1,191 @@
+fileFormatVersion: 2
+guid: 4038ca4f85de25642a7634b84540f74a
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: CockpitDamage
+    100004: FrontGuardDamage
+    100006: Lt_Canard
+    100008: Lt_CanardDamage
+    100010: Lt_Gun_Aim
+    100012: Lt_Gun_Pitch
+    100014: Lt_Gun_SupportArm
+    100016: Lt_Gun_SupportJoint
+    100018: Lt_Gun_Yaw
+    100020: Lt_Rotor
+    100022: Lt_Rotor_Pitch
+    100024: Lt_Rotor_Roll
+    100026: Lt_RotorDamage
+    100028: Lt_Thruster
+    100030: Lt_ThrusterA
+    100032: Lt_ThrusterB
+    100034: Lt_Vent
+    100036: Main
+    100038: MainTurret_ArmLow
+    100040: MainTurret_ArmUp
+    100042: MainTurret_Lt_Btm_Barrel
+    100044: MainTurret_Lt_Top_Barrel
+    100046: MainTurret_PistonAim
+    100048: MainTurret_PistonLow
+    100050: MainTurret_PistonUp
+    100052: MainTurret_Pitch
+    100054: MainTurret_Rt_Btm_Barrel
+    100056: MainTurret_Rt_Top_Barrel
+    100058: MainTurret_Yaw
+    100060: Rt_Canard
+    100062: Rt_CanardDamage
+    100064: Rt_Gun_Aim
+    100066: Rt_Gun_Pitch
+    100068: Rt_Gun_SupportArm
+    100070: Rt_Gun_SupportJoint
+    100072: Rt_Gun_Yaw
+    100074: Rt_Rotor
+    100076: Rt_Rotor_Pitch
+    100078: Rt_Rotor_Roll
+    100080: Rt_RotorDamage
+    100082: Rt_Thruster
+    100084: Rt_ThrusterA
+    100086: Rt_ThrusterB
+    100088: Rt_Vent
+    100090: Rudder
+    100092: RudderDamage
+    100094: SK_VH_Cicada
+    400000: //RootNode
+    400002: CockpitDamage
+    400004: FrontGuardDamage
+    400006: Lt_Canard
+    400008: Lt_CanardDamage
+    400010: Lt_Gun_Aim
+    400012: Lt_Gun_Pitch
+    400014: Lt_Gun_SupportArm
+    400016: Lt_Gun_SupportJoint
+    400018: Lt_Gun_Yaw
+    400020: Lt_Rotor
+    400022: Lt_Rotor_Pitch
+    400024: Lt_Rotor_Roll
+    400026: Lt_RotorDamage
+    400028: Lt_Thruster
+    400030: Lt_ThrusterA
+    400032: Lt_ThrusterB
+    400034: Lt_Vent
+    400036: Main
+    400038: MainTurret_ArmLow
+    400040: MainTurret_ArmUp
+    400042: MainTurret_Lt_Btm_Barrel
+    400044: MainTurret_Lt_Top_Barrel
+    400046: MainTurret_PistonAim
+    400048: MainTurret_PistonLow
+    400050: MainTurret_PistonUp
+    400052: MainTurret_Pitch
+    400054: MainTurret_Rt_Btm_Barrel
+    400056: MainTurret_Rt_Top_Barrel
+    400058: MainTurret_Yaw
+    400060: Rt_Canard
+    400062: Rt_CanardDamage
+    400064: Rt_Gun_Aim
+    400066: Rt_Gun_Pitch
+    400068: Rt_Gun_SupportArm
+    400070: Rt_Gun_SupportJoint
+    400072: Rt_Gun_Yaw
+    400074: Rt_Rotor
+    400076: Rt_Rotor_Pitch
+    400078: Rt_Rotor_Roll
+    400080: Rt_RotorDamage
+    400082: Rt_Thruster
+    400084: Rt_ThrusterA
+    400086: Rt_ThrusterB
+    400088: Rt_Vent
+    400090: Rudder
+    400092: RudderDamage
+    400094: SK_VH_Cicada
+    2100000: 'Material #117'
+    4300000: SK_VH_Cicada
+    9500000: //RootNode
+    13700000: SK_VH_Cicada
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.001
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

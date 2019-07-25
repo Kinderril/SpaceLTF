@@ -1,0 +1,819 @@
+fileFormatVersion: 2
+guid: fc65125f5fd322647a15f3827dd26ea6
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: ' cold ray'
+    100002: A1 matter EQ arra.000
+    100004: A1 matter EQ arra.001
+    100006: A1 matter EQ array
+    100008: AllsecondayLINKarray
+    100010: Camera
+    100012: Cube
+    100014: Cube.001
+    100016: Cube.002
+    100018: Cube.003
+    100020: Cube.004
+    100022: Dark Matter GRV g.000
+    100024: Dark Matter GRV g.001
+    100026: Dark Matter GRV gen
+    100028: Drive glow
+    100030: Drive glow.001
+    100032: Drive glow.002
+    100034: E Pulse Cannon
+    100036: E T sysMulti Xranger
+    100038: Empty
+    100040: Energy MUFF unit
+    100042: EnX Shield Plate .000
+    100044: EnX Shield Plate .001
+    100046: EnX Shield Plate .002
+    100048: EnX Shield Plate .004
+    100050: EnX Shield Plate 001
+    100052: GUN ARM heavy L
+    100054: GUN ARM heavy R
+    100056: GUN wing
+    100058: H M D Td needle L
+    100060: H M D Td needle L01
+    100062: H M D Td needle R
+    100064: H M D Td needle R01
+    100066: Humanoid 1.75m tall 01
+    100068: Humanoid prob 01 L
+    100070: Humanoid prob 01 R
+    100072: Humanoid prob 01 R.001
+    100074: Humanoid prob 01 R.002
+    100076: Lamp
+    100078: Main COM link
+    100080: NAVCOM unit JUMPDRIVE GEN L1
+    100082: NAVCOM unit JUMPDRIVE GEN L2
+    100084: NAVCOM unit JUMPDRIVE GEN L3
+    100086: OXEEHA SIGAEL frame
+    100088: //RootNode
+    100090: Pilot 170 cm
+    100092: ryder plate
+    100094: 'SC -TImer '
+    100096: SC ACU AtomCHILL unit
+    100098: SC ACU simlple drid X 5 L
+    100100: SC ACU simlple drid X 5 R
+    100102: SC ACU unit plate array 004
+    100104: SC ADDON ARM  rail L
+    100106: SC ADDON ARM  rail R
+    100108: SC ADDON ARM L
+    100110: SC ADDON ARM R
+    100112: SC AFT   Q DSA sensor RANGER 01
+    100114: SC AFT   Q DSA sensor RANGER 02
+    100116: SC AFT DSA sensor array
+    100118: SC CONdeenZ unit L
+    100120: SC CONdeenZ unit R
+    100122: SC dc ID comp L 02
+    100124: SC dc ID comp L 02.002
+    100126: SC dc ID comp L03
+    100128: SC dc ID comp R01
+    100130: SC dc ID comp R01.001
+    100132: SC dc ID comp R01.002
+    100134: SC dc ID comp R02
+    100136: SC dc ID comp R03
+    100138: SC dc ID comp R04
+    100140: 'SC ETE unit   Energy Trace Eraser '
+    100142: SC External power unit L
+    100144: SC External power unit R
+    100146: SC F type SCANNER D1
+    100148: SC F type SCANNER D1.001
+    100150: SC F type SCANNER D1.002
+    100152: SC F type SCANNER D1.003
+    100154: SC F type SCANNER D1.004
+    100156: SC F type SCANNER D2
+    100158: SC GRAVITON GUN
+    100160: SC GRV FOCUS cell array A
+    100162: SC GRV FOCUS cell array AF 1
+    100164: SC GRV FOCUS cell array AF2
+    100166: SC GRV FOCUS cell array B
+    100168: SC GRV SENSOR  unit A
+    100170: SC GRV SENSOR  unit B
+    100172: SC hHull bridge T 01
+    100174: SC hHull bridge T 02
+    100176: SC HITEMP  PBX power bridge ARM 01
+    100178: SC HITEMP  PBX power bridge ARM 02
+    100180: SC HITEMP  PBX power bridge ARM 03
+    100182: SC HITEMP  PBX power bridge ARM 04
+    100184: SC HITEMP  PBX power bridge ARM 05
+    100186: SC HITEMP  PBX power bridge ARM 06
+    100188: SC HITEMP  PBX power bridge ARM 07
+    100190: SC HITEMP  PBX power bridge ARM 08
+    100192: SC HITEMP  PBX power bridge ARM 09
+    100194: SC Hyper ARM L
+    100196: SC Hyper ARM R
+    100198: SC HYPERmASS Drive unit Early WARP tech L
+    100200: SC HYPERmASS Drive unit Early WARP tech R
+    100202: SC ID PULSE array and JAM Q unit
+    100204: SC J matter C GEN  Jtype battery Left
+    100206: SC J matter C GEN  Jtype battery Right
+    100208: 'SC M XR  military type range finder  / SC ALLEYES T4 type '
+    100210: SC MILITARY Battle COMLINK
+    100212: 'SC Military comlink PASS diamond ID '
+    100214: SC OPL  onepierlink unit
+    100216: 'SC P type stadrive '
+    100218: SC pasif X Range finder L1
+    100220: SC pasif X Range finder L2
+    100222: SC PB computer unit with SC  RSQ  Star sequencer
+    100224: SC S type GUNARM L1
+    100226: SC S type GUNARM R1
+    100228: SC SFPU SF4 spacefabric PUNCH unit
+    100230: 'SC Star DRIVE type N 200 '
+    100232: 'SC Star dust sens array '
+    100234: SC TIC unit TARGET ID battle COMPUTER  L1
+    100236: SC TIC unit TARGET ID battle COMPUTER  L2
+    100238: SC TIC unit TARGET ID battle COMPUTER  L3
+    100240: SC TIC unit TARGET ID battle COMPUTER  L4
+    100242: SC TIC unit TARGET ID battle COMPUTER  R1
+    100244: SC TIC unit TARGET ID battle COMPUTER  R2
+    100246: SC TIC unit TARGET ID battle COMPUTER  R3
+    100248: SC TIC unit TARGET ID battle COMPUTER  R4
+    100250: SC TRACER COMP 01
+    100252: SC TRACER COMP 02
+    100254: SC XMG sequencer A1
+    100256: SC XMG sequencer A2
+    100258: SC XMG sequencer B1
+    100260: SC XMG sequencer B2
+    100262: SC XMG sequencer C1
+    100264: SC XMG sequencer C2
+    100266: SCIFI link
+    100268: 'soft orange '
+    100270: ST Shield GEN Array 0
+    100272: ST Shield GEN Array 1
+    100274: ST Shield GEN Array 3
+    100276: ST Shield GEN Array 4
+    100278: Sub SPACE link
+    100280: Time link
+    100282: Top GUNARM L 2
+    100284: Top GUNARM Left
+    100286: Top GUNARM R 2
+    100288: Top GUNARM Right
+    400000: ' cold ray'
+    400002: A1 matter EQ arra.000
+    400004: A1 matter EQ arra.001
+    400006: A1 matter EQ array
+    400008: AllsecondayLINKarray
+    400010: Camera
+    400012: Cube
+    400014: Cube.001
+    400016: Cube.002
+    400018: Cube.003
+    400020: Cube.004
+    400022: Dark Matter GRV g.000
+    400024: Dark Matter GRV g.001
+    400026: Dark Matter GRV gen
+    400028: Drive glow
+    400030: Drive glow.001
+    400032: Drive glow.002
+    400034: E Pulse Cannon
+    400036: E T sysMulti Xranger
+    400038: Empty
+    400040: Energy MUFF unit
+    400042: EnX Shield Plate .000
+    400044: EnX Shield Plate .001
+    400046: EnX Shield Plate .002
+    400048: EnX Shield Plate .004
+    400050: EnX Shield Plate 001
+    400052: GUN ARM heavy L
+    400054: GUN ARM heavy R
+    400056: GUN wing
+    400058: H M D Td needle L
+    400060: H M D Td needle L01
+    400062: H M D Td needle R
+    400064: H M D Td needle R01
+    400066: Humanoid 1.75m tall 01
+    400068: Humanoid prob 01 L
+    400070: Humanoid prob 01 R
+    400072: Humanoid prob 01 R.001
+    400074: Humanoid prob 01 R.002
+    400076: Lamp
+    400078: Main COM link
+    400080: NAVCOM unit JUMPDRIVE GEN L1
+    400082: NAVCOM unit JUMPDRIVE GEN L2
+    400084: NAVCOM unit JUMPDRIVE GEN L3
+    400086: OXEEHA SIGAEL frame
+    400088: //RootNode
+    400090: Pilot 170 cm
+    400092: ryder plate
+    400094: 'SC -TImer '
+    400096: SC ACU AtomCHILL unit
+    400098: SC ACU simlple drid X 5 L
+    400100: SC ACU simlple drid X 5 R
+    400102: SC ACU unit plate array 004
+    400104: SC ADDON ARM  rail L
+    400106: SC ADDON ARM  rail R
+    400108: SC ADDON ARM L
+    400110: SC ADDON ARM R
+    400112: SC AFT   Q DSA sensor RANGER 01
+    400114: SC AFT   Q DSA sensor RANGER 02
+    400116: SC AFT DSA sensor array
+    400118: SC CONdeenZ unit L
+    400120: SC CONdeenZ unit R
+    400122: SC dc ID comp L 02
+    400124: SC dc ID comp L 02.002
+    400126: SC dc ID comp L03
+    400128: SC dc ID comp R01
+    400130: SC dc ID comp R01.001
+    400132: SC dc ID comp R01.002
+    400134: SC dc ID comp R02
+    400136: SC dc ID comp R03
+    400138: SC dc ID comp R04
+    400140: 'SC ETE unit   Energy Trace Eraser '
+    400142: SC External power unit L
+    400144: SC External power unit R
+    400146: SC F type SCANNER D1
+    400148: SC F type SCANNER D1.001
+    400150: SC F type SCANNER D1.002
+    400152: SC F type SCANNER D1.003
+    400154: SC F type SCANNER D1.004
+    400156: SC F type SCANNER D2
+    400158: SC GRAVITON GUN
+    400160: SC GRV FOCUS cell array A
+    400162: SC GRV FOCUS cell array AF 1
+    400164: SC GRV FOCUS cell array AF2
+    400166: SC GRV FOCUS cell array B
+    400168: SC GRV SENSOR  unit A
+    400170: SC GRV SENSOR  unit B
+    400172: SC hHull bridge T 01
+    400174: SC hHull bridge T 02
+    400176: SC HITEMP  PBX power bridge ARM 01
+    400178: SC HITEMP  PBX power bridge ARM 02
+    400180: SC HITEMP  PBX power bridge ARM 03
+    400182: SC HITEMP  PBX power bridge ARM 04
+    400184: SC HITEMP  PBX power bridge ARM 05
+    400186: SC HITEMP  PBX power bridge ARM 06
+    400188: SC HITEMP  PBX power bridge ARM 07
+    400190: SC HITEMP  PBX power bridge ARM 08
+    400192: SC HITEMP  PBX power bridge ARM 09
+    400194: SC Hyper ARM L
+    400196: SC Hyper ARM R
+    400198: SC HYPERmASS Drive unit Early WARP tech L
+    400200: SC HYPERmASS Drive unit Early WARP tech R
+    400202: SC ID PULSE array and JAM Q unit
+    400204: SC J matter C GEN  Jtype battery Left
+    400206: SC J matter C GEN  Jtype battery Right
+    400208: 'SC M XR  military type range finder  / SC ALLEYES T4 type '
+    400210: SC MILITARY Battle COMLINK
+    400212: 'SC Military comlink PASS diamond ID '
+    400214: SC OPL  onepierlink unit
+    400216: 'SC P type stadrive '
+    400218: SC pasif X Range finder L1
+    400220: SC pasif X Range finder L2
+    400222: SC PB computer unit with SC  RSQ  Star sequencer
+    400224: SC S type GUNARM L1
+    400226: SC S type GUNARM R1
+    400228: SC SFPU SF4 spacefabric PUNCH unit
+    400230: 'SC Star DRIVE type N 200 '
+    400232: 'SC Star dust sens array '
+    400234: SC TIC unit TARGET ID battle COMPUTER  L1
+    400236: SC TIC unit TARGET ID battle COMPUTER  L2
+    400238: SC TIC unit TARGET ID battle COMPUTER  L3
+    400240: SC TIC unit TARGET ID battle COMPUTER  L4
+    400242: SC TIC unit TARGET ID battle COMPUTER  R1
+    400244: SC TIC unit TARGET ID battle COMPUTER  R2
+    400246: SC TIC unit TARGET ID battle COMPUTER  R3
+    400248: SC TIC unit TARGET ID battle COMPUTER  R4
+    400250: SC TRACER COMP 01
+    400252: SC TRACER COMP 02
+    400254: SC XMG sequencer A1
+    400256: SC XMG sequencer A2
+    400258: SC XMG sequencer B1
+    400260: SC XMG sequencer B2
+    400262: SC XMG sequencer C1
+    400264: SC XMG sequencer C2
+    400266: SCIFI link
+    400268: 'soft orange '
+    400270: ST Shield GEN Array 0
+    400272: ST Shield GEN Array 1
+    400274: ST Shield GEN Array 3
+    400276: ST Shield GEN Array 4
+    400278: Sub SPACE link
+    400280: Time link
+    400282: Top GUNARM L 2
+    400284: Top GUNARM Left
+    400286: Top GUNARM R 2
+    400288: Top GUNARM Right
+    2000000: Camera
+    2100000: humanoid 000.001
+    2100002: homanoid 02.001
+    2100004: humanoid 001.001
+    2100006: Rust 001.001
+    2100008: Material
+    2100010: Doc ID comp
+    2100012: Doc ID com L
+    2100014: Doc ID com R
+    2100016: Hull bridge
+    2100018: grrebles
+    2100020: Chrome  comp001
+    2100022: Rust 002
+    2100024: Material 001
+    2100026: drive glow 02
+    2100028: drive glow 01
+    2100030: No Name
+    2100032: Rust 001
+    2300000: A1 matter EQ arra.000
+    2300002: A1 matter EQ arra.001
+    2300004: A1 matter EQ array
+    2300006: AllsecondayLINKarray
+    2300008: Cube
+    2300010: Cube.001
+    2300012: Cube.002
+    2300014: Cube.003
+    2300016: Cube.004
+    2300018: Dark Matter GRV g.000
+    2300020: Dark Matter GRV g.001
+    2300022: Dark Matter GRV gen
+    2300024: Drive glow
+    2300026: Drive glow.001
+    2300028: Drive glow.002
+    2300030: E Pulse Cannon
+    2300032: E T sysMulti Xranger
+    2300034: Energy MUFF unit
+    2300036: EnX Shield Plate .000
+    2300038: EnX Shield Plate .001
+    2300040: EnX Shield Plate .002
+    2300042: EnX Shield Plate .004
+    2300044: EnX Shield Plate 001
+    2300046: GUN ARM heavy L
+    2300048: GUN ARM heavy R
+    2300050: GUN wing
+    2300052: H M D Td needle L
+    2300054: H M D Td needle L01
+    2300056: H M D Td needle R
+    2300058: H M D Td needle R01
+    2300060: Humanoid 1.75m tall 01
+    2300062: Humanoid prob 01 L
+    2300064: Humanoid prob 01 R
+    2300066: Humanoid prob 01 R.001
+    2300068: Humanoid prob 01 R.002
+    2300070: Main COM link
+    2300072: NAVCOM unit JUMPDRIVE GEN L1
+    2300074: NAVCOM unit JUMPDRIVE GEN L2
+    2300076: NAVCOM unit JUMPDRIVE GEN L3
+    2300078: OXEEHA SIGAEL frame
+    2300080: Pilot 170 cm
+    2300082: ryder plate
+    2300084: 'SC -TImer '
+    2300086: SC ACU AtomCHILL unit
+    2300088: SC ACU simlple drid X 5 L
+    2300090: SC ACU simlple drid X 5 R
+    2300092: SC ACU unit plate array 004
+    2300094: SC ADDON ARM  rail L
+    2300096: SC ADDON ARM  rail R
+    2300098: SC ADDON ARM L
+    2300100: SC ADDON ARM R
+    2300102: SC AFT   Q DSA sensor RANGER 01
+    2300104: SC AFT   Q DSA sensor RANGER 02
+    2300106: SC AFT DSA sensor array
+    2300108: SC CONdeenZ unit L
+    2300110: SC CONdeenZ unit R
+    2300112: SC dc ID comp L 02
+    2300114: SC dc ID comp L 02.002
+    2300116: SC dc ID comp L03
+    2300118: SC dc ID comp R01
+    2300120: SC dc ID comp R01.001
+    2300122: SC dc ID comp R01.002
+    2300124: SC dc ID comp R02
+    2300126: SC dc ID comp R03
+    2300128: SC dc ID comp R04
+    2300130: 'SC ETE unit   Energy Trace Eraser '
+    2300132: SC External power unit L
+    2300134: SC External power unit R
+    2300136: SC F type SCANNER D1
+    2300138: SC F type SCANNER D1.001
+    2300140: SC F type SCANNER D1.002
+    2300142: SC F type SCANNER D1.003
+    2300144: SC F type SCANNER D1.004
+    2300146: SC F type SCANNER D2
+    2300148: SC GRAVITON GUN
+    2300150: SC GRV FOCUS cell array A
+    2300152: SC GRV FOCUS cell array AF 1
+    2300154: SC GRV FOCUS cell array AF2
+    2300156: SC GRV FOCUS cell array B
+    2300158: SC GRV SENSOR  unit A
+    2300160: SC GRV SENSOR  unit B
+    2300162: SC hHull bridge T 01
+    2300164: SC hHull bridge T 02
+    2300166: SC HITEMP  PBX power bridge ARM 01
+    2300168: SC HITEMP  PBX power bridge ARM 02
+    2300170: SC HITEMP  PBX power bridge ARM 03
+    2300172: SC HITEMP  PBX power bridge ARM 04
+    2300174: SC HITEMP  PBX power bridge ARM 05
+    2300176: SC HITEMP  PBX power bridge ARM 06
+    2300178: SC HITEMP  PBX power bridge ARM 07
+    2300180: SC HITEMP  PBX power bridge ARM 08
+    2300182: SC HITEMP  PBX power bridge ARM 09
+    2300184: SC Hyper ARM L
+    2300186: SC Hyper ARM R
+    2300188: SC HYPERmASS Drive unit Early WARP tech L
+    2300190: SC HYPERmASS Drive unit Early WARP tech R
+    2300192: SC ID PULSE array and JAM Q unit
+    2300194: SC J matter C GEN  Jtype battery Left
+    2300196: SC J matter C GEN  Jtype battery Right
+    2300198: 'SC M XR  military type range finder  / SC ALLEYES T4 type '
+    2300200: SC MILITARY Battle COMLINK
+    2300202: 'SC Military comlink PASS diamond ID '
+    2300204: SC OPL  onepierlink unit
+    2300206: 'SC P type stadrive '
+    2300208: SC pasif X Range finder L1
+    2300210: SC pasif X Range finder L2
+    2300212: SC PB computer unit with SC  RSQ  Star sequencer
+    2300214: SC S type GUNARM L1
+    2300216: SC S type GUNARM R1
+    2300218: SC SFPU SF4 spacefabric PUNCH unit
+    2300220: 'SC Star DRIVE type N 200 '
+    2300222: 'SC Star dust sens array '
+    2300224: SC TIC unit TARGET ID battle COMPUTER  L1
+    2300226: SC TIC unit TARGET ID battle COMPUTER  L2
+    2300228: SC TIC unit TARGET ID battle COMPUTER  L3
+    2300230: SC TIC unit TARGET ID battle COMPUTER  L4
+    2300232: SC TIC unit TARGET ID battle COMPUTER  R1
+    2300234: SC TIC unit TARGET ID battle COMPUTER  R2
+    2300236: SC TIC unit TARGET ID battle COMPUTER  R3
+    2300238: SC TIC unit TARGET ID battle COMPUTER  R4
+    2300240: SC TRACER COMP 01
+    2300242: SC TRACER COMP 02
+    2300244: SC XMG sequencer A1
+    2300246: SC XMG sequencer A2
+    2300248: SC XMG sequencer B1
+    2300250: SC XMG sequencer B2
+    2300252: SC XMG sequencer C1
+    2300254: SC XMG sequencer C2
+    2300256: SCIFI link
+    2300258: ST Shield GEN Array 0
+    2300260: ST Shield GEN Array 1
+    2300262: ST Shield GEN Array 3
+    2300264: ST Shield GEN Array 4
+    2300266: Sub SPACE link
+    2300268: Time link
+    2300270: Top GUNARM L 2
+    2300272: Top GUNARM Left
+    2300274: Top GUNARM R 2
+    2300276: Top GUNARM Right
+    3300000: A1 matter EQ arra.000
+    3300002: A1 matter EQ arra.001
+    3300004: A1 matter EQ array
+    3300006: AllsecondayLINKarray
+    3300008: Cube
+    3300010: Cube.001
+    3300012: Cube.002
+    3300014: Cube.003
+    3300016: Cube.004
+    3300018: Dark Matter GRV g.000
+    3300020: Dark Matter GRV g.001
+    3300022: Dark Matter GRV gen
+    3300024: Drive glow
+    3300026: Drive glow.001
+    3300028: Drive glow.002
+    3300030: E Pulse Cannon
+    3300032: E T sysMulti Xranger
+    3300034: Energy MUFF unit
+    3300036: EnX Shield Plate .000
+    3300038: EnX Shield Plate .001
+    3300040: EnX Shield Plate .002
+    3300042: EnX Shield Plate .004
+    3300044: EnX Shield Plate 001
+    3300046: GUN ARM heavy L
+    3300048: GUN ARM heavy R
+    3300050: GUN wing
+    3300052: H M D Td needle L
+    3300054: H M D Td needle L01
+    3300056: H M D Td needle R
+    3300058: H M D Td needle R01
+    3300060: Humanoid 1.75m tall 01
+    3300062: Humanoid prob 01 L
+    3300064: Humanoid prob 01 R
+    3300066: Humanoid prob 01 R.001
+    3300068: Humanoid prob 01 R.002
+    3300070: Main COM link
+    3300072: NAVCOM unit JUMPDRIVE GEN L1
+    3300074: NAVCOM unit JUMPDRIVE GEN L2
+    3300076: NAVCOM unit JUMPDRIVE GEN L3
+    3300078: OXEEHA SIGAEL frame
+    3300080: Pilot 170 cm
+    3300082: ryder plate
+    3300084: 'SC -TImer '
+    3300086: SC ACU AtomCHILL unit
+    3300088: SC ACU simlple drid X 5 L
+    3300090: SC ACU simlple drid X 5 R
+    3300092: SC ACU unit plate array 004
+    3300094: SC ADDON ARM  rail L
+    3300096: SC ADDON ARM  rail R
+    3300098: SC ADDON ARM L
+    3300100: SC ADDON ARM R
+    3300102: SC AFT   Q DSA sensor RANGER 01
+    3300104: SC AFT   Q DSA sensor RANGER 02
+    3300106: SC AFT DSA sensor array
+    3300108: SC CONdeenZ unit L
+    3300110: SC CONdeenZ unit R
+    3300112: SC dc ID comp L 02
+    3300114: SC dc ID comp L 02.002
+    3300116: SC dc ID comp L03
+    3300118: SC dc ID comp R01
+    3300120: SC dc ID comp R01.001
+    3300122: SC dc ID comp R01.002
+    3300124: SC dc ID comp R02
+    3300126: SC dc ID comp R03
+    3300128: SC dc ID comp R04
+    3300130: 'SC ETE unit   Energy Trace Eraser '
+    3300132: SC External power unit L
+    3300134: SC External power unit R
+    3300136: SC F type SCANNER D1
+    3300138: SC F type SCANNER D1.001
+    3300140: SC F type SCANNER D1.002
+    3300142: SC F type SCANNER D1.003
+    3300144: SC F type SCANNER D1.004
+    3300146: SC F type SCANNER D2
+    3300148: SC GRAVITON GUN
+    3300150: SC GRV FOCUS cell array A
+    3300152: SC GRV FOCUS cell array AF 1
+    3300154: SC GRV FOCUS cell array AF2
+    3300156: SC GRV FOCUS cell array B
+    3300158: SC GRV SENSOR  unit A
+    3300160: SC GRV SENSOR  unit B
+    3300162: SC hHull bridge T 01
+    3300164: SC hHull bridge T 02
+    3300166: SC HITEMP  PBX power bridge ARM 01
+    3300168: SC HITEMP  PBX power bridge ARM 02
+    3300170: SC HITEMP  PBX power bridge ARM 03
+    3300172: SC HITEMP  PBX power bridge ARM 04
+    3300174: SC HITEMP  PBX power bridge ARM 05
+    3300176: SC HITEMP  PBX power bridge ARM 06
+    3300178: SC HITEMP  PBX power bridge ARM 07
+    3300180: SC HITEMP  PBX power bridge ARM 08
+    3300182: SC HITEMP  PBX power bridge ARM 09
+    3300184: SC Hyper ARM L
+    3300186: SC Hyper ARM R
+    3300188: SC HYPERmASS Drive unit Early WARP tech L
+    3300190: SC HYPERmASS Drive unit Early WARP tech R
+    3300192: SC ID PULSE array and JAM Q unit
+    3300194: SC J matter C GEN  Jtype battery Left
+    3300196: SC J matter C GEN  Jtype battery Right
+    3300198: 'SC M XR  military type range finder  / SC ALLEYES T4 type '
+    3300200: SC MILITARY Battle COMLINK
+    3300202: 'SC Military comlink PASS diamond ID '
+    3300204: SC OPL  onepierlink unit
+    3300206: 'SC P type stadrive '
+    3300208: SC pasif X Range finder L1
+    3300210: SC pasif X Range finder L2
+    3300212: SC PB computer unit with SC  RSQ  Star sequencer
+    3300214: SC S type GUNARM L1
+    3300216: SC S type GUNARM R1
+    3300218: SC SFPU SF4 spacefabric PUNCH unit
+    3300220: 'SC Star DRIVE type N 200 '
+    3300222: 'SC Star dust sens array '
+    3300224: SC TIC unit TARGET ID battle COMPUTER  L1
+    3300226: SC TIC unit TARGET ID battle COMPUTER  L2
+    3300228: SC TIC unit TARGET ID battle COMPUTER  L3
+    3300230: SC TIC unit TARGET ID battle COMPUTER  L4
+    3300232: SC TIC unit TARGET ID battle COMPUTER  R1
+    3300234: SC TIC unit TARGET ID battle COMPUTER  R2
+    3300236: SC TIC unit TARGET ID battle COMPUTER  R3
+    3300238: SC TIC unit TARGET ID battle COMPUTER  R4
+    3300240: SC TRACER COMP 01
+    3300242: SC TRACER COMP 02
+    3300244: SC XMG sequencer A1
+    3300246: SC XMG sequencer A2
+    3300248: SC XMG sequencer B1
+    3300250: SC XMG sequencer B2
+    3300252: SC XMG sequencer C1
+    3300254: SC XMG sequencer C2
+    3300256: SCIFI link
+    3300258: ST Shield GEN Array 0
+    3300260: ST Shield GEN Array 1
+    3300262: ST Shield GEN Array 3
+    3300264: ST Shield GEN Array 4
+    3300266: Sub SPACE link
+    3300268: Time link
+    3300270: Top GUNARM L 2
+    3300272: Top GUNARM Left
+    3300274: Top GUNARM R 2
+    3300276: Top GUNARM Right
+    4300000: Humanoid 1.75m tall 01
+    4300002: Humanoid prob 01 L
+    4300004: OXEEHA SIGAEL frame
+    4300006: SC dc ID comp R01.001
+    4300008: SC dc ID comp R02
+    4300010: SC hHull bridge T 01
+    4300012: GUN wing
+    4300014: Humanoid prob 01 R
+    4300016: Humanoid prob 01 R.001
+    4300018: Humanoid prob 01 R.002
+    4300020: Cube
+    4300022: Cube.003
+    4300024: Cube.004
+    4300026: Cube.001
+    4300028: Cube.002
+    4300030: SC Hyper ARM L
+    4300032: SC HYPERmASS Drive unit Early WARP tech L
+    4300034: H M D Td needle L
+    4300036: H M D Td needle L01
+    4300038: SC Hyper ARM R
+    4300040: SC HYPERmASS Drive unit Early WARP tech R
+    4300042: H M D Td needle R01
+    4300044: H M D Td needle R
+    4300046: SC S type GUNARM L1
+    4300048: SC dc ID comp R01.002
+    4300050: SC dc ID comp L 02
+    4300052: SC S type GUNARM R1
+    4300054: SC TIC unit TARGET ID battle COMPUTER  L1
+    4300056: SC dc ID comp R04
+    4300058: SC TIC unit TARGET ID battle COMPUTER  L2
+    4300060: SC TIC unit TARGET ID battle COMPUTER  L3
+    4300062: SC TIC unit TARGET ID battle COMPUTER  L4
+    4300064: SC TIC unit TARGET ID battle COMPUTER  R1
+    4300066: SC dc ID comp L03
+    4300068: SC TIC unit TARGET ID battle COMPUTER  R2
+    4300070: SC TIC unit TARGET ID battle COMPUTER  R3
+    4300072: SC TIC unit TARGET ID battle COMPUTER  R4
+    4300074: Top GUNARM L 2
+    4300076: SC pasif X Range finder L1
+    4300078: SC pasif X Range finder L2
+    4300080: Top GUNARM Left
+    4300082: SC External power unit L
+    4300084: SC ACU simlple drid X 5 L
+    4300086: SC CONdeenZ unit L
+    4300088: Top GUNARM R 2
+    4300090: 'SC M XR  military type range finder  / SC ALLEYES T4 type '
+    4300092: Top GUNARM Right
+    4300094: SC External power unit R
+    4300096: SC ACU simlple drid X 5 R
+    4300098: SC CONdeenZ unit R
+    4300100: Main COM link
+    4300102: AllsecondayLINKarray
+    4300104: SCIFI link
+    4300106: Sub SPACE link
+    4300108: Time link
+    4300110: 'SC -TImer '
+    4300112: SC SFPU SF4 spacefabric PUNCH unit
+    4300114: SC F type SCANNER D1
+    4300116: SC F type SCANNER D2
+    4300118: SC hHull bridge T 02
+    4300120: E Pulse Cannon
+    4300122: Energy MUFF unit
+    4300124: 'SC ETE unit   Energy Trace Eraser '
+    4300126: SC dc ID comp R03
+    4300128: E T sysMulti Xranger
+    4300130: EnX Shield Plate .001
+    4300132: EnX Shield Plate .002
+    4300134: EnX Shield Plate .004
+    4300136: NAVCOM unit JUMPDRIVE GEN L2
+    4300138: A1 matter EQ arra.000
+    4300140: Dark Matter GRV g.000
+    4300142: Drive glow.001
+    4300144: NAVCOM unit JUMPDRIVE GEN L1
+    4300146: A1 matter EQ array
+    4300148: Dark Matter GRV gen
+    4300150: Drive glow
+    4300152: SC XMG sequencer A1
+    4300154: SC XMG sequencer A2
+    4300156: NAVCOM unit JUMPDRIVE GEN L3
+    4300158: A1 matter EQ arra.001
+    4300160: Dark Matter GRV g.001
+    4300162: Drive glow.002
+    4300164: SC J matter C GEN  Jtype battery Left
+    4300166: SC XMG sequencer C1
+    4300168: SC XMG sequencer C2
+    4300170: SC XMG sequencer B1
+    4300172: SC XMG sequencer B2
+    4300174: ryder plate
+    4300176: Pilot 170 cm
+    4300178: SC J matter C GEN  Jtype battery Right
+    4300180: SC GRAVITON GUN
+    4300182: SC AFT DSA sensor array
+    4300184: SC GRV FOCUS cell array A
+    4300186: SC GRV FOCUS cell array B
+    4300188: SC GRV FOCUS cell array AF2
+    4300190: SC GRV FOCUS cell array AF 1
+    4300192: SC AFT   Q DSA sensor RANGER 01
+    4300194: SC AFT   Q DSA sensor RANGER 02
+    4300196: SC dc ID comp L 02.002
+    4300198: SC ACU AtomCHILL unit
+    4300200: SC ACU unit plate array 004
+    4300202: SC GRV SENSOR  unit B
+    4300204: SC MILITARY Battle COMLINK
+    4300206: SC TRACER COMP 02
+    4300208: SC TRACER COMP 01
+    4300210: SC F type SCANNER D1.003
+    4300212: SC F type SCANNER D1.004
+    4300214: SC ID PULSE array and JAM Q unit
+    4300216: 'SC Military comlink PASS diamond ID '
+    4300218: SC OPL  onepierlink unit
+    4300220: SC GRV SENSOR  unit A
+    4300222: 'SC P type stadrive '
+    4300224: 'SC Star dust sens array '
+    4300226: 'SC Star DRIVE type N 200 '
+    4300228: EnX Shield Plate .000
+    4300230: SC dc ID comp R01
+    4300232: EnX Shield Plate 001
+    4300234: ST Shield GEN Array 4
+    4300236: ST Shield GEN Array 0
+    4300238: ST Shield GEN Array 1
+    4300240: ST Shield GEN Array 3
+    4300242: SC F type SCANNER D1.001
+    4300244: SC F type SCANNER D1.002
+    4300246: SC PB computer unit with SC  RSQ  Star sequencer
+    4300248: SC HITEMP  PBX power bridge ARM 01
+    4300250: GUN ARM heavy L
+    4300252: SC ADDON ARM R
+    4300254: SC ADDON ARM  rail R
+    4300256: GUN ARM heavy R
+    4300258: SC ADDON ARM L
+    4300260: SC ADDON ARM  rail L
+    4300262: SC HITEMP  PBX power bridge ARM 02
+    4300264: SC HITEMP  PBX power bridge ARM 03
+    4300266: SC HITEMP  PBX power bridge ARM 04
+    4300268: SC HITEMP  PBX power bridge ARM 05
+    4300270: SC HITEMP  PBX power bridge ARM 06
+    4300272: SC HITEMP  PBX power bridge ARM 07
+    4300274: SC HITEMP  PBX power bridge ARM 08
+    4300276: SC HITEMP  PBX power bridge ARM 09
+    10800000: ' cold ray'
+    10800002: Lamp
+    10800004: 'soft orange '
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

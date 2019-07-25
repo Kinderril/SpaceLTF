@@ -1,0 +1,223 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEngine;
+
+public enum ShieldChangeSt
+{
+//    changeToActive,
+    active,
+    restoring,
+    disable,
+}
+
+public delegate void ShieldParameterChange(float curent, float max, float delta, ShieldChangeSt state, ShipBase shipOwner);
+
+public class ShieldParameters
+{
+    private const float RestoreShieldPercent = 0.3f;
+    private Collider _shieldCollider;
+    public float ShieldRegenPerSec { get; set; }
+    private float _nextTimeShiledRegen;
+    public ShieldChangeSt State { get; private set; }
+    private float _curShiled;
+    private Collider shieldCollider;
+    private float ShieldDeltaTick = 1f;
+    private ShipBase _shipBase;
+    private float _restoreTime;
+    private float _startRestore;
+
+    public event ShieldParameterChange OnShildChanged;
+    public event Action<ShieldChangeSt> OnStateChange;
+
+    public ShieldParameters(ShipBase shipBase,Collider shieldCollider, float shiledRegen, float maxShiled)
+    {
+        _shipBase = shipBase;
+        this._shieldCollider = shieldCollider;
+        this.ShieldRegenPerSec = shiledRegen;
+        MaxShiled = maxShiled;
+        CurShiled = MaxShiled;
+    }
+
+    public float MaxShiled { get; set; }
+
+    public float NextTimeShiledRegen
+    {
+        get { return _nextTimeShiledRegen; }
+        set { _nextTimeShiledRegen = value; }
+    }
+    public bool ShiledIsActive
+    {
+        get { return State == ShieldChangeSt.active; }
+    }
+
+    public float CurShiled
+    {
+        get
+        {
+            return _curShiled;
+        }
+        set
+        {
+//            if (ShieldBroken)
+//            {
+//                return;
+//            }
+            _curShiled = value;
+            if (State == ShieldChangeSt.active)
+            {
+                if (_curShiled <= 0f)
+                {
+                    SetState(ShieldChangeSt.restoring);
+                }
+            }
+//            if (_shiledIsActive)
+//            {
+//                ShiledIsActive = _curShiled > 0.9f;
+//            }
+//            else
+//            {
+//                ShiledIsActive = _curShiled > MaxShiled * 0.1f;
+//            }
+        }
+    }
+
+    public void Crash()
+    {
+        if (State == ShieldChangeSt.disable)
+        {
+            return;
+        }
+        SetState(ShieldChangeSt.restoring);
+    }
+
+    public void Disable()
+    {
+        SetState(ShieldChangeSt.disable);
+    }
+
+    public void Enable()
+    {
+        if (State == ShieldChangeSt.disable)
+        {
+            SetState(ShieldChangeSt.restoring);
+        }
+    }
+
+    public void ShiledAction(float delta)
+    {
+//        if (ShieldBroken)
+//        {
+//            return;
+//        }
+        if (OnShildChanged != null)
+        {
+            OnShildChanged(CurShiled, MaxShiled, delta, State,_shipBase);
+        }
+    }
+
+    public void HealShield(float v)
+    {
+//        ShieldBroken = false;
+        var c = CurShiled + v;
+        var d = MaxShiled - CurShiled;
+        if (d <= 0)
+        {
+            return;
+        }
+        if (c > MaxShiled)
+        {
+            c = MaxShiled;
+        }
+        var delta = c - CurShiled;
+        CurShiled = c;
+        EffectController.Instance.Create(DataBaseController.Instance.DataStructPrefabs.ShieldChagedEffect, _shipBase.transform, 5f);
+        ShiledAction(delta);
+    }
+
+    private void RegenShield()
+    {
+        if (NextTimeShiledRegen < Time.time)
+        {
+            NextTimeShiledRegen = Time.time + ShieldDeltaTick;
+            if (CurShiled < MaxShiled)
+            {
+                var d = ShieldRegenPerSec * ShieldDeltaTick;
+                if (d > 0)
+                {
+                    CurShiled = Mathf.Clamp(CurShiled + d, 0, MaxShiled);
+                    ShiledAction(d);
+                }
+            }
+        }
+    }
+
+    public void Update()
+    {
+        switch (State)
+        {
+//            case ShieldChangeSt.changeToActive:
+//                break;
+            case ShieldChangeSt.active:
+                RegenShield();
+                break;
+            case ShieldChangeSt.restoring:
+                if (_curShiled > MaxShiled * RestoreShieldPercent)
+                {
+                    if (Time.time - _startRestore > 5)
+                    {
+                        SetState(ShieldChangeSt.active);
+                    }
+                }
+                if (_restoreTime > Time.time)
+                {
+                    RegenShield();
+                }
+                break;
+        }
+    }
+
+    private void SetState(ShieldChangeSt v)
+    {
+        if (State == ShieldChangeSt.disable && v == ShieldChangeSt.active)
+        {
+            return;
+        }
+        if (State == v)
+        {
+            return;
+        }
+
+        State = v;
+        switch (State)
+        {
+            case ShieldChangeSt.restoring:
+                _restoreTime = Time.time + 5f;
+                _startRestore = Time.time;
+                break;
+            case ShieldChangeSt.active:
+
+                break;
+            case ShieldChangeSt.disable:
+                break;
+        }
+        if (OnStateChange != null)
+        {
+            OnStateChange(v);
+        }
+
+        _shieldCollider.gameObject.SetActive(ShiledIsActive);
+    }
+
+    public void Dispose()
+    {
+        OnShildChanged = null;
+    }
+
+    public void Repair()
+    {
+        
+    }
+}
+
