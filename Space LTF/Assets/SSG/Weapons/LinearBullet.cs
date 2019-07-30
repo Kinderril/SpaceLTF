@@ -29,7 +29,6 @@ public class LinearBullet : Bullet
 
     protected void DoVisual(float f)
     {
-//        Debug.LogError("Do visual " + f);
         transform.position = Vector3.Lerp(_startPos, _endPos, f);
     }
 

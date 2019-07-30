@@ -19,15 +19,18 @@ public class CommanderCoinController
     public event Action<bool> OnRegenEnableChange;
 
     public bool EnableCharge { get; private set; }
+
+    public float CoefSpeed  { get; private set; }
 //    private bool _isRegenEnable;
 
-    public CommanderCoinController(int coinsCount,bool enableCharge)
+public CommanderCoinController(int coinsCount,bool enableCharge,int levelcharges)
     {
+        CoefSpeed = 1 - (levelcharges - 1)* Library.CHARGE_SPEED_COEF_PER_LEVEL;
         availableCount = coinsCount;
         _coins = new CommandCoin[coinsCount];
         for (int i = 0; i < coinsCount; i++)
         {
-            CommandCoin c1 = new CommandCoin(i+1);
+            CommandCoin c1 = new CommandCoin(i+1,CoefSpeed);
             c1.OnUsed += CoinUsed;
             _coins[i] = (c1);
             c1.EnableRegen(enableCharge);
@@ -65,6 +68,8 @@ public class CommanderCoinController
         {
             OnCoinChange(c, true);
         }
+
+        delay *= CoefSpeed;
         c.SetUsed(delay);
 //        Debug.Log("UseCoin " + c.Id + " availableCount:" + availableCount);
     }

@@ -9,7 +9,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
     private StartShipPilotData _ship;
     public GameObject LevelUpButton;
     public Button RepairButton;
-    public TextMeshProUGUI RepairCost;
+//    public TextMeshProUGUI RepairCost;
     public SliderWithTextMeshPro HealthSlider;
     public MoneySlotUI Money;
     public Image RankImage;
@@ -63,8 +63,8 @@ public class SideShipGlobalMapInfo : MonoBehaviour
 //        HealthSlider.    Field
         HealthSlider.Slider.value = _ship.Ship.HealthPercent * MaxHealth;
         var shallRepair = _ship.Ship.HealthPointToRepair() > 0;
-        RepairCost.text = String.Format("Repair:{0}",_ship.MoneyToFullRepair().ToString());
-        RepairCost.gameObject.SetActive(shallRepair);
+//        RepairCost.text = String.Format("Repair:{0}",_ship.MoneyToFullRepair().ToString());
+//        RepairCost.gameObject.SetActive(shallRepair);
         RepairButton.gameObject.SetActive(shallRepair);
         Money.Init(_ship.Pilot.Money);
         LevelUpButton.gameObject.SetActive(_ship.Pilot.CanUpgradeAnyParameter(0));

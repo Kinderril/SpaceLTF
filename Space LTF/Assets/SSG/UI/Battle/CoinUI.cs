@@ -31,7 +31,7 @@ public class CoinUI : MonoBehaviour
             {
                 Field.gameObject.SetActive(true);
             }
-            var remainTime = (int) _coin.RemainTime();
+            var remainTime = (int) (_coin.RemainTime() );
             Field.text = remainTime.ToString("0");
             Slider.fillAmount = 1f - _coin.Percent();
         }

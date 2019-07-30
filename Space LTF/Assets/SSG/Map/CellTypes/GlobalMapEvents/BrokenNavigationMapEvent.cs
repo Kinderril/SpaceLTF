@@ -59,7 +59,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
 
             if (MyExtensions.IsTrueEqual())
             {
-                var m = Library.CreatSimpleModul(2);
+                var m = Library.CreatSimpleModul(2, SkillWork(3, DiplomacyLevel));
                 var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);
                 if (canAdd)
                 {
@@ -122,7 +122,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
         if (MainController.Instance.MainPlayer.CanAddShip())
         {
             var mianAnswers = new List<AnswerDialogData>();
-            var ship = HireAction();
+            var ship = HireAction(1);
             mianAnswers.Add(new AnswerDialogData("Ok", null, null));
             var mesData = new MessageDialogData($"Ship hired {Namings.ShipConfig(ship.Ship.ShipConfig)}.", null);
             return mesData;

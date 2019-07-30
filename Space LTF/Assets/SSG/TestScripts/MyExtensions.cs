@@ -35,6 +35,17 @@ public static class MyExtensions
         var f = rnd.NextDouble();
         return (int)((a + (b - a) * f) + .5f);
     }
+    public static int RandomSing()
+    {
+        if (IsTrueEqual())
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+    }
 
     public static bool IsTrue01(float a)
     {

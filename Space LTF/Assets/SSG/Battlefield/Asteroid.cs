@@ -26,8 +26,8 @@ public class Asteroid : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.LogError($"Asteroid DEAD {gameObject.name}. {transform.position}. {other.gameObject.name}");
-//        OnBulletHit(other);
+//        Debug.LogError($"Asteroid DEAD {gameObject.name}. {transform.position}. {other.gameObject.name}");
+        OnBulletHit(other);
     }
     
     private void OnBulletHit(Collider other)

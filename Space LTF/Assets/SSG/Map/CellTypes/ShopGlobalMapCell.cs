@@ -32,7 +32,7 @@ public class ShopGlobalMapCell : GlobalMapCell
             });
         for (var i = 0; i < countModuls; i++)
         {
-            var m = Library.CreatSimpleModul(levels.Random());
+            var m = Library.CreatSimpleModul(levels.Random(),MyExtensions.IsTrueEqual());
             m.CurrentInventory = _shopInventory;
             _shopInventory.Moduls.Add(m);
         }

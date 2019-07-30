@@ -52,7 +52,7 @@ public class Player
         {
             if (Inventory.GetFreeSimpleSlot(out var index))
             {
-                var modul = Library.CreatSimpleModul(1);
+                var modul = Library.CreatSimpleModul(1,MyExtensions.IsTrueEqual());
                 Inventory.TryAddSimpleModul(modul,index);
             }
         }
@@ -250,7 +250,7 @@ public class Player
                     {2,isWeak?3f:4f},
                     {3,isWeak?0f:2f},
                 });
-                var m = Library.CreatSimpleModul(levels.Random());
+                var m = Library.CreatSimpleModul(levels.Random(),MyExtensions.IsTrueEqual());
                 if (Inventory.GetFreeSpellSlot(out slotIndex))
                 {
                     LastReward.Moduls.Add(m);

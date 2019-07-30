@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class StayBullet : LinearBullet
 {
-//    public float DestroyPeriod = 1f;
-//    public bool ActivateOnStart = false;
     public float StayTime = MineFieldSpell.MINES_PERIOD;
     protected float _deathTime;
     protected float _moveTimeEnd;
@@ -23,26 +21,15 @@ public class StayBullet : LinearBullet
     public override void Init()
     {
         _isActive = false;
-        base.Init();
         moveState = true;
-//        _deathTime = DestroyPeriod + Time.time;
-//        _moveTimeEnd = Time.time + 
+        base.Init();
     }
 
     public override void LateInit()
     {
-        //        _isActive = ActivateOnStart;
-        //        moveState = !ActivateOnStart;       
+        moveState = true;
+        _isActive = false;  
         _moveTimeEnd = Time.time + _moveLifeTime;
-//        if (_isActive)            
-//        {
-//            _deathTime = StayTime + Time.time;
-////            Debug.Log($"Inited  _deathTime: {_deathTime}.  Time:{Time.time}");
-//        }
-//        else
-//        {
-////            _deathTime = DestroyPeriod + Time.time;
-//        }
         base.LateInit();
         if (StayEffect != null)
         {

@@ -655,6 +655,14 @@ public class ShipBase : MovingObject
 
     public void GetHit(IWeapon weapon, Bullet bullet)
     {
+        if (ShipParameters.ShieldParameters.ShiledIsActive)
+        {
+            var effect = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShieldHitEffect, transform, 3f);
+            effect.transform.position = bullet.Position;
+            var posToLookAt = bullet.Position - bullet.LookDirection * 3;
+            Debug.DrawLine(posToLookAt, effect.transform.position,Color.red,10);
+            effect.transform.LookAt(posToLookAt, Vector3.up);
+        }
         weapon.ApplyToShip(ShipParameters, this, bullet);
     }
 

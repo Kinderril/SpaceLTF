@@ -60,7 +60,8 @@ public class Commander
         _paramsOfShips = player.GetShipsToBattle();
         Battlefield = battlefield;
         _teamIndex = teamIndex;
-        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(),true);
+        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(),true,
+            player.Parameters.ChargesSpeed.Level);
 //        RewardController= new CommanderRewardController(this);
         SpellController = new CommanderSpells(this);
     }

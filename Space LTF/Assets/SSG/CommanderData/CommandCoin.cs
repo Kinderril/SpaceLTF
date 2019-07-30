@@ -11,13 +11,15 @@ public class CommandCoin
     private float _remainCausePause;
     private float _remainPercent;
     public int Id { get; private set; }
+    public float SpeedCoef { get; private set; }
     public event Action<CommandCoin, bool> OnUsed;
     private TimerManager.ITimer timer;
 
 
-    public CommandCoin(int id)
+    public CommandCoin(int id,float speedCoef)
     {
         Id = id;
+        SpeedCoef = speedCoef;
     }
 
     public bool Used

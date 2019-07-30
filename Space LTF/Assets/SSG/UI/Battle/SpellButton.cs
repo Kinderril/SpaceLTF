@@ -18,7 +18,7 @@ public class SpellButton : MonoBehaviour
     public TextMeshProUGUI NameField;
     private InGameMainUI _inGameMain;
 
-    public void Init(InGameMainUI inGameMain, SpellInGame spell,Action<SpellInGame> OnSpellClick )
+    public void Init(InGameMainUI inGameMain, SpellInGame spell,Action<SpellInGame> OnSpellClick,float speedCoef)
     {
         _inGameMain = inGameMain;
         _inGameMain.OnSelectSpell += OnSelectSpell;
@@ -27,7 +27,7 @@ public class SpellButton : MonoBehaviour
         Selected.gameObject.SetActive(false);
         var a = DataBaseController.Instance.DataStructPrefabs.GetSpellIcon(spell.SpellType);
         CostField.text = String.Format("{0}", _spell.CostCount.ToString("0"));
-        TimeField.text = String.Format("{0}", _spell.CostPeriod.ToString("0"));
+        TimeField.text = $"{(_spell.CostPeriod * speedCoef).ToString("0")}";
         NameField.text = _spell.Name;
         Icon.sprite = a;
     }

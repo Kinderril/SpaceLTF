@@ -13,6 +13,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
     protected ArmyCreatorType _armyType;
     private ShipConfig _config;
     private bool canHire = false;
+    private Player _player;
 
     public int Power
     {
@@ -22,6 +23,16 @@ public class ArmyGlobalMapCell : GlobalMapCell
     protected int _power;
 
     public Player GetArmy()
+    {
+        if (_player == null)
+        {
+            CacheArmy();
+        }
+        return _player;
+
+    }
+
+    private void CacheArmy()
     {
         ArmyCreatorData data = new ArmyCreatorData(_config, true);
         switch (_armyType)
@@ -46,7 +57,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         {
             case ShipConfig.droid:
                 coreShipChance = 0f;
-                break;  
+                break;
             case ShipConfig.raiders:
                 coreShipChance = 0.1f;
                 break;
@@ -58,7 +69,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 break;
         }
         bool withCore = MyExtensions.IsTrue01(coreShipChance);
-        var army = ArmyCreator.CreateSimpleEnemyArmy(_power,  data,  player);
+        var army = ArmyCreator.CreateSimpleEnemyArmy(_power, data, player);
         player.Army = army;
         switch (_config)
         {
@@ -67,7 +78,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 canHire = MyExtensions.IsTrue01(HIRE_CHANCE);
                 break;
         }
-        return player;
+        _player = player;
     }
 
     public override bool CanCellDestroy()
@@ -85,19 +96,27 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     public override MessageDialogData GetDialog()
     {
-        bool isSameSide = MainController.Instance.MainPlayer.MainShip.Ship.ShipConfig == _config;
+        var myPlaer = MainController.Instance.MainPlayer;
+        bool isSameSide = myPlaer.MainShip.Ship.ShipConfig == _config;
         string masinMsg;
 
         var ans = new List<AnswerDialogData>();
         var rep = MainController.Instance.MainPlayer.ReputationData.Reputation;
+        var scoutData = GetArmy().ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
+        string scoutsField = "";
+        for (int i = 0; i < scoutData.Count; i++)
+        {
+            var info = scoutData[i];
+            scoutsField = $"{scoutsField}\n{info}\n";
+        }
         if (isSameSide && rep > 40)
         {
-            masinMsg = String.Format("This fleet looks friendly. [Power:{0}]", Power);
-            ans.Add(new AnswerDialogData(String.Format("Ask for help. [Reputation:{0}]", rep), DimlomatyOption));
+            masinMsg = $"This fleet looks friendly.\n {scoutsField}";
+            ans.Add(new AnswerDialogData($"Ask for help. [Reputation:{rep}]", DimlomatyOption));
         }
         else
         {
-            masinMsg = String.Format("You see enemies. Shall we fight? [Power:{0}]", Power);
+            masinMsg = $"You see enemies. Shall we fight? \n {scoutsField}";
         }
 
         ans.Add(new AnswerDialogData("Fight", Take));
@@ -165,7 +184,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 int slot;
                 if (MyExtensions.IsTrue01(.5f))
                 {
-                    var m = Library.CreatSimpleModul(2);
+                    var m = Library.CreatSimpleModul(2,MyExtensions.IsTrueEqual());
                     itemName = Namings.SimpleModulName(m.Type);
                     canAdd = player.Inventory.GetFreeSimpleSlot(out slot);
                     if (canAdd)
@@ -591,6 +610,15 @@ public class ArmyGlobalMapCell : GlobalMapCell
             var cng = config.HasValue ? config.Value : configs.Random();
             var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer);
             WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}", Namings.ShipConfig(cng), Namings.ShipType(type)));
+            int itemsCount = MyExtensions.Random(1, 2);
+            for (int i = 0; i < itemsCount; i++)
+            {
+                if (ship.GetFreeWeaponSlot(out var inex))
+                {
+                    var weapon = Library.CreateWeapon(true);
+                    ship.TryAddWeaponModul(weapon, inex);
+                }
+            }
             MainController.Instance.MainPlayer.TryHireShip(new StartShipPilotData(pilot, ship));
         }
         else

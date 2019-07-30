@@ -16,7 +16,7 @@ public abstract class BaseGlobalMapEvent
         return null;
     }
 
-    protected StartShipPilotData HireAction(int itemsCount = 0)
+    protected StartShipPilotData HireAction(int itemsCount = 1)
     {
         var pilot = Library.CreateDebugPilot();
         WDictionary<ShipType> types = new WDictionary<ShipType>(new Dictionary<ShipType, float>()
@@ -43,7 +43,11 @@ public abstract class BaseGlobalMapEvent
         data.Ship.SetRepairPercent(0.1f);
         for (int i = 0; i < itemsCount; i++)
         {
-            
+            if (data.Ship.GetFreeWeaponSlot(out var inex))
+            {
+                var weapon = Library.CreateWeapon(true);
+                data.Ship.TryAddWeaponModul(weapon, inex);
+            }
         }
         MainController.Instance.MainPlayer.TryHireShip(data);
         return data;

@@ -16,7 +16,8 @@ public class SpellModulsContainer : MonoBehaviour
     private List<SpellButton> _buttons = new List<SpellButton>();
     private ShipBase _mainShip;
 
-    public void Init(InGameMainUI inGameMain,CommanderSpells commanderSpells, ShipBase mainShip,Action<SpellInGame> buttonCallback)
+    public void Init(InGameMainUI inGameMain,CommanderSpells commanderSpells, 
+        ShipBase mainShip,Action<SpellInGame> buttonCallback,CommanderCoinController coinController)
     {
         _mainShip = mainShip;
         _buttons.Clear();
@@ -27,7 +28,7 @@ public class SpellModulsContainer : MonoBehaviour
             {
                 var b = DataBaseController.GetItem(spPrefab);
                 b.transform.SetParent(Layout, false);
-                b.Init(inGameMain,baseSpellModul, buttonCallback);
+                b.Init(inGameMain,baseSpellModul, buttonCallback, coinController.CoefSpeed);
                 _buttons.Add(b);
             }
         }

@@ -22,11 +22,13 @@ public class GalaxyData
 {
     private CellsInGalaxy cells;
     public int Size { get;private set;}
+    public int SizeOfSector { get;private set;}
     public int StartDeathStep { get;private set;}
     public string Name;
 //    public int startIndexX { get; private set; }
 //    public int startIndexZ { get; private set; }
     private  const int zoneCount = 5;
+    public  const int VERTICAL_COUNT = 3;
 
     Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
 
@@ -39,61 +41,22 @@ public class GalaxyData
         {GlobalMapEventType.anomaly, 3},
         {GlobalMapEventType.spaceGarbage, 3},
     };
-            /*
-    public static void InitExamples()
-    {
-        WDictionary<ShipConfig> lvl1 = new WDictionary<ShipConfig>(new Dictionary<ShipConfig, float>
-        {
-            {ShipConfig.raiders, 6},
-            {ShipConfig.mercenary, 2},
-            {ShipConfig.ocrons, 1},
-        });
-        WDictionary<ShipConfig> lvl2 = new WDictionary<ShipConfig>(new Dictionary<ShipConfig, float>
-        {
-            {ShipConfig.raiders, 3},
-            {ShipConfig.mercenary, 3},
-            {ShipConfig.federation, 1},
-            {ShipConfig.ocrons, 3},
-        });
-        WDictionary<ShipConfig> lvl3= new WDictionary<ShipConfig>(new Dictionary<ShipConfig, float>
-        {
-            {ShipConfig.mercenary, 1},
-            {ShipConfig.federation, 2},
-            {ShipConfig.ocrons, 1},
-        });
-        WDictionary<ShipConfig> lvl4 = new WDictionary<ShipConfig>(new Dictionary<ShipConfig, float>
-        {
-            {ShipConfig.federation, 3},
-            {ShipConfig.ocrons, 1},
-        });
 
-        var d = new Dictionary<int, WDictionary<ShipConfig>>
-        {
-            { 1,lvl1},
-            { 2,lvl2},
-            { 3,lvl3},
-            { 4,lvl4},
-        };
-
-        ShipsDictionary = d;
-    }
-
-    private static Dictionary<int, WDictionary<ShipConfig>> ShipsDictionary;
-          */
     public GlobalMapCell Init2(int sectorCount, int sizeSector,int startPower, int coreCells, int startDeathStep)
     {
         StartDeathStep = startDeathStep;
         var allSubSectors =new List<SectorData>();
         var unPopulatedSectors =new List<SectorData>();
         var step = (sizeSector + 1);
+        SizeOfSector = step;
         var sectorsCount = sectorCount;
-        var mapSize = sectorsCount * sizeSector;
-        SectorData[,] sectors = new SectorData[sectorsCount, sectorsCount];
+        Debug.Log($"global map size: {sectorsCount} {VERTICAL_COUNT}");
+        SectorData[,] sectors = new SectorData[sectorsCount, VERTICAL_COUNT];
         int id = 0;
         int maxDist = 0;
         for (int i = 0; i < sectorsCount; i++)
         {
-            for (int j = 0; j < sectorsCount; j++)
+            for (int j = 0; j < VERTICAL_COUNT; j++)
             {
                 var xx = i * step;
                 var zz = j * step;
@@ -114,50 +77,50 @@ public class GalaxyData
         
         //Create start sector
         var startSector = allSubSectors.Where(x => x.StartX == 0).ToList().RandomElement();
-        var xCell = startSector.StartX + RndIndex(sizeSector);
+        var xCell = startSector.StartX + RndIndex(sizeSector - 1);
         var zCell = startSector.StartZ + RndIndex(sizeSector);
         var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell);
-//        startSector.RandomizeBorders();
         startSector.SetCell(startCell,id);
         unPopulatedSectors.Remove(startSector);
         startSector.Populate(startPower,null);
-        //CreateEndSector   
+        Debug.Log($"Create start sector: {xCell} {zCell}");
 
-        var endSector = sectors[sectorsCount - 1, RndIndex(sectorsCount)];
-        xCell = endSector.StartX + RndIndex(sizeSector);
+        //CreateEndSector   
+        var endSector = sectors[sectorsCount - 1, RndIndex(VERTICAL_COUNT)];
+        xCell = endSector.StartX + 1 + RndIndex(sizeSector - 1);
         zCell = endSector.StartZ + RndIndex(sizeSector);
         var endCell = new EndGlobalCell(Utils.GetId(), xCell, zCell);
         endSector.SetCell(endCell,id);
         unPopulatedSectors.Remove(endSector);
         endSector.Populate(startPower,startSector);
+        Debug.Log($"CreateEndSector : {xCell} {zCell}");
 
         //Create core sectors
-        coreCells = Mathf.Clamp(coreCells, 0, maxDist - 2);
-        for (int i = 0; i < coreCells; i++)
+        var goodCorePositions = Mathf.Clamp(coreCells, 0, sectorsCount - 2);
+        for (int i = 0; i < goodCorePositions; i++)
         {
-            var secrosDist = maxDist - 1 - i;
-            var coreSector = allSubSectors.Where(x => x.StartX/ sizeSector + x.StartZ / sizeSector == secrosDist).ToList().RandomElement();
+            var secrosDist = sectorsCount - 1 - i;
+            var coreSector = allSubSectors.Where(x => x.StartX/ sizeSector  == secrosDist).ToList().RandomElement();
             if (coreSector == null)
             {
                 Debug.LogError($"can't find sector with dist:{secrosDist}");
             }
             else
             {
-                xCell = coreSector.StartX + RndIndex(sizeSector);
-                zCell = coreSector.StartZ + RndIndex(sizeSector);
-                var coreId = Utils.GetId();
-                var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell);
-                coreSector.SetCell(coreCell, id);
-                coreSector.Populate(startPower, startSector);
-                unPopulatedSectors.Remove(coreSector);
-                coreSector.MarkAsCore(coreId);
-                Debug.Log($"Core created {coreSector.StartX} {coreSector.StartZ}.");
+                CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
             }
         }
 
+        var notGoodCores = coreCells = goodCorePositions;
+        for (int i = 0; i < notGoodCores; i++)
+        {
+            var coreSector = allSubSectors.Where(x =>!x.IsPopulated && x.StartX != 0).ToList().RandomElement();
+            CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
+        }
 
         foreach (var sectorData in unPopulatedSectors)
         {
+            Debug.Log($"Populate others : {sectorData.StartX} {sectorData.StartZ}");
             sectorData.Populate(startPower, startSector);
         }
 
@@ -167,7 +130,7 @@ public class GalaxyData
         }
 
         AddPortals(sectorsCount,sectors);
-        PopulateBigMap(sectors, sizeSector, sectorsCount);
+        InplementSectorToGalaxy(sectors, sizeSector, sectorsCount);
 
 
         Debug.Log("Population end");
@@ -176,27 +139,26 @@ public class GalaxyData
         var cores = list.Where(x => x is CoreGlobalMapCell).ToList();
         if (cores.Count != coreCells)
         {
-            Debug.LogError($"Wrong count of core cells {cores.Count}/{coreCells}.");
+            Debug.LogError($"Wrong count of core cells {cores.Count}/{coreCells}. goodCorePositions:{goodCorePositions}.");
         }
 #endif
-        //        for (int i = 0; i < cells.Size; i++)
-        //        {
-        //            for (int j = 0; j < cells.Size; j++)
-        //            {
-        //                var cell = cells.GetCell(i, j  );
-        //                var str = String.Format("Cell:: {0} {1}     _   {2} ", i, j, cell);
-        //                if (cell == null)
-        //                {
-        //                   Debug.LogError(str);
-        //                }
-        //                else
-        //                {
-        //                    Debug.Log(str);
-        //                }
-        //            }
-        //        }
         return startCell;
     }
+
+    private void CreateCoreSector(SectorData coreSector,SectorData startSector,int id,List<SectorData> unPopulatedSectors,
+        int startPower,int sizeSector)
+    {
+        var xCell = coreSector.StartX + RndIndex(sizeSector);
+        var zCell = coreSector.StartZ + RndIndex(sizeSector);
+        var coreId = Utils.GetId();
+        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell);
+        coreSector.SetCell(coreCell, id);
+        coreSector.Populate(startPower, startSector);
+        unPopulatedSectors.Remove(coreSector);
+        coreSector.MarkAsCore(coreId);
+        Debug.Log($"Core created {coreSector.StartX} {coreSector.StartZ}.");
+    }
+
     public List<GlobalMapCell> GetAllList()
     {
         return cells.GetAllList();
@@ -212,7 +174,7 @@ public class GalaxyData
 
         for (int i = 0; i < sectorsCount; i++)
         {
-            for (int j = 0; j < sectorsCount; j++)
+            for (int j = 0; j < VERTICAL_COUNT; j++)
             {
                 var subSector = sectors[i, j];
                 if (i + 1 < sectorsCount)
@@ -221,7 +183,7 @@ public class GalaxyData
                     ConnectSectorsRight(subSector, rightConnectSector);
                 }
 
-                if (j + 1 < sectorsCount)
+                if (j + 1 < VERTICAL_COUNT)
                 {
 
                     var topConnectedSector = sectors[i, j + 1];
@@ -363,14 +325,14 @@ public class GalaxyData
         cellR.AddWay(cellL);
     }
 
-    private void PopulateBigMap(SectorData[,] sectors, int sizeZoneSector,int sectorsCount)
+    private void InplementSectorToGalaxy(SectorData[,] sectors, int sizeZoneSector,int sectorsCount)
     {
-//        Debug.Log(String.Format("PopulateBigMap : sizeSector:{0}   sectorsCount:{1}", sizeSector, sectorsCount) );
+//        Debug.Log(String.Format("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}", sizeSector, sectorsCount) );
         Size = sectorsCount * (sizeZoneSector + 1) - 1;
         cells = new CellsInGalaxy(Size);
         for (int i = 0; i < sectorsCount; i++)
         {
-            for (int j = 0; j < sectorsCount; j++)
+            for (int j = 0; j < VERTICAL_COUNT; j++)
             {
                 var subSector = sectors[i, j];
                 SetNullsTo(cells,subSector, sizeZoneSector);
@@ -454,142 +416,6 @@ public class GalaxyData
         var configs = new WDictionary<ShipConfig>(d);
         return configs.Random();
     }
-
-//    public GlobalMapCell Init(int mapSize, int startPower,int coreCells,int startDeathStep)
-//    {
-//        StartDeathStep = startDeathStep;
-//        foreach (GlobalMapEventType d in Enum.GetValues(typeof(GlobalMapEventType)))
-//        {
-//            _eventsCount.Add(d,0);
-//        }
-//        Size = mapSize;
-//        InitExamples();
-//        int cellId = 0;
-//        cells = new CellsInGalaxy(mapSize);
-//        int delta = Mathf.Clamp((int)(mapSize*0.2f), 1, 5);
-//        int half = mapSize/2;
-//
-//        startIndexX = 0;//MyExtensions.Random(half - delta, half + delta);
-//        startIndexZ = MyExtensions.Random(half - delta, half + delta);
-//        int endIndexX = mapSize - 1;
-//        int endIndexZ = MyExtensions.Random(half - delta, half + delta);
-//
-//        Debug.LogFormat("Start cell: {0},{1}",startIndexX,startIndexZ);
-//        Debug.LogFormat("End cell: {0},{1}", endIndexX, endIndexZ);
-//
-////        int maxDistanceX = Mathf.Max(Mathf.Abs(mapSize - startIndexX), startIndexX);
-////        int maxDistanceZ = Mathf.Max(Mathf.Abs(mapSize - startIndexZ), startIndexZ);
-//        int maxDistance = mapSize;// + maxDistanceZ;
-//
-//        var endCell = new EndGlobalCell(cellId++, endIndexX, endIndexZ);
-//        cells.SetCell(endIndexX, endIndexZ,endCell);
-//
-//
-//        List<int> vertical = new List<int>();
-//        List<int> horizontal = new List<int>();
-//
-//        var notingPower = Size/3;
-//        AddNothingPoints(notingPower);
-//
-//        for (int i = 0; i < mapSize; i++)
-//        {
-//            vertical.Add(i);
-//            horizontal.Add(i);
-//        }
-//        List<CoreGlobalMapCell> cores = new List<CoreGlobalMapCell>();
-//        for (int i = 0; i < coreCells; i++)
-//        {
-//            var coreX = vertical.RandomElement();
-//            var coreZ = horizontal.RandomElement();
-//            var deltaToStart = Mathf.Max(Mathf.Abs(startIndexX - coreX), Mathf.Abs(startIndexZ - coreZ));
-//            var power = CalcPowerOfCell(startPower, deltaToStart, mapSize);
-//            var coreCell = new CoreGlobalMapCell(power, cellId++, coreX, coreZ);
-//            SubscribeCell(coreCell);
-//            cells.SetCell(coreX, coreZ, coreCell);
-//            vertical.Remove(coreX);
-//            horizontal.Remove(coreZ);
-//            Debug.LogFormat("coreCells {2} cell: {0},{1}", coreX, coreZ,i);
-//            cores.Add(coreCell);
-//        }
-//
-//        var counts = new Dictionary<GlobalMapCellType, int>()
-//        {
-//            {GlobalMapCellType.army,0},
-//            {GlobalMapCellType.eventMap, 0},
-//            {GlobalMapCellType.repair,0},
-////            {GlobalMapCellType.modif, 0},
-//            {GlobalMapCellType.shop, 0},
-//            {GlobalMapCellType.nothing, 0},
-//        };
-//        for (int i = 0; i < mapSize; i++)
-//        {
-//            for (int j = 0; j < mapSize; j++)
-//            {
-//                var cell = cells.GetCell(i, j);
-//                if (cell == null)
-//                {
-//                    var deltaToStart = Mathf.Max(Mathf.Abs(startIndexX - i) , Mathf.Abs(startIndexZ - j));
-//                    cell = CreateRandomCell(deltaToStart,mapSize,startPower,maxDistance,ref cellId,i,j, counts);
-//                    SubscribeCell(cell);
-//                    cells.SetCell(i, j, cell);
-//                }
-//            }
-//        }
-//
-//        InitKeysZones(cores);
-//
-//#if UNITY_EDITOR
-//        string ss = "";
-//        foreach (var count in counts)
-//        {
-//            ss += " (" + count.Key.ToString() + ":" + count.Value + ")";
-//        }
-//        Debug.Log(ss);
-//#endif
-//        var startCell = new StartGlobalCell(cellId++, startIndexX, startIndexZ);
-//        cells.SetCell(startIndexX, startIndexZ, startCell);
-//        return startCell;
-//    }
-
-//    private void InitKeysZones(List<CoreGlobalMapCell> cores)
-//    {
-//        int maxPosibleOffset = zoneCount / 2;
-//        int coreIndex = 1;
-//        foreach (var item in cores)
-//        {
-//            var xx = item.indX;
-//            var zz = item.indZ;
-//            int offsetX = MyExtensions.Random(-maxPosibleOffset, maxPosibleOffset);
-//            int offsetZ = MyExtensions.Random(-maxPosibleOffset, maxPosibleOffset);
-//            var centerX = Mathf.Clamp(xx + offsetX, maxPosibleOffset, Size - maxPosibleOffset-1);
-//            var centerZ = Mathf.Clamp(zz + offsetZ, maxPosibleOffset, Size - maxPosibleOffset - 1);
-//            for (int i = 0; i < zoneCount; i++)
-//            {
-//                var ix = centerX - maxPosibleOffset + i;
-//                for (int j = 0; j < zoneCount; j++)
-//                {
-//                    var jz = centerZ - maxPosibleOffset + j;
-//#if UNITY_EDITOR
-//                    if (ix < 0 || ix >= Size)
-//                    {
-//                        Debug.LogErrorFormat("wrong cells {0} {1} {2} {3}" , centerX,maxPosibleOffset,i, Size);
-//                    }
-//                    if (jz < 0 || jz >= Size)
-//                    {
-//                        Debug.LogErrorFormat("wrong cells {0} {1} {2} {3}", centerZ, maxPosibleOffset, j, Size);
-//                    }
-//#endif
-//                    var cell = cells.GetCell(ix, jz);
-//                    if (cell != null)
-//                    {
-//                        cell.SetConnectedCell(coreIndex);
-//                    }
-//                }
-//            }
-//            coreIndex++;
-//        }
-//    }
-
     private void SubscribeCell(GlobalMapCell cell)
     {
         cell.OnScouted += OnCellScouted;
@@ -623,41 +449,6 @@ public class GalaxyData
             obj.UnconnectAll();
         }
     }
-
-//    private void AddNothingPoints(int notingPower)
-//    {
-//        for (int i = 0; i < Size; i++)
-//        {
-//            for (int j = 0; j < notingPower; j++)
-//            {
-//
-//                var rndZ = MyExtensions.Random(0, Size-1);
-//                var cell = cells.GetCell(i, rndZ);
-//                if (cell == null)
-//                {
-//                    var connected = ConnectedCellsToCurrent(i,rndZ);
-//                    int blockedCount = 0;
-//                    foreach (var globalMapCell in connected)
-//                    {
-//                        if (globalMapCell != null)
-//                        {
-//                            if (globalMapCell is GlobalMapNothing)
-//                            {
-//                                blockedCount++;
-//                            }
-//                        }
-//                    }
-//                    if (blockedCount <= 2)
-//                    {
-//                        var c = new GlobalMapNothing(Utils.GetId(), i, rndZ);
-//                        cells.SetCell( c);
-//                    }
-//                }
-//            }
-//        }
-//
-//    }
-
     public GlobalMapCell GetRandomClosestCellWithNoData(ShipConfig config, int indX, int indZ)
     {
         return cells.GetRandomClosestCellWithNoData(config, indX, indZ);

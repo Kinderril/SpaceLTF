@@ -24,6 +24,7 @@ public enum BulletType
     beam = 3,
     upDown = 4,
     nextFrame = 5,
+    delayHoming = 6,
 }
 
 [System.Serializable]
@@ -160,6 +161,9 @@ public abstract class Bullet : MovingObject
             case BulletType.nextFrame:
                 bullet.InitNextFrame(weapon, dir, position, distanceShoot, bulletSpeed);
                 break;
+            case BulletType.delayHoming:
+                bullet.InitDelayHoming(weapon, dir, position, distanceShoot, bulletSpeed, turnSpeed);
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -201,6 +205,27 @@ public abstract class Bullet : MovingObject
         }
 #endif
         _homing = false;
+        Weapon = weapon;
+        _startTime = Time.time;
+        _startPos = position;
+        transform.position = _startPos;
+        _endPos = _startPos + Utils.NormalizeFastSelf(dir) * distanceShoot;
+        _distanceShoot = distanceShoot;
+        Rotation = Quaternion.LookRotation(dir);
+
+    }
+
+    private void InitDelayHoming(IWeapon weapon, Vector3 dir, Vector3 position, float distanceShoot, float bulletSpeed, float turnSpeed)
+    {
+        _turnSpeed = turnSpeed;
+        _curTime = 0;
+        _curSpeed = _maxSpeed = bulletSpeed;
+#if UNITY_EDITOR
+        if (_curSpeed <= 0)
+        {
+            Debug.LogError("wrong bullet speed " + gameObject.name);
+        }
+#endif
         Weapon = weapon;
         _startTime = Time.time;
         _startPos = position;

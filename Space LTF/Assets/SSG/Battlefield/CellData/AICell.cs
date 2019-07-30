@@ -96,6 +96,7 @@ public class AICell
     public Dictionary<int, CellDirection> PosibleDirections = new Dictionary<int, CellDirection>(); 
  
     private CellPoint[] _arrayPoints;
+    public List<AIAsteroidData> Asteroids; 
 
     public AICell(CellType cell,CellPoint start,CellPoint left,CellPoint right,CellPoint end,float side)
     {

@@ -21,6 +21,7 @@ public class WeaponInventoryParameters
     public float shieldDamage;
     public float bodyDamage;
     public float sectorAngle;
+    public float turnSpeed;
     public float reloadSec;
     public float delayBetweenShootsSec;
     public int shootPerTime;
@@ -30,10 +31,11 @@ public class WeaponInventoryParameters
 
     public WeaponInventoryParameters(int shieldDamage, int bodyDamage, float sectorAngle, float reloadSec,
         float delayBetweenShootsSec,
-        int shootPerTime, float _bulletSpeed, float AimRadius)
+        int shootPerTime, float _bulletSpeed, float AimRadius, float turnSpeed = 0f)
     {
         this.AimRadius = AimRadius;
         this._bulletSpeed = _bulletSpeed;
+        this.turnSpeed = turnSpeed;
         this.shootPerTime = shootPerTime;
         this.delayBetweenShootsSec = delayBetweenShootsSec;
         this.reloadSec = reloadSec;
@@ -115,6 +117,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         _bodyDamage = parameters.bodyDamage;
         this.shootPerTime = parameters.shootPerTime;
         this._bulletSpeed = parameters._bulletSpeed;
+        this._bulletTurnSpeed = parameters.turnSpeed;
         this.ReloadSec = parameters.reloadSec;
         this.delayBetweenShootsSec = parameters.delayBetweenShootsSec;
         this._aimRadius = parameters.AimRadius;
@@ -258,6 +261,10 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         if (CanUpgrade())
         {
             Level++;
+            if (OnUpgrade != null)
+            {
+                OnUpgrade(this);
+            }
         }
     }
 }

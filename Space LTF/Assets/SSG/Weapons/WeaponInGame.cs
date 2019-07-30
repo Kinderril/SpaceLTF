@@ -51,7 +51,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
     //public WeaponInv WeaponData;
     //private float _reloadSec;
     //private float _aimRadius;
-    private float _radiusShoot;
+    protected float _radiusShoot;
     public float SetorAngle { get; set; }
     public float BulletSpeed { get; set; }
     public float ReloadSec { get; set; }
@@ -263,7 +263,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         return v;
     }
 
-    protected void ShootDir(ShipBase target)
+    protected virtual void ShootDir(ShipBase target)
     {
         _curPeriodShoots++;
         BulletCreate(target, Owner.LookDirection);
@@ -279,7 +279,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         }
     }
 
-    public void BulletCreate(ShipBase target, Vector3 dir)
+    public virtual void BulletCreate(ShipBase target, Vector3 dir)
     {
         CreateBulletAction(new BulletTarget(target),  bulletOrigin, this, ShootPos.position,
             new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));

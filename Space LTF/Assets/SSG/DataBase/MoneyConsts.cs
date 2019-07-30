@@ -14,10 +14,10 @@ public static class MoneyConsts
     //Upgrade
     public static Dictionary<int, int> SpellsCostUpgrade = new Dictionary<int, int>()
     {
-        {1, 8},
-        {2, 14},
-        {3, 26},
-        {4, 45},
+        {1, 16},
+        {2, 27},
+        {3, 35},
+        {4, 40},
     };
 
     public static Dictionary<int, int> PassiveUpgrade = new Dictionary<int, int>()
@@ -31,7 +31,7 @@ public static class MoneyConsts
     {
         {1, 14},
         {2, 24},
-        {3, 30},
+        {3, 35},
     };
 
     //BUY
@@ -47,7 +47,7 @@ public static class MoneyConsts
     public const int SPELL_BASE_MONEY_COST = 16;
     public const int MODUL_BASE_MONEY_COST = 16;
     public const int MODUL_LEVEL_MONEY_COST = 14;
-    public const int MODUL_SUPPORT_MONEY_COST = 19;
+    public const int MODUL_RARE_MONEY_COST = 26;
 
 
 }

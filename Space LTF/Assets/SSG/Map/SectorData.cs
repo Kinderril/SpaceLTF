@@ -7,10 +7,12 @@ using JetBrains.Annotations;
 
 public class SectorData
 {
+    private const float COEF_POWER = 0.7f;
     public int StartX;
     public int StartZ;
     public int Size { get; private set; }
     public int Id { get; private set; }
+    public bool IsPopulated { get; private set; }
     private int _power;
     public SectorCellContainer[,] Cells;
     private HashSet<SectorCellContainer> _listCells = new HashSet<SectorCellContainer>();
@@ -43,12 +45,6 @@ public class SectorData
         }
     }
 
-//    public void SetCellToRandom(GlobalMapCell cell)
-//    {
-//        var x = MyExtensions.Random(0, Size);
-//        var z = MyExtensions.Random(0, Size);
-//        Cells[x, z] = cell;
-//    }
     public void SetCell(GlobalMapCell cell,int subSectotId)
     {
         var x = cell.indX - StartX;
@@ -68,15 +64,16 @@ public class SectorData
     }
 
 
-    public void Populate(int power,[CanBeNull] SectorData startSectorData)
+    public void Populate(int startPowerGalaxy,[CanBeNull] SectorData startSectorData)
     {
+        IsPopulated = true;
         int additional = 0;
         if (startSectorData != null)
         {
-            var s = Mathf.Abs(startSectorData.StartX - StartX) + Mathf.Abs(startSectorData.StartZ - StartZ);
-            additional = (int) (s * Size / 3f);
+//            var s = Mathf.Abs(startSectorData.StartX - StartX) + Mathf.Abs(startSectorData.StartZ - StartZ);
+            additional = (int) (StartX * Size * COEF_POWER);
         }
-        _power = power + additional;
+        _power = startPowerGalaxy + additional;
         RandomizeBorders();
         var remainFreeCells = _listCells.Where(x => x.IsFreeToPopulate()).ToList();
         //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");

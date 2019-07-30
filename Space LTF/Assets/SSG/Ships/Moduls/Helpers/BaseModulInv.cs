@@ -27,51 +27,15 @@ public class BaseModulInv : IItemInv
     {
         get
         {
-            switch (Type)
+            if (LibraryModuls.IsRare(Type))
             {
-                case SimpleModulType.autoRepair:
-                case SimpleModulType.autoShieldRepair:
-                case SimpleModulType.closeStrike:
-                case SimpleModulType.shieldRegen:
-                case SimpleModulType.antiPhysical:
-                case SimpleModulType.antiEnergy:
-                case SimpleModulType.shieldLocker:
-                case SimpleModulType.engineLocker:
-                case SimpleModulType.damageMines:
-                case SimpleModulType.systemMines:
-                case SimpleModulType.ShipSpeed:
-                case SimpleModulType.blink:
-                    return (MoneyConsts.MODUL_BASE_MONEY_COST + MoneyConsts.MODUL_LEVEL_MONEY_COST * (Level - 1));
-                case SimpleModulType.laserUpgrade:
-                case SimpleModulType.bombUpgrade:
-                case SimpleModulType.EMIUpgrade:
-                case SimpleModulType.rocketUpgrade:
-                case SimpleModulType.impulseUpgrade:
-                case SimpleModulType.ResistDamages:
-                    return 2 * (MoneyConsts.MODUL_BASE_MONEY_COST + MoneyConsts.MODUL_LEVEL_MONEY_COST * (Level - 1));
-                case SimpleModulType.WeaponSpeed:
-                case SimpleModulType.WeaponSpray:
-                case SimpleModulType.WeaponDist:
-                case SimpleModulType.WeaponPush:
-                case SimpleModulType.WeaponFire:
-                case SimpleModulType.WeaponEngine:
-                case SimpleModulType.WeaponShield:
-                case SimpleModulType.WeaponWeapon:
-                case SimpleModulType.WeaponCrit:
-                case SimpleModulType.WeaponAOE:
-                case SimpleModulType.WeaponSector:
-                case SimpleModulType.WeaponChain:
-                case SimpleModulType.WeaponLessDist:
-                case SimpleModulType.WeaponShieldIgnore:
-                case SimpleModulType.WeaponSelfDamage:
-                case SimpleModulType.WeaponShieldPerHit:
-                case SimpleModulType.WeaponNoBulletDeath:
-                case SimpleModulType.WeaponPowerShot:
-                case SimpleModulType.WeaponFireNear:
-                    return MoneyConsts.MODUL_SUPPORT_MONEY_COST + MoneyConsts.MODUL_LEVEL_MONEY_COST * (Level - 1);
+
+                return MoneyConsts.MODUL_RARE_MONEY_COST + MoneyConsts.MODUL_LEVEL_MONEY_COST * (Level - 1);
             }
-            UnityEngine.Debug.LogError("CAn't find cost for modul type: " + Type.ToString());
-            return MoneyConsts.MODUL_BASE_MONEY_COST + MoneyConsts.MODUL_LEVEL_MONEY_COST * (Level - 1);
+            else
+            {
+                return (MoneyConsts.MODUL_BASE_MONEY_COST + MoneyConsts.MODUL_LEVEL_MONEY_COST * (Level - 1));
+            }
         }
     }
 

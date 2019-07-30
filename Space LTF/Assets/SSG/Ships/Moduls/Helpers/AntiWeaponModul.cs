@@ -7,7 +7,7 @@ using UnityEngine;
 
 public abstract class AntiWeaponModul : TimerModul
 {
-    private const float RADIUS_BASE = 20;
+    private const float RADIUS_BASE = 14;
     private float _radSqrt = 400;
 
 //    private float _nextCheckTime;

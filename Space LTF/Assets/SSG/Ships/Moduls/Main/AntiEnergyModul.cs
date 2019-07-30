@@ -8,8 +8,8 @@ using UnityEngine;
 public class AntiEnergyModul : AntiWeaponModul
 {
 
-    private const float DELAY_BASE = 5;
-    private const float DELAY_DELTA = 2;
+    private const float DELAY_BASE = 13;
+    private const float DELAY_DELTA = 3;
     public AntiEnergyModul(BaseModulInv b) 
         : base(b)
     {

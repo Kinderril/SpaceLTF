@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.XR.WSA.Input;
 
 public enum ArmyCreationMode
 {
@@ -81,6 +82,8 @@ public static class Library
     public const int COINS_TO_CHARGE_SHIP_SHIELD = 2;
     public const int COINS_TO_CHARGE_SHIP_SHIELD_DELAY = 20;
     public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.3f;
+    public const int PriorityTargetCostTime = 120;
+    public const int PriorityTargetCostCount = 1;
 
 
     #region GLOBAL_MAP_DATA
@@ -89,17 +92,19 @@ public static class Library
     public const float MIN_GLOBAL_MAP_DEATHSTART = 1;
     public const float MAX_GLOBAL_MAP_DEATHSTART= 15;
     public const float MIN_GLOBAL_MAP_CORES = 2;
-    public const float MAX_GLOBAL_MAP_CORES = 6;
+    public const float MAX_GLOBAL_MAP_CORES = 5;
     public const float MIN_GLOBAL_MAP_BASE_POWER = 7;
     public const float MAX_GLOBAL_MAP_BASE_POWER = 11;
-    public const int MIN_GLOBAL_MAP_SECTOR_COUNT = 2;
-    public const int MAX_GLOBAL_MAP_SECTOR_COUNT = 7;
+    public const int MIN_GLOBAL_MAP_SECTOR_COUNT = 3;
+    public const int MAX_GLOBAL_MAP_SECTOR_COUNT = 8;
     public const float SELL_COEF = 0.5f;
     #endregion
 
+    #region REPUTATION
     public static int REPUTATION_REPAIR_ADD = 12;
     public static int REPUTATION_SCIENS_LAB_ADD = 7;
     public static int REPUTATION_FIND_WAY_ADD = 8;
+    public static float CHARGE_SPEED_COEF_PER_LEVEL = 0.12f;
 
     public const int REPUTATION_STEAL_REMOVE = 5;
     public const int REPUTATION_REPAIR_REMOVE = 4;
@@ -107,8 +112,8 @@ public static class Library
     public const int REPUTATION_FRIGHTEN_SHIP_REMOVE = 9;
     public const int REPUTATION_HIRE_CRIMINAL_REMOVED = 10;
     public const float REPAIR_PERCENT_PERSTEP_PERLEVEL = 0.08f;
-    public const int PriorityTargetCostTime = 120;
-    public const int PriorityTargetCostCount = 1;
+    #endregion
+
    
     public static void Init()
     {
@@ -117,6 +122,7 @@ public static class Library
         {
             _lvlUps[i] = (int)(i * 0.5f + 4f);
         }
+        LibraryModuls.Init();
     }
 
     public static int PilotLvlUpCost(int curLvl)
@@ -133,13 +139,13 @@ public static class Library
                 parametes = new WeaponInventoryParameters(4, 4, LASER_ANG, LASER_DELAY, 0.15f, 1, LASER_SPEED, 8);
                 return new LaserInventory(parametes,  1);
             case WeaponType.rocket:
-                parametes = new WeaponInventoryParameters(3, 6, ROCKET_ANG, ROCKET_DELAY, 0.5f, 1, ROCKET_SPEED, 11);
+                parametes = new WeaponInventoryParameters(3, 6, ROCKET_ANG, ROCKET_DELAY, 0.5f, 1, ROCKET_SPEED, 11,36f);
                 return new RocketInventory(parametes,  1);
             case WeaponType.impulse:
                 parametes = new WeaponInventoryParameters(6, 2, LASER_ANG, IMPULSE_DELAY, 0.2f, 1, IMPULSE_SPEED, 6);
                 return new ImpulseInventory(parametes,  1);
             case WeaponType.casset:
-                parametes = new WeaponInventoryParameters(2, 4, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9);
+                parametes = new WeaponInventoryParameters(2, 4, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9,70f);
                 return new BombInventoryWeapon(parametes, 1);
             case WeaponType.eimRocket:
                 parametes = new WeaponInventoryParameters(2, 2, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 7);
@@ -212,11 +218,11 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 21, 10, 4.1f, 70,1, 2, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 21, 10, 4.1f, 70,1, 3, 0, 1, 0.0f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 28, 12, 3.6f, 63, 1, 3, 0, 1, 0.05f), player);
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 28, 12, 3.6f, 63, 1, 4, 0, 1, 0.05f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 32, 14, 3.1f, 55, 2, 3, 0, 1, 0.01f), player);
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 32, 14, 3.1f, 55, 2, 4, 0, 1, 0.01f), player);
                     case ShipType.Base:
                         return new ShipInventory(new StartShipParamsDebug(shipType, config, 46, 18, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
@@ -225,14 +231,28 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 15, 22, 3.6f, 75, 2, 1, 0, 1, 0.3f), player);
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 15, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 19, 34, 3.0f, 64, 2, 1, 0, 1, 0.35f), player);
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 19, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 22, 41, 2.2f, 52, 3, 2, 0, 1, 0.4f), player);
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 22, 41, 2.2f, 53, 3, 3, 0, 1, 0.4f), player);
                     case ShipType.Base:
                         return new ShipInventory(new StartShipParamsDebug(shipType, config, 31, 54, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
+                break;
+            case ShipConfig.mercenary:
+                switch (shipType)
+                {
+                    case ShipType.Light:
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 22, 11, 3.8f, 72, 2, 2, 0, 1, 0.1f), player);
+                    case ShipType.Middle:
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 26, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f), player);
+                    case ShipType.Heavy:
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f), player);
+                    case ShipType.Base:
+                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 34, 45, 0.01f, 40, 0, 0, 3, 1, 0f), player);
+                }
+
                 break;
             case ShipConfig.federation:
                 switch (shipType)
@@ -245,19 +265,6 @@ public static class Library
                         return new ShipInventory(new StartShipParamsDebug(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player);
                     case ShipType.Base:
                         return new ShipInventory(new StartShipParamsDebug(shipType, config, 50, 30, 0.01f, 40, 0, 0, 4, 1, 0f), player);
-                }
-                break;
-            case ShipConfig.mercenary:
-                switch (shipType)
-                {
-                    case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 19, 13, 3.8f, 75, 2, 2, 0, 1, 0.1f), player);
-                    case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 23, 15, 3.2f, 62, 2, 3, 0, 1, 0.15f), player);
-                    case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 30, 20, 2.6f, 50, 3, 3, 0, 1, 0.2f), player);
-                    case ShipType.Base:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 34, 45, 0.01f, 40, 0, 0, 3, 1, 0f), player);
                 }
                 break;
             case ShipConfig.ocrons:
@@ -322,112 +329,83 @@ public static class Library
 
     public static BaseModulInv CreatSimpleModul(SimpleModulType type,int level)
     {
-        return new BaseModulInv(type, level);
-    }
-
-    public static BaseModulInv CreatSimpleModul(int level)
-    {
-        if (MyExtensions.IsTrue01(.5f))
+        if (LibraryModuls.IsSupport(type))
         {
-            List<SimpleModulType> typesToRnd;
-            typesToRnd = ShipActionModuls();
-            return new BaseModulInv(typesToRnd.RandomElement(), level);
+            return CreateSupport(type, level);
         }
         else
         {
-            var rnd = WeaponUpgradeModuls().RandomElement();
-            switch (rnd)
-            {
-                case SimpleModulType.WeaponSpeed:
-                    return new WeaponSpeedModul(level);  
-                case SimpleModulType.WeaponSpray:
-                    return new WeaponSprayModul(level);
-                case SimpleModulType.WeaponDist:
-                    return new WeaponDistModul(level);
-                case SimpleModulType.WeaponPush:
-                    return new WeaponPushModul(level);
-                case SimpleModulType.WeaponFire:
-                    return new WeaponDamageTimeEffect(ShipDamageType.fire,level);
-                case SimpleModulType.WeaponEngine:
-                    return new WeaponDamageTimeEffect(ShipDamageType.engine, level);
-                case SimpleModulType.WeaponShield:
-                    return new WeaponDamageTimeEffect(ShipDamageType.shiled, level);
-                case SimpleModulType.WeaponWeapon:
-                    return new WeaponDamageTimeEffect(ShipDamageType.weapon, level);
-                case SimpleModulType.WeaponCrit:
-                    return new WeaponCritModul(level);
-                case SimpleModulType.WeaponAOE:
-                    return new WeaponAOEModul(level);
-                case SimpleModulType.WeaponSector:
-                    return new WeaponSectorModul(level);
-                case SimpleModulType.WeaponLessDist:
-                    return new WeaponLessDist(level);
-                case SimpleModulType.WeaponChain:
-                    return new WeaponChainModul(level);    
-                case SimpleModulType.WeaponShieldIgnore:
-                    return new WeaponShieldIgnore(level);  
-                case SimpleModulType.WeaponSelfDamage:
-                    return new WeaponSelfDamageModul(level);    
-                case SimpleModulType.WeaponShieldPerHit:
-                    return new WeaponShieldPerHit(level);   
-                case SimpleModulType.WeaponNoBulletDeath:
-                    return new WeaponNoDeathModul(level); 
-                case SimpleModulType.WeaponPowerShot:
-                    return new WeaponPowerShot(level); 
-                case SimpleModulType.WeaponFireNear:
-                    return new WeaponFireNearModul(level);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            return new BaseModulInv(type, level);
         }
     }
 
-    private static List<SimpleModulType> ShipActionModuls()
+    public static BaseModulInv CreatSimpleModul(int level,bool rare)
     {
-        List<SimpleModulType> typesToRnd = new List<SimpleModulType>()
+        List<SimpleModulType> list;
+        if (rare)
         {
-            SimpleModulType.autoRepair,
-            SimpleModulType.autoShieldRepair,
-            SimpleModulType.closeStrike,
-            SimpleModulType.antiPhysical,
-            SimpleModulType.antiEnergy,
-            SimpleModulType.shieldLocker,
-            SimpleModulType.engineLocker,
-            SimpleModulType.damageMines,
-            SimpleModulType.systemMines,
-            SimpleModulType.blink,
-//            SimpleModulType.laserUpgrade, 
-//            SimpleModulType.rocketUpgrade, 
-//            SimpleModulType.EMIUpgrade, 
-//            SimpleModulType.impulseUpgrade, 
-//            SimpleModulType.bombUpgrade, 
-            SimpleModulType.ShipSpeed,
-            SimpleModulType.ShipTurnSpeed,
-        };
-        return typesToRnd;
+            list = LibraryModuls.GetRareList();
+        }
+        else
+        {
+            list = LibraryModuls.GetSimpleList();
+        }
+
+        var type = list.RandomElement();
+        return CreatSimpleModul(type, level);
     }
-    private static List<SimpleModulType> WeaponUpgradeModuls()
+
+    private static BaseSupportModul CreateSupport(SimpleModulType rnd, int level)
     {
-        List<SimpleModulType> typesToRnd = new List<SimpleModulType>()
+        switch (rnd)
         {
-            SimpleModulType.WeaponSpeed,
-            SimpleModulType.WeaponSpray,
-            SimpleModulType.WeaponDist,
+            case SimpleModulType.WeaponSpeed:
+                return new WeaponSpeedModul(level);
+            case SimpleModulType.WeaponSpray:
+                return new WeaponSprayModul(level);
+            case SimpleModulType.WeaponDist:
+                return new WeaponDistModul(level);
+            case SimpleModulType.WeaponPush:
+                return new WeaponPushModul(level);
+            case SimpleModulType.WeaponFire:
+                return new WeaponDamageTimeEffect(ShipDamageType.fire, level);
+            case SimpleModulType.WeaponEngine:
+                return new WeaponDamageTimeEffect(ShipDamageType.engine, level);
+            case SimpleModulType.WeaponShield:
+                return new WeaponDamageTimeEffect(ShipDamageType.shiled, level);
+            case SimpleModulType.WeaponWeapon:
+                return new WeaponDamageTimeEffect(ShipDamageType.weapon, level);
+            case SimpleModulType.WeaponCrit:
+                return new WeaponCritModul(level);
+            case SimpleModulType.WeaponAOE:
+                return new WeaponAOEModul(level);
+            case SimpleModulType.WeaponSector:
+                return new WeaponSectorModul(level);
+            case SimpleModulType.WeaponLessDist:
+                return new WeaponLessDist(level);
+            case SimpleModulType.WeaponChain:
+                return new WeaponChainModul(level);
+            case SimpleModulType.WeaponShieldIgnore:
+                return new WeaponShieldIgnore(level);
+            case SimpleModulType.WeaponSelfDamage:
+                return new WeaponSelfDamageModul(level);
+            case SimpleModulType.WeaponShieldPerHit:
+                return new WeaponShieldPerHit(level);
+            case SimpleModulType.WeaponNoBulletDeath:
+                return new WeaponNoDeathModul(level);
+            case SimpleModulType.WeaponPowerShot:
+                return new WeaponPowerShot(level);
+            case SimpleModulType.WeaponFireNear:
+                return new WeaponFireNearModul(level);
+            default:
+                Debug.LogError($"this is not support {rnd}");
+                throw new ArgumentOutOfRangeException();
+        }
 
-            SimpleModulType.WeaponPush,
-            SimpleModulType.WeaponFire,
-            SimpleModulType.WeaponEngine,
-            SimpleModulType.WeaponShield,
-            SimpleModulType.WeaponWeapon,
-
-            SimpleModulType.WeaponCrit,
-            SimpleModulType.WeaponAOE,
-            SimpleModulType.WeaponSector,
-            SimpleModulType.WeaponLessDist,
-            SimpleModulType.WeaponChain,
-        };
-        return typesToRnd;
     }
+
+
+
 
     public static PilotParameters CreateDebugPilot()
     {

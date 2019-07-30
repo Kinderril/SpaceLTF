@@ -106,7 +106,7 @@ public class InGameMainUI : BaseWindow
         var mainShip = MyCommander.MainShip;
         if (mainShip != null)
         {
-            SpellModulsContainer.Init(this, MyCommander.SpellController, mainShip, OnSpellClicked);
+            SpellModulsContainer.Init(this, MyCommander.SpellController, mainShip, OnSpellClicked, MyCommander.CoinController);
         }
     }
 

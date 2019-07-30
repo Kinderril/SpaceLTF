@@ -13,10 +13,12 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     public RectTransform MainLayout;
     public TextMeshProUGUI Name;
     public TextMeshProUGUI WeaponLevelField;
-    public TextMeshProUGUI DamageField;
+//    public TextMeshProUGUI DamageField;
     public TextMeshProUGUI PrefabText;
     private WeaponInv _weapon;
 
+    public SliderWithTextMeshPro DamageHP;
+    public SliderWithTextMeshPro DamageShield;
     public SliderWithTextMeshPro RadiuesField;
     public SliderWithTextMeshPro AngField;
     public SliderWithTextMeshPro ReloadField;       
@@ -51,6 +53,8 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
     private void DrawParams(IAffectParameters modif)
     {
+        DamageHP.InitBorders(0, 10, true);
+        DamageShield.InitBorders(0, 10, true);
         RadiuesField.InitBorders(0, 15, true);
         AngField.InitBorders(0, 180, true);
         ReloadField.InitBorders(1, 20, true);
@@ -60,6 +64,8 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         AngField.InitName("Sector");
         ReloadField.InitName("Reload");
         BulletSpeedField.InitName("Speed");
+        DamageHP.InitName("Damage body");
+        DamageShield.InitName("Damage shield");
         DrawCurrentUpgrades(modif);
     }
 
@@ -83,11 +89,13 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     private void DrawCurrentUpgrades(IAffectParameters modif)
     {
 //        var dataMain = new WeaponUIParams(_weapon.CurrentDamage, _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed);
-        DamageField.text = $"Damage. Shield:{modif.CurrentDamage.ShieldDamage}  Body:{modif.CurrentDamage.BodyDamage}";
+//        DamageField.text = $"Damage. Shield:{modif.CurrentDamage.ShieldDamage}  Body:{modif.CurrentDamage.BodyDamage}";
         RadiuesField.Slider.value = modif.AimRadius;
         AngField.Slider.value = modif.SetorAngle;
         ReloadField.Slider.value = modif.ReloadSec;
         BulletSpeedField.Slider.value = modif.BulletSpeed;
+        DamageHP.Slider.value = modif.CurrentDamage.BodyDamage;
+        DamageShield.Slider.value = modif.CurrentDamage.ShieldDamage;
     }
 
     private void DrawModuls()
@@ -115,6 +123,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
     private void OnUpgrade(WeaponInv obj)
     {
+        DrawModuls();
         CheckCanUpg();
         DrawLevel();
         DrawCurrentUpgrades(dataModif);

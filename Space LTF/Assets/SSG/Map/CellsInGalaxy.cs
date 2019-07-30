@@ -65,7 +65,7 @@ public class CellsInGalaxy
             for (int j = 0; j < Size; j++)
             {
                 var cell = cells[i, j];
-                if (!cell.IsScouted && !cell.Completed)
+                if (cell != null && !cell.IsScouted && !cell.Completed)
                 {
                     var armyCell = cell as ArmyGlobalMapCell;
                     if (armyCell != null && armyCell.GetConfig() == config)

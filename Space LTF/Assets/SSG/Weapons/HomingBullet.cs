@@ -9,22 +9,17 @@ public class HomingBullet : Bullet
 {
     private bool _targetIsDead;
     protected float _deathTime;
+    public float HomingTimeSec = 8f;
 
     public override void LateInit()
     {
-        _deathTime = Time.time + 8f;
+        _deathTime = Time.time + HomingTimeSec;
         _targetIsDead = false;
         base.LateInit();
         Target.OnDeath += OnDeathTarget;
     }
 
-    public override BulletType GetType
-    {
-        get
-        {
-            return BulletType.homing;
-        }
-    }
+    public override BulletType GetType => BulletType.homing;
 
     private void OnDeathTarget(ShipBase obj)
     {

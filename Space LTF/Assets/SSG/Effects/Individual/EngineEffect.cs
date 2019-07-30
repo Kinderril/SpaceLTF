@@ -10,6 +10,7 @@ public class EngineEffect : MonoBehaviour
     private MovingObject _mobj;
     private float _lastFrameSpeed;
     public ParticleSystem[] Particles;
+    private bool _failed;
 
     public void Init(MovingObject mobj)
     {
@@ -18,6 +19,10 @@ public class EngineEffect : MonoBehaviour
 
     void Update()
     {
+        if (_failed)
+        {
+            return;
+        }
         var delta = Mathf.Abs(_lastFrameSpeed - _mobj.CurSpeed);
         if (delta > Mathf.Epsilon)
         {
@@ -25,11 +30,20 @@ public class EngineEffect : MonoBehaviour
             var spd = _lastFrameSpeed*1f;
             for (int i = 0; i < Particles.Length; i++)
             {
-                var p = Particles[i];
-                var main = p.main;
-                var m = new ParticleSystem.MinMaxCurve(spd * 0.8f, spd * 1.2f);
-                main.startSpeed = m;
-//                main.startSpeed.constantMin = spd * 0.8f;
+                try
+                {
+
+                    var p = Particles[i];
+                    var main = p.main;
+
+
+                    var m = new ParticleSystem.MinMaxCurve(spd * 0.8f, spd * 1.2f);
+                    main.startSpeed = m;
+                }
+                catch (Exception e)
+                {
+                    _failed = true;
+                }
             }
         }
     }

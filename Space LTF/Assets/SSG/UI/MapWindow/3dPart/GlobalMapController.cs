@@ -90,7 +90,7 @@ public class GlobalMapController : MonoBehaviour
         GlobalMapCell startCell = null;
         for (int i = 0; i < data.Size; i++)
         {
-            for (int j = 0; j < data.Size; j++)
+            for (int j = 0; j < GalaxyData.VERTICAL_COUNT * data.SizeOfSector - 1; j++)
             {
                 var cell = allCells2[i, j];
                 if (!(cell is GlobalMapNothing))
