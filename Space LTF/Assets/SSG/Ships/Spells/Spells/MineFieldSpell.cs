@@ -15,26 +15,31 @@ public class MineFieldSpell : BaseSpellModulInv
     private float dist;//Костыльный параметр
     public MineFieldSpell(int costCount, int costTime)
         : base(SpellType.mineField, costCount, costTime,
-            MainCreateBullet, MainAffect, new BulleStartParameters(9.7f, 36f, 25, 25), false)
+            MainCreateBullet, CastSpell, MainAffect, new BulleStartParameters(9.7f, 36f, 25, 25), false)
     {
 
     }
 
-    private static void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
         var deltaAng = 360f / MINES_COUNT;
         var d = MyExtensions.IsTrue01(0.5f) ? Vector3.right : Vector3.left;
         for (int i = 0; i < MINES_COUNT; i++)
         {
             d = Utils.RotateOnAngUp(d, MyExtensions.GreateRandom((deltaAng * i)));
-            var position = shootpos + d * MyExtensions.Random(rad / 4, rad);
+            var position = shootPos + d * MyExtensions.Random(rad / 4, rad);
             var dir = (position - weapon.CurPosition);
             var dist = dir.magnitude;
-
-            var b = Bullet.Create(origin, weapon, dir, weapon.CurPosition, null,
-                new BulleStartParameters(Library.MINE_SPEED, 0f, dist, dist));
-
+            MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
         }
+    }
+
+    private static void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    {
+        var dir = (target.Position - weapon.CurPosition);
+        var dist = dir.magnitude;
+        Bullet.Create(origin, weapon, dir, weapon.CurPosition, null,
+                new BulleStartParameters(Library.MINE_SPEED, 0f, dist, dist));
     }
 
     private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)

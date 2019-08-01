@@ -33,26 +33,43 @@ public class TradeMapEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-        List<ItemType> types = new List<ItemType>(){ItemType.modul,ItemType.weapon,ItemType.spell};
-        switch (types.RandomElement())
+       
+        var inventory = MainController.Instance.MainPlayer.Inventory;
+
+        if ((inventory.Moduls.Count > 0) || (inventory.Weapons.Count > 0))
         {
-            case ItemType.weapon:
-                _itemsToTrade = Library.CreateWeapon(MyExtensions.IsTrueEqual());
-                break;
-            case ItemType.modul:
-                var list = new List<int>(){1,2};
-                _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(),MyExtensions.IsTrueEqual());
-                break;
-            case ItemType.spell:
-                _itemsToTrade = Library.CreateSpell();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            _TradeType = MyExtensions.IsTrueEqual() ? TradeType.traderBuy : TradeType.traderSell;
+        }
+        else
+        {
+            _TradeType =  TradeType.traderSell;
         }
 
-        _TradeType = MyExtensions.IsTrueEqual() ? TradeType.traderBuy : TradeType.traderSell;
+        if (_TradeType == TradeType.traderSell)
+        {
+            List<ItemType> types = new List<ItemType>() { ItemType.modul, ItemType.weapon, ItemType.spell };
+            switch (types.RandomElement())
+            {
+                case ItemType.weapon:
+                    _itemsToTrade = Library.CreateWeapon(MyExtensions.IsTrueEqual());
+                    break;
+                case ItemType.modul:
+                    var list = new List<int>() { 1, 2 };
+                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(), MyExtensions.IsTrueEqual());
+                    break;
+                case ItemType.spell:
+                    _itemsToTrade = Library.CreateSpell();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            _itemsToTrade.CurrentInventory = _inventory;
+        }
+        else
+        {
+           
 
-        _itemsToTrade.CurrentInventory = _inventory;
+        }
         string tradeData;
         switch (_TradeType)
         {
@@ -61,6 +78,14 @@ public class TradeMapEvent : BaseGlobalMapEvent
                 tradeData = $"He want to sell {_itemsToTrade.GetInfo()} for {_cost} credits.";
                 break;
             case TradeType.traderBuy:
+                if (inventory.Moduls.Count > 0)
+                {
+                    _itemsToTrade = inventory.Moduls.RandomElement();
+                }
+                else if (inventory.Weapons.Count > 0)
+                {
+                    _itemsToTrade = inventory.Weapons.RandomElement();
+                }
                 _cost = (int)(_itemsToTrade.CostValue * 1.2f);
                 tradeData = $"He want to buy your item {_itemsToTrade.GetInfo()} for {_cost} credits.";
                 break;

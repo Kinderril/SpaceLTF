@@ -25,9 +25,13 @@ public class DistShotSpell : BaseSpellModulInv
     private const float DIST_SHOT = 28f;
     public DistShotSpell(int costCount, int costTime)
         : base(SpellType.distShot, costCount, costTime  ,
-            DistShotCreateBullet, MainAffect, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT),false)
+            DistShotCreateBullet, CastSpell, MainAffect, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT),false)
     {
         CurWeaponDamage = new CurWeaponDamage(1,5);
+    }
+    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    {
+        DistShotCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
     }
 
     private static void DistShotCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)

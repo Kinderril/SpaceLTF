@@ -92,8 +92,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 
     public ShipBase Owner { get; private set; }
 
-
-    private CircleShader CircleShader;
+    public TeamIndex TeamIndex => Owner.TeamIndex;
 
 
     public Vector3 GetShootPos
@@ -266,7 +265,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
     protected virtual void ShootDir(ShipBase target)
     {
         _curPeriodShoots++;
-        BulletCreate(target, Owner.LookDirection);
+        BulletCreateByDir(target, Owner.LookDirection);
         if (_curPeriodShoots >= _shootPerTime)
         {
             ShootDoneAction(Owner);
@@ -279,9 +278,20 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         }
     }
 
-    public virtual void BulletCreate(ShipBase target, Vector3 dir)
+    public virtual void BulletCreateByDir(ShipBase target, Vector3 dir)
     {
-        CreateBulletAction(new BulletTarget(target),  bulletOrigin, this, ShootPos.position,
+        CreateBulletWithModif(target);
+    }
+
+    protected void CreateBulletWithModif(ShipBase target)
+    {
+        CreateBulletAction(new BulletTarget(target), bulletOrigin, this, ShootPos.position,
+            new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));
+    }
+
+    protected void CreateBulletWithModif(Vector3 target)
+    {
+        CreateBulletAction(new BulletTarget(target), bulletOrigin, this, ShootPos.position,
             new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));
     }
 
@@ -328,26 +338,13 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 
     }
 
-    //public BulleStartParameters ModifyParameters(BulleStartParameters parameters)
-    //{
-    //    return WeaponData.Modify(parameters);
-    //}
     public void ReloadNow()
     {
         _nextShootTime = 0f;
     }
 
     public abstract bool IsAimed(ShipPersonalInfo target);
-
-    public void Select(bool val)
-    {
-        CircleShader.Select(val);
-    }
-
-    public TeamIndex TeamIndex
-    {
-        get { return Owner.TeamIndex; }
-    }
+    
 
     public void UpgradeWithModul(BaseModulInv modul)
     {
@@ -395,6 +392,15 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
     {
         get { return _level; }
     }
+    public void AddAffectTargtAction(AffectTargetDelegate affectTarget)
+    {
+        AffectAction.Add(affectTarget);
+    }
+
+    public void CacheAngCos()
+    {
+        _sectorCos = Mathf.Cos(SetorAngle * Mathf.Deg2Rad / 2f);
+    }
 
     public void AffectTotal(ShipParameters shipParameters, ShipBase target, Bullet bullet,
         WeaponAffectionAdditionalParams additional)
@@ -426,17 +432,4 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         OnShootStart = null;
     }
 
-    public void AddAffectTargtAction(AffectTargetDelegate affectTarget)
-    {
-        AffectAction.Add(affectTarget);
-    }
-
-    public void CacheAngCos()
-    {
-        _sectorCos = Mathf.Cos(SetorAngle * Mathf.Deg2Rad / 2f);
-        CircleShader = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.CircleShader);
-        CircleShader.transform.SetParent(Owner.transform, false);
-        CircleShader.transform.position = GetShootPos;
-        CircleShader.Init(Owner, _sectorCos, AimRadius);
-    }
 }

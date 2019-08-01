@@ -5,10 +5,10 @@ using System.Text;
 
 public class ArmyCreatorLaser : ArmyCreatorData
 {
-    protected override List<SimpleModulType> AllSimpleModuls()
-    {
-        return new List<SimpleModulType>() { SimpleModulType.shieldRegen, SimpleModulType.engineLocker };
-    }
+//    protected override List<SimpleModulType> AllSimpleModuls()
+//    {
+//        return new List<SimpleModulType>() { SimpleModulType.shieldRegen, SimpleModulType.engineLocker };
+//    }
 
     protected override List<WeaponType> AllWeaponModuls()
     {

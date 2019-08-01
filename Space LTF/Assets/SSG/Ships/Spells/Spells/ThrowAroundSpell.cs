@@ -13,11 +13,15 @@ public class ThrowAroundSpell : BaseSpellModulInv
 
     public ThrowAroundSpell(int costCount, int costTime)
         : base(SpellType.throwAround, costCount, costTime,
-            MainCreateBullet, MainAffect, new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
+            MainCreateBullet, CastSpell, MainAffect,  new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
 
     }
 
+    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    {
+        MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
+    }
     public override SpellDamageData RadiusAOE()
     {
         return new SpellDamageData(rad);

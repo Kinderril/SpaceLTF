@@ -36,12 +36,25 @@ public class ShipParameters
     public delegate void ParameterChange(float curent,float max,float delta,ShipBase shipOwner);
 
     public float MaxHealth { get;  set; }
-    public float CurHealth { get;  set; }
+    public float CurHealth
+    {
+        get { return _curHealth;}
+        private set
+        {
+#if UNITY_EDITOR
+            if (DebugParamsController.NoDamage)
+            {
+                return;
+            }
+#endif
+            _curHealth = value;
+        } }
+    private float _curHealth;
 
 
 
 
-    public float MaxSpeed { get; set; }
+public float MaxSpeed { get; set; }
     public float TurnSpeed { get; set; }
 
     public event ParameterChange OnHealthChanged;

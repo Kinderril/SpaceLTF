@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 
 public static class Namings
@@ -57,9 +58,11 @@ public static class Namings
             case WeaponType.impulse:
                 return "Impulse";
             case WeaponType.casset:
-                return "Bomb";
+                return "Swarm";
             case WeaponType.eimRocket:
-                return "EMI";
+                return "EMI";     
+            case WeaponType.beam:
+                return "Beam";
         }
         return $"none.{config.ToString()} ___  {config}";
     }
@@ -162,7 +165,31 @@ public static class Namings
                 break;    
             case SimpleModulType.WeaponChain:
                 Name = "Chain strike";
+                break;  
+            case SimpleModulType.WeaponNoBulletDeath:
+                Name = " Penetrating shot";
+                break;
+            case SimpleModulType.WeaponSelfDamage:
+                Name = "Powerful recoil";
+                break;
+            case SimpleModulType.WeaponShieldPerHit:
+                Name = "Shield stealer";
                 break;   
+            case SimpleModulType.WeaponPowerShot:
+                Name = "Power shot";
+                break;    
+            case SimpleModulType.WeaponFireNear:
+                Name = "Fire wave";
+                break;  
+            case SimpleModulType.ResistDamages:
+                Name = "Protector";
+                break; 
+            case SimpleModulType.beamUpgrade:
+                Name = "Beam upgrade";
+                break;
+            default:
+                Debug.LogError($"NO NAME {config.ToString()}");
+                break;
 
         }
         return Name;
@@ -226,6 +253,10 @@ public static class Namings
                 break;
             case SimpleModulType.ShipTurnSpeed:
                 Name = String.Format("Increase ship turn speed for {0}% per level.", ShipSpeedModul.PER_LEVEL);
+                break;
+
+            default:
+                Debug.LogError($"NO DescSimpleModul {config.ToString()}");
                 break;
         }
         return Name;

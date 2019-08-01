@@ -42,7 +42,7 @@ public abstract class MineAbstractModul : BaseModul , IWeapon
         get { return _owner.Position; }
     }
 
-    public void BulletCreate(ShipBase target,Vector3 dir)
+    public void BulletCreateByDir(ShipBase target,Vector3 dir)
     {
         Debug.Log($"Mine abstract BulletCreate {Time.time}");
         for (int i = 0; i < 1+Level; i++)
@@ -108,7 +108,7 @@ public abstract class MineAbstractModul : BaseModul , IWeapon
     public void SetMine()
     {
         UpdateTime();
-        BulletCreate(null, _owner.LookDirection);
+        BulletCreateByDir(null, _owner.LookDirection);
     }
 
     public override void UpdateBattle()

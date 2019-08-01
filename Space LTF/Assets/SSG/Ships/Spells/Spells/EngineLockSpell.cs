@@ -16,8 +16,13 @@ public    class EngineLockSpell : BaseSpellModulInv
 
     public EngineLockSpell(int costCount, int costTime)
         : base(SpellType.engineLock, costCount, costTime, 
-            EngineCreateBullet, MainAffect, new BulleStartParameters(9.7f, 36f, 25, 25), false)
+            EngineCreateBullet, CastSpell, MainAffect, new BulleStartParameters(9.7f, 36f, 25, 25), false)
     {
+    }
+    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    {
+        EngineCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
+
     }
 
     private static void EngineCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)

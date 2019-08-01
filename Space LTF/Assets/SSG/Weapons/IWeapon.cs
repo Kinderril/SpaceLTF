@@ -14,7 +14,7 @@ public interface IWeapon
     float CurOwnerSpeed { get; }
     CurWeaponDamage CurrentDamage { get; }
 
-    void BulletCreate(ShipBase target, Vector3 dir);
+    void BulletCreateByDir(ShipBase target, Vector3 dir);
     void DamageDoneCallback(float healthdelta, float shielddelta,ShipBase damageAppliyer);
     void BulletDestroyed(Vector3 position, Bullet bullet);
     void ApplyToShip(ShipParameters shipParameters, ShipBase shipBase, Bullet bullet);

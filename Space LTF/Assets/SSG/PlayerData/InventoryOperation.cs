@@ -199,6 +199,7 @@ public  static  class  InventoryOperation
 
             return;
         }
+
         CallbackSuccsess();
     }
 }

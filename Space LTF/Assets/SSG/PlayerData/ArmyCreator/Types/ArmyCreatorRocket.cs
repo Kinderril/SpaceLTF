@@ -5,10 +5,10 @@ using System.Text;
 
 public class ArmyCreatorRocket : ArmyCreatorData
 {
-    protected override List<SimpleModulType> AllSimpleModuls()
-    {
-        return new List<SimpleModulType>() { SimpleModulType.antiPhysical, SimpleModulType.autoRepair ,SimpleModulType.rocketUpgrade,SimpleModulType.EMIUpgrade};
-    }
+//    protected override List<SimpleModulType> AllSimpleModuls()
+//    {
+//        return new List<SimpleModulType>() { SimpleModulType.antiPhysical, SimpleModulType.autoRepair ,SimpleModulType.rocketUpgrade,SimpleModulType.EMIUpgrade};
+//    }
 
     protected override List<WeaponType> AllWeaponModuls()
     {

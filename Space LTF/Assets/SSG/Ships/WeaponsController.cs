@@ -4,70 +4,6 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-class WeaponAimedType
-{
-    public WeaponInGame[] WeaponsToShoot;
-    public WeaponInGame WeaponToAim;
-    private List<WeaponInGame>preList = new List<WeaponInGame>();
-
-    public WeaponAimedType(WeaponInGame firstWeapon)
-    {
-        WeaponToAim = firstWeapon;
-        preList.Add(firstWeapon);
-    }
-
-    public void TryShoot(ShipPersonalInfo target,Vector3 ownerLokkDir)
-    {
-        bool subCanFire = false;
-        switch (WeaponToAim.TargetType)
-        {
-            case TargetType.Enemy:
-                subCanFire = CheckWeaponAimed(WeaponToAim, target);
-                break;
-
-            case TargetType.Ally:
-                subCanFire = CheckWeaponAimed(WeaponToAim, target);
-                break;
-        }
-
-        if (subCanFire)
-        {
-            for (int i = 0; i < WeaponsToShoot.Length; i++)
-            {
-                var toShoot = WeaponsToShoot[i];
-                toShoot.TryShoot(ownerLokkDir, target.ShipLink);
-            }
-        }
-    }
-
-    private bool CheckWeaponAimed(WeaponInGame weapon, ShipPersonalInfo shipInfo)
-    {
-        shipInfo.CanShoot = weapon.IsInRadius(shipInfo.Dist);// && weapon.IsInSector(shipInfo.DirNorm);
-        if (shipInfo.CanShoot)
-        {
-            var isAimed = weapon.IsAimed(shipInfo);
-            if (isAimed)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void AddWeapon(WeaponInGame weaponInGame)
-    {
-
-        preList.Add(weaponInGame);
-    }
-
-    public void Cache()
-    {
-        WeaponsToShoot = preList.ToArray();
-        preList = null;
-
-    }
-}
-
 public class WeaponsController
 {
     private List<WeaponPlace> weaponPosition;
@@ -78,10 +14,12 @@ public class WeaponsController
     private bool _enable = true;
     public event Action<WeaponInGame> OnWeaponShootStart;
     private BaseEffectAbsorber _weaponCrashEffect;
+    private WeaponsAimSectorController AimSectorController;
 
     public WeaponsController(List<WeaponPlace> weaponPosition, 
         ShipBase owner,WeaponInv[] weapons, BaseModulInv[] moduls,BaseEffectAbsorber weaponCrashEffect)
     {
+        AimSectorController = new WeaponsAimSectorController();
         Dictionary<string,WeaponAimedType> weaponsAims = new Dictionary<string, WeaponAimedType>();
         _weaponCrashEffect = weaponCrashEffect;
         _owner = owner;
@@ -137,6 +75,7 @@ public class WeaponsController
         }
 
         _weaponsToAim = weaponsAims.Values.ToArray();
+        AimSectorController.Init(_weaponsToAim,owner);
 
     }
 
@@ -167,10 +106,6 @@ public class WeaponsController
             weapon.CrashReload(val);
         }
     }
-
-
-
-
     public List<WeaponInGame> GelAllWeapons()
     {
         return _weapons;
@@ -178,10 +113,7 @@ public class WeaponsController
 
     public void Select(bool val)
     {
-        foreach (var weapon in _weapons)
-        {
-            weapon.Select(val);
-        }
+        AimSectorController.Select(val);
     }
 
     public void Enable(bool val)
@@ -200,9 +132,7 @@ public class WeaponsController
             var weaponsToCheck = _weaponsToAim[i];
             weaponsToCheck.TryShoot(target, _owner.LookDirection);
         }
-
     }
-
 
     public void Dispose()
     {
@@ -224,24 +154,6 @@ public class WeaponsController
         return false;
     }
 
-    public void DrawActiveWeapons()
-    {
-        if (_weapons.Count > 0)
-        {
-            var weapon = _weapons[0];
-            if (weapon != null)
-            {
-                weapon.GizmosDraw();
-            }
-        }
-        foreach (var w in _weapons)
-        {
-            Gizmos.color = w.IsLoaded()?Color.blue:new Color(.85f,.1f,.1f,1f);
-            Gizmos.DrawSphere(w.GetShootPos, 0.14f);
-            DrawUtils.DrawCircle(w.GetShootPos,Vector3.up, Color.yellow,w.AimRadius);
-            DrawUtils.DrawCircle(w.GetShootPos,Vector3.up, Color.green,w.AimRadius);
-        }
-    }
 
     public bool AllWeaponNotLoad()
     {
@@ -294,6 +206,24 @@ public class WeaponsController
         foreach (var weapon in _weapons)
         {
             weapon.ReloadNow();
+        }
+    }
+    public void DrawActiveWeapons()
+    {
+        if (_weapons.Count > 0)
+        {
+            var weapon = _weapons[0];
+            if (weapon != null)
+            {
+                weapon.GizmosDraw();
+            }
+        }
+        foreach (var w in _weapons)
+        {
+            Gizmos.color = w.IsLoaded() ? Color.blue : new Color(.85f, .1f, .1f, 1f);
+            Gizmos.DrawSphere(w.GetShootPos, 0.14f);
+            DrawUtils.DrawCircle(w.GetShootPos, Vector3.up, Color.yellow, w.AimRadius);
+            DrawUtils.DrawCircle(w.GetShootPos, Vector3.up, Color.green, w.AimRadius);
         }
     }
 }

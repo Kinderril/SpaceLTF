@@ -64,10 +64,11 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
 
 
     protected BaseSpellModulInv(SpellType spell,int costCount, int costTime, 
-        CreateBulletDelegate createBullet, AffectTargetDelegate affectAction, 
+        CreateBulletDelegate createBullet, CastActionSpell castSpell, AffectTargetDelegate affectAction, 
         BulleStartParameters bulleStartParameters,bool isHoming)
     {
         IsHoming = isHoming;
+        CastSpell = castSpell;
         BulleStartParameters = bulleStartParameters;
         AffectAction =  new WeaponInventoryAffectTarget(affectAction);
         CreateBullet = createBullet;
@@ -103,9 +104,12 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
         return GetInfo()  + "\n" + cost
              + "\n" + Namings.SpellDesc(SpellType);
     }
+
+//    protected abstract void CastAction(Vector3 v);
          
     public BulleStartParameters BulleStartParameters { get; private set; }
     public WeaponInventoryAffectTarget AffectAction { get; private set; }
+    public CastActionSpell CastSpell { get; private set; }
     public CreateBulletDelegate CreateBulletAction => CreateBullet;
     public virtual CurWeaponDamage CurrentDamage => new CurWeaponDamage(0,0);
     public float AimRadius { get; set; }

@@ -35,9 +35,9 @@ public class TeacherMapEvent : BaseGlobalMapEvent
 //                PlayerParameterType tt = PlayerParameterType.diplomaty;
                 List<PlayerParameterType> posibleUpg = new List<PlayerParameterType>();
                 var player = MainController.Instance.MainPlayer.Parameters;
+                PlayerParameter param = null;
                 foreach (PlayerParameterType pp in Enum.GetValues(typeof(PlayerParameterType)))
                 {
-                    PlayerParameter param;
                     switch (pp)
                     {
                         case PlayerParameterType.scout:
@@ -66,15 +66,28 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                 }
 
                 var paramToUpgrade = posibleUpg.RandomElement();
-
-                mianAnswers.Add(new AnswerDialogData($"Ok.", ()=>DoUpgradeMain(paramToUpgrade), null));
+                if (param != null)
+                {
+                    _cost = (int)(param.UpgradeCost()*MyExtensions.Random(0.5f,0.75f));
+                    if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_cost))
+                    {
+                        mianAnswers.Add(new AnswerDialogData($"Ok.", () => DoUpgradeMain(paramToUpgrade), null));
+                    }
+                }
                 mianAnswers.Add(new AnswerDialogData("No, thanks.", null));
-                mesData = new MessageDialogData($"This is science ship. They can improve your fleet. Do you want to upgrade {Namings.ParameterName(paramToUpgrade)}?", mianAnswers);
+                mesData = new MessageDialogData($"This is science ship. They can improve your fleet [credits:{_cost}]. Do you want to upgrade {Namings.ParameterName(paramToUpgrade)}?", mianAnswers);
                 return mesData;
             case TeachType.pilots:
-                mianAnswers.Add(new AnswerDialogData($"Ok.", ()=>DoPilotTeach(), null));
+                var army = MainController.Instance.MainPlayer.Army;
+                var midLvl = (army.Sum(x=>x.Pilot.CurLevel)/army.Count) ;
+                var costMidLvl = Library.PilotLvlUpCost(midLvl);
+                _cost = (int)(costMidLvl * MyExtensions.Random(0.5f, 0.75f));
+                if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_cost))
+                {
+                    mianAnswers.Add(new AnswerDialogData($"Ok.", () => DoPilotTeach(), null));
+                }
                 mianAnswers.Add(new AnswerDialogData("No, thanks.", null));
-                mesData = new MessageDialogData($"This is science ship. They can teach some of your pilots.", mianAnswers);
+                mesData = new MessageDialogData($"This is science ship. They can teach some of your pilots [credits:{_cost}].", mianAnswers);
                 return mesData;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -84,6 +97,7 @@ public class TeacherMapEvent : BaseGlobalMapEvent
 
     private void DoPilotTeach()
     {
+        MainController.Instance.MainPlayer.MoneyData.RemoveMoney(_cost);
         var army = MainController.Instance.MainPlayer.Army.Suffle();
         var points = 1000f;
         foreach (var pilotData in army)

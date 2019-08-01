@@ -11,6 +11,10 @@ public class MapWindow : BaseWindow
     public Transform PlayerContainer;
     public Transform MapCellsLayout;
     public GameObject ArmyInfoContainer;
+
+    private bool isArmyActive;
+
+    private Vector3 _stablePos;
 //    public GameObject ModifInfoContainer;
 
     public MapConsoleUI MapConsoleUI;
@@ -48,7 +52,7 @@ public class MapWindow : BaseWindow
         GlobalMap.gameObject.SetActive(true);
         CamerasController.Instance.StartGlobalMap();
         GlobalMap.UnBlock();
-        ArmyInfoContainer.gameObject.SetActive(false);
+//        ArmyInfoContainer.gameObject.SetActive(false);
         player = MainController.Instance.MainPlayer;
         player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
         Cataclysm.Init(player.MapData);
@@ -295,7 +299,7 @@ public class MapWindow : BaseWindow
 
     public void OnArmyShowClick()
     {
-        if (ArmyInfoContainer.activeSelf)
+        if (isArmyActive)
         {
             EnableArmy(false);
             GlobalMap.UnBlock();
@@ -325,18 +329,21 @@ public class MapWindow : BaseWindow
 
     private void EnableArmy(bool val)
     {
+
         if (val)
         {
-            ArmyInfoContainer.SetActive(true);
+            ArmyInfoContainer.transform.position = _stablePos;
 //            playerArmyUI.Enable();
 //            InventoryUI.Enable();
         }
         else
         {
-//            playerArmyUI.Disable();
-//            InventoryUI.Disable();
-            ArmyInfoContainer.SetActive(false);
+            _stablePos = ArmyInfoContainer.transform.position;
+            var v = new Vector3(5000,0,0);
+            ArmyInfoContainer.transform.position = v;
+
         }
+        isArmyActive = val;
     }
 
     public void OnDebugAddRep()
@@ -364,7 +371,8 @@ public class MapWindow : BaseWindow
             for (int j = 0; j < s.Size; j++)
             {
                 var cell = s.AllCells()[i, j];
-                cell.Scouted();
+                if (cell != null)
+                    cell.Scouted();
             }
         }
 

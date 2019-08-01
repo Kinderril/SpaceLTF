@@ -13,7 +13,7 @@ public class ArtillerySpell : BaseSpellModulInv
 
     public ArtillerySpell(int costCount, int costTime)
         : base(SpellType.artilleryPeriod, costCount, costTime,
-            MainCreateBullet, MainAffect, new BulleStartParameters(2.7f, 36f, DIST_SHOT, DIST_SHOT), false)
+            MainCreateBullet, CastSpell,MainAffect, new BulleStartParameters(2.7f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
 
     }
@@ -23,12 +23,7 @@ public class ArtillerySpell : BaseSpellModulInv
         return new SpellDamageData(rad);
     }
 
-    private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
-    {
-        ActionShip(target, bullet.Position, damagedone);
-    }
-
-    private static void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var battle = BattleController.Instance;
         for (int i = 0; i < 10; i++)
@@ -38,13 +33,21 @@ public class ArtillerySpell : BaseSpellModulInv
             timer.OnTimer += () => {
                 if (battle.State == BattleState.process)
                 {
-                    var b = Bullet.Create(origin, weapon, Vector3.down, shootpos + Vector3.up * DIST_SHOT,
-                        null, bullestartparameters);
+                    MainCreateBullet(target, origin,weapon,shootpos, bullestartparameters);
                 }
             };
         }
+    }
 
+    private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    {
+        ActionShip(target, bullet.Position, damagedone);
+    }
 
+    private static void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    {
+        Bullet.Create(origin, weapon, Vector3.down, shootpos + Vector3.up * DIST_SHOT,
+            null, bullestartparameters);
     }
 
     public override Bullet GetBulletPrefab()

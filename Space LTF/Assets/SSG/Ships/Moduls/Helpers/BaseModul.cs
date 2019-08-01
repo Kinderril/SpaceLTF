@@ -56,6 +56,7 @@ public enum SimpleModulType
 
     WeaponFireNear = 36,
     ResistDamages = 37,
+    beamUpgrade = 38,
 }
 
 public abstract class BaseModul
@@ -90,16 +91,6 @@ public abstract class BaseModul
                 return new AntiEnergyModul(baseModulInv);
             case SimpleModulType.blink:
                 return new BlinkModul(baseModulInv);
-            case SimpleModulType.laserUpgrade:
-                return new AbstractWeaponUpgradeModul(baseModulInv,WeaponType.laser);
-            case SimpleModulType.rocketUpgrade:
-                return new AbstractWeaponUpgradeModul(baseModulInv,WeaponType.rocket);
-            case SimpleModulType.EMIUpgrade:
-                return new AbstractWeaponUpgradeModul(baseModulInv,WeaponType.eimRocket);
-            case SimpleModulType.bombUpgrade:
-                return new AbstractWeaponUpgradeModul(baseModulInv,WeaponType.casset);
-            case SimpleModulType.impulseUpgrade:
-                return new AbstractWeaponUpgradeModul(baseModulInv,WeaponType.impulse);
             case SimpleModulType.autoRepair:
                 return new AutoRepairModul(baseModulInv);
             case SimpleModulType.autoShieldRepair:

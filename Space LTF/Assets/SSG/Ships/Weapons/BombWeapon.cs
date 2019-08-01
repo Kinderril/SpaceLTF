@@ -42,7 +42,7 @@ public class BombWeapon : WeaponInGame
 //        AffectTotal(shipParameters, target, bullet, new WeaponAffectionAdditionalParams());
 //    }
 
-    public override void BulletCreate(ShipBase target, Vector3 dir)
+    public override void BulletCreateByDir(ShipBase target, Vector3 dir)
     {
         var r1_min = 60f;
         var r2_max = 80f;
@@ -55,14 +55,16 @@ public class BombWeapon : WeaponInGame
 
 
         var baseEndPoint1_1 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd1_1;
-        var baseEndPoint2_1 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd2_1;  
-//        var baseEndPoint1_2 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd1_2;
-//        var baseEndPoint2_2 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd2_2;
+        var baseEndPoint2_1 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd2_1;
+        //        var baseEndPoint1_2 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd1_2;
+        //        var baseEndPoint2_2 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd2_2;
 
-        CreateBulletAction(new BulletTarget(baseEndPoint1_1), bulletOrigin, this, ShootPos.position,
-            new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));    
-        CreateBulletAction(new BulletTarget(baseEndPoint2_1), bulletOrigin, this, ShootPos.position,
-            new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));    
+        CreateBulletWithModif(baseEndPoint1_1);
+        CreateBulletWithModif(baseEndPoint2_1);
+//        CreateBulletAction(new BulletTarget(baseEndPoint1_1), bulletOrigin, this, ShootPos.position,
+//            new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));    
+//        CreateBulletAction(new BulletTarget(baseEndPoint2_1), bulletOrigin, this, ShootPos.position,
+//            new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));    
 //        CreateBulletAction(new BulletTarget(baseEndPoint1_2), bulletOrigin, this, ShootPos.position,
 //            new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));    
 //        CreateBulletAction(new BulletTarget(baseEndPoint2_2), bulletOrigin, this, ShootPos.position,

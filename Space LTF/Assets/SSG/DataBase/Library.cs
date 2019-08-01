@@ -34,7 +34,7 @@ public static class Library
 {
     public static int START_PLAYER_FREE_PARAMETERS = 2;
 
-    public const int MAX_WEAPON_LVL = 3;
+    public const int MAX_WEAPON_LVL = 5;
     public const int MAX_MOUDL_LEVEL = 2;
 
     public const float MIN_WORKING_SHIP = 6;
@@ -348,7 +348,7 @@ public static class Library
         }
         else
         {
-            list = LibraryModuls.GetSimpleList();
+            list = LibraryModuls.GetNormalList();
         }
 
         var type = list.RandomElement();
@@ -397,16 +397,24 @@ public static class Library
                 return new WeaponPowerShot(level);
             case SimpleModulType.WeaponFireNear:
                 return new WeaponFireNearModul(level);
+            case SimpleModulType.EMIUpgrade:
+                return new AbstractWeaponUpgradeModul(WeaponType.eimRocket, rnd, level);
+            case SimpleModulType.bombUpgrade:
+                return new AbstractWeaponUpgradeModul(WeaponType.casset, rnd, level);
+            case SimpleModulType.impulseUpgrade:
+                return new AbstractWeaponUpgradeModul(WeaponType.impulse, rnd, level);
+            case SimpleModulType.rocketUpgrade:
+                return new AbstractWeaponUpgradeModul(WeaponType.rocket, rnd, level);
+            case SimpleModulType.beamUpgrade:
+                return new AbstractWeaponUpgradeModul(WeaponType.beam, rnd, level);
+            case SimpleModulType.laserUpgrade:
+                return new AbstractWeaponUpgradeModul(WeaponType.laser, rnd, level);
             default:
                 Debug.LogError($"this is not support {rnd}");
                 throw new ArgumentOutOfRangeException();
         }
 
     }
-
-
-
-
     public static PilotParameters CreateDebugPilot()
     {
         var pilot = new PilotParameters();

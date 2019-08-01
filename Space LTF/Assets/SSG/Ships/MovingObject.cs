@@ -117,6 +117,12 @@ public abstract class MovingObject : PoolElement
         {
             return false;
         }
+#if UNITY_EDITOR
+        if (DebugParamsController.EngineOff)
+        {
+            return false;
+        }
+#endif
         if (!EngineWork)
         {
             return false;
@@ -186,7 +192,12 @@ public abstract class MovingObject : PoolElement
 
     private void Banking()
     {
-        
+#if UNITY_EDITOR
+        if (DebugParamsController.EngineOff)
+        {
+            return;
+        }
+#endif  
         if (!HaveRotatingObject)
         {
             return;
@@ -348,6 +359,12 @@ public abstract class MovingObject : PoolElement
 
     protected void ApplyMove()
     {
+#if UNITY_EDITOR
+        if (DebugParamsController.EngineOff)
+        {
+            return;
+        }
+#endif
         if (EngineWork)
         {
             Vector3 dir = CurSpeed * LookDirection.normalized * Time.deltaTime;

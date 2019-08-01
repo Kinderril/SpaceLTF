@@ -62,7 +62,7 @@ public class GalaxyData
                 var zz = j * step;
                 var distToStart = i + j;
                 ShipConfig shipConfig = GetConfig(i,j, sectorsCount);
-                var subSector = new SectorData(xx, zz, sizeSector,_eventsCount,  shipConfig,id);
+                var subSector = new SectorData(xx, zz, sizeSector,_eventsCount,  shipConfig,id,i);
                 id++;
                 allSubSectors.Add(subSector);
                 unPopulatedSectors.Add(subSector);
@@ -100,7 +100,7 @@ public class GalaxyData
         for (int i = 0; i < goodCorePositions; i++)
         {
             var secrosDist = sectorsCount - 1 - i;
-            var coreSector = allSubSectors.Where(x => x.StartX/ sizeSector  == secrosDist).ToList().RandomElement();
+            var coreSector = allSubSectors.Where(x => x.XIndex == secrosDist).ToList().RandomElement();
             if (coreSector == null)
             {
                 Debug.LogError($"can't find sector with dist:{secrosDist}");
@@ -111,7 +111,7 @@ public class GalaxyData
             }
         }
 
-        var notGoodCores = coreCells = goodCorePositions;
+        var notGoodCores = coreCells - goodCorePositions;
         for (int i = 0; i < notGoodCores; i++)
         {
             var coreSector = allSubSectors.Where(x =>!x.IsPopulated && x.StartX != 0).ToList().RandomElement();
@@ -139,7 +139,7 @@ public class GalaxyData
         var cores = list.Where(x => x is CoreGlobalMapCell).ToList();
         if (cores.Count != coreCells)
         {
-            Debug.LogError($"Wrong count of core cells {cores.Count}/{coreCells}. goodCorePositions:{goodCorePositions}.");
+            Debug.LogError($"Wrong count of core cells {cores.Count}/{coreCells}. goodCorePositions:{goodCorePositions}. notGoodCores:{notGoodCores}");
         }
 #endif
         return startCell;

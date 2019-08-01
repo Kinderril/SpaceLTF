@@ -9,12 +9,19 @@ public class CommanderSpellPriorityTarget : ISpellToGame
     private void AffectACtion(ShipParameters targetparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
 //                  Debug.LogError("AFFECT PRIORITY!!");
-        bullet.Weapon.Owner.Commander.SetPriorityTarget(target);
+//        bullet.Weapon.Owner.Commander.SetPriorityTarget(target);
     }
 
     public CreateBulletDelegate CreateBulletAction => (target, origin, weapon, pos, parameters) =>
     {
-        var b0 = Bullet.Create(origin, weapon, Vector3.up, target.Position, target.target, BulleStartParameters);
+        var inex = BattleController.OppositeIndex(weapon.TeamIndex);
+        var ship = BattleController.Instance.ClosestShipToPos(pos, inex);
+        weapon.Owner.Commander.SetPriorityTarget(ship);
+    };
+
+    public CastActionSpell CastSpell => (target, origin, weapon, shootpos, bullestartparameters) =>
+    {
+        CreateBulletAction(target, origin, weapon, shootpos, bullestartparameters);
     };
 
     public SpellDamageData RadiusAOE()

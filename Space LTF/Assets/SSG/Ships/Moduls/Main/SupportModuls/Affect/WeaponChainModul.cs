@@ -28,8 +28,8 @@ public class WeaponChainModul : BaseSupportModul
         {
             var rndSHip = shipsInRad.RandomElement();
             if (rndSHip != null)
-            {
-                bullet.Weapon.BulletCreate(rndSHip,ship.LookDirection);
+            {                             
+                bullet.Weapon.BulletCreateByDir(rndSHip,ship.LookDirection);
             }
         }
     }

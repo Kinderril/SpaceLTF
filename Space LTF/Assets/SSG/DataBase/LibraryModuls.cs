@@ -6,7 +6,7 @@ using System.Linq;
 
 public static class LibraryModuls
 {
-    private static List<SimpleModulType> SimpleModuls;
+    private static List<SimpleModulType> NormalModuls;
     private static List<SimpleModulType> RareModuls;
     private static List<SimpleModulType> NotExistModuls;
 
@@ -30,13 +30,13 @@ public static class LibraryModuls
         }
 
 
-        SimpleModuls = GetSimplesList().ToList();
+        NormalModuls = GetSimplesList().ToList();
         RareModuls = RareList().ToList();
         NotExistModuls = NotExistList().ToList();
 
-        if (SimpleModuls.Count + RareModuls.Count + NotExistModuls.Count != all.Length)
+        if (NormalModuls.Count + RareModuls.Count + NotExistModuls.Count != all.Length)
         {
-            Debug.LogError($"Wrong delemiter of SimpleModuls {SimpleModuls.Count} + RareModuls {RareModuls.Count} + NotExistModuls {NotExistModuls.Count}  != all:{all.Length}");
+            Debug.LogError($"Wrong delemiter of NormalModuls {NormalModuls.Count} + RareModuls {RareModuls.Count} + NotExistModuls {NotExistModuls.Count}  != all:{all.Length}");
         }
     }
 
@@ -49,10 +49,14 @@ public static class LibraryModuls
         return RareModuls.Contains(type);
     }
 
-    public static List<SimpleModulType> GetSimpleList()
+    public static List<SimpleModulType> GetNormalList()
     {
-        return SimpleModuls;
-    }  
+        return NormalModuls;
+    }   
+//    public static List<SimpleModulType> GetUpgradesList()
+//    {
+//        return UpgradesModuls;
+//    }  
     public static List<SimpleModulType> GetRareList()
     {
         return RareModuls;
@@ -74,6 +78,7 @@ public static class LibraryModuls
             SimpleModulType.systemMines,
             SimpleModulType.blink,
             SimpleModulType.laserUpgrade,
+            SimpleModulType.beamUpgrade,
             SimpleModulType.rocketUpgrade,
             SimpleModulType.EMIUpgrade,
             SimpleModulType.impulseUpgrade,
@@ -114,6 +119,7 @@ public static class LibraryModuls
             SimpleModulType.EMIUpgrade,
             SimpleModulType.impulseUpgrade,
             SimpleModulType.bombUpgrade,
+            SimpleModulType.beamUpgrade,
         };
         return typesToRnd;
     }
@@ -184,11 +190,7 @@ public static class LibraryModuls
             SimpleModulType.damageMines,
             SimpleModulType.systemMines,
             SimpleModulType.blink,
-            SimpleModulType.laserUpgrade,
-            SimpleModulType.rocketUpgrade,
-            SimpleModulType.EMIUpgrade,
-            SimpleModulType.impulseUpgrade,
-            SimpleModulType.bombUpgrade,
+   
             SimpleModulType.ShipSpeed,
             SimpleModulType.ShipTurnSpeed,
             SimpleModulType.shieldRegen,
@@ -225,6 +227,13 @@ public static class LibraryModuls
             SimpleModulType.WeaponPowerShot,
 
             SimpleModulType.WeaponFireNear,
+
+            SimpleModulType.laserUpgrade,
+            SimpleModulType.rocketUpgrade,
+            SimpleModulType.EMIUpgrade,
+            SimpleModulType.impulseUpgrade,
+            SimpleModulType.bombUpgrade,
+            SimpleModulType.beamUpgrade,
         };
         return typesToRnd;
     }

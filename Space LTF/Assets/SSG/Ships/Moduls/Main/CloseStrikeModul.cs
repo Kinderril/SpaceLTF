@@ -30,7 +30,7 @@ public class CloseStrikeModul : BaseModul,IWeapon
         Period = 20f;
     }
 
-    public void BulletCreate(ShipBase target, Vector3 dir)
+    public void BulletCreateByDir(ShipBase target, Vector3 dir)
     {
 
         var bsp = new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT);
@@ -157,9 +157,14 @@ public class CloseStrikeModul : BaseModul,IWeapon
         var dir = Vector3.Dot(_owner.LookLeft, _owner.Enemies[ship].DirNorm) > 0 ? _owner.LookLeft : _owner.LookRight;
         var dir1 = Utils.RotateOnAngUp(dir, -ANG_OFFSET);
         var dir2 = Utils.RotateOnAngUp(dir, ANG_OFFSET);
-        BulletCreate(null, dir);
-        BulletCreate(null, dir1);
-        BulletCreate(null, dir2);
+
+
+//        CreateBulletWithModif(baseEndPoint1_1);
+//        CreateBulletWithModif(baseEndPoint2_1);
+
+        BulletCreateByDir(null, dir);
+        BulletCreateByDir(null, dir1);
+        BulletCreateByDir(null, dir2);
 
 
     }

@@ -20,8 +20,8 @@ public class MainController : Singleton<MainController>
 
     void Awake()
     {
-        DataBase.Init();
         Library.Init();
+        DataBase.Init();
         ShipNames.Init();
         Statistics = PlayerStatistics.Load();
         WindowManager.Instance.Init();

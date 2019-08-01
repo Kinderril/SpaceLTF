@@ -170,11 +170,21 @@ public class DataStructPrefabs : MonoBehaviour
     {
         var array = Enum.GetValues(typeof(SimpleModulType));
         var values3 = (SimpleModulType[])array;
+        var noIcon = new HashSet<SimpleModulType>();
         foreach (var v in values3)
         {
             var obj = Resources.Load<Sprite>(String.Format("Icons/moduls/{0}", v.ToString()));
             ModulsIconsDic.Add(v, obj);
+            if (obj == null)
+            {
+                noIcon.Add(v);
+            }
 
+        }
+
+        foreach (var simpleModulType in noIcon)
+        {
+            Debug.LogError($"Modul {simpleModulType.ToString()} have no Icon");
         }
     }
 

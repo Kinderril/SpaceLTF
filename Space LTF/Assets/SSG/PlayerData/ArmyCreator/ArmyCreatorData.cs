@@ -24,8 +24,8 @@ public class ArmyCreatorData
     {
         _isAi = isAi;
         ArmyConfig = config;
-        simlplModuls = AllSimpleModuls();
-        spellModuls = AllSpells();
+        simlplModuls = LibraryModuls.GetNormalList();
+        spellModuls =  AllSpells();
         weapons = AllWeaponModuls();
     }
 
@@ -34,17 +34,6 @@ public class ArmyCreatorData
         return new List<WeaponType>() { WeaponType.impulse, WeaponType.laser, WeaponType.rocket, WeaponType.casset, WeaponType.eimRocket };
     }
 
-    protected virtual List<SimpleModulType> AllSimpleModuls()
-    {
-        return new List<SimpleModulType>() {SimpleModulType.antiEnergy,SimpleModulType.antiPhysical,SimpleModulType.autoRepair,
-            SimpleModulType.closeStrike,SimpleModulType.shieldRegen,SimpleModulType.engineLocker,
-            SimpleModulType.laserUpgrade,
-            SimpleModulType.bombUpgrade,
-            SimpleModulType.EMIUpgrade,
-            SimpleModulType.impulseUpgrade,
-            SimpleModulType.rocketUpgrade,
-        };
-    }
     
     protected virtual List<SpellType> AllSpells()
     {

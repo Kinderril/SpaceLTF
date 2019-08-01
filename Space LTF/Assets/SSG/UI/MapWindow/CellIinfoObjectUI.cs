@@ -133,8 +133,12 @@ public class CellIinfoObjectUI : MonoBehaviour
             }
 
             //            Debug.Log("InfoField:" + haveObj + "   " + _disabled);
-#if UNITY_EDITOR                             
+#if UNITY_EDITOR       
             InfoField.text = txt + $"{cell.indX}.{cell.indZ}";
+            if (cell is CoreGlobalMapCell)
+            {
+                InfoField.text = $"{InfoField.text} [CORE!]";
+            }
 #else    
             InfoField.text = txt;
 #endif

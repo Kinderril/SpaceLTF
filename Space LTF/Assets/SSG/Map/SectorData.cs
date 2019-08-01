@@ -11,6 +11,7 @@ public class SectorData
     public int StartX;
     public int StartZ;
     public int Size { get; private set; }
+    public int XIndex { get; private set; }
     public int Id { get; private set; }
     public bool IsPopulated { get; private set; }
     private int _power;
@@ -24,8 +25,9 @@ public class SectorData
     private Dictionary<GlobalMapEventType, int> _maxCount;
 
     public SectorData(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-         ShipConfig shipConfig,int index)
+         ShipConfig shipConfig,int index,int xIndex)
     {
+        XIndex = xIndex;
         Id = index;
         Cells = new SectorCellContainer[size, size];
         _shipConfig = shipConfig;

@@ -106,48 +106,82 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    private int _lastShip = 0;
+    private void TryGetShipAndSelectItNext()
+    {
+        var ships = _commander.Ships.Values;
+        var list = ships.ToList();
+        if (list.Count > 0)
+        {
+            if (_lastShip < list.Count)
+            {
+                var s = list[_lastShip];
+                inGameMainUi.ActionShipSelected(s);
+                _lastShip++;
+            }
+            else
+            {
+                _lastShip = 0;
+                var s = list[_lastShip];
+                inGameMainUi.ActionShipSelected(s);
+            }
+
+        }
+
+    }
+
     private void SpellsKeyboard()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            TrySelectSpell(0);
+            TryGetShipAndSelectItNext();
         }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            TrySelectSpell(1);
+
+        //        if (Input.GetKeyDown(KeyCode.Q))
+            //        {
+            //            TrySelectSpell(0);
+            //        }
+            //        if (Input.GetKeyDown(KeyCode.E))
+            //        {
+            //            TrySelectSpell(1);
+            //        }
+            //        if (Input.GetKeyDown(KeyCode.R))
+            //        {
+            //            TrySelectSpell(2);
+            //        }
+            //        if (Input.GetKeyDown(KeyCode.T))
+            //        {
+            //            TrySelectSpell(3);
+            //        }
         }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            TrySelectSpell(2);
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TrySelectSpell(3);
-        }
-    }
 
     private void NumbersClick()
     {
         
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            TryGetShipAndSelectIt(0);
+            TrySelectSpell(0);
+//            TryGetShipAndSelectIt(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            TryGetShipAndSelectIt(1);
+            TrySelectSpell(1);
+//            TryGetShipAndSelectIt(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            TryGetShipAndSelectIt(2);
+            TrySelectSpell(2);
+//            TryGetShipAndSelectIt(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            TryGetShipAndSelectIt(3);
+            TrySelectSpell(3);
+//            TryGetShipAndSelectIt(3);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            TryGetShipAndSelectIt(4);
+            TrySelectSpell(4);
+            //            TryGetShipAndSelectIt(4);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {

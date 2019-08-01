@@ -22,9 +22,13 @@ public class ShieldOffSpell : BaseSpellModulInv
 
     public ShieldOffSpell(int costCount, int costTime)
         : base(SpellType.shildDamage, costCount, costTime,
-            MainCreateBullet, MainAffect, new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
+            MainCreateBullet, CastSpell, MainAffect, new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
         CurrentDamage = new CurWeaponDamage(2,0);
+    }
+    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    {
+        MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
     }
 
     private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
