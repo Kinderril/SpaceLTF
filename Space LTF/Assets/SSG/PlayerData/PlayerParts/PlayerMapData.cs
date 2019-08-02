@@ -11,6 +11,7 @@ public class PlayerMapData
     public GlobalMapCell CurrentCell;
     public GalaxyData GalaxyData;
     public int Step = 0;
+    public int VisitedSectors = 0;
 
     [field: NonSerialized]
     public event Action<GlobalMapCell> OnCellChanged;    
@@ -64,6 +65,7 @@ public class PlayerMapData
             {
                 target.OpenInfo();
                 GoNextAfterDialog(target);
+                target.VisitCell(this);
                 target.ComeTo();
             }
         }

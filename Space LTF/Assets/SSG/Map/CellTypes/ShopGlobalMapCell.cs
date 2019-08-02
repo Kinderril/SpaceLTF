@@ -7,7 +7,7 @@ public class ShopGlobalMapCell : GlobalMapCell
 {
     private readonly ShopInventory _shopInventory;
 
-    public ShopGlobalMapCell(bool goodPower, int id, int intX, int intZ) : base(id, intX, intZ)
+    public ShopGlobalMapCell(bool goodPower, int id, int intX, int intZ, SectorData secto) : base(id, intX, intZ, secto)
     {
         _shopInventory = new ShopInventory(null);
         var weaponsCount = MyExtensions.Random(1, 3);

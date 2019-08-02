@@ -118,7 +118,7 @@ public abstract class MovingObject : PoolElement
             return false;
         }
 #if UNITY_EDITOR
-        if (DebugParamsController.EngineOff)
+        if (DebugParamsController.EngineOff && this is ShipBase)
         {
             return false;
         }
@@ -193,7 +193,7 @@ public abstract class MovingObject : PoolElement
     private void Banking()
     {
 #if UNITY_EDITOR
-        if (DebugParamsController.EngineOff)
+        if (DebugParamsController.EngineOff && this is ShipBase)
         {
             return;
         }
@@ -360,7 +360,7 @@ public abstract class MovingObject : PoolElement
     protected void ApplyMove()
     {
 #if UNITY_EDITOR
-        if (DebugParamsController.EngineOff)
+        if (DebugParamsController.EngineOff && this is ShipBase)
         {
             return;
         }

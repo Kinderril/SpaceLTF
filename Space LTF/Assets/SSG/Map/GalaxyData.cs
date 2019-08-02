@@ -79,17 +79,17 @@ public class GalaxyData
         var startSector = allSubSectors.Where(x => x.StartX == 0).ToList().RandomElement();
         var xCell = startSector.StartX + RndIndex(sizeSector - 1);
         var zCell = startSector.StartZ + RndIndex(sizeSector);
-        var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell);
+        var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell, startSector);
         startSector.SetCell(startCell,id);
         unPopulatedSectors.Remove(startSector);
-        startSector.Populate(startPower,null);
+        startSector.Populate(startPower, startSector);
         Debug.Log($"Create start sector: {xCell} {zCell}");
 
         //CreateEndSector   
         var endSector = sectors[sectorsCount - 1, RndIndex(VERTICAL_COUNT)];
         xCell = endSector.StartX + 1 + RndIndex(sizeSector - 1);
         zCell = endSector.StartZ + RndIndex(sizeSector);
-        var endCell = new EndGlobalCell(Utils.GetId(), xCell, zCell);
+        var endCell = new EndGlobalCell(Utils.GetId(), xCell, zCell, endSector);
         endSector.SetCell(endCell,id);
         unPopulatedSectors.Remove(endSector);
         endSector.Populate(startPower,startSector);
@@ -151,7 +151,7 @@ public class GalaxyData
         var xCell = coreSector.StartX + RndIndex(sizeSector);
         var zCell = coreSector.StartZ + RndIndex(sizeSector);
         var coreId = Utils.GetId();
-        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell);
+        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, startSector);
         coreSector.SetCell(coreCell, id);
         coreSector.Populate(startPower, startSector);
         unPopulatedSectors.Remove(coreSector);
@@ -355,7 +355,7 @@ public class GalaxyData
                     var zz = sector.StartZ + i;
                     if (zz < cellsInGalaxy.Size)
                     {
-                        var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz);
+                        var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz,sector);
                         cellsInGalaxy.SetCell(nothing);
 //                        Debug.Log(String.Format("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
                     }
@@ -375,7 +375,7 @@ public class GalaxyData
                     if (xx < cellsInGalaxy.Size)
                     {
 
-                        var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz);
+                        var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz,sector);
                         cellsInGalaxy.SetCell(nothing);
 //                        Debug.Log(String.Format("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
                     }

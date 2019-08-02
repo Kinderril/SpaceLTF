@@ -9,7 +9,7 @@ using UnityEngine;
 [System.Serializable]
 public class GlobalMapNothing : GlobalMapCell
 {
-    public GlobalMapNothing(int id, int iX, int iZ) : base( id, iX, iZ)
+    public GlobalMapNothing(int id, int iX, int iZ, SectorData secto) : base( id, iX, iZ, secto)
     {
 
     }

@@ -7,7 +7,7 @@ public class RepairStationGlobalCell : GlobalMapCell
 {
     private const float REPAIR_DISCOUTNT = 0.2f;
 
-    public RepairStationGlobalCell( int id, int intX, int intZ) : base( id, intX, intZ)
+    public RepairStationGlobalCell( int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
     {
     }
 

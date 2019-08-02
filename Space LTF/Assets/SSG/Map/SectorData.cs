@@ -15,6 +15,7 @@ public class SectorData
     public int Id { get; private set; }
     public bool IsPopulated { get; private set; }
     private int _power;
+    private bool _isVisited;
     public SectorCellContainer[,] Cells;
     private HashSet<SectorCellContainer> _listCells = new HashSet<SectorCellContainer>();
 
@@ -65,17 +66,18 @@ public class SectorData
         Cells[x, z].SetData(cell);
     }
 
+    public static int CalcCellPower(int StartX, int Size, int startPowerGalaxy)
+    {
+       
+        var additional = (int)(StartX * Size * COEF_POWER);
+        var power = startPowerGalaxy + additional;
+        return power;
+    }
 
-    public void Populate(int startPowerGalaxy,[CanBeNull] SectorData startSectorData)
+    public void Populate(int startPowerGalaxy,SectorData startSectorData)
     {
         IsPopulated = true;
-        int additional = 0;
-        if (startSectorData != null)
-        {
-//            var s = Mathf.Abs(startSectorData.StartX - StartX) + Mathf.Abs(startSectorData.StartZ - StartZ);
-            additional = (int) (StartX * Size * COEF_POWER);
-        }
-        _power = startPowerGalaxy + additional;
+        _power = CalcCellPower(startSectorData.StartX,startPowerGalaxy,startPowerGalaxy);
         RandomizeBorders();
         var remainFreeCells = _listCells.Where(x => x.IsFreeToPopulate()).ToList();
         //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");
@@ -119,7 +121,7 @@ public class SectorData
             foreach (var container in cellsForShop)
             {
                 var shopCell = new ShopGlobalMapCell(_power > 20, Utils.GetId(), StartX + container.indX,
-                    StartZ + container.indZ);
+                    StartZ + container.indZ,this);
                 container.SetData(shopCell);
                 remainFreeCells.Remove(container);
             }
@@ -128,7 +130,7 @@ public class SectorData
         if (repairCount == 1 && remainFreeCells.Count >= 1)
         {
             var cellForRepair = remainFreeCells.RandomElement();
-            var cellRepair = new RepairStationGlobalCell(Utils.GetId(), StartX + cellForRepair.indX, StartZ + cellForRepair.indZ);
+            var cellRepair = new RepairStationGlobalCell(Utils.GetId(), StartX + cellForRepair.indX, StartZ + cellForRepair.indZ, this);
             cellForRepair.SetData(cellRepair);
             remainFreeCells.Remove(cellForRepair);
         }
@@ -139,7 +141,7 @@ public class SectorData
             foreach (var cellContainerForEvent in cellsForEvents)
             {
                 var type = GetMinorEventType();
-                var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ);
+                var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ, this);
                 cellContainerForEvent.SetData(cellEvent);
                 remainFreeCells.Remove(cellContainerForEvent);
             }
@@ -151,7 +153,7 @@ public class SectorData
             foreach (var cellContainerForEvent in cellsForEvents)
             {
                 var type = GetBigEventType();
-                var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ);
+                var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ, this);
                 cellContainerForEvent.SetData(cellEvent);
                 remainFreeCells.Remove(cellContainerForEvent);
             
@@ -172,7 +174,7 @@ public class SectorData
             {
                 var config = IsDroids(_shipConfig);
                 var t1 = _armyCreatorTypes.RandomElement();
-                var armyCellcell = new ArmyGlobalMapCell(_power, config, Utils.GetId(), t1, StartX + armyContainer.indX, StartZ + armyContainer.indZ);
+                var armyCellcell = new ArmyGlobalMapCell(_power, config, Utils.GetId(), t1, StartX + armyContainer.indX, StartZ + armyContainer.indZ, this);
                 armyContainer.SetData(armyCellcell);
                 remainFreeCells.Remove(armyContainer);
             }
@@ -189,6 +191,26 @@ public class SectorData
         }
 #endif
 
+    }
+
+    public bool ComeToSector(int visitedSectors)
+    {
+        if (!_isVisited)
+        {
+            _isVisited = true;
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    var cell = Cells[i, j];
+                    cell.Data.UpdatePowers(visitedSectors);
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private ShipConfig IsDroids(ShipConfig coreConfig)
@@ -265,7 +287,7 @@ public class SectorData
 
     private void SetNullCell(int x, int z)
     {
-        var c = new GlobalMapNothing(Utils.GetId(),StartX +  x,StartZ + z);
+        var c = new GlobalMapNothing(Utils.GetId(),StartX +  x,StartZ + z, this);
         var container = Cells[x, z];
         if (container.IsFreeToPopulate())
         {

@@ -122,6 +122,12 @@ public class CamerasController : Singleton<CamerasController>
             keybordDir = new Vector3(y, 0, x);
             if (_activeCamera != null)
             {
+#if UNITY_EDITOR
+                if (DebugParamsController.NoMouseMove)
+                {
+                    return;
+                }
+#endif
                 _activeCamera.MoveMainCamToDir(keybordDir);
             }
         }

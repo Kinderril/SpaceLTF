@@ -20,7 +20,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     public event Action<GlobalMapCell> OnTaken;
 
 
-    public CoreGlobalMapCell(int power, int id, int intX, int intZ) : base( power,ShipConfig.mercenary, id, ArmyCreatorType.destroy, intX, intZ)
+    public CoreGlobalMapCell(int power, int id, int intX, int intZ,SectorData  secto) : base( power,ShipConfig.mercenary, id, ArmyCreatorType.destroy, intX, intZ, secto)
     {
         _power = power;
         WDictionary<GlobalCellType> chances = new WDictionary<GlobalCellType>(new Dictionary<GlobalCellType, float>()

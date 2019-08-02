@@ -181,6 +181,12 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         var segmentTarget = new SegmentPoints(target.ShipLink.Position, target.ShipLink.PredictionPos());
         if (AIUtility.IsParalel(segmentShip, segmentTarget))
         {
+#if UNITY_EDITOR
+            if (!IsInSector(target.DirNorm))
+            {
+                Debug.LogError("can't aim not in sector IsParalel");
+            }
+#endif
             return true;
         }
 
@@ -193,7 +199,14 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
             var dirNorm = Utils.NormalizeFastSelf(crossPointData.Value.CrossPoint - shootPos);
             if (canShoot)
             {
-                return IsInSector(dirNorm);
+#if UNITY_EDITOR
+                if (!IsInSector(target.DirNorm))
+                {
+                    Debug.LogError("can't aim not in sector IsAimedStraightBaseOnCrossPoint");
+                }
+#endif
+                return IsInSector(target.DirNorm);
+//                return IsInSector(dirNorm);
             }
             else
             {
@@ -210,7 +223,12 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
                 {
                     d = AIUtility.IsAimedStraight4(target.ShipLink.LookDirection, owner.LookDirection);
                 }
-
+#if UNITY_EDITOR
+                if (!IsInSector(target.DirNorm))
+                {
+                    Debug.LogError("can't aim not in sector IsAimedStraightByProjectionPoint");
+                }
+#endif
                 return d;
             }
             else

@@ -12,7 +12,7 @@ public class EndGlobalCell : GlobalMapCell
 {
     private LastBattleData _data;
 
-    public EndGlobalCell(int id, int intX, int intZ) : base( id, intX, intZ)
+    public EndGlobalCell(int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
     {
         InfoOpen = true;
     }

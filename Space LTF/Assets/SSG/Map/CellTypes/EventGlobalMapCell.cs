@@ -28,7 +28,7 @@ public class EventGlobalMapCell : GlobalMapCell
     private GlobalMapEventType _eventType;
     private BaseGlobalMapEvent _mapEvent;
 
-    public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ) : base( id, intX, intZ)
+    public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
     {
         _eventType = eventType;
         switch (_eventType)

@@ -6,6 +6,7 @@ public class DebugParamsController
 #if UNITY_EDITOR  
     public static bool EngineOff { get; private set; }
     public static bool NoDamage { get; private set; }
+    public static bool NoMouseMove { get; private set; }
 
     public static void SwitchEngine()
     {
@@ -14,6 +15,10 @@ public class DebugParamsController
     public static void SwitchNoDamage()
     {
         NoDamage = !NoDamage;
+    }    
+    public static void SwitchNoMouseMove()
+    {
+        NoMouseMove = !NoMouseMove;
     }
 #endif
 

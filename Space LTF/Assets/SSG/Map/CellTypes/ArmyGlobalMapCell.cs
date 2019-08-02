@@ -86,13 +86,19 @@ public class ArmyGlobalMapCell : GlobalMapCell
         return true;
     }
 
-    public ArmyGlobalMapCell(int power, ShipConfig config, int id, ArmyCreatorType type, int Xind, int Zind) : base(id, Xind, Zind)
+    public ArmyGlobalMapCell(int power, ShipConfig config, int id, ArmyCreatorType type, int Xind, int Zind, SectorData secto) 
+        : base(id, Xind, Zind, secto)
     {
         _config = config;
         _armyType = type;
         _power = power;
     }
-
+    public override void UpdatePowers(int visitedSectors)
+    {
+        Debug.Log("Army power sector updated");
+        _player = null;
+        _power = SectorData.CalcCellPower(visitedSectors, _sector.Size, visitedSectors);
+    }
 
     public override MessageDialogData GetDialog()
     {

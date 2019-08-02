@@ -48,6 +48,20 @@ public class DebugPanelWindow : EditorWindow
         {
             DebugUtils.KillAllEnemies();
         }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("EngineOff:" + DebugParamsController.EngineOff))
+        {
+            DebugParamsController.SwitchEngine();
+        }       
+        if (GUILayout.Button("NoDamage:" + DebugParamsController.NoDamage))
+        {
+            DebugParamsController.SwitchNoDamage();
+        }        
+        if (GUILayout.Button("NoMouseMove." + DebugParamsController.NoMouseMove))
+        {
+            DebugParamsController.SwitchNoMouseMove();
+        }
         
         EditorGUILayout.EndHorizontal();
 //        SelectedShip = (ShipBase)EditorGUILayout.ObjectField("Selected ship ", SelectedShip, typeof(ShipBase), true);

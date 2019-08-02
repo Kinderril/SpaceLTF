@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class ModifGlobalMapCell : GlobalMapCell
 {
-    public ModifGlobalMapCell(int id, int intX, int intZ) : base(id, intX, intZ)
+    public ModifGlobalMapCell(int id, int intX, int intZ, SectorData secto) : base(id, intX, intZ, secto)
     {
     }
 

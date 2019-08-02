@@ -348,6 +348,12 @@ public class ShipBase : MovingObject
 
     private void MoveByY(int dir, bool isGreen)
     {
+#if UNITY_EDITOR
+        if (DebugParamsController.EngineOff)
+        {
+            return;
+        }
+#endif
         var d = ySpeed*Time.deltaTime*dir;
         yMove += d;
         var p = ShipVisual.transform.position;

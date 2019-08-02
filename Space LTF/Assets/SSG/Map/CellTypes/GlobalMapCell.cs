@@ -20,6 +20,7 @@ public abstract class GlobalMapCell
     public int indZ;
     public int SectorId = -1;
     public int ConnectedGates = -1;
+    protected SectorData _sector;
     private List<GlobalMapCell> _ways = new List<GlobalMapCell>();
 //    public GlobalMapCell ExtraWay = null;
 
@@ -32,8 +33,9 @@ public abstract class GlobalMapCell
     [field: NonSerialized]
     public event Action<GlobalMapCell> OnComplete;
 
-    protected GlobalMapCell(int id,int iX,int iZ)
+    protected GlobalMapCell(int id,int iX,int iZ,SectorData sector)
     {
+        _sector = sector;
         this.indX = iX;
         this.indZ = iZ;
         Id = id;
@@ -172,6 +174,19 @@ public abstract class GlobalMapCell
     public void RemoveWayTo(GlobalMapCell rnd)
     {
         _ways.Remove(rnd);
+    }
+
+    public void VisitCell(PlayerMapData mapData)
+    {
+        if (_sector.ComeToSector(mapData.VisitedSectors))
+        {
+            mapData.VisitedSectors++;
+        }
+    }
+
+    public virtual void UpdatePowers(int visitedSectors)
+    {
+        
     }
 }
 

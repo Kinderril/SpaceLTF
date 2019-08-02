@@ -9,7 +9,7 @@ using UnityEngine;
 [System.Serializable]
 public class StartGlobalCell : GlobalMapCell
 {
-    public StartGlobalCell(int id, int intX, int intZ) : base( id, intX, intZ)
+    public StartGlobalCell(int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
     {
         InfoOpen = true;
     }
