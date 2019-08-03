@@ -64,6 +64,11 @@ public static class ArmyCreator
 
         int index = 0;
         int upgradeIterations = 100;
+        if (army.Count == 0)
+        {
+            Debug.LogError($"SHIT!!! ARMY IS NULLL!!! {remainPoints}");
+            return army;
+        }
         while (upgradeIterations > 0 && remainPoints > 0)
         {
             var ship = army[index];
@@ -79,6 +84,7 @@ public static class ArmyCreator
              {LibraryShipUpgradeType.addWeapon  ,2} ,
              {LibraryShipUpgradeType.levelUpPilot ,5} ,
              {LibraryShipUpgradeType.upgradeWeapon ,5} ,
+             {LibraryShipUpgradeType.upgradeModul ,3} ,
             });
             UpgradeShip(points, LibraryShipUpgradeType.addModul, ship, upgrades, data, logger);
             upgradeIterations--;
@@ -347,6 +353,10 @@ public static class ArmyCreator
             if (startData.Ship.WeaponsModuls.Any(x => x != null))
             {
                 chancesInner.Add(LibraryShipUpgradeType.upgradeWeapon, 2f);
+            }
+            if (startData.Ship.Moduls.SimpleModuls.Any(x => x != null))
+            {
+                chancesInner.Add(LibraryShipUpgradeType.upgradeModul, 2f);
             }   
             chances = new WDictionary<LibraryShipUpgradeType>(chancesInner);
             //                isWorks = false;
@@ -383,6 +393,14 @@ public static class ArmyCreator
                 break;
             case LibraryShipUpgradeType.addModul:
                 isWorks = TryAddModul(v, startData.Ship, data, logs);
+                if (!isWorks)
+                {
+                    if (chances != null)
+                        chances.Remove(shipUpgradeType);
+                }
+                break;
+            case LibraryShipUpgradeType.upgradeModul:
+                isWorks = TryUpgradeModul(v, startData.Ship,logs);
                 if (!isWorks)
                 {
                     if (chances != null)
@@ -470,7 +488,7 @@ public static class ArmyCreator
         return false;
     }
 
-    private static bool TryUpgradeModul(ArmyRemainPoints v, ShipInventory ship)
+    private static bool TryUpgradeModul(ArmyRemainPoints v, ShipInventory ship, ArmyCreatorLogs logs)
     {
         var val = Library.BASE_SIMPLE_MODUL_VALUE_UPGRADE;//* Library.ShipPowerCoef(ship.ShipType);
         if (v.Points >= val)
@@ -481,6 +499,7 @@ public static class ArmyCreator
                 v.Points -= val;
                 var rndModul = rndModuls.RandomElement();
                 rndModul.Upgrade();
+                logs.AddLog(v.Points,"upgrade modul");
                 return true;
             }
         }
@@ -524,13 +543,7 @@ public static class ArmyCreator
 
     public static bool TryAddModul(ArmyRemainPoints v, ShipInventory ship,ArmyCreatorData listSimple, ArmyCreatorLogs logs)
     {
-        WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
-        {
-            {1,4f},
-            {2,4f},
-            {3, 1f},
-        });
-        var lvl = levels.Random();
+        var lvl = 1;
         var val = Library.BASE_SIMPLE_MODUL_VALUE;// * Library.ShipPowerCoef(ship.ShipType);
         if (v.Points >= val && ship.GetFreeSimpleSlot(out var simpleIndex))
         {

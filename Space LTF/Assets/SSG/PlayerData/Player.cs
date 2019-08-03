@@ -110,8 +110,8 @@ public class Player
         AddWeaponsToShips(ref r, ship1, posibleStartWeapons);
         AddWeaponsToShips(ref r, ship2, posibleStartWeapons);
         
-//        ship1.Ship.TryAddSimpleModul(new BaseModulInv(SimpleModulType.closeStrike, 1), 0);
-//        ship2.Ship.TryAddSimpleModul(new BaseModulInv(SimpleModulType.closeStrike, 1), 0);
+        ship1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1,false), 0);
+        ship2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, false), 0);
 
         List<StartShipPilotData> army = new List<StartShipPilotData>();
         army.Add(bShip);

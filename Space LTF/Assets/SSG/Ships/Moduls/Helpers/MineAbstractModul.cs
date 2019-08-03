@@ -49,7 +49,7 @@ public abstract class MineAbstractModul : BaseModul , IWeapon
         {
             var dirToMove = Utils.RotateOnAngUp(_owner.LookDirection, MyExtensions.Random(-90, 90));
             Bullet.Create(_mineBulletPrefab, this, -dirToMove * 3f, _owner.Position, null,
-                new BulleStartParameters(1.01f, 0f, 1f, 1f));
+                new BulleStartParameters(3.01f, 0f, 2f, 2f));
         }
     }
 

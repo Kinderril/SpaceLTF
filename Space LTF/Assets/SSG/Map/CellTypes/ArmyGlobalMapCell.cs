@@ -93,11 +93,12 @@ public class ArmyGlobalMapCell : GlobalMapCell
         _armyType = type;
         _power = power;
     }
-    public override void UpdatePowers(int visitedSectors)
+    public override void UpdatePowers(int visitedSectors,int startPower)
     {
-        Debug.Log("Army power sector updated");
+        var nextPower = SectorData.CalcCellPower(visitedSectors + 1, _sector.Size, startPower);
         _player = null;
-        _power = SectorData.CalcCellPower(visitedSectors, _sector.Size, visitedSectors);
+        Debug.Log($"Army power sector updated prev:{_power}. next:{nextPower}");
+        _power = nextPower;
     }
 
     public override MessageDialogData GetDialog()

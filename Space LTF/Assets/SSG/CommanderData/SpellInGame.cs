@@ -66,6 +66,7 @@ public class SpellInGame : IWeapon
         _spellDamageData = spellData.RadiusAOE();
         _bulletStartParams = spellData.BulleStartParameters;
         AffectAction = spellData.AffectAction;
+        CastSpell = spellData.CastSpell;
         CreateBulletAction = spellData.CreateBulletAction;
     }
     public bool CanCast(CommanderCoinController coinController)

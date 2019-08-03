@@ -18,6 +18,7 @@ public enum LibraryShipUpgradeType
     addWeapon,
     addModul,
     upgradeWeapon,
+    upgradeModul,
 //    upgradeSimple,
     levelUpPilot,
 }
@@ -151,7 +152,7 @@ public static class Library
                 parametes = new WeaponInventoryParameters(2, 2, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 7);
                 return new EMIRocketInventory(parametes, 1);
             case WeaponType.beam:
-                parametes = new WeaponInventoryParameters(2, 4, BEAM_ANG, BEAM_DELAY, 0.4f, 2, BEAM_SPEED, 2.5f);
+                parametes = new WeaponInventoryParameters(1, 4, BEAM_ANG, BEAM_DELAY, 0.4f, 2, BEAM_SPEED, 2.5f);
                 return new BeamWeaponInventory(parametes, 1);
                 //            case WeaponType.beam://NO USABLE
                 //                return new WeaponInv(2,7, MINE_ANG, BEAM_DELAY, 0.5f, 1, BEAM_SPEED,4, weapon, 1);

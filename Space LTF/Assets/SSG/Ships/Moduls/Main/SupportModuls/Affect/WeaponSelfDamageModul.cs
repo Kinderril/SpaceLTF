@@ -7,7 +7,8 @@ public class WeaponSelfDamageModul : BaseSupportModul
 {
 
     private const int Damage = 2;
-    private const int Self = 1;
+    private int Self => _self + Level;
+    private const int _self = 1;
     public WeaponSelfDamageModul(int level)
         : base(SimpleModulType.WeaponSelfDamage, level)
     {

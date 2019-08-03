@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
+[System.Serializable]
 public class SectorData
 {
     private const float COEF_POWER = 0.7f;
@@ -14,6 +15,7 @@ public class SectorData
     public int XIndex { get; private set; }
     public int Id { get; private set; }
     public bool IsPopulated { get; private set; }
+    private int _startPowerGalaxy;
     private int _power;
     private bool _isVisited;
     public SectorCellContainer[,] Cells;
@@ -77,6 +79,7 @@ public class SectorData
     public void Populate(int startPowerGalaxy,SectorData startSectorData)
     {
         IsPopulated = true;
+        _startPowerGalaxy = startPowerGalaxy;
         _power = CalcCellPower(startSectorData.StartX,startPowerGalaxy,startPowerGalaxy);
         RandomizeBorders();
         var remainFreeCells = _listCells.Where(x => x.IsFreeToPopulate()).ToList();
@@ -203,7 +206,7 @@ public class SectorData
                 for (int j = 0; j < Size; j++)
                 {
                     var cell = Cells[i, j];
-                    cell.Data.UpdatePowers(visitedSectors);
+                    cell.Data.UpdatePowers(visitedSectors, _startPowerGalaxy);
                 }
             }
 
@@ -294,59 +297,7 @@ public class SectorData
             container.SetData(c);
         }
     }
-
-//    private GlobalMapCell CreateRandomCell(int power, int Xind, int Zind)
-//    {
-//        var cnfg = _shipConfig;
-//        List<ArmyCreatorType> _armyCreatorTypes = new List<ArmyCreatorType>()
-//        {
-//            ArmyCreatorType.laser,
-//            ArmyCreatorType.destroy,
-//            ArmyCreatorType.mine,
-//            ArmyCreatorType.simple,
-//            ArmyCreatorType.rocket,
-//        };
-//        GlobalMapCell cell;
-//        var rndCell = new WDictionary<GlobalMapCellType>(new Dictionary<GlobalMapCellType, float>()
-//        {
-//            {GlobalMapCellType.army, 7},
-//            {GlobalMapCellType.eventMap, 5},
-//            {GlobalMapCellType.repair, 2},
-////            { GlobalMapCellType.modif, distToStart <= 3?0: 2 },
-//            {GlobalMapCellType.shop, 2},
-//        });
-//        var ct = rndCell.Random();
-//        switch (ct)
-//        {
-//            case GlobalMapCellType.eventMap:
-//                var type = GetEventType();
-//                if (type.HasValue)
-//                {
-//                    cell = new EventGlobalMapCell(type.Value, Utils.GetId(), Xind, Zind);
-//                }
-//                else
-//                {
-//                    var t1 = _armyCreatorTypes.RandomElement();
-////                    var power = CalcPowerOfCell(startPower, distToStart, mapSize);
-//                    cell = new ArmyGlobalMapCell(power, cnfg, Utils.GetId(), t1, Xind, Zind);
-//                }
-//
-//                break;
-//            case GlobalMapCellType.shop:
-//                cell = new ShopGlobalMapCell(power > 20, Utils.GetId(), Xind, Zind);
-//                break;
-//            case GlobalMapCellType.repair:
-//                cell = new RepairStationGlobalCell(Utils.GetId(), Xind, Zind);
-//                break;
-//            case GlobalMapCellType.army:
-//            default:
-//                var t = _armyCreatorTypes.RandomElement();
-//                cell = new ArmyGlobalMapCell(power, cnfg, Utils.GetId(), t, Xind, Zind);
-//                break;
-//        }
-//        return cell;
-//    }
-
+           
     private bool CanAdd(GlobalMapEventType eventType)
     {
         if (_maxCount.ContainsKey(eventType))
@@ -432,7 +383,10 @@ public class SectorData
         _eventsCount[eventType] = _eventsCount[eventType] + 1;
         return eventType;
     }
-
+    public void MarkAsVisited()
+    {
+        _isVisited = true;
+    }
 
     public void MarkAsCore(int coreId)
     {

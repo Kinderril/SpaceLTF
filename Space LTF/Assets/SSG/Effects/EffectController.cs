@@ -44,6 +44,7 @@ public class EffectController : Singleton<EffectController>
 
     public void LeaveEffect(BaseEffectAbsorber ps, Transform oldTransform,float delay = -1,Transform holder = null)
     {
+        ps.RemeberScale();
         if (holder == null)
         {
             ps.transform.SetParent(effectsContainer, true);

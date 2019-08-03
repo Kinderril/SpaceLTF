@@ -184,7 +184,7 @@ public abstract class GlobalMapCell
         }
     }
 
-    public virtual void UpdatePowers(int visitedSectors)
+    public virtual void UpdatePowers(int visitedSectors, int startPower)
     {
         
     }

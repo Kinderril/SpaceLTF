@@ -14,7 +14,8 @@ public class MapWindow : BaseWindow
 
     private bool isArmyActive;
 
-    private Vector3 _stablePos;
+    private Vector3 _stablePos; 
+    private bool _stablePosCached = false;
 //    public GameObject ModifInfoContainer;
 
     public MapConsoleUI MapConsoleUI;
@@ -338,7 +339,11 @@ public class MapWindow : BaseWindow
         }
         else
         {
-            _stablePos = ArmyInfoContainer.transform.position;
+            if (!_stablePosCached)
+            {
+                _stablePosCached = true;
+                _stablePos = ArmyInfoContainer.transform.position;
+            }
             var v = new Vector3(5000,0,0);
             ArmyInfoContainer.transform.position = v;
 

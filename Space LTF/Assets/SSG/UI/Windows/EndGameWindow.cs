@@ -187,7 +187,7 @@ public class EndGameWindow : BaseWindow
     private void UpdateMoneys()
     {
         GoToMapButton.interactable = true;
-        TotalMoneyRewardField.Init(0);
+//        TotalMoneyRewardField.Init(0);
         var player = MainController.Instance.MainPlayer;
         var lastReward = player.LastReward;
         var forPilots = lastReward.Money - _myMoney;

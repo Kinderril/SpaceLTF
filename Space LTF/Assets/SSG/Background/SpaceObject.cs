@@ -17,7 +17,7 @@ public class SpaceObject : MonoBehaviour
     void Awake()
     {
         _wannaRotate = MyExtensions.IsTrue01(0.7f);
-        _rotateSpeed = MyExtensions.Random(0.1f, 0.6f);
+        _rotateSpeed = MyExtensions.Random(0.1f, 0.25f);
         var xx = MyExtensions.Random(0f, 1f);
         var yy = MyExtensions.Random(0f, 1f);
         var zz = MyExtensions.Random(0f, 1f);

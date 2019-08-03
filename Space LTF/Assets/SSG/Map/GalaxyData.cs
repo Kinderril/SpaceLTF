@@ -83,6 +83,7 @@ public class GalaxyData
         startSector.SetCell(startCell,id);
         unPopulatedSectors.Remove(startSector);
         startSector.Populate(startPower, startSector);
+        startSector.MarkAsVisited();
         Debug.Log($"Create start sector: {xCell} {zCell}");
 
         //CreateEndSector   

@@ -49,6 +49,7 @@ public class BaseEffectAbsorber : PoolElement
             {
                 gameObject.transform.SetParent(oldTransform, false);
                 gameObject.transform.localPosition = Vector3.zero;
+                gameObject.transform.localScale = _rememberredScale;
             }
         }
         catch (Exception e)
@@ -80,6 +81,12 @@ public class BaseEffectAbsorber : PoolElement
     void Update()
     {
         UpdateManual();
+    }
+
+    private Vector3 _rememberredScale;
+    public void RemeberScale()
+    {
+        _rememberredScale = transform.localScale;
     }
 }
 

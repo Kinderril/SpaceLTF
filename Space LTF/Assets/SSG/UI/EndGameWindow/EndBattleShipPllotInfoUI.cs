@@ -25,6 +25,8 @@ public class EndBattleShipPllotInfoUI : MonoBehaviour
     public void Init(StartShipPilotData info)
     {
         StartShipPilotData = info;
+        var canUpgradeAnyParameter = StartShipPilotData.Pilot.CanUpgradeAnyParameter(0);
+        CanUpgradeIcon.gameObject.SetActive(canUpgradeAnyParameter);
         IconType.sprite = DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(info.Ship.ShipType);
         IconConfig.text = info.Ship.ShipConfig.ToString();
         FieldCurrentMoney.text = info.Pilot.Money.ToString();

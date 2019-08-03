@@ -371,28 +371,46 @@ public class GlobalMapController : MonoBehaviour
     }
 
 
+    [CanBeNull]
     private GlobalMapCellObject ClosestObject(Vector3 pos,out float dist)
     {
         float vv = Single.MaxValue;
-        GlobalMapCellObject obj = null;
-        for (int i = 0; i < _data.Size; i++)
+        var xIndex = (int)((pos.x + Offset/2f) / Offset);
+        var zIndex = (int)((pos.z + Offset / 2f) / Offset);
+//        Debug.Log($"INDEX: {xIndex} {zIndex}");
+        if (xIndex >= 0 && xIndex < _data.Size && zIndex >= 0 && zIndex < _data.Size)
         {
-            for (int j = 0; j < _data.Size; j++)
+            var a = _allCells[xIndex, zIndex];
+            if (a != null)
             {
-                var a = _allCells[i, j];
-                if (a != null)
-                {
-                    var sDist = (a.transform.position - pos).sqrMagnitude;
-                    if (sDist < vv)
-                    {
-                        vv = sDist;
-                        obj = a;
-                    }
-                }
+                dist = (a.transform.position - pos).sqrMagnitude;
+                return a;
             }
         }
-        dist = vv;
-        return obj;
+
+        dist = 0f;
+        return null;
+
+
+//        GlobalMapCellObject obj = null;
+//        for (int i = 0; i < _data.Size; i++)
+//        {
+//            for (int j = 0; j < _data.Size; j++)
+//            {
+//                var a = _allCells[i, j];
+//                if (a != null)
+//                {
+//                    var sDist = (a.transform.position - pos).sqrMagnitude;
+//                    if (sDist < vv)
+//                    {
+//                        vv = sDist;
+//                        obj = a;
+//                    }
+//                }
+//            }
+//        }
+//        dist = vv;
+//        return obj;
     }
 
     private Vector3? GetPointByClick(Vector3 pos)

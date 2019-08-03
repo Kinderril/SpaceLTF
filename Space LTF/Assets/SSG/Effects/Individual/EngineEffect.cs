@@ -42,6 +42,7 @@ public class EngineEffect : MonoBehaviour
                 }
                 catch (Exception e)
                 {
+                    Debug.LogError($"Engine error!!: {_mobj.gameObject.name}");
                     _failed = true;
                 }
             }
