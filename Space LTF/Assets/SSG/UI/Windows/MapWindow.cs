@@ -398,6 +398,23 @@ public class MapWindow : BaseWindow
         }
         modifWindowUI.gameObject.SetActive(val);
     }
+    void LateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (modifWindowUI.gameObject.activeSelf)
+            {
+                EnableModif(false);
+                return;
+            }
+
+            if (isArmyActive)
+            {
+                EnableArmy(false);
+                return;
+            }
+        }
+    }
 
     private void StartDialog(MessageDialogData dialog,Action callbackOnEnd)
     {

@@ -29,6 +29,7 @@ public enum WeaponType
     throwAroundSpell = 16,
     nextFrame = 17,
     beam = 18,
+    artilleryBullet = 19,
 }
 
 public class WeaponAffectionAdditionalParams

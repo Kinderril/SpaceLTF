@@ -17,8 +17,9 @@ public class SpellButton : MonoBehaviour
     public TextMeshProUGUI CostField;
     public TextMeshProUGUI NameField;
     private InGameMainUI _inGameMain;
+    private KeyCode _keyCode;
 
-    public void Init(InGameMainUI inGameMain, SpellInGame spell,Action<SpellInGame> OnSpellClick,float speedCoef)
+    public void Init(InGameMainUI inGameMain, SpellInGame spell,Action<SpellInGame> OnSpellClick,float speedCoef,int index)
     {
         _inGameMain = inGameMain;
         _inGameMain.OnSelectSpell += OnSelectSpell;
@@ -29,7 +30,24 @@ public class SpellButton : MonoBehaviour
         CostField.text = String.Format("{0}", _spell.CostCount.ToString("0"));
         TimeField.text = $"{(_spell.CostPeriod * speedCoef).ToString("0")}";
         NameField.text = _spell.Name;
-        Icon.sprite = a;
+        Icon.sprite = a; switch (index)
+        {
+            case 1:
+                _keyCode = KeyCode.Alpha1;
+                break;
+            case 2:
+                _keyCode = KeyCode.Alpha2;
+                break;
+            case 3:
+                _keyCode = KeyCode.Alpha3;
+                break;
+            case 4:
+                _keyCode = KeyCode.Alpha4;
+                break;
+            case 5:
+                _keyCode = KeyCode.Alpha5;
+                break;
+        }
     }
 
     private void OnSelectSpell(SpellInGame obj)
@@ -43,9 +61,18 @@ public class SpellButton : MonoBehaviour
         OnSpellClick(_spell);
     }
 
+    void LateUpdate()
+    {
+        if (Input.GetKeyDown(_keyCode))
+        {
+            OnSpellClick(_spell);
+        }
+    }
+
     public void Dispose()
     {
         _inGameMain.OnSelectSpell -= OnSelectSpell;
     }
+
 }
 

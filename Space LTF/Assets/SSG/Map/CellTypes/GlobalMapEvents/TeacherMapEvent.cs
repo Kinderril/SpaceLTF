@@ -95,8 +95,10 @@ public class TeacherMapEvent : BaseGlobalMapEvent
 
     }
 
-    private void DoPilotTeach()
+    private MessageDialogData DoPilotTeach()
     {
+        var mianAnswers = new List<AnswerDialogData>();
+        mianAnswers.Add(new AnswerDialogData($"Ok.", null, null));
         MainController.Instance.MainPlayer.MoneyData.RemoveMoney(_cost);
         var army = MainController.Instance.MainPlayer.Army.Suffle();
         var points = 1000f;
@@ -104,9 +106,11 @@ public class TeacherMapEvent : BaseGlobalMapEvent
         {
             if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
             {
-                return;
+                var mesData = new MessageDialogData($"Ship {pilotData.Ship.Name} Improved. Pilot level:{pilotData.Pilot.CurLevel}", mianAnswers);
+                return mesData;
             }
         }
+        return new MessageDialogData($"Fail.", mianAnswers); ;
     }
 
     private void DoUpgradeMain(PlayerParameterType paramToUpgrade)

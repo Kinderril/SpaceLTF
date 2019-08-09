@@ -29,7 +29,7 @@ public class AutoShieldRepairModul : BaseModul
             var c = curent/max < 0.2f;
             if (c)
             {
-                var sp2heal = shipowner.ShipParameters.ShieldParameters.MaxShiled*.5f;
+                var sp2heal = shipowner.ShipParameters.ShieldParameters.MaxShield*.5f;
                 shipowner.ShipParameters.ShieldParameters.HealShield(sp2heal);
                 UpdateTime();
             }

@@ -25,6 +25,8 @@ public class BaseWindow : MonoBehaviour
         get { return canvasGroup; }
     }
 
+    public bool WithLoadWindow = false;
+
     public void Activate()
     {
         animator = GetComponent<Animator>();

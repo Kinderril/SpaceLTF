@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -23,6 +24,7 @@ public class Player
     public PlayerMoneyData MoneyData;
     public LastScoutsData LastScoutsData;
     public PlayerReputationData ReputationData;
+    public PlayerAfterBattleOptions AfterBattleOptions;
     public PlayerMapData MapData;
     public PlayerMessagesToConsole MessagesToConsole;
     public List<StartShipPilotData> Army = new List<StartShipPilotData>();
@@ -43,6 +45,7 @@ public class Player
         MapData.Init(data);
         Army = CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell);
         RepairData.Init(Army, MapData,Parameters);
+        AfterBattleOptions = new PlayerAfterBattleOptions();
         AddModuls(1);
     }
 
@@ -67,7 +70,6 @@ public class Player
             }
 
         }
-
         for (int i = 0; i < 3; i++)
         {
             if (Inventory.GetFreeWeaponSlot(out var index2))
@@ -76,15 +78,16 @@ public class Player
                 Inventory.TryAddWeaponModul(modul1, index2);
             }
         }
+        var allSpellType = (SpellType[])Enum.GetValues(typeof(SpellType));
+        foreach (var type in allSpellType)
+        {
+            if (Inventory.GetFreeSpellSlot(out var index1))
+            {
+                var modul = Library.CreateSpell(type);
+                Inventory.TryAddSpellModul(modul, index1);
+            }
 
-        //        for (int i = 0; i < 5; i++)
-        //        {
-        //        }
-        //        if (Inventory.GetFreeSimpleSlot(out var index2))
-        //        {
-        //            var modul = Library.CreatSimpleModul(SimpleModulType.damageMines,1);
-        //            Inventory.TryAddSimpleModul(modul, index2);
-        //        }
+        }
 #endif
 
     }
@@ -271,6 +274,22 @@ public class Player
         if (File.Exists(path))
         {
             File.Delete(path);
+        }
+    }
+
+    public void DestroyShip(ShipInventory shipInventory)
+    {
+        var shipTo = Army.FirstOrDefault(x => x.Ship == shipInventory);
+        if (shipTo == null)
+        {
+            Debug.LogError("can't find ship to destroy");
+            return;
+        }
+
+        Army.Remove(shipTo);
+        if (OnAddShip != null)
+        {
+            OnAddShip(shipTo, false);
         }
     }
 }

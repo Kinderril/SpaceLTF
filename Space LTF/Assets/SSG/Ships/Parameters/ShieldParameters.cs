@@ -36,11 +36,11 @@ public class ShieldParameters
         _shipBase = shipBase;
         this._shieldCollider = shieldCollider;
         this.ShieldRegenPerSec = shiledRegen;
-        MaxShiled = maxShiled;
-        CurShiled = MaxShiled;
+        MaxShield = maxShiled;
+        CurShiled = MaxShield;
     }
 
-    public float MaxShiled { get; set; }
+    public float MaxShield { get; set; }
 
     public float NextTimeShiledRegen
     {
@@ -113,7 +113,7 @@ public class ShieldParameters
 //        }
         if (OnShildChanged != null)
         {
-            OnShildChanged(CurShiled, MaxShiled, delta, State,_shipBase);
+            OnShildChanged(CurShiled, MaxShield, delta, State,_shipBase);
         }
     }
 
@@ -121,14 +121,14 @@ public class ShieldParameters
     {
 //        ShieldBroken = false;
         var c = CurShiled + v;
-        var d = MaxShiled - CurShiled;
+        var d = MaxShield - CurShiled;
         if (d <= 0)
         {
             return;
         }
-        if (c > MaxShiled)
+        if (c > MaxShield)
         {
-            c = MaxShiled;
+            c = MaxShield;
         }
         var delta = c - CurShiled;
         CurShiled = c;
@@ -141,12 +141,12 @@ public class ShieldParameters
         if (NextTimeShiledRegen < Time.time)
         {
             NextTimeShiledRegen = Time.time + ShieldDeltaTick;
-            if (CurShiled < MaxShiled)
+            if (CurShiled < MaxShield)
             {
                 var d = ShieldRegenPerSec * ShieldDeltaTick;
                 if (d > 0)
                 {
-                    CurShiled = Mathf.Clamp(CurShiled + d, 0, MaxShiled);
+                    CurShiled = Mathf.Clamp(CurShiled + d, 0, MaxShield);
                     ShiledAction(d);
                 }
             }
@@ -163,7 +163,7 @@ public class ShieldParameters
                 RegenShield();
                 break;
             case ShieldChangeSt.restoring:
-                if (_curShiled > MaxShiled * RestoreShieldPercent)
+                if (_curShiled > MaxShield * RestoreShieldPercent)
                 {
                     if (Time.time - _startRestore > 5)
                     {

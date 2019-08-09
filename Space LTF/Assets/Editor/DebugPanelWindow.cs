@@ -57,15 +57,26 @@ public class DebugPanelWindow : EditorWindow
         if (GUILayout.Button("NoDamage:" + DebugParamsController.NoDamage))
         {
             DebugParamsController.SwitchNoDamage();
-        }        
+        }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("NoMouseMove." + DebugParamsController.NoMouseMove))
         {
             DebugParamsController.SwitchNoMouseMove();
         }
+
+        if (GUILayout.Button("FastRecharge." + DebugParamsController.FastRecharge))
+        {
+            DebugParamsController.SwitchFastRecharge();
+        }
         
         EditorGUILayout.EndHorizontal();
-//        SelectedShip = (ShipBase)EditorGUILayout.ObjectField("Selected ship ", SelectedShip, typeof(ShipBase), true);
-        if (BattleController.Instance.InGameMainUI != null)
+        //        SelectedShip = (ShipBase)EditorGUILayout.ObjectField("Selected ship ", SelectedShip, typeof(ShipBase), true);     
+        if (GUILayout.Button("Hire test."))
+        {
+            DebugParamsController.TestHire();
+        }
+        if (BattleController.Instance != null && BattleController.Instance.InGameMainUI != null)
         {
             var ss = BattleController.Instance.InGameMainUI.SelectedShip;
             if (ss != null)

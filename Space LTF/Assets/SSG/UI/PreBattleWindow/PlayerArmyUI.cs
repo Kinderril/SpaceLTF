@@ -107,7 +107,7 @@ public class PlayerArmyUI : MonoBehaviour
 
     public void Dispose()
     {
-        _player.OnAddShip += OnAddShip;
+        _player.OnAddShip -= OnAddShip;
         mainShipInfo.Dispose();
         foreach (var inventoryUi in playerInfoList)
         {

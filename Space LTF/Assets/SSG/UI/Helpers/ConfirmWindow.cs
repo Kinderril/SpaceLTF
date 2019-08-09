@@ -14,7 +14,8 @@ public class ConfirmWindow : MonoBehaviour
     public TextMeshProUGUI labelField;
     public virtual void Init(Action onConfirm, Action onReject,string ss)
     {
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
+        WindowManager.Instance.WindowMainCanvas.interactable = false;
+        WindowManager.Instance.WindowSubCanvas.interactable = true;
         this.onConfirm = onConfirm;
         this.onReject = onReject;
         labelField.text = ss;
@@ -27,14 +28,16 @@ public class ConfirmWindow : MonoBehaviour
         if (onConfirm != null)
             onConfirm();
         gameObject.SetActive(false);
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        WindowManager.Instance.WindowSubCanvas.interactable = false;
     }
     public virtual void OnRejectClick()
     {
         if (onReject != null)
             onReject();
         gameObject.SetActive(false);
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        WindowManager.Instance.WindowSubCanvas.interactable = false;
     }
 }
 

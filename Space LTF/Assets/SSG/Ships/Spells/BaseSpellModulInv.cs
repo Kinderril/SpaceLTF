@@ -19,6 +19,7 @@ public enum SpellType
     distShot = 10,
     priorityTarget = 11,
     artilleryPeriod = 12,
+    BaitPriorityTarget = 13,
 }
 
 
@@ -27,15 +28,18 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
 {
     public int CostCount { get; protected set; }
     public int CostTime { get; protected set; }
+    public int Level { get; protected set; }
     public bool IsHoming { get; protected set; }
     //    private float _nextPosibleCast;
     public SpellType SpellType { get; private set; }
-  
-//    [field: NonSerialized]
-//    public ShipBase ShipBase { get; private set; }
-//    protected int WeaponSlot { get; private set; }
-//    [field: NonSerialized]
-//    protected Transform ModulPos { get; private set; }
+
+    [field: NonSerialized] public event Action<BaseSpellModulInv> OnUpgrade;
+
+    //    [field: NonSerialized]
+    //    public ShipBase ShipBase { get; private set; }
+    //    protected int WeaponSlot { get; private set; }
+    //    [field: NonSerialized]
+    //    protected Transform ModulPos { get; private set; }
     protected CreateBulletDelegate CreateBullet { get; private set; }
 
 
@@ -52,23 +56,17 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
 
 
 
-    public ItemType ItemType
-    {
-        get
-        {
-            return ItemType.spell;
-        }
-    }
+    public ItemType ItemType => ItemType.spell;
 
     public IInventory CurrentInventory { get; set; }
 
 
     protected BaseSpellModulInv(SpellType spell,int costCount, int costTime, 
-        CreateBulletDelegate createBullet, CastActionSpell castSpell, AffectTargetDelegate affectAction, 
-        BulleStartParameters bulleStartParameters,bool isHoming)
+                 BulleStartParameters bulleStartParameters,bool isHoming)
     {
+        Level = 1;
         IsHoming = isHoming;
-        CastSpell = castSpell;
+        CastSpell = castActionSpell;
         BulleStartParameters = bulleStartParameters;
         AffectAction =  new WeaponInventoryAffectTarget(affectAction);
         CreateBullet = createBullet;
@@ -76,6 +74,10 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
         CostCount = costCount;
         CostTime = costTime;
     }
+
+    protected abstract CreateBulletDelegate createBullet { get; }
+    protected abstract CastActionSpell castActionSpell { get; }
+    protected abstract AffectTargetDelegate affectAction  { get; }
 
     public virtual bool TryCast(CommanderCoinController coinController,Vector3 pos)
     {
@@ -86,9 +88,13 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
     }
 
     public abstract Bullet GetBulletPrefab();
+    public abstract float ShowCircle { get; }
+    public abstract bool ShowLine { get; }
 
 
     protected abstract void CastAction(Vector3 pos);
+
+    public abstract string Desc();
 
 
     public int CostValue { get { return MoneyConsts.SPELL_BASE_MONEY_COST; } }
@@ -102,7 +108,7 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
     {
         string cost = String.Format("Charges require: {0} with delay {1} sec.",CostCount,CostTime);
         return GetInfo()  + "\n" + cost
-             + "\n" + Namings.SpellDesc(SpellType);
+             + "\n" + Desc();
     }
 
 //    protected abstract void CastAction(Vector3 v);
@@ -124,5 +130,51 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
     public virtual SpellDamageData RadiusAOE()
     {
         return new SpellDamageData();
+    }
+    public void TryUpgrade()
+    {
+        var owner = CurrentInventory.Owner;
+        if (CanUpgrade())
+        {
+            if (MoneyConsts.SpellUpgrade.ContainsKey(Level))
+            {
+                var cost = MoneyConsts.SpellUpgrade[Level];
+                if (owner.MoneyData.HaveMoney(cost))
+                {
+                    var txt = String.Format("You want to upgrade {0}", Namings.SpellName(SpellType));
+                    WindowManager.Instance.ConfirmWindow.Init(() =>
+                    {
+                        owner.MoneyData.RemoveMoney(cost);
+                        Upgrade();
+                    }, null, txt);
+                }
+                else
+                {
+                    WindowManager.Instance.NotEnoughtMoney(cost);
+                }
+            }
+        }
+        else
+        {
+            WindowManager.Instance.InfoWindow.Init(null, "Spell have max level");
+        }
+    }
+
+    public bool CanUpgrade()
+    {
+        return Level < Library.MAX_SPELL_LVL;
+    }
+
+
+    public void Upgrade()
+    {
+        if (CanUpgrade())
+        {
+            Level++;
+            if (OnUpgrade != null)
+            {
+                OnUpgrade(this);
+            }
+        }
     }
 }

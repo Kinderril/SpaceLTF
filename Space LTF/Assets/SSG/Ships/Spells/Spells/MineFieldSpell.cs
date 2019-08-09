@@ -8,46 +8,59 @@ using UnityEngine;
 [System.Serializable]
 public class MineFieldSpell : BaseSpellModulInv 
 {
-    public const int MINES_COUNT = 4;
+    public const int MINES_COUNT = 2;
     public const float MINES_PERIOD = 20f;
     private const float rad = 2f;
+    private const float damageBody = 3f;
+    private const float damageShield = 2f;
+    private float _distToShoot;
+
+    private int MinesCount => MINES_COUNT + Level;
 
     private float dist;//Костыльный параметр
     public MineFieldSpell(int costCount, int costTime)
         : base(SpellType.mineField, costCount, costTime,
-            MainCreateBullet, CastSpell, MainAffect, new BulleStartParameters(9.7f, 36f, 25, 25), false)
+             new BulleStartParameters(9.7f, 36f, 25, 25), false)
     {
 
     }
+    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CastActionSpell castActionSpell => CastSpell;
+    protected override AffectTargetDelegate affectAction => MainAffect;
 
-    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
-        var deltaAng = 360f / MINES_COUNT;
-        var d = MyExtensions.IsTrue01(0.5f) ? Vector3.right : Vector3.left;
-        for (int i = 0; i < MINES_COUNT; i++)
+        var deltaAng = 360f / MinesCount;
+        var direction = MyExtensions.IsTrueEqual() ? Vector3.right : Vector3.left;
+        var baseDist = (target.Position - weapon.CurPosition).magnitude;
+//        Debug.LogError($"Mine base dist {baseDist}");
+        for (int i = 0; i < MinesCount; i++)
         {
-            d = Utils.RotateOnAngUp(d, MyExtensions.GreateRandom((deltaAng * i)));
-            var position = shootPos + d * MyExtensions.Random(rad / 4, rad);
+            direction = Utils.RotateOnAngUp(direction, MyExtensions.GreateRandom((deltaAng * i)));
+            var position = target.Position + direction * MyExtensions.Random(rad / 4, rad);
             var dir = (position - weapon.CurPosition);
-            var dist = dir.magnitude;
-            MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
+            bullestartparameters.distanceShoot = baseDist;
+            MainCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, bullestartparameters);
         }
     }
 
-    private static void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
+        Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var dir = (target.Position - weapon.CurPosition);
+        //        Debug.LogError("");                  
         var dist = dir.magnitude;
+//        Debug.LogError($"Mine result dist {dist}");
         Bullet.Create(origin, weapon, dir, weapon.CurPosition, null,
                 new BulleStartParameters(Library.MINE_SPEED, 0f, dist, dist));
     }
 
-    private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         shipparameters.Damage(2, 3, damagedone, target);
     }
-
-
+    public override bool ShowLine => false;
+    public override float ShowCircle => rad;
     public override Bullet GetBulletPrefab()
     {
         var bullet = DataBaseController.Instance.GetBullet(WeaponType.castMine);
@@ -63,7 +76,12 @@ public class MineFieldSpell : BaseSpellModulInv
 
     public override SpellDamageData RadiusAOE()
     {
-        return new SpellDamageData(rad);
+        return new SpellDamageData();
+    }
+    public override string Desc()
+    {
+        return
+            $"Set {MinesCount} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location. Each mine damage {damageShield}/{damageBody}";
     }
 }
 

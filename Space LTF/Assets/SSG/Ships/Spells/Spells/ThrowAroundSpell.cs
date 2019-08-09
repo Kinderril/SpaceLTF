@@ -8,17 +8,18 @@ using UnityEngine;
 [System.Serializable]
 public class ThrowAroundSpell : BaseSpellModulInv
 {
-    private const float DIST_SHOT = 25f;
+    private const float DIST_SHOT = 8;
+    private const float DAMAGE_BODY = 4;
     private const float rad = 3f;
 
     public ThrowAroundSpell(int costCount, int costTime)
         : base(SpellType.throwAround, costCount, costTime,
-            MainCreateBullet, CastSpell, MainAffect,  new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
+             new BulleStartParameters(19.7f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
 
     }
 
-    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
         MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
     }
@@ -27,15 +28,23 @@ public class ThrowAroundSpell : BaseSpellModulInv
         return new SpellDamageData(rad);
     }
 
-    private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CastActionSpell castActionSpell => CastSpell;
+    protected override AffectTargetDelegate affectAction => MainAffect;
+    public override bool ShowLine => true;
+    public override float ShowCircle => rad;
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         ActionShip(target, bullet.Position, damagedone);
     }
 
-    private static void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var b = Bullet.Create(origin, weapon, weapon.CurPosition, weapon.CurPosition, null,
-            new BulleStartParameters(Library.MINE_SPEED, 0f, DIST_SHOT, DIST_SHOT));
+        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
+        var dir = target.Position - startPos;
+        bullestartparameters.distanceShoot = dir.magnitude;
+        var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
+//        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition, weapon.CurPosition, null, bullestartparameters);
     }
 
     public override Bullet GetBulletPrefab()
@@ -59,14 +68,19 @@ public class ThrowAroundSpell : BaseSpellModulInv
 //        }
     }
 
+    private float bodyDamage => DAMAGE_BODY + Level;
+    private float powerThrow => 7 + Level * 2;
 
-    private static void ActionShip(ShipBase shipBase,Vector3 fromPos,DamageDoneDelegate damageDoneCallback)
+    private void ActionShip(ShipBase shipBase,Vector3 fromPos,DamageDoneDelegate damageDoneCallback)
     {
-        shipBase.ShipParameters.Damage(0,2, damageDoneCallback,shipBase);
+        shipBase.ShipParameters.Damage(0, bodyDamage, damageDoneCallback,shipBase);
         var dir = Utils.NormalizeFastSelf(shipBase.Position - fromPos);
-        shipBase.ExternalForce.Init(10,1f,dir);
+        shipBase.ExternalForce.Init(powerThrow, 1f,dir);
 
     }
-
+    public override string Desc()
+    {
+        return $"Create a shockwave witch throw around all ships in radius with power {powerThrow}. And body damage {bodyDamage}.";
+    }
 }
 

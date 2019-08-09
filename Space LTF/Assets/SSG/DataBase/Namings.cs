@@ -187,6 +187,12 @@ public static class Namings
             case SimpleModulType.beamUpgrade:
                 Name = "Beam upgrade";
                 break;
+            case SimpleModulType.ShipDecreaseSpeed:
+                Name = "Heavy weapons";
+                break;
+            case SimpleModulType.ShieldDouble:
+                Name = "Maximum shield";
+                break;
             default:
                 Debug.LogError($"NO NAME {config.ToString()}");
                 break;
@@ -248,12 +254,12 @@ public static class Namings
             case SimpleModulType.bombUpgrade:
                 Name = "Increase power of all bomb weapons for +1/+1 per level.";
                 break;
-            case SimpleModulType.ShipSpeed:
-                Name = String.Format("Increase ship max speed for {0}% per level.", ShipTurnModul.PER_LEVEL);
-                break;
-            case SimpleModulType.ShipTurnSpeed:
-                Name = String.Format("Increase ship turn speed for {0}% per level.", ShipSpeedModul.PER_LEVEL);
-                break;
+//            case SimpleModulType.ShipSpeed:
+//                Name = String.Format("Increase ship max speed for {0}% per level.", ShipTurnModul.PER_LEVEL);
+//                break;
+//            case SimpleModulType.ShipTurnSpeed:
+//                Name = String.Format("Increase ship turn speed for {0}% per level.", ShipSpeedModul.PER_LEVEL);
+//                break;
 
             default:
                 Debug.LogError($"NO DescSimpleModul {config.ToString()}");
@@ -269,39 +275,39 @@ public static class Namings
     public static string Unknown = "Unknown";
 //    public static string Destroyed = "Destroyed";
 
-    public static string SpellDesc(SpellType spellType)
-    {
-        switch (spellType)
-        {
-            case SpellType.shildDamage:
-                return String.Format("Disable shields of ships in radius for {0} sec.",ShieldOffSpell.PERIOD.ToString("0"));
-            case SpellType.engineLock:
-                return String.Format("Destroy engines for {0} sec. Work only if shield of target disabled.",EngineLockSpell.LOCK_PERIOD.ToString("0"));
-            case SpellType.lineShot:
-                return "Triple shot by selected direction";
-            case SpellType.throwAround:
-                return "Create a shockwave witch throw around all ships in radius";
-//            case SpellType.allToBase:
-//                return "Return all ship to base immidiatly";
-//            case SpellType.invisibility:
-//                return "Invisibility";
-            case SpellType.artilleryPeriod:
-                return "Start attack zone with artillery";
-            case SpellType.distShot:
-                return "Single bullet. Damage dependence on distance. And starts fire on target";
-            case SpellType.mineField:
-                return
-                    $"Settings {MineFieldSpell.MINES_COUNT} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location";
-            case SpellType.randomDamage:
-                return "Random damage to all inner moduls of ship. Do not work through shield";
-//            case SpellType.spaceWall:
-//                return String.Format("Creates a wall for {0} sec, whitch destroy all bullet coming to it",ShieldWallSpell.WALL_PERIOD);
-            default:
-                throw new ArgumentOutOfRangeException(nameof(spellType), spellType, null);
-        }
-
-        return "TODO DESC";
-    }
+//    public static string SpellDesc(SpellType spellType,int level)
+//    {
+//        switch (spellType)
+//        {
+//            case SpellType.shildDamage:
+//                return $"Disable shields of ships in radius for {ShieldOffSpell.PERIOD.ToString("0")} sec.";
+//            case SpellType.engineLock:
+//                return String.Format("Destroy engines for {0} sec. Work only if shield of target disabled.",EngineLockSpell.LOCK_PERIOD.ToString("0"));
+//            case SpellType.lineShot:
+//                return "Triple shot by selected direction";
+//            case SpellType.throwAround:
+//                return "Create a shockwave witch throw around all ships in radius";
+////            case SpellType.allToBase:
+////                return "Return all ship to base immidiatly";
+////            case SpellType.invisibility:
+////                return "Invisibility";
+//            case SpellType.artilleryPeriod:
+//                return "Start attack zone with artillery";
+//            case SpellType.distShot:
+//                return "Single bullet. Damage dependence on distance. And starts fire on target";
+//            case SpellType.mineField:
+//                return
+//                    $"Settings {MineFieldSpell.MINES_COUNT} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location";
+//            case SpellType.randomDamage:
+//                return "Random damage to all inner moduls of ship. Do not work through shield";
+////            case SpellType.spaceWall:
+////                return String.Format("Creates a wall for {0} sec, whitch destroy all bullet coming to it",ShieldWallSpell.WALL_PERIOD);
+//            default:
+//                throw new ArgumentOutOfRangeException(nameof(spellType), spellType, null);
+//        }
+//
+//        return "TODO DESC";
+//    }
 
     public static string SpellName(SpellType spellType)
     {
@@ -482,6 +488,7 @@ public static class Namings
     }
 
     public static string PriorityTarget = "Priority Target";
+    public static string FakePriorityTarget = "Bait Target";
 
     public static string Damage(ShipDamageType damageType, float time)
     {

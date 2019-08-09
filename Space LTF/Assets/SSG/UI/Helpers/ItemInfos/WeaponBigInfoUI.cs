@@ -26,18 +26,20 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
     public Transform Layout;
 
-    public GameObject ButtonUpgrade;
+    public GameObject ButtonContainer;
+    public Button ButtonUpgrade;
     public TextMeshProUGUI MaxLevel;
     public MoneySlotUI UpgradeCost;
     private WeaponUIParams dataModif;
+    private bool _withModul;
 
 
-    public void Init(WeaponInv inv, Action callback)
+    public void Init(WeaponInv inv, Action callback,bool canClick,bool withModul)
     {
         base.Init(callback);
+        _withModul = withModul;
 
-
-
+        ButtonUpgrade.interactable = canClick;
 
         _weapon = inv;
         Name.text = inv.Name;
@@ -72,7 +74,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     private void DrawLevel()
     {
         var canUpgrade = _weapon.CanUpgrade();
-        ButtonUpgrade.gameObject.SetActive(canUpgrade);
+        ButtonContainer.gameObject.SetActive(canUpgrade);
         MaxLevel.gameObject.SetActive(!canUpgrade);
         if (canUpgrade)
         {
@@ -100,9 +102,15 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
     private void DrawModuls()
     {
-        dataModif = new   WeaponUIParams(_weapon.CurrentDamage, 
-            _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed,_weapon.ReloadSec);
+        dataModif = new WeaponUIParams(_weapon.CurrentDamage,
+            _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed, _weapon.ReloadSec);
         Layout.ClearTransform();
+        if (!_withModul)
+        {
+            Layout.gameObject.SetActive(false);
+            DrawParams(dataModif);
+            return;
+        }
         var allItems = _weapon.CurrentInventory.GetAllItems();
         bool haveModuls = false;
         foreach (var item in allItems)

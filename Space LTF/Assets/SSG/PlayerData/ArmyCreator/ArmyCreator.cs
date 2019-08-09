@@ -377,7 +377,15 @@ public static class ArmyCreator
                 WeaponType rndWeapon;
                 if (startData.Ship.WeaponsModuls.Length > 0)
                 {
-                    rndWeapon = startData.Ship.WeaponsModuls[0].WeaponType;
+                    try
+                    {
+                        rndWeapon = startData.Ship.WeaponsModuls[0].WeaponType;
+                        Debug.LogError($"UpgradeShip no weapon {startData.Ship.WeaponsModuls.Length}");
+                    }
+                    catch (Exception e)
+                    {
+                        rndWeapon = data.GetWeaponType();
+                    }
                 }
                 else
                 {

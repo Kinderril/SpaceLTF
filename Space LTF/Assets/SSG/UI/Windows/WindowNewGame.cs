@@ -46,18 +46,18 @@ public class WindowNewGame : BaseWindow
         {
             var posibleStartSpells = new List<SpellType>()
         {
+            SpellType.lineShot,
             SpellType.engineLock,
             SpellType.shildDamage,
             SpellType.mineField,
             SpellType.throwAround,
-            SpellType.lineShot,
             SpellType.distShot,
             SpellType.artilleryPeriod,
 //            SpellType.spaceWall,
         };
 #if UNITY_EDITOR
             posibleStartSpells = new List<SpellType>();
-            posibleStartSpells.Add(SpellType.lineShot);
+            posibleStartSpells.Add(SpellType.engineLock);
 
 #endif
             List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();

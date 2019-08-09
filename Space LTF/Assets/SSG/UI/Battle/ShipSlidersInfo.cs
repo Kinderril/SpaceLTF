@@ -28,7 +28,7 @@ public class ShipSlidersInfo : MonoBehaviour
         _shipBase.ShipParameters.ShieldParameters.OnShildChanged += OnShildChanged;
         //        _ship.ShipParameters.DebugInfo();
         OnHealthChanged(_shipBase.ShipParameters.CurHealth, _shipBase.ShipParameters.MaxHealth, 0, _shipBase);
-        OnShildChanged(_shipBase.ShipParameters.CurShiled, _shipBase.ShipParameters.MaxShiled, 0, _shipBase.ShipParameters.ShieldParameters.State, _shipBase);
+        OnShildChanged(_shipBase.ShipParameters.CurShiled, _shipBase.ShipParameters.MaxShield, 0, _shipBase.ShipParameters.ShieldParameters.State, _shipBase);
         _lastState = shipBase.ShipParameters.ShieldParameters.ShiledIsActive;
         //        backShieldSlider = ShieldSlider.GetComponent<Image>();
         BackSet();

@@ -34,7 +34,9 @@ public abstract class BaseSupportModul :  BaseModulInv
         return standartDelegate;
     }
 
-    public abstract string DescSupport();
+
+
+
     public void ChangeBullet(IAffectable weaponInGame)
     {
         if (BulletImplement)
@@ -48,5 +50,12 @@ public abstract class BaseSupportModul :  BaseModulInv
     {
 
     }
+
+    public virtual void ChangeParamsShip(IShipAffectableParams weapon)
+    {
+
+    }
+
+    public abstract string DescSupport();
 
 }

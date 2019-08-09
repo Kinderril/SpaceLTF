@@ -21,11 +21,13 @@ public class DialogWindow : MonoBehaviour
         Utils.ClearTransform(Layout);
         gameObject.SetActive(true);
         MessageField.text = dialog.Message;
+        int index = 1;
         foreach (var answerDialogData in dialog.Answers)
         {
             var dialogAnswer = DataBaseController.GetItem(DialogAnswerPrefab);
             dialogAnswer.transform.SetParent(Layout);
-            dialogAnswer.Init(answerDialogData);
+            dialogAnswer.Init(answerDialogData, index);
+            index++;
         }
 
         _endCallback = endCallback;

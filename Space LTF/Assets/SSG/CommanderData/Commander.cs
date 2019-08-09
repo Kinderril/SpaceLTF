@@ -90,6 +90,8 @@ public class Commander
         {
             var weaponsIndex = 0;
 //            SpellController..Init();
+
+            SpellController.AddPriorityTarget();
             foreach (var baseSpellModul in MainShip.ShipParameters.Spells)
             {
                 if (baseSpellModul != null)
@@ -99,7 +101,6 @@ public class Commander
                     SpellController.AddSpell(baseSpellModul, modulPos);
                 }
             }
-            SpellController.AddPriorityTarget();
             CoinController.Init(MainShip);
             if (CoinController.EnableCharge)
             {
@@ -192,7 +193,7 @@ public class Commander
     {
         foreach (var enemy in enemies)
         {
-            var commanderEnemy = new CommanderShipEnemy(enemy.Value);
+            var commanderEnemy = new CommanderShipEnemy(enemy.Value.PriorityObject,enemy.Value.FakePriorityObject);
             _enemies.Add(enemy.Key, commanderEnemy);
             AddEnemy(enemy.Value, commanderEnemy);
         }
@@ -245,14 +246,14 @@ public class Commander
         }
     }
 
-    public void SetPriorityTarget(ShipBase target)
+    public void SetPriorityTarget(ShipBase target,bool isBait)
     {
         if (LastPriorityTarget != null)
         {
-            LastPriorityTarget.SetPriority(false);
+            LastPriorityTarget.SetPriority(false, isBait);
         }
         LastPriorityTarget = _enemies[target.Id];
-        LastPriorityTarget.SetPriority(true);
+        LastPriorityTarget.SetPriority(true, isBait);
     }
 
     public Vector3 GetWaitPosition(ShipBase ship)
@@ -321,11 +322,21 @@ public class Commander
         foreach (var shipBase in Ships)
         {
             var baseRepairPercent = _player.Parameters.RepairPercentPerStep();
-            var percent = shipBase.Value.ShipParameters.CurHealth / shipBase.Value.ShipParameters.MaxHealth;
-            if (percent < baseRepairPercent)
+            var isDead = shipBase.Value.IsDead;
+            float percent;
+            if (isDead)
             {
                 percent = baseRepairPercent;
+                shipBase.Value.ShipInventory.SetCriticalyDamage();
             }
+            else
+            {
+                percent = shipBase.Value.ShipParameters.CurHealth / shipBase.Value.ShipParameters.MaxHealth;
+                if (percent < baseRepairPercent)
+                {
+                    percent = baseRepairPercent;
+                }
+            }      
             Debug.Log("End game health remain percent:" + percent + "   baseRepairPercent:" + baseRepairPercent);
             shipBase.Value.ShipInventory.SetRepairPercent(percent);
         }
@@ -339,7 +350,7 @@ public class Commander
         if (CoinController.CanUseCoins(c))
         {
             CoinController.UseCoins(c,delay);
-            var maxShield = ship.ShipParameters.ShieldParameters.MaxShiled;
+            var maxShield = ship.ShipParameters.ShieldParameters.MaxShield;
             var countToHeal = maxShield*percent;
             ship.ShipParameters.ShieldParameters.HealShield(countToHeal);
             return true;

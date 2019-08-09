@@ -9,4 +9,6 @@ public interface ISpellToGame
     CastActionSpell CastSpell { get;}
     SpellDamageData RadiusAOE();
     Bullet GetBulletPrefab();
+    float ShowCircle { get; }
+    bool ShowLine { get; }
 }

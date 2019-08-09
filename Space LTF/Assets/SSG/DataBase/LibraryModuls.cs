@@ -6,7 +6,7 @@ using System.Linq;
 
 public static class LibraryModuls
 {
-    private static List<SimpleModulType> NormalModuls;
+    private static List<SimpleModulType> CommonModuls;
     private static List<SimpleModulType> RareModuls;
     private static List<SimpleModulType> NotExistModuls;
 
@@ -21,7 +21,7 @@ public static class LibraryModuls
         var all = (SimpleModulType[])Enum.GetValues(typeof(SimpleModulType));
 
         NonSupportHashSet = ShipActionModuls();
-        SupportHashSet = WeaponUpgradeModuls();
+        SupportHashSet = SupportModuls();
         NonSupportList = NonSupportHashSet.ToList();
         SupportList = SupportHashSet.ToList();
         if (NonSupportList.Count + SupportList.Count != all.Length)
@@ -30,13 +30,13 @@ public static class LibraryModuls
         }
 
 
-        NormalModuls = GetSimplesList().ToList();
+        CommonModuls = GetCommonList().ToList();
         RareModuls = RareList().ToList();
         NotExistModuls = NotExistList().ToList();
 
-        if (NormalModuls.Count + RareModuls.Count + NotExistModuls.Count != all.Length)
+        if (CommonModuls.Count + RareModuls.Count + NotExistModuls.Count != all.Length)
         {
-            Debug.LogError($"Wrong delemiter of NormalModuls {NormalModuls.Count} + RareModuls {RareModuls.Count} + NotExistModuls {NotExistModuls.Count}  != all:{all.Length}");
+            Debug.LogError($"Wrong delemiter of CommonModuls {CommonModuls.Count} + RareModuls {RareModuls.Count} + NotExistModuls {NotExistModuls.Count}  != all:{all.Length}");
         }
     }
 
@@ -51,7 +51,7 @@ public static class LibraryModuls
 
     public static List<SimpleModulType> GetNormalList()
     {
-        return NormalModuls;
+        return CommonModuls;
     }   
 //    public static List<SimpleModulType> GetUpgradesList()
 //    {
@@ -107,6 +107,8 @@ public static class LibraryModuls
             SimpleModulType.WeaponNoBulletDeath,
             SimpleModulType.WeaponPowerShot,
             SimpleModulType.WeaponFireNear,
+            SimpleModulType.ShipDecreaseSpeed,
+            SimpleModulType.ShieldDouble,
         };
         return typesToRnd;
     }
@@ -142,11 +144,12 @@ public static class LibraryModuls
             SimpleModulType.WeaponChain,
             SimpleModulType.WeaponNoBulletDeath,
             SimpleModulType.WeaponFireNear,
+            SimpleModulType.ShieldDouble,
         };
         return typesToRnd;
     }
 
-    private static HashSet<SimpleModulType> GetSimplesList()
+    private static HashSet<SimpleModulType> GetCommonList()
     {
         var typesToRnd = new HashSet<SimpleModulType>()
         {
@@ -169,6 +172,7 @@ public static class LibraryModuls
             SimpleModulType.WeaponShieldPerHit,
             SimpleModulType.WeaponPowerShot,
             SimpleModulType.WeaponPush,
+            SimpleModulType.ShipDecreaseSpeed,
 
 
         };
@@ -190,17 +194,15 @@ public static class LibraryModuls
             SimpleModulType.damageMines,
             SimpleModulType.systemMines,
             SimpleModulType.blink,
-   
-            SimpleModulType.ShipSpeed,
-            SimpleModulType.ShipTurnSpeed,
-            SimpleModulType.shieldRegen,
             SimpleModulType.ResistDamages,
+            SimpleModulType.shieldRegen,
+
         };
         return typesToRnd;
     }
 
 
-    private static HashSet<SimpleModulType> WeaponUpgradeModuls()
+    private static HashSet<SimpleModulType> SupportModuls()
     {
         var typesToRnd = new HashSet<SimpleModulType>()
         {
@@ -234,6 +236,12 @@ public static class LibraryModuls
             SimpleModulType.impulseUpgrade,
             SimpleModulType.bombUpgrade,
             SimpleModulType.beamUpgrade,
+
+            SimpleModulType.ShipSpeed,
+            SimpleModulType.ShipTurnSpeed,
+//            SimpleModulType.ResistDamages,
+            SimpleModulType.ShipDecreaseSpeed,
+            SimpleModulType.ShieldDouble,
         };
         return typesToRnd;
     }

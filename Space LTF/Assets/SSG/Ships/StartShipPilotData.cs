@@ -31,7 +31,6 @@ public class StartShipPilotData
     public int MoneyToFullRepair()
     {
         var percentsToRepair = Ship.HealthPointToRepair();
-        var fullPercent = 5 + (int)(Pilot.CurLevel * 0.501f); 
-        return fullPercent * percentsToRepair;
+        return Library.GetReapairCost(percentsToRepair, Pilot.CurLevel);
     }
 }

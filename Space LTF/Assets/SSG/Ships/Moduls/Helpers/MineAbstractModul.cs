@@ -44,8 +44,9 @@ public abstract class MineAbstractModul : BaseModul , IWeapon
 
     public void BulletCreateByDir(ShipBase target,Vector3 dir)
     {
-        Debug.Log($"Mine abstract BulletCreate {Time.time}");
+//        Debug.Log($"Mine abstract BulletCreate {Time.time}");
         for (int i = 0; i < 1+Level; i++)
+
         {
             var dirToMove = Utils.RotateOnAngUp(_owner.LookDirection, MyExtensions.Random(-90, 90));
             Bullet.Create(_mineBulletPrefab, this, -dirToMove * 3f, _owner.Position, null,
@@ -115,7 +116,7 @@ public abstract class MineAbstractModul : BaseModul , IWeapon
     {
         if (_timeCome < Time.time)
         {
-            _timeCome = Time.time + 3f;
+            _timeCome = Time.time + 1f;
             bool isReady = IsReady();
             if (isReady)
             {

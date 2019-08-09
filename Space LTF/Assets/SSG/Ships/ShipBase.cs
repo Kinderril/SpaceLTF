@@ -28,6 +28,7 @@ public class ShipBase : MovingObject
     public BaseAction CurAction { get; private set; }
     private SelectedElement SelectedElement { get; set; }
     public GameObject PriorityObject { get; protected set; }
+    public GameObject FakePriorityObject { get; protected set; }
     private Vector3 _backPredictionPos;
 
     private Action<ShipBase> _dealthCallback;
@@ -116,10 +117,7 @@ public class ShipBase : MovingObject
         SelectedElement.Init(shipInventory.ShipType);
         SelectedElement.transform.SetParent(ShipVisual.transform, false);
 
-        var priorityTarget = DataBaseController.Instance.PriorityTarget;
-        PriorityObject = DataBaseController.GetItem(priorityTarget);
-        PriorityObject.transform.SetParent(ShipVisual.transform, false);
-        PriorityObject.gameObject.SetActive(false);
+        InitPriorityObjects();
 
         DamageData = new ShipDamageData(this);
         HitData = new ShipHitData();
@@ -167,6 +165,19 @@ public class ShipBase : MovingObject
         PathController = new ShipPathController(this, MaxTurnRadius * 1.5f);
         BuffData = new ShipBuffData(this);
         DamageData.Activate();
+    }
+
+    private void InitPriorityObjects()
+    {
+        var priorityTarget = DataBaseController.Instance.PriorityTarget;
+        PriorityObject = DataBaseController.GetItem(priorityTarget);
+        PriorityObject.transform.SetParent(ShipVisual.transform, false);
+        PriorityObject.gameObject.SetActive(false);
+
+        var fakePriorityTarget = DataBaseController.Instance.BaitPriorityTarget;
+        FakePriorityObject = DataBaseController.GetItem(fakePriorityTarget);
+        FakePriorityObject.transform.SetParent(ShipVisual.transform, false);
+        FakePriorityObject.gameObject.SetActive(false);
     }
 
     public void Select(bool val)
@@ -817,7 +828,7 @@ public class ShipBase : MovingObject
     {
         if (ShipParameters != null)
         {
-            var s = "s:" + ShipParameters.CurShiled.ToString("0") + "/" + ShipParameters.MaxShiled.ToString("0");
+            var s = "s:" + ShipParameters.CurShiled.ToString("0") + "/" + ShipParameters.MaxShield.ToString("0");
             var p = transform.position + Vector3.up*0.58f;
             SubDraw(s, p);
         }

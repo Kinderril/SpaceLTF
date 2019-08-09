@@ -216,6 +216,9 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     {
     }
 
+    public virtual void ShootDone(ShipBase ship)
+    {
+    }
 
     public void TryUpgrade()
     {
@@ -252,9 +255,6 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         return Level < Library.MAX_WEAPON_LVL;
     }
 
-    public virtual void ShootDone(ShipBase ship)
-    {
-    }
 
     public void Upgrade()
     {

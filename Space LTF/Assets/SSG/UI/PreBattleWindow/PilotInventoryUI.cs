@@ -98,6 +98,7 @@ public class PilotInventoryUI : MonoBehaviour
 
     private void OnShipRepaired(ShipInventory obj)
     {
+        SetParamsAndMoney();
         SetCurHealths();
     }
 

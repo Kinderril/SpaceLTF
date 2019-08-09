@@ -19,8 +19,8 @@ public class DragableSpellItem : DragableItem
 
     protected override void OnClickComplete()
     {
-        if (CanShowWindow())
-            WindowManager.Instance.ItemInfosController.Init(Spell);
+//        if ()
+            WindowManager.Instance.ItemInfosController.Init(Spell, CanShowWindow());
     }
 }
 

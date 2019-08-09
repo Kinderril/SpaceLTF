@@ -5,7 +5,6 @@ using UnityEngine;
 [Serializable]
 public class RepairStationGlobalCell : GlobalMapCell
 {
-    private const float REPAIR_DISCOUTNT = 0.2f;
 
     public RepairStationGlobalCell( int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
     {
@@ -28,9 +27,13 @@ public class RepairStationGlobalCell : GlobalMapCell
         var total = 0;
         foreach (var startShipPilotData in allShips)
         {
-            total = total + startShipPilotData.Ship.HealthPointToRepair();
+            var pointToRepair = startShipPilotData.Ship.HealthPointToRepair();
+            var cost = Library.GetReapairCost(pointToRepair, startShipPilotData.Pilot.CurLevel);
+            var thisShip = (int)Mathf.Clamp((int)cost * Library.REPAIR_DISCOUTNT, 1, 99999);
+            total += thisShip;
         }
-        total =(int)Mathf.Clamp((int)total *REPAIR_DISCOUTNT,1,99999);
+
+        
         //var half = total/2;
         MessageDialogData mesData;
         if (total > 0)

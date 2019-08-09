@@ -29,8 +29,8 @@ public class StayBullet : LinearBullet
     {
         moveState = true;
         _isActive = false;  
-        _moveTimeEnd = Time.time + _moveLifeTime;
         base.LateInit();
+        _moveTimeEnd = Time.time + _moveLifeTime;
         if (StayEffect != null)
         {
             StayEffect.gameObject.SetActive(false);

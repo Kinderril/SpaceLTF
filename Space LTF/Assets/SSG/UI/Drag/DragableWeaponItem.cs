@@ -23,8 +23,9 @@ public class DragableWeaponItem : DragableItem
 
     protected override void OnClickComplete()
     {
-        if (CanShowWindow())
-            WindowManager.Instance.ItemInfosController.Init(Weapon);
+        var shipInv = (Weapon.CurrentInventory as ShipInventory) != null;
+//        if (CanShowWindow())
+            WindowManager.Instance.ItemInfosController.Init(Weapon, CanShowWindow(), shipInv);
     }
 }
 

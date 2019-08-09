@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 [System.Serializable]
 public class SectorData
 {
-    private const float COEF_POWER = 0.7f;
+    private const float COEF_POWER = 1.1f;
     public int StartX;
     public int StartZ;
     public int Size { get; private set; }
@@ -68,10 +68,10 @@ public class SectorData
         Cells[x, z].SetData(cell);
     }
 
-    public static int CalcCellPower(int StartX, int Size, int startPowerGalaxy)
+    public static int CalcCellPower(int visited, int Size, int startPowerGalaxy)
     {
        
-        var additional = (int)(StartX * Size * COEF_POWER);
+        var additional = (int)(visited * Size * COEF_POWER);
         var power = startPowerGalaxy + additional;
         return power;
     }
@@ -80,7 +80,7 @@ public class SectorData
     {
         IsPopulated = true;
         _startPowerGalaxy = startPowerGalaxy;
-        _power = CalcCellPower(startSectorData.StartX,startPowerGalaxy,startPowerGalaxy);
+        _power = CalcCellPower(0,startPowerGalaxy,startPowerGalaxy);
         RandomizeBorders();
         var remainFreeCells = _listCells.Where(x => x.IsFreeToPopulate()).ToList();
         //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");
@@ -123,7 +123,7 @@ public class SectorData
             var cellsForShop = remainFreeCells.RandomElement(shopsCount);
             foreach (var container in cellsForShop)
             {
-                var shopCell = new ShopGlobalMapCell(_power > 20, Utils.GetId(), StartX + container.indX,
+                var shopCell = new ShopGlobalMapCell(_power, Utils.GetId(), StartX + container.indX,
                     StartZ + container.indZ,this);
                 container.SetData(shopCell);
                 remainFreeCells.Remove(container);

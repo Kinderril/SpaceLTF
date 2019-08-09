@@ -36,10 +36,13 @@ public static class Library
     public static int START_PLAYER_FREE_PARAMETERS = 2;
 
     public const int MAX_WEAPON_LVL = 5;
+    public const int MAX_SPELL_LVL = 5;
     public const int MAX_MOUDL_LEVEL = 2;
 
     public const float MIN_WORKING_SHIP = 6;
     public const float MAX_ARMY_POWER_MAP = 70;
+
+    public const float REPAIR_DISCOUTNT = 0.5f;
 
     const float LASER_SPEED =9.7f;
     const float LASER_DELAY = 4f;
@@ -83,8 +86,13 @@ public static class Library
     public const int COINS_TO_CHARGE_SHIP_SHIELD = 2;
     public const int COINS_TO_CHARGE_SHIP_SHIELD_DELAY = 20;
     public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.3f;
+
     public const int PriorityTargetCostTime = 120;
     public const int PriorityTargetCostCount = 1;
+
+    public const int BaitPriorityTargetCostTime = 120;
+    public const int BaitPriorityTargetCostCount = 2;
+    public const int CRITICAL_DAMAGES_TO_DEATH = 2;
 
 
     #region GLOBAL_MAP_DATA
@@ -206,52 +214,52 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 15, 5, 3.2f, 89,1, 0, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 15, 5, 3.2f, 89,1, 0, 0, 1, 0.0f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 18, 7, 2.8f, 71, 1, 0, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 18, 7, 2.8f, 71, 1, 0, 0, 1, 0.0f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 52, 10, 0.01f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 52, 10, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.raiders:
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 21, 10, 4.1f, 70,1, 3, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 21, 10, 4.1f, 70,1, 3, 0, 1, 0.0f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 28, 12, 3.6f, 63, 1, 4, 0, 1, 0.05f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 28, 12, 3.6f, 63, 1, 4, 0, 1, 0.05f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 32, 14, 3.1f, 55, 2, 4, 0, 1, 0.01f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 32, 14, 3.1f, 55, 2, 4, 0, 1, 0.01f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 46, 18, 0.01f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 46, 18, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.krios:
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 15, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 15, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 19, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 19, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 22, 41, 2.2f, 53, 3, 3, 0, 1, 0.4f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 22, 41, 2.2f, 53, 3, 3, 0, 1, 0.4f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 31, 54, 0.01f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 31, 54, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.mercenary:
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 22, 11, 3.8f, 72, 2, 2, 0, 1, 0.1f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 22, 11, 3.8f, 72, 2, 2, 0, 1, 0.1f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 26, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 26, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 34, 45, 0.01f, 40, 0, 0, 3, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 34, 45, 0.01f, 40, 0, 0, 3, 1, 0f), player);
                 }
 
                 break;
@@ -259,26 +267,26 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 20, 16, 3.4f, 70, 2, 1, 0, 1, 0.2f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 20, 16, 3.4f, 70, 2, 1, 0, 1, 0.2f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 25, 22, 2.9f, 61, 2, 2, 0, 1, 0.25f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 25, 22, 2.9f, 61, 2, 2, 0, 1, 0.25f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 50, 30, 0.01f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 50, 30, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.ocrons:
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 52, 0, 3.6f, 75, 2, 3, 0, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 52, 0, 3.6f, 75, 2, 3, 0, 1, 0f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 62, 0, 3.2f, 62, 2, 3, 0, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 62, 0, 3.2f, 62, 2, 3, 0, 1, 0f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParamsDebug(shipType, config, 62, 0, 0.01f, 40, 0, 0, 1, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 62, 0, 0.01f, 40, 0, 0, 1, 1, 0f), player);
                 }
                 break;
             default:
@@ -410,6 +418,14 @@ public static class Library
                 return new AbstractWeaponUpgradeModul(WeaponType.beam, rnd, level);
             case SimpleModulType.laserUpgrade:
                 return new AbstractWeaponUpgradeModul(WeaponType.laser, rnd, level);
+            case SimpleModulType.ShipSpeed:
+                return new ShipSpeedModul(level);
+            case SimpleModulType.ShipTurnSpeed:
+                return new ShipTurnSpeedModul(level);
+            case SimpleModulType.ShipDecreaseSpeed:
+                return new ShipDecreaseSpeedModul(level);
+            case SimpleModulType.ShieldDouble:
+                return new ShipShieldDoubleModul(level);
             default:
                 Debug.LogError($"this is not support {rnd}");
                 throw new ArgumentOutOfRangeException();
@@ -469,36 +485,18 @@ public static class Library
         return ((sumLevel - 4)*PILOT_INNER_COEF);
     }
 
-//    public static Weapon CreateWeapon(WeaponInv weapon1)
-//    {
-//        switch (weapon1.WeaponType)
-//        {
-//            case WeaponType.laser:
-//                return new LaserWeapon(weapon1);
-//            case WeaponType.rocket:
-//                return new RocketWeapon(weapon1);
-//            case WeaponType.impulse:
-//                return new ImpulseWeapon(weapon1);
-//            case WeaponType.casset:
-//                return new MineWeapon(weapon1);
-////            case WeaponType.beam:
-////                return new BeamWeapon(weapon1);
-////            case WeaponType.artillery:
-////                return new ArtilleryWeapon(weapon1);
-////            case WeaponType.spread:
-////                return new SpreadWeapon(weapon1);
-//            case WeaponType.eimRocket:
-//                return new EMIRocketWeaponGame(weapon1);
-//            default:
-//                Debug.LogError("can't create weapon by type " + weapon1.WeaponType.ToString());
-//                break;
-//        }
-//        return null;
-//    }
-
     public static int ModificationMoneyBattleReward(int moneyToReward)
     {
         return moneyToReward;
+    }
+
+    public static int GetReapairCost(int hpPointToRepair,int shipLevel)
+    {
+        if (hpPointToRepair == 0)
+        {
+            return 0;
+        }
+        return (hpPointToRepair + shipLevel)/5;
     }
 }
 

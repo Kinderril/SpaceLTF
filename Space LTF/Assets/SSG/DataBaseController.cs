@@ -23,6 +23,7 @@ public class DataBaseController : Singleton<DataBaseController>
     public Transform BulletContainer;
     public SelectedElement SelectedElement;
     public GameObject PriorityTarget;
+    public GameObject BaitPriorityTarget;
     public PoolRenderTextures PoolRenderTextures;
     public Transform CanvasContainer;
 

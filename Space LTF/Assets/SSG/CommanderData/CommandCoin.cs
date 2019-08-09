@@ -63,6 +63,12 @@ public class CommandCoin
         {
             _remainPercent = 1f;
         }
+#if UNITY_EDITOR
+        if (DebugParamsController.FastRecharge)
+        {
+            delay = 1f;
+        }
+#endif
         _lenghtTime = delay;
         _restoreEndTime = Time.time + _lenghtTime;
         Used = true;

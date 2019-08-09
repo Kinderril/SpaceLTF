@@ -1,4 +1,4 @@
-﻿public class StartShipParamsDebug : IStartShipParams
+﻿public class StartShipParams : IStartShipParams
 {
     public int BodyVisualTypeData;
 //    public float EvationData;
@@ -16,7 +16,7 @@
     public float ShiledRegenData = 0f;
     public string NameData;
 
-    public StartShipParamsDebug(
+    public StartShipParams(
         ShipType ShipTypeData,
         ShipConfig ShipConfigData,
         float MaxHealthData,

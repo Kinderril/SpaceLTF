@@ -72,6 +72,14 @@ public class PreBattleWindow : BaseWindow
         PlayersInventory.Dispose();
     }
 
+    void LateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            OnClickStart();
+        }
+    }
+
     public void OnClickStart()
     {
         if (_greenPlayer != null && _redPlayer != null)

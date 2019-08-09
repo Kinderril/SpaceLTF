@@ -14,6 +14,14 @@ public class LinearBullet : Bullet
     public override void LateInit()
     {
         base.Init();
+        if (TrailEffect != null)
+        {
+            TrailEffect.Play();
+        }
+        if (TrailEffect != null)
+        {
+            TrailEffect.StartEmmision();
+        }
         _bornTime = Time.time;
         _moveLifeTime = _distanceShoot / _curSpeed;
 #if UNITY_EDITOR

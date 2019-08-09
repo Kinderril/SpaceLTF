@@ -12,24 +12,28 @@ public class RandomDamageSpell : BaseSpellModulInv
 
     public RandomDamageSpell(int costCount, int costTime)
         : base(SpellType.randomDamage, costCount, costTime,
-            MainCreateBullet, CastSpell, MainAffect, new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
+             new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
 
     }
-    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
         MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
     }
 
-    private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         ActionShip(target);
     }
+    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CastActionSpell castActionSpell => CastSpell;
+    protected override AffectTargetDelegate affectAction => MainAffect;
 
-    private static void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    public override bool ShowLine => true;
+    public override float ShowCircle => -1;
+    private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var b = Bullet.Create(origin, weapon, weapon.CurPosition, weapon.CurPosition, null,
-            new BulleStartParameters(Library.MINE_SPEED, 0f, DIST_SHOT, DIST_SHOT));
+        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition, weapon.CurPosition, null, bullestartparameters);
     }
     
     public override Bullet GetBulletPrefab()
@@ -42,29 +46,32 @@ public class RandomDamageSpell : BaseSpellModulInv
 
     protected override void CastAction(Vector3 pos)
     {
-//        var effect2 = DataBaseController.Instance.SpellDataBase.ShieldDamageEffectAOE;
-//        EffectController.Instance.Create(effect2, pos, 3f);
-//        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.green, rad);
-//        var c2 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.red, rad);
-//        foreach (var shipBase in c1)
-//        {
-//            ActionShip(shipBase);
-//        }
-//        foreach (var shipBase in c2)
-//        {
-//            ActionShip(shipBase);
-//        }
+        //        var effect2 = DataBaseController.Instance.SpellDataBase.ShieldDamageEffectAOE;
+        //        EffectController.Instance.Create(effect2, pos, 3f);
+        //        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.green, rad);
+        //        var c2 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.red, rad);
+        //        foreach (var shipBase in c1)
+        //        {
+        //            ActionShip(shipBase);
+        //        }
+        //        foreach (var shipBase in c2)
+        //        {
+        //            ActionShip(shipBase);
+        //        }
     }
-
+    float timeDelay => 9f + Level * 3f;
+    public override string Desc()
+    {    
+        return $"Random damage to all inner moduls of ship. Do not work through shield for {timeDelay} sec.";
+    }
 
     public override SpellDamageData RadiusAOE()
     {
         return new SpellDamageData(rad);
     }
 
-    private static void ActionShip(ShipBase shipBase)
+    private void ActionShip(ShipBase shipBase)
     {
-        float timeDelay = 13f;
         WDictionary< ShipDamageType > wd = new WDictionary<ShipDamageType>(new Dictionary<ShipDamageType, float>()
         {
             { ShipDamageType.engine,3f},

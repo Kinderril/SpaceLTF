@@ -26,7 +26,10 @@ public class ShipModuls
                 if (isSupport)
                 {
                     if (m is BaseSupportModul sup)
+                    {
                         SupportModuls.Add(sup);
+                    }
+
                     continue;
                 }
                 var modul = BaseModul.Create(m);
@@ -46,9 +49,12 @@ public class ShipModuls
         foreach (var baseModul in Moduls)
         {
             baseModul.Apply(_owner.ShipParameters, _owner);
-
         }
 
+        foreach (var baseSupportModul in SupportModuls)
+        {
+            baseSupportModul.ChangeParamsShip(_owner.ShipParameters);
+        }
     }
 
     public void Dispose()

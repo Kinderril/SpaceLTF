@@ -38,6 +38,17 @@ public static class MoneyConsts
         {7, 45},
     };
 
+    public static Dictionary<int, int> SpellUpgrade = new Dictionary<int, int>()
+    {
+        {1, 13},
+        {2, 24},
+        {3, 28},
+        {4, 32},
+        {5, 36},
+        {6, 40},
+        {7, 45},
+    };
+
     //BUY
     public const int Weapon1Buyl = 12;
     public const int Weapon1Buy2 = 33;

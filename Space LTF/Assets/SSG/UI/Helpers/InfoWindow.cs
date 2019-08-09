@@ -17,7 +17,8 @@ public class InfoWindow : MonoBehaviour
     public virtual void Init(Action onOK,string msg)
     {
         transform.SetAsLastSibling();
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
+        WindowManager.Instance.WindowMainCanvas.interactable = false;
+        WindowManager.Instance.WindowSubCanvas.interactable = true;
         this.onOK = onOK;
         textField.text = msg;
         gameObject.SetActive(true);
@@ -27,7 +28,8 @@ public class InfoWindow : MonoBehaviour
 
     public void OnClickOk()
     {
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        WindowManager.Instance.WindowSubCanvas.interactable = false;
         if (onOK != null)
             onOK();
         gameObject.SetActive(false);

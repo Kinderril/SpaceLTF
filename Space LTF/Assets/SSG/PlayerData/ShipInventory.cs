@@ -19,7 +19,9 @@ public class ShipInventory : IStartShipParams , IInventory
     [field: NonSerialized]
     public event ItemTransferedTo OnItemAdded;
     [field: NonSerialized]
-    public event Action<ShipInventory> OnShipRepaired;
+    public event Action<ShipInventory> OnShipRepaired;   
+    [field: NonSerialized]
+    public event Action<ShipInventory> OnShipCriticalChange;
 
     //    public int DamageTimes = 0;
     public ShipBattleData LastBattleData;
@@ -28,6 +30,7 @@ public class ShipInventory : IStartShipParams , IInventory
     public int WeaponModulsCount { get; private set; }
     public int SimpleModulsCount { get; private set; }
     public int SpellModulsCount { get; private set; }
+    public int CriticalDamages { get; private set; }
     public string Name { get; private set; }
     public int Id { get; private set; }
 //    public bool Destroyed { get; set; }
@@ -41,6 +44,7 @@ public class ShipInventory : IStartShipParams , IInventory
 
     public ShipInventory(IStartShipParams pParams, Player player)
     {
+        CriticalDamages = 0;
         HealthPercent = 1f;
         _player = player;
         MaxHealth = pParams.MaxHealth;
@@ -245,6 +249,34 @@ public class ShipInventory : IStartShipParams , IInventory
         }
 
         return false;
+    }
+
+    public void SetCriticalyDamage()
+    {
+        CriticalDamages++;
+        if (CriticalDamages >= Library.CRITICAL_DAMAGES_TO_DEATH)
+        {
+              Debug.Log("Ship fully destroyed cause critical damages");
+              MainController.Instance.MainPlayer.DestroyShip(this);
+        }
+        else
+        {
+            if (OnShipCriticalChange != null)
+            {
+                OnShipCriticalChange(this);
+            }
+        }
+
+
+    }
+
+    public void RestoreAllCriticalDamages()
+    {
+        CriticalDamages = 0;
+        if (OnShipCriticalChange != null)
+        {
+            OnShipCriticalChange(this);
+        }
     }
 }
 

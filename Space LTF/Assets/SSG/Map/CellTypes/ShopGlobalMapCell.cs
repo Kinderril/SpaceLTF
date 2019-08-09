@@ -6,11 +6,21 @@ using UnityEngine;
 public class ShopGlobalMapCell : GlobalMapCell
 {
     private readonly ShopInventory _shopInventory;
-
-    public ShopGlobalMapCell(bool goodPower, int id, int intX, int intZ, SectorData secto) : base(id, intX, intZ, secto)
+    private const int MIN_ITEMS = 5;
+    private const int MAX_ITEMS = 25;
+    private const float MODULS_PERCENT = 0.4f; 
+    private const float WEAPON_PERCENT = 0.4f; 
+    private const float SPELL_PERCENT = 0.2f; 
+    public ShopGlobalMapCell(float power, int id, int intX, int intZ, SectorData secto) : base(id, intX, intZ, secto)
     {
         _shopInventory = new ShopInventory(null);
-        var weaponsCount = MyExtensions.Random(1, 3);
+        int totalItems =(int)((power + 5) / 2);
+        totalItems = Mathf.Clamp(totalItems, MIN_ITEMS, MAX_ITEMS);
+        var weaponsCount = (int)(totalItems * WEAPON_PERCENT);
+        var countModuls = (int)(totalItems * MODULS_PERCENT);
+        var spells = (int)(totalItems * SPELL_PERCENT);
+
+        bool goodPower = power > 22;
         for (var i = 0; i < weaponsCount; i++)
         {
             var w = Library.CreateWeapon(goodPower);
@@ -18,12 +28,7 @@ public class ShopGlobalMapCell : GlobalMapCell
             _shopInventory.Weapons.Add(w);
         }
 
-        var minModuls = 1;
-        if (weaponsCount == 0)
-        {
-            minModuls = 3;
-        }
-        var countModuls = MyExtensions.Random(minModuls, 6);
+       
         WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
             {
                 {1,4f},
@@ -36,7 +41,6 @@ public class ShopGlobalMapCell : GlobalMapCell
             m.CurrentInventory = _shopInventory;
             _shopInventory.Moduls.Add(m);
         }
-        var spells = MyExtensions.Random(0, 2);
 
         for (int i = 0; i < spells; i++)
         {

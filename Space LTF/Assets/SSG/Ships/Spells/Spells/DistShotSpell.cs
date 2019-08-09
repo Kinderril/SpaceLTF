@@ -12,7 +12,9 @@ public class DistShotSpell : BaseSpellModulInv
 {
     //    private const float dist = 28f;
 
-    private const int BASE_DAMAGE = 10;
+    private const int DIST_BASE_DAMAGE = 6;
+    private const int BASE_DAMAGE = 8;
+    private const int LEVEL_DAMAGE = 4;
     private const float DIST_COEF = .065f;
 
     [NonSerialized]
@@ -20,37 +22,35 @@ public class DistShotSpell : BaseSpellModulInv
 
 
     private const float ANG_OFFSET = 8f;
-    private const float BULLET_SPEED = 8f;
+    private const float BULLET_SPEED = 12f;
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 28f;
     public DistShotSpell(int costCount, int costTime)
-        : base(SpellType.distShot, costCount, costTime  ,
-            DistShotCreateBullet, CastSpell, MainAffect, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT),false)
+        : base(SpellType.distShot, costCount, costTime  , new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT),false)
     {
-        CurWeaponDamage = new CurWeaponDamage(1,5);
+        CurWeaponDamage = new CurWeaponDamage(0,12);
     }
-    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
         DistShotCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
     }
 
-    private static void DistShotCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private void DistShotCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-
-
-        var b = Bullet.Create(origin, weapon, weapon.CurPosition, weapon.CurPosition, null,
-            new BulleStartParameters(Library.MINE_SPEED, 0f, DIST_SHOT, DIST_SHOT));
+        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition, weapon.CurPosition, null, bullestartparameters);
     }
 
-    private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    public int BASE_damage => BASE_DAMAGE + LEVEL_DAMAGE * Level;
+
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         var dist = (target.Position - bullet1.Weapon.Owner.Position).magnitude;
         var c = dist * DIST_COEF;
-        int damage = Mathf.Clamp((int)(BASE_DAMAGE / c), 1, BASE_DAMAGE);
+        int damage = BASE_damage + Mathf.Clamp((int)(DIST_BASE_DAMAGE / c), 0, DIST_BASE_DAMAGE);
         //        int baseSpDamage = (int)(BASE_DAMAGE / c);
 
-        target.ShipParameters.Damage(damage, damage, bullet1.Weapon.DamageDoneCallback,target);
-        target.DamageData.ApplyEffect(ShipDamageType.fire,5);
+        target.ShipParameters.Damage(0, damage, bullet1.Weapon.DamageDoneCallback,target);
+        target.DamageData.ApplyEffect(ShipDamageType.engine,5);
     }
 
 
@@ -60,25 +60,21 @@ public class DistShotSpell : BaseSpellModulInv
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
     }
+    public override bool ShowLine => true;
+    public override float ShowCircle => -1;
 
-
-    public int Level
-    {
-        get { return 1; }
-    }
-
-
-
-
+    protected override CreateBulletDelegate createBullet => DistShotCreateBullet;
+    protected override CastActionSpell castActionSpell => CastSpell;
+    protected override AffectTargetDelegate affectAction => MainAffect;
 
     protected override void CastAction(Vector3 pos)
     {
 
-     }
-    
-    public void BulletDestroyed(Vector3 position, Bullet bullet)
+    }
+    public override string Desc()
     {
-        
+        return
+            $"Single bullet. Base damage {BASE_damage}. Additional damage dependence on distance."; 
     }
 
 }

@@ -3,7 +3,8 @@ using UnityEngine;
 using System.Collections;
 
 [System.Serializable]
-public delegate void CastActionSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters);
+public delegate void CastActionSpell(BulletTarget target, Bullet origin, IWeapon weapon,
+    Vector3 shootpos, BulleStartParameters bullestartparameters);
 public class SpellDamageData
 {
     public float AOERad;
@@ -50,10 +51,15 @@ public class SpellInGame : IWeapon
     public CurWeaponDamage CurrentDamage => new CurWeaponDamage(0, 0);
     public string Name { get; set; }
     public SpellType SpellType { get;private set; }
+    float ShowCircleRadius { get; }
+    bool ShowLine { get; }
+    public bool ShowCircle => ShowCircleRadius > 0;
 
     public SpellInGame(ISpellToGame spellData,Vector3 modulPos,
         TeamIndex teamIndex,ShipBase owner,int level,string name,int period,int count, SpellType spellType)
     {
+        ShowCircleRadius = spellData.ShowCircle;
+        ShowLine = spellData.ShowLine;
         Level = level;
         SpellType = spellType;
         _owner = owner;
@@ -81,32 +87,40 @@ public class SpellInGame : IWeapon
 
     public void UpdateShowCast(Vector3 pos)
     {
-        if (_spellDamageData.IsAOE)
+        if (ShowCircle)
         {
             CircleObjectToShow.transform.position = pos;
         }
 
-        var dir = (pos - _modulPos);
-        LineObjectToShow.SetDirection(_modulPos, _modulPos + dir);
+        if (ShowLine)
+        {
+
+            var dir = (pos - _modulPos);
+            LineObjectToShow.SetDirection(_modulPos, _modulPos + dir);
+        }
     }
 
     public void StartShowCast()
     {
-        if (LineObjectToShow == null)
+        if (ShowLine)
         {
-            var p = DataBaseController.Instance.SpellDataBase.SpellZoneLine;
-            LineObjectToShow = DataBaseController.GetItem(p);
-            LineObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
+            if (LineObjectToShow == null)
+            {
+                var p = DataBaseController.Instance.SpellDataBase.SpellZoneLine;
+                LineObjectToShow = DataBaseController.GetItem(p);
+                LineObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
+            }
+            LineObjectToShow.gameObject.SetActive(true);
         }
-        LineObjectToShow.gameObject.SetActive(true);
-        if (_spellDamageData.IsAOE)
+   
+        if (ShowCircle)
         {
             if (CircleObjectToShow == null)
             {
                 CircleObjectToShow =
                     DataBaseController.GetItem(DataBaseController.Instance.SpellDataBase.SpellZoneCircle);
                 CircleObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
-                CircleObjectToShow.SetSize(_spellDamageData.AOERad);
+                CircleObjectToShow.SetSize(ShowCircleRadius);
             }
 
             CircleObjectToShow.gameObject.SetActive(true);
@@ -116,12 +130,13 @@ public class SpellInGame : IWeapon
 
     public void EndShowCast()
     {
-        if (_spellDamageData.IsAOE)
+        if (ShowCircle)
         {
             CircleObjectToShow.gameObject.SetActive(false);
         }
 
-        LineObjectToShow.gameObject.SetActive(false);
+        if (ShowLine)
+            LineObjectToShow.gameObject.SetActive(false);
     }
 
     public void Cast(Vector3 target)

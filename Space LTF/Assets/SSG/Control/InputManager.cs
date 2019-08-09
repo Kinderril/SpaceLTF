@@ -158,31 +158,31 @@ public class InputManager : MonoBehaviour
     private void NumbersClick()
     {
         
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            TrySelectSpell(0);
-//            TryGetShipAndSelectIt(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            TrySelectSpell(1);
-//            TryGetShipAndSelectIt(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            TrySelectSpell(2);
-//            TryGetShipAndSelectIt(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            TrySelectSpell(3);
-//            TryGetShipAndSelectIt(3);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            TrySelectSpell(4);
-            //            TryGetShipAndSelectIt(4);
-        }
+//        if (Input.GetKeyDown(KeyCode.Alpha1))
+//        {
+//            TrySelectSpell(0);
+////            TryGetShipAndSelectIt(0);
+//        }
+//        if (Input.GetKeyDown(KeyCode.Alpha2))
+//        {
+//            TrySelectSpell(1);
+////            TryGetShipAndSelectIt(1);
+//        }
+//        if (Input.GetKeyDown(KeyCode.Alpha3))
+//        {
+//            TrySelectSpell(2);
+////            TryGetShipAndSelectIt(2);
+//        }
+//        if (Input.GetKeyDown(KeyCode.Alpha4))
+//        {
+//            TrySelectSpell(3);
+////            TryGetShipAndSelectIt(3);
+//        }
+//        if (Input.GetKeyDown(KeyCode.Alpha5))
+//        {
+//            TrySelectSpell(4);
+//            //            TryGetShipAndSelectIt(4);
+//        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             BattleController.Instance.PauseChange();

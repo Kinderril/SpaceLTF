@@ -22,13 +22,19 @@ public class SpellModulsContainer : MonoBehaviour
         _mainShip = mainShip;
         _buttons.Clear();
         SpellButton spPrefab = DataBaseController.Instance.SpellDataBase.SpellButton;
+        int index = 1;
         foreach (var baseSpellModul in commanderSpells.AllSpells)
         {
             if (baseSpellModul != null)
             {
                 var b = DataBaseController.GetItem(spPrefab);
                 b.transform.SetParent(Layout, false);
-                b.Init(inGameMain,baseSpellModul, buttonCallback, coinController.CoefSpeed);
+                b.Init(inGameMain,baseSpellModul, spell =>
+                {
+//                    SpellSelected(spell);
+                    buttonCallback(spell);
+                }, coinController.CoefSpeed, index);
+                index++;
                 _buttons.Add(b);
             }
         }
@@ -38,6 +44,14 @@ public class SpellModulsContainer : MonoBehaviour
         _mainShip.Commander.CoinController.OnRegenEnableChange += OnRegenEnableChange;
         _mainShip.ShipParameters.ShieldParameters.OnStateChange += OnStateChange;
     }
+
+//    private void SpellSelected(SpellInGame spell)
+//    {
+//        foreach (var spellButton in _buttons)
+//        {
+//            spellButton.UnSelectIfIsThisSpell(spell);
+//        }
+//    }
 
     private void OnRegenEnableChange(bool obj)
     {

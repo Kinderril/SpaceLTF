@@ -24,8 +24,8 @@ public class DragableModulItem : DragableItem
 
     protected override void OnClickComplete()
     {
-        if (CanShowWindow())
-            WindowManager.Instance.ItemInfosController.Init(Modul);
+//        if (CanShowWindow())
+            WindowManager.Instance.ItemInfosController.Init(Modul, CanShowWindow());
     }
 }
 

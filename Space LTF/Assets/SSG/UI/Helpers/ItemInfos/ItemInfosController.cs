@@ -13,28 +13,32 @@ public class ItemInfosController :MonoBehaviour
     public ModulBigInfoUI Modul;
     
 
-    public void Init(WeaponInv weapon)
+    public void Init(WeaponInv weapon,bool canChange,bool withSupport)
     {
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
+        WindowManager.Instance.WindowMainCanvas.interactable = false;
+        WindowManager.Instance.WindowSubCanvas.interactable = true;
         transform.SetAsLastSibling();
-        Weapon.Init(weapon,OnSubWindowClose);
+        Weapon.Init(weapon,OnSubWindowClose, canChange, withSupport);
     }
-    public void Init(BaseModulInv modul)
+    public void Init(BaseModulInv modul, bool canChange)
     {
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
+        WindowManager.Instance.WindowMainCanvas.interactable = false;
+        WindowManager.Instance.WindowSubCanvas.interactable = true;
         transform.SetAsLastSibling();
         Modul.Init(modul, OnSubWindowClose);
     }
-    public void Init(BaseSpellModulInv spell)
+    public void Init(BaseSpellModulInv spell, bool canChange)
     {
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
+        WindowManager.Instance.WindowMainCanvas.interactable = false;
+        WindowManager.Instance.WindowSubCanvas.interactable = true;
         transform.SetAsLastSibling();
-        Spell.Init(spell, OnSubWindowClose);
+        Spell.Init(spell, OnSubWindowClose, canChange);
     }
 
     private void OnSubWindowClose()
     {
-        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        WindowManager.Instance.WindowSubCanvas.interactable = false;
     }
 
     public void InitSelf()

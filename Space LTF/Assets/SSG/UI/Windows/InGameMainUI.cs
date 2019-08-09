@@ -114,6 +114,11 @@ public class InGameMainUI : BaseWindow
     {
         if (spellToCast.CanCast(MyCommander.CoinController))
         {
+            if (_spellSelected != null)
+            {
+                _spellSelected.EndShowCast();
+            }
+
             _spellSelected = spellToCast;
             if (OnSelectSpell != null)
             {
@@ -218,7 +223,7 @@ public class InGameMainUI : BaseWindow
                 info = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.ShipUIOnMapMini);
             }
             info.Init(ship, fullSize);
-            ship.DamageData.OnDamageDone += OnDamageDone;
+//            ship.DamageData.OnDamageDone += OnDamageDone;
 //            ship.ShipParameters.OnHealthChanged += OnHealthChanged;
 //            ship.ShipParameters.ShieldParameters.OnShildChanged += OnShildChanged;
             ShipsUIs.Add(ship.Id,info);
@@ -234,7 +239,7 @@ public class InGameMainUI : BaseWindow
         else
         {
             FlyingNumbersController.RemoveShip(ship);
-            ship.DamageData.OnDamageDone -= OnDamageDone;
+//            ship.DamageData.OnDamageDone -= OnDamageDone;
 //            ship.ShipParameters.OnHealthChanged -= OnHealthChanged;
 //            ship.ShipParameters.ShieldParameters.OnShildChanged -= OnShildChanged;
             var d = ShipsUIs[ship.Id];
@@ -267,6 +272,7 @@ public class InGameMainUI : BaseWindow
                 info = "Fire on board";
                 break;
         }
+        Debug.LogError($"add {arg1}");
         FlyNumberWithDependence.Create(shipOwner.transform, info, Color.red, FlyingInfosContainer, FlyNumerDirection.right);
     }
 
@@ -327,6 +333,7 @@ public class InGameMainUI : BaseWindow
                 if (left)
                 {
                     var ray = GetPointByClick(pos);
+//                    Debug.LogError($"Try cast CLICK!   {ray.HasValue}");
                     if (ray.HasValue)
                     {
                         if (MyCommander.SpellController.TryCastspell(_spellSelected, ray.Value))

@@ -1,16 +1,27 @@
-﻿public class CommanderShipEnemy
+﻿using UnityEngine;
+
+public class CommanderShipEnemy
 {
-    public ShipBase ShipBase;
+    public GameObject TargetPriority;
+    public GameObject BaitPriority;
     public bool IsPriority { get; private set; }
 
-    public CommanderShipEnemy(ShipBase ShipBase)
+    public CommanderShipEnemy(GameObject TargetPriority, GameObject baitPriority)
     {
-        this.ShipBase = ShipBase;
+        this.TargetPriority = TargetPriority;
+        this.BaitPriority = baitPriority;
     }
 
-    public void SetPriority(bool b)
+    public void SetPriority(bool val,bool isBait)
     {
-        IsPriority = b;
-        ShipBase.PriorityObject.SetActive(b);
+        IsPriority = val;
+        if (isBait)
+        {
+            BaitPriority.SetActive(val);
+        }
+        else
+        {
+            TargetPriority.SetActive(val);
+        }
     }
 }

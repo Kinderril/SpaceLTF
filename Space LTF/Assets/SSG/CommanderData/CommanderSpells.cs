@@ -21,11 +21,15 @@ public class CommanderSpells
     public void AddPriorityTarget()
     {
         ShipBase mainShip = _commander.MainShip;
-        CommanderSpellPriorityTarget priority = new CommanderSpellPriorityTarget();
-
+        var priority = new CommanderSpellPriorityTarget();
         var spellInGame = new SpellInGame(priority, mainShip.Position, mainShip.TeamIndex, mainShip, 1,
             Namings.PriorityTarget, Library.PriorityTargetCostTime, Library.PriorityTargetCostCount, SpellType.priorityTarget);
         AllSpells.Add(spellInGame);
+
+        var priorityBait = new CommanderSpellPriorityBait();
+        var baieSpell = new SpellInGame(priorityBait, mainShip.Position, mainShip.TeamIndex, mainShip, 1,
+            Namings.FakePriorityTarget, Library.BaitPriorityTargetCostTime, Library.BaitPriorityTargetCostCount, SpellType.BaitPriorityTarget);
+        AllSpells.Add(baieSpell);
     }
 
 

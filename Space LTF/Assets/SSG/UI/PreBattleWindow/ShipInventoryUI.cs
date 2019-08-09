@@ -19,12 +19,22 @@ public class ShipInventoryUI : DragZone
     public Transform ModulsLayout;
     private IPilotParameters _pilot;
     private ShipInventory _shipInventory;
+    public GameObject[] CriticalDamages;
+    public SliderWithTextMeshPro HealthSlider;
 
-    public void Init(ShipInventory shipInventory, IPilotParameters pilot, bool usable, ConnectInventory connectedInventory)
+    public TextMeshProUGUI RepairCost;
+    public Button RepairButton;
+    private StartShipPilotData _shipData;
+
+
+    public void Init(StartShipPilotData shipData, bool usable, ConnectInventory connectedInventory)
     {
-        _pilot = pilot;
+        _shipData = shipData;
+        _pilot = _shipData.Pilot;
+        _shipInventory = _shipData.Ship;
         _pilot.OnLevelUp += OnLevelUp;
-        _shipInventory = shipInventory;
+        _shipInventory.OnShipCriticalChange += OnShipCriticalChange;
+        _shipInventory.OnShipRepaired += OnShipRepaired;
 //        _weaponsSlots.Clear();
 //        _modulsSlots.Clear();
 //        _spellsSlots.Clear();
@@ -35,20 +45,63 @@ public class ShipInventoryUI : DragZone
         ModulsLayout.gameObject.SetActive(_shipInventory.SimpleModulsCount > 0);
 //        SpellsLayout.gameObject.SetActive(_shipInventory.SpellModulsCount > 0);
         var allSlots = InitFreeSlots();
-        base.Init(shipInventory, usable, allSlots, connectedInventory);
+        base.Init(_shipInventory, usable, allSlots, connectedInventory);
         InitCurrentItems();
-        NameField.text = shipInventory.Name;
-        ConfigType.text = Namings.ShipConfig(shipInventory.ShipConfig);
-        IconType.sprite = DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(shipInventory.ShipType);
+        NameField.text = _shipInventory.Name;
+        ConfigType.text = Namings.ShipConfig(_shipInventory.ShipConfig);
+        IconType.sprite = DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(_shipInventory.ShipType);
         //        ConfigType.sprite = DataBaseController.Instance.DataStructPrefabs.Get(shipInventory.ShipType);
         //        Slots = new InventorySlots(shipInventory, allSlots);
         SetLevelUpField();
+        UpdateCriticalDamages();
+        if (CriticalDamages.Length != Library.CRITICAL_DAMAGES_TO_DEATH)
+        {
+            Debug.LogError($"Wrong count of critical damages must be {Library.CRITICAL_DAMAGES_TO_DEATH}");
+        }
+
+        UpdateHealth();
 
     }
 
+    private void OnShipRepaired(ShipInventory obj)
+    {
+        UpdateHealth();  
+    }
+
+    private void UpdateHealth()
+    {
+        var repairCost = _shipData.MoneyToFullRepair();
+        var shallRepair = _shipInventory.HealthPointToRepair() > 0;
+        RepairButton.gameObject.SetActive(shallRepair);
+        RepairCost.text = repairCost.ToString();
+        var MaxHealth = ShipParameters.ParamUpdate(_shipInventory.MaxHealth, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
+        HealthSlider.InitBorders(0, MaxHealth, true);
+        HealthSlider.Slider.value = _shipInventory.HealthPercent * MaxHealth;
+    }
+
+
+    public void OnRepairClick()
+    {
+        _shipData.TryRepairSelfFull();
+    }
+
+    private void OnShipCriticalChange(ShipInventory obj)
+    {
+        UpdateCriticalDamages();
+    }
+
+    private void UpdateCriticalDamages()
+    {
+        for (int i = 0; i < Library.CRITICAL_DAMAGES_TO_DEATH; i++)
+        {
+            var haveDmg = i < _shipInventory.CriticalDamages;
+            CriticalDamages[i].SetActive(haveDmg);
+        }
+    }
     private void OnLevelUp(IPilotParameters obj)
     {
         SetLevelUpField();
+        UpdateHealth();
     }
 
     private void SetLevelUpField()
@@ -113,6 +166,8 @@ public class ShipInventoryUI : DragZone
 
     public override void Dispose()
     {
+        _shipInventory.OnShipRepaired -= OnShipRepaired;
+        _shipInventory.OnShipCriticalChange -= OnShipCriticalChange;
         _pilot.OnLevelUp -= OnLevelUp;
         base.Dispose();
     }

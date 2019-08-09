@@ -57,6 +57,8 @@ public enum SimpleModulType
     WeaponFireNear = 36,
     ResistDamages = 37,
     beamUpgrade = 38,
+    ShipDecreaseSpeed = 39,
+    ShieldDouble = 40,
 }
 
 public abstract class BaseModul
@@ -105,10 +107,10 @@ public abstract class BaseModul
                 return new MineDamageModul(baseModulInv);
             case SimpleModulType.systemMines:
                 return new MineSystemModul(baseModulInv);
-            case SimpleModulType.ShipSpeed:
-                return new ShipSpeedModul(baseModulInv);
-            case SimpleModulType.ShipTurnSpeed:
-                return new ShipTurnModul(baseModulInv);     
+//            case SimpleModulType.ShipSpeed:
+//                return new ShipSpeedModul(baseModulInv);
+//            case SimpleModulType.ShipTurnSpeed:
+//                return new ShipTurnSpeedModul(baseModulInv);     
             case SimpleModulType.ResistDamages:
                 return new ResistDamagesModul(baseModulInv);
             default:

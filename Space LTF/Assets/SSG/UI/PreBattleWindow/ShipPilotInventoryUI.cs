@@ -21,7 +21,7 @@ public class ShipPilotInventoryUI : MonoBehaviour
     {
         this.ontoggleSwitched = ontoggleSwitched;
 //        Destroyed.gameObject.SetActive(data.Ship.Destroyed);
-        ShipInventory.Init(data.Ship, data.Pilot, usable, connectedInventory);
+        ShipInventory.Init(data, usable, connectedInventory);
         var openInfoPilot = true;
         ToggleElement.interactable = usable;
         ToggleElement.isOn = openInfoPilot;

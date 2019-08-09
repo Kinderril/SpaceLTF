@@ -13,7 +13,7 @@ public enum DamageType
 
 public delegate void DamageDoneDelegate(float healthDelta, float shieldDelta,ShipBase attacker);
 
-public class ShipParameters
+public class ShipParameters  : IShipAffectableParams
 {
     public const float MaxHealthCoef = 3.3f;
     public const float MaxShieldCoef = 2.4f;
@@ -24,9 +24,10 @@ public class ShipParameters
     {
         get { return ShieldParameters.CurShiled; }
     }
-    public float MaxShiled
+    public float MaxShield
     {
-        get { return ShieldParameters.MaxShiled; }
+        get { return ShieldParameters.MaxShield; }
+        set { ShieldParameters.MaxShield = value; }
     }
     public float ShieldRegenPerSec
     {
@@ -35,7 +36,11 @@ public class ShipParameters
 
     public delegate void ParameterChange(float curent,float max,float delta,ShipBase shipOwner);
 
-    public float MaxHealth { get;  set; }
+    public float MaxHealth { get; set; }
+    public float MaxSpeed { get; set; }
+    public float TurnSpeed { get; set; }
+
+
     public float CurHealth
     {
         get { return _curHealth;}
@@ -52,10 +57,6 @@ public class ShipParameters
     private float _curHealth;
 
 
-
-
-public float MaxSpeed { get; set; }
-    public float TurnSpeed { get; set; }
 
     public event ParameterChange OnHealthChanged;
     public BaseSpellModulInv[] Spells = new BaseSpellModulInv[0];

@@ -27,9 +27,9 @@ public class WaitHealAction : BaseAction
         _hpPercentHeal = owner.ShipParameters.MaxHealth*PERCENT_PER_TICK;
         var hpPercentNeedToHeal = deltaHp / owner.ShipParameters.MaxHealth;
 
-        var deltaSd = owner.ShipParameters.MaxShiled - owner.ShipParameters.CurShiled;
-        _sdPercentHeal = owner.ShipParameters.MaxShiled * PERCENT_PER_TICK;
-        var sdPercentNeedToHeal = deltaSd / owner.ShipParameters.MaxShiled;
+        var deltaSd = owner.ShipParameters.MaxShield - owner.ShipParameters.CurShiled;
+        _sdPercentHeal = owner.ShipParameters.MaxShield * PERCENT_PER_TICK;
+        var sdPercentNeedToHeal = deltaSd / owner.ShipParameters.MaxShield;
 
         var maxPecent = Mathf.Max(sdPercentNeedToHeal, hpPercentNeedToHeal);
         _secToWait = (int) (maxPecent/ PERCENT_PER_TICK) + 1;

@@ -15,8 +15,8 @@ public class CommanderSpellPriorityTarget : ISpellToGame
     public CreateBulletDelegate CreateBulletAction => (target, origin, weapon, pos, parameters) =>
     {
         var inex = BattleController.OppositeIndex(weapon.TeamIndex);
-        var ship = BattleController.Instance.ClosestShipToPos(pos, inex);
-        weapon.Owner.Commander.SetPriorityTarget(ship);
+        var ship = BattleController.Instance.ClosestShipToPos(target.Position, inex);
+        weapon.Owner.Commander.SetPriorityTarget(ship,false);
     };
 
     public CastActionSpell CastSpell => (target, origin, weapon, shootpos, bullestartparameters) =>
@@ -35,4 +35,7 @@ public class CommanderSpellPriorityTarget : ISpellToGame
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
     }
+
+    public float ShowCircle => 1;
+    public bool ShowLine => false;
 }

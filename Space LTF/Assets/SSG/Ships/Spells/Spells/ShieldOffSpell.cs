@@ -10,36 +10,42 @@ public class ShieldOffSpell : BaseSpellModulInv
 {
 //    public 
 
-    public const float PERIOD = 20f;
-    private const float dist = 28f;
+    public const float PERIOD = 10f;
+    private const float SHIELD_DAMAGE = 3f;
     private const float rad = 3f;
     private const float BULLET_SPEED = 13f;
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 25f;
     public CurWeaponDamage CurrentDamage { get; }
-    //    [NonSerialized]
-    //    private Bullet bullet;
+
+    private float Period => PERIOD + Level * 4;
 
     public ShieldOffSpell(int costCount, int costTime)
         : base(SpellType.shildDamage, costCount, costTime,
-            MainCreateBullet, CastSpell, MainAffect, new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
+            new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
         CurrentDamage = new CurWeaponDamage(2,0);
     }
-    private static void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
         MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
     }
 
-    private static void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CastActionSpell castActionSpell => CastSpell;
+    protected override AffectTargetDelegate affectAction => MainAffect;
+
+    public override bool ShowLine => true;
+    public override float ShowCircle => rad;
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         ActionShip(target,damagedone);
     }
 
-    private static void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var b = Bullet.Create(origin, weapon, weapon.CurPosition, weapon.CurPosition, null,
-            new BulleStartParameters(Library.MINE_SPEED, 0f, DIST_SHOT, DIST_SHOT));
+        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition,
+            weapon.CurPosition, null, bullestartparameters);
     }
       
 
@@ -75,26 +81,30 @@ public class ShieldOffSpell : BaseSpellModulInv
 
 
 
-    private static void ActionShip(ShipBase shipBase,DamageDoneDelegate damageDone)
+    private void ActionShip(ShipBase shipBase,DamageDoneDelegate damageDone)
     {
-        shipBase.DamageData.ApplyEffect(ShipDamageType.shiled,PERIOD);
-        shipBase.ShipParameters.Damage(3,0, damageDone,shipBase);
+        shipBase.DamageData.ApplyEffect(ShipDamageType.shiled, Period);
+        shipBase.ShipParameters.Damage(SHIELD_DAMAGE,0, damageDone,shipBase);
 
     }
+    public override string Desc()
+    {
+        return $"Disable shields of ships in radius for {Period.ToString("0")} sec. And damages shield for {SHIELD_DAMAGE}.";
+    }
 
-//    public void BulletDestroyed(Vector3 position, Bullet bullet)
-//    {
-//        var c1 = BattleController.Instance.GetAllShipsInRadius(position, TeamIndex.green, rad);
-//        var c2 = BattleController.Instance.GetAllShipsInRadius(position, TeamIndex.red, rad);
-//        foreach (var shipBase in c1)
-//        {
-//            ActionShip(shipBase);
-//        }
-//        foreach (var shipBase in c2)
-//        {
-//            ActionShip(shipBase);
-//        }
-//    }
+    //    public void BulletDestroyed(Vector3 position, Bullet bullet)
+    //    {
+    //        var c1 = BattleController.Instance.GetAllShipsInRadius(position, TeamIndex.green, rad);
+    //        var c2 = BattleController.Instance.GetAllShipsInRadius(position, TeamIndex.red, rad);
+    //        foreach (var shipBase in c1)
+    //        {
+    //            ActionShip(shipBase);
+    //        }
+    //        foreach (var shipBase in c2)
+    //        {
+    //            ActionShip(shipBase);
+    //        }
+    //    }
 
 }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public enum MainState
@@ -47,9 +48,13 @@ public class WindowManager : Singleton<WindowManager>
     public ItemInfosController ItemInfosController;
     private GameObject planeX;
     public GameObject MainBack;
+    public GameObject LoadingScreen;
     public event Action<BaseWindow> OnWindowSetted;
     //    public event Action OnInfoWindowWithShopClose;
     public Action OnItemWindowClose;
+
+    public CanvasGroup WindowMainCanvas;
+    public CanvasGroup WindowSubCanvas;
 //    public ItemWindow ItemWindow;
 
     public Transform UIPool;
@@ -62,6 +67,7 @@ public class WindowManager : Singleton<WindowManager>
 
     public void Init()
     {
+        LoadingScreen.gameObject.SetActive(false);
         foreach (var window in windows)
         {
             window.window.gameObject.SetActive(false);
@@ -144,34 +150,11 @@ public class WindowManager : Singleton<WindowManager>
             return;
         }
 
-        if (currentWindow != null)
-        {
-            CurrentWindow.Dispose();
-            if (nextWindow.Animator == null)
-            {
-                CurrentWindow.EndClose();
-            }
-            else
-            {
-                currentWindow.Close();
-            }
-            var sIndex = currentWindow.transform.GetSiblingIndex();
-            nextWindow.transform.SetSiblingIndex(sIndex + 1);
-            
-            TopPanel.transform.SetAsLastSibling();
-        }
+
         //window.StartAnimation();
         try
         {
-
-            if (obj != null)
-            {
-                nextWindow.Init<T>(obj);
-            }
-            else
-            {
-                nextWindow.Init();
-            }
+            OpenWindowPreTask(obj, nextWindow);
         }
         catch (Exception ex)
         {
@@ -179,7 +162,59 @@ public class WindowManager : Singleton<WindowManager>
 //            DebugController.Instance.SetInfo2(t);
             Debug.LogError(ex);
         }
-        currentWindow = nextWindow;
+    }
+
+    private async void OpenWindowPreTask<T>(T obj, BaseWindow windowToLoad)
+    {
+        await OpenWindowTask(obj, windowToLoad);
+    }
+
+    private async Task OpenWindowTask<T>(T obj,BaseWindow windowToLoad)
+    {
+        bool withLOadWindow = windowToLoad.WithLoadWindow;
+        if (withLOadWindow)
+        {
+
+            LoadingScreen.gameObject.SetActive(true);
+            await Task.Yield();
+            await Task.Delay(100);
+        }
+        if (currentWindow != null)
+        {
+            CurrentWindow.Dispose();
+            if (windowToLoad.Animator == null)
+            {
+                CurrentWindow.EndClose();
+            }
+            else
+            {
+                CurrentWindow.Close();
+            }
+//            Debug.LogError($"CurrentWindow.gameObject.SetActive(false) {CurrentWindow.name}");
+            CurrentWindow.gameObject.SetActive(false);
+            //            var sIndex = currentWindow.transform.GetSiblingIndex();
+            //            nextWindow.transform.SetSiblingIndex(sIndex + 1);
+
+            //            TopPanel.transform.SetAsLastSibling();
+        }
+//        Debug.LogError($"$Window to load {windowToLoad.name}");
+        if (obj != null)
+        {
+            windowToLoad.Init<T>(obj);
+        }
+        else
+        {
+            windowToLoad.Init();
+        }
+
+        if (withLOadWindow)
+        {
+            await Task.Yield();
+            LoadingScreen.gameObject.SetActive(false);
+        }
+
+        currentWindow = windowToLoad;
+        Debug.LogError($"set currentWindow {currentWindow.name}");
         if (OnWindowSetted != null)
         {
             OnWindowSetted(currentWindow);
