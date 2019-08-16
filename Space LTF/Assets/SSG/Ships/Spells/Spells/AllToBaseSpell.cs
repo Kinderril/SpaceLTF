@@ -57,7 +57,7 @@
 //
 //    private void ActionShip(ShipBase shipBase,Vector3 closePos)
 //    {
-//        shipBase.Position = shipBase.Commander.StartCell.Center;
+//        shipBase.Position = shipBase.Commander.StartMyPosition.Center;
 //    }
 //}
 //

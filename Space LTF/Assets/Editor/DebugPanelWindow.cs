@@ -15,6 +15,11 @@ public class DebugPanelWindow : EditorWindow
     
     public static List<NavMeshSurface> navMeshSurfaceSelected = new List<NavMeshSurface>();
     public static ShipBase SelectedShip;
+    public static bool EngineOff;
+    public static bool NoDamage;
+    public static bool NoMouseMove;
+    public static bool FastRecharge;
+    public static bool AllModuls;
 
     [MenuItem("Tools/Debug Panel")]
     static void Init()
@@ -50,24 +55,29 @@ public class DebugPanelWindow : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("EngineOff:" + DebugParamsController.EngineOff))
+        if (GUILayout.Button("EngineOff:" + EngineOff))
         {
-            DebugParamsController.SwitchEngine();
+            SwitchEngine();
         }       
-        if (GUILayout.Button("NoDamage:" + DebugParamsController.NoDamage))
+        if (GUILayout.Button("NoDamage:" + NoDamage))
         {
-            DebugParamsController.SwitchNoDamage();
+            SwitchNoDamage();
         }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("NoMouseMove." + DebugParamsController.NoMouseMove))
-        {
-            DebugParamsController.SwitchNoMouseMove();
+        if (GUILayout.Button("NoMouseMove." + NoMouseMove))
+        { 
+            SwitchNoMouseMove();
         }
 
-        if (GUILayout.Button("FastRecharge." + DebugParamsController.FastRecharge))
+        if (GUILayout.Button("FastRecharge." + FastRecharge))
         {
-            DebugParamsController.SwitchFastRecharge();
+            SwitchFastRecharge();
+        }     
+        if (GUILayout.Button("AllModuls." + AllModuls))
+        {
+            AllModuls = !AllModuls;
+            DebugParamsController.AllModuls = AllModuls;
         }
         
         EditorGUILayout.EndHorizontal();
@@ -105,7 +115,27 @@ public class DebugPanelWindow : EditorWindow
         }
     }
 
+    public static void SwitchEngine()
+    {
+        EngineOff = !EngineOff;
+        DebugParamsController.EngineOff = EngineOff;
+    }
+    public static void SwitchNoDamage()
+    {
+        NoDamage = !NoDamage;
+        DebugParamsController.NoDamage = NoDamage;
+    }
+    public static void SwitchNoMouseMove()
+    {
+        NoMouseMove = !NoMouseMove;
+        DebugParamsController.NoMouseMove = NoMouseMove;
+    }
 
+    public static void SwitchFastRecharge()
+    {
+        FastRecharge = !FastRecharge;
+        DebugParamsController.FastRecharge = FastRecharge;
+    }
     private void NoInGame()
     {
         if (GUILayout.Button("Recalc bullets IDs"))

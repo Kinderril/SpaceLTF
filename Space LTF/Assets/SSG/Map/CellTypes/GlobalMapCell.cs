@@ -12,15 +12,17 @@ public abstract class GlobalMapCell
 {
     protected string name;
     public bool LeaveComplete = false;
-    public bool Completed = false;
+    public bool Completed { get; private set; }
     public bool InfoOpen = false;
     public bool IsDestroyed = false;
     public bool IsScouted { get; private set; }
     public int indX;
     public int indZ;
-    public int SectorId = -1;
+//    public int SectorId = -1;
     public int ConnectedGates = -1;
     protected SectorData _sector;
+    public int SectorId => _sector.Id;
+
     private List<GlobalMapCell> _ways = new List<GlobalMapCell>();
 //    public GlobalMapCell ExtraWay = null;
 

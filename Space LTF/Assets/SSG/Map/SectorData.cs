@@ -15,7 +15,7 @@ public class SectorData
     public int XIndex { get; private set; }
     public int Id { get; private set; }
     public bool IsPopulated { get; private set; }
-    private int _startPowerGalaxy;
+    public int StartPowerGalaxy { get; private set; }
     private int _power;
     private bool _isVisited;
     public SectorCellContainer[,] Cells;
@@ -54,7 +54,7 @@ public class SectorData
     {
         var x = cell.indX - StartX;
         var z = cell.indZ - StartZ;
-        cell.SectorId = subSectotId;
+//        cell.SectorId = subSectotId;
 #if UNITY_EDITOR
         try
         {
@@ -79,7 +79,7 @@ public class SectorData
     public void Populate(int startPowerGalaxy,SectorData startSectorData)
     {
         IsPopulated = true;
-        _startPowerGalaxy = startPowerGalaxy;
+        StartPowerGalaxy = startPowerGalaxy;
         _power = CalcCellPower(0,startPowerGalaxy,startPowerGalaxy);
         RandomizeBorders();
         var remainFreeCells = _listCells.Where(x => x.IsFreeToPopulate()).ToList();
@@ -206,7 +206,7 @@ public class SectorData
                 for (int j = 0; j < Size; j++)
                 {
                     var cell = Cells[i, j];
-                    cell.Data.UpdatePowers(visitedSectors, _startPowerGalaxy);
+                    cell.Data.UpdatePowers(visitedSectors, StartPowerGalaxy);
                 }
             }
 

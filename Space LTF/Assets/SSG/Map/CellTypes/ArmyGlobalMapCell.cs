@@ -119,11 +119,26 @@ public class ArmyGlobalMapCell : GlobalMapCell
         if (isSameSide && rep > 40)
         {
             masinMsg = $"This fleet looks friendly.\n {scoutsField}";
-            ans.Add(new AnswerDialogData($"Ask for help. [Reputation:{rep}]", DimlomatyOption));
+            ans.Add(new AnswerDialogData($"Ask for help. [Reputation:{rep}]",null, DimlomatyOption));
         }
         else
         {
-            masinMsg = $"You see enemies. Shall we fight? \n {scoutsField}";
+            int buyoutCost = _power;
+            var playersPower = ArmyCreator.CalcArmyPower(myPlaer.Army);
+
+            if (playersPower < _power)
+            {
+                if (myPlaer.MoneyData.HaveMoney(buyoutCost))
+                {
+                    ans.Add(new AnswerDialogData($"Try to buy out. [Cost :{buyoutCost}]", null, () => BuyOutOption(buyoutCost)));
+                }
+               masinMsg = $"You see enemies. They look stronger than you. Shall we fight? \n {scoutsField}";
+            }
+            else
+            {
+
+                masinMsg = $"You see enemies. Shall we fight? \n {scoutsField}";
+            }
         }
 
         ans.Add(new AnswerDialogData("Fight", Take));
@@ -156,8 +171,59 @@ public class ArmyGlobalMapCell : GlobalMapCell
         return mesData;
     }
 
-    private void DimlomatyOption()
+
+
+    public string PowerDesc()
     {
+        var player = MainController.Instance.MainPlayer;
+        var playersPower = ArmyCreator.CalcArmyPower(player.Army);
+
+        var isSameSecto = _sector.Id == player.MapData.CurrentCell.SectorId;
+        float powerToCompare;
+        if (isSameSecto)
+        {
+            powerToCompare = Power;
+//            Debug.LogError($"power2  :{powerToCompare} ");
+        }
+        else
+        {
+
+            powerToCompare = SectorData.CalcCellPower(player.MapData.VisitedSectors+1, _sector.Size, _sector.StartPowerGalaxy);
+//            Debug.LogError($"power1  :{powerToCompare}");
+        }
+//        Debug.LogError($"mySctorID:{player.MapData.CurrentCell.SectorId}    _sector.Id:{_sector.Id}");
+
+
+//        Debug.LogError($"playersPower  :{playersPower}");
+        var delta = playersPower/powerToCompare;
+//        if (Mathf.Abs(delta) < 2)
+//        {                                                           d
+//        }
+
+        if (delta < 0.95f)
+        {
+            return "Risky";
+        }
+        if (delta > 1.15f)
+        {
+            return "Easily";
+        }
+        return "Comparable";
+    }
+    private MessageDialogData BuyOutOption(int buyoutCost )
+    {
+        var player = MainController.Instance.MainPlayer;
+        var ans = new List<AnswerDialogData>();
+        player.MoneyData.RemoveMoney(buyoutCost);
+        ans.Add(new AnswerDialogData("Ok"));
+        var mesData = new MessageDialogData($"Buyout complete. You lose {buyoutCost} credits.", ans);
+        return mesData;
+    }
+
+    private MessageDialogData DimlomatyOption()
+    {
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData("Ok"));
         var rep = MainController.Instance.MainPlayer.ReputationData.Reputation;
         bool doDip = MyExtensions.IsTrue01((float)rep / PlayerReputationData.MAX_REP);
         if (doDip)
@@ -218,12 +284,14 @@ public class ArmyGlobalMapCell : GlobalMapCell
                     helpInfo = "But you have no free space";
                 }
             }
-            var pr = String.Format("They help you as much as they can. {0}", helpInfo);
-            WindowManager.Instance.InfoWindow.Init(null, pr);
+            var pr = $"They help you as much as they can. {helpInfo}";
+            var mesData = new MessageDialogData(pr, ans);
+            return mesData;
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null, "They can't help you now");
+            var mesData = new MessageDialogData("They can't help you now", ans);
+            return mesData;
         }
     }
 

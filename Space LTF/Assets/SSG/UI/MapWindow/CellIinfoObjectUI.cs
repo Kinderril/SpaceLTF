@@ -88,11 +88,11 @@ public class CellIinfoObjectUI : MonoBehaviour
                             desc = Namings.Fleet;
                         }
 #if UNITY_EDITOR
-                        desc += $"({isArmy.Power})";
+                        desc += $"({isArmy.PowerDesc()})";
 #endif
                         if (cell.IsScouted)
                         {
-                            desc += String.Format("({0})", Namings.ShipConfig(isArmy.GetConfig()));
+                            desc += $"({Namings.ShipConfig(isArmy.GetConfig())})";
                         }
                     }
                     else
@@ -133,15 +133,15 @@ public class CellIinfoObjectUI : MonoBehaviour
             }
 
             //            Debug.Log("InfoField:" + haveObj + "   " + _disabled);
-#if UNITY_EDITOR       
-            InfoField.text = txt + $"{cell.indX}.{cell.indZ}";
-            if (cell is CoreGlobalMapCell)
-            {
-                InfoField.text = $"{InfoField.text} [CORE!]";
-            }
-#else    
+//#if UNITY_EDITOR       
+//            InfoField.text = txt + $"{cell.indX}.{cell.indZ}";
+//            if (cell is CoreGlobalMapCell)
+//            {
+//                InfoField.text = $"{InfoField.text} [CORE!]";
+//            }
+//#else    
             InfoField.text = txt;
-#endif
+//#endif        
         }
     } 
 

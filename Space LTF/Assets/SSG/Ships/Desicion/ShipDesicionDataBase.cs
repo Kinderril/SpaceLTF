@@ -154,14 +154,14 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 }
                 var closestEnemy = BattleController.Instance.ClosestShipToPos(_owner.Position,
                     BattleController.OppositeIndex(_owner.TeamIndex));
-                AICell cellToCare;
+                Vector3 cellToCare;
                 if (closestEnemy != null)
                 {
-                    cellToCare = closestEnemy.Cell;
+                    cellToCare = closestEnemy.Position;
                 }
                 else
                 {
-                    cellToCare = _owner.Commander.StartCell;
+                    cellToCare = _owner.Commander.StartMyPosition;
                 }
                 return (new MineFieldAction(_owner, mineModul, cellToProtect, cellToCare));
             case ActionType.attackSide:

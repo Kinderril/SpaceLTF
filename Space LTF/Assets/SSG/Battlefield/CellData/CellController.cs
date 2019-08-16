@@ -7,17 +7,18 @@ using UnityEngine;
 public class CellController : MonoBehaviour
 {
     [HideInInspector]
-    public AICellData Data;
+    public AICellDataRaound Data;
     public float CellDrawLevel = 10f;
     public float cellSize = 11f;
 
 //    public Transform Start;
 //    public Transform End;
 
-    public GameObject CloudsPrefab;
-    public AsteroidField AsteroidFieldPrefab;
-    public DeepSpaceField DeepSpace;
+//    public GameObject CloudsPrefab;
+//    public AsteroidField AsteroidFieldPrefab;
+//    public DeepSpaceField DeepSpace;
     public Transform CellsContainer;
+    public List<Asteroid> AsteroidsPrefabs;
     
 
     public Vector3 Min
@@ -32,46 +33,25 @@ public class CellController : MonoBehaviour
     public void Init(int coef = 0)
     {
         gameObject.SetActive(true);
-        var sizeX = MyExtensions.Random(7 + coef/2, 8 + coef);
-        var sizeZ = MyExtensions.Random(7 + coef/2, 8 + coef);
-        Data.Init(transform.position,sizeX,sizeZ, cellSize);
+                  var size = MyExtensions.Random(6 + coef / 2, 9 + coef);
+//        var sizeX = MyExtensions.Random(7 + coef/2, 8 + coef);
+//        var sizeZ = MyExtensions.Random(7 + coef/2, 8 + coef);
+        Data.Init(transform.position, size, cellSize);
         InstantiatePrefabs();
     }
 
     private void InstantiatePrefabs()
     {
         Utils.ClearTransform(CellsContainer);
-        for (int i = 0; i < Data.MaxIx; i++)
+        int index = 0;
+        foreach (var aiAsteroidPredata in Data.Asteroids)
         {
-            for (int j = 0; j < Data.MaxIz; j++)
-            {
-                var cell1 = Data.GetCell(i, j);
-//                var xx = Data.StartX + (i + 0.5f)*Data.CellSize;
-//                var zz = Data.StartX + (j + 0.5f)*Data.CellSize;
-                var p = cell1.Center;
-                switch (cell1.CellType)
-                {
-                    case CellType.Asteroids:
-                        var ast = DataBaseController.GetItem(AsteroidFieldPrefab);
-                        ast.Init(cellSize);
-                        ast.transform.SetParent(CellsContainer);
-                        ast.transform.position = p;
-                        ast.name = String.Format("Asteroids I:{0}  J:{1}",i,j);
-                        break;
-                    case CellType.DeepSpace:
-                        var ds = DataBaseController.GetItem(DeepSpace);
-                        ds.transform.SetParent(CellsContainer);
-                        ds.transform.position = p;
-                        ds.name = String.Format("DeepSpace I:{0}  J:{1}", i, j);
-                        break;
-                    case CellType.Clouds:
-                        var cs = DataBaseController.GetItem(CloudsPrefab);
-                        cs.transform.SetParent(CellsContainer);
-                        cs.transform.position = p;
-                        cs.name = String.Format("Clouds I:{0}  J:{1}", i, j);
-                        break;
-                }
-            }
+            index++;
+            var pref = AsteroidsPrefabs.RandomElement();
+            var astreroid = DataBaseController.GetItem(pref,aiAsteroidPredata.Position);
+            astreroid.Init(aiAsteroidPredata);
+            astreroid.name = $"Asteroids I:{index}  ";
+            astreroid.transform.SetParent(CellsContainer);
         }
     }
 
@@ -89,6 +69,10 @@ public class CellController : MonoBehaviour
         var delta = f - startCoef;
         int indexPre = (int) (delta/Data.CellSize);
         return indexPre;
+    }
+    public void AddShip(ShipBase shipBase)
+    {
+        Data.AddShip(shipBase);
     }
 
     public AICell GetCellByDir(AICell curCell, Vector3 dir)
@@ -123,6 +107,16 @@ public class CellController : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        if (Data == null)
+        {
+            return;
+        }
+
+        var RadiusToBeSafe = Data.Radius - AICellDataRaound.SafeRadius;
+        DrawUtils.DrawCircle(Data.CenterZone,Vector3.up, Color.green, RadiusToBeSafe);
+        DrawUtils.DrawCircle(Data.CenterZone,Vector3.up, Color.red,Data.Radius);
+//        Gizmos.DrawWireCube(new Vector3(), );
+            
         for (int i = 0; i < Data.MaxIx; i++)
         {
             for (int j = 0; j < Data.MaxIz; j++)
@@ -151,5 +145,6 @@ public class CellController : MonoBehaviour
     {
         Utils.ClearTransform(CellsContainer);
     }
+
 }
 

@@ -38,6 +38,7 @@ public class GlobalMapController : MonoBehaviour
     public Transform PointsContainer;
     public GlobalMapCellConnector GlobalMapCellConnectorPrefab;
     public GlobalMapCellConnector GlobalMapCellWayPrefab;
+    public GlobalMapMoverObject MapMoverObject;
     public GlobalMapCellConnector GlobalMapCellBorderPrefab;
     private List<GlobalMapCellConnector> _connectors = new List<GlobalMapCellConnector>();
     private Dictionary<GlobalMapCell,List<GlobalMapCellConnector>> _cellsWaysObjects 
@@ -208,7 +209,7 @@ public class GlobalMapController : MonoBehaviour
                 }
             }
         }
-
+        MapMoverObject.Init(myCEll);
         int connectd = 0;
         if (myCEll != null)
         {
@@ -479,5 +480,42 @@ public class GlobalMapController : MonoBehaviour
         IsEnbale = false;
     }
 
+    public void MoveToCell(GlobalMapCell target,Action callback)
+    {
+        Block();
+        var targetCell = GetCellObjectByCell(target);
+        
+        var shallChange2 = WindowManager.Instance.WindowSubCanvas.interactable;
+        var shallChange = WindowManager.Instance.WindowMainCanvas.interactable;
+        if (shallChange)
+            WindowManager.Instance.WindowMainCanvas.interactable = false;
+        if (shallChange2)
+            WindowManager.Instance.WindowSubCanvas.interactable = false;
+
+        void AfterAction()
+        {
+            if (shallChange) WindowManager.Instance.WindowMainCanvas.interactable = true;
+            if (shallChange2) WindowManager.Instance.WindowSubCanvas.interactable = true;
+            UnBlock();
+        }
+
+        if (targetCell != null)
+        {
+            MapMoverObject.MoveTo(targetCell, () =>
+            {
+                AfterAction();
+                callback();
+            });
+
+        }
+        else
+        {
+            Debug.LogError("can't find object cell by target cell");
+            AfterAction();
+        }
+
+
+
+    }
 }
 

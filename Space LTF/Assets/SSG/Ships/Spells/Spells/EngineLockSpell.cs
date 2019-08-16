@@ -94,7 +94,7 @@ public  class EngineLockSpell : BaseSpellModulInv
     public override string Desc()
     {
         return
-            $"Destroy engines for {CurLockPeriod.ToString("0")} sec. Work only if shield of target disabled.";
+            $"Destroy engines for {CurLockPeriod.ToString("0")} sec.";
     }
 }
 

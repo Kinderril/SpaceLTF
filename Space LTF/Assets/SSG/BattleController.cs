@@ -30,6 +30,7 @@ public enum EndBattleType
 
 public class BattleController :Singleton<BattleController>
 {
+    public const float START_SAFE_RADIUS = 5;
     private List<ShipBase> SideGreen = new List<ShipBase>();
     private List<ShipBase> SideRed = new List<ShipBase>();
 
@@ -111,15 +112,36 @@ public class BattleController :Singleton<BattleController>
         RedCommander = new Commander(TeamIndex.red, Battlefield, redSide);
 
         var d = CellController.Data;
-        var b1 = d.GetCell(0, 0);
-        var b2 = d.GetCell(d.MaxIx - 1, d.MaxIz - 1);
-        var cell1 = d.FindClosestCellByType(b1, CellType.Free);
-        var cell2 = d.FindClosestCellByType(b2, CellType.Free);
-        Debug.Log("Start cell 1 : " + cell1.ToString() + "   b1" + b1.ToString());
-        Debug.Log("Start cell 2 : " + cell2.ToString() + "   b2" + b2.ToString());
+//        var b1 = d.GetCell(0, 0);
+//        var b2 = d.GetCell(d.MaxIx - 1, d.MaxIz - 1);
+//        var cell1 = d.FindClosestCellByType(b1, CellType.Free);
+//        var cell2 = d.FindClosestCellByType(b2, CellType.Free);
+//        Debug.Log("Start cell 1 : " + cell1.ToString() + "   b1" + b1.ToString());
+//        Debug.Log("Start cell 2 : " + cell2.ToString() + "   b2" + b2.ToString());
 
-        var shipsA = GreenCommander.InitShips(cell1, cell2);
-        var shipsB = RedCommander.InitShips(cell2, cell1);
+        var center = d.CenterZone;
+        var radius = d.InsideRadius - START_SAFE_RADIUS;
+
+        var dir1 =  new Vector3(0,0,-1);
+        var diifAng = MyExtensions.Random(-25, 25f);
+        dir1 = Utils.RotateOnAngUp(dir1, diifAng);
+        var posTeam1 = center + dir1 * radius;
+        
+        var dir2 =  new Vector3(0,0,1);
+        var diifAng2 = MyExtensions.Random(-25, 25f);
+        dir2 = Utils.RotateOnAngUp(dir2, diifAng2);
+        var posTeam2 = center + dir2 * radius;
+
+        var shipsA = GreenCommander.InitShips(posTeam1, posTeam2);
+        var shipsB = RedCommander.InitShips(posTeam2, posTeam1);
+        foreach (var shipBase in shipsA)
+        {
+            CellController.AddShip(shipBase.Value);
+        }
+        foreach (var shipBase in shipsB)
+        {
+            CellController.AddShip(shipBase.Value);
+        }
 
         GreenCommander.OnShipAdd += ShipAdd;
         RedCommander.OnShipAdd += ShipAdd;
@@ -147,7 +169,7 @@ public class BattleController :Singleton<BattleController>
         WindowManager.Instance.LoadingScreen.gameObject.SetActive(false);
         await Task.Yield();
 
-        CamerasController.Instance.SetCameraTo(GreenCommander.StartCell.Center);
+        CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition);
     }
 
     private void RandomizeColorAndAng()
@@ -159,6 +181,7 @@ public class BattleController :Singleton<BattleController>
 
     private void ShipAdd(ShipBase obj)
     {
+        CellController.AddShip(obj);
         var commanderEnemy = new CommanderShipEnemy(obj.PriorityObject,obj.FakePriorityObject);
         if (obj.Commander.TeamIndex == TeamIndex.green)
         {

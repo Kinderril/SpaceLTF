@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using UnityEngine;
 
 
 [System.Serializable]
@@ -30,6 +31,7 @@ public class PlayerInventory : IInventory
 
     public void TransferItem(IItemInv item, bool val)
     {
+        Debug.Log($"TransferItem {item.WideInfo()}  {val}");
         if (val)
             item.CurrentInventory = this;
         if (OnItemAdded != null)

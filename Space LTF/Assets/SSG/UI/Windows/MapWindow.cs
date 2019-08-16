@@ -265,22 +265,37 @@ public class MapWindow : BaseWindow
 
     private void InitsMainCellDialog(GlobalMapCell obj)
     {
-        var dialog = obj.GetDialog();
-        player.MapData.GoToTarget(obj);
-        if (dialog != null)
+        void ActivateDialog()
         {
-            if (player.MapData.CurrentCell.Completed && player.MapData.CurrentCell.OneTimeUsed())
+            var dialog = obj.GetDialog();
+            if (dialog != null)
             {
-                WindowManager.Instance.InfoWindow.Init(OnMainDialogEnds, "You have been there before.");
+                if (obj.Completed && obj.OneTimeUsed())
+                {
+                    WindowManager.Instance.InfoWindow.Init(OnMainDialogEnds, "You have been there before.");
+                }
+                else
+                {
+                    StartDialog(dialog, OnMainDialogEnds);
+                }
             }
             else
             {
-                StartDialog(dialog,OnMainDialogEnds);
+                OnMainDialogEnds();
             }
+        }
+
+        if (player.MapData.GoToTarget(obj, GlobalMap, () =>
+        {
+            ActivateDialog();
+        }))
+        {
+
         }
         else
         {
-            OnMainDialogEnds();
+            ActivateDialog();
+
         }
     }
 

@@ -509,4 +509,7 @@ public static class Namings
 
 //        return "null";
     }
+
+    public static string PriorityTargetDesc = "All your ship will try to attack selected ship.";
+    public static string FakePriorityTargetDesc = "All enemies ships will try to attack selected ship";
 }

@@ -11,34 +11,45 @@ public class ItemInfosController :MonoBehaviour
     public WeaponBigInfoUI Weapon;
     public SpellBigInfoUI Spell;
     public ModulBigInfoUI Modul;
+    public CoreSpellBigInfo CoreSpell;
     
 
     public void Init(WeaponInv weapon,bool canChange,bool withSupport)
     {
-        WindowManager.Instance.WindowMainCanvas.interactable = false;
-        WindowManager.Instance.WindowSubCanvas.interactable = true;
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+//        WindowManager.Instance.WindowMainCanvas.interactable = false;
+//        WindowManager.Instance.WindowSubCanvas.interactable = true;
         transform.SetAsLastSibling();
         Weapon.Init(weapon,OnSubWindowClose, canChange, withSupport);
     }
+
+    public void Init(int coreSpellInddex)
+    {
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        transform.SetAsLastSibling();
+        CoreSpell.Init(coreSpellInddex, OnSubWindowClose);
+    }
     public void Init(BaseModulInv modul, bool canChange)
     {
-        WindowManager.Instance.WindowMainCanvas.interactable = false;
-        WindowManager.Instance.WindowSubCanvas.interactable = true;
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        //        WindowManager.Instance.WindowMainCanvas.interactable = false;
+        //        WindowManager.Instance.WindowSubCanvas.interactable = true;
         transform.SetAsLastSibling();
         Modul.Init(modul, OnSubWindowClose);
     }
     public void Init(BaseSpellModulInv spell, bool canChange)
     {
-        WindowManager.Instance.WindowMainCanvas.interactable = false;
-        WindowManager.Instance.WindowSubCanvas.interactable = true;
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        //        WindowManager.Instance.WindowMainCanvas.interactable = false;
+        //        WindowManager.Instance.WindowSubCanvas.interactable = true;
         transform.SetAsLastSibling();
         Spell.Init(spell, OnSubWindowClose, canChange);
     }
 
     private void OnSubWindowClose()
     {
-        WindowManager.Instance.WindowMainCanvas.interactable = true;
-        WindowManager.Instance.WindowSubCanvas.interactable = false;
+//        WindowManager.Instance.WindowMainCanvas.interactable = true;
+//        WindowManager.Instance.WindowSubCanvas.interactable = false;
     }
 
     public void InitSelf()

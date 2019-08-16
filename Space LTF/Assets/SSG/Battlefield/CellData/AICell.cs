@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public enum CellType
@@ -96,7 +97,12 @@ public class AICell
     public Dictionary<int, CellDirection> PosibleDirections = new Dictionary<int, CellDirection>(); 
  
     private CellPoint[] _arrayPoints;
-    public List<AIAsteroidData> Asteroids; 
+    private Dictionary<ShipBase,List<ShipAsteroidPoint>> _asteroids = new Dictionary<ShipBase, List<ShipAsteroidPoint>>();
+//    private Asteroid[] _cellAsteroids = null;
+    private List<AIAsteroidPredata> asteroidsPreData = new List<AIAsteroidPredata>();
+    public bool HaveAsteroids { get; private set; }
+
+  //  public Asteroid[] Asteroids => _cellAsteroids;
 
     public AICell(CellType cell,CellPoint start,CellPoint left,CellPoint right,CellPoint end,float side)
     {
@@ -126,11 +132,12 @@ public class AICell
         {
             c1,c2,c3,c4
         };
-//        _listPoints.Add(c1);
-//        _listPoints.Add(c2);
-//        _listPoints.Add(c3);
-//        _listPoints.Add(c4);
+        //        _listPoints.Add(c1);
+        //        _listPoints.Add(c2);
+        //        _listPoints.Add(c3);
+        //        _listPoints.Add(c4);
     }
+
 
     public void AddCellOfBorder(AICellSegment cBorder1, AICell getCell)
     {
@@ -163,27 +170,39 @@ public class AICell
         }
         return null;
     }
+    public void AddShip(ShipBase shipBase)
+    {
+        HaveAsteroids = asteroidsPreData != null && asteroidsPreData.Count > 0;
+        if (HaveAsteroids)
+        {
+            var asteroidsCopy = new List<ShipAsteroidPoint>();
+            for (int i = 0; i < asteroidsPreData.Count; i++)
+            {
+                var cellASteroid = asteroidsPreData[i];
+                var asteroidShip = new ShipAsteroidPoint(cellASteroid);
+                cellASteroid.OnDeath += () =>
+                {
+                    asteroidsCopy.Remove(asteroidShip);
+                };
+//                cellASteroid.AddAsteroidForShip(asteroidShip);
+                asteroidsCopy.Add(asteroidShip);
+            }
+            _asteroids.Add(shipBase, asteroidsCopy);
+        }
+    }
 
-//    public List<Vector3> GetPoints()
-//    {
-//        return _listPoints;
-//    }
-//
-//    public void AddNeightbourhood(AICell p0)
-//    {
-//        if (p0.CellType == CellType.Asteroids)
-//        {
-//            _listPoints.Add(p0.c1);
-//            _listPoints.Add(p0.c2);
-//            _listPoints.Add(p0.c3);
-//            _listPoints.Add(p0.c4);
-//        }
-//    }
-
-//    public void CacheList()
-//    {
-//        _arrayPoints = _listPoints.ToArray();
-//    }
+    [CanBeNull]
+    public List<ShipAsteroidPoint> GetAsteroidsForShip(ShipBase owner)
+    {
+        if (HaveAsteroids)
+        {
+            return _asteroids[owner];
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     public bool IsFree()
     {
@@ -503,18 +522,22 @@ public class AICell
         }
 #endif
 
-        var closestDir = ClosestDir(wantedNormDir, eulerAng);
-        if (closestDir.CanMove)
-        {
-            return wantedNormDir;
-        }
-        var targetDir = ClosestPosibleDirection(wantedNormDir, eulerAng);
+//        var closestDir = ClosestDir(wantedNormDir, eulerAng);
+//        if (closestDir.CanMove)
+//        {
+//            return wantedNormDir;
+//        }
+//        var targetDir = ClosestPosibleDirection(wantedNormDir, eulerAng);
 
         //Maybe add later
 
-        return targetDir.Dir;
+        return wantedNormDir;
     }
 
+    public void AddAsteroid(AIAsteroidPredata asteroid)
+    {
+        asteroidsPreData.Add(asteroid);
+    }
     public void SetStubDirections()
     {
         if (PosibleDirections == null || PosibleDirections.Count == 0)
@@ -535,13 +558,16 @@ public class AICell
 
     public void DrawGizmosSelected()
     {
-        foreach (var posibleDirection in PosibleDirections)
-        {
-            var d = posibleDirection.Value;
-            DrawUtils.DebugArrow(Center,d.Dir,d.CanMove?Color.green : Color.red);
-//            UnityEngine.Handheld.
-        }
+        var h = Side;
+          Gizmos.DrawWireCube(Center,new Vector3(h,0.1f,h));
+//        foreach (var posibleDirection in PosibleDirections)
+//        {
+//            var d = posibleDirection.Value;
+//            DrawUtils.DebugArrow(Center,d.Dir,d.CanMove?Color.green : Color.red);
+////            UnityEngine.Handheld.
+//        }
 
     }
+
 }
 

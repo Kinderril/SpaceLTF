@@ -119,7 +119,10 @@ public static class Utils
         var listOut = new List<T>();
         if (list.Count == 0)
             return listOut;
-
+        if (count > list.Count)
+        {
+            return list.ToList();
+        }
 
 //        if (list.Count <= count)
 //        {

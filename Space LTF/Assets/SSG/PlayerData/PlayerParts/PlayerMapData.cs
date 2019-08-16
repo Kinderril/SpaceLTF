@@ -57,18 +57,30 @@ public class PlayerMapData
 
 
 
-    public void GoToTarget(GlobalMapCell target)
+    public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap,Action callback)
     {
         if (CanGoTo(target))
         {
             if (target != CurrentCell)
             {
-                target.OpenInfo();
-                GoNextAfterDialog(target);
-                target.VisitCell(this);
-                target.ComeTo();
+                globalMap.MoveToCell(target,() =>
+                {
+                    callback();
+                    target.OpenInfo();
+                    GoNextAfterDialog(target);
+                    target.VisitCell(this);
+                    target.ComeTo();
+                });
             }
+            else
+            {
+                callback();
+            }
+
+            return true;
         }
+
+        return false;
     }
 
     private void GoNextAfterDialog(GlobalMapCell target)

@@ -12,6 +12,20 @@ public class Asteroid : MonoBehaviour
     private bool _wannaRotate = false;
     private float _rotateSpeed;
     private Vector3 _rotateDir;
+    private AIAsteroidPredata _aiAsteroidPredata;
+
+    private float _rad;
+    public Vector3 Position { get; set; }
+
+    public float Rad
+    {
+        get { return _rad; }
+        set
+        {
+            transform.localScale = new Vector3(value, value, value);
+            _rad = value;
+        }
+    }
 
     void Awake()
     {
@@ -65,6 +79,20 @@ public class Asteroid : MonoBehaviour
         EffectController.Instance.LeaveEffect(EffectOnHit, transform, 5f);
         EffectOnHit.Play();
         gameObject.transform.position = new Vector3(9999, 9999, 9999);
+        _aiAsteroidPredata.Death();
+    }
+
+    public void InitRad()
+    {
+         var midVal = (transform.localScale.x + transform.localScale.z);
+         Rad = midVal;
+    }
+
+    public void Init(AIAsteroidPredata aiAsteroidPredata)
+    {
+        _aiAsteroidPredata = aiAsteroidPredata;
+       Rad = aiAsteroidPredata.Rad / AIAsteroidPredata.SHIP_SIZE_COEF;
+
     }
 }
 

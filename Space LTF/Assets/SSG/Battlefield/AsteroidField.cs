@@ -12,7 +12,8 @@ public class AsteroidField : MonoBehaviour
 //    public Vector3 p3 { get; private set; }
 //    public Vector3 p4 { get; private set; }
 //    public List<Vector3> points { get; private set; }ullet
-    public List<GameObject> AsteroidsPrefabs;
+    public List<Asteroid> AsteroidsPrefabs;
+    public List<Asteroid> CurrentAsteroids;
     public int MinAsteroids = 4;
     public int MaxAsteroids = 8;
 
@@ -27,6 +28,7 @@ public class AsteroidField : MonoBehaviour
         var box = GetComponent<BoxCollider>();
         box.size = size * Vector3.one;
 #endif
+        CurrentAsteroids = new List<Asteroid>();
         float minScale = 0.8f;
         float maxScale = 1.2f;
         float hs = size * 0.4f;
@@ -51,6 +53,9 @@ public class AsteroidField : MonoBehaviour
             var yS = MyExtensions.Random(minScale, maxScale);
             var zS = MyExtensions.Random(minScale, maxScale);
             nAsteroid.transform.localScale = new Vector3(xS,yS,zS);
+
+            nAsteroid.InitRad();
+            CurrentAsteroids.Add(nAsteroid);
         }
     }
 

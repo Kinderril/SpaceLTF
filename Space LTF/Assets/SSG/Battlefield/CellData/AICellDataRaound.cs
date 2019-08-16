@@ -5,9 +5,36 @@ using System.Text;
 using JetBrains.Annotations;
 using UnityEngine;
 
-[Serializable]
-public class AICellData
+public class AIAsteroidPredata
 {
+    public Vector3 Position;
+    public float Rad;
+    public event Action OnDeath;
+    public const float SHIP_SIZE_COEF = 3f;
+
+    public AIAsteroidPredata(Vector3 ateroidPos)
+    {
+        this.Position = ateroidPos;
+        Rad = MyExtensions.Random(0.8f, 1.2f) * SHIP_SIZE_COEF;
+    }
+
+    public void Death()
+    {
+        if (OnDeath != null)
+        {
+            OnDeath();
+        }
+
+    }
+}
+
+[Serializable]
+public class AICellDataRaound
+{
+    public const float SafeRadius = 9; 
+    private const float AsteroidRadius = 4; 
+    private const float AsteroidINFieldMin = 3; 
+    private const float AsteroidINFieldMax = 7; 
     public float CellSize;
     public float StartX;
     public float StartZ;
@@ -20,14 +47,14 @@ public class AICellData
 
     public float Radius;
 
-    public Vector3 Min
-    {
-        get { return new Vector3(StartX,0, StartZ); }
-    }
-    public Vector3 Max
-    {
-        get { return new Vector3(StartX + CellSize* MaxIx, 0, StartZ + CellSize * MaxIz); }
-    }
+    public float InsideRadius => Radius - AICellDataRaound.SafeRadius;
+
+    public Vector3 Min => new Vector3(StartX,0, StartZ);
+
+    public Vector3 Max => new Vector3(StartX + CellSize* MaxIx, 0, StartZ + CellSize * MaxIz);
+
+    public Vector3 CenterZone { get; private set; }
+    public List<AIAsteroidPredata> Asteroids = new List<AIAsteroidPredata>();
 
     public void Init(Vector3 startPos,int size,float cellSize)
     {
@@ -43,6 +70,7 @@ public class AICellData
         MaxIz = size;//(int)(zzDelta/CellSize) + 1;
         int cellX = MaxIx + 1;
         int cellZ = MaxIz + 1;
+        CenterZone = (Max + Min) / 2f;
 
         CellPoint[,] cellsPoints = new CellPoint[cellX, cellZ];
         List = new AICell[MaxIx, MaxIz];
@@ -82,132 +110,79 @@ public class AICellData
             for (int j = 0; j < MaxIz; j++)
             {
                 CellType ct = CellType.Free;
-                bool outOfField = false;
-                if (i == 0 || i == MaxIx-1 || j == 0 || j == MaxIz-1)
-                {
-                    outOfField = true;
-                    ct = CellType.DeepSpace;
-                }
-                else
-                {
-                    if (i == 1 || i == MaxIx - 2 || j == 1 || j == MaxIz - 2)
-                    {
-                        outOfField = true;
-                        ct = CellType.Asteroids;
-                    }
-                }
+
                 var startCorner = cellsPoints[i, j];
                 var leftCorner = cellsPoints[i, j+1];
                 var rightCorner = cellsPoints[i+1, j];
                 var endCorner = cellsPoints[i+1, j+1];
                 var cell = new AICell(ct, startCorner, leftCorner, rightCorner, endCorner, cellSize);
-                cell.OutOfField = outOfField;
                 SetCell(i, j, cell);
             }
         }
 
+        int asteroidsFieldCount = (int)((size + 6f) / 2f);
 
+        CreateAsteroidsOnCircle(2);
+        CreateRandomAsteroids(asteroidsFieldCount);
 
-        for (int i = 1; i < cellX-1; i++)
-        {
-            for (int j = 1; j < cellZ-1; j++)
-            {
-                var cUp = cellsPoints[i, j + 1];
-                var cDown = cellsPoints[i, j - 1];
-                var cLeft = cellsPoints[i-1, j];
-                var cRight = cellsPoints[i+1, j];
-                //MUST BE IN RIGHT ORDERED !!!
-                CellPoint[] points = new CellPoint[]
-                {
-                    cRight,cUp,cLeft,cDown,
-                };
-                var upCell = List[i, j - 1];
-                var downCell = List[i-1, j];
-                var diagCell = List[i-1, j - 1];
-                var currCell = List[i, j];
-
-                AICell[] list = new AICell[]
-                {
-                    upCell,downCell,diagCell,currCell
-                };
-                var tested = cellsPoints[i, j];
-                tested.SetData(list, points);
-            }
-        }
-
-        //Соотношение зависимости границ к соседним клеткам
-        for (int i = 1; i < MaxIx - 1; i++)
-        {
-            for (int j = 1; j < MaxIz - 1; j++)
-            {
-                var c = GetCell(i, j);
-                c.AddCellOfBorder(c.Border1, GetCell(i - 1, j));
-                c.AddCellOfBorder(c.Border2, GetCell(i, j + 1));
-                c.AddCellOfBorder(c.Border3, GetCell(i + 1, j));
-                c.AddCellOfBorder(c.Border4, GetCell(i, j - 1));
-
-            }
-        }
-
-        int cloudsCount = (int)MyExtensions.Random(0, 1);
-        int asteroidsCount = 1 + (int)MyExtensions.Random(1, 4);
-        AddTypes(CellType.Asteroids, asteroidsCount);
-        AddTypes(CellType.Clouds, cloudsCount);
-
-        //Добавить направления возможностей
-        for (int i = 1; i < MaxIx - 1; i++)
-        {
-            for (int j = 1; j < MaxIz - 1; j++)
-            {
-                var cell = GetCell(i, j);
-                cell.ImplementBorderDirection(GetCell(i    , j + 1), 0);//up
-                cell.ImplementBorderDirection(GetCell(i + 1, j + 1), 1);//up right
-                cell.ImplementBorderDirection(GetCell(i + 1, j    ), 2);//right
-                cell.ImplementBorderDirection(GetCell(i + 1, j - 1), 3);//down right
-                cell.ImplementBorderDirection(GetCell(i    , j - 1), 4);//down
-                cell.ImplementBorderDirection(GetCell(i - 1, j - 1), 5);//down left
-                cell.ImplementBorderDirection(GetCell(i - 1, j    ), 6);//left
-                cell.ImplementBorderDirection(GetCell(i - 1, j + 1), 7);//up left
-            }
-        }
-        for (int i = 0; i < MaxIx; i++)
-        {
-            for (int j = 0; j < MaxIz; j++)
-            {
-                var cell = GetCell(i, j);
-                cell.SetStubDirections();
-            }
-        }
     }
 
-    private void AddTypes(CellType type, int count)
+    private void CreateRandomAsteroids(int fieldsCount)
     {
-        int offset = 1;
-        for (int i = 0; i < count; i++)
-        {
-            var delta = (MaxIx- offset)/count;
-            var d = offset + delta*i;
-            var rndX = Math.Abs((int) MyExtensions.Random(d, d + delta) -1);
-            var rndZ = (int) MyExtensions.Random(offset, MaxIz - offset);
-            var cell = GetCell(rndX, rndZ);
-            int dist;
-            var closest = FindClosestCellByType(cell, CellType.Free, true, out dist);
-//            FindClosestCellByType(cell, );
-            if (closest != null)
-            {
-                closest.CellType = type;
-                closest.Marked = true;
-                var cellsAround = GetCellsAround(closest);
-                foreach (var aiCell in cellsAround)
+//        AddAsteroidToPosition(CenterZone);
+        var offsetCEnterField = InsideRadius - AsteroidRadius;
+                for (int i = 0; i < fieldsCount; i++)
                 {
-                    aiCell.Marked = true;
+                    var findPointX = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
+                    var findPointZ = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
+        //            var point = new Vector3(findPointX, 0, findPointZ);
+                    var countAsteroids = MyExtensions.Random(AsteroidINFieldMin, AsteroidINFieldMax);
+                    for (int j = 0; j < countAsteroids; j++)
+                    {
+                        var xx = MyExtensions.Random(0.3f, AsteroidRadius);
+                        var zz = MyExtensions.Random(0.3f, AsteroidRadius);
+                        var ateroidPos = new Vector3(findPointX + xx, 0, findPointZ + zz);
+                        AddAsteroidToPosition(CenterZone + ateroidPos);
+                    }
                 }
-            }
-            else
+    }
+
+    private void AddAsteroidToPosition(Vector3 ateroidPos)
+    {
+        var asteroid = new AIAsteroidPredata(ateroidPos);
+        Asteroids.Add(asteroid);
+        //        StartX + CellSize * i
+        var cellIx = (int)((ateroidPos.x - StartX) / CellSize);
+        var cellIz = (int)((ateroidPos.z - StartZ) / CellSize);
+        for (int i = Mathf.Clamp(cellIx-1,0, MaxIx); i < Mathf.Clamp(cellIx + 2, 0, MaxIx); i++)
+        {
+            for (int j = Mathf.Clamp(cellIz - 1, 0, MaxIz); j < Mathf.Clamp(cellIz + 2, 0, MaxIz); j++)
             {
-                Debug.LogError("can't find free cell");
+                var cell = GetCell(i, j);
+                cell.AddAsteroid(asteroid);
+//                Debug.LogError($"Add asteroid to cells {cell.Xindex},{cell.Zindex}");
             }
         }
+
+    }
+
+    private void CreateAsteroidsOnCircle(int iterations)
+    {
+        for (int j = 0; j < iterations; j++)
+        {
+            var countSTeps = 40;
+            var dir = new Vector3(1, 0, 0);
+
+            var step = (int)(360 / countSTeps);
+            for (int i = 0; i < countSTeps; i++)
+            {
+                dir = Utils.RotateOnAngUp(dir, MyExtensions.GreateRandom(step));
+                var point = CenterZone + dir * MyExtensions.Random(Radius - SafeRadius, Radius);
+                var asteroid = new AIAsteroidPredata(point);
+                Asteroids.Add(asteroid);
+            }
+        }  
+
     }
 
     public void SetCell(int i, int j, AICell cell)

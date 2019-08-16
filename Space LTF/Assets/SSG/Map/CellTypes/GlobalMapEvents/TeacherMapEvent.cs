@@ -104,10 +104,14 @@ public class TeacherMapEvent : BaseGlobalMapEvent
         var points = 1000f;
         foreach (var pilotData in army)
         {
-            if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
+            if (pilotData.Ship.ShipType != ShipType.Base)
             {
-                var mesData = new MessageDialogData($"Ship {pilotData.Ship.Name} Improved. Pilot level:{pilotData.Pilot.CurLevel}", mianAnswers);
-                return mesData;
+                if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
+                {
+                    var mesData = new MessageDialogData(
+                        $"Ship {pilotData.Ship.Name} Improved. Pilot level:{pilotData.Pilot.CurLevel}", mianAnswers);
+                    return mesData;
+                }
             }
         }
         return new MessageDialogData($"Fail.", mianAnswers); ;

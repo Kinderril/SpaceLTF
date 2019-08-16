@@ -89,7 +89,7 @@ public abstract class Bullet : MovingObject
         return _turnSpeed;
     }
     
-    protected override float MaxSpeed()
+    public override float MaxSpeed()
     {
         return _maxSpeed;
     }

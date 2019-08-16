@@ -88,7 +88,7 @@ public abstract class MovingObject : PoolElement
     }
 
     protected abstract float TurnSpeed();
-    protected abstract float MaxSpeed();
+    public abstract float MaxSpeed();
 
 
     public override void Init()

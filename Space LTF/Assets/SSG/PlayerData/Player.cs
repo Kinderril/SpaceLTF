@@ -60,33 +60,39 @@ public class Player
             }
         }
 #if UNITY_EDITOR
-        var allVals = (SimpleModulType[])Enum.GetValues(typeof(SimpleModulType));
-        foreach (var type in allVals)
+        if (DebugParamsController.AllModuls)
         {
-            if (Inventory.GetFreeSimpleSlot(out var index1))
+
+            var allVals = (SimpleModulType[]) Enum.GetValues(typeof(SimpleModulType));
+            foreach (var type in allVals)
             {
-                var modul = Library.CreatSimpleModul(type,1);
-                Inventory.TryAddSimpleModul(modul, index1);
+                if (Inventory.GetFreeSimpleSlot(out var index1))
+                {
+                    var modul = Library.CreatSimpleModul(type, 1);
+                    Inventory.TryAddSimpleModul(modul, index1);
+                }
+
             }
 
-        }
-        for (int i = 0; i < 3; i++)
-        {
-            if (Inventory.GetFreeWeaponSlot(out var index2))
+            for (int i = 0; i < 3; i++)
             {
-                var modul1 = Library.CreateWeapon(WeaponType.beam);
-                Inventory.TryAddWeaponModul(modul1, index2);
-            }
-        }
-        var allSpellType = (SpellType[])Enum.GetValues(typeof(SpellType));
-        foreach (var type in allSpellType)
-        {
-            if (Inventory.GetFreeSpellSlot(out var index1))
-            {
-                var modul = Library.CreateSpell(type);
-                Inventory.TryAddSpellModul(modul, index1);
+                if (Inventory.GetFreeWeaponSlot(out var index2))
+                {
+                    var modul1 = Library.CreateWeapon(WeaponType.beam);
+                    Inventory.TryAddWeaponModul(modul1, index2);
+                }
             }
 
+            var allSpellType = (SpellType[]) Enum.GetValues(typeof(SpellType));
+            foreach (var type in allSpellType)
+            {
+                if (Inventory.GetFreeSpellSlot(out var index1))
+                {
+                    var modul = Library.CreateSpell(type);
+                    Inventory.TryAddSpellModul(modul, index1);
+                }
+
+            }
         }
 #endif
 

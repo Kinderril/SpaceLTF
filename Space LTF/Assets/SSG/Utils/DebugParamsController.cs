@@ -5,30 +5,21 @@ using System.Collections.Generic;
 
 public class DebugParamsController
 {
-#if UNITY_EDITOR  
-    public static bool EngineOff { get; private set; }
-    public static bool NoDamage { get; private set; }
-    public static bool NoMouseMove { get; private set; }
-    public static bool FastRecharge { get; private set; }
+#if UNITY_EDITOR
 
-    public static void SwitchEngine()
-    {
-        EngineOff = !EngineOff;
-    }
-    public static void SwitchNoDamage()
-    {
-        NoDamage = !NoDamage;
-    }    
-    public static void SwitchNoMouseMove()
-    {
-        NoMouseMove = !NoMouseMove;
-    }
+    public static bool EngineOff;
+    public static bool NoDamage;
+    public static bool NoMouseMove;
+    public static bool FastRecharge;
+    public static bool AllModuls = false;
 
-    public static void SwitchFastRecharge()
-    {
-        FastRecharge = !FastRecharge;
-    }
 #endif
+
+    public DebugParamsController()
+    {
+        Debug.LogError("DebugParamsController INITED");
+
+    }
 
     public static void TestHire()
     {

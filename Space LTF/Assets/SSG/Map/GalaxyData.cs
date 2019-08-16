@@ -97,10 +97,18 @@ public class GalaxyData
         Debug.Log($"CreateEndSector : {xCell} {zCell}");
 
         //Create core sectors
-        var goodCorePositions = Mathf.Clamp(coreCells, 0, sectorsCount - 2);
-        for (int i = 0; i < goodCorePositions; i++)
+        var randomInts = new List<int>();
+        for (int i = 1; i < sectorCount-1; i++)
         {
-            var secrosDist = sectorsCount - 1 - i;
+            randomInts.Add(i);
+        }
+//        List<int> xIndexs = new List<int>();
+        var xIndexs = randomInts.RandomElement(coreCells);
+        var goodCorePositions = xIndexs.Count;
+//        var goodCorePositions = Mathf.Clamp(coreCells, 0, sectorsCount - 2);
+        for (int i = 0; i < xIndexs.Count; i++)
+        {
+            var secrosDist = xIndexs[i];
             var coreSector = allSubSectors.Where(x => x.XIndex == secrosDist).ToList().RandomElement();
             if (coreSector == null)
             {

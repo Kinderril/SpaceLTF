@@ -10,9 +10,9 @@ public class MineFieldAction : BaseAction
 {
     private MineAbstractModul _mineModul;
     private AICell _cellToProtect;
-    private AICell _cellDanger;
+    private Vector3 _cellDanger;
 
-    public MineFieldAction([NotNull] ShipBase owner,MineAbstractModul mineModul, AICell cellToProtect, AICell dangerCell) 
+    public MineFieldAction([NotNull] ShipBase owner,MineAbstractModul mineModul, AICell cellToProtect, Vector3 dangerCell) 
         : base(owner,ActionType.mineField)
     {
         _cellToProtect = cellToProtect;
@@ -41,7 +41,7 @@ public class MineFieldAction : BaseAction
 
     private void FindWay()
     {
-        var dir = Utils.NormalizeFastSelf(_cellDanger.Center - _cellToProtect.Center);
+        var dir = Utils.NormalizeFastSelf(_cellDanger - _cellToProtect.Center);
         var pos = _cellToProtect.Center + dir*2f;
 
         _targetPoint = (pos);

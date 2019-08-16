@@ -47,7 +47,7 @@ public class ShipBase : MovingObject
     public bool IsInited;
 //    public bool IsRepared = false;
     public ShipVisual ShipVisual;
-    public ShipPathController PathController { get; private set; }
+    public ShipPathController2 PathController { get; private set; }
     public ShipBuffData BuffData { get; private set; }
 //    public ShipAsteroidDamage AsteroidDamage { get; private set; }
     public ShipVisibilityData VisibilityData { get; private set; }
@@ -78,7 +78,7 @@ public class ShipBase : MovingObject
     public IShipDesicion DesicionData { get; protected set; }
 
     public bool Pause { get; set; }
-    public bool InBattlefield { get; private set; }
+    public bool InBattlefield { get; set; }
     public bool InAsteroidField { get; private set; }
     public bool IsDead { get; private set; }
 
@@ -96,10 +96,8 @@ public class ShipBase : MovingObject
 
     private DebugTurnData DebugTurnData;
 
-    public float MaxTurnRadius
-    {
-        get { return Mathf.Rad2Deg * (ShipParameters.MaxSpeed / ShipParameters.TurnSpeed); }
-    }
+    public float MaxTurnRadius => Mathf.Rad2Deg * (ShipParameters.MaxSpeed / ShipParameters.TurnSpeed);
+    public float CurTurnRadius => Mathf.Rad2Deg * (CurSpeed / TurnSpeed());
 
     public void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos,
         IPilotParameters pilotParams, Commander commander, Action<ShipBase> dealthCallback)
@@ -130,7 +128,6 @@ public class ShipBase : MovingObject
         PeriodDamage = new ShipPeriodDamage(this);
         Locator = new ShipLocator(this);
         Id = DataBaseController.Instance.GetNewIndex();
-        InBattlefield = true;
         PilotParameters = pilotParams;
         Commander = commander;
         TeamIndex = teamIndex;
@@ -162,9 +159,10 @@ public class ShipBase : MovingObject
             PeriodDamageEffect.Stop();
         if (WeaponCrashEffect != null)
             WeaponCrashEffect.Stop();
-        PathController = new ShipPathController(this, MaxTurnRadius * 1.5f);
+        PathController = new ShipPathController2(this,  1.25f);
         BuffData = new ShipBuffData(this);
         DamageData.Activate();
+        PathController.Activate();
     }
 
     private void InitPriorityObjects()
@@ -402,7 +400,7 @@ public class ShipBase : MovingObject
         Vector3? curTarget;
         bool shallSlow = false;
         float speedREcommended;
-        var direction4 = PathController.GetCurentDirection4(target, out exactlyPoint, out goodDir, out curTarget, out speedREcommended);
+        var direction4 = PathController.GetCurentDirection(target, out exactlyPoint, out goodDir, out speedREcommended);
         if (!goodDir)
         {
 
@@ -420,7 +418,7 @@ public class ShipBase : MovingObject
         Vector3? curTarget;
         bool shallSlow = false;
         float speedREcommended;
-        var direction4 = PathController.GetCurentDirection4(target, out exactlyPoint, out goodDir,out curTarget,out speedREcommended);
+        var direction4 = PathController.GetCurentDirection(target, out exactlyPoint, out goodDir,out speedREcommended);
         if (!goodDir)
         {
 
@@ -557,7 +555,7 @@ public class ShipBase : MovingObject
         return ShipParameters.TurnSpeed;
     }
 
-    protected override float MaxSpeed()
+    public override float MaxSpeed()
     {
         return ShipParameters.MaxSpeed;
     }
@@ -751,7 +749,18 @@ public class ShipBase : MovingObject
             return;
         }
 
-        DrawUtils.DrawCircle(transform.position, Vector3.up, Color.green, MaxTurnRadius);
+        var s = Cell.Side;
+        Gizmos.DrawWireCube(Cell.Center, new Vector3(s,0.1f,s));
+        var asteroids = Cell.GetAsteroidsForShip(this);
+//        if (asteroids != null)
+//        {
+//            foreach (var shipAsteroidPoint in asteroids)
+//            {
+//                DrawUtils.DrawCircle(shipAsteroidPoint.Position, Vector3.up, Color.white, shipAsteroidPoint.Rad);
+//            }
+//        }
+
+        DrawUtils.DrawCircle(transform.position, Vector3.up, InBattlefield?Color.green:Color.yellow, MaxTurnRadius);
 //        DrawUtils.GizmosArrow(transform.position, LookDirection*2, Color.red);
 //        DrawUtils.GizmosArrow(transform.position, LookLeft*1.3f, Color.yellow);
 //        DrawUtils.GizmosArrow(transform.position, LookRight*1.3f, Color.green);
@@ -787,7 +796,7 @@ public class ShipBase : MovingObject
             var inClouds = (nextCell.CellType == CellType.Clouds);
             VisibilityData.SetInClouds(inClouds);
             Cell = nextCell;
-            InBattlefield = !nextCell.OutOfField;
+//            InBattlefield = !nextCell.OutOfField;
             if (nextCell.CellType == CellType.DeepSpace)
             {
                 ShipParameters.Damage(999,999,null,null);

@@ -18,6 +18,7 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
     public TextMeshProUGUI MaxLevel;
     public TextMeshProUGUI CostCountField;
     public TextMeshProUGUI CostDelayField;
+    public TextMeshProUGUI WeaponLevelField;
     public MoneySlotUI UpgradeCost;
     private BaseSpellModulInv _spell;
     public void Init(BaseSpellModulInv spell,Action callback, bool canChange)
@@ -25,7 +26,7 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         base.Init(callback);
         _spell = spell;
         NameField.text = Namings.SpellName(spell.SpellType);
-        DrawLevel();
+        OnUpgrade(spell);
         _spell.OnUpgrade += OnUpgrade;
         ButtonUpgrade.interactable = canChange;
         CostCountField.text = $"Charges count {spell.CostCount}";
@@ -48,6 +49,16 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         {
             var cost = MoneyConsts.SpellUpgrade[_spell.Level];
             UpgradeCost.Init(cost);
+        }
+        WeaponLevelField.text = _spell.Level.ToString();
+        if (!canUpgrade)
+        {
+            WeaponLevelField.text = "Max level";
+        }
+        else
+        {
+
+            WeaponLevelField.text = $"Level {_spell.Level.ToString()}";
         }
     }
 

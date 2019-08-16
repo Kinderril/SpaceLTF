@@ -9,11 +9,11 @@ using UnityEngine;
 
 public static class PathDirectionFinder2
 {
-    public static Vector3 TryFindDirection(CellController cellController,Vector3 lookDirection,Vector3 lookLeft,Vector3 lookRight,AICell currentCell, 
+    public static Vector3 TryFindDirection(ShipAsteroidPoint[] asteroids, Vector3 lookDirection,Vector3 lookLeft,
+        Vector3 lookRight,AICell currentCell, 
         Vector3 targetPoint, Vector3 startPosition, float curTurnRad,
          out bool goodDir,out bool shallSlow)
     {
-        var asteroids = currentCell.Asteroids;
         var dir = targetPoint - startPosition;
         var isLeft = Vector3.Dot(lookLeft, dir) > 0;
         bool isInFront = Vector3.Dot(lookDirection, dir) > 0;
