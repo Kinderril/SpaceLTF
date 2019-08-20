@@ -170,9 +170,10 @@ public class BattleController :Singleton<BattleController>
         await Task.Yield();
 
         CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition);
-        CamerasController.Instance.GameCamera.SourceAmbient.clip =
-            DataBaseController.Instance.AudioDataBase.AmbientsClips.RandomElement();
-        CamerasController.Instance.GameCamera.SourceAmbient.Play();
+        var ambientSource = CamerasController.Instance.GameCamera.SourceAmbient;
+        ambientSource.clip = DataBaseController.Instance.AudioDataBase.AmbientsClips.RandomElement();
+        ambientSource.volume = 0.2f;
+        ambientSource.Play();
 
     }
 

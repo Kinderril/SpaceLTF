@@ -672,6 +672,9 @@ public class ShipBase : MovingObject
 
     public void GetHit(IWeapon weapon, Bullet bullet)
     {
+        var hitClip = DataBaseController.Instance.AudioDataBase.GetHit();
+        Audio.PlayOneShot(hitClip);
+//        Debug.LogError($"playt hit {hitClip.name}");
         if (ShipParameters.ShieldParameters.ShiledIsActive)
         {
             var effect = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShieldHitEffect, transform, 3f);

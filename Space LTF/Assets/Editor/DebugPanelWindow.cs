@@ -214,6 +214,7 @@ public class DebugPanelWindow : EditorWindow
                 //                            PrefabUtility.
                 source = ShipBase.ShipVisual.EngineEffect.gameObject.AddComponent<AudioSource>();
                 ShipBase.ShipVisual.EngineEffect.SourceEngine = source;
+                source.clip = DataBaseController.Instance.AudioDataBase.EngineDefault;
             }
 
             foreach (var positon in ShipBase.WeaponPosition)

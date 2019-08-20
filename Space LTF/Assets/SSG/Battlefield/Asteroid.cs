@@ -13,6 +13,7 @@ public class Asteroid : MonoBehaviour
     private float _rotateSpeed;
     private Vector3 _rotateDir;
     private AIAsteroidPredata _aiAsteroidPredata;
+    public AudioSource Source;
 
     private float _rad;
     public Vector3 Position { get; set; }
@@ -75,6 +76,7 @@ public class Asteroid : MonoBehaviour
 
     private void Death()
     {
+        Source.Play();
         EffectOnHit.gameObject.SetActive(true);
         EffectController.Instance.LeaveEffect(EffectOnHit, transform, 5f);
         EffectOnHit.Play();

@@ -37,6 +37,7 @@ public class DataBaseController : Singleton<DataBaseController>
         {
             Pool.RegisterBullet(bullet);
         }
+        AudioDataBase.Init();
         SpellDataBase.Init();
     }
 
