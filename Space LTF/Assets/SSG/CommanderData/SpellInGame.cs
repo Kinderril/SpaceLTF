@@ -49,7 +49,7 @@ public class SpellInGame : IWeapon
     public CastActionSpell CastSpell { get; private set; }
     public float CurOwnerSpeed => 0.001f;
     public CurWeaponDamage CurrentDamage => new CurWeaponDamage(0, 0);
-    public string Name { get; set; }
+    public string Name { get; private set; }
     public SpellType SpellType { get;private set; }
     float ShowCircleRadius { get; }
     bool ShowLine { get; }

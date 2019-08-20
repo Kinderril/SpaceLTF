@@ -15,7 +15,7 @@ public class WeaponPlace : MonoBehaviour
     private bool setted = false;
     private WeaponInGame weapon;
     private bool IsActivePlace;
-
+    public AudioSource Source;
 
 
     public void SetWeapon(WeaponInGame weapon)
@@ -27,7 +27,7 @@ public class WeaponPlace : MonoBehaviour
             this.weapon = weapon;
            Utils.CopyMaterials(ReloadIndicator,Color.white);
 //            _material = ReloadIndicator.material;
-            weapon.SetTransform(BulletOut);
+            weapon.SetTransform(this);
         }
         PlaceVisual.gameObject.SetActive(IsActivePlace);
     }

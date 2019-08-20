@@ -32,7 +32,7 @@ public class InGameMainUI : BaseWindow
     public CreditControllerUI CreditController;
     public SpellModulsContainer SpellModulsContainer;
     public event Action<SpellInGame> OnSelectSpell;
-    public Button DebugKillAllEnemies;
+//    public Button DebugKillAllEnemies;
     private FlyingNumbersController FlyingNumbersController = new FlyingNumbersController();
 
     public ShipBase SelectedShip
@@ -81,11 +81,11 @@ public class InGameMainUI : BaseWindow
     
     public void Init(BattleController battle)
     {
-#if UNITY_EDITOR
-        DebugKillAllEnemies.gameObject.SetActive(true);
-#else
-        DebugKillAllEnemies.gameObject.SetActive(false);
-#endif
+//#if UNITY_EDITOR
+//        DebugKillAllEnemies.gameObject.SetActive(true);
+//#else
+//        DebugKillAllEnemies.gameObject.SetActive(false);
+//#endif
 
         FlyingNumbersController.Init(FlyingInfosContainer);
         PreFinish.Init();
@@ -188,7 +188,7 @@ public class InGameMainUI : BaseWindow
         }
         OnPause();
         WindowManager.Instance.ConfirmWindow.Init( ()=>DoRunAway(shipsToDamage),OnPause,
-            String.Format("Do you want run away? {0} of your ships will be badly damaged.", shipsToDamage.Count));
+            String.Format(Namings.DoWantRetry , shipsToDamage.Count));
     }
 
     private void DoRunAway(HashSet<ShipBase> shipsToDamage)
@@ -254,22 +254,22 @@ public class InGameMainUI : BaseWindow
         switch (arg1)
         {
             case ShipDamageType.engine:
-                info = "Engine destroyed";
+                info = Namings.EngineDest;
                 break;
 //            case ShipDamageType.turnEngine:
 //                info = "Turn engine destroyed";
 //                break;
             case ShipDamageType.weapon:
-                info = "Weapon destroyed";
+                info = Namings.WeaponDest; 
                 break;
             case ShipDamageType.shiled:
-                info = "Shield destroyed";
+                info = Namings.ShieldDest; 
                 break;
 //            case ShipDamageType.moduls:
 //                info = "Modul destroyed";
 //                break;
             case ShipDamageType.fire:
-                info = "Fire on board";
+                info = Namings.FireDest; 
                 break;
         }
         Debug.LogError($"add {arg1}");

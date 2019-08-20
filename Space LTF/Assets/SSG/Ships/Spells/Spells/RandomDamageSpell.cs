@@ -62,7 +62,8 @@ public class RandomDamageSpell : BaseSpellModulInv
     float timeDelay => 9f + Level * 3f;
     public override string Desc()
     {    
-        return $"Random damage to all inner moduls of ship. Do not work through shield for {timeDelay} sec.";
+        return       String.Format(Namings.RandomDamageSpell,timeDelay);
+//            $"Random damage to all inner moduls of ship. Do not work through shield for {timeDelay} sec.";
     }
 
     public override SpellDamageData RadiusAOE()

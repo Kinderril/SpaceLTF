@@ -80,8 +80,8 @@ public class MineFieldSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return
-            $"Set {MinesCount} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location. Each mine damage {damageShield}/{damageBody}";
+        return    String.Format(Namings.MinesSpell, MinesCount, MineFieldSpell.MINES_PERIOD.ToString("0"), damageShield, damageBody);
+//            $"Set {MinesCount} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location. Each mine damage {damageShield}/{damageBody}";
     }
 }
 

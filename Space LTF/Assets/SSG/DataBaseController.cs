@@ -18,6 +18,7 @@ public class DataBaseController : Singleton<DataBaseController>
  //   public List<ShipControlCenter> ControlBase = new List<ShipControlCenter>();
     public DataStructPrefabs DataStructPrefabs;
     public SpellDataBase SpellDataBase;
+    public AudioDataBase AudioDataBase;
     public BackgroundsDatabase Backgrounds;
     public Pool Pool;
     public Transform BulletContainer;

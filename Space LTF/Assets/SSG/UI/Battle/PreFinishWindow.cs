@@ -27,14 +27,14 @@ public class PreFinishWindow : MonoBehaviour
         {
             case EndBattleType.win:
                 color = Color.green;
-                Field.text = "Win!";
+                Field.text = Namings.Win;
                 break;
             case EndBattleType.lose:
-                Field.text = "Lose";
+                Field.text = Namings.Lose;
                 color = Color.red;
                 break;
             case EndBattleType.runAway:
-                Field.text = "Run away complete";
+                Field.text = Namings.RunAwayComplete; 
                 color = new Color(255f/255f, 153f / 255f, 51f / 255f,1f);
                 break;
         }

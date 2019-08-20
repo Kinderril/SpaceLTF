@@ -214,7 +214,7 @@ public class WindowManager : Singleton<WindowManager>
         }
 
         currentWindow = windowToLoad;
-        Debug.LogError($"set currentWindow {currentWindow.name}");
+//        Debug.LogError($"set currentWindow {currentWindow.name}");
         if (OnWindowSetted != null)
         {
             OnWindowSetted(currentWindow);

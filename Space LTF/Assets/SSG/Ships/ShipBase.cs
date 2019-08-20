@@ -32,8 +32,9 @@ public class ShipBase : MovingObject
     private Vector3 _backPredictionPos;
 
     private Action<ShipBase> _dealthCallback;
+    public AudioSource Audio;
 
-//    private MoveWayNoLerp _moveWay;
+    //    private MoveWayNoLerp _moveWay;
     private float _nextPosibleRecalcWay = 0;
     private float _nextRecalc = 0;
     private Vector3 _predictionPos;
@@ -214,6 +215,7 @@ public class ShipBase : MovingObject
     
     private void Death()
     {
+        Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetDeath());
         ShipInventory.LastBattleData.Destroyed = true;
         VisibilityData.Dispose();
         if (IsDead)

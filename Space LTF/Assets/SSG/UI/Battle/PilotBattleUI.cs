@@ -15,9 +15,9 @@ public class PilotBattleUI : MonoBehaviour
 
     public void Init(IPilotParameters pilotParameters)
     {
-        LevelField.text = "Level:" + pilotParameters.CurLevel.ToString();
-        SpeedField.text = "Speed:" + pilotParameters.SpeedLevel.ToString();
-        TurnField.text = "Turn:" + pilotParameters.TurnSpeedLevel.ToString();
+        LevelField.text = Namings.Level +  ":" + pilotParameters.CurLevel.ToString();
+        SpeedField.text = Namings.Speed + ":" + pilotParameters.SpeedLevel.ToString();
+        TurnField.text = Namings.TurnSpeed + ":" + pilotParameters.TurnSpeedLevel.ToString();
     }
 
 }

@@ -29,9 +29,8 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         OnUpgrade(spell);
         _spell.OnUpgrade += OnUpgrade;
         ButtonUpgrade.interactable = canChange;
-        CostCountField.text = $"Charges count {spell.CostCount}";
-        CostDelayField.text = $"Charges delay {spell.CostTime}";
-        //        LevelField.text =(modul.Level.ToString("0"));
+        CostCountField.text = String.Format(Namings.ChargesCount, spell.CostCount);
+        CostDelayField.text = String.Format(Namings.ChargesDelay, spell.CostTime);
     }
 
     private void OnUpgrade(BaseSpellModulInv obj)
@@ -53,12 +52,12 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         WeaponLevelField.text = _spell.Level.ToString();
         if (!canUpgrade)
         {
-            WeaponLevelField.text = "Max level";
+            WeaponLevelField.text = Namings.SpellMaxLevel;
         }
         else
         {
 
-            WeaponLevelField.text = $"Level {_spell.Level.ToString()}";
+            WeaponLevelField.text =  String.Format(Namings.Level) + ":" + _spell.Level.ToString();
         }
     }
 

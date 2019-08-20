@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.XR.WSA.Input;
 
 public enum ArmyCreationMode
 {

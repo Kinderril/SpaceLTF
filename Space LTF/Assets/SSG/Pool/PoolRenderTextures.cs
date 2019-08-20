@@ -14,13 +14,17 @@ public class PoolRenderTextures : MonoBehaviour
 
     public void Init()
     {
+        var hh = Screen.height * MainRenderTexture.width / Screen.width;
+        MainRenderTexture.height = hh;
         Backgroundcamera.depth = 10;
         if (_PoolList.Count < 7)
         {
             Debug.LogError("Wrong pool count PoolRenderTextures.   _PoolList.Count: " + _PoolList.Count);
         }
+//        Debug.LogError($"Render texture {800} {hh}");
         foreach (var renderTextureWithPool in _PoolList)
         {
+            renderTextureWithPool.Init(800,hh);
             renderTextureWithPool.SetFree();
             if (renderTextureWithPool.RenderTexture == null)
             {

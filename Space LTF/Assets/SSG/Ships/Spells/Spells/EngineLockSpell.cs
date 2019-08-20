@@ -93,8 +93,8 @@ public  class EngineLockSpell : BaseSpellModulInv
 
     public override string Desc()
     {
-        return
-            $"Destroy engines for {CurLockPeriod.ToString("0")} sec.";
+        return String.Format(Namings.EnerguLockSpell, CurLockPeriod.ToString("0"));
+//            $"Destroy engines for {CurLockPeriod.ToString("0")} sec.";
     }
 }
 

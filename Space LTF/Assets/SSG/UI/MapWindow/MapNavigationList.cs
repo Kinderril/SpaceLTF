@@ -38,7 +38,7 @@ public class MapNavigationList : MonoBehaviour
     {
         var player = MainController.Instance.MainPlayer;
         _lastSoutButton = InitScout();
-        _lastSoutButton.Field.text = "Scouted";
+        _lastSoutButton.Field.text = Namings.Scouted;
         _lastSoutButton.gameObject.SetActive(false);
      
     }
@@ -77,7 +77,7 @@ public class MapNavigationList : MonoBehaviour
                     if (exitCell != null)
                     {
                         navigButton = InitCellButton(exitCell);
-                        navigButton.Field.text = "Gate";
+                        navigButton.Field.text = Namings.Gate;
                     }
                     
                 }
@@ -96,11 +96,11 @@ public class MapNavigationList : MonoBehaviour
         string txt;
         if (cell.Taken)
         {
-            txt = String.Format("Complete {0}", c);
+            txt = String.Format(Namings.Complete, c);
         }
         else
         {
-            txt = String.Format("Target {0}", c);
+            txt = String.Format(Namings.Target, c);
 
         }
         navigButton.Field.text = txt;
@@ -114,7 +114,7 @@ public class MapNavigationList : MonoBehaviour
         {
             GlobalMap.SetCameraHome();
         });
-        homeBtn.Field.text = "Home";
+        homeBtn.Field.text = Namings.Home; 
     }
 
     private NavigationButton InitCellButton(GlobalMapCell c)

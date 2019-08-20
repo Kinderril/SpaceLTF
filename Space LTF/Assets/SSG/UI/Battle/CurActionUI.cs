@@ -33,7 +33,7 @@ public class CurActionUI : MonoBehaviour
     {
         if (arg2 == null)
         {
-            ActionText.text = "Processing...";
+            ActionText.text = Namings.Processing; 
         }
         else
         {

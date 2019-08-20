@@ -106,7 +106,7 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
 
     public string WideInfo()
     {
-        string cost = String.Format("Charges require: {0} with delay {1} sec.",CostCount,CostTime);
+        string cost = String.Format(Namings.SpellModulChargers, CostCount, CostTime);
         return GetInfo()  + "\n" + cost
              + "\n" + Desc();
     }

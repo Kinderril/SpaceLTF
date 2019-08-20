@@ -73,8 +73,8 @@ public class DistShotSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return
-            $"Single bullet. Base damage {BASE_damage}. Additional damage dependence on distance."; 
+        return String.Format(Namings.DistShotSpell, BASE_damage);
+//            $"Single bullet. Base damage {BASE_damage}. Additional damage dependence on distance."; 
     }
 
 }

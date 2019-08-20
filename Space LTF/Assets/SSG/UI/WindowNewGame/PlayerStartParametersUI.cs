@@ -29,7 +29,7 @@ public class PlayerStartParametersUI : MonoBehaviour
         UpdateFields();
     }
 
-    private void OnParamClick(PlayerParameterType arg1, bool arg2)
+    public void OnParamClick(PlayerParameterType arg1, bool arg2)
     {
         if (arg2)
         {
@@ -58,7 +58,7 @@ public class PlayerStartParametersUI : MonoBehaviour
         {
             parameterUi.UpdateField(_curLevel);
         }
-        RemainField.text = "Remain:" + _remainLevelUp;
+        RemainField.text = Namings.Remain +  ":" + _remainLevelUp;
     }
 
     public void Dispose()

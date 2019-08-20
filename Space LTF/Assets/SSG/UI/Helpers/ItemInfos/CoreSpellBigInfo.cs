@@ -29,8 +29,8 @@ public class CoreSpellBigInfo : AbstractBaseInfoUI
         var costDelay = isZero ? Library.PriorityTargetCostTime : Library.BaitPriorityTargetCostTime;
         var costCount = isZero ? Library.PriorityTargetCostCount : Library.BaitPriorityTargetCostCount;
 
-        CostCountField.text = $"Charges count {costCount}";
-        CostDelayField.text = $"Charges delay {costDelay}";
+        CostCountField.text = String.Format(Namings.ChargesCount, costCount); 
+        CostDelayField.text = String.Format(Namings.ChargesDelay, costDelay); 
     }
 
 

@@ -71,6 +71,8 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
     public bool IsCrahed { get; private set; }
     private bool _inProcess;
     private bool _isRoundAng;
+    private AudioSource Source;
+    private AudioClip Clip;
 
     public event Action<WeaponInGame> OnShootStart;
 
@@ -121,6 +123,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         ReloadSec = weaponInv.ReloadSec;
         CurrentDamage = weaponInv.CurrentDamage;
         bulletOrigin = DataBaseController.Instance.GetBullet(weaponInv.WeaponType);
+        Clip = DataBaseController.Instance.AudioDataBase.ShotWeapon(weaponInv.WeaponType);
     }
 
     public void Init(ShipBase owner)
@@ -283,6 +286,10 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 
     protected virtual void ShootDir(ShipBase target)
     {
+        if (Source != null)
+        {
+            Source.PlayOneShot(Clip);
+        }
         _curPeriodShoots++;
         BulletCreateByDir(target, Owner.LookDirection);
         if (_curPeriodShoots >= _shootPerTime)
@@ -397,9 +404,11 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         return _nextShootTime < Time.time;
     }
 
-    public void SetTransform(Transform transform)
+    public void SetTransform(WeaponPlace transform)
     {
-        ShootPos = transform;
+//        Clip = DataBaseController.Instance.AudioDataBase.GetShot(we)
+        Source = transform.Source;
+            ShootPos = transform.BulletOut;
     }
 
     public Vector3 CurPosition

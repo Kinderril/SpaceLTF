@@ -89,7 +89,8 @@ public class ShieldOffSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return $"Disable shields of ships in radius for {Period.ToString("0")} sec. And damages shield for {SHIELD_DAMAGE}.";
+        return  String.Format(Namings.ShieldOffSpell, Period.ToString("0"), SHIELD_DAMAGE);
+//            $"Disable shields of ships in radius for {Period.ToString("0")} sec. And damages shield for {SHIELD_DAMAGE}.";
     }
 
     //    public void BulletDestroyed(Vector3 position, Bullet bullet)

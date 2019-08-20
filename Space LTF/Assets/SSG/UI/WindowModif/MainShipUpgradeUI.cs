@@ -36,7 +36,7 @@ public class MainShipUpgradeUI : MonoBehaviour
         if (isMax)
         {
 
-            CostField.text = "Max";
+            CostField.text = Namings.MaxLevel;
         }
         else
         {

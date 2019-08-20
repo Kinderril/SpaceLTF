@@ -15,6 +15,7 @@ public class WeaponsController
     public event Action<WeaponInGame> OnWeaponShootStart;
     private BaseEffectAbsorber _weaponCrashEffect;
     private WeaponsAimSectorController AimSectorController;
+//    private AudioClip _maxinSootClip;
 
     public WeaponsController(List<WeaponPlace> weaponPosition, 
         ShipBase owner,WeaponInv[] weapons, BaseModulInv[] moduls,BaseEffectAbsorber weaponCrashEffect)

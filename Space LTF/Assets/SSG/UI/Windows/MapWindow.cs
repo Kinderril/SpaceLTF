@@ -272,7 +272,7 @@ public class MapWindow : BaseWindow
             {
                 if (obj.Completed && obj.OneTimeUsed())
                 {
-                    WindowManager.Instance.InfoWindow.Init(OnMainDialogEnds, "You have been there before.");
+                    WindowManager.Instance.InfoWindow.Init(OnMainDialogEnds, Namings.BeenBefore);
                 }
                 else
                 {

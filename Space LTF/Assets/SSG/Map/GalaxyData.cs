@@ -77,8 +77,11 @@ public class GalaxyData
         
         //Create start sector
         var startSector = allSubSectors.Where(x => x.StartX == 0).ToList().RandomElement();
-        var xCell = startSector.StartX + RndIndex(sizeSector - 1);
-        var zCell = startSector.StartZ + RndIndex(sizeSector);
+        var xCell = startSector.StartX + 1 + RndIndex(sizeSector - 1);
+        var zCell = startSector.StartZ + 1 + RndIndex(sizeSector - 1);
+        xCell = Mathf.Clamp(xCell, startSector.StartX, startSector.StartX + sizeSector - 1);
+        zCell = Mathf.Clamp(zCell, startSector.StartZ, startSector.StartZ + sizeSector - 1);
+
         var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell, startSector);
         startSector.SetCell(startCell,id);
         unPopulatedSectors.Remove(startSector);
@@ -88,8 +91,10 @@ public class GalaxyData
 
         //CreateEndSector   
         var endSector = sectors[sectorsCount - 1, RndIndex(VERTICAL_COUNT)];
+        
+
         xCell = endSector.StartX + 1 + RndIndex(sizeSector - 1);
-        zCell = endSector.StartZ + RndIndex(sizeSector);
+        zCell = endSector.StartZ  + RndIndex(sizeSector);
         var endCell = new EndGlobalCell(Utils.GetId(), xCell, zCell, endSector);
         endSector.SetCell(endCell,id);
         unPopulatedSectors.Remove(endSector);

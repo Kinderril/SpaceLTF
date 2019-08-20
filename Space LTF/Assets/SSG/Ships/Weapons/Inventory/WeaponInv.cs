@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using UnityEditor.Experimental.UIElements.GraphView;
 using UnityEngine;
 
 [System.Serializable]
@@ -230,7 +228,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                 var cost = MoneyConsts.WeaponUpgrade[Level];
                 if (owner.MoneyData.HaveMoney(cost))
                 {
-                    var txt = String.Format("You want to upgrade {0}", Namings.Weapon(WeaponType));
+                    var txt = String.Format( Namings.WANT_UPGRADE_WEAPON , Namings.Weapon(WeaponType));
                     WindowManager.Instance.ConfirmWindow.Init(() =>
                     {
                         owner.MoneyData.RemoveMoney(cost);
@@ -246,7 +244,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null, "Weapon have max level");
+            WindowManager.Instance.InfoWindow.Init(null,  Namings.WeaponMaxLevel);
         }
     }
 

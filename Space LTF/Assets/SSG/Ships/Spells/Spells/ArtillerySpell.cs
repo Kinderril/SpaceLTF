@@ -88,8 +88,8 @@ public class ArtillerySpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return
-            $"Starts fire at selected zone. Total bullets {BulletsCount}. Damage of each bullet:{DAMAGE}/{DAMAGE}.";
+        return String.Format(Namings.ArtillerySpell,BulletsCount,DAMAGE);
+//            $"Starts fire at selected zone. Total bullets {BulletsCount}. Damage of each bullet:{DAMAGE}/{DAMAGE}.";
     }
 }
 

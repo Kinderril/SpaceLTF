@@ -273,41 +273,6 @@ public static class Namings
     public static string Speed = "Speed";
     public static string TurnSpeed = "Turn";
     public static string Unknown = "Unknown";
-//    public static string Destroyed = "Destroyed";
-
-//    public static string SpellDesc(SpellType spellType,int level)
-//    {
-//        switch (spellType)
-//        {
-//            case SpellType.shildDamage:
-//                return $"Disable shields of ships in radius for {ShieldOffSpell.PERIOD.ToString("0")} sec.";
-//            case SpellType.engineLock:
-//                return String.Format("Destroy engines for {0} sec. Work only if shield of target disabled.",EngineLockSpell.LOCK_PERIOD.ToString("0"));
-//            case SpellType.lineShot:
-//                return "Triple shot by selected direction";
-//            case SpellType.throwAround:
-//                return "Create a shockwave witch throw around all ships in radius";
-////            case SpellType.allToBase:
-////                return "Return all ship to base immidiatly";
-////            case SpellType.invisibility:
-////                return "Invisibility";
-//            case SpellType.artilleryPeriod:
-//                return "Start attack zone with artillery";
-//            case SpellType.distShot:
-//                return "Single bullet. Damage dependence on distance. And starts fire on target";
-//            case SpellType.mineField:
-//                return
-//                    $"Settings {MineFieldSpell.MINES_COUNT} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location";
-//            case SpellType.randomDamage:
-//                return "Random damage to all inner moduls of ship. Do not work through shield";
-////            case SpellType.spaceWall:
-////                return String.Format("Creates a wall for {0} sec, whitch destroy all bullet coming to it",ShieldWallSpell.WALL_PERIOD);
-//            default:
-//                throw new ArgumentOutOfRangeException(nameof(spellType), spellType, null);
-//        }
-//
-//        return "TODO DESC";
-//    }
 
     public static string SpellName(SpellType spellType)
     {
@@ -512,4 +477,66 @@ public static class Namings
 
     public static string PriorityTargetDesc = "All your ship will try to attack selected ship.";
     public static string FakePriorityTargetDesc = "All enemies ships will try to attack selected ship";
+    public static string SpellModulChargers = "Charges require: {0} with delay {1} sec.";
+
+    public static string ArtillerySpell =
+        "Starts fire at selected zone. Total bullets {0}. Damage of each bullet:{1}/{1}.";
+
+    public static string DistShotSpell =
+        "Single bullet. Base damage {0}. Additional damage dependence on distance.";
+
+    public static string EnerguLockSpell = "Destroy engines for {0} sec.";
+
+    public static string LineSHotSpell =
+        "Triple shot by selected direction. Base damage: {0}/{1}. And starts fire for {2} sec.";
+
+    public static string MinesSpell =
+        "Set {0} mines for {1} sec to selected location. Each mine damage {2}/{3}";
+
+    public static string RandomDamageSpell =
+        "Random damage to all inner moduls of ship. Do not work through shield for {0} sec.";
+
+    public static string ShieldOffSpell =
+        "Disable shields of ships in radius for {0} sec. And damages shield for {1}.";
+
+    public static string TrowAroundSpell =
+        "Create a shockwave witch throw around all ships in radius with power {0}. And body damage {1}.";
+
+    public static string WANT_UPGRADE_WEAPON = "Do you want to upgrade {0}?";
+    public static string WeaponMaxLevel = "Weapon have max level";
+    public static string SpellMaxLevel = "Spell have max level";
+    public static string Processing = "Processing...";
+    public static string Level = "Level";
+    public static string Win = "Win!";
+    public static string Lose = "Lose";
+    public static string RunAwayComplete = "Run away complete";
+    public static string Type = "Type";
+    public static string Regen = "Regeneration";
+    public static string SheildActive = "Shield is active";
+    public static string SheildRestore = "Shield restoring";
+    public static string SheildDisable = "Shield disabled";
+
+    public static string BattleRestor = "Battery restoring";
+    public static string BattleDisable = "Battery disable";
+    public static string DamageBody = "Damage body";
+    public static string DamageShield = "Damage shield";
+    public static string ChargesCount = "Charges count {0}";
+    public static string ChargesDelay = "Charges delay {0}";
+    public static string Scouted = "Scouted";
+    public static string Gate = "Gate";
+    public static string Home = "Home";
+    public static string Complete = "Complete {0}";
+    public static string Target = "Target {0}";
+    public static string Delay = "Delay";
+    public static string KillUIPilot = "Kills:{0}/{1}";
+    public static string Remain = "Remain";
+    public static string EngineDest = "Engine destroyed";
+    public static string WeaponDest= "Weapon destroyed";
+    public static string ShieldDest = "Shield destroyed";
+    public static string FireDest = "Fire on board";
+    public static string DoWantRetry = "Do you want run away? {0} of your ships will be badly damaged.";
+    public static string BeenBefore = "You have been there before.";
+    public static string NoSafeGame = "No save game";
+    public static string MaxLevel = "Max";
+    public static string And = "And";
 }

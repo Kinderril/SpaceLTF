@@ -11,10 +11,17 @@ public class EngineEffect : MonoBehaviour
     private float _lastFrameSpeed;
     public ParticleSystem[] Particles;
     private bool _failed;
+//    public AudioClip AudioEngine;
+    public AudioSource SourceEngine;
 
     public void Init(MovingObject mobj)
     {
         _mobj = mobj;
+        SourceEngine.loop = true;
+        SourceEngine.volume = 0.3f;
+//        SourceEngine.mute = true;//TOOD DEBUG
+//        SourceEngine = _mobj.Audio;
+        SourceEngine.Play();
     }
 
     void Update()

@@ -31,7 +31,7 @@ public class WindowStart : BaseWindow
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null,"No save game");
+            WindowManager.Instance.InfoWindow.Init(null,Namings.NoSafeGame);
         }
     }
 }

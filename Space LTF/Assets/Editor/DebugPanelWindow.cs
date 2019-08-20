@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEditor;
@@ -41,76 +42,80 @@ public class DebugPanelWindow : EditorWindow
         {
             NoInGame();
         }
-//        EditorGUILayout.BeginHorizontal();
-//        
-//        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Find first AI"))
+        else
         {
-            FindAnyAI();
-        }
-        if (GUILayout.Button("Kill all enemies"))
-        {
-            DebugUtils.KillAllEnemies();
-        }
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("EngineOff:" + EngineOff))
-        {
-            SwitchEngine();
-        }       
-        if (GUILayout.Button("NoDamage:" + NoDamage))
-        {
-            SwitchNoDamage();
-        }
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("NoMouseMove." + NoMouseMove))
-        { 
-            SwitchNoMouseMove();
-        }
 
-        if (GUILayout.Button("FastRecharge." + FastRecharge))
-        {
-            SwitchFastRecharge();
-        }     
-        if (GUILayout.Button("AllModuls." + AllModuls))
-        {
-            AllModuls = !AllModuls;
-            DebugParamsController.AllModuls = AllModuls;
-        }
-        
-        EditorGUILayout.EndHorizontal();
-        //        SelectedShip = (ShipBase)EditorGUILayout.ObjectField("Selected ship ", SelectedShip, typeof(ShipBase), true);     
-        if (GUILayout.Button("Hire test."))
-        {
-            DebugParamsController.TestHire();
-        }
-        if (BattleController.Instance != null && BattleController.Instance.InGameMainUI != null)
-        {
-            var ss = BattleController.Instance.InGameMainUI.SelectedShip;
-            if (ss != null)
+            //        EditorGUILayout.BeginHorizontal();
+            //        
+            //        EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Find first AI"))
             {
-                EditorGUILayout.BeginHorizontal();
-                float externalPower = 14;
-                float externalTime = 0.4f;
-                if (GUILayout.Button("External force"))
+                FindAnyAI();
+            }
+            if (GUILayout.Button("Kill all enemies"))
+            {
+                DebugUtils.KillAllEnemies();
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("EngineOff:" + EngineOff))
+            {
+                SwitchEngine();
+            }
+            if (GUILayout.Button("NoDamage:" + NoDamage))
+            {
+                SwitchNoDamage();
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("NoMouseMove." + NoMouseMove))
+            {
+                SwitchNoMouseMove();
+            }
+
+            if (GUILayout.Button("FastRecharge." + FastRecharge))
+            {
+                SwitchFastRecharge();
+            }
+            if (GUILayout.Button("AllModuls." + AllModuls))
+            {
+                AllModuls = !AllModuls;
+                DebugParamsController.AllModuls = AllModuls;
+            }
+
+            EditorGUILayout.EndHorizontal();
+            //        SelectedShip = (ShipBase)EditorGUILayout.ObjectField("Selected ship ", SelectedShip, typeof(ShipBase), true);     
+            if (GUILayout.Button("Hire test."))
+            {
+                DebugParamsController.TestHire();
+            }
+            if (BattleController.Instance != null && BattleController.Instance.InGameMainUI != null)
+            {
+                var ss = BattleController.Instance.InGameMainUI.SelectedShip;
+                if (ss != null)
                 {
-                    SelectedShip.ExternalForce.Init(externalPower, externalTime, SelectedShip.LookDirection);
+                    EditorGUILayout.BeginHorizontal();
+                    float externalPower = 14;
+                    float externalTime = 0.4f;
+                    if (GUILayout.Button("External force"))
+                    {
+                        SelectedShip.ExternalForce.Init(externalPower, externalTime, SelectedShip.LookDirection);
+                    }
+                    if (GUILayout.Button("External left"))
+                    {
+                        SelectedShip.ExternalForce.Init(externalPower, externalTime, SelectedShip.LookLeft);
+                    }
+                    if (GUILayout.Button("Do damage"))
+                    {
+                        DoDamageToSelected();
+                    }
+                    if (GUILayout.Button("Do fire"))
+                    {
+                        DoFireToSelected();
+                    }
+                    EditorGUILayout.EndHorizontal();
                 }
-                if (GUILayout.Button("External left"))
-                {
-                    SelectedShip.ExternalForce.Init(externalPower, externalTime, SelectedShip.LookLeft);
-                }
-                if (GUILayout.Button("Do damage"))
-                {
-                    DoDamageToSelected();
-                }
-                if (GUILayout.Button("Do fire"))
-                {
-                    DoFireToSelected();
-                }
-                EditorGUILayout.EndHorizontal();
             }
         }
     }
@@ -142,7 +147,124 @@ public class DebugPanelWindow : EditorWindow
         {
             ResetBulletsIds2();
             Repaint();
+        }   
+        if (GUILayout.Button("Set Audio"))
+        {
+            List<GameObject> prefabs = new List<GameObject>();
+            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
+            foreach (var gameObject in prefabs)
+            {
+                AddAudioTest(gameObject);
+            }
+
         }
+    }
+
+    public static void LoadAllPrefabsAt(string path, List<GameObject> prefabs)
+    {
+        if (path != "")
+        {
+            if (path.EndsWith("/"))
+            {
+                path = path.TrimEnd('/');
+            }
+        }
+
+        DirectoryInfo dirInfo = new DirectoryInfo(path);
+        var drer = dirInfo.GetDirectories();
+        foreach (var directoryInfo in drer)
+        {
+            LoadAllPrefabsAt(path +"/" + directoryInfo.Name, prefabs);
+        }
+
+       FileInfo[] fileInf = dirInfo.GetFiles("*.prefab");
+
+        //loop through directory loading the game object and checking if it has the component you want
+        foreach (FileInfo fileInfo in fileInf)
+        {
+            string fullPath = fileInfo.FullName.Replace(@"\", "/");
+            string assetPath = "Assets" + fullPath.Replace(Application.dataPath, "");
+            GameObject prefab = AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject)) as GameObject;
+
+            if (prefab != null)
+            {
+                prefabs.Add(prefab);
+            }
+        }
+    }
+
+    private void AddAudioTest( GameObject PrefabAsset)
+    {
+//        PrefabAsset = EditorGUILayout.ObjectField("Prefab", PrefabAsset, typeof(GameObject), allowSceneObjects: false);
+        var asset_path = AssetDatabase.GetAssetPath(PrefabAsset);
+        var editable_prefab = PrefabUtility.LoadPrefabContents(asset_path);
+
+        // Do your changes here.
+        var ShipBase = editable_prefab.GetComponent<ShipBase>();
+        if (ShipBase == null)
+        {
+            return;
+        }
+        Debug.Log($"{ShipBase.gameObject.name}  SHIP audio COMPLETE");
+        if (ShipBase.ShipVisual.EngineEffect != null)
+        {
+            var source = ShipBase.ShipVisual.EngineEffect.SourceEngine;
+            if (source == null)
+            {
+                //                            PrefabUtility.
+                source = ShipBase.ShipVisual.EngineEffect.gameObject.AddComponent<AudioSource>();
+                ShipBase.ShipVisual.EngineEffect.SourceEngine = source;
+            }
+
+            foreach (var positon in ShipBase.WeaponPosition)
+            {
+                if (positon.Source == null)
+                {
+                    positon.Source = positon.GetComponent<AudioSource>();
+                }
+
+                if (positon.Source == null)
+                {
+                    positon.Source = positon.gameObject.AddComponent<AudioSource>();
+                }
+            }
+
+            ShipType _shipType = ShipType.Base;
+            if (PrefabAsset.name.Contains("Heavy"))
+            {
+                _shipType = ShipType.Heavy;
+            }
+            else if (PrefabAsset.name.Contains("Mid"))
+            {
+                _shipType = ShipType.Middle;
+            }
+            else if (PrefabAsset.name.Contains("Lig"))
+            {
+                _shipType = ShipType.Light;
+            }
+
+            source.clip = DataBaseController.Instance.AudioDataBase.GetEngine(_shipType);
+        }
+
+        var mainSource = ShipBase.Audio;
+        if (mainSource == null)
+        {
+            ShipBase.Audio = ShipBase.gameObject.AddComponent<AudioSource>();
+        }
+
+
+
+        Undo.RecordObject(ShipBase, "Audio FIX");
+        ShipBase.enabled = false;
+
+        // NO SAVE - ArgumentException: Can't save a Prefab instance.
+        //~ PrefabUtility.SavePrefabAsset(editable_prefab);
+        // NO SAVE - Prefab still has MeshRenderer enabled.
+        //~ PrefabUtility.SavePrefabAsset(PrefabAsset);
+        
+        // This save method works.
+        PrefabUtility.SaveAsPrefabAsset(editable_prefab, asset_path);
+        PrefabUtility.UnloadPrefabContents(editable_prefab);
     }
 
     private void FindAnyAI()

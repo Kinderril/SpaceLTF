@@ -64,13 +64,13 @@ public class SpellModulsContainer : MonoBehaviour
         switch (obj)
         {
             case ShieldChangeSt.active:
-                info = "Shield is active";
+                info = Namings.SheildActive; 
                 break;
             case ShieldChangeSt.restoring:
-                info = "Shield restoring";
+                info = Namings.SheildRestore;
                 break;
             case ShieldChangeSt.disable:
-                info = "Shield disabled";
+                info = Namings.SheildDisable;
                 break;
         }
 
@@ -79,7 +79,7 @@ public class SpellModulsContainer : MonoBehaviour
 
     private void DrawRegenEnable(bool isRegenEnable)
     {
-        FieldRegenStatus.text = isRegenEnable ? "Battery restoring" : "Restoring disabled";
+        FieldRegenStatus.text = isRegenEnable ? Namings.BattleRestor  :  Namings.BattleDisable ;
 //        RegenStatus.color = isRegenEnable ? Color.green : Color.red;
     }
 

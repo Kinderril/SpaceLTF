@@ -33,7 +33,7 @@ public class PilotInventoryUI : MonoBehaviour
         _pilot.OnLevelUp += OnLevelUp;
         UpdateTacticField();
         DelaySlider.InitBorders(0f,20f,true);
-        DelaySlider.InitName("Delay");
+        DelaySlider.InitName(Namings.Delay );
         DelaySlider.SetValue(pilot.Delay);
         DelaySlider.InitCallback(SliderChange);
         if (_ship.ShipType == ShipType.Base)
@@ -56,7 +56,7 @@ public class PilotInventoryUI : MonoBehaviour
         RankField.text =_pilot.Stats.CurRank.ToString();
         var kills = _pilot.Stats.Kills;
         var nextKills = (((int) (kills / 10)) + 1) * 10;
-        KillsField.text = $"Kills{kills}/{nextKills}";
+        KillsField.text = String.Format(Namings.KillUIPilot, kills, nextKills);
     }
 
 //    public void OnLevelUpClick()

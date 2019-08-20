@@ -40,33 +40,33 @@ public class WindowNewGame : BaseWindow
     {
         if (PlayerStartParametersUI.CheckFreePoints())
         {
-            WindowManager.Instance.InfoWindow.Init(null, "Distribute the remaining points");
+            PlayerStartParametersUI.OnParamClick(PlayerParameterType.repair, true);
+            PlayerStartParametersUI.OnParamClick(PlayerParameterType.scout, true);
         }
-        else
-        {
-            var posibleStartSpells = new List<SpellType>()
-        {
-            SpellType.lineShot,
-            SpellType.engineLock,
-            SpellType.shildDamage,
-            SpellType.mineField,
-            SpellType.throwAround,
-            SpellType.distShot,
-            SpellType.artilleryPeriod,
+     
+        var posibleStartSpells = new List<SpellType>()
+    {
+        SpellType.lineShot,
+        SpellType.engineLock,
+        SpellType.shildDamage,
+        SpellType.mineField,
+        SpellType.throwAround,
+        SpellType.distShot,
+        SpellType.artilleryPeriod,
 //            SpellType.spaceWall,
-        };
+    };
 #if UNITY_EDITOR
-            posibleStartSpells = new List<SpellType>();
-            posibleStartSpells.Add(SpellType.engineLock);
+        posibleStartSpells = new List<SpellType>();
+        posibleStartSpells.Add(SpellType.engineLock);
 
 #endif
-            List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
-            var gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
-                ArmyTypeSelectorUI.Selected, posibleStartWeapons, 
-                SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(), 
-                BasePower.GetValueInt(), posibleStartSpells.RandomElement());
-            MainController.Instance.CreateNewPlayerAndStartGame(gameData);
-        }
+        List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
+        var gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
+            ArmyTypeSelectorUI.Selected, posibleStartWeapons, 
+            SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(), 
+            BasePower.GetValueInt(), posibleStartSpells.RandomElement());
+        MainController.Instance.CreateNewPlayerAndStartGame(gameData);
+        
     }
 
     public void OnClickRandomStart()

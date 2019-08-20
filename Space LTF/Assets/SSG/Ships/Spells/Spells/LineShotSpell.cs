@@ -75,8 +75,8 @@ public class LineShotSpell : BaseSpellModulInv
 
     public override string Desc()
     {
-        return
-            $"Triple shot by selected direction. Base damage: {CurrentDamage.BodyDamage}/{CurrentDamage.ShieldDamage}. And starts fire for {FirePeriod} sec.";
+        return      String.Format(Namings.LineSHotSpell, CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod);
+//            $"Triple shot by selected direction. Base damage: {CurrentDamage.BodyDamage}/{CurrentDamage.ShieldDamage}. And starts fire for {FirePeriod} sec.";
     }
 }
 

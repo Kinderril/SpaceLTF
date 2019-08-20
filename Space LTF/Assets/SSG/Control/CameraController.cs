@@ -22,6 +22,7 @@ public class CameraController : MonoBehaviour
     private float _period;
     public Camera Camera;
     private bool _isEnable = true;
+    public AudioSource SourceAmbient;
 
     public void InitBorders(Vector3 min, Vector3 max)
     {

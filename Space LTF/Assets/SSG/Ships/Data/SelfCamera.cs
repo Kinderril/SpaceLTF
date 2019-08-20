@@ -20,6 +20,7 @@ public class SelfCamera : MonoBehaviour
         Camera.enabled = true;
         _rawImage = rawImage;
         _textureWithPool = DataBaseController.Instance.PoolRenderTextures.GetTexture();
+//        _textureWithPool.RenderTexture.height
         Camera.targetTexture = _textureWithPool.RenderTexture;
         rawImage.texture = _textureWithPool.RenderTexture;
         _isInited = true;

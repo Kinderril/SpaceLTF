@@ -17,7 +17,7 @@ public class StartWeaponToggleUI : MonoBehaviour
 
     public void Init(WeaponsPair weaponsPair, Action<StartWeaponToggleUI> oncallback,bool interactable)
     {
-        Field.text = Namings.Weapon(weaponsPair.Part1) + " And " + Namings.Weapon(weaponsPair.Part2);
+        Field.text = $"{Namings.Weapon(weaponsPair.Part1)} {Namings.And} {Namings.Weapon(weaponsPair.Part2)}";
         this.oncallback = oncallback;
         WeaponsPair = weaponsPair;
         Toggle.interactable = interactable;

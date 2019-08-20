@@ -80,7 +80,8 @@ public class ThrowAroundSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return $"Create a shockwave witch throw around all ships in radius with power {powerThrow}. And body damage {bodyDamage}.";
+        return String.Format(Namings.TrowAroundSpell, powerThrow, bodyDamage);
+//            $"Create a shockwave witch throw around all ships in radius with power {powerThrow}. And body damage {bodyDamage}.";
     }
 }
 

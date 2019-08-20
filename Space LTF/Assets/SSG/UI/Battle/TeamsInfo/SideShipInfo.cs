@@ -132,8 +132,8 @@ public class SideShipInfo : MonoBehaviour
             //FullOpenHolder.gameObject.SetActive(true);
             //ControlBlockHolder.SetParent(FullOpenHolder, false);
             _ship.SelfCamera.Init(RawImage);
-            if (BackRawImage.texture == null)
-                BackRawImage.texture = DataBaseController.Instance.DataStructPrefabs.BackgroundRenderTexture;
+//            if (BackRawImage.texture == null)
+//                BackRawImage.texture = DataBaseController.Instance.DataStructPrefabs.BackgroundRenderTexture;
         }
         else
         {

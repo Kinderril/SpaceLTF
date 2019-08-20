@@ -170,6 +170,10 @@ public class BattleController :Singleton<BattleController>
         await Task.Yield();
 
         CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition);
+        CamerasController.Instance.GameCamera.SourceAmbient.clip =
+            DataBaseController.Instance.AudioDataBase.AmbientsClips.RandomElement();
+        CamerasController.Instance.GameCamera.SourceAmbient.Play();
+
     }
 
     private void RandomizeColorAndAng()
@@ -390,6 +394,7 @@ public class BattleController :Singleton<BattleController>
 
     public void EndPart2Battle()
     {
+        CamerasController.Instance.GameCamera.SourceAmbient.Stop();
         Debug.Log("End battle 2 LastWinner:" + LastWinner.ToString());
         if (LastWinner == EndBattleType.win)
         {

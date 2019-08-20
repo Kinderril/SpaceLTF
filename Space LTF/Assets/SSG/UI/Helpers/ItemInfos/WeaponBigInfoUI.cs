@@ -143,12 +143,11 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         WeaponLevelField.text = _weapon.Level.ToString();
         if (!canUpg)
         {
-            WeaponLevelField.text = "Max level";
+            WeaponLevelField.text = Namings.WeaponMaxLevel;
         }
         else
         {
-
-            WeaponLevelField.text = String.Format("Level {0}",_weapon.Level.ToString());
+            WeaponLevelField.text = Namings.Level + ":" + _weapon.Level.ToString();
         }
         var canUpgrade = MoneyConsts.WeaponUpgrade.ContainsKey(_weapon.Level);
 //        WeaponLevelField.gameObject.SetActive(!canUpgrade);

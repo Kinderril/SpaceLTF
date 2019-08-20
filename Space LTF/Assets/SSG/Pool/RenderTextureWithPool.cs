@@ -11,6 +11,11 @@ public  class RenderTextureWithPool
     public RenderTexture RenderTexture;
     public bool IsFree;
 
+    public void Init(int w, int h)
+    {
+        RenderTexture = new RenderTexture(w,h,1);
+    }
+
     public void SetFree()
     {
         IsFree = true;
@@ -19,6 +24,12 @@ public  class RenderTextureWithPool
     public void SetUsed()
     {
         IsFree = false;
+    }
+
+    public void SetSize(int height)
+    {
+        Debug.LogError($"Set size {height}  {RenderTexture.name}");
+        RenderTexture.height = height;
     }
 }
 

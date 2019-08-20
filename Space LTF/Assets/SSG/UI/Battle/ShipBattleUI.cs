@@ -16,10 +16,10 @@ public class ShipBattleUI : MonoBehaviour
 
     public void Init(ShipParameters shipParameters,IPilotParameters pilotParams)
     {
-        LevelField.text = "Level:" + pilotParams.CurLevel.ToString();
-        ShipType.text = "Type:" + shipParameters.StartParams.ShipType.ToString();
-        MaxSpeed.text = "Speed:" + shipParameters.MaxSpeed.ToString("0.0");
-        ShieldRegenPerSec.text = "Regen:" + shipParameters.ShieldRegenPerSec.ToString("0.0");
+        LevelField.text =Namings.Level + ":" + pilotParams.CurLevel.ToString();
+        ShipType.text =  Namings.Type +  ":" + shipParameters.StartParams.ShipType.ToString();
+        MaxSpeed.text = Namings.Speed + ":" + shipParameters.MaxSpeed.ToString("0.0");
+        ShieldRegenPerSec.text = Namings.Regen + ":" + shipParameters.ShieldRegenPerSec.ToString("0.0");
     }
 
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class SpellButton : MonoBehaviour
+public class SpellButton : UIElementWithTooltip
 {
     private SpellInGame _spell;
     private Action<SpellInGame> OnSpellClick;
@@ -74,5 +74,9 @@ public class SpellButton : MonoBehaviour
         _inGameMain.OnSelectSpell -= OnSelectSpell;
     }
 
+    protected override string TextToTooltip()
+    {
+        return String.Format(_spell.Name);
+    }
 }
 
