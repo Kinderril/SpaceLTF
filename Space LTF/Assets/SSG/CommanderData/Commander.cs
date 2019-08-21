@@ -60,8 +60,7 @@ public class Commander
         _paramsOfShips = player.GetShipsToBattle();
         Battlefield = battlefield;
         _teamIndex = teamIndex;
-        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(),true,
-            player.Parameters.ChargesSpeed.Level);
+        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(),player.Parameters.ChargesSpeed.Level);
 //        RewardController= new CommanderRewardController(this);
         SpellController = new CommanderSpells(this);
     }
@@ -102,14 +101,7 @@ public class Commander
                 }
             }
             CoinController.Init(MainShip);
-            if (CoinController.EnableCharge)
-            {
-                MainShip.ShipParameters.ShieldParameters.Disable();
-            }
-            else
-            {
-                MainShip.ShipParameters.ShieldParameters.Enable();
-            }
+            MainShip.ShipParameters.ShieldParameters.Enable();
         }
 
         return Ships;
@@ -220,10 +212,10 @@ public class Commander
         }
     }
 
-    public void ChangeShieldControlCenter()
-    {
-        CoinController.ChangeRegenEnable();
-    }
+//    public void ChangeShieldControlCenter()
+//    {
+//        CoinController.ChangeRegenEnable();
+//    }
 
     public void UpdateManual()
     {
@@ -352,6 +344,7 @@ public class Commander
             CoinController.UseCoins(c,delay);
             var maxShield = ship.ShipParameters.ShieldParameters.MaxShield;
             var countToHeal = maxShield*percent;
+            ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
             ship.ShipParameters.ShieldParameters.HealShield(countToHeal);
             return true;
         }
@@ -361,10 +354,11 @@ public class Commander
     {
         var c = Library.COINS_TO_CHARGE_SHIP_SHIELD;
         var delay = Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY;
-        var percent = Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT;
+//        var percent = Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT;
         if (CoinController.CanUseCoins(c))
         {
             CoinController.UseCoins(c,delay);
+            ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.BufffShip);
             ship.BuffData.Apply();
             //ship.WeaponsController.TryWeaponReload();
             return true;
@@ -372,5 +366,25 @@ public class Commander
         return false;
     }
 
+    public void ExtraCharge()
+    {
+        var cointToReCharge =(int) (MainShip.ShipParameters.ShieldParameters.CurShiled/Library.SHIELD_COEF_EXTRA_CHARGE);
+        if (cointToReCharge > 0)
+        {
+            int notCharged = CoinController.NotChargedCoins();
+            if (notCharged < cointToReCharge)
+            {
+                cointToReCharge = notCharged;
+            }
+
+            if (cointToReCharge > 0)
+            {
+                var sheildToClear = cointToReCharge * Library.SHIELD_COEF_EXTRA_CHARGE;
+                MainShip.ShipParameters.ShieldParameters.CurShiled =
+                    MainShip.ShipParameters.ShieldParameters.CurShiled - sheildToClear;
+                CoinController.RechargerCoins(sheildToClear);
+            }
+        }
+    }
 }
 

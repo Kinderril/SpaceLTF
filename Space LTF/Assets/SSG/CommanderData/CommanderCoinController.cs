@@ -13,17 +13,17 @@ public class CommanderCoinController
     private CommandCoin[] _coins ;
     private int availableCount;
     public event Action<CommandCoin, bool> OnCoinChange;
-    public event Action< bool> OnRegenEnable;
+//    public event Action< bool> OnRegenEnable;
     private ShipBase _controlShip;
-    private bool _isRegenEnable = true;
-    public event Action<bool> OnRegenEnableChange;
+//    private bool _isRegenEnable = true;
+//    public event Action<bool> OnRegenEnableChange;
 
-    public bool EnableCharge { get; private set; }
+//    public bool EnableCharge { get; private set; }
 
     public float CoefSpeed  { get; private set; }
 //    private bool _isRegenEnable;
 
-public CommanderCoinController(int coinsCount,bool enableCharge,int levelcharges)
+public CommanderCoinController(int coinsCount,int levelcharges)
     {
         CoefSpeed = 1 - (levelcharges - 1)* Library.CHARGE_SPEED_COEF_PER_LEVEL;
         availableCount = coinsCount;
@@ -33,10 +33,10 @@ public CommanderCoinController(int coinsCount,bool enableCharge,int levelcharges
             CommandCoin c1 = new CommandCoin(i+1,CoefSpeed);
             c1.OnUsed += CoinUsed;
             _coins[i] = (c1);
-            c1.EnableRegen(enableCharge);
+            c1.EnableRegen(true);
         }
 
-        EnableCharge = enableCharge;
+//        EnableCharge = enableCharge;
 //        DrawRegenEnable();
     }
 
@@ -105,47 +105,71 @@ public CommanderCoinController(int coinsCount,bool enableCharge,int levelcharges
 
     }
 
-    public void ChangeRegenEnable()
-    {
-        _isRegenEnable = !_isRegenEnable;
+//    public void ChangeRegenEnable()
+//    {
+//        _isRegenEnable = !_isRegenEnable;
+//
+//        EnableRegen(_isRegenEnable);
+//        if (_isRegenEnable)
+//        {
+//            _controlShip.ShipParameters.ShieldParameters.Disable();
+//        }
+//        else
+//        {
+//            _controlShip.ShipParameters.ShieldParameters.Enable();
+//        }
+//        if (OnRegenEnableChange != null)
+//        {
+//            OnRegenEnableChange(_isRegenEnable);
+//        }
+//    }
 
-        EnableRegen(_isRegenEnable);
-        if (_isRegenEnable)
-        {
-            _controlShip.ShipParameters.ShieldParameters.Disable();
-        }
-        else
-        {
-            _controlShip.ShipParameters.ShieldParameters.Enable();
-        }
-        if (OnRegenEnableChange != null)
-        {
-            OnRegenEnableChange(_isRegenEnable);
-        }
-    }
-
-    public bool IsEnable
-    {
-        get { return _isRegenEnable; }
-    }
+//    public bool IsEnable
+//    {
+//        get { return _isRegenEnable; }
+//    }
 
     public void Init(ShipBase controlShip)
     {
         _controlShip = controlShip;
     }
 
-    public void EnableRegen(bool b)
+//    public void EnableRegen(bool b)
+//    {
+////        _isRegenEnable = b;
+////        DrawRegenEnable();
+//        for (int i = 0; i < _coins.Length; i++)
+//        {
+//            var c = _coins[i];
+//            c.EnableRegen(b);
+//        }
+//        if (OnRegenEnable != null)
+//        {
+//            OnRegenEnable(b);
+//        }
+//    }
+    public int NotChargedCoins()
     {
-//        _isRegenEnable = b;
-//        DrawRegenEnable();
-        for (int i = 0; i < _coins.Length; i++)
+        int c = 0;
+        foreach (var commandCoin in _coins)
         {
-            var c = _coins[i];
-            c.EnableRegen(b);
+            if (commandCoin.Used)
+            {
+                c++;
+            }
         }
-        if (OnRegenEnable != null)
+
+        return c;
+    }
+
+    public void RechargerCoins(int sheildToClear)
+    {
+        var coinsToRecgarge = _coins.OrderBy(x => x.RemainTime()).ToArray();
+        var coint = Mathf.Min(sheildToClear, _coins.Length);
+        for (int i = 0; i < coint; i++)
         {
-            OnRegenEnable(b);
+            var coin = coinsToRecgarge[i];
+            coin.Recharge();
         }
     }
 }

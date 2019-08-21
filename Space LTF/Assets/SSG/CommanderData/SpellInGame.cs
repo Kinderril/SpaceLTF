@@ -102,6 +102,7 @@ public class SpellInGame : IWeapon
 
     public void StartShowCast()
     {
+        _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.SelectSpell);
         if (ShowLine)
         {
             if (LineObjectToShow == null)
@@ -141,6 +142,7 @@ public class SpellInGame : IWeapon
 
     public void Cast(Vector3 target)
     {
+        _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetCastSpell(SpellType));
         CastSpell(new BulletTarget(target), _bulletOrigin, this, _modulPos, _bulletStartParams);
     }
 

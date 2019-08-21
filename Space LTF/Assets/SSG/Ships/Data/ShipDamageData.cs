@@ -67,6 +67,8 @@ public class ShipDamageData : ShipData
 
         damagedDetails[damageType] = true;
         var info = Namings.Damage(damageType, time);
+        _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetDamageSpell(damageType));
+
         switch (damageType)
         {
             case ShipDamageType.engine:

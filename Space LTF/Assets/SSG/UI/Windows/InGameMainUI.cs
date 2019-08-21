@@ -140,6 +140,11 @@ public class InGameMainUI : BaseWindow
 #endif
     }
 
+    public void OnClickExtraCharge()
+    {
+        MyCommander.ExtraCharge();
+    }
+
     private void UnselectSpell()
     {
         _spellSelected = null;

@@ -55,11 +55,11 @@ public class WindowNewGame : BaseWindow
         SpellType.artilleryPeriod,
 //            SpellType.spaceWall,
     };
-#if UNITY_EDITOR
-        posibleStartSpells = new List<SpellType>();
-        posibleStartSpells.Add(SpellType.engineLock);
-
-#endif
+//#if UNITY_EDITOR
+//        posibleStartSpells = new List<SpellType>();
+//        posibleStartSpells.Add(SpellType.engineLock);
+//
+//#endif
         List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
         var gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
             ArmyTypeSelectorUI.Selected, posibleStartWeapons, 

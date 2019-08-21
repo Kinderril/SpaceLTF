@@ -53,6 +53,7 @@ public class WaitHealAction : BaseAction
         {
             _nextStep = 1 + _nextStep;
             _owner.ShipParameters.HealHp(_hpPercentHeal);
+            _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
             _owner.ShipParameters.ShieldParameters.HealShield(_sdPercentHeal);
             _secRemain--;
         }

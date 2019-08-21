@@ -32,15 +32,21 @@ public class CommandCoin
                 OnUsed(this, value);
         }
     }
+    public void Recharge()
+    {
+        timer.Stop();
+        Used = false;
+        _remainPercent = 0f;
+    }
 
 
-//    public void SetUsed(ShipBase selectedShip)
-//    {
-//        _ship = selectedShip;
-////        _ship.AddCoin();
-//        _ship.OnDispose += OnDispose;
-//        SetUsed();
-//    }
+    //    public void SetUsed(ShipBase selectedShip)
+    //    {
+    //        _ship = selectedShip;
+    ////        _ship.AddCoin();
+    //        _ship.OnDispose += OnDispose;
+    //        SetUsed();
+    //    }
 
     public float Percent()
     {
@@ -114,4 +120,5 @@ public class CommandCoin
     {
         return _remainPercent;
     }
+
 }

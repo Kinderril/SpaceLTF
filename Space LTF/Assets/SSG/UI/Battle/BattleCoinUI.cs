@@ -17,7 +17,7 @@ public class BattleCoinUI :MonoBehaviour
     {
 //        RegenIcon.color = Color.blue;
         _coinController = coinController;
-        _coinController.OnRegenEnable += OnRegenEnable;
+//        _coinController.OnRegenEnable += OnRegenEnable;
         var allCoins = _coinController.GetAllCoins();
         foreach (var commandCoin in allCoins)
         {
@@ -27,7 +27,7 @@ public class BattleCoinUI :MonoBehaviour
             c.Init(commandCoin,CoinUISetUsed);
         }
 
-        OnRegenEnable(_coinController.EnableCharge);
+        OnRegenEnable(true);
 //        _coinController.OnCoinChange += OnCoinChange;
     }
 
@@ -51,7 +51,7 @@ public class BattleCoinUI :MonoBehaviour
 
     public void Dispose()
     {
-        _coinController.OnRegenEnable -= OnRegenEnable;
+//        _coinController.OnRegenEnable -= OnRegenEnable;
         foreach (var coinUi in _coins)
         {
             coinUi.Dispose();

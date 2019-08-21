@@ -92,6 +92,7 @@ public static class Library
     public const int BaitPriorityTargetCostTime = 120;
     public const int BaitPriorityTargetCostCount = 2;
     public const int CRITICAL_DAMAGES_TO_DEATH = 2;
+    public const int SHIELD_COEF_EXTRA_CHARGE = 10;
 
 
     #region GLOBAL_MAP_DATA
@@ -219,7 +220,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 52, 10, 0.01f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 33, 10, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.raiders:
@@ -245,7 +246,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 22, 41, 2.2f, 53, 3, 3, 0, 1, 0.4f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 31, 54, 0.01f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 15, 47, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.mercenary:
@@ -258,7 +259,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 34, 45, 0.01f, 40, 0, 0, 3, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 36, 25, 0.01f, 40, 0, 0, 3, 1, 0f), player);
                 }
 
                 break;
@@ -272,7 +273,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 50, 30, 0.01f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 30, 30, 0.01f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.ocrons:
@@ -285,7 +286,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 62, 0, 0.01f, 40, 0, 0, 1, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 56, 10, 0.01f, 40, 0, 0, 1, 1, 0f), player);
                 }
                 break;
             default:

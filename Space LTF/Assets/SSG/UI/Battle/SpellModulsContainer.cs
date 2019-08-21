@@ -11,8 +11,8 @@ public class SpellModulsContainer : MonoBehaviour
 {
     public Transform Layout;
 //    public Image RegenStatus;
-    public TextMeshProUGUI FieldRegenStatus;
-    public TextMeshProUGUI MainShipStatusField;
+//    public TextMeshProUGUI FieldRegenStatus;
+//    public TextMeshProUGUI MainShipStatusField;
     private List<SpellButton> _buttons = new List<SpellButton>();
     private ShipBase _mainShip;
 
@@ -39,10 +39,10 @@ public class SpellModulsContainer : MonoBehaviour
             }
         }
 
-        OnStateChange(_mainShip.ShipParameters.ShieldParameters.State);
-        OnRegenEnableChange(_mainShip.Commander.CoinController.IsEnable);
-        _mainShip.Commander.CoinController.OnRegenEnableChange += OnRegenEnableChange;
-        _mainShip.ShipParameters.ShieldParameters.OnStateChange += OnStateChange;
+//        OnStateChange(_mainShip.ShipParameters.ShieldParameters.State);
+//        OnRegenEnableChange(_mainShip.Commander.CoinController.IsEnable);
+//        _mainShip.Commander.CoinController.OnRegenEnableChange += OnRegenEnableChange;
+//        _mainShip.ShipParameters.ShieldParameters.OnStateChange += OnStateChange;
     }
 
 //    private void SpellSelected(SpellInGame spell)
@@ -53,41 +53,41 @@ public class SpellModulsContainer : MonoBehaviour
 //        }
 //    }
 
-    private void OnRegenEnableChange(bool obj)
-    {
-        DrawRegenEnable(obj);
-    }
+//    private void OnRegenEnableChange(bool obj)
+//    {
+//        DrawRegenEnable(obj);
+//    }
 
-    private void OnStateChange(ShieldChangeSt obj)
-    {
-        string info = "";
-        switch (obj)
-        {
-            case ShieldChangeSt.active:
-                info = Namings.SheildActive; 
-                break;
-            case ShieldChangeSt.restoring:
-                info = Namings.SheildRestore;
-                break;
-            case ShieldChangeSt.disable:
-                info = Namings.SheildDisable;
-                break;
-        }
+//    private void OnStateChange(ShieldChangeSt obj)
+//    {
+//        string info = "";
+//        switch (obj)
+//        {
+//            case ShieldChangeSt.active:
+//                info = Namings.SheildActive; 
+//                break;
+//            case ShieldChangeSt.restoring:
+//                info = Namings.SheildRestore;
+//                break;
+//            case ShieldChangeSt.disable:
+//                info = Namings.SheildDisable;
+//                break;
+//        }
+//
+//        MainShipStatusField.text = info;
+//    }
 
-        MainShipStatusField.text = info;
-    }
-
-    private void DrawRegenEnable(bool isRegenEnable)
-    {
-        FieldRegenStatus.text = isRegenEnable ? Namings.BattleRestor  :  Namings.BattleDisable ;
-//        RegenStatus.color = isRegenEnable ? Color.green : Color.red;
-    }
+//    private void DrawRegenEnable(bool isRegenEnable)
+//    {
+////        FieldRegenStatus.text = isRegenEnable ? Namings.BattleRestor  :  Namings.BattleDisable ;
+////        RegenStatus.color = isRegenEnable ? Color.green : Color.red;
+//    }
 
 
     public void Dispose()
     {
-        _mainShip.Commander.CoinController.OnRegenEnableChange -= OnRegenEnableChange;
-        _mainShip.ShipParameters.ShieldParameters.OnStateChange -= OnStateChange;
+//        _mainShip.Commander.CoinController.OnRegenEnableChange -= OnRegenEnableChange;
+//        _mainShip.ShipParameters.ShieldParameters.OnStateChange -= OnStateChange;
         foreach (var spellButton in _buttons)
         {
             spellButton.Dispose();

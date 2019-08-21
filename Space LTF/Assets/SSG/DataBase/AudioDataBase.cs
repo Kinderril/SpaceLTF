@@ -28,6 +28,15 @@ public class AudioDataBase : MonoBehaviour
 
     private List<AudioClip> _shipHits = new List<AudioClip>();
 
+    public AudioClip SelectSpell;
+    public AudioClip CastDefaultSpell;
+    public AudioClip HealSheild;
+    public AudioClip BufffShip;
+    public AudioClip EngineDamage;
+    public AudioClip WeaponDamage;
+    public AudioClip ShieldDamage;
+    public AudioClip FireDamage;
+
     public void Init()
     {
         _shipHits.Add(ShipHit1);
@@ -117,4 +126,25 @@ public class AudioDataBase : MonoBehaviour
         return DefaultShot;
     }
 
+    public AudioClip GetCastSpell(SpellType spellType)
+    {
+        return CastDefaultSpell;
+    }
+
+    public AudioClip GetDamageSpell(ShipDamageType damageType)
+    {
+        switch (damageType)
+        {
+            case ShipDamageType.engine:
+                return EngineDamage;
+            case ShipDamageType.weapon:
+                return WeaponDamage;
+            case ShipDamageType.shiled:
+                return ShieldDamage;
+            case ShipDamageType.fire:
+                return FireDamage;
+        }
+
+        return DefaultShot;
+    }
 }

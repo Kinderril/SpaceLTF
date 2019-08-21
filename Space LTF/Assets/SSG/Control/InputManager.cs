@@ -189,13 +189,13 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void MainShipControls()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            _commander.ChangeShieldControlCenter();
-        }
-    }
+//    private void MainShipControls()
+//    {
+//        if (Input.GetKeyDown(KeyCode.LeftShift))
+//        {
+//            _commander.ChangeShieldControlCenter();
+//        }
+//    }
 
 //    private void CameraMove()
 //    {
@@ -233,7 +233,7 @@ public class InputManager : MonoBehaviour
 
     private void UpdateKeyboard()
     {
-        MainShipControls();
+//        MainShipControls();
         SpellsKeyboard();
         NumbersClick();
 //        CameraMove();

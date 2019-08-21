@@ -52,12 +52,12 @@ public class PlayerStatistics
     {
         if (OpenShipsTypes.Count == 0)
         {
-            var sc1 = new OpenShipConfig(ShipConfig.raiders);
-            var sc2 = new OpenShipConfig(ShipConfig.mercenary);
+            var sc1 = new OpenShipConfig(ShipConfig.mercenary);
+            var sc2 = new OpenShipConfig(ShipConfig.raiders);
             var sc3 = new OpenShipConfig(ShipConfig.federation);
             var sc4 = new OpenShipConfig(ShipConfig.ocrons);
             var sc5 = new OpenShipConfig(ShipConfig.krios);
-            sc2.IsOpen = true;
+            sc1.IsOpen = true;
 #if UNITY_EDITOR
             sc1.IsOpen = sc2.IsOpen = sc3.IsOpen = sc4.IsOpen = sc5.IsOpen = true;
 #endif

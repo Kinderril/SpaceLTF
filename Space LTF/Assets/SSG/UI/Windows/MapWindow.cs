@@ -366,40 +366,7 @@ public class MapWindow : BaseWindow
         isArmyActive = val;
     }
 
-    public void OnDebugAddRep()
-    {
-#if UNITY_EDITOR
 
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(6);
-#endif
-    }
-
-    public void OnDebugAddMoney()
-    {
-#if UNITY_EDITOR      
-        MainController.Instance.MainPlayer.MoneyData.AddMoney(100);
-#endif
-
-    }
-
-    public void OnDebugScoutedAll()
-    {
-#if UNITY_EDITOR      
-        var s = MainController.Instance.MainPlayer.MapData.GalaxyData;
-        for (int i = 0; i < s.Size; i++)
-        {
-            for (int j = 0; j < s.Size; j++)
-            {
-                var cell = s.AllCells()[i, j];
-                if (cell != null)
-                    cell.Scouted();
-            }
-        }
-
-//        .AddMoney(100);
-#endif
-
-    }
 
     private void EnableModif(bool val)
     {

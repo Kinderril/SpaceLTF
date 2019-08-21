@@ -23,11 +23,21 @@ public class CameraController : MonoBehaviour
     public Camera Camera;
     private bool _isEnable = true;
     public AudioSource SourceAmbient;
+    public AudioListener MainListerer;
+    private bool isAudioEnabled = true;
 
     public void InitBorders(Vector3 min, Vector3 max)
     {
         _min = min;
         _max = max;
+    }
+
+    public void MainListenerSwitch()
+    {
+        isAudioEnabled = !isAudioEnabled;
+
+        AudioListener.volume = isAudioEnabled?1f:0f;
+//        MainListerer.
     }
 
     public void Enable(bool val)
