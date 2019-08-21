@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class DebugParamsController
 {
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 
     public static bool EngineOff;
     public static bool NoDamage;
@@ -13,7 +13,7 @@ public class DebugParamsController
     public static bool FastRecharge;
     public static bool AllModuls = false;
 
-#endif
+//#endif
 
     public DebugParamsController()
     {
