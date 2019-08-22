@@ -50,6 +50,7 @@ public class BattleController :Singleton<BattleController>
     public event Action<ShipBase, bool> OnShipAdd;
     public bool CanFastEnd = false;
     public BattleState State;
+//    private float _lastTimeDelta = 1f;
 
     public List<Bullet> ActiveBullet = new List<Bullet>();
     public Transform BulletContainer;
@@ -75,7 +76,12 @@ public class BattleController :Singleton<BattleController>
         await Task.Delay(100);
 
         RandomizeColorAndAng();
-        PauseData.Unpase();
+        if (PauseData == null)
+        {
+            PauseData = new PauseData();
+        }
+
+        PauseData.Unpase(1f);
         CamerasController.Instance.StartBattle();
         CanFastEnd = false;
         State = BattleState.preStart;
@@ -163,6 +169,7 @@ public class BattleController :Singleton<BattleController>
         GreenCommander.LaunchAll(ShipInited, CommanderDeath);
         RedCommander.LaunchAll(ShipInited, CommanderDeath);
 
+//        Time.timeScale = 1f;
         State = BattleState.process;
 
         await Task.Yield();
@@ -174,7 +181,6 @@ public class BattleController :Singleton<BattleController>
         ambientSource.clip = DataBaseController.Instance.AudioDataBase.AmbientsClips.RandomElement();
         ambientSource.volume = 0.2f;
         ambientSource.Play();
-
     }
 
     private void RandomizeColorAndAng()
@@ -234,7 +240,7 @@ public class BattleController :Singleton<BattleController>
     private void CheckEndBattle(ShipBase lastShip)
     {
 
-        PauseData.Unpase();
+        PauseData.Unpase(1f);
         IsWin();
         if (lastShip.ShipParameters.StartParams.ShipType == ShipType.Base)
         {
@@ -427,6 +433,11 @@ public class BattleController :Singleton<BattleController>
                 MainController.Instance.EndGameRunAway();
                 break;
         }
+    }
+
+    public void ChangerCoreTimeSpeed(float delta)
+    {
+        PauseData.ChangeCoreSpeed(delta);
     }
 
     public void Dispose()

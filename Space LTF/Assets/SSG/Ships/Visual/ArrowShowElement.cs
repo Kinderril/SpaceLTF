@@ -5,7 +5,9 @@ using System.Text;
 using UnityEngine;
 
 
-  public  class ArrowShowElement : MonoBehaviour
-    {
-    }
+public  class ArrowShowElement : MonoBehaviour
+{
+  public GameObject GO1;
+  public GameObject GO2;
+}
 

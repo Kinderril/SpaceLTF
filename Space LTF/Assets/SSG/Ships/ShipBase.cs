@@ -66,8 +66,8 @@ public class ShipBase : MovingObject
     public BaseEffectAbsorber RepairEffect;
     public BaseEffectAbsorber PeriodDamageEffect;
     public BaseEffectAbsorber WeaponCrashEffect;
-    
 
+    private ArrowTarget Arrow;
     public ShipParameters ShipParameters { get; private set; }
     public ShipModuls ShipModuls { get; private set; }
     public ShipPersonalInfo Target;
@@ -164,6 +164,13 @@ public class ShipBase : MovingObject
         BuffData = new ShipBuffData(this);
         DamageData.Activate();
         PathController.Activate();
+        if (TeamIndex == TeamIndex.green)
+        {
+            Arrow = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.ArrowTargetPersonal);
+            Arrow.transform.SetParent(transform);
+            Arrow.transform.localPosition = Vector3.zero;
+            Arrow.SetOwner(this);
+        }
     }
 
     private void InitPriorityObjects()
@@ -238,6 +245,10 @@ public class ShipBase : MovingObject
 
     public void Dispose()
     {
+        if (Arrow != null)
+        {
+            Arrow.Disable();
+        }
         VisibilityData.Dispose();
         IsInited = false;
         if (OnDispose != null)

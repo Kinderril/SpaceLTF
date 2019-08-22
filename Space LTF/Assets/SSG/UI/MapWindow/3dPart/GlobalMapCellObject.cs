@@ -16,6 +16,8 @@ public class GlobalMapCellObject : MonoBehaviour
     public GameObject Event;
     public GameObject Repair;
     public GameObject Destroyed;
+    public GameObject ExitObject;
+    public GameObject StartObject;
     public Renderer ActiveRenderer;
 
     private GameObject ObjectPainted;
@@ -55,6 +57,8 @@ public class GlobalMapCellObject : MonoBehaviour
         Event.gameObject.SetActive(false);
         Repair.gameObject.SetActive(false);
         Destroyed.gameObject.SetActive(false);
+        ExitObject.gameObject.SetActive(false);
+        StartObject.gameObject.SetActive(false);
     }
 
     public void Init(GlobalMapCell cell, float cellSize)
@@ -139,6 +143,7 @@ public class GlobalMapCellObject : MonoBehaviour
         }
         else
         {
+            bool checkOnEnd = false;
             if (Cell is ShopGlobalMapCell)
             {
                 ObjectPainted = Shop;
@@ -153,10 +158,28 @@ public class GlobalMapCellObject : MonoBehaviour
             }
             else
             {
+                checkOnEnd = true;
                 ObjectPainted = Unknown;
             }
 
             ObjectPainted.gameObject.gameObject.SetActive(false);
+
+            if (checkOnEnd)
+            {
+                if (Cell is EndGlobalCell)
+                {
+                    Unknown.gameObject.gameObject.SetActive(false);
+                    ExitObject.gameObject.gameObject.SetActive(true);
+//                ObjectPainted = ExitObject;
+                }
+                else if (Cell is StartGlobalCell)
+                {
+                    Unknown.gameObject.gameObject.SetActive(false);
+                    StartObject.gameObject.gameObject.SetActive(true);
+//                ObjectPainted = StartObject;
+                }
+            }
+
             ActiveRenderer = ObjectPainted.GetComponent<Renderer>();
         }
 #if UNITY_EDITOR

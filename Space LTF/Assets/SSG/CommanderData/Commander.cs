@@ -219,6 +219,11 @@ public class Commander
 
     public void UpdateManual()
     {
+        if (Time.time == 0f)
+        {
+            return;
+        }
+
         DelayedShips();
 //        SpellController.ManualUpdate();
         if (_shipsToRemove.Count > 0)
@@ -318,6 +323,7 @@ public class Commander
             float percent;
             if (isDead)
             {
+
                 percent = baseRepairPercent;
                 shipBase.Value.ShipInventory.SetCriticalyDamage();
             }
@@ -329,7 +335,7 @@ public class Commander
                     percent = baseRepairPercent;
                 }
             }      
-            Debug.Log("End game health remain percent:" + percent + "   baseRepairPercent:" + baseRepairPercent);
+            Debug.Log($"End game health remain percent:{percent}   baseRepairPercent:{baseRepairPercent}   isDead:{isDead}");
             shipBase.Value.ShipInventory.SetRepairPercent(percent);
         }
     }

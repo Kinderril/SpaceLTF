@@ -42,9 +42,9 @@ public class SideShipInfo : MonoBehaviour
     
     private ShipBase _ship;
     private Action<ShipBase> _shipSelectedAction;
-    private Action _toggleCallback;
+    private Action<SideShipInfo> _toggleCallback;
 
-    public void Init(ShipBase ship, Action<ShipBase> shipSelectedAction, Action toggleCallback,bool shallOpen)
+    public void Init(ShipBase ship, Action<ShipBase> shipSelectedAction, Action<SideShipInfo> toggleCallback,bool shallOpen)
     {
         FireDamage.gameObject.SetActive(false);
         ShiedDamage.gameObject.SetActive(false);
@@ -120,8 +120,14 @@ public class SideShipInfo : MonoBehaviour
         var showFull = ToggleOpen.isOn;
         UpdateToggle(showFull);
         PlayerPrefs.SetInt(String.Format(PREFS_KEY,_ship.Id),(showFull?1:0));
-        _toggleCallback();
+        _toggleCallback(this);
 
+    }
+
+    public void ToggleViaCode()
+    {
+        ToggleOpen.isOn = !ToggleOpen.isOn;
+        OnToggleClick();
     }
 
     private void UpdateToggle(bool val)
@@ -131,7 +137,7 @@ public class SideShipInfo : MonoBehaviour
         {
             //FullOpenHolder.gameObject.SetActive(true);
             //ControlBlockHolder.SetParent(FullOpenHolder, false);
-            _ship.SelfCamera.Init(RawImage);
+            _ship.SelfCamera.Init(RawImage,_ship);
 //            if (BackRawImage.texture == null)
 //                BackRawImage.texture = DataBaseController.Instance.DataStructPrefabs.BackgroundRenderTexture;
         }

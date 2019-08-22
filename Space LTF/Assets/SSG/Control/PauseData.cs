@@ -7,15 +7,27 @@ using UnityEngine;
 
 public class PauseData
 {
+    private float _coreSpeed = 1f;
     public void Change()
     {
-        if (Time.timeScale > 0.5f)
+        if (IsPause)
         {
-            Pause();
+            Unpase(_coreSpeed);
         }
         else
         {
-            Unpase();
+            Pause();
+        }
+    }
+
+    private bool IsPause => Time.timeScale < 0.1f;
+
+    public void ChangeCoreSpeed(float coreSpeed)
+    {
+        _coreSpeed = coreSpeed;
+        if (!IsPause)
+        {
+            Unpase(_coreSpeed);
         }
     }
 
@@ -24,9 +36,9 @@ public class PauseData
         Time.timeScale = 0f;
     }
 
-    public void Unpase()
+    public void Unpase(float to)
     {
-        Time.timeScale = 1f;
+        Time.timeScale = to;
     }
 }
 

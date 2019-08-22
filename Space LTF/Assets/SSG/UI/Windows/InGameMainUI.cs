@@ -32,7 +32,9 @@ public class InGameMainUI : BaseWindow
     public CreditControllerUI CreditController;
     public SpellModulsContainer SpellModulsContainer;
     public event Action<SpellInGame> OnSelectSpell;
-//    public Button DebugKillAllEnemies;
+
+    public TimeScaleBattleUI TimeScaleBattle;
+    //    public Button DebugKillAllEnemies;
     private FlyingNumbersController FlyingNumbersController = new FlyingNumbersController();
 
     public ShipBase SelectedShip
@@ -103,6 +105,7 @@ public class InGameMainUI : BaseWindow
         GreenTeamInfoContainer.Init(battle.GreenCommander, ActionShipSelected);
         RedTeamInfoContainer.Init(battle.RedCommander, ActionShipSelected);
         int weaponsIndex = 0;
+        TimeScaleBattle.Init(_battle);
         var mainShip = MyCommander.MainShip;
         if (mainShip != null)
         {

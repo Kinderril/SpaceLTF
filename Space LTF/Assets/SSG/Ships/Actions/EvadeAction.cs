@@ -34,7 +34,9 @@ public class EvadeAction : BaseAction
         if (_clouds != null)
         {
             _owner.SetTargetSpeed(1f);
-            _owner.MoveByWay(_clouds.Center);
+            var pos = _clouds.Center;
+            _targetPoint = pos;
+            _owner.MoveByWay(pos);
             return;
         }
 
@@ -49,6 +51,7 @@ public class EvadeAction : BaseAction
             var cell = _owner.CellController.FindCell(pos);
             if (cell.IsFree())
             {
+                _targetPoint = pos;
                 _owner.MoveByWay(pos);
                 return;
             }
@@ -62,6 +65,7 @@ public class EvadeAction : BaseAction
             var cell = _owner.CellController.FindCell(pos);
             if (cell.IsFree())
             {
+                _targetPoint = pos;
                 _owner.MoveByWay(pos);
                 return;
             }
@@ -77,11 +81,17 @@ public class EvadeAction : BaseAction
             {
                 _owner.SetTargetSpeed(0.1f);
             }
-            _owner.MoveByWay(_owner.Position + side * 7);
+
+            var pos = _owner.Position + side * 7;
+            _targetPoint = pos;
+            _owner.MoveByWay(pos);
         }
         
     }
-
+    public override Vector3? GetTargetToArrow()
+    {
+        return _targetPoint;
+    }
     private Vector3 GetSideDir(ShipPersonalInfo danger)
     {
         Vector3 side;

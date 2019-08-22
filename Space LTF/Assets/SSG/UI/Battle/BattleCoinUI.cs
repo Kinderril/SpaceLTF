@@ -27,7 +27,7 @@ public class BattleCoinUI :MonoBehaviour
             c.Init(commandCoin,CoinUISetUsed);
         }
 
-        OnRegenEnable(true);
+//        OnRegenEnable(_coinController.EnableCharge);
 //        _coinController.OnCoinChange += OnCoinChange;
     }
 

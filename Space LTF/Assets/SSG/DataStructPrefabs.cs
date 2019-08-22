@@ -100,6 +100,7 @@ public class DataStructPrefabs : MonoBehaviour
     public FlyingNumberWithDependencesHoldin FlyingNumberWithDependencesHoldinPrefab;
     public SelfCamera SelfCameraPrefab;
     public Texture BackgroundRenderTexture;
+    public ArrowTarget ArrowTargetPersonal;
 
 
     public void Init()

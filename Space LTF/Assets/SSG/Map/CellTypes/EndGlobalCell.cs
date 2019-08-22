@@ -15,6 +15,7 @@ public class EndGlobalCell : GlobalMapCell
     public EndGlobalCell(int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
     {
         InfoOpen = true;
+        Scouted();
     }
     
 

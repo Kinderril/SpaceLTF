@@ -15,6 +15,9 @@ public class TeamInfoContainer : MonoBehaviour
     private Dictionary<ShipBase, SideShipMiniInfo> _infosRight  = new Dictionary<ShipBase, SideShipMiniInfo>();
     private Action<ShipBase> _shipSelectedAction;
     private RectTransform _layoutRect;
+    private int _openCount;
+    private int max_open = 2;
+    private SideShipInfo _lastToggle = null;
 
     public void Init(Commander commander,Action<ShipBase> shipSelectedAction)
     {
@@ -52,9 +55,19 @@ public class TeamInfoContainer : MonoBehaviour
         if (_commander.TeamIndex == TeamIndex.green)
         {
             var shallOpen = 1 == PlayerPrefs.GetInt(String.Format(SideShipInfo.PREFS_KEY, obj.Id),1);
+            if (obj.ShipParameters.StartParams.ShipType == ShipType.Base)
+            {
+                shallOpen = false;
+            }
+
             var pref = DataBaseController.Instance.DataStructPrefabs.SideShipInfoLeft;
             var s1 = DataBaseController.GetItem(pref);
             s1.Init(obj, _shipSelectedAction, ToggleChanges, shallOpen);
+            if (shallOpen)
+            {
+                _lastToggle = s1;
+                _openCount++;
+            }
             _infosGreen.Add(obj, s1);
             s1.transform.SetParent(Layout, false);
         }
@@ -75,8 +88,24 @@ public class TeamInfoContainer : MonoBehaviour
 //        s1.transform.SetParent(Layout, false);
     }
 
-    private void ToggleChanges()
+    private void ToggleChanges(SideShipInfo changedInfo)
     {
+        if (changedInfo.ToggleOpen.isOn)
+        {
+            _openCount++;
+        }
+        else
+        {
+            _openCount--;
+        }
+
+        if (_openCount > max_open)
+        {
+            if (_lastToggle != null)
+            {
+                _lastToggle.ToggleViaCode();
+            }
+        }
         LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutRect);
     }
 

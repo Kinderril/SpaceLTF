@@ -26,11 +26,13 @@ public class ArrowTarget : MonoBehaviour
 
     void Awake()
     {
+        var layer = gameObject.layer;
         for (int i = 0; i < Arrows.Length; i++)
         {
             ArrowShowElement a = DataBaseController.GetItem<ArrowShowElement>(Element);
             Arrows[i] = a;
             a.gameObject.SetActive(false);
+            a.gameObject.layer = a.GO1.gameObject.layer = a.GO2.gameObject.layer = layer;
             a.transform.SetParent(transform);
         }
     }
@@ -60,7 +62,7 @@ public class ArrowTarget : MonoBehaviour
         {
             if (!_shipBase.IsDead && _shipBase.CurAction != null)
             {
-                var move = _shipBase.PathController.Target;
+//                var move = _shipBase.PathController.Target;
                 if (_shipBase.CurAction != null)
                 {
                     Vector3? target = _shipBase.CurAction.GetTargetToArrow();

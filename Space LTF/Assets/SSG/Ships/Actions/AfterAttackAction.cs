@@ -76,6 +76,10 @@ public class AfterAttackAction : BaseAction
         };
         return c;
     }
+    public override Vector3? GetTargetToArrow()
+    {
+        return _targetPoint;
+    }
 
     public override void DrawGizmos()
     {

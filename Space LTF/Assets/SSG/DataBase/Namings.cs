@@ -539,4 +539,6 @@ public static class Namings
     public static string NoSafeGame = "No save game";
     public static string MaxLevel = "Max";
     public static string And = "And";
+    public static string SupportModul = "Support modul";
+    public static string ActionModul = "Action modul";
 }

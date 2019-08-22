@@ -58,7 +58,7 @@ public class AICellDataRaound
 
     public void Init(Vector3 startPos,int size,float cellSize)
     {
-        Radius = size * cellSize / 2f;
+        Radius = size * cellSize / 2f - cellSize;
 //        Debug.Log(String.Format("Cells inited. SizeX:{0}  SizeZ:{1}",sizeX,sizeZ).Red());
         Debug.Log($"Cells inited. SizeX:{size}  ".Red());
         CellSize = cellSize;
@@ -121,7 +121,7 @@ public class AICellDataRaound
         }
 
         int asteroidsFieldCount = (int)((size + 6f) / 2f);
-
+        Asteroids.Clear();
         CreateAsteroidsOnCircle(2);
         CreateRandomAsteroids(asteroidsFieldCount);
 
