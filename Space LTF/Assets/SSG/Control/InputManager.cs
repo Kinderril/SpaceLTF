@@ -47,7 +47,7 @@ public class InputManager : MonoBehaviour
         {
             var delta = Time.time - _rightDown;
             isOverUI = EventSystem.current.IsPointerOverGameObject();
-            inGameMainUi.Hold(Input.mousePosition, false, delta);
+            inGameMainUi.Hold(Input.mousePosition, true, delta);
         }
 
         if (Input.GetMouseButtonUp(1))
@@ -59,7 +59,17 @@ public class InputManager : MonoBehaviour
             isOverUI = EventSystem.current.IsPointerOverGameObject();
             inGameMainUi.Clicked(Input.mousePosition,false, delta);
 //            isLastFramePressed = true;
-        }
+        }   
+//        if (Input.GetMouseButtonUp(2))
+//        {
+////            Debug.Log("u");
+//            var delta = Time.time - _rightDown;
+////            Debug.Log("Pressed left click:" + delta);
+////            var isLong = delta > 0.6f;
+//            isOverUI = EventSystem.current.IsPointerOverGameObject();
+//            inGameMainUi.Clicked(Input.mousePosition,false, delta);
+////            isLastFramePressed = true;
+//        }
 
 //        if (Input.GetMouseButtonUp(0))
 //        {

@@ -166,6 +166,7 @@ public class InGameMainUI : BaseWindow
             {
                 _spellSelected.UpdateShowCast(ray.Value);
             }
+
         }
     }
     
@@ -362,39 +363,44 @@ public class InGameMainUI : BaseWindow
         }
         else
         {
-            if (delta > HoldClearCoinUI.BOT_LINE)
+            if (left)
             {
-//                HoldClearCoinUI.Release();
+                if (delta < HoldClearCoinUI.BOT_LINE)
+                {
+                    var pt = GetShipByPoint(pos);
+                    if (pt != null)
+                    {
+                        if (left)
+                        {
+                            SelectedShip = pt;
+                        }   
+                    }
+                }
             }
             else
             {
-                var pt = GetShipByPoint(pos);
-                if (pt != null)
-                {
-                    if (left)
-                    {
-                        SelectedShip = pt;
-                    }
-//                    else
+//#if UNITY_EDITOR
+//                Debug.LogError("ONLY EDITOR FUCTION! DEBUG!");
+//                if (SelectedShip != null)
+//                {
+//                    var ray = GetPointByClick(pos);
+//                    if (ray.HasValue)
 //                    {
-//                        MyCommander.TryReward(pt);
+//                        SelectedShip.GoToPointAction(ray.Value);
 //                    }
-                }
-                else
+//                }
+//#endif
+                if (SelectedShip != null && SelectedShip.ShipParameters.StartParams.ShipType == ShipType.Base &&
+                    SelectedShip.TeamIndex == MyCommander.TeamIndex)
                 {
-#if UNITY_EDITOR
-                    Debug.LogError("ONLY EDITOR FUCTION! DEBUG!");
-                    if (SelectedShip != null)
+                    var ray = GetPointByClick(pos);
+                    if (ray.HasValue)
                     {
-                        var ray = GetPointByClick(pos);
-                        if (ray.HasValue)
-                        {
-                            SelectedShip.GoToPointAction(ray.Value);
-                        }
+                        SelectedShip.GoToPointAction(ray.Value);
                     }
-#endif
                 }
             }
+
         }
     }
 

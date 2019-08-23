@@ -46,9 +46,11 @@ public class Commander
     }
 
     private List<StartShipPilotData> _paramsOfShips;
+    private BattleController _battleController;
 
-    public Commander(TeamIndex teamIndex,Battlefield battlefield,Player player)
+    public Commander(TeamIndex teamIndex,Battlefield battlefield,Player player, BattleController battleController)
     {
+        _battleController = battleController;
         BattleStats = new CommaderBattleStats();
         StartPower = 0f;
         foreach (var startShipPilotData in player.Army)
@@ -390,6 +392,21 @@ public class Commander
                     MainShip.ShipParameters.ShieldParameters.CurShiled - sheildToClear;
                 CoinController.RechargerCoins(sheildToClear);
             }
+        }
+    }
+
+    public void ShipRunAway(ShipBase owner)
+    {
+        owner.ShipRunAway();
+        _battleController.ShipRunAway(owner);
+        if (Ships.Count == 1 && Ships[0].ShipParameters.StartParams.ShipType == ShipType.Base)
+        {
+             BattleController.Instance.RunAway();
+        }
+        if (Ships.Count == 1 || Ships.Count == 0)
+        {
+            Debug.LogError($"WRONG RUN AWAY Ships.Count {Ships.Count}");
+            BattleController.Instance.RunAway();
         }
     }
 }

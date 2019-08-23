@@ -54,7 +54,13 @@ public class BaseEffectAbsorber : PoolElement
         }
         catch (Exception e)
         {
-            Debug.LogError("destroy PS error " + gameObject.name);
+            if (gameObject != null)
+                Debug.LogError("destroy PS error " + gameObject.name);
+            else
+            {
+
+                Debug.LogError("DestroyPS PS error STARGE ");
+            }
         }
     }
 

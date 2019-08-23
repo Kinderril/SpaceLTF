@@ -19,15 +19,30 @@ public class ShipControlCenter : ShipBase
         DesicionData = new ControlCenterDesicionData(this);
     }
 
-    protected override void EngineUpdate()
-    {
-        _curSpeed = 0f;
-    }
+//    protected override void EngineUpdate()
+//    {
+//        _curSpeed = 0f;
+//    }
 
     protected override void UpdateAction()
     {
         UpdateShieldRegen();
+        if (CurAction != null)
+        {
+            if (CurAction.ShallEndByTime())
+            {
+                CurAction.EndAction("By time");
+                return;
+            }
 
+            if (CurAction != null)
+            {
+                CurAction.ShallEndUpdate2();
+            }
+            CurAction.ManualUpdate();
+            EngineUpdate();
+            ApplyMove();
+        }
     }
 
     public override Vector3 PredictionPos()

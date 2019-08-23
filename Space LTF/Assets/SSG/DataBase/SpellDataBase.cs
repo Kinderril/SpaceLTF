@@ -29,6 +29,8 @@ public class SpellDataBase : MonoBehaviour
     public BaseEffectAbsorber BlinkTargetEffect;//Спираль обратная
     public BaseEffectAbsorber ShieldOffAOE;
     public BaseEffectAbsorber ShieldHitEffect;
+    public BaseEffectAbsorber GoPlaceOk;
+    public BaseEffectAbsorber GoPlaceFail;
 
     public void Init()
     {
@@ -49,6 +51,8 @@ public class SpellDataBase : MonoBehaviour
         pool.RegisterEffect(Utils.GetId(), BlinkTargetEffect);
         pool.RegisterEffect(Utils.GetId(), ShieldOffAOE);
         pool.RegisterEffect(Utils.GetId(), ShieldHitEffect);
+        pool.RegisterEffect(Utils.GetId(), GoPlaceOk);
+        pool.RegisterEffect(Utils.GetId(), GoPlaceFail);
     }
     
 }

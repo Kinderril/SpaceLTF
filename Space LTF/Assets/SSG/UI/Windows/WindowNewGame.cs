@@ -15,23 +15,24 @@ public class WindowNewGame : BaseWindow
     public SliderWithTextMeshPro SectorSize;
     public SliderWithTextMeshPro StartDeathTime;
     public SliderWithTextMeshPro CoresCount;
-    public SliderWithTextMeshPro BasePower;
+    public DifficultyNewGame DifficultyNewGame;
     public SliderWithTextMeshPro SectorsCount;
 
     public override void Init()
     {
         PlayerStartParametersUI.Init();
         ArmyTypeSelectorUI.Init();
+        DifficultyNewGame.Init();
         StartGameWeaponsChooseUI.Init();
         SectorSize.InitName(Namings.StartNewGameFieldSize);
         StartDeathTime.InitName(Namings.StartNewGameStartDeathTime);
         CoresCount.InitName(Namings.StartNewGameCoresCount);
-        BasePower.InitName(Namings.StartNewGameBasePower);
+//        BasePower.InitName(Namings.StartNewGameBasePower);
         SectorsCount.InitName(Namings.StartNewGameSectorsCount);
         SectorSize.InitBorders(Library.MIN_GLOBAL_SECTOR_SIZE, Library.MAX_GLOBAL_SECTOR_SIZE, true);
         StartDeathTime.InitBorders(Library.MIN_GLOBAL_MAP_DEATHSTART, Library.MAX_GLOBAL_MAP_DEATHSTART, true);
         CoresCount.InitBorders(Library.MIN_GLOBAL_MAP_CORES, Library.MAX_GLOBAL_MAP_CORES, true);
-        BasePower.InitBorders(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER, true);
+//        BasePower.InitBorders(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER, true);
         SectorsCount.InitBorders(Library.MIN_GLOBAL_MAP_SECTOR_COUNT, Library.MAX_GLOBAL_MAP_SECTOR_COUNT, true);
         base.Init();
     }
@@ -63,8 +64,8 @@ public class WindowNewGame : BaseWindow
         List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
         var gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
             ArmyTypeSelectorUI.Selected, posibleStartWeapons, 
-            SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(), 
-            BasePower.GetValueInt(), posibleStartSpells.RandomElement());
+            SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(),
+            DifficultyNewGame.CurDifficulty, posibleStartSpells.RandomElement());
         MainController.Instance.CreateNewPlayerAndStartGame(gameData);
         
     }
@@ -91,7 +92,7 @@ public class WindowNewGame : BaseWindow
         SectorSize.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_SECTOR_SIZE, Library.MAX_GLOBAL_SECTOR_SIZE));
         StartDeathTime.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_DEATHSTART, Library.MAX_GLOBAL_MAP_DEATHSTART));
         CoresCount.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_CORES, Library.MAX_GLOBAL_MAP_CORES));
-        BasePower.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER));
+//        BasePower.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER));
         SectorsCount.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_SECTOR_COUNT, Library.MAX_GLOBAL_MAP_SECTOR_COUNT));
 
     }

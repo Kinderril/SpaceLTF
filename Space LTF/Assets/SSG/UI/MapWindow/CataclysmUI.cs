@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using TMPro;
 
 public class CataclysmUI : MonoBehaviour
 {
     public TextMeshProUGUI Field;
-    public GameObject StartedObject;
+//    public GameObject StartedObject;
     private PlayerMapData _data;
     public void Init(PlayerMapData data)
     {
@@ -23,9 +24,16 @@ public class CataclysmUI : MonoBehaviour
     {
         var remainSteps = _data.GalaxyData.StartDeathStep - _data.Step;
         var isStarted = remainSteps <= 0;
-        Field.gameObject.SetActive(!isStarted);
-        StartedObject.SetActive(isStarted);
-        Field.text = $"Remain days {remainSteps}";
+//        Field.gameObject.SetActive(!isStarted);
+        if (isStarted)
+        {
+            Field.text = String.Format(Namings.CataclysmProcess, _data.GalaxyData.CellsDestroyed);
+        }
+        else
+        {
+            Field.text = String.Format(Namings.RemainCataclysm, remainSteps);
+        }
+//        StartedObject.SetActive(isStarted);
     }
 
     public void Dispose()

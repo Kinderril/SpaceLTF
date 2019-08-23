@@ -114,8 +114,8 @@ public class BattleController :Singleton<BattleController>
 
 #endif
 
-        GreenCommander = new Commander(TeamIndex.green, Battlefield, greenSide);
-        RedCommander = new Commander(TeamIndex.red, Battlefield, redSide);
+        GreenCommander = new Commander(TeamIndex.green, Battlefield, greenSide,this);
+        RedCommander = new Commander(TeamIndex.red, Battlefield, redSide, this);
 
         var d = CellController.Data;
 //        var b1 = d.GetCell(0, 0);
@@ -565,15 +565,24 @@ public class BattleController :Singleton<BattleController>
         }
     }
 
-    public void RunAway(HashSet<ShipBase> shipsToDamage)
+    public void RunAway(HashSet<ShipBase> shipsToDamage = null)
     {
         LastWinner = EndBattleType.runAway;
         EndPart1Battle();
-        foreach (var shipBase in shipsToDamage)
+        if (shipsToDamage != null)
         {
-            shipBase.ShipInventory.SetRepairPercent(0.1f);
+            foreach (var shipBase in shipsToDamage)
+            {
+                shipBase.ShipInventory.SetRepairPercent(0.1f);
+            }
         }
-        
+
+    }
+
+    public void ShipRunAway(ShipBase owner)
+    {
+        SideGreen.Remove(owner);
+        SideRed.Remove(owner);
     }
 }
 

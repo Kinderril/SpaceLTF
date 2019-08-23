@@ -11,10 +11,11 @@ public class GoToBaseAction : BaseAction
     public const float CloseToMainShipSQRT = 1f;
     public const float CloseToMainShipSQRT2 = CloseToMainShipSQRT*1.2f;
     private ShipBase Target;
-
-    public GoToBaseAction([NotNull] ShipBase owner, ShipBase target) 
+    private bool _withRunAway;
+    public GoToBaseAction([NotNull] ShipBase owner, ShipBase target,bool withRunAway) 
         : base(owner,ActionType.moveToBase)
     {
+        _withRunAway = withRunAway;
         Target = target;
         FindWay();
     }
@@ -42,6 +43,10 @@ public class GoToBaseAction : BaseAction
                 var sDist = (Target.Position - _owner.Position).sqrMagnitude;
                 if (sDist < CloseToMainShipSQRT)
                 {
+                    if (_withRunAway)
+                    {
+                        _owner.Commander.ShipRunAway(_owner);
+                    }
                     return true;
                 }
                 return false;

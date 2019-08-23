@@ -24,6 +24,7 @@ public class GalaxyData
     public int Size { get;private set;}
     public int SizeOfSector { get;private set;}
     public int StartDeathStep { get;private set;}
+    public int CellsDestroyed { get;private set;}
     public string Name;
 //    public int startIndexX { get; private set; }
 //    public int startIndexZ { get; private set; }
@@ -108,12 +109,15 @@ public class GalaxyData
 
         //Create core sectors
         var randomInts = new List<int>();
-        for (int i = 1; i < sectorCount-1; i++)
+        for (int i = 2; i < sectorCount-1; i++)
         {
             randomInts.Add(i);
         }
-//        List<int> xIndexs = new List<int>();
-        var xIndexs = randomInts.RandomElement(coreCells);
+
+//        var takeThisIndex = 1;
+
+        var xIndexs = randomInts.RandomElement(coreCells-1);
+        xIndexs.Add(1);
         var goodCorePositions = xIndexs.Count;
 //        var goodCorePositions = Mathf.Clamp(coreCells, 0, sectorsCount - 2);
         for (int i = 0; i < xIndexs.Count; i++)
@@ -526,6 +530,7 @@ public class GalaxyData
         if (rnds.Count > 0)
         {
             var rnd = rnds.RandomElement();
+            CellsDestroyed++;
             rnd.DestroyCell();
             var ways = rnd.GetCurrentPosibleWays();
             foreach (var globalMapCell in ways)

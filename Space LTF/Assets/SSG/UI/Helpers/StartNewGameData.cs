@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class StartNewGameData
 {
@@ -16,6 +17,9 @@ public class StartNewGameData
         ShipConfig shipConfig, List<WeaponType> posibleStartWeapons, int SectorSize,  int SectorCount,
         int CellsStartDeathStep, int CoreElementsCount, int BasePower, SpellType posibleSpell)
     {
+        Debug.Log(($"StartNewGameData {shipConfig.ToString()} SectorSize:{SectorSize} " +
+                  $" SectorCount:{SectorCount} CellsStartDeathStep:{CellsStartDeathStep}  CoreElementsCount:{CoreElementsCount}" +
+                  $"  BasePower:{BasePower}   posibleSpell:{posibleSpell}").Red());
         this.startParametersLevels = startParametersLevels;
         this.shipConfig = shipConfig;
         this.SectorSize = SectorSize;

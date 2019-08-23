@@ -29,6 +29,6 @@ public class ShipShieldDoubleModul : BaseSupportModul
         var _delta = PER_LEVEL * Parameters.MaxShield;
         Parameters.MaxShield += _delta;   
         var _deltaHp = PER_LEVEL * Parameters.MaxHealth;
-        Parameters.MaxHealth = Mathf.Clamp(_deltaHp + Parameters.MaxHealth,5,99999);
+        Parameters.MaxHealth = Mathf.Clamp(_deltaHp - Parameters.MaxHealth,5,99999);
     }
 }

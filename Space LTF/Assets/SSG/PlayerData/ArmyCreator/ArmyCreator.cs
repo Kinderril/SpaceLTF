@@ -47,7 +47,7 @@ public static class ArmyCreator
 
     public static List<StartShipPilotData> CreateSimpleEnemyArmy(float remainPoints, ArmyCreatorData data,  Player player)
     {
-
+        Debug.Log($"Start create army {remainPoints} . {data}  {player.Name}");
         if (data.ArmyConfig == ShipConfig.droid)
         {
             return CreateSimpleEnemyArmyDroid(remainPoints, data, player);

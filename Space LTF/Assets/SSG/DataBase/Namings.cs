@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 
@@ -541,4 +542,11 @@ public static class Namings
     public static string And = "And";
     public static string SupportModul = "Support modul";
     public static string ActionModul = "Action modul";
+    public static string CataclysmProcess = "{0} cells destroyed";
+    public static string RemainCataclysm = "Days remain:{0}";
+    public static string VeryEasy = "Very easy";
+    public static string Easy = "Easy";
+    public static string Normal = "Normal";
+    public static string Hard = "Hard";
+    public static string Imposilbe = "Imposilbe";
 }

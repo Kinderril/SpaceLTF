@@ -129,7 +129,10 @@ public class SideShipInfo : MonoBehaviour
         ToggleOpen.isOn = !ToggleOpen.isOn;
         OnToggleClick();
     }
-
+    public void OnClickRunAway()
+    {
+        _ship.RunAwayAction();
+    }
     private void UpdateToggle(bool val)
     {
         FullInfoContainer.gameObject.SetActive(val);

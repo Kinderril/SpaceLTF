@@ -599,9 +599,25 @@ public class ShipBase : MovingObject
 
     public void GoToPointAction(Vector3 pos)
     {
-        return;
-        var a = new GoToCurrentPointAction(this, pos);
-        Debug.LogError("Go action activated");
+        var battle = BattleController.Instance;
+        var center = battle.CellController.Data.CenterZone;
+        var rad = battle.CellController.Data.InsideRadius;
+        var dist = (center - pos).magnitude;
+        if (dist < rad)
+        {
+            var a = new GoToCurrentPointAction(this, pos);
+            SetAction(a);
+            EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceOk,pos,2);
+        }
+        else
+        {
+            EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceFail, pos, 2);
+        }
+    }
+
+    public void RunAwayAction()
+    {
+        var a = new GoToBaseAction(this,Commander.MainShip,true);
         SetAction(a);
     }
 
@@ -804,7 +820,14 @@ public class ShipBase : MovingObject
         }
     }
 
-
+    public void ShipRunAway()
+    {
+        _dealthCallback(this);
+        if (OnDeath != null)
+        {
+            OnDeath(this);
+        }
+    }
     public void SetCell(AICell nextCell)
     {
         if (nextCell != Cell)

@@ -33,7 +33,11 @@ public class ShieldLocker : BaseModul
             else
             {
                 UpdateTime();
-                _owner.Target.ShipLink.DamageData.ApplyEffect(ShipDamageType.shiled, 2f + ModulData.Level * 3f);
+                var shield = _owner.Target.ShipLink.ShipParameters.ShieldParameters;
+                if (shield.ShiledIsActive && shield.CurShiled > 2)
+                {
+                    _owner.Target.ShipLink.DamageData.ApplyEffect(ShipDamageType.shiled, 2f + ModulData.Level * 3f);
+                }
             }
         }
     }

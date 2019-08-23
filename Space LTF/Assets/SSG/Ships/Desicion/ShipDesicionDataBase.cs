@@ -128,7 +128,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             case ActionType.attack:
                 return new AttackAction(_owner, _owner.Enemies[target]);
             case ActionType.moveToBase:
-                return (new GoToBaseAction(_owner, target));
+                return (new GoToBaseAction(_owner, target,false));
             case ActionType.returnToBattle:
                 return (new ReturnActionToBattlefield(_owner));
             case ActionType.closeStrikeAction:
