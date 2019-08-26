@@ -41,4 +41,5 @@ public interface IAffectParameters
      float SetorAngle { get; set; }
      float BulletSpeed { get; set; }
      float ReloadSec { get; set; }
+     int ShootPerTime { get; set; }
 }

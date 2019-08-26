@@ -47,6 +47,7 @@ public class PlayerStatistics
     private const string mainPlayer = "stats.stat";
     public List<OpenShipConfig> OpenShipsTypes = new List<OpenShipConfig>();
     public List<WeaponsPair> WeaponsPairs = new List<WeaponsPair>();
+    public EndBattleType LastBattle = EndBattleType.win;
 
     public void Init()
     {
@@ -98,46 +99,54 @@ public class PlayerStatistics
         return ps;
     }
 
-    public void EndGame(bool win)
+    public void EndGame(EndBattleType type)
     {
-        if (win)
+        LastBattle = type;
+        switch (type)
         {
-            var weaponsOpen = WeaponsPairs.Count(x => x.IsOpen);
-            var configsOpen = OpenShipsTypes.Count(x => x.IsOpen);
-            bool openWeapons = false;
-            bool openConfigs = false;
-            if (weaponsOpen < OPEN_FOR_END_GAME && configsOpen < OPEN_FOR_END_GAME)
-            {
-                if (weaponsOpen < configsOpen)
+            case EndBattleType.win:
+                var weaponsOpen = WeaponsPairs.Count(x => x.IsOpen);
+                var configsOpen = OpenShipsTypes.Count(x => x.IsOpen);
+                bool openWeapons = false;
+                bool openConfigs = false;
+                if (weaponsOpen < OPEN_FOR_END_GAME && configsOpen < OPEN_FOR_END_GAME)
                 {
-                    openWeapons = true;
+                    if (weaponsOpen < configsOpen)
+                    {
+                        openWeapons = true;
+                    }
+                    else
+                    {
+                        openConfigs = true;
+                    }
                 }
                 else
                 {
-                    openConfigs = true;
-                }
-            }
-            else
-            {
-                if (weaponsOpen < OPEN_FOR_END_GAME)
-                {
-                    openWeapons = true;
-                }
-                if (configsOpen < OPEN_FOR_END_GAME)
-                {
+                    if (weaponsOpen < OPEN_FOR_END_GAME)
+                    {
+                        openWeapons = true;
+                    }
+                    if (configsOpen < OPEN_FOR_END_GAME)
+                    {
 
-                    openConfigs = true;
+                        openConfigs = true;
+                    }
                 }
-            }
-            if (openWeapons)
-            {
-                OpenWeapon();
-            }
-            else if (openConfigs)
-            {
-                OpenConfig();
-            }
+                if (openWeapons)
+                {
+                    OpenWeapon();
+                }
+                else if (openConfigs)
+                {
+                    OpenConfig();
+                }
+                break;  
+            case EndBattleType.runAway:
+
+                break;
         }
+
+
     }
 
     private void OpenConfig()

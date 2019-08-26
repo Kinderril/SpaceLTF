@@ -65,7 +65,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     public float _radiusShoot;
     public float sectorAngle;
     public float delayBetweenShootsSec;
-    public int shootPerTime;
+//    public int shootPerTime;
     public WeaponType WeaponType;
     public bool isRoundAng;
     public readonly float fixedDelta;
@@ -83,6 +83,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     }
 
     public float ReloadSec { get; set; }
+    public int ShootPerTime { get; set; }
 
     public CurWeaponDamage CurrentDamage => new CurWeaponDamage(ShieldDamage, BodyDamage);
 
@@ -113,7 +114,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     {
         _shieldDamage = parameters.shieldDamage;
         _bodyDamage = parameters.bodyDamage;
-        this.shootPerTime = parameters.shootPerTime;
+        this.ShootPerTime = parameters.shootPerTime;
         this._bulletSpeed = parameters._bulletSpeed;
         this._bulletTurnSpeed = parameters.turnSpeed;
         this.ReloadSec = parameters.reloadSec;
@@ -135,17 +136,17 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         this.Level = Level;
         isRoundAng = sectorAngle >= 360;
 
-        if (delayBetweenShootsSec * shootPerTime > ReloadSec)
+        if (delayBetweenShootsSec * ShootPerTime > ReloadSec)
         {
             Debug.LogError("wrong shoot times: delayBetweenShootsSec:" + delayBetweenShootsSec +
                            " ReloadSec:" + ReloadSec +
-                           "  shootPerTime:" + shootPerTime);
+                           "  shootPerTime:" + ShootPerTime);
         }
 
         Name = Namings.Weapon(WeaponType);
-        if (shootPerTime > 1)
+        if (ShootPerTime > 1)
         {
-            fixedDelta = MAX_DELTA * (shootPerTime / 2f);
+            fixedDelta = MAX_DELTA * (ShootPerTime / 2f);
         }
         else
         {

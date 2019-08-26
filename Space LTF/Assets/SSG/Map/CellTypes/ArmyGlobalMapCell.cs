@@ -317,9 +317,17 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     protected override MessageDialogData GetLeavedActionInner()
     {
-        var player = MainController.Instance.MainPlayer;
-        var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power);
-        return msg;
+        if (MainController.Instance.Statistics.LastBattle == EndBattleType.win)
+        {
+            var player = MainController.Instance.MainPlayer;
+            var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power);
+            return msg;
+        }
+        else
+        {
+            return null;
+        }
+
     }
 
     public ShipConfig GetConfig()

@@ -26,39 +26,63 @@ public class WeaponSprayModul : BaseSupportModul
         }
     }
 
-    protected void BulletCreateSpray3(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters)
+    private void BulletCreateSpray3(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters)
     {
-       
-
+    
         var dirToShoot = target.Position - shootPos;
         var isHoming = origin is HomingBullet;
-        var abseAng = isHoming ? ANG_2 * 2 : ANG_2;
-var b0 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, startParameters);
-        var half = abseAng / 2f;
+        if (isHoming)
+        {
+            var b0 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, startParameters);
+            for (int i = 0; i < 2; i++)
+            {
+                var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.4f);
+                timer.OnTimer += () =>
+                {
+                    var b1 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, startParameters);
+                };
+            }
 
-        var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
-        var r2 = Utils.RotateOnAngUp(dirToShoot, half);
+        }
+        else
+        {
+            var b0 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, startParameters);
+            var half = ANG_2 / 2f;
 
+            var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
+            var r2 = Utils.RotateOnAngUp(dirToShoot, half);
 
-        var b1 = Bullet.Create(origin, weapon, r1, shootPos, target.target, startParameters);
-        var b2 = Bullet.Create(origin, weapon, r2, shootPos, target.target, startParameters);
+            var b1 = Bullet.Create(origin, weapon, r1, shootPos, target.target, startParameters);
+            var b2 = Bullet.Create(origin, weapon, r2, shootPos, target.target, startParameters);
+        }
     }
 
-    protected void BulletCreateSpray2(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters)
+    private void BulletCreateSpray2(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters)
     {
          var dirToShoot = target.Position - shootPos;
 
-        //        var b0 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target, startParameters);  
-        var isHoming = origin is HomingBullet;
-        var abseAng = isHoming ? ANG_1 * 2 : ANG_1;
-        var half = abseAng / 2f;
+         var isHoming = origin is HomingBullet;
+         if (isHoming)
+         {
+             var b0 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, startParameters);
+            var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.4f);
+            timer.OnTimer += () =>
+            {
+                var b1 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, startParameters);
+            };
 
-        var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
-        var r2 = Utils.RotateOnAngUp(dirToShoot, half);
+        }
+         else
+         {
+             var half = ANG_1 / 2f;
+
+             var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
+             var r2 = Utils.RotateOnAngUp(dirToShoot, half);
 
 
-        var b1 = Bullet.Create(origin, weapon, r1, shootPos, target.target, startParameters);
-        var b2 = Bullet.Create(origin, weapon, r2, shootPos, target.target, startParameters);
+             var b1 = Bullet.Create(origin, weapon, r1, shootPos, target.target, startParameters);
+             var b2 = Bullet.Create(origin, weapon, r2, shootPos, target.target, startParameters);
+         }
     }
     public override string DescSupport()
     {

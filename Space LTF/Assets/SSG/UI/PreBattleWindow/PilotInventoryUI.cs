@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PilotInventoryUI : MonoBehaviour
+public class PilotInventoryUI : MonoBehaviour  
 {
     private IPilotParameters _pilot;
     private ShipInventory _ship;
@@ -29,6 +29,7 @@ public class PilotInventoryUI : MonoBehaviour
         _ship = ship;
         _pilot = pilot;
         _ship.OnShipRepaired += OnShipRepaired;
+        _ship.OnItemAdded += OnItemAdded;
         _pilot.OnTacticChange += OnTacticChange;
         _pilot.OnLevelUp += OnLevelUp;
         UpdateTacticField();
@@ -48,6 +49,12 @@ public class PilotInventoryUI : MonoBehaviour
         //SpeedField.SetLevelUp(pilot, LibraryPilotUpgradeType.speed);
         //ShieldField.SetLevelUp(pilot, LibraryPilotUpgradeType.shield);
         //TurnField.SetLevelUp(pilot, LibraryPilotUpgradeType.turnSpeed);
+    }
+
+    private void OnItemAdded(IItemInv item, bool val)
+    {
+
+        SetInfoParams();
     }
 
     private void RankUpdate()
@@ -99,33 +106,47 @@ public class PilotInventoryUI : MonoBehaviour
     private void OnShipRepaired(ShipInventory obj)
     {
         SetParamsAndMoney();
-        SetCurHealths();
+        SetInfoParams();
     }
 
-    private void SetCurHealths()
-    {
-        var MaxHealth = ShipParameters.ParamUpdate(_ship.MaxHealth, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
-        var curHp = MaxHealth * _ship.HealthPercent;
-        var hpTxt = String.Format("{0}/{1}", curHp.ToString("0"),Info(MaxHealth, _pilot.HealthLevel));
-        var txt = LevelInfo(Namings.Health, _pilot.HealthLevel, hpTxt);
-        HealthField.SetData(txt,_pilot.HealthLevel,_pilot,LibraryPilotUpgradeType.health);
-    }
 
     private void SetInfoParams()
     {
-        var MaxSpeed = ShipParameters.ParamUpdate(_ship.MaxSpeed, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
-        var TurnSpeed = ShipParameters.ParamUpdate(_ship.TurnSpeed, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
+        var maxSpeed = ShipParameters.ParamUpdate(_ship.MaxSpeed, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
+        var turnSpeed = ShipParameters.ParamUpdate(_ship.TurnSpeed, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
         var maxShiled = ShipParameters.ParamUpdate(_ship.MaxShiled, _pilot.ShieldLevel, ShipParameters.MaxShieldCoef);
+        var maxHealth = ShipParameters.ParamUpdate(_ship.MaxHealth, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
 
-        var shiledInfo = LevelInfo(Namings.Shield, _pilot.ShieldLevel,Info(maxShiled, _pilot.ShieldLevel));
-        var speedInfo = LevelInfo(Namings.Speed, _pilot.SpeedLevel, Info(MaxSpeed, _pilot.SpeedLevel));
-        var turnInfo = LevelInfo(Namings.TurnSpeed, _pilot.TurnSpeedLevel, Info(TurnSpeed, _pilot.TurnSpeedLevel));
-//        var shiledInfo = LevelInfo(Namings.Shield, _pilot.ShieldLevel,Info(maxShiled, _pilot.ShieldLevel));
+        PilotParamsInUI pilotParams = new PilotParamsInUI()
+            {MaxSpeed = maxSpeed, MaxHealth = maxHealth, MaxShield = maxShiled, TurnSpeed = turnSpeed};
+
+        foreach (var modul in _ship.Moduls.SimpleModuls)
+        {
+            if (modul != null)
+            {
+                var support = modul as BaseSupportModul;
+                if (support != null)
+                {
+                    support.ChangeParamsShip(pilotParams);
+                }
+            }
+        }
+
+        var shiledInfo = LevelInfo(Namings.Shield, _pilot.ShieldLevel, Info(pilotParams.MaxShield, _pilot.ShieldLevel));
+        var speedInfo = LevelInfo(Namings.Speed, _pilot.SpeedLevel, Info(pilotParams.MaxSpeed, _pilot.SpeedLevel));
+        var turnInfo = LevelInfo(Namings.TurnSpeed, _pilot.TurnSpeedLevel, Info(pilotParams.TurnSpeed, _pilot.TurnSpeedLevel));
+        var curHp = pilotParams.MaxHealth * _ship.HealthPercent;
+        var hpTxt = String.Format("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel));
+        var txt = LevelInfo(Namings.Health, _pilot.HealthLevel, hpTxt);
+
+
 
         ShieldField.SetData(shiledInfo, _pilot.ShieldLevel,_pilot,LibraryPilotUpgradeType.shield);
         SpeedField.SetData(speedInfo,_pilot.SpeedLevel,_pilot,LibraryPilotUpgradeType.speed);
         TurnField.SetData(turnInfo,_pilot.TurnSpeedLevel,_pilot,LibraryPilotUpgradeType.turnSpeed);
-        SetCurHealths();
+        HealthField.SetData(txt, _pilot.HealthLevel, _pilot, LibraryPilotUpgradeType.health);
+
+//        SetCurHealths();
     }
 
     private static string LevelInfo(string name,int level,string info)
@@ -174,6 +195,7 @@ public class PilotInventoryUI : MonoBehaviour
         }
         if (_ship != null)
         {
+            _ship.OnItemAdded -= OnItemAdded;
             _ship.OnShipRepaired -= OnShipRepaired;
         }
     }

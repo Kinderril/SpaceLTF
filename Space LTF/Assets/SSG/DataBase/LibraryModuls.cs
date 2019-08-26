@@ -104,6 +104,7 @@ public static class LibraryModuls
             SimpleModulType.WeaponShieldIgnore,
             SimpleModulType.WeaponSelfDamage,
             SimpleModulType.WeaponShieldPerHit,
+            SimpleModulType.WeaponShootPerTime,
             SimpleModulType.WeaponNoBulletDeath,
             SimpleModulType.WeaponPowerShot,
             SimpleModulType.WeaponFireNear,
@@ -224,6 +225,7 @@ public static class LibraryModuls
 
             SimpleModulType.WeaponShieldIgnore,
             SimpleModulType.WeaponSelfDamage,
+            SimpleModulType.WeaponShootPerTime,
             SimpleModulType.WeaponShieldPerHit,
             SimpleModulType.WeaponNoBulletDeath,
             SimpleModulType.WeaponPowerShot,

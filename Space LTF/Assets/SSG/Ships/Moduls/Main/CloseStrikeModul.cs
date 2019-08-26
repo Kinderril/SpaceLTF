@@ -69,7 +69,7 @@ public class CloseStrikeModul : BaseModul,IWeapon
 //        Debug.Log("Apply isReady closestShip");
         if (_timer == null || !_timer.IsActive)
         {
-            _timer = MainController.Instance.TimerManager.MakeTimer(1f, true);
+            _timer = MainController.Instance.BattleTimerManager.MakeTimer(1f, true);
             _timer.OnTimer += OnTimer;
         }
         _battleController = BattleController.Instance;

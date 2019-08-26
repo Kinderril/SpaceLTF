@@ -175,6 +175,9 @@ public static class Namings
                 break;
             case SimpleModulType.WeaponShieldPerHit:
                 Name = "Shield stealer";
+                break; 
+            case SimpleModulType.WeaponShootPerTime:
+                Name = "More bullets";
                 break;   
             case SimpleModulType.WeaponPowerShot:
                 Name = "Power shot";
@@ -535,6 +538,7 @@ public static class Namings
     public static string WeaponDest= "Weapon destroyed";
     public static string ShieldDest = "Shield destroyed";
     public static string FireDest = "Fire on board";
+    public static string DoWantRetire = "Do you want run away?";
     public static string DoWantRetry = "Do you want run away? {0} of your ships will be badly damaged.";
     public static string BeenBefore = "You have been there before.";
     public static string NoSafeGame = "No save game";
@@ -549,4 +553,8 @@ public static class Namings
     public static string Normal = "Normal";
     public static string Hard = "Hard";
     public static string Imposilbe = "Imposilbe";
+    public static string Radius = "Radius";
+    public static string Sector = "Sector";
+    public static string Reload = "Reload";
+    public static string ShootPerTime = "Bullet count";
 }

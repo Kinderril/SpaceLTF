@@ -291,7 +291,7 @@ public class BattleController :Singleton<BattleController>
 
     private void WaitEndBattle()
     {
-        var timer = MainController.Instance.TimerManager.MakeTimer(2.5f, false);
+        var timer = MainController.Instance.BattleTimerManager.MakeTimer(2.5f, false);
         timer.OnTimer += () => { EndPart1Battle(); };
 //        var taskWait = new Task(EndPart1Battle);
 //        taskWait.
@@ -420,6 +420,7 @@ public class BattleController :Singleton<BattleController>
         CellController.gameObject.SetActive(false);
         Battlefield.Dispose();
         State = BattleState.end;
+        MainController.Instance.BattleTimerManager.StopAll();
         CamerasController.Instance.EndGame();
         switch (LastWinner)
         {

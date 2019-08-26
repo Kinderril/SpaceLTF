@@ -40,7 +40,7 @@ public class PoolElement : MonoBehaviour
         {
             if (delay > 0)
             {
-                _timer = MainController.Instance.TimerManager.MakeTimer(delay);
+                _timer = MainController.Instance.BattleTimerManager.MakeTimer(delay);
                 _timer.OnTimer += () =>
                 {
                     isUsing = false;

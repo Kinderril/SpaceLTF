@@ -24,7 +24,7 @@ public abstract class TimerModul : BaseModul
     {
         if (_timer == null || !_timer.IsActive)
         {
-            _timer = MainController.Instance.TimerManager.MakeTimer(0.7f, true);
+            _timer = MainController.Instance.BattleTimerManager.MakeTimer(0.7f, true);
             _timer.OnTimer += OnTimer;
         }
         base.Apply(Parameters,owner);

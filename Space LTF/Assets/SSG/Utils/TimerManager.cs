@@ -178,4 +178,13 @@ public class TimerManager
             timers.AddLast(timer);
         }
     }
+
+    public void StopAll()
+    {
+        foreach (var timer in timers.ToList())
+        {
+            timer.Stop();
+        }
+        timers.Clear();
+    }
 }

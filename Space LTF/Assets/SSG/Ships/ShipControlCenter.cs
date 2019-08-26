@@ -35,11 +35,11 @@ public class ShipControlCenter : ShipBase
                 return;
             }
 
+            CurAction.ManualUpdate();
             if (CurAction != null)
             {
                 CurAction.ShallEndUpdate2();
             }
-            CurAction.ManualUpdate();
             EngineUpdate();
             ApplyMove();
         }

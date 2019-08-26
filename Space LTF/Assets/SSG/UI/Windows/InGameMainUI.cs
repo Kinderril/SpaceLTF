@@ -181,23 +181,33 @@ public class InGameMainUI : BaseWindow
 
     public void OnClickRetire()
     {
-        HashSet<ShipBase> shipsToDamage = new HashSet<ShipBase>();
-        float closestDist = 20f;
-        foreach (var ship in MyCommander.Ships)
-        {
-            foreach (var enemy in ship.Value.Enemies)
-            {
-                var closer = enemy.Value.Dist < closestDist;
-                if (closer)
-                {
-                    shipsToDamage.Add(ship.Value);
-                    break;
-                }
-            }
-        }
+//        HashSet<ShipBase> shipsToDamage = new HashSet<ShipBase>();
+//        float closestDist = 20f;
+//        foreach (var ship in MyCommander.Ships)
+//        {
+//            foreach (var enemy in ship.Value.Enemies)
+//            {
+//                var closer = enemy.Value.Dist < closestDist;
+//                if (closer)
+//                {
+//                    shipsToDamage.Add(ship.Value);
+//                    break;
+//                }
+//            }
+//        }
         OnPause();
-        WindowManager.Instance.ConfirmWindow.Init( ()=>DoRunAway(shipsToDamage),OnPause,
-            String.Format(Namings.DoWantRetry , shipsToDamage.Count));
+        WindowManager.Instance.ConfirmWindow.Init(() =>
+            {
+                foreach (var ship in MyCommander.Ships)
+                {
+                    if (ship.Value.ShipParameters.StartParams.ShipType != ShipType.Base)
+                    {
+                        ship.Value.RunAwayAction();
+                    }
+                }
+                OnPause();
+            }, OnPause,
+            String.Format(Namings.DoWantRetire));
     }
 
     private void DoRunAway(HashSet<ShipBase> shipsToDamage)

@@ -36,6 +36,7 @@ public class Commander
     private List<StartShipPilotData> _delayedShips = new List<StartShipPilotData>();
     private int index = 0;
     private CommanderShipEnemy LastPriorityTarget;
+//    private bool isRunawayComplete = false;
     public float StartPower { get; private set; }
     private Vector3 _enemyCell;
     private Player _player;
@@ -397,17 +398,29 @@ public class Commander
 
     public void ShipRunAway(ShipBase owner)
     {
+//        if (isRunawayComplete)
+//        {
+//            return;
+//        }
         owner.ShipRunAway();
         _battleController.ShipRunAway(owner);
-        if (Ships.Count == 1 && Ships[0].ShipParameters.StartParams.ShipType == ShipType.Base)
+        var shipsREmain = Ships.Values.ToList();
+        shipsREmain.Remove(owner);
+
+        Debug.Log($"ShipRunAway complete {owner.Id}  remainCount:{shipsREmain.Count}");
+        if (shipsREmain.Count == 1 && shipsREmain[0].ShipParameters.StartParams.ShipType == ShipType.Base)
         {
-             BattleController.Instance.RunAway();
+            //                isRunawayComplete = true;
+            BattleController.Instance.RunAway();
         }
-        if (Ships.Count == 1 || Ships.Count == 0)
+
+        if (shipsREmain.Count == 1 || shipsREmain.Count == 0)
         {
+            //                isRunawayComplete = true;
             Debug.LogError($"WRONG RUN AWAY Ships.Count {Ships.Count}");
             BattleController.Instance.RunAway();
         }
+
     }
 }
 

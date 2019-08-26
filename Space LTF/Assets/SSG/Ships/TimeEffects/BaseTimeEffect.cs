@@ -34,7 +34,7 @@ public abstract class BaseTimeEffect
     {
         _shipToApply = shipToApply;
         _shipToApply.OnDispose += OnDispose;
-        _timer = MainController.Instance.TimerManager.MakeTimer(deltaTimeSec);
+        _timer = MainController.Instance.BattleTimerManager.MakeTimer(deltaTimeSec);
         _timer.OnTimer += DisApply;
         Apply();
     }

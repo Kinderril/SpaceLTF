@@ -60,7 +60,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
     public float _delayBetweenShootsSec;
 
     //public float SpeedModif = 1f;  
-    public int _shootPerTime;
+    public int ShootPerTime { get; set; }
     public int _level;
 
     protected float _bulletTurnSpeed;
@@ -115,7 +115,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         AffectAction = new WeaponInventoryAffectTarget(Affect);
         _isRoundAng = weaponInv.isRoundAng;
         CreateBulletAction = weaponInv.BulletCreate;
-        _shootPerTime = weaponInv.shootPerTime;
+        ShootPerTime = weaponInv.ShootPerTime;
         _delayBetweenShootsSec = weaponInv.delayBetweenShootsSec;
         AimRadius = weaponInv.AimRadius;
         _radiusShoot = weaponInv._radiusShoot;
@@ -254,9 +254,9 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 
         _inProcess = true;
         ShootDir(target);
-        for (var i = 1; i < _shootPerTime; i++)
+        for (var i = 1; i < ShootPerTime; i++)
         {
-            var timer = MainController.Instance.TimerManager.MakeTimer(_delayBetweenShootsSec * i);
+            var timer = MainController.Instance.BattleTimerManager.MakeTimer(_delayBetweenShootsSec * i);
             timer.OnTimer += () =>
             {
                 if (!Owner.IsDead)
@@ -266,10 +266,10 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
             };
         }
 
-        if (ReloadSec < _delayBetweenShootsSec * (_shootPerTime - 1))
+        if (ReloadSec < _delayBetweenShootsSec * (ShootPerTime - 1))
         {
             Debug.LogError("wrong weapons settings. ReloadSec is less than delayBetweenShootsSec");
-            ReloadSec = _delayBetweenShootsSec * (_shootPerTime - 1) + 0.1f;
+            ReloadSec = _delayBetweenShootsSec * (ShootPerTime - 1) + 0.1f;
         }
     }
 
@@ -292,7 +292,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         }
         _curPeriodShoots++;
         BulletCreateByDir(target, Owner.LookDirection);
-        if (_curPeriodShoots >= _shootPerTime)
+        if (_curPeriodShoots >= ShootPerTime)
         {
             ShootDoneAction(Owner);
             _nextShootTime = Time.time + ReloadSec;

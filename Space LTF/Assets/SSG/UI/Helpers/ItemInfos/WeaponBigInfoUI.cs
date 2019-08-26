@@ -23,6 +23,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     public SliderWithTextMeshPro AngField;
     public SliderWithTextMeshPro ReloadField;       
     public SliderWithTextMeshPro BulletSpeedField;       
+    public SliderWithTextMeshPro ShootPerTime;       
 
     public Transform Layout;
 
@@ -61,13 +62,15 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         AngField.InitBorders(0, 180, true);
         ReloadField.InitBorders(1, 20, true);
         BulletSpeedField.InitBorders(0, 20, true);
+        ShootPerTime.InitBorders(0, 4, true);
 
-        RadiuesField.InitName("Radius");
-        AngField.InitName("Sector");
-        ReloadField.InitName("Reload");
-        BulletSpeedField.InitName("Speed");
-        DamageHP.InitName("Damage body");
-        DamageShield.InitName("Damage shield");
+        RadiuesField.InitName(Namings.Radius);
+        AngField.InitName(Namings.Sector);
+        ReloadField.InitName(Namings.Reload);
+        BulletSpeedField.InitName(Namings.Speed);
+        DamageHP.InitName(Namings.DamageBody);
+        DamageShield.InitName(Namings.DamageShield);
+        ShootPerTime.InitName(Namings.ShootPerTime);
         DrawCurrentUpgrades(modif);
     }
 
@@ -98,12 +101,13 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         BulletSpeedField.Slider.value = modif.BulletSpeed;
         DamageHP.Slider.value = modif.CurrentDamage.BodyDamage;
         DamageShield.Slider.value = modif.CurrentDamage.ShieldDamage;
+        ShootPerTime.Slider.value = modif.ShootPerTime;
     }
 
     private void DrawModuls()
     {
         dataModif = new WeaponUIParams(_weapon.CurrentDamage,
-            _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed, _weapon.ReloadSec);
+            _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed, _weapon.ReloadSec,_weapon.ShootPerTime);
         Layout.ClearTransform();
         if (!_withModul)
         {

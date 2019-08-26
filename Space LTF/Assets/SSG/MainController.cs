@@ -11,7 +11,7 @@ public enum StartMode
 
 public class MainController : Singleton<MainController>
 {
-    public TimerManager TimerManager = new TimerManager();
+    public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
     public Player MainPlayer;
     public PlayerStatistics Statistics;
@@ -91,13 +91,13 @@ public class MainController : Singleton<MainController>
 
     void Update()
     {
-        TimerManager.Update();
+        BattleTimerManager.Update();
     }
 
     public void EndGameWin()
     {
         WindowManager.Instance.OpenWindow(MainState.endBattle);
-        Statistics.EndGame(true);
+        Statistics.EndGame(EndBattleType.win);
         MainPlayer.MessagesToConsole.AddMsg("Battle won!");
         //        MainPlayer.EndGame();
     }
@@ -105,14 +105,15 @@ public class MainController : Singleton<MainController>
     public void EndGameLose()
     {
         WindowManager.Instance.OpenWindow(MainState.loseBattle);
-        Statistics.EndGame(false);
+        Statistics.EndGame(EndBattleType.lose);
         MainPlayer.EndGame();
     }
 
     public void EndGameRunAway()
     {
-        WindowManager.Instance.OpenWindow(MainState.runAwayBattle);
-        Statistics.EndGame(false);
+        WindowManager.Instance.OpenWindow(MainState.map);
+//        WindowManager.Instance.OpenWindow(MainState.runAwayBattle);
+        Statistics.EndGame(EndBattleType.runAway);
 //        MainPlayer.EndGame();
         MainPlayer.MessagesToConsole.AddMsg("Running away complete");
     }

@@ -59,6 +59,7 @@ public enum SimpleModulType
     beamUpgrade = 38,
     ShipDecreaseSpeed = 39,
     ShieldDouble = 40,
+    WeaponShootPerTime = 41,
 }
 
 public abstract class BaseModul

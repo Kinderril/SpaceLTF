@@ -78,7 +78,7 @@ public class CommandCoin
         _lenghtTime = delay;
         _restoreEndTime = Time.time + _lenghtTime;
         Used = true;
-        timer = MainController.Instance.TimerManager.MakeTimer(delay);
+        timer = MainController.Instance.BattleTimerManager.MakeTimer(delay);
         timer.OnTimer += () =>
         {
             Used = false;

@@ -151,13 +151,13 @@ public static class Library
         switch (weapon)
         {
             case WeaponType.laser:
-                parametes = new WeaponInventoryParameters(4, 4, LASER_ANG, LASER_DELAY, 0.15f, 1, LASER_SPEED, 8);
+                parametes = new WeaponInventoryParameters(4, 4, LASER_ANG, LASER_DELAY, 0.5f, 1, LASER_SPEED, 8);
                 return new LaserInventory(parametes,  1);
             case WeaponType.rocket:
                 parametes = new WeaponInventoryParameters(3, 6, ROCKET_ANG, ROCKET_DELAY, 0.5f, 1, ROCKET_SPEED, 11,36f);
                 return new RocketInventory(parametes,  1);
             case WeaponType.impulse:
-                parametes = new WeaponInventoryParameters(6, 2, LASER_ANG, IMPULSE_DELAY, 0.2f, 1, IMPULSE_SPEED, 6);
+                parametes = new WeaponInventoryParameters(3, 1, LASER_ANG, IMPULSE_DELAY, 0.5f, 2, IMPULSE_SPEED, 6);
                 return new ImpulseInventory(parametes,  1);
             case WeaponType.casset:
                 parametes = new WeaponInventoryParameters(2, 4, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9,70f);
@@ -166,7 +166,7 @@ public static class Library
                 parametes = new WeaponInventoryParameters(2, 2, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 7);
                 return new EMIRocketInventory(parametes, 1);
             case WeaponType.beam:
-                parametes = new WeaponInventoryParameters(1, 4, BEAM_ANG, BEAM_DELAY, 0.4f, 2, BEAM_SPEED, 2.5f);
+                parametes = new WeaponInventoryParameters(1, 4, BEAM_ANG, BEAM_DELAY, 0.4f, 1, BEAM_SPEED, 2.5f);
                 return new BeamWeaponInventory(parametes, 1);
                 //            case WeaponType.beam://NO USABLE
                 //                return new WeaponInv(2,7, MINE_ANG, BEAM_DELAY, 0.5f, 1, BEAM_SPEED,4, weapon, 1);
@@ -406,6 +406,8 @@ public static class Library
                 return new WeaponSelfDamageModul(level);
             case SimpleModulType.WeaponShieldPerHit:
                 return new WeaponShieldPerHit(level);
+            case SimpleModulType.WeaponShootPerTime:
+                return new WeaponPerTimeBullet(level);
             case SimpleModulType.WeaponNoBulletDeath:
                 return new WeaponNoDeathModul(level);
             case SimpleModulType.WeaponPowerShot:

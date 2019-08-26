@@ -7,7 +7,7 @@ public class WeaponShieldIgnore : BaseSupportModul
 {
     private const float decrase = 0.7f; 
     public WeaponShieldIgnore(int level)
-        : base(SimpleModulType.WeaponCrit, level)
+        : base(SimpleModulType.WeaponShieldIgnore, level)
     {
 
     }

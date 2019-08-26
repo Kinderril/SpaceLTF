@@ -31,7 +31,7 @@ public class ArtillerySpell : BaseSpellModulInv
         for (int i = 0; i < BulletsCount; i++)
         {
             var timer =
-                MainController.Instance.TimerManager.MakeTimer(i * 0.3f);
+                MainController.Instance.BattleTimerManager.MakeTimer(i * 0.3f);
             timer.OnTimer += () => {
                 if (battle.State == BattleState.process)
                 {

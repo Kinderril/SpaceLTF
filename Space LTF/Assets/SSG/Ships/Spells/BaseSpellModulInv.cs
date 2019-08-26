@@ -73,6 +73,7 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
         SpellType = spell;
         CostCount = costCount;
         CostTime = costTime;
+        ShootPerTime = 1;
     }
 
     protected abstract CreateBulletDelegate createBullet { get; }
@@ -122,6 +123,7 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
     public float SetorAngle { get; set; }
     public float BulletSpeed { get; set; }
     public float ReloadSec { get; set; }
+    public int ShootPerTime { get; set; }
 
     public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
     {
