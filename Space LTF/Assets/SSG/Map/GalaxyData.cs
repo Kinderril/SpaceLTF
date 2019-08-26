@@ -79,16 +79,17 @@ public class GalaxyData
         
         //Create start sector
         var startSector = allSubSectors.Where(x => x.StartX == 0).ToList().RandomElement();
-        var rndX = RndIndex(sizeSector - 2);
-        var rndZ = RndIndex(sizeSector - 2);
-        var xCell = startSector.StartX + 1 + rndX;
-        var zCell = startSector.StartZ + 1 + rndZ;
-        Debug.Log($"Create start sector X: {xCell} min:{startSector.StartX}  max:{startSector.StartX + sizeSector - 1}   SizeSector:{sizeSector}  rndX:{rndX}");
-        Debug.Log($"Create start sector Z: {zCell} min:{startSector.StartZ}  max:{startSector.StartZ + sizeSector - 1}   SizeSector:{sizeSector}  rndZ:{rndZ}");
-        xCell = Mathf.Clamp(xCell, startSector.StartX, startSector.StartX + sizeSector - 1);
-        zCell = Mathf.Clamp(zCell, startSector.StartZ, startSector.StartZ + sizeSector - 1);
+//        var rndX = RndIndex(sizeSector - 2);
+//        var rndZ = RndIndex(sizeSector - 2);
+//        var xCell = startSector.StartX + 1 + rndX;
+//        var zCell = startSector.StartZ + 1 + rndZ;
+//        Debug.Log($"Create start sector X: {xCell} min:{startSector.StartX}  max:{startSector.StartX + sizeSector - 2}   SizeSector:{sizeSector}  rndX:{rndX}");
+//        Debug.Log($"Create start sector Z: {zCell} min:{startSector.StartZ}  max:{startSector.StartZ + sizeSector - 2}   SizeSector:{sizeSector}  rndZ:{rndZ}");
+//        xCell = Mathf.Clamp(xCell, startSector.StartX, startSector.StartX + sizeSector - 1);
+//        zCell = Mathf.Clamp(zCell, startSector.StartZ, startSector.StartZ + sizeSector - 1);
 
-
+        var xCell = startSector.StartX + sizeSector / 2;
+        var zCell = startSector.StartZ + sizeSector / 2;
         var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell, startSector);
         startSector.SetCell(startCell,id);
         unPopulatedSectors.Remove(startSector);                                                          

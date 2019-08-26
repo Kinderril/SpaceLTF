@@ -9,7 +9,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
 {
     private StartShipPilotData _ship;
     public GameObject LevelUpButton;
-    public Button RepairButton;
+    public GameObject RepairButton;
 //    public TextMeshProUGUI RepairCost;
     public SliderWithTextMeshPro HealthSlider;
     public MoneySlotUI Money;
@@ -17,10 +17,12 @@ public class SideShipGlobalMapInfo : MonoBehaviour
     public TextMeshProUGUI LevelField;
     public Image RankImage;
     public GameObject[] CriticalDamages;
+    private MapWindow _window;
 
 
-    public void Init(StartShipPilotData ship)
+    public void Init(StartShipPilotData ship,MapWindow window)
     {
+        _window = window;
         _ship = ship;
         EnableActions();
         UpToDate();
@@ -54,9 +56,14 @@ public class SideShipGlobalMapInfo : MonoBehaviour
 //         //        _ship.Pilot.UpgradeLevel(true);
 //    }
 
-    public void OnRepairClick()
-    {                      
-        _ship.TryRepairSelfFull();
+//    public void OnRepairClick()
+//    {                      
+//        _ship.TryRepairSelfFull();
+//    }
+
+    public void OnClickToInventiry()
+    {
+        _window.OnArmyShowClick();
     }
 
     private void OnLevelUp(IPilotParameters obj)

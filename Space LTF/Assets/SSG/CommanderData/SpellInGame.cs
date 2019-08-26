@@ -34,14 +34,14 @@ public class SpellInGame : IWeapon
 
 
 //    private int RadiusCircle;
-    private Vector3 _modulPos;
+    private Func<Vector3> _modulPos;
     private Bullet _bulletOrigin;
     private WeaponAffectionAdditionalParams _additionalParams = new WeaponAffectionAdditionalParams();
     private SpellDamageData _spellDamageData;
 
     private readonly ShipBase _owner;
     public TeamIndex TeamIndex { get; private set; }
-    public Vector3 CurPosition => _modulPos;
+    public Vector3 CurPosition => _modulPos();
     public ShipBase Owner => _owner;
     public int Level { get; private set; }
     public int CostCount { get; private set; }
@@ -55,7 +55,7 @@ public class SpellInGame : IWeapon
     bool ShowLine { get; }
     public bool ShowCircle => ShowCircleRadius > 0;
 
-    public SpellInGame(ISpellToGame spellData,Vector3 modulPos,
+    public SpellInGame(ISpellToGame spellData,Func<Vector3> modulPos,
         TeamIndex teamIndex,ShipBase owner,int level,string name,int period,int count, SpellType spellType)
     {
         ShowCircleRadius = spellData.ShowCircle;
@@ -95,8 +95,8 @@ public class SpellInGame : IWeapon
         if (ShowLine)
         {
 
-            var dir = (pos - _modulPos);
-            LineObjectToShow.SetDirection(_modulPos, _modulPos + dir);
+            var dir = (pos - _modulPos());
+            LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir);
         }
     }
 
@@ -143,7 +143,7 @@ public class SpellInGame : IWeapon
     public void Cast(Vector3 target)
     {
         _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetCastSpell(SpellType));
-        CastSpell(new BulletTarget(target), _bulletOrigin, this, _modulPos, _bulletStartParams);
+        CastSpell(new BulletTarget(target), _bulletOrigin, this, _modulPos(), _bulletStartParams);
     }
 
 
@@ -154,12 +154,12 @@ public class SpellInGame : IWeapon
 
     protected void CreateBulletWithModif(ShipBase target)
     {
-        CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos, _bulletStartParams);
+        CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos(), _bulletStartParams);
     }
 
     protected void CreateBulletWithModif(Vector3 target)
     {
-        CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos, _bulletStartParams);
+        CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos(), _bulletStartParams);
     }
 
     public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase applyied)

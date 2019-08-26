@@ -127,7 +127,7 @@ public class MapWindow : BaseWindow
     {
         var element = DataBaseController.GetItem(SideShipGlobalMapInfoPrefabs);
         element.gameObject.transform.SetParent(LayoutSideShips, false);
-        element.Init(pilotData);
+        element.Init(pilotData,this);
         _sideInfos.Add(element);
     }
 

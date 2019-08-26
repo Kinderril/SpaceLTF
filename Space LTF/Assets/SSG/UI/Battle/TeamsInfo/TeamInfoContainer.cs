@@ -15,7 +15,7 @@ public class TeamInfoContainer : MonoBehaviour
     private Dictionary<ShipBase, SideShipMiniInfo> _infosRight  = new Dictionary<ShipBase, SideShipMiniInfo>();
     private Action<ShipBase> _shipSelectedAction;
     private RectTransform _layoutRect;
-    private int _openCount;
+//    private int _openCount;
     private int max_open = 2;
     private SideShipInfo _lastToggle = null;
 
@@ -66,8 +66,9 @@ public class TeamInfoContainer : MonoBehaviour
             if (shallOpen)
             {
                 _lastToggle = s1;
-                _openCount++;
             }
+//            _openCount++;
+//            Debug.LogError($"_openCount:{_openCount}");
             _infosGreen.Add(obj, s1);
             s1.transform.SetParent(Layout, false);
         }
@@ -90,20 +91,41 @@ public class TeamInfoContainer : MonoBehaviour
 
     private void ToggleChanges(SideShipInfo changedInfo)
     {
-        if (changedInfo.ToggleOpen.isOn)
+        if (changedInfo.IsOpen)
         {
-            _openCount++;
+            _lastToggle = changedInfo;
+//            Debug.LogError($" _lastToggle.Id:{ _lastToggle.Id}");
+           
         }
-        else
-        {
-            _openCount--;
-        }
+//        if (changedInfo.ToggleOpen.isOn)
+//        {
+//            _openCount++;
+//            Debug.LogError($"_openCount:{_openCount}  ++:");
+//        }
+//        else
+//        {
+//            _openCount--;
+//            Debug.LogError($"_openCount:{_openCount}  --:");
+//        }
 
-        if (_openCount > max_open)
+        var count = _infosGreen.Values.Sum(x => x.IsOpen?1:0);
+        if (count > max_open)
         {
-            if (_lastToggle != null)
+            if (_lastToggle != null && _lastToggle.IsOpen && _lastToggle != changedInfo)
             {
                 _lastToggle.ToggleViaCode();
+            }
+            else
+            {
+                _lastToggle = _infosGreen.Values.FirstOrDefault(x => x.IsOpen && x != changedInfo);
+                if (_lastToggle != null)
+                {
+                    _lastToggle.ToggleViaCode();
+                }
+                else
+                {
+                    Debug.LogError("can't find elemуtn to close");
+                }
             }
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(_layoutRect);

@@ -36,6 +36,9 @@ public  class BaseShipInventoryUI : DragZone
         InitParameter(playerParameters.Scouts);
         InitParameter(playerParameters.Diplomaty);
         InitParameter(playerParameters.Repair);
+        var rect = PamsLayout.GetComponent<RectTransform>();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+
 
         base.Init(shipInventory, usable, allSlots, connectedInventory);
         InitCurrentItems();

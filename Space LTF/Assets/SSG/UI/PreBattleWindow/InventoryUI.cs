@@ -15,7 +15,7 @@ public class InventoryUI : DragZone
     private List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();
     
     public Transform Layout;
-    private Player _player;
+    private Player _player;                                           
     private List<DragableItemSlot> _allSLots = new List<DragableItemSlot>();
 //    public ScrollView Scroll;
 //    private InventorySlots SlotsController;

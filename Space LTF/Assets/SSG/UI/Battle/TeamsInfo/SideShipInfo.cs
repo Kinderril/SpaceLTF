@@ -44,6 +44,9 @@ public class SideShipInfo : MonoBehaviour
     private Action<ShipBase> _shipSelectedAction;
     private Action<SideShipInfo> _toggleCallback;
 
+    public bool IsOpen => FullInfoContainer.gameObject.activeInHierarchy;
+    public int Id => _ship.Id;
+
     public void Init(ShipBase ship, Action<ShipBase> shipSelectedAction, Action<SideShipInfo> toggleCallback,bool shallOpen)
     {
         FireDamage.gameObject.SetActive(false);
@@ -117,10 +120,14 @@ public class SideShipInfo : MonoBehaviour
 
     public void OnToggleClick()
     {
-        var showFull = ToggleOpen.isOn;
-        UpdateToggle(showFull);
-        PlayerPrefs.SetInt(String.Format(PREFS_KEY,_ship.Id),(showFull?1:0));
-        _toggleCallback(this);
+//        if (ToggleOpen.isOn != FullInfoContainer.gameObject.activeSelf)
+//        {
+//            Debug.Log($"OnToggleClick {ToggleOpen.isOn}  {_ship.Id}");
+            var showFull = ToggleOpen.isOn;
+            UpdateToggle(showFull);
+            PlayerPrefs.SetInt(String.Format(PREFS_KEY, _ship.Id), (showFull ? 1 : 0));
+            _toggleCallback(this);
+//        }
 
     }
 

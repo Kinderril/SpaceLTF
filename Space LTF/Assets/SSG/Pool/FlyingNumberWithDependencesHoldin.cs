@@ -106,6 +106,7 @@ public class FlyingNumberWithDependencesHoldin : MonoBehaviour
 
     private void Merge(float delta)
     {
+//        Field.gameObject.SetActive(true);
         if (isActive)
         {
             ResetStayingTimer();
@@ -138,8 +139,9 @@ public class FlyingNumberWithDependencesHoldin : MonoBehaviour
     private void AnimEnds()
     {
         isActive = false;
-        _lastChangeDelta = 0f;
         Field.gameObject.SetActive(isActive);
+        _lastChangeDelta = 0f;
+//        Field.gameObject.SetActive(isActive);
     }
 
     public void Dispose()

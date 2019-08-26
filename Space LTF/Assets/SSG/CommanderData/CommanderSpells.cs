@@ -22,12 +22,12 @@ public class CommanderSpells
     {
         ShipBase mainShip = _commander.MainShip;
         var priority = new CommanderSpellPriorityTarget();
-        var spellInGame = new SpellInGame(priority, mainShip.Position, mainShip.TeamIndex, mainShip, 1,
+        var spellInGame = new SpellInGame(priority,()=> mainShip.Position, mainShip.TeamIndex, mainShip, 1,
             Namings.PriorityTarget, Library.PriorityTargetCostTime, Library.PriorityTargetCostCount, SpellType.priorityTarget);
         AllSpells.Add(spellInGame);
 
         var priorityBait = new CommanderSpellPriorityBait();
-        var baieSpell = new SpellInGame(priorityBait, mainShip.Position, mainShip.TeamIndex, mainShip, 1,
+        var baieSpell = new SpellInGame(priorityBait, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
             Namings.FakePriorityTarget, Library.BaitPriorityTargetCostTime, Library.BaitPriorityTargetCostCount, SpellType.BaitPriorityTarget);
         AllSpells.Add(baieSpell);
     }
@@ -42,7 +42,7 @@ public class CommanderSpells
     {
 
         ShipBase mainShip = _commander.MainShip;
-        var spellInGame= new SpellInGame(baseSpellModul,modulPos.position,mainShip.TeamIndex,mainShip,1,
+        var spellInGame= new SpellInGame(baseSpellModul, () => modulPos.position,mainShip.TeamIndex,mainShip,1,
             baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount,baseSpellModul.SpellType);
         AllSpells.Add(spellInGame);
     }

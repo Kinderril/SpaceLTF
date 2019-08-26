@@ -435,11 +435,6 @@ public class BattleController :Singleton<BattleController>
         }
     }
 
-    public void ChangerCoreTimeSpeed(float delta)
-    {
-        PauseData.ChangeCoreSpeed(delta);
-    }
-
     public void Dispose()
     {
         BulletContainer.ClearTransform();
