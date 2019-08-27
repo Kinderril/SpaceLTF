@@ -14,7 +14,8 @@ public class PlayerParameterUI : MonoBehaviour
     public TextMeshProUGUI NameField;
     public Button LevelUpButton;
     public TextMeshProUGUI FieldMaxLevel;
-    public TextMeshProUGUI FieldLevel;
+    public TextMeshProUGUI LvlUpCostField;
+
     private PlayerParameter _parameter;
 
     public void Init(PlayerParameter parameter)
@@ -25,14 +26,25 @@ public class PlayerParameterUI : MonoBehaviour
         OnUpgrade(_parameter);
     }
 
+    public void OnUpgradeClick()
+    {
+        _parameter.TryUpgrade();
+    }
+
     private void OnUpgrade(PlayerParameter obj)
     {
+        var cost = obj.UpgradeCost();
+        var isMaxLvl = obj.IsMaxLevel();
+        FieldMaxLevel.gameObject.SetActive(isMaxLvl);
+        LevelUpButton.gameObject.SetActive(!isMaxLvl);
+        LvlUpCostField.gameObject.SetActive(!isMaxLvl);
+
+        LvlUpCostField.text = cost.ToString();
         LevelField.text = obj.Level.ToString();
     }
 
     public void Dispose()
     {
-
         _parameter.OnUpgrade += OnUpgrade;
     }
 }

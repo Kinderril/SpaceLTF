@@ -93,6 +93,7 @@ public static class Library
     public const int BaitPriorityTargetCostCount = 2;
     public const int CRITICAL_DAMAGES_TO_DEATH = 2;
     public const int SHIELD_COEF_EXTRA_CHARGE = 10;
+    public static int RANK_ERIOD = 8;
 
 
     #region GLOBAL_MAP_DATA

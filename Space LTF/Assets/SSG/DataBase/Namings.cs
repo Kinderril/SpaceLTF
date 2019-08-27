@@ -557,4 +557,43 @@ public static class Namings
     public static string Sector = "Sector";
     public static string Reload = "Reload";
     public static string ShootPerTime = "Bullet count";
+    public static string cantUpgrade = "Can't upgrade";
+
+    public static string KeyKode(KeyCode descKey)
+    {
+        switch (descKey)
+        {
+            case KeyCode.Q:
+                return "Select main ship";
+            case KeyCode.Alpha1:
+                return "Select spell 1";
+            case KeyCode.Alpha2:
+                return "Select spell 2";
+            case KeyCode.Alpha3:
+                return "Select spell 3";
+            case KeyCode.Alpha4:
+                return "Select spell 4";
+            case KeyCode.Alpha5:
+                return "Select spell 5";
+            case KeyCode.Alpha6:
+                return "Select spell 6";     
+            case KeyCode.Space:
+                return "Pause/Unpause";
+            case KeyCode.Tab:
+                return "Choose ship";
+            case KeyCode.W:
+                return "Move camera Up";   
+            case KeyCode.S:
+                return "Move camera down";   
+            case KeyCode.A:
+                return "Move camera left";   
+            case KeyCode.D:
+                return "Move camera right";
+
+        }
+
+        return "null";
+    }
+
+    public static string UpgParams = "Dou you want upgrade {0}?\n Cost {1} credits.";
 }

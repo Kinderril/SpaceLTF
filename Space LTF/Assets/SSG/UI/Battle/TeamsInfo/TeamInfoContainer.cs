@@ -21,8 +21,9 @@ public class TeamInfoContainer : MonoBehaviour
 
     public void Init(Commander commander,Action<ShipBase> shipSelectedAction)
     {
+        _infosGreen.Clear();
         _layoutRect = Layout.GetComponent<RectTransform>();
-        //        Layout.ClearTransform();
+        Layout.ClearTransform();
         _shipSelectedAction = shipSelectedAction;
         _commander = commander;
 
@@ -133,6 +134,7 @@ public class TeamInfoContainer : MonoBehaviour
 
     public void Dispose()
     {
+        _infosGreen.Clear();
         Layout.ClearTransform();
         _commander.OnShipAdd -= OnShipAdd;
         _commander.OnShipDestroy -= OnShipDestroy;

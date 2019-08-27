@@ -15,7 +15,6 @@ public enum PilotRank
 [System.Serializable]
 public class TotalStats
 {
-    private const int RANK_ERIOD = 10;
     public PilotRank CurRank;
     public int Kills { get; private set; }
 
@@ -29,7 +28,7 @@ public class TotalStats
     public void AddKills(int kills)
     {
         Kills += kills;
-        var nextRankI = Kills / RANK_ERIOD;
+        var nextRankI = Kills / Library.RANK_ERIOD;
         PilotRank nextRank = (PilotRank) nextRankI;
         Debug.Log($"rank update : Kills {Kills}.  rank:{nextRank.ToString()}");
         if (nextRank != CurRank)

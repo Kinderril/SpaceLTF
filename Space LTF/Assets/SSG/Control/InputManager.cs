@@ -117,25 +117,33 @@ public class InputManager : MonoBehaviour
     }
 
     private int _lastShip = 0;
-    private void TryGetShipAndSelectItNext()
+    private void TryGetShipAndSelectItNext(int index = -1)
     {
         var ships = _commander.Ships.Values;
         var list = ships.ToList();
-        if (list.Count > 0)
+        if (index <= 0 || list.Count >= index)
         {
-            if (_lastShip < list.Count)
+            if (list.Count > 0)
             {
-                var s = list[_lastShip];
-                inGameMainUi.ActionShipSelected(s);
-                _lastShip++;
-            }
-            else
-            {
-                _lastShip = 0;
-                var s = list[_lastShip];
-                inGameMainUi.ActionShipSelected(s);
-            }
+                if (_lastShip < list.Count)
+                {
+                    var s = list[_lastShip];
+                    inGameMainUi.ActionShipSelected(s);
+                    _lastShip++;
+                }
+                else
+                {
+                    _lastShip = 0;
+                    var s = list[_lastShip];
+                    inGameMainUi.ActionShipSelected(s);
+                }
 
+            }
+        }
+        else
+        {
+            var toSelect = list[index];
+            inGameMainUi.ActionShipSelected(toSelect);
         }
 
     }
@@ -147,10 +155,10 @@ public class InputManager : MonoBehaviour
             TryGetShipAndSelectItNext();
         }
 
-        //        if (Input.GetKeyDown(KeyCode.Q))
-            //        {
-            //            TrySelectSpell(0);
-            //        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            TryGetShipAndSelectItNext(0);
+        }
             //        if (Input.GetKeyDown(KeyCode.E))
             //        {
             //            TrySelectSpell(1);

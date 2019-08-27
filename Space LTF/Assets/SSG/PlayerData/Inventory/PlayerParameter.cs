@@ -38,16 +38,20 @@ public class PlayerParameter
         if (CanUpgrade())
         {
             int cost = UpgradeCost();
-            _player.MoneyData.RemoveMoney(cost);
-            Level++;
-            if (OnUpgrade != null)
+            WindowManager.Instance.ConfirmWindow.Init(() =>
             {
-                OnUpgrade(this);
-            }
+
+                _player.MoneyData.RemoveMoney(cost);
+                Level++;
+                if (OnUpgrade != null)
+                {
+                    OnUpgrade(this);
+                }
+            },null,String.Format(Namings.UpgParams,Name, cost));
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null,"can't upgrade");
+            WindowManager.Instance.InfoWindow.Init(null,Namings.cantUpgrade);
         }
     }
 
