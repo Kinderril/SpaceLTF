@@ -10,16 +10,8 @@ public class CellController : MonoBehaviour
     public AICellDataRaound Data;
     public float CellDrawLevel = 10f;
     public float cellSize = 11f;
-
-//    public Transform Start;
-//    public Transform End;
-
-//    public GameObject CloudsPrefab;
-//    public AsteroidField AsteroidFieldPrefab;
-//    public DeepSpaceField DeepSpace;
     public Transform CellsContainer;
     public List<Asteroid> AsteroidsPrefabs;
-    
 
     public Vector3 Min
     {

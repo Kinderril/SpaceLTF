@@ -44,7 +44,7 @@ public class PlayerArmyUI : MonoBehaviour
         player.OnAddShip += OnAddShip;
         foreach (var shipPilotData in player.Army)
         {
-            AddShip(shipPilotData);
+            AddShip(shipPilotData,false);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
         WaitLoadStart();
@@ -68,7 +68,7 @@ public class PlayerArmyUI : MonoBehaviour
 //        LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
 //    }
 
-    private void AddShip(StartShipPilotData shipPilotData)
+    private void AddShip(StartShipPilotData shipPilotData,bool withRebuild)
     {
 
         if (shipPilotData.Ship.ShipType == ShipType.Base)
@@ -83,6 +83,8 @@ public class PlayerArmyUI : MonoBehaviour
             playerInfo.transform.SetParent(ShipsLayout);
             playerInfo.Init(shipPilotData, _usable, _connectedInventory,OnToggleSwitched);
             playerInfoList.Add(playerInfo);
+            if (withRebuild)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
         }
     }
 
@@ -95,7 +97,7 @@ public class PlayerArmyUI : MonoBehaviour
     {
         if (arg2)
         {
-            AddShip(arg1);
+            AddShip(arg1,true);
         }
     }
 

@@ -139,12 +139,12 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     {
         var army = MainController.Instance.MainPlayer.Army.Where(x=>x.Ship.ShipType != ShipType.Base && x.Pilot.CanUpgradeByLevel(9999)).ToList();
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData("Ok.", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
         if (army.Count > 0)
         {
             var rnd = army.RandomElement();
-            rnd.Pilot.UpgradeRandomLevel(false);
-            return new MessageDialogData($"Ship {rnd.Ship.Name} Upgraded.", mianAnswers);
+            var parameter = rnd.Pilot.UpgradeRandomLevel(false);
+            return new MessageDialogData($"{Namings.ParameterName(parameter)} upgrade at ship {rnd.Ship.Name} Upgraded.", mianAnswers);
         }
         else
         {

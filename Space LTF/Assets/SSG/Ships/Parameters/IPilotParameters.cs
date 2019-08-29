@@ -39,7 +39,7 @@ public interface IPilotParameters
     event Action<IPilotParameters> OnLevelUp;
     void AddMoney(int money);
 
-    void UpgradeRandomLevel(bool withMoney);
+    LibraryPilotUpgradeType UpgradeRandomLevel(bool withMoney);
     void UpgradeLevel(bool withMoney, LibraryPilotUpgradeType type);
     void UpgradeLevelByType(LibraryPilotUpgradeType rnd);
     bool HaveMoney(int cost);

@@ -118,25 +118,9 @@ public class BattleController :Singleton<BattleController>
         RedCommander = new Commander(TeamIndex.red, Battlefield, redSide, this);
 
         var d = CellController.Data;
-//        var b1 = d.GetCell(0, 0);
-//        var b2 = d.GetCell(d.MaxIx - 1, d.MaxIz - 1);
-//        var cell1 = d.FindClosestCellByType(b1, CellType.Free);
-//        var cell2 = d.FindClosestCellByType(b2, CellType.Free);
-//        Debug.Log("Start cell 1 : " + cell1.ToString() + "   b1" + b1.ToString());
-//        Debug.Log("Start cell 2 : " + cell2.ToString() + "   b2" + b2.ToString());
 
-        var center = d.CenterZone;
-        var radius = d.InsideRadius - START_SAFE_RADIUS;
-
-        var dir1 =  new Vector3(0,0,-1);
-        var diifAng = MyExtensions.Random(-25, 25f);
-        dir1 = Utils.RotateOnAngUp(dir1, diifAng);
-        var posTeam1 = center + dir1 * radius;
-        
-        var dir2 =  new Vector3(0,0,1);
-        var diifAng2 = MyExtensions.Random(-25, 25f);
-        dir2 = Utils.RotateOnAngUp(dir2, diifAng2);
-        var posTeam2 = center + dir2 * radius;
+        var posTeam1 = d.StartPosition1;
+        var posTeam2 = d.StartPosition2;
 
         var shipsA = GreenCommander.InitShips(posTeam1, posTeam2);
         var shipsB = RedCommander.InitShips(posTeam2, posTeam1);

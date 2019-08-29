@@ -166,7 +166,22 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         shipParameters.Damage(CurrentDamage.ShieldDamage, CurrentDamage.BodyDamage,callback, target);
     }
 
-    protected bool IsAimedStraight(ShipPersonalInfo target, ShipBase owner, Vector3 shootPos,
+    protected bool IsAimedStraight(ShipPersonalInfo targInfo, ShipBase owner, Vector3 shootPos,float distShoot)
+    {
+
+        int mask = owner.TeamIndex == TeamIndex.green
+            ? LayerMaskController.AimingMaskRed
+            : LayerMaskController.AimingMaskGreen;
+
+        if (Physics.Linecast(shootPos, owner.LookDirection* distShoot, out var hitInfo, mask))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected bool IsAimedStraight2(ShipPersonalInfo target, ShipBase owner, Vector3 shootPos,
         float bulletSpeed, float posibleDelta)
     {
         if (target.ShipLink.CurSpeed < 0.001f)

@@ -10,6 +10,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
 
 public class DebugPanelWindow : EditorWindow
 {
@@ -141,6 +142,8 @@ public class DebugPanelWindow : EditorWindow
         FastRecharge = !FastRecharge;
         DebugParamsController.FastRecharge = FastRecharge;
     }
+
+    private GameObject _aimingBox;
     private void NoInGame()
     {
         if (GUILayout.Button("Recalc bullets IDs"))
@@ -155,6 +158,22 @@ public class DebugPanelWindow : EditorWindow
             foreach (var gameObject in prefabs)
             {
                 AddAudioTest(gameObject);
+            }
+
+        }
+
+        _aimingBox = EditorGUILayout.ObjectField(_aimingBox, typeof(GameObject), true) as GameObject;
+        if (GUILayout.Button("Update aiming Box"))
+        {
+            List<GameObject> prefabs = new List<GameObject>();
+            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
+            var aimingBox = _aimingBox.GetComponent<AimingBox>();
+            if (aimingBox != null)
+            {
+                foreach (var gameObject in prefabs)
+                {
+                    AddAimingBox(gameObject, aimingBox);
+                }
             }
 
         }
@@ -263,6 +282,35 @@ public class DebugPanelWindow : EditorWindow
         // NO SAVE - Prefab still has MeshRenderer enabled.
         //~ PrefabUtility.SavePrefabAsset(PrefabAsset);
         
+        // This save method works.
+        PrefabUtility.SaveAsPrefabAsset(editable_prefab, asset_path);
+        PrefabUtility.UnloadPrefabContents(editable_prefab);
+    }     
+    private void AddAimingBox( GameObject PrefabAsset,AimingBox box)
+    {
+//        PrefabAsset = EditorGUILayout.ObjectField("Prefab", PrefabAsset, typeof(GameObject), allowSceneObjects: false);
+        var asset_path = AssetDatabase.GetAssetPath(PrefabAsset);
+        var editable_prefab = PrefabUtility.LoadPrefabContents(asset_path);
+
+        // Do your changes here.
+        var ShipBase = editable_prefab.GetComponent<ShipBase>();
+        if (ShipBase == null)
+        {
+            return;
+        }
+
+        var par = ShipBase.ShipVisual;
+        var item = DataBaseController.GetItem(box);
+        item.transform.SetParent(par.transform);
+        ShipBase.AimingBox = item;
+        item.transform.localPosition = new Vector3(0,0,0.64f);
+
+
+
+
+
+        Undo.RecordObject(ShipBase, "Aimng box FIX");
+        ShipBase.enabled = false;
         // This save method works.
         PrefabUtility.SaveAsPrefabAsset(editable_prefab, asset_path);
         PrefabUtility.UnloadPrefabContents(editable_prefab);

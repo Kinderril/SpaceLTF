@@ -39,5 +39,17 @@ public class ConfirmWindow : MonoBehaviour
         WindowManager.Instance.WindowMainCanvas.interactable = true;
         WindowManager.Instance.WindowSubCanvas.interactable = false;
     }
+    void LateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            OnConfirmClick();
+        }
+        else
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnRejectClick();
+        }
+    }
 }
 

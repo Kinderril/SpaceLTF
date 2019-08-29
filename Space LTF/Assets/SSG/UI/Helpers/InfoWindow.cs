@@ -34,5 +34,13 @@ public class InfoWindow : MonoBehaviour
             onOK();
         gameObject.SetActive(false);
     }
+
+    void LateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            OnClickOk();
+        }
+    }
 }
 

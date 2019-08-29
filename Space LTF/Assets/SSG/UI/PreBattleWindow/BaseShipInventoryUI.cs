@@ -16,11 +16,13 @@ public  class BaseShipInventoryUI : DragZone
     public Transform SpellsLayout;
     public Transform PamsLayout;
     public PlayerParameterUI PlayerParameterPrefab;
+    private List<PlayerParameterUI> _curParams = new List<PlayerParameterUI>();
 
     private ShipInventory _shipInventory;
 
     public void Init(PlayerParameters playerParameters,ShipInventory shipInventory, bool usable, ConnectInventory connectedInventory)
     {
+        _curParams.Clear();
         _shipInventory = shipInventory;
         SpellsLayout.ClearTransform();
         PamsLayout.ClearTransform();
@@ -49,6 +51,17 @@ public  class BaseShipInventoryUI : DragZone
         var itemParameter = DataBaseController.GetItem(PlayerParameterPrefab);
         itemParameter.transform.SetParent(PamsLayout,false);
         itemParameter.Init(parameter);
+        _curParams.Add(itemParameter);
+    }
+
+    public override void Dispose()
+    {
+        foreach (var param in _curParams)
+        {
+            param.Dispose();
+        }
+        _curParams.Clear();
+        base.Dispose();
     }
 
     private List<DragableItemSlot> InitSpells()

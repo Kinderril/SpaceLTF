@@ -45,7 +45,7 @@ public class PlayerParameterUI : MonoBehaviour
 
     public void Dispose()
     {
-        _parameter.OnUpgrade += OnUpgrade;
+        _parameter.OnUpgrade -= OnUpgrade;
     }
 }
 

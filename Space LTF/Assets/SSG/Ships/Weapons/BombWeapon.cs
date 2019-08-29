@@ -30,7 +30,7 @@ public class BombWeapon : WeaponInGame
     
     public override bool IsAimed(ShipPersonalInfo target)
     {
-        return IsAimedStraight(target, Owner, GetShootPos, BulletSpeed, _fixedDelta);
+        return IsAimedStraight(target, Owner, GetShootPos, _radiusShoot);
     }
 
 //    public override void ApplyToShip(ShipParameters shipParameters, ShipBase target, Bullet bullet)

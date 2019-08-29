@@ -70,6 +70,7 @@ public class ShipBase : MovingObject
     private ArrowTarget Arrow;
     public ShipParameters ShipParameters { get; private set; }
     public ShipModuls ShipModuls { get; private set; }
+    public AimingBox AimingBox;
     public ShipPersonalInfo Target;
     public TeamIndex TeamIndex;
     public AICell Cell;
@@ -132,6 +133,7 @@ public class ShipBase : MovingObject
         PilotParameters = pilotParams;
         Commander = commander;
         TeamIndex = teamIndex;
+        AimingBox.Init(this);
         transform.position = pos.position;
         transform.rotation = Quaternion.FromToRotation(Vector3.forward, pos.direction);
         if (ShieldCollider == null)

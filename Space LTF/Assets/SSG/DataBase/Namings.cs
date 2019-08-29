@@ -596,4 +596,5 @@ public static class Namings
     }
 
     public static string UpgParams = "Dou you want upgrade {0}?\n Cost {1} credits.";
+    public static string Ok = "Ok";
 }

@@ -92,7 +92,7 @@ public class PilotParameters : IPilotParameters
         MoneyData.AddMoney(money);
     }
 
-    public void UpgradeRandomLevel(bool withMoney)
+    public LibraryPilotUpgradeType UpgradeRandomLevel(bool withMoney)
     {
         List<LibraryPilotUpgradeType> all = new List<LibraryPilotUpgradeType>()
         {
@@ -101,8 +101,9 @@ public class PilotParameters : IPilotParameters
             LibraryPilotUpgradeType.turnSpeed,
             LibraryPilotUpgradeType.health,
         };
-        UpgradeLevel(withMoney, all.RandomElement());
-
+        var p = all.RandomElement();
+        UpgradeLevel(withMoney,p );
+        return p;
     }
     public void UpgradeLevel(bool withMoney,LibraryPilotUpgradeType type)
     {

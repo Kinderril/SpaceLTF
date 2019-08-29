@@ -48,12 +48,12 @@ public class AICellDataRaound
     public float Radius;
 
     public float InsideRadius => Radius - AICellDataRaound.SafeRadius;
-
     public Vector3 Min => new Vector3(StartX,0, StartZ);
-
     public Vector3 Max => new Vector3(StartX + CellSize* MaxIx, 0, StartZ + CellSize * MaxIz);
-
     public Vector3 CenterZone { get; private set; }
+    public Vector3 StartPosition1 { get; private set; }
+    public Vector3 StartPosition2 { get; private set; }
+
     public List<AIAsteroidPredata> Asteroids = new List<AIAsteroidPredata>();
 
     public void Init(Vector3 startPos,int size,float cellSize)
@@ -102,8 +102,6 @@ public class AICellDataRaound
         CellPoint point2 = new CellPoint(MaxIx, MaxIz, startPoint2);
         cellsPoints[MaxIx, MaxIz] = point2;
 
-
-
         //Create cells
         for (int i = 0; i < MaxIx; i++)
         {
@@ -120,6 +118,8 @@ public class AICellDataRaound
             }
         }
 
+        CalcStartPositinons();
+
         int asteroidsFieldCount = (int)((size + 6f) / 2f);
         Asteroids.Clear();
         CreateAsteroidsOnCircle(2);
@@ -127,47 +127,68 @@ public class AICellDataRaound
 
     }
 
+    private void CalcStartPositinons()
+    {
+        var dir1 = new Vector3(0, 0, -1);
+        var diifAng = MyExtensions.Random(-25, 25f);
+        dir1 = Utils.RotateOnAngUp(dir1, diifAng);
+        StartPosition1 = CenterZone + dir1 * SafeRadius;
+
+        var dir2 = new Vector3(0, 0, 1);
+        var diifAng2 = MyExtensions.Random(-25, 25f);
+        dir2 = Utils.RotateOnAngUp(dir2, diifAng2);
+        StartPosition2 = CenterZone + dir2 * SafeRadius;
+    }
+
     private void CreateRandomAsteroids(int fieldsCount)
     {
 //        AddAsteroidToPosition(CenterZone);
         var offsetCEnterField = InsideRadius - AsteroidRadius;
-                for (int i = 0; i < fieldsCount; i++)
-                {
-                    var findPointX = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
-                    var findPointZ = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
-        //            var point = new Vector3(findPointX, 0, findPointZ);
-                    var countAsteroids = MyExtensions.Random(AsteroidINFieldMin, AsteroidINFieldMax);
-                    for (int j = 0; j < countAsteroids; j++)
-                    {
-                        var xx = MyExtensions.Random(0.3f, AsteroidRadius);
-                        var zz = MyExtensions.Random(0.3f, AsteroidRadius);
-                        var ateroidPos = new Vector3(findPointX + xx, 0, findPointZ + zz);
-                        AddAsteroidToPosition(CenterZone + ateroidPos);
-                    }
-                }
+        for (int i = 0; i < fieldsCount; i++)
+        {
+            var findPointX = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
+            var findPointZ = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
+//            var point = new Vector3(findPointX, 0, findPointZ);
+            var countAsteroids = MyExtensions.Random(AsteroidINFieldMin, AsteroidINFieldMax);
+            for (int j = 0; j < countAsteroids; j++)
+            {
+                var xx = MyExtensions.Random(0.3f, AsteroidRadius);
+                var zz = MyExtensions.Random(0.3f, AsteroidRadius);
+                var ateroidPos = new Vector3(findPointX + xx, 0, findPointZ + zz);
+                AddAsteroidToPosition(CenterZone + ateroidPos);
+            }
+        }
     }
 
     private void AddAsteroidToPosition(Vector3 ateroidPos)
     {
-        var asteroid = new AIAsteroidPredata(ateroidPos);
-        Asteroids.Add(asteroid);
-        //        StartX + CellSize * i
-        var cellIx = (int)((ateroidPos.x - StartX) / CellSize);
-        var cellIz = (int)((ateroidPos.z - StartZ) / CellSize);
-        for (int i = Mathf.Clamp(cellIx-1,0, MaxIx); i < Mathf.Clamp(cellIx + 2, 0, MaxIx); i++)
+        var distTostart1 = (ateroidPos - StartPosition1).magnitude; 
+        var distTostart2 = (ateroidPos - StartPosition2).magnitude;
+        if (distTostart2 > 10 && distTostart1 > 10)
         {
-            for (int j = Mathf.Clamp(cellIz - 1, 0, MaxIz); j < Mathf.Clamp(cellIz + 2, 0, MaxIz); j++)
+            var asteroid = new AIAsteroidPredata(ateroidPos);
+            Asteroids.Add(asteroid);
+            //        StartX + CellSize * i
+            var cellIx = (int)((ateroidPos.x - StartX) / CellSize);
+            var cellIz = (int)((ateroidPos.z - StartZ) / CellSize);
+            for (int i = Mathf.Clamp(cellIx - 1, 0, MaxIx); i < Mathf.Clamp(cellIx + 2, 0, MaxIx); i++)
             {
-                var cell = GetCell(i, j);
-                cell.AddAsteroid(asteroid);
-//                Debug.LogError($"Add asteroid to cells {cell.Xindex},{cell.Zindex}");
+                for (int j = Mathf.Clamp(cellIz - 1, 0, MaxIz); j < Mathf.Clamp(cellIz + 2, 0, MaxIz); j++)
+                {
+                    var cell = GetCell(i, j);
+                    cell.AddAsteroid(asteroid);
+                    //                Debug.LogError($"Add asteroid to cells {cell.Xindex},{cell.Zindex}");
+                }
             }
         }
+
+        
 
     }
 
     private void CreateAsteroidsOnCircle(int iterations)
     {
+        var minRad = (Radius - SafeRadius) * 1.2f;
         for (int j = 0; j < iterations; j++)
         {
             var countSTeps = 40;
@@ -177,12 +198,25 @@ public class AICellDataRaound
             for (int i = 0; i < countSTeps; i++)
             {
                 dir = Utils.RotateOnAngUp(dir, MyExtensions.GreateRandom(step));
-                var point = CenterZone + dir * MyExtensions.Random(Radius - SafeRadius, Radius);
+                var point = CenterZone + dir * MyExtensions.Random(minRad, Radius*1.1f);
                 var asteroid = new AIAsteroidPredata(point);
                 Asteroids.Add(asteroid);
             }
-        }  
+        }
 
+        for (int i = 0; i < MaxIx; i++)
+        {
+            for (int j = 0; j < MaxIz; j++)
+            {
+                var cell = GetCell(i, j);
+                var cellCenter = cell.Center;
+                var distToCenter = (CenterZone - cellCenter).magnitude;
+                if (distToCenter > minRad)
+                {
+                    cell.CellType = CellType.Asteroids;
+                }
+            }
+        }
     }
 
     public void SetCell(int i, int j, AICell cell)
