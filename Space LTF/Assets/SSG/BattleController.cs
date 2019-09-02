@@ -53,6 +53,7 @@ public class BattleController :Singleton<BattleController>
 //    private float _lastTimeDelta = 1f;
 
     public List<Bullet> ActiveBullet = new List<Bullet>();
+    public List<BulletKiller> ActiveBulletKillers = new List<BulletKiller>();
     public Transform BulletContainer;
     public Transform OneBattleContainer;
 
@@ -61,6 +62,8 @@ public class BattleController :Singleton<BattleController>
     
     public void LaunchGame(Player greenSide, Player redSide)
     {
+        ActiveBullet.Clear();
+        ActiveBulletKillers.Clear();
         PreLaunchGame(greenSide, redSide);
     }
 
@@ -380,6 +383,11 @@ public class BattleController :Singleton<BattleController>
         State = BattleState.preEnd;
         DataBaseController.Instance.Pool.Clear();
         InGameMainUI.EndBattle(LastWinner);
+        foreach (var activeBulletKiller in ActiveBulletKillers.ToList())
+        {
+            GameObject.Destroy(activeBulletKiller.gameObject);
+        }
+        ActiveBulletKillers.Clear();
         Dispose();
     }
 
@@ -469,6 +477,20 @@ public class BattleController :Singleton<BattleController>
 //            bullet.transform.SetParent(BulletContainer,true);
             ActiveBullet.Add(bullet);
         }
+    }
+
+    public void AddBullet(BulletKiller bullet)
+    {
+        if (!ActiveBulletKillers.Contains(bullet))
+        {
+            //            bullet.transform.SetParent(BulletContainer,true);
+            ActiveBulletKillers.Add(bullet);
+        }
+    }
+
+    public void RemoveBullet(BulletKiller bullet)
+    {
+        ActiveBulletKillers.Remove(bullet);
     }
 
     [CanBeNull]

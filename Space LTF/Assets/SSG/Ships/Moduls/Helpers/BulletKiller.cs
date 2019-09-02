@@ -41,6 +41,7 @@ public class BulletKiller : MonoBehaviour
         }
 #endif
 
+        BattleController.Instance.AddBullet(this);
         ProcessEvent.Play(_lauchShip.transform.position, _bulletTarget.transform.position);
     }
 
@@ -94,6 +95,7 @@ public class BulletKiller : MonoBehaviour
 
         _lauchShip = null;
         GameObject.Destroy(gameObject);
-//        EndUse(delay);
+        BattleController.Instance.RemoveBullet(this);
+        //        EndUse(delay);
     }
 }

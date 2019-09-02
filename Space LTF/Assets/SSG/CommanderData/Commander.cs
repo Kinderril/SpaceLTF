@@ -341,6 +341,8 @@ public class Commander
             Debug.Log($"End game health remain percent:{percent}   baseRepairPercent:{baseRepairPercent}   isDead:{isDead}");
             shipBase.Value.ShipInventory.SetRepairPercent(percent);
         }
+        //TODO ADD DEATH SHIP AFFECT
+
     }
 
     public bool TryRecharge(ShipBase ship)

@@ -173,7 +173,9 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
             ? LayerMaskController.AimingMaskRed
             : LayerMaskController.AimingMaskGreen;
 
-        if (Physics.Linecast(shootPos, owner.LookDirection* distShoot, out var hitInfo, mask))
+        var to = shootPos + owner.LookDirection* distShoot;
+        Debug.DrawLine(shootPos, to, Color.magenta);
+        if (Physics.Linecast(shootPos, to, out var hitInfo, mask))
         {
             return true;
         }

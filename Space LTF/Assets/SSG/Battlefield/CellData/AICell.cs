@@ -559,7 +559,9 @@ public class AICell
     public void DrawGizmosSelected()
     {
         var h = Side;
-          Gizmos.DrawWireCube(Center,new Vector3(h,0.1f,h));
+        Color c = CellType == CellType.Free ? Color.white : Color.red;
+        Gizmos.color = c;
+        Gizmos.DrawWireCube(Center,new Vector3(h,0.1f,h));
 //        foreach (var posibleDirection in PosibleDirections)
 //        {
 //            var d = posibleDirection.Value;

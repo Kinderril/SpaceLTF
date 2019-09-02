@@ -132,12 +132,12 @@ public class AICellDataRaound
         var dir1 = new Vector3(0, 0, -1);
         var diifAng = MyExtensions.Random(-25, 25f);
         dir1 = Utils.RotateOnAngUp(dir1, diifAng);
-        StartPosition1 = CenterZone + dir1 * SafeRadius;
+        StartPosition1 = CenterZone + dir1 * InsideRadius;
 
         var dir2 = new Vector3(0, 0, 1);
         var diifAng2 = MyExtensions.Random(-25, 25f);
         dir2 = Utils.RotateOnAngUp(dir2, diifAng2);
-        StartPosition2 = CenterZone + dir2 * SafeRadius;
+        StartPosition2 = CenterZone + dir2 * InsideRadius;
     }
 
     private void CreateRandomAsteroids(int fieldsCount)
