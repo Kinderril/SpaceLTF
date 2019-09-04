@@ -77,7 +77,7 @@ public class PlayerAfterBattleOptions
         {
             var masinMsg = "Coordinates of some fleets open";
             var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Ok", OpenCellsByRaiders));
+            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByRaiders));
             var mesData = new MessageDialogData(masinMsg, ans);
             return mesData;
         }
@@ -127,7 +127,7 @@ public class PlayerAfterBattleOptions
         {
             var masinMsg = "Coordinates of some fleets open";
             var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Ok", OpenCellsByMercenaries));
+            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByMercenaries));
             var mesData = new MessageDialogData(masinMsg, ans);
             return mesData;
         }
@@ -165,7 +165,7 @@ public class PlayerAfterBattleOptions
         {
             var masinMsg = "Coordinates of some fleets open";
             var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Ok", OpenCellsByOcrons));
+            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByOcrons));
             var mesData = new MessageDialogData(masinMsg, ans);
             return mesData;
         }
@@ -193,7 +193,7 @@ public class PlayerAfterBattleOptions
         {
             var masinMsg = "Coordinates of some fleets open";
             var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Ok", OpenCellsByKrions));
+            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByKrions));
             var mesData = new MessageDialogData(masinMsg, ans);
             return mesData;
         }
@@ -243,7 +243,7 @@ public class PlayerAfterBattleOptions
             {
                 if (shipPilotData.Ship.ShipType != ShipType.Base)
                 {
-                    shipPilotData.Pilot.UpgradeRandomLevel(false);
+                    shipPilotData.Pilot.UpgradeRandomLevel(false,true);
                 }
             }
         }
@@ -258,9 +258,9 @@ public class PlayerAfterBattleOptions
     {
         if (!MyExtensions.IsTrue01(0.15f))
         {
-            var masinMsg = "Coordinates of some fleets open";
+            var masinMsg = Namings.OpenCoordinates; 
             var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Ok", OpenCellsByFederation));
+            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByFederation));
             var mesData = new MessageDialogData(masinMsg, ans);
             return mesData;
         }

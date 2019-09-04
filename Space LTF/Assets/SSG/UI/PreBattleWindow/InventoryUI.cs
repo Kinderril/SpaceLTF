@@ -8,7 +8,7 @@ using UnityEngine.Experimental.UIElements;
 
 public class InventoryUI : DragZone
 {
-    private const int MAX_SLOTS = 16;
+//    private const int MAX_SLOTS = 16;
 
     private List<BaseModulInv> Moduls = new List<BaseModulInv>();
     private List<WeaponInv> Weapons = new List<WeaponInv>();
@@ -89,7 +89,7 @@ public class InventoryUI : DragZone
     
     private void InitFreeSlots()
     {
-        var delta = MAX_SLOTS - _allSLots.Count;
+        var delta = _inventory.SlotsCount - _allSLots.Count;
         for (int i = 0; i < delta; i++)
         {
             var itemSlot = AttachToLayout();

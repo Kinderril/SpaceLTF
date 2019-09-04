@@ -23,6 +23,7 @@ public enum ActionType
     goToHide,
     waitEnemySec,
     waitEdnGame,
+    readyToAttack,
 }
 
 public abstract class BaseAction

@@ -412,6 +412,12 @@ public static class Utils
         return a.z*b.x - a.x*b.z;
     }
 
+    public static float GreateRandom(float ang)
+    {
+        var a = ang * 0.8f;
+        var b = ang * 1.2f;
+        return RandomNormal(a, b);
+    }
 }
 
 

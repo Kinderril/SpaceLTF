@@ -53,11 +53,18 @@ public class SpellInGame : IWeapon
     public SpellType SpellType { get;private set; }
     float ShowCircleRadius { get; }
     bool ShowLine { get; }
+    private float _maxDist;
     public bool ShowCircle => ShowCircleRadius > 0;
 
     public SpellInGame(ISpellToGame spellData,Func<Vector3> modulPos,
-        TeamIndex teamIndex,ShipBase owner,int level,string name,int period,int count, SpellType spellType)
+        TeamIndex teamIndex,ShipBase owner,int level,string name,int period,
+        int count, SpellType spellType,float maxDist)
     {
+        if (maxDist < 1)
+        {
+            Debug.LogError($"Shoot dist is vey low {spellData}  {maxDist}  name:{name}");
+        }
+        _maxDist = maxDist;
         ShowCircleRadius = spellData.ShowCircle;
         ShowLine = spellData.ShowLine;
         Level = level;
@@ -96,7 +103,7 @@ public class SpellInGame : IWeapon
         {
 
             var dir = (pos - _modulPos());
-            LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir);
+            LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir, _maxDist);
         }
     }
 

@@ -25,7 +25,7 @@ public class CellController : MonoBehaviour
     public void Init(int coef = 0)
     {
         gameObject.SetActive(true);
-        var size = 2 + MyExtensions.Random(6 + coef / 2, 9 + coef);
+        var size = 2 + MyExtensions.Random(5 + coef / 2, 7 + coef);
 //        var sizeX = MyExtensions.Random(7 + coef/2, 8 + coef);
 //        var sizeZ = MyExtensions.Random(7 + coef/2, 8 + coef);
         Data.Init(transform.position, size, cellSize);

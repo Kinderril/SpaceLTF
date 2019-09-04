@@ -417,8 +417,18 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         {
             return false;
         }
-
         return _nextShootTime < Time.time;
+    } 
+    public bool IsLoaded(float deltaPosible, out bool fullLoad)
+    {
+        if (IsCrahed)
+        {
+            fullLoad = false;
+            return false;
+        }
+        var delta = _nextShootTime - Time.time;
+        fullLoad = delta < 0f;
+        return delta < deltaPosible;
     }
 
     public void SetTransform(WeaponPlace transform)

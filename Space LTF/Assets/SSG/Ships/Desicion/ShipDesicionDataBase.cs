@@ -125,6 +125,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 break;
             case ActionType.goToHide:
                 return new GoToHideAction(_owner);
+            case ActionType.readyToAttack:
+                return new ReadyToAttackAction(_owner, _owner.Enemies[target]);  
             case ActionType.attack:
                 return new AttackAction(_owner, _owner.Enemies[target]);
             case ActionType.moveToBase:
@@ -192,16 +194,31 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         return ActionType.goToHide;
     }
     
-    protected ActionType DoOrWait(ActionType def,ShipBase ship,ActionType defNo = ActionType.afterAttack)
+    protected ActionType DoOrWait(ActionType defaultAction,ShipBase ship,ActionType defNo = ActionType.afterAttack)
     {
-        if (_owner.WeaponsController.AnyWeaponIsLoaded() && ship != null && ship.VisibilityData.Visible)
+        if (_owner.WeaponsController.AnyWeaponIsLoaded(2f, out var fullLoad))
         {
-            return def;
+            if (ship != null && ship.VisibilityData.Visible)
+            {
+                if (fullLoad)
+                {
+                    return defaultAction;
+                }
+                else
+                {
+                    return ActionType.readyToAttack;
+                }
+            }
         }
-        if (_owner.Locator.DangerEnemy != null)
-        {
-            return ActionType.evade;
-        }
+
+//        if (_owner.WeaponsController.AnyWeaponIsLoaded() && ship != null && ship.VisibilityData.Visible)
+//        {
+//            return def;
+//        }
+//        if (_owner.Locator.DangerEnemy != null)
+//        {
+//            return ActionType.evade;
+//        }
         return defNo;
     }
 

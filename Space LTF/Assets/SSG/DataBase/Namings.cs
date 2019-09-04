@@ -371,6 +371,9 @@ public static class Namings
     {
         switch (arg2ActionType)
         {
+            case ActionType.readyToAttack:
+                return "Preparing";
+                break;   
             case ActionType.attack:
                 return "Attack";
                 break;
@@ -597,4 +600,8 @@ public static class Namings
 
     public static string UpgParams = "Dou you want upgrade {0}?\n Cost {1} credits.";
     public static string Ok = "Ok";
+    public static string CoreSector = "Target sector";
+    public static string NotCoreSector = "Simple sector";
+    public static string Populated = "Populated by";
+    public static string OpenCoordinates = "Coordinates of some fleets open";
 }

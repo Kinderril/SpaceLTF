@@ -22,7 +22,8 @@ public class ShipDesicionDataAttack : ShipDesicionDataBase
 
     protected override ActionType DoAttackAction(ShipBase ship)
     {
-        return DoOrWait(AttackOrAttackSide(ship), ship);
+        var attackOptional = AttackOrAttackSide(ship);
+        return DoOrWait(attackOptional, ship);
     }
 
     protected override ActionType OptionalTask(out ShipBase ship)

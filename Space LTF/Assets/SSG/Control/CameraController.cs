@@ -21,6 +21,7 @@ public class CameraController : MonoBehaviour
     private float startMoveTime;
     private float _period;
     public Camera Camera;
+    public CameraShake MainCameraShake;
     private bool _isEnable = true;
     public AudioSource SourceAmbient;
     public AudioListener MainListerer;

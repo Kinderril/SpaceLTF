@@ -25,8 +25,8 @@ public class ShipDecreaseSpeedModul : BaseSupportModul
     }
     public override void ChangeParams(IAffectParameters weapon)
     {
-        weapon.CurrentDamage.BodyDamage *= DmgLevel;
-        weapon.CurrentDamage.ShieldDamage *= DmgLevel;
+        weapon.CurrentDamage.BodyDamage *= 1 + DmgLevel;
+        weapon.CurrentDamage.ShieldDamage *= 1 + DmgLevel;
     }
 
     public override void ChangeParamsShip(IShipAffectableParams Parameters)

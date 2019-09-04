@@ -31,6 +31,7 @@ public class GalaxyData
     private  const int zoneCount = 5;
     public  const int VERTICAL_COUNT = 3;
     private bool _prevStepDestroy = false;
+    public List<SectorData> AllSectors = new List<SectorData>();
 
     Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
 
@@ -150,6 +151,7 @@ public class GalaxyData
 
         foreach (var sectorData in allSubSectors)
         {
+            AllSectors.Add(sectorData);
             sectorData.CacheWays();
         }
 

@@ -30,7 +30,7 @@ public class ParameterWithLevelUp : MonoBehaviour
     {
         if (_pilot.CanUpgradeAnyParameter(0))
         {
-            _pilot.UpgradeLevel(true, _type);
+            _pilot.UpgradeLevel(true, _type,true);
         }
     }
 

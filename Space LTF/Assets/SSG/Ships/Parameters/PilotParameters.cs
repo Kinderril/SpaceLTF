@@ -92,7 +92,7 @@ public class PilotParameters : IPilotParameters
         MoneyData.AddMoney(money);
     }
 
-    public LibraryPilotUpgradeType UpgradeRandomLevel(bool withMoney)
+    public LibraryPilotUpgradeType UpgradeRandomLevel(bool withMoney, bool withMsg)
     {
         List<LibraryPilotUpgradeType> all = new List<LibraryPilotUpgradeType>()
         {
@@ -102,10 +102,10 @@ public class PilotParameters : IPilotParameters
             LibraryPilotUpgradeType.health,
         };
         var p = all.RandomElement();
-        UpgradeLevel(withMoney,p );
+        UpgradeLevel(withMoney,p, withMsg);
         return p;
     }
-    public void UpgradeLevel(bool withMoney,LibraryPilotUpgradeType type)
+    public void UpgradeLevel(bool withMoney,LibraryPilotUpgradeType type,bool withMsg)
     {
         if (withMoney)
         {
@@ -118,7 +118,7 @@ public class PilotParameters : IPilotParameters
         var rnd = type;
         if (CanUpgradeByLevel(CurLevel) && MoneyData.PayLvlUp(CurLevel))
         {
-            UpgradeLevelByType(rnd);
+            UpgradeLevelByType(rnd,withMsg);
         }
     }
 
@@ -270,7 +270,7 @@ public class PilotParameters : IPilotParameters
 //    }
 
 
-    public void UpgradeLevelByType(LibraryPilotUpgradeType rnd)
+    public void UpgradeLevelByType(LibraryPilotUpgradeType rnd,bool withMsg)
     {
         switch (rnd)
         {
@@ -287,7 +287,8 @@ public class PilotParameters : IPilotParameters
                 UpgradeMaxTurnSpeedCoef();
                 break;
         }
-        MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format("Ship upgraded!"));
+        if (withMsg)
+            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format("Ship upgraded!"));
         if (OnLevelUp != null)
         {
             OnLevelUp(this);

@@ -61,7 +61,7 @@ public class DataStructPrefabs : MonoBehaviour
     public CoinUI CoinPrefab;
     public SideShipInfo SideShipInfoLeft;
     public SideShipMiniInfo SideShipInfoRight;
-    public WindowKeys WindowKeys;
+    public SectorGlobalMapInfo SectorGlobalMapInfo;
 
     public DragableWeaponItem DragableItemWeaponPrefab;
     public DragableModulItem DragableItemModulPrefab;

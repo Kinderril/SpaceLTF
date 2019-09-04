@@ -22,7 +22,7 @@ public class WeaponAOEModul : BaseSupportModul
     }
     public override string DescSupport()
     {
-        return $"Damage all ships in radius {RAD}. Decrease damage by {Utils.FloatToChance(decrase)}.";
+        return $"Damage all ships in radius {RAD}. Decrease damage by {Utils.FloatToChance(decrase)}%.";
     }
     protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase target, Bullet bullet, DamageDoneDelegate doneDelegate,WeaponAffectionAdditionalParams additional)
     {

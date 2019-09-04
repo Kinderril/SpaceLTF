@@ -216,6 +216,8 @@ public class ShipInventory : IStartShipParams , IInventory
         get { return _player; }
     }
 
+    public int SlotsCount => SpellModulsCount + SimpleModulsCount + WeaponModulsCount;
+
     public bool IsShop()
     {
         return false;

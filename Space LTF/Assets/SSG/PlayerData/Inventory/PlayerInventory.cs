@@ -41,6 +41,9 @@ public class PlayerInventory : IInventory
     }
     [CanBeNull]
     public Player Owner { get { return _player; } }
+
+    public int SlotsCount => MAX_SLOTS;
+
     public virtual bool IsShop()
     {
         return false;

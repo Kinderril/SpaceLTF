@@ -33,7 +33,8 @@ public interface IInventory
     void TransferItem(IItemInv item, bool val);
 
     Player Owner { get; }
-    
+    int SlotsCount { get; }
+
     bool IsShop();
 }
 

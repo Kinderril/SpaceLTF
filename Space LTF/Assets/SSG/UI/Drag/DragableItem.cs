@@ -83,6 +83,8 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
         {
             if (findedSlot != Slot)
             {
+//                var slotInventory = findedSlot._inventory;
+
                 if (findedSlot.CanPutHere(this))
                 {
 
@@ -123,6 +125,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
         {
             var p = transform.position;
             DragableItemSlot findedSlot = TryFindSlot(p);
+            Debug.Log($"Release findedSlot:{findedSlot !=null}");
             TestSlot(findedSlot, b =>
             {
                 if (!b)
@@ -163,12 +166,6 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
         List<RaycastResult> raycastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(pointer, raycastResults);
 
-
-
-//        var m_PointerEventData = new PointerEventData(EventSystem.current);
-//        m_PointerEventData.position = vector3;
-//        List<RaycastResult> results = new List<RaycastResult>();
-//        m_Raycaster.Raycast(m_PointerEventData, results);
         foreach (RaycastResult result in raycastResults)
         {
             var tmpSlot = result.gameObject.GetComponent<DragableItemSlot>();

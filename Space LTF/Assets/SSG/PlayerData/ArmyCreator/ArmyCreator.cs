@@ -86,7 +86,8 @@ public static class ArmyCreator
              {LibraryShipUpgradeType.upgradeWeapon ,5} ,
              {LibraryShipUpgradeType.upgradeModul ,3} ,
             });
-            UpgradeShip(points, LibraryShipUpgradeType.addModul, ship, upgrades, data, logger);
+            var rnd = upgrades.Random();
+            UpgradeShip(points, rnd, ship, upgrades, data, logger);
             upgradeIterations--;
         }
         Debug.LogFormat("Simple army create. RemainPoints:{0}", remainPoints);
@@ -472,7 +473,7 @@ public static class ArmyCreator
             v.Points -= d;
             logs.AddLog(v.Points,"upgrade pilot");
             var rnd = list.RandomElement();
-            pilot.UpgradeLevelByType(rnd);
+            pilot.UpgradeLevelByType(rnd,false);
             return true;
         }
         return false;

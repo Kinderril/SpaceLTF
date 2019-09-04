@@ -23,26 +23,13 @@ public class GlobalMapCellObject : MonoBehaviour
     private GameObject ObjectPainted;
 
 
-    //    public GameObject ShipPrefab;
     private bool _isArmy;
-
-//    public List<SpaceObject> PlanetSphereObjectPrefabs;
-//    public ParticleSystem main;
     public GameObject IAmHere;
     public Transform Container;
-//    public Transform DestroyedContainer;
     public GameObject SelectedObj;
-//    private SpaceObject _mainGameObject;
-    public GameObject CanBeTargetObject;
-//    public GameObject HistoryInfo;
-//    public List<Renderer> HistoryInfoRenderers;
+//    public GameObject CanBeTargetObject;
     public Color CompleteColor;
-//    public Color ScoutedColor;
-//    public Animator ShipAnimator;
-
     private bool _IamHere;
-//    public List<ParticleSystem> allPartiles = new List<ParticleSystem>();
-//    private Dictionary<ParticleSystem,Color> _systemsColors = new Dictionary<ParticleSystem, Color>();
 
     public Vector3 ModifiedPosition
     {
@@ -126,7 +113,7 @@ public class GlobalMapCellObject : MonoBehaviour
     private void UpdateConnetedGates()
     {
         var shallDraw = Cell.ConnectedGates > 0;
-        CanBeTargetObject.SetActive(shallDraw);
+//        CanBeTargetObject.SetActive(shallDraw);
     }
 
     private void InitMainObject()

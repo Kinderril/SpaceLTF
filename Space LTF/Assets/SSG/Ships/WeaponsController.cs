@@ -153,6 +153,26 @@ public class WeaponsController
             }
         }
         return false;
+    }    
+    public bool AnyWeaponIsLoaded(float delta,out bool fullLoad)
+    {
+        bool loadByDelta = false;
+        bool loadFull = false;
+
+        foreach (var weapon in _weapons)
+        {                    
+            if (weapon.IsLoaded(delta,out var fullLoadWeapon))
+            {
+                if (fullLoadWeapon)
+                {
+                    loadFull = true;
+                }
+                loadByDelta = true;
+            }
+        }
+
+        fullLoad = loadFull;
+        return loadByDelta;
     }
 
 

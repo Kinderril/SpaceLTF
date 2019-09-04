@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class AfterAttackAction : BaseAction
 {
-
     public AfterAttackAction([NotNull] ShipBase owner) 
         : base(owner,ActionType.afterAttack)
     {
@@ -25,6 +24,10 @@ public class AfterAttackAction : BaseAction
 
     private void FindWay()
     {
+        var point = _owner.CellController.Data.FreePoints.RandomElement();
+        _targetPoint = point;
+        return;
+
         var trgCell = _owner.CellController.GetCellByDir(_owner.Cell, _owner.LookDirection);
         if (trgCell.IsFree())
         {

@@ -142,15 +142,17 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
         if (Complete)
         {
             var mianAnswers = new List<AnswerDialogData>();
+            int improved = 0;
             foreach (var shipPilotData in MainController.Instance.MainPlayer.Army)
             {
                 if (shipPilotData.Ship.ShipType != ShipType.Base)
                 {
-                    shipPilotData.Pilot.UpgradeRandomLevel(false);
+                    improved++;
+                    shipPilotData.Pilot.UpgradeRandomLevel(false,true);
                 }
             }
             mianAnswers.Add(new AnswerDialogData($"Yes.", null, null));
-            var mesData = new MessageDialogData("You successfully deactivate anomaly. All your ships improved.", mianAnswers);
+            var mesData = new MessageDialogData($"You successfully deactivate anomaly. {improved} of your ships improved.", mianAnswers);
             return mesData;
         }
         else

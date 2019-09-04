@@ -12,10 +12,17 @@ public class SpellZoneVisualLine : MonoBehaviour
     private Vector3 _from;
     private Vector3 _to;
 
-    public void SetDirection(Vector3 from, Vector3 to)
+    public void SetDirection(Vector3 from, Vector3 to,float maxDist)
     {
         _from = from;
         _to = to;
+
+        var dir = _to - _from;
+        var dist = dir.magnitude;
+        if (dist > maxDist)
+        {
+            _to = _from + Utils.NormalizeFast(dir) * maxDist;
+        }
         gameObject.SetActive(true);
         var list = new List<Vector3>();
         list.Add(from);

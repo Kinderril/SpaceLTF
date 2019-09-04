@@ -55,6 +55,7 @@ public class AICellDataRaound
     public Vector3 StartPosition2 { get; private set; }
 
     public List<AIAsteroidPredata> Asteroids = new List<AIAsteroidPredata>();
+    public List<Vector3> FreePoints = new List<Vector3>();
 
     public void Init(Vector3 startPos,int size,float cellSize)
     {
@@ -122,9 +123,63 @@ public class AICellDataRaound
 
         int asteroidsFieldCount = (int)((size + 6f) / 2f);
         Asteroids.Clear();
-        CreateAsteroidsOnCircle(2);
+        CreateAsteroidsOnCircle(4);
         CreateRandomAsteroids(asteroidsFieldCount);
+        FindFreeCorePoints();
 
+    }
+
+    private void FindFreeCorePoints()
+    {
+        var rad1 = InsideRadius * 0.3f;
+        var rad2 = InsideRadius * 0.5f;
+//        var rad3 = InsideRadius * 0.7f;
+        var countSides = 16;
+        var ang = 360f / countSides;
+        var dir1 = new Vector3(1, 0, 0);
+        var dir2 = new Vector3(1, 0, 0);
+        for (int i = 0; i < countSides; i++)
+        {
+
+            dir1 = Utils.RotateOnAngUp(dir1, Utils.GreateRandom(ang));
+            dir2 = Utils.RotateOnAngUp(dir2, -Utils.GreateRandom(ang));
+            var p1 = CenterZone + dir1 * rad1;
+            var p2 = CenterZone + dir2 * rad2;
+            if (IsFree(p1))
+            {
+                FreePoints.Add(p1);
+            }
+            if (IsFree(p2))
+            {
+                FreePoints.Add(p2);
+            }
+        }
+
+        if (FreePoints.Count < 3)
+        {
+            Debug.LogError("can't find enought free points");
+            for (int i = 0; i < 10; i++)
+            {
+                var xx = MyExtensions.Random(-InsideRadius, InsideRadius);
+                var zz = MyExtensions.Random(-InsideRadius, InsideRadius);
+                var p = CenterZone + new Vector3(xx, 0, zz);
+                FreePoints.Add(p);
+
+            }
+        }
+    }
+
+    private bool IsFree(Vector3 p2)
+    {
+        foreach (var asteroid in Asteroids)
+        {
+            var sDist = (asteroid.Position - p2).sqrMagnitude;
+            if (sDist > 2 * 2)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void CalcStartPositinons()

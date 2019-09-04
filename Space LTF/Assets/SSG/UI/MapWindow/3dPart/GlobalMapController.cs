@@ -12,7 +12,8 @@ public class GlobalMapController : MonoBehaviour
 {
     private GlobalMapCellObject[,] _allCells;
     public GlobalMapCellObject CellPrefab;
-    public float Offset;
+    public float OffsetCell;
+//    public float OffsetSector;
     private GalaxyData _data;
 
     private bool IsEnbale
@@ -36,6 +37,7 @@ public class GlobalMapController : MonoBehaviour
     public Transform WaysContainer;
     public Transform ConnectionsContainer;
     public Transform PointsContainer;
+    public Transform SectorsContainer;
     public GlobalMapCellConnector GlobalMapCellConnectorPrefab;
     public GlobalMapCellConnector GlobalMapCellWayPrefab;
     public GlobalMapMoverObject MapMoverObject;
@@ -45,6 +47,8 @@ public class GlobalMapController : MonoBehaviour
         = new Dictionary<GlobalMapCell, List<GlobalMapCellConnector>>();
     GlobalMapCellObject myCEll = null;
     private float _mapPressedDownTime;
+    private List<SectorGlobalMapInfo> _allSectros = new List<SectorGlobalMapInfo>();
+    private SectorGlobalMapInfo _lastSelectedSector;
 
 
     public void SingleInit(GalaxyData data,MapWindow mapWindow, Action<GlobalMapCellObject> CallbackNearObjec)
@@ -53,15 +57,16 @@ public class GlobalMapController : MonoBehaviour
         {
             return;
         }
-
+        SectorsContainer.ClearTransform();
         this.CallbackNearObjec = CallbackNearObjec;
         _mapWindow = mapWindow;
         isInited = true;
         _data = data;
         _allCells = new GlobalMapCellObject[data.Size, data.Size];
         min = Vector3.zero;
-        max = new Vector3(Offset * data.Size, 0, Offset * data.Size);
+        max = new Vector3(OffsetCell * data.Size, 0, OffsetCell * data.Size);
 
+        DrawSectors(_data);
         var startCell = DrawCells(data);
         for (int i = 0; i < 22; i++)
         {
@@ -74,7 +79,19 @@ public class GlobalMapController : MonoBehaviour
         if (startCell != null)
             RecursuveDrawWays(data, startCell, usedCells);
         SetBorders();
-//        Draw
+    }
+
+    private void DrawSectors(GalaxyData data)
+    {
+        foreach (var sector in data.AllSectors)
+        {
+            var sectorPlace =
+                DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.SectorGlobalMapInfo);
+            sectorPlace.transform.SetParent(SectorsContainer);
+            sectorPlace.Init(sector, data, OffsetCell);
+            sectorPlace.name = $"Sector {sector.Id}";
+            _allSectros.Add(sectorPlace);
+        }
     }
 
     private GlobalMapCell DrawCells(GalaxyData data)
@@ -101,11 +118,11 @@ public class GlobalMapController : MonoBehaviour
                         startCell = cell;
                         //                        haveStartCell = true;
                     }
-                    Vector3 v = new Vector3(Offset * i, 0, Offset * j);
+                    Vector3 v = new Vector3(OffsetCell * i, 0, OffsetCell * j);
                     var cellObj = DataBaseController.GetItem(CellPrefab);
                     cellObj.transform.SetParent(PointsContainer, true);
                     cellObj.transform.position = v;
-                    cellObj.Init(cell, Offset);
+                    cellObj.Init(cell, OffsetCell);
                     cellObj.Cell.OnDestoyedCell += OnDestoyedCell;
                     _allCells[i, j] = cellObj;
                 }
@@ -328,14 +345,37 @@ public class GlobalMapController : MonoBehaviour
             Clicked(Input.mousePosition, true);
             return;
         }
-        UpdateClosest();
+
+        var ray = GetPointByClick(Input.mousePosition);
+        UpdateClosetsSector(ray);
+        UpdateClosest(ray);
+    }
+
+    private void UpdateClosetsSector(Vector3? point)
+    {
+        if (point.HasValue)
+        {
+            var secot = ClosestSector(point.Value, out var dist);
+            if (secot != null)
+            {
+//                Debug.LogError($"closest {secot.transform.position}   point:{point}  name:{secot.name}");
+            }
+            if (secot != _lastSelectedSector)
+            {
+
+                if (_lastSelectedSector != null)
+                {
+                    _lastSelectedSector.UnSelect();
+                }
+                _lastSelectedSector = secot;
+                _lastSelectedSector.Select();
+            }
+        }
     }
 
 
-    private void UpdateClosest()
+    private void UpdateClosest(Vector3? ray)
     {
-
-        var ray = GetPointByClick(Input.mousePosition);
         if (ray.HasValue)
         {
             float dist;
@@ -376,9 +416,8 @@ public class GlobalMapController : MonoBehaviour
     private GlobalMapCellObject ClosestObject(Vector3 pos,out float dist)
     {
         float vv = Single.MaxValue;
-        var xIndex = (int)((pos.x + Offset/2f) / Offset);
-        var zIndex = (int)((pos.z + Offset / 2f) / Offset);
-//        Debug.Log($"INDEX: {xIndex} {zIndex}");
+        var xIndex = (int)((pos.x + OffsetCell/2f) / OffsetCell);
+        var zIndex = (int)((pos.z + OffsetCell / 2f) / OffsetCell);
         if (xIndex >= 0 && xIndex < _data.Size && zIndex >= 0 && zIndex < _data.Size)
         {
             var a = _allCells[xIndex, zIndex];
@@ -391,27 +430,24 @@ public class GlobalMapController : MonoBehaviour
 
         dist = 0f;
         return null;
+    }
 
-
-//        GlobalMapCellObject obj = null;
-//        for (int i = 0; i < _data.Size; i++)
-//        {
-//            for (int j = 0; j < _data.Size; j++)
-//            {
-//                var a = _allCells[i, j];
-//                if (a != null)
-//                {
-//                    var sDist = (a.transform.position - pos).sqrMagnitude;
-//                    if (sDist < vv)
-//                    {
-//                        vv = sDist;
-//                        obj = a;
-//                    }
-//                }
-//            }
-//        }
-//        dist = vv;
-//        return obj;
+    private SectorGlobalMapInfo ClosestSector(Vector3 pos,out float dist)
+    {
+        var startDist = Single.MaxValue;
+        dist = 0f;
+        SectorGlobalMapInfo secotr = null;
+        foreach (var allSectro in _allSectros)
+        {
+            dist = (allSectro.transform.position - pos).sqrMagnitude;
+            if (dist < startDist)
+            {
+//                Debug.LogError($"dist to secv {dist}   name:{allSectro.name}");
+                startDist = dist;
+                secotr = allSectro;
+            }
+        }
+        return secotr;
     }
 
     private Vector3? GetPointByClick(Vector3 pos)

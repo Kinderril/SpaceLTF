@@ -12,6 +12,8 @@ public class SectorData
     public int StartX;
     public int StartZ;
     public int Size { get; private set; }
+    public bool IsCore { get; private set; }
+    public string Name { get; private set; }
     public int XIndex { get; private set; }
     public int Id { get; private set; }
     public bool IsPopulated { get; private set; }
@@ -193,7 +195,7 @@ public class SectorData
             }
         }
 #endif
-
+        Name = Namings.ShipConfig(_shipConfig);
     }
 
     public bool ComeToSector(int visitedSectors)
@@ -390,6 +392,7 @@ public class SectorData
 
     public void MarkAsCore(int coreId)
     {
+        IsCore = true;
         Debug.Log($"Sector marked as core:{Id}  coreId:{coreId}");
         for (int i = 0; i < Size; i++)
         {

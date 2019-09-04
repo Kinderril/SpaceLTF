@@ -224,6 +224,8 @@ public class ShipBase : MovingObject
     
     private void Death()
     {
+        if (TeamIndex == TeamIndex.red && MyExtensions.IsTrueEqual())
+            CamerasController.Instance.GameCamera.MainCameraShake.Init(1f);
         Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetDeath());
         ShipInventory.LastBattleData.Destroyed = true;
         VisibilityData.Dispose();

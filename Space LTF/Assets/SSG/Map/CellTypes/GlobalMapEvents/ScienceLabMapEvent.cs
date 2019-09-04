@@ -143,7 +143,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         if (army.Count > 0)
         {
             var rnd = army.RandomElement();
-            var parameter = rnd.Pilot.UpgradeRandomLevel(false);
+            var parameter = rnd.Pilot.UpgradeRandomLevel(false,true);
             return new MessageDialogData($"{Namings.ParameterName(parameter)} upgrade at ship {rnd.Ship.Name} Upgraded.", mianAnswers);
         }
         else

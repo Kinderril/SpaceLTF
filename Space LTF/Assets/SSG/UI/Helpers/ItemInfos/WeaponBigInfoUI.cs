@@ -56,8 +56,8 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
     private void DrawParams(IAffectParameters modif)
     {
-        DamageHP.InitBorders(0, 10, true);
-        DamageShield.InitBorders(0, 10, true);
+        DamageHP.InitBorders(0, 20, true);
+        DamageShield.InitBorders(0, 20, true);
         RadiuesField.InitBorders(0, 15, true);
         AngField.InitBorders(0, 180, true);
         ReloadField.InitBorders(1, 20, true);
