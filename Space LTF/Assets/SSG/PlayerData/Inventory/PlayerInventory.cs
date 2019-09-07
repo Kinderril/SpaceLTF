@@ -11,7 +11,7 @@ using UnityEngine;
 public class PlayerInventory : IInventory
 {
 
-    public const int MAX_SLOTS = 50;
+    public static int MAX_SLOTS = 50;
     public List<BaseModulInv> Moduls = new List<BaseModulInv>();
     public List<WeaponInv> Weapons = new List<WeaponInv>();
     public List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();
@@ -31,6 +31,11 @@ public class PlayerInventory : IInventory
 
     public void TransferItem(IItemInv item, bool val)
     {
+        if (item == null)
+        {
+            Debug.LogError("Tyr to transfer zero item");
+            return;
+        }
         Debug.Log($"TransferItem {item.WideInfo()}  {val}");
         if (val)
             item.CurrentInventory = this;

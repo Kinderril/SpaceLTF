@@ -30,8 +30,8 @@ public class InventoryUI : DragZone
         Weapons = player.Weapons;
         Moduls = player.Moduls;
         Spells = player.Spells;
-        InitFreeSlots();
         InitCurrentItems();
+        InitFreeSlots();
 //        InitMoney();
         base.Init(player, true, _allSLots, connectedInventory);
 //        Enable();
