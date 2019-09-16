@@ -103,6 +103,9 @@ public static class Namings
                 break;
             case SimpleModulType.damageMines:
                 Name = "Power mine";
+                break;   
+            case SimpleModulType.fireMines:
+                Name = "Fire mine";
                 break;
             case SimpleModulType.blink:
                 Name = "Teleportation";
@@ -196,6 +199,9 @@ public static class Namings
                 break;
             case SimpleModulType.ShieldDouble:
                 Name = "Maximum shield";
+                break;  
+            case SimpleModulType.WeaponShieldIgnore:
+                Name = "Ignore shield";
                 break;
             default:
                 Debug.LogError($"NO NAME {config.ToString()}");
@@ -235,10 +241,13 @@ public static class Namings
                 Name = "Destroy engine of target enemy.";
                 break;
             case SimpleModulType.systemMines:
-                Name = "Put system mines trying to hit enemies";
+                Name = "Put system mines, crashing enemies engines";
                 break;
             case SimpleModulType.damageMines:
-                Name = "Put damage mines trying to hit enemies";
+                Name = "Put damage mines to hit enemies";
+                break; 
+            case SimpleModulType.fireMines:
+                Name = $"Put damage mines, witch can fire enemies for {MineFireModul.PERIOD_DAMAGE} sec.";
                 break;
             case SimpleModulType.blink:
                 Name = "Ship can teleport to better locations.";
@@ -257,6 +266,9 @@ public static class Namings
                 break;
             case SimpleModulType.bombUpgrade:
                 Name = "Increase power of all bomb weapons for +1/+1 per level.";
+                break;   
+            case SimpleModulType.ResistDamages:
+                Name = "Protect ships engine, weapons, shields. And your ship cannot be fired.";
                 break;
 //            case SimpleModulType.ShipSpeed:
 //                Name = String.Format("Increase ship max speed for {0}% per level.", ShipTurnModul.PER_LEVEL);
@@ -266,7 +278,12 @@ public static class Namings
 //                break;
 
             default:
-                Debug.LogError($"NO DescSimpleModul {config.ToString()}");
+#if UNITY_EDITOR
+                if (!LibraryModuls.IsSupport(config))
+                {
+                    Debug.LogError($"NO DescSimpleModul NOT SUPPORT    {config.ToString()}");
+                }
+#endif
                 break;
         }
         return Name;
@@ -437,6 +454,7 @@ public static class Namings
     public static string Fleet = "Fleet";
     public static string RechargeButton = "Recharge Shiled.\nCost[{0}/{1}]"; 
     public static string BuffButton = "Increase parameters of ship.\n[Cost:{0}/{1}]";
+    public static string PowerWeaponButton = "Increase next shoot damage of ship.\n[Cost:{0}/{1}]";
     public static string CellScouted = "Coordinates Scouted [{0},{1}]";
 
     public static object ShipDamage(ShipDamageType damageType)
@@ -604,4 +622,5 @@ public static class Namings
     public static string NotCoreSector = "Simple sector";
     public static string Populated = "Populated by";
     public static string OpenCoordinates = "Coordinates of some fleets open";
+    public static string TutorCloseForever = "Do not show this again.";
 }

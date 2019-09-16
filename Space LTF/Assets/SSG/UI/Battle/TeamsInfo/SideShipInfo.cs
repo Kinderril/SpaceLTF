@@ -17,17 +17,18 @@ public class SideShipInfo : MonoBehaviour
     public Image ShipTypeIcon;
     public TacticsButton TacticIcons;
 
-    public Transform ControlBlockHolder;
+//    public Transform ControlBlockHolder;
 
 
-    public Transform FullOpenHolder;
-    public Transform MinorOpenHolder;
+//    public Transform FullOpenHolder;
+//    public Transform MinorOpenHolder;
     public Transform FullInfoContainer;
 
     public Transform WeaponsLayout;
 
     public TryChargeButton TryChargeButton;
     public TryBuffShip TryReloadButton;
+    public TryWeaponsShip TryWeaponsShipButton;
 
     public TextMeshProUGUI DamageDoneField;
     public TextMeshProUGUI KillsField;
@@ -64,6 +65,7 @@ public class SideShipInfo : MonoBehaviour
         OnShipDesicionChange(ship, ship.DesicionData);
         ShipSlidersInfo.Init(ship);
         TryChargeButton.Init(_ship);
+        TryWeaponsShipButton.Init(_ship);
         TryReloadButton.Init(_ship);
         InitWeapons();
         ShipTypeIcon.sprite =
@@ -198,14 +200,15 @@ public class SideShipInfo : MonoBehaviour
         _ship.OnShipDesicionChange -= OnShipDesicionChange;
         ShipSlidersInfo.Dispose();
         TryChargeButton.Dispose();
+        TryWeaponsShipButton.Dispose();
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonUp(0))// && !EventSystem.current.IsPointerOverGameObject())
-        {
-            TacticIcons.gameObject.SetActive(false);
-        }
-    }
+//    void Update()
+//    {
+//        if (Input.GetMouseButtonUp(0))// && !EventSystem.current.IsPointerOverGameObject())
+//        {
+//            TacticIcons.gameObject.SetActive(false);
+//        }
+//    }
 }
 

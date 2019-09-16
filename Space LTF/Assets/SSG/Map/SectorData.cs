@@ -319,7 +319,7 @@ public class SectorData
         list.Add(GlobalMapEventType.prisoner);
         list.Add(GlobalMapEventType.spaceGarbage);
         list.Add(GlobalMapEventType.battleField);
-        list.Add(GlobalMapEventType.retranslatorMessage);
+//        list.Add(GlobalMapEventType.retranslatorMessage);
         list.Add(GlobalMapEventType.asteroidsField);
         list.Add(GlobalMapEventType.scienceLab);
         list.Add(GlobalMapEventType.brokenNavigation);

@@ -71,8 +71,13 @@ public static class ArmyCreator
         }
         while (upgradeIterations > 0 && remainPoints > 0)
         {
+            upgradeIterations--;
             var ship = army[index];
             index++;
+            if (ship.Ship.ShipType == ShipType.Base)
+            {
+                continue;
+            }
             if (index >= army.Count)
             {
                 index = 0;
@@ -88,7 +93,6 @@ public static class ArmyCreator
             });
             var rnd = upgrades.Random();
             UpgradeShip(points, rnd, ship, upgrades, data, logger);
-            upgradeIterations--;
         }
         Debug.LogFormat("Simple army create. RemainPoints:{0}", remainPoints);
         logger.LogToConsole();
@@ -303,18 +307,25 @@ public static class ArmyCreator
         var shipWithWeapons = CreateShipByConfig(remainPoints, data.ArmyConfig, player, logs);
         if (shipWithWeapons == null)
         {
+            Debug.LogWarning($"Can't create ship by config {data.ArmyConfig} " );
             return null;
         }
         var rndWeapon = data.GetWeaponType();
         var weaponSlots = shipWithWeapons.Ship.WeaponsModuls.Length;
         var moreHalf = 1 + (int) (weaponSlots / 2f);
         moreHalf = Mathf.Clamp(moreHalf, 1, weaponSlots);
+        bool weaponCreated = false;
         for (int i = 0; i < moreHalf; i++)
         {
             if (TryAddWeapon(remainPoints, shipWithWeapons.Ship, rndWeapon, true, logs))
             {
-
+                weaponCreated = true;
             }
+        }
+
+        if (!weaponCreated)
+        {
+            Debug.LogError($"Create ship without weapons count:{moreHalf}");
         }
         return shipWithWeapons;
     }
@@ -368,7 +379,7 @@ public static class ArmyCreator
         return startData;
     }
 
-    private static bool UpgradeShip(ArmyRemainPoints v,LibraryShipUpgradeType shipUpgradeType, StartShipPilotData startData,
+    public static bool UpgradeShip(ArmyRemainPoints v,LibraryShipUpgradeType shipUpgradeType, StartShipPilotData startData,
         WDictionary<LibraryShipUpgradeType> chances,ArmyCreatorData data, ArmyCreatorLogs logs)
     {
         bool isWorks = false;
@@ -381,10 +392,17 @@ public static class ArmyCreator
                     try
                     {
                         rndWeapon = startData.Ship.WeaponsModuls[0].WeaponType;
-                        Debug.LogError($"UpgradeShip no weapon {startData.Ship.WeaponsModuls.Length}");
                     }
                     catch (Exception e)
                     {
+                        string dataInfoDEbug = "";
+                        foreach (var shipWeaponsModul in startData.Ship.WeaponsModuls)
+                        {
+                            var weap = (shipWeaponsModul == null) ? "null" : "weap";
+                            dataInfoDEbug += "  " + weap;
+                        }
+                        Debug.LogError($"UpgradeShip no weapon Length:{startData.Ship.WeaponsModuls.Length}  ShipType:{startData.Ship.ShipType}   dataInfoDEbug:{dataInfoDEbug}");
+
                         rndWeapon = data.GetWeaponType();
                     }
                 }

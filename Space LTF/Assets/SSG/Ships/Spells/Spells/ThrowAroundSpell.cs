@@ -9,7 +9,7 @@ using UnityEngine;
 public class ThrowAroundSpell : BaseSpellModulInv
 {
     private const float DIST_SHOT = 8;
-    private const float DAMAGE_BODY = 4;
+    private const float DAMAGE_BODY = 3;
     private const float rad = 3f;
 
     public ThrowAroundSpell(int costCount, int costTime)
@@ -40,7 +40,8 @@ public class ThrowAroundSpell : BaseSpellModulInv
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
+//        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
+        var startPos = shootpos;
         var dir = target.Position - startPos;
         bullestartparameters.distanceShoot = dir.magnitude;
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);

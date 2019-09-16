@@ -1,0 +1,142 @@
+
+
+=============== Game started ================
+
+
+ 14.09.2019 22:17:59 Log  Game Loaded C:/Users/Kinderril/AppData/LocalLow/DefaultCompany/TestProjectstats.stat
+ 14.09.2019 22:17:59 Log  OpenWindow start
+ 14.09.2019 22:18:00 Log  OpenWindow startNewGame
+ 14.09.2019 22:18:01 Log  <color=red>StartNewGameData mercenary SectorSize:4  SectorCount:6 CellsStartDeathStep:20  CoreElementsCount:4  BasePower:7   posibleSpell:System.Collections.Generic.List`1[SpellType]</color>
+ 14.09.2019 22:18:01 Log  global map size: 6 3
+ 14.09.2019 22:18:02 Log  CreateEndSector : 26 7
+ 14.09.2019 22:18:02 Log  Sector marked as core:9  coreId:99
+ 14.09.2019 22:18:02 Log  Core created 15 0.
+ 14.09.2019 22:18:02 Log  Sector marked as core:13  coreId:115
+ 14.09.2019 22:18:02 Log  Core created 20 5.
+ 14.09.2019 22:18:02 Log  Sector marked as core:12  coreId:133
+ 14.09.2019 22:18:02 Log  Core created 20 0.
+ 14.09.2019 22:18:02 Log  Sector marked as core:3  coreId:152
+ 14.09.2019 22:18:02 Log  Core created 5 0.
+ 14.09.2019 22:18:02 Log  Populate others : 0 5
+ 14.09.2019 22:18:02 Log  Populate others : 0 10
+ 14.09.2019 22:18:02 Log  Populate others : 5 5
+ 14.09.2019 22:18:02 Log  Populate others : 5 10
+ 14.09.2019 22:18:02 Log  Populate others : 10 0
+ 14.09.2019 22:18:02 Log  Populate others : 10 5
+ 14.09.2019 22:18:02 Log  Populate others : 10 10
+ 14.09.2019 22:18:02 Log  Populate others : 15 5
+ 14.09.2019 22:18:02 Log  Populate others : 15 10
+ 14.09.2019 22:18:02 Log  Populate others : 20 10
+ 14.09.2019 22:18:02 Log  Populate others : 25 0
+ 14.09.2019 22:18:02 Log  Populate others : 25 10
+ 14.09.2019 22:18:02 Log  Population end
+ 14.09.2019 22:18:02 Error Wrong remian points more than was _lastRemainPoints:1000_pointsRemain:1002
+ UnityEngine.Debug:LogError(Object)
+ArmyCreatorLogs:AddLog(Single, String) (at Assets/SSG/PlayerData/ArmyCreator/ArmyCreatorLogs.cs:15)
+ArmyCreator:CreateShipByConfig(ArmyRemainPoints, ShipConfig, Player, ArmyCreatorLogs) (at Assets/SSG/PlayerData/ArmyCreator/ArmyCreator.cs:293)
+Player:CreateStartArmy(ShipConfig, List`1, List`1) (at Assets/SSG/PlayerData/Player.cs:110)
+Player:PlayNewGame(StartNewGameData) (at Assets/SSG/PlayerData/Player.cs:46)
+MainController:CreateNewPlayerAndStartGame(StartNewGameData) (at Assets/SSG/MainController.cs:67)
+WindowNewGame:OnClickStart() (at Assets/SSG/UI/Windows/WindowNewGame.cs:69)
+UnityEngine.EventSystems.EventSystem:Update()
+
+ 14.09.2019 22:18:02 Log  Simple modul add to ship 544  WeaponSelfDamage
+ 14.09.2019 22:18:02 Log  Simple modul add to ship 546  WeaponWeapon
+ 14.09.2019 22:18:02 Log  TransferItem Bullet speed (1)
+none  True
+ 14.09.2019 22:18:02 Log  OpenWindow map
+ 14.09.2019 22:18:02 Log  drag zone Enable:551  BaseShipInventoryUI(Clone)
+ 14.09.2019 22:18:02 Log  Init drag zone 551
+ 14.09.2019 22:18:02 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:02 Log  drag zone Enable:561  ShipInvUI
+ 14.09.2019 22:18:02 Log  Init drag zone 561
+ 14.09.2019 22:18:02 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:02 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:02 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:02 Log  drag zone Enable:571  ShipInvUI
+ 14.09.2019 22:18:02 Log  Init drag zone 571
+ 14.09.2019 22:18:02 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:02 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:03 Log  drag zone Enable:626  InventoryUI
+ 14.09.2019 22:18:03 Log  Init drag zone 626
+ 14.09.2019 22:18:03 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:03 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:16 Error drag zone OnDisable error:551  BaseShipInventoryUI(Clone)
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:240)
+
+ 14.09.2019 22:18:16 Error Parents info:  Layout  PlayerArmyUI(Clone)  Left  Left
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:241)
+
+ 14.09.2019 22:18:16 Error drag zone OnDisable error:561  ShipInvUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:240)
+
+ 14.09.2019 22:18:16 Error Parents info:  ShipPilotInventoryUI(Clone)  Layout  Player  Player
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:241)
+
+ 14.09.2019 22:18:16 Error drag zone OnDisable error:571  ShipInvUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:240)
+
+ 14.09.2019 22:18:16 Error Parents info:  ShipPilotInventoryUI(Clone)  Layout  Player  Player
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:241)
+
+ 14.09.2019 22:18:16 Error drag zone OnDisable error:626  InventoryUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:240)
+
+ 14.09.2019 22:18:16 Error Parents info:  Right  Layout  WindowMap  WindowMap
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:241)
+
+ 14.09.2019 22:18:16 Error drag zone OnDestroy error:551  BaseShipInventoryUI(Clone)
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:259)
+
+ 14.09.2019 22:18:16 Error Parents info:  Layout  PlayerArmyUI(Clone)  Left  Left
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:260)
+
+ 14.09.2019 22:18:16 Error drag zone OnDestroy error:561  ShipInvUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:259)
+
+ 14.09.2019 22:18:16 Error Parents info:  ShipPilotInventoryUI(Clone)  Layout  Player  Player
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:260)
+
+ 14.09.2019 22:18:16 Warning  [Singleton] Instance 'MainController' already destroyed on application quit. Won't create again - returning null.
+ 14.09.2019 22:18:16 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:16 Warning  [Singleton] Instance 'MainController' already destroyed on application quit. Won't create again - returning null.
+ 14.09.2019 22:18:16 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:16 Error drag zone OnDestroy error:571  ShipInvUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:259)
+
+ 14.09.2019 22:18:16 Error Parents info:  ShipPilotInventoryUI(Clone)  Layout  Player  Player
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:260)
+
+ 14.09.2019 22:18:16 Warning  [Singleton] Instance 'MainController' already destroyed on application quit. Won't create again - returning null.
+ 14.09.2019 22:18:16 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:16 Warning  [Singleton] Instance 'MainController' already destroyed on application quit. Won't create again - returning null.
+ 14.09.2019 22:18:16 Exception  NullReferenceException: Object reference not set to an instance of an object
+ 14.09.2019 22:18:16 Error drag zone OnDestroy error:626  InventoryUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:259)
+
+ 14.09.2019 22:18:16 Error Parents info:  Right  Layout  WindowMap  WindowMap
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:260)

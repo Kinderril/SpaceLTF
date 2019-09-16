@@ -1,0 +1,309 @@
+
+
+=============== Game started ================
+
+
+ 14.09.2019 20:37:09 Log 
+ Game Loaded C:/Users/Kinderril/AppData/LocalLow/DefaultCompany/TestProjectstats.stat
+ 14.09.2019 20:37:10 Log 
+ OpenWindow start
+ 14.09.2019 20:37:11 Log 
+ OpenWindow startNewGame
+ 14.09.2019 20:37:14 Log 
+ <color=red>StartNewGameData mercenary SectorSize:4  SectorCount:6 CellsStartDeathStep:20  CoreElementsCount:4  BasePower:7   posibleSpell:System.Collections.Generic.List`1[SpellType]</color>
+ 14.09.2019 20:37:14 Log 
+ global map size: 6 3
+ 14.09.2019 20:37:14 Log 
+ CreateEndSector : 27 11
+ 14.09.2019 20:37:14 Log 
+ Sector marked as core:11  coreId:96
+ 14.09.2019 20:37:14 Log 
+ Core created 15 10.
+ 14.09.2019 20:37:14 Log 
+ Sector marked as core:13  coreId:115
+ 14.09.2019 20:37:14 Log 
+ Core created 20 5.
+ 14.09.2019 20:37:14 Log 
+ Sector marked as core:13  coreId:131
+ 14.09.2019 20:37:14 Log 
+ Core created 20 5.
+ 14.09.2019 20:37:14 Log 
+ Sector marked as core:4  coreId:139
+ 14.09.2019 20:37:14 Log 
+ Core created 5 5.
+ 14.09.2019 20:37:14 Log 
+ Populate others : 0 5
+ 14.09.2019 20:37:14 Log 
+ Populate others : 0 10
+ 14.09.2019 20:37:14 Log 
+ Populate others : 5 0
+ 14.09.2019 20:37:14 Log 
+ Populate others : 5 10
+ 14.09.2019 20:37:14 Log 
+ Populate others : 10 0
+ 14.09.2019 20:37:14 Log 
+ Populate others : 10 5
+ 14.09.2019 20:37:14 Log 
+ Populate others : 10 10
+ 14.09.2019 20:37:14 Log 
+ Populate others : 15 0
+ 14.09.2019 20:37:14 Log 
+ Populate others : 15 5
+ 14.09.2019 20:37:14 Log 
+ Populate others : 20 0
+ 14.09.2019 20:37:14 Log 
+ Populate others : 20 10
+ 14.09.2019 20:37:14 Log 
+ Populate others : 25 0
+ 14.09.2019 20:37:14 Log 
+ Populate others : 25 5
+ 14.09.2019 20:37:14 Log 
+ Population end
+ 14.09.2019 20:37:14 Error 
+ Wrong remian points more than was _lastRemainPoints:1000_pointsRemain:1002
+ UnityEngine.Debug:LogError(Object)
+ArmyCreatorLogs:AddLog(Single, String) (at Assets/SSG/PlayerData/ArmyCreator/ArmyCreatorLogs.cs:15)
+ArmyCreator:CreateShipByConfig(ArmyRemainPoints, ShipConfig, Player, ArmyCreatorLogs) (at Assets/SSG/PlayerData/ArmyCreator/ArmyCreator.cs:293)
+Player:CreateStartArmy(ShipConfig, List`1, List`1) (at Assets/SSG/PlayerData/Player.cs:110)
+Player:PlayNewGame(StartNewGameData) (at Assets/SSG/PlayerData/Player.cs:46)
+MainController:CreateNewPlayerAndStartGame(StartNewGameData) (at Assets/SSG/MainController.cs:67)
+WindowNewGame:OnClickStart() (at Assets/SSG/UI/Windows/WindowNewGame.cs:69)
+UnityEngine.EventSystems.EventSystem:Update()
+
+ 14.09.2019 20:37:14 Log 
+ Simple modul add to ship 543  ShipTurnSpeed
+ 14.09.2019 20:37:14 Log 
+ Simple modul add to ship 545  shieldRegen
+ 14.09.2019 20:37:14 Log 
+ TransferItem Spray fire (1)
+none  True
+ 14.09.2019 20:37:14 Log 
+ OpenWindow map
+ 14.09.2019 20:37:14 Log 
+ drag zone Enable:550  BaseShipInventoryUI(Clone)
+ 14.09.2019 20:37:14 Log 
+ Init drag zone 550
+ 14.09.2019 20:37:14 Log 
+ drag zone Enable:560  ShipInvUI
+ 14.09.2019 20:37:14 Log 
+ Init drag zone 560
+ 14.09.2019 20:37:14 Log 
+ drag zone Enable:568  ShipInvUI
+ 14.09.2019 20:37:14 Log 
+ Init drag zone 568
+ 14.09.2019 20:37:15 Log 
+ drag zone Enable:623  InventoryUI
+ 14.09.2019 20:37:15 Log 
+ Init drag zone 623
+ 14.09.2019 20:37:18 Log 
+ Start create army 7 . ArmyCreatorData  
+ 14.09.2019 20:37:18 Warning 
+ this is not enought to build ship
+ 14.09.2019 20:37:18 Log 
+ Simple army create. RemainPoints:7
+ 14.09.2019 20:37:18 Log 
+ <color=green>ARMY CREATOR:
+ 0. Remain:5. create ship
+ 1. Remain:4. add weapon
+ 2. Remain:2. create ship
+ 3. Remain:1. add weapon
+ 4. Remain:0,2. upgrade weapon</color>
+ 14.09.2019 20:37:19 Log 
+ Game Saved
+ 14.09.2019 20:37:19 Log 
+ OpenWindow preBattle
+ 14.09.2019 20:37:19 Log 
+ DragZone dispose:623  InventoryUI
+ 14.09.2019 20:37:19 Log 
+ drag zone Disable:623  InventoryUI
+ 14.09.2019 20:37:19 Log 
+ DragZone dispose:550  BaseShipInventoryUI(Clone)
+ 14.09.2019 20:37:19 Log 
+ drag zone Disable:550  BaseShipInventoryUI(Clone)
+ 14.09.2019 20:37:19 Log 
+ DragZone dispose:560  ShipInvUI
+ 14.09.2019 20:37:19 Log 
+ drag zone Disable:560  ShipInvUI
+ 14.09.2019 20:37:19 Log 
+ DragZone dispose:568  ShipInvUI
+ 14.09.2019 20:37:19 Log 
+ drag zone Disable:568  ShipInvUI
+ 14.09.2019 20:37:19 Log 
+ drag zone Enable:631  BaseShipInventoryUI(Clone)
+ 14.09.2019 20:37:19 Log 
+ Init drag zone 631
+ 14.09.2019 20:37:19 Log 
+ drag zone Enable:641  ShipInvUI
+ 14.09.2019 20:37:19 Log 
+ Init drag zone 641
+ 14.09.2019 20:37:19 Log 
+ drag zone Enable:649  ShipInvUI
+ 14.09.2019 20:37:19 Log 
+ Init drag zone 649
+ 14.09.2019 20:37:19 Log 
+ drag zone Enable:704  InventoryUI
+ 14.09.2019 20:37:19 Log 
+ Init drag zone 704
+ 14.09.2019 20:37:19 Log 
+ Map cell complete 78
+ 14.09.2019 20:37:20 Log 
+  cam dims:1,777246   1,6    cameraSize:(3,6, 2,0)   spriteSize:(19,2, 12,0)
+ 14.09.2019 20:37:20 Log 
+ OpenWindow play
+ 14.09.2019 20:37:20 Log 
+ <color=red>Cells inited. SizeX:9  </color>
+ 14.09.2019 20:37:20 Error 
+ can't find enought free points
+ UnityEngine.Debug:LogError(Object)
+AICellDataRaound:FindFreeCorePoints() (at Assets/SSG/Battlefield/CellData/AICellDataRaound.cs:160)
+AICellDataRaound:Init(Vector3, Int32, Single) (at Assets/SSG/Battlefield/CellData/AICellDataRaound.cs:128)
+CellController:Init(Int32) (at Assets/SSG/Battlefield/CellData/CellController.cs:31)
+<LoadGameTask>d__28:MoveNext() (at Assets/SSG/BattleController.cs:111)
+UnityEngine.UnitySynchronizationContext:ExecuteTasks()
+
+ 14.09.2019 20:37:20 Log 
+ Asteroids count: 199.  FieldRadius:28
+ 14.09.2019 20:37:20 Log 
+ green power:13,6  red army:6,8
+ 14.09.2019 20:37:20 Warning 
+ Try to register bullet with same id:754  NextFrameBullet   PriorityTargetBullet
+ 14.09.2019 20:37:20 Warning 
+ Try to register bullet with same id:754  NextFrameBullet   PriorityTargetBullet
+ 14.09.2019 20:37:20 Warning 
+ Try to register bullet with same id:45699  LinearBullet   shieldOffBullet
+ 14.09.2019 20:37:20 Warning 
+ Try to register bullet with same id:82423  LinearBullet   DistShot
+ 14.09.2019 20:37:20 Warning 
+ Try to register bullet with same id:1045  LinearBullet   subMineBullet
+ 14.09.2019 20:37:20 Log 
+ AIcommander Inited. Spells: 0
+ 14.09.2019 20:37:20 Log 
+ <color=red>Damage done:1/3  to:1. Time:9,139999</color>
+ 14.09.2019 20:37:20 Log 
+ <color=red>Damage done:1/3  to:1. Time:9,139999</color>
+ 14.09.2019 20:37:20 Log 
+ <color=red>Damage done:1/3  to:1. Time:9,139999</color>
+ 14.09.2019 20:37:20 Log 
+ <color=red>Damage done:1/3  to:1. Time:9,139999</color>
+ 14.09.2019 20:37:20 Log 
+ <color=red>Damage done:1/3  to:1. Time:9,139999</color>
+ 14.09.2019 20:37:20 Log 
+ <color=red>Damage done:1/3  to:1. Time:9,139999</color>
+ 14.09.2019 20:37:20 Log 
+ <color=yellow>Task1:2  ReturnActionToBattlefield</color>
+ 14.09.2019 20:37:20 Log 
+ <color=yellow>Task1:3  ReturnActionToBattlefield</color>
+ 14.09.2019 20:37:20 Log 
+ <color=yellow>Task1:4  ReturnActionToBattlefield</color>
+ 14.09.2019 20:37:20 Log 
+ <color=yellow>Task1:5  ReturnActionToBattlefield</color>
+ 14.09.2019 20:37:20 Log 
+ <color=green>End Action  Id:2  Action:returnToBattle  Cause:out bf  Time:9,426501</color>
+ 14.09.2019 20:37:20 Log 
+ <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 20:37:20 Log 
+ <color=green>End Action  Id:3  Action:returnToBattle  Cause:out bf  Time:9,426501</color>
+ 14.09.2019 20:37:20 Log 
+ <color=yellow>Task2:3  AttackAction</color>
+ 14.09.2019 20:37:20 Log 
+ DragZone dispose:631  BaseShipInventoryUI(Clone)
+ 14.09.2019 20:37:20 Log 
+ drag zone Disable:631  BaseShipInventoryUI(Clone)
+ 14.09.2019 20:37:20 Log 
+ DragZone dispose:641  ShipInvUI
+ 14.09.2019 20:37:20 Log 
+ drag zone Disable:641  ShipInvUI
+ 14.09.2019 20:37:20 Log 
+ DragZone dispose:649  ShipInvUI
+ 14.09.2019 20:37:20 Log 
+ drag zone Disable:649  ShipInvUI
+ 14.09.2019 20:37:20 Log 
+ DragZone dispose:704  InventoryUI
+ 14.09.2019 20:37:20 Log 
+ drag zone Disable:704  InventoryUI
+ 14.09.2019 20:37:21 Log 
+ <color=green>End Action  Id:4  Action:returnToBattle  Cause:out bf  Time:10,03299</color>
+ 14.09.2019 20:37:21 Log 
+ <color=yellow>Task2:4  AttackAction</color>
+ 14.09.2019 20:37:22 Log 
+ <color=green>End Action  Id:5  Action:returnToBattle  Cause:out bf  Time:10,86427</color>
+ 14.09.2019 20:37:22 Log 
+ <color=yellow>Task2:5  AttackAction</color>
+ 14.09.2019 20:37:22 Log 
+ spell select Shield Locker
+ 14.09.2019 20:37:23 Log 
+ spell TryCast Shield Locker
+ 14.09.2019 20:37:25 Log 
+ <color=green>End Action  Id:5  Action:attack  Cause:is Shoot End  Time:14,06782</color>
+ 14.09.2019 20:37:25 Log 
+ <color=yellow>Task2:5  AfterAttackAction</color>
+ 14.09.2019 20:37:25 Log 
+ <color=green>End Action  Id:4  Action:attack  Cause:is Shoot End  Time:14,13568</color>
+ 14.09.2019 20:37:25 Log 
+ <color=yellow>Task2:4  AfterAttackAction</color>
+ 14.09.2019 20:37:25 Log 
+ <color=green>End Action  Id:2  Action:attack  Cause:is Shoot End  Time:14,32102</color>
+ 14.09.2019 20:37:25 Log 
+ <color=yellow>Task2:2  AfterAttackAction</color>
+ 14.09.2019 20:37:25 Log 
+ <color=green>End Action  Id:3  Action:attack  Cause:is Shoot End  Time:14,52116</color>
+ 14.09.2019 20:37:25 Log 
+ <color=yellow>Task2:3  AfterAttackAction</color>
+ 14.09.2019 20:37:26 Log 
+ <color=red>Damage done:4/4  to:4. Time:14,7</color>
+ 14.09.2019 20:37:26 Log 
+ <color=red>Damage done:4/4  to:4. Time:14,7</color>
+ 14.09.2019 20:37:26 Log 
+ <color=red>Damage done:3/0  to:4. Time:14,74062</color>
+ 14.09.2019 20:37:26 Log 
+ <color=red>Damage done:4/4  to:4. Time:15</color>
+ 14.09.2019 20:37:26 Log 
+ <color=red>Damage done:4/4  to:4. Time:15</color>
+ 14.09.2019 20:37:27 Log 
+ <color=red>Damage done:3/5  to:2. Time:15,82</color>
+ 14.09.2019 20:37:28 Log 
+ spell select Power shot
+ 14.09.2019 20:37:29 Log 
+ spell TryCast Power shot
+ 14.09.2019 20:37:29 Log 
+ <color=green>End Action  Id:2  Action:afterAttack  Cause:path complete  Time:18,05006</color>
+ 14.09.2019 20:37:29 Log 
+ <color=yellow>Task2:2  ReadyToAttackAction</color>
+ 14.09.2019 20:37:29 Log 
+ <color=green>End Action  Id:3  Action:afterAttack  Cause:path complete  Time:18,26818</color>
+ 14.09.2019 20:37:29 Log 
+ <color=yellow>Task2:3  ReadyToAttackAction</color>
+ 14.09.2019 20:37:29 Log 
+ <color=green>End Action  Id:2  Action:readyToAttack  Cause:weapon load  Time:18,31831</color>
+ 14.09.2019 20:37:29 Log 
+ <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 20:37:29 Log 
+ <color=green>End Action  Id:4  Action:afterAttack  Cause:path complete  Time:18,43645</color>
+ 14.09.2019 20:37:29 Log 
+ <color=yellow>Task2:4  AfterAttackAction</color>
+ 14.09.2019 20:37:29 Log 
+ <color=green>End Action  Id:3  Action:readyToAttack  Cause:weapon load  Time:18,5205</color>
+ 14.09.2019 20:37:29 Log 
+ <color=yellow>Task2:3  AttackAction</color>
+ 14.09.2019 20:37:30 Log 
+ <color=red>Damage done:3/5  to:2. Time:19,18</color>
+ 14.09.2019 20:37:31 Log 
+ <color=green>End Action  Id:2  Action:attack  Cause:another target close  Time:20,25596</color>
+ 14.09.2019 20:37:31 Log 
+ <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 20:37:32 Log 
+ <color=green>End Action  Id:4  Action:afterAttack  Cause:weapon load  Time:21,13211</color>
+ 14.09.2019 20:37:32 Log 
+ <color=yellow>Task2:4  AttackAction</color>
+ 14.09.2019 20:37:32 Log 
+ <color=green>End Action  Id:2  Action:attack  Cause:another target close  Time:21,26691</color>
+ 14.09.2019 20:37:32 Log 
+ <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 20:37:33 Log 
+ <color=green>End Action  Id:5  Action:afterAttack  Cause:path complete  Time:21,72214</color>
+ 14.09.2019 20:37:33 Log 
+ <color=yellow>Task2:5  AfterAttackAction</color>
+ 14.09.2019 20:37:33 Log 
+ <color=green>End Action  Id:3  Action:attack  Cause:is Shoot End  Time:21,75606</color>
+ 14.09.2019 20:37:33 Log 
+ <color=yellow>Task2:3  AfterAttackAction</color>

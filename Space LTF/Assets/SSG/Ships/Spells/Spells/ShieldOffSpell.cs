@@ -10,7 +10,7 @@ public class ShieldOffSpell : BaseSpellModulInv
 {
 //    public 
 
-    public const float PERIOD = 10f;
+    public const float PERIOD = 16f;
     private const float SHIELD_DAMAGE = 3f;
     private const float rad = 3f;
     private const float BULLET_SPEED = 13f;

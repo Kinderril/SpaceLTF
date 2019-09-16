@@ -222,6 +222,14 @@ public class WeaponsController
         return false;
     }
 
+    public void ChargePowerToAllWeapons()
+    {
+        foreach (var weapon in _weapons)
+        {
+            weapon.ChargeWeaponsForNextShoot();
+        }
+
+    }
     public void TryWeaponReload()
     {
         foreach (var weapon in _weapons)
@@ -247,5 +255,6 @@ public class WeaponsController
             DrawUtils.DrawCircle(w.GetShootPos, Vector3.up, Color.green, w.AimRadius);
         }
     }
+
 }
 

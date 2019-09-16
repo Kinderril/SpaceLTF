@@ -65,7 +65,7 @@ public class WindowNewGame : BaseWindow
         var gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
             ArmyTypeSelectorUI.Selected, posibleStartWeapons, 
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(),
-            DifficultyNewGame.CurDifficulty, posibleStartSpells.RandomElement());
+            DifficultyNewGame.CurDifficulty, posibleStartSpells.RandomElement(2));
         MainController.Instance.CreateNewPlayerAndStartGame(gameData);
         
     }

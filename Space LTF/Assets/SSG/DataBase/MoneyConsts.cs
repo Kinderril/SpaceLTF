@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 public static class MoneyConsts
 {
     public const int MAX_SPELLS_LEVEL = 4;
-    public const int MAX_PASSIVE_LEVEL = 3;
+    public const int MAX_PASSIVE_LEVEL = 4;
 
 
     //Upgrade
@@ -25,6 +25,7 @@ public static class MoneyConsts
         {1, 15},
         {2, 23},
         {3, 40},
+        {4, 50},
     };
 
     public static Dictionary<int, int> WeaponUpgrade = new Dictionary<int, int>()

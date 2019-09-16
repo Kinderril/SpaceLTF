@@ -9,7 +9,7 @@ using UnityEngine;
 public  class EngineLockSpell : BaseSpellModulInv
 {
     public const float DIST_SHOT = 8f;
-    public const float LOCK_PERIOD = 6;
+    public const float LOCK_PERIOD = 4;
     public const float LOCK_LEVEL = 2f;
     private const float rad = 8f;
     [NonSerialized]
@@ -35,7 +35,8 @@ public  class EngineLockSpell : BaseSpellModulInv
 
     private void EngineCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
+//        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
+        var startPos = shootpos;
         var dir = target.Position - startPos;
         bullestartparameters.distanceShoot = dir.magnitude;
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);

@@ -21,16 +21,9 @@ public class MineSystemModul : MineAbstractModul
 
     public override void ApplyToShip(ShipParameters shipParameters, ShipBase shipBase, Bullet bullet)
     {
-        foreach (var baseModul in shipBase.ShipModuls.Moduls)
+        if (MyExtensions.IsTrue01(.7f))
         {
-            if (MyExtensions.IsTrue01(.5f))
-            {
-                baseModul.Crash();
-            }
-        }
-        if (MyExtensions.IsTrue01(.3f))
-        {
-            shipBase.EngineStop.Stop(3f + Level * 2);
+            shipBase.EngineStop.Stop(5f + Level * 2);
         }
     }
 

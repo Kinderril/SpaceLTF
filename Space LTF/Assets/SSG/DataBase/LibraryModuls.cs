@@ -75,6 +75,7 @@ public static class LibraryModuls
             SimpleModulType.shieldLocker,
             SimpleModulType.engineLocker,
             SimpleModulType.damageMines,
+            SimpleModulType.fireMines,
             SimpleModulType.systemMines,
             SimpleModulType.blink,
             SimpleModulType.laserUpgrade,
@@ -132,6 +133,7 @@ public static class LibraryModuls
         var typesToRnd = new HashSet<SimpleModulType>()
         {
             SimpleModulType.engineLocker,
+            SimpleModulType.systemMines,
             SimpleModulType.autoRepair,
             SimpleModulType.autoShieldRepair,
             SimpleModulType.blink,
@@ -146,6 +148,7 @@ public static class LibraryModuls
             SimpleModulType.WeaponNoBulletDeath,
             SimpleModulType.WeaponFireNear,
             SimpleModulType.ShieldDouble,
+            SimpleModulType.WeaponShootPerTime,
         };
         return typesToRnd;
     }
@@ -158,7 +161,6 @@ public static class LibraryModuls
             SimpleModulType.antiEnergy,
             SimpleModulType.shieldLocker,
             SimpleModulType.damageMines,
-            SimpleModulType.systemMines,
             SimpleModulType.ShipSpeed,
             SimpleModulType.ShipTurnSpeed,
             SimpleModulType.shieldRegen,
@@ -174,6 +176,7 @@ public static class LibraryModuls
             SimpleModulType.WeaponPowerShot,
             SimpleModulType.WeaponPush,
             SimpleModulType.ShipDecreaseSpeed,
+            SimpleModulType.fireMines,
 
 
         };
@@ -194,6 +197,7 @@ public static class LibraryModuls
             SimpleModulType.engineLocker,
             SimpleModulType.damageMines,
             SimpleModulType.systemMines,
+            SimpleModulType.fireMines,
             SimpleModulType.blink,
             SimpleModulType.ResistDamages,
             SimpleModulType.shieldRegen,

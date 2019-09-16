@@ -10,7 +10,7 @@ using UnityEngine;
 [System.Serializable]
 public class EndGlobalCell : GlobalMapCell
 {
-    private LastBattleData _data;
+    private FinalBattleData _data;
 
     public EndGlobalCell(int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
     {

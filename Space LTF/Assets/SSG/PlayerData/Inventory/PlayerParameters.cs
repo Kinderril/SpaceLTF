@@ -66,7 +66,7 @@ public class PlayerParameters
 
     public int GetChargesToBattle()
     {
-        return ChargesCount.Level + 4;
+        return ChargesCount.Level + Library.BASE_CHARGES_COUNT;
     }
 
     public bool ScoutsIsMax()

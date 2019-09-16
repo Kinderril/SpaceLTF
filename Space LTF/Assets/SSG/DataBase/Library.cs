@@ -48,7 +48,7 @@ public static class Library
     const float LASER_ANG = 20f;
 
     const float ROCKET_ANG = 44f;
-    const float ROCKET_DELAY = 9f;
+    const float ROCKET_DELAY = 10f;
     const float ROCKET_SPEED = 6.8f;
 
     const float IMPULSE_SPEED = 8.8f;
@@ -82,6 +82,8 @@ public static class Library
     public const int MAX_PILOT_PARAMETER_LEVEL = 80;
     private static int[] _lvlUps = new int[MAX_PILOT_PARAMETER_LEVEL];
 
+    public const int COINS_TO_POWER_WEAPON_SHIP_SHIELD = 1;
+    public const int COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY = 40;
     public const int COINS_TO_CHARGE_SHIP_SHIELD = 2;
     public const int COINS_TO_CHARGE_SHIP_SHIELD_DELAY = 20;
     public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.3f;
@@ -94,6 +96,7 @@ public static class Library
     public const int CRITICAL_DAMAGES_TO_DEATH = 2;
     public const int SHIELD_COEF_EXTRA_CHARGE = 10;
     public static int RANK_ERIOD = 8;
+    public static int BASE_CHARGES_COUNT = 5;
 
 
     #region GLOBAL_MAP_DATA
@@ -155,7 +158,7 @@ public static class Library
                 parametes = new WeaponInventoryParameters(4, 4, LASER_ANG, LASER_DELAY, 0.5f, 1, LASER_SPEED, 8);
                 return new LaserInventory(parametes,  1);
             case WeaponType.rocket:
-                parametes = new WeaponInventoryParameters(3, 6, ROCKET_ANG, ROCKET_DELAY, 0.5f, 1, ROCKET_SPEED, 11,36f);
+                parametes = new WeaponInventoryParameters(2, 6, ROCKET_ANG, ROCKET_DELAY, 0.5f, 1, ROCKET_SPEED, 11,36f);
                 return new RocketInventory(parametes,  1);
             case WeaponType.impulse:
                 parametes = new WeaponInventoryParameters(3, 1, LASER_ANG, IMPULSE_DELAY, 0.5f, 2, IMPULSE_SPEED, 6);
@@ -240,7 +243,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 32, 14, 3.1f, 55, 2, 4, 0, 1, 0.01f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 46, 18, 0.51f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 46, 28, 1.1f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.krios:
@@ -253,7 +256,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 22, 41, 2.2f, 53, 3, 3, 0, 1, 0.4f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 15, 47, 0.51f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 15, 57, 0.6f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.mercenary:
@@ -266,7 +269,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 36, 25, 0.51f, 40, 0, 0, 3, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 41, 28, 0.81f, 40, 0, 0, 3, 1, 0f), player);
                 }
 
                 break;
@@ -280,7 +283,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 30, 30, 0.51f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 35, 35, 0.71f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.ocrons:
@@ -293,7 +296,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 56, 10, 0.51f, 40, 0, 0, 1, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 66, 10, 0.75f, 40, 0, 0, 2, 1, 0f), player);
                 }
                 break;
             default:
@@ -313,29 +316,28 @@ public static class Library
         switch (spellType)
         {
             case SpellType.mineField:
-                return new MineFieldSpell(2, 80);
+                return new MineFieldSpell(2, 40);
 //            case SpellType.invisibility:
 //                return new InvisibleSpell(3, 20);
 //            case SpellType.allToBase:
 //                return new AllToBaseSpell(2, 90);
 //            case SpellType.shildDamage:
-                return new ShieldOffSpell(3, 30);
             case SpellType.randomDamage:
-                return new RandomDamageSpell(3, 40);
+                return new RandomDamageSpell(3, 20);
             case SpellType.lineShot:
-                return new LineShotSpell(5, 15);
+                return new LineShotSpell(5, 14);
             case SpellType.throwAround:
-                return new ThrowAroundSpell(2, 25);
+                return new ThrowAroundSpell(2, 18);
             case SpellType.engineLock:
-                return new EngineLockSpell(2, 45);
+                return new EngineLockSpell(2, 22);
 //            case SpellType.spaceWall:
 //                return new ShieldWallSpell(2, 35);
             case SpellType.distShot:
-                return new DistShotSpell(3, 25);   
+                return new DistShotSpell(3, 17);   
             case SpellType.shildDamage:
-                return new ShieldOffSpell(3, 25);
+                return new ShieldOffSpell(3, 17);
             case SpellType.artilleryPeriod:
-                return new ArtillerySpell(4, 22);
+                return new ArtillerySpell(4, 10);
             default:
                 Debug.LogError("spellType not implemented " + spellType.ToString());
                 break;

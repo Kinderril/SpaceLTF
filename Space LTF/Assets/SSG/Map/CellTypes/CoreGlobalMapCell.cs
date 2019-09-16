@@ -14,10 +14,12 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
 {
     public GlobalCellType CellType;
     private bool _afterFightActivated = false;
-    public bool HaveInfo = false;
+//    public bool HaveInfo = false;
     public bool Taken = false;
-    [field: NonSerialized]
-    public event Action<GlobalMapCell> OnTaken;
+
+    private Player _cachedArmy = null;
+
+    private PlayerQuestData Quest => MainController.Instance.MainPlayer.QuestData;
 
 
     public CoreGlobalMapCell(int power, int id, int intX, int intZ,SectorData  secto) : base( power,ShipConfig.mercenary, id, ArmyCreatorType.destroy, intX, intZ, secto)
@@ -43,7 +45,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     public override void OpenInfo()
     {
         base.OpenInfo();
-        HaveInfo = true;
+//        HaveInfo = true;
     }
 
     public override string Desc()
@@ -91,66 +93,85 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
 
     private int MoneyToBuy()
     {
-        return _power*2;
+        return _power*3;
     }
 
     private MessageDialogData GetTalkDialog()
     {
         var player = MainController.Instance.MainPlayer;
         List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
+
+        var scoutData = GetArmy().ScoutData.GetInfo(player.Parameters.Scouts.Level);
+        string scoutsField = "";
+        for (int i = 0; i < scoutData.Count; i++)
+        {
+            var info = scoutData[i];
+            scoutsField = $"{scoutsField}\n{info}\n";
+        }
+
         answerDialog.Add(new AnswerDialogData("Attack.", Fight));
         if (player.MoneyData.HaveMoney(MoneyToBuy()))
-            answerDialog.Add(new AnswerDialogData(String.Format("Buy for {0} credits.", MoneyToBuy()), Buy));
+            answerDialog.Add(new AnswerDialogData(String.Format("Buy for {0} credits.", MoneyToBuy()), null,Buy));
         if (player.Parameters.Diplomaty.Level >= 3)
-            answerDialog.Add(new AnswerDialogData(String.Format("Use diplomaty."), Diplomaty));
+            answerDialog.Add(new AnswerDialogData(String.Format("Use diplomacy."),null, Diplomaty));
 //        if (player.Parameters.Scouts.Level >= 1)
-        answerDialog.Add(new AnswerDialogData(String.Format("Steal."), Steal));
-        var mesData = new MessageDialogData("Some other fleet already have your target.", answerDialog);
+        answerDialog.Add(new AnswerDialogData(String.Format("Send scouts to steal."), null,Steal));
+        var mesData = new MessageDialogData($"Some other fleet already have your target. \n {scoutsField}", answerDialog);
         return mesData;
     }
 
-    private void Buy()
+    private MessageDialogData Buy()
     {
+        
         MainController.Instance.MainPlayer.MoneyData.RemoveMoney(MoneyToBuy());
-        WindowManager.Instance.InfoWindow.Init(null, "Element was purchased");
         SetTake();
         MainController.Instance.MainPlayer.QuestData.AddElement();
+        List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
+        answerDialog.Add(new AnswerDialogData("Ok."));
+        var mesData = new MessageDialogData(String.Format("Element was purchased. {0}/{1}", Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+        return mesData;
     }
 
-    private void Diplomaty()
+    private MessageDialogData Diplomaty()
     {
-        WindowManager.Instance.InfoWindow.Init(null, "Element is yours");
         SetTake();
         MainController.Instance.MainPlayer.QuestData.AddElement();
+        MainController.Instance.MainPlayer.QuestData.AddElement();
+        List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
+        answerDialog.Add(new AnswerDialogData("Ok."));
+        var mesData = new MessageDialogData(String.Format("Element is yours. {0}/{1}", Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+        return mesData;
     }
 
     private void SetTake()
     {
         Taken = true;
-        if (OnTaken != null)
-        {
-            OnTaken(this);
-        }
     }
 
-    private void Steal()
+    private MessageDialogData Steal()
     {
         WDictionary<bool> wd = new WDictionary<bool>(new Dictionary<bool, float>()
         {
             { true,MainController.Instance.MainPlayer.Parameters.Scouts.Level},
-            { false,2},
+            { false,3.5f},
         });
         if (wd.Random())
         {
 
-            WindowManager.Instance.InfoWindow.Init(null, "Element is yours");
             SetTake();
             MainController.Instance.MainPlayer.QuestData.AddElement();
+            List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
+            answerDialog.Add(new AnswerDialogData("Ok."));
+            var mesData = new MessageDialogData(String.Format("Element is yours. {0}/{1}", Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+            return mesData;
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(Fight, "Fail. Now you should fight");
-
+            _power = (int)(_power * 1.26f);
+            List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
+            answerDialog.Add(new AnswerDialogData("Very bad. Fight.", Fight));
+            var mesData = new MessageDialogData("Fail. While you were trying to steal an item, reinforcements came to them, and now you can't runaway.", answerDialog);
+            return mesData;
         }
     }
 
@@ -158,6 +179,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     {
         if (_afterFightActivated)
         {
+            MainController.Instance.MainPlayer.QuestData.AddElement();
             List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
             answerDialog.Add(new AnswerDialogData("Ok.", null, null));
             var mesData = new MessageDialogData("This part is yours now.", answerDialog);
@@ -165,7 +187,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         }
         else
         {
-         return base.GetLeavedActionInner();
+            return base.GetLeavedActionInner();
         }
     }
 
@@ -173,6 +195,54 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     {
         _afterFightActivated = true;
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy());
+    }
+
+    protected override Player GetArmy()
+    {
+        if (_cachedArmy != null)
+        {
+            return _cachedArmy;
+        }
+
+        List<Func<float ,List<StartShipPilotData>> > posibleArmies = new List<Func<float, List<StartShipPilotData>>>();
+        switch (_config)
+        {
+            case ShipConfig.raiders:
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossBeamDistRaiders);
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossLightMinesRaiders);
+                break;
+            case ShipConfig.federation:
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossEngineLockersFederation);
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossImpulseCritsFed);
+                break;
+            case ShipConfig.mercenary:
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossCassetSprayMerc);
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossManyEMIMerc);
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossEMIFireMerc);
+                break;
+            case ShipConfig.ocrons:
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossHeavyWithSpeedOcrons);
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossMaxSelfDamageOcrons);
+                break;
+            case ShipConfig.krios:
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossIgnoreShieldKrios);
+                posibleArmies.Add(ArmyCreatorSpecial.CreateBossRocketTurnDistKrios);
+                break;
+            case ShipConfig.droid:
+                break;
+        }
+
+        if (posibleArmies.Count > 0)
+        {
+            var rnd = posibleArmies.RandomElement();
+            var army = rnd(_power);
+            var player = new Player("boss");
+            player.Army = army;
+            _cachedArmy =  player;
+        }
+
+        _cachedArmy = base.GetArmy();
+        return _cachedArmy;
     }
 
     public override Color Color()

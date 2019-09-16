@@ -13,9 +13,9 @@ public class LineShotSpell : BaseSpellModulInv
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 38f;
 
-    private const int FIRE_PERIOD = 5;
+    private const int FIRE_PERIOD = 4;
 
-    private int FirePeriod => FIRE_PERIOD + Level * 3;
+    private int FirePeriod => FIRE_PERIOD + Level * 2;
 
     private static CurWeaponDamage CurrentDamage { get; set; }
 

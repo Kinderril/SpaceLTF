@@ -11,7 +11,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
 {
     public float HIRE_CHANCE = 0.01f;
     protected ArmyCreatorType _armyType;
-    private ShipConfig _config;
+    protected ShipConfig _config;
     private bool canHire = false;
     private Player _player;
 
@@ -22,7 +22,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     protected int _power;
 
-    public Player GetArmy()
+    protected virtual Player GetArmy()
     {
         if (_player == null)
         {
@@ -52,23 +52,23 @@ public class ArmyGlobalMapCell : GlobalMapCell
         }
         //        var data = new ArmyCreatorRocket(ShipConfig.mercenary);
         var player = new Player(name);
-        float coreShipChance = 0;
-        switch (_config)
-        {
-            case ShipConfig.droid:
-                coreShipChance = 0f;
-                break;
-            case ShipConfig.raiders:
-                coreShipChance = 0.1f;
-                break;
-            case ShipConfig.federation:
-                coreShipChance = 0.9f;
-                break;
-            case ShipConfig.mercenary:
-                coreShipChance = 0.5f;
-                break;
-        }
-        bool withCore = MyExtensions.IsTrue01(coreShipChance);
+//        float coreShipChance = 0;
+//        switch (_config)
+//        {
+//            case ShipConfig.droid:
+//                coreShipChance = 0f;
+//                break;
+//            case ShipConfig.raiders:
+//                coreShipChance = 0.1f;
+//                break;
+//            case ShipConfig.federation:
+//                coreShipChance = 0.9f;
+//                break;
+//            case ShipConfig.mercenary:
+//                coreShipChance = 0.5f;
+//                break;
+//        }
+//        bool withCore = MyExtensions.IsTrue01(coreShipChance);
         var army = ArmyCreator.CreateSimpleEnemyArmy(_power, data, player);
         player.Army = army;
         switch (_config)

@@ -1,0 +1,822 @@
+
+
+=============== Game started ================
+
+
+ 14.09.2019 22:20:34 Log  Game Loaded C:/Users/Kinderril/AppData/LocalLow/DefaultCompany/TestProjectstats.stat
+ 14.09.2019 22:20:34 Log  OpenWindow start
+ 14.09.2019 22:20:35 Log  OpenWindow startNewGame
+ 14.09.2019 22:20:36 Log  <color=red>StartNewGameData mercenary SectorSize:4  SectorCount:6 CellsStartDeathStep:20  CoreElementsCount:4  BasePower:7   posibleSpell:System.Collections.Generic.List`1[SpellType]</color>
+ 14.09.2019 22:20:36 Log  global map size: 6 3
+ 14.09.2019 22:20:36 Log  CreateEndSector : 27 2
+ 14.09.2019 22:20:36 Log  Sector marked as core:10  coreId:95
+ 14.09.2019 22:20:36 Log  Core created 15 5.
+ 14.09.2019 22:20:36 Log  Sector marked as core:12  coreId:112
+ 14.09.2019 22:20:36 Log  Core created 20 0.
+ 14.09.2019 22:20:36 Log  Sector marked as core:13  coreId:128
+ 14.09.2019 22:20:36 Log  Core created 20 5.
+ 14.09.2019 22:20:36 Log  Sector marked as core:4  coreId:144
+ 14.09.2019 22:20:36 Log  Core created 5 5.
+ 14.09.2019 22:20:36 Log  Populate others : 0 0
+ 14.09.2019 22:20:36 Log  Populate others : 0 10
+ 14.09.2019 22:20:36 Log  Populate others : 5 0
+ 14.09.2019 22:20:36 Log  Populate others : 5 10
+ 14.09.2019 22:20:36 Log  Populate others : 10 0
+ 14.09.2019 22:20:36 Log  Populate others : 10 5
+ 14.09.2019 22:20:36 Log  Populate others : 10 10
+ 14.09.2019 22:20:36 Log  Populate others : 15 0
+ 14.09.2019 22:20:36 Log  Populate others : 15 10
+ 14.09.2019 22:20:36 Log  Populate others : 20 10
+ 14.09.2019 22:20:36 Log  Populate others : 25 5
+ 14.09.2019 22:20:36 Log  Populate others : 25 10
+ 14.09.2019 22:20:36 Log  Population end
+ 14.09.2019 22:20:36 Error Wrong remian points more than was _lastRemainPoints:1000_pointsRemain:1002
+ UnityEngine.Debug:LogError(Object)
+ArmyCreatorLogs:AddLog(Single, String) (at Assets/SSG/PlayerData/ArmyCreator/ArmyCreatorLogs.cs:15)
+ArmyCreator:CreateShipByConfig(ArmyRemainPoints, ShipConfig, Player, ArmyCreatorLogs) (at Assets/SSG/PlayerData/ArmyCreator/ArmyCreator.cs:293)
+Player:CreateStartArmy(ShipConfig, List`1, List`1) (at Assets/SSG/PlayerData/Player.cs:110)
+Player:PlayNewGame(StartNewGameData) (at Assets/SSG/PlayerData/Player.cs:46)
+MainController:CreateNewPlayerAndStartGame(StartNewGameData) (at Assets/SSG/MainController.cs:67)
+WindowNewGame:OnClickStart() (at Assets/SSG/UI/Windows/WindowNewGame.cs:69)
+UnityEngine.EventSystems.EventSystem:Update()
+
+ 14.09.2019 22:20:36 Log  Simple modul add to ship 533  shieldLocker
+ 14.09.2019 22:20:36 Log  Simple modul add to ship 535  damageMines
+ 14.09.2019 22:20:36 Log  TransferItem Spray fire (1)
+none  True
+ 14.09.2019 22:20:36 Log  OpenWindow map
+ 14.09.2019 22:20:36 Log  drag zone Enable:540  BaseShipInventoryUI(Clone)
+ 14.09.2019 22:20:36 Log  Init drag zone 540
+ 14.09.2019 22:20:36 Log  drag zone Enable:550  ShipInvUI
+ 14.09.2019 22:20:36 Log  Init drag zone 550
+ 14.09.2019 22:20:36 Log  drag zone Enable:558  ShipInvUI
+ 14.09.2019 22:20:36 Log  Init drag zone 558
+ 14.09.2019 22:20:37 Log  drag zone Enable:613  InventoryUI
+ 14.09.2019 22:20:37 Log  Init drag zone 613
+ 14.09.2019 22:20:43 Log  Release findedSlot:True
+ 14.09.2019 22:20:55 Log  Start create army 7 . ArmyCreatorRocket  
+ 14.09.2019 22:20:55 Warning  this is not enought to build ship
+ 14.09.2019 22:20:55 Log  <color=green>ARMY CREATOR:
+ 0. Remain:5. create ship
+ 1. Remain:4. add weapon
+ 2. Remain:2. create ship
+ 3. Remain:1. add weapon
+ 4. Remain:0. add weapon</color>
+ 14.09.2019 22:20:55 Log  Game Saved
+ 14.09.2019 22:20:56 Log  OpenWindow preBattle
+ 14.09.2019 22:20:56 Log  DragZone dispose:613  InventoryUI
+ 14.09.2019 22:20:56 Log  drag zone Disable:613  InventoryUI
+ 14.09.2019 22:20:56 Log  DragZone dispose:540  BaseShipInventoryUI(Clone)
+ 14.09.2019 22:20:56 Log  drag zone Disable:540  BaseShipInventoryUI(Clone)
+ 14.09.2019 22:20:56 Log  DragZone dispose:550  ShipInvUI
+ 14.09.2019 22:20:56 Log  drag zone Disable:550  ShipInvUI
+ 14.09.2019 22:20:56 Log  DragZone dispose:558  ShipInvUI
+ 14.09.2019 22:20:56 Log  drag zone Disable:558  ShipInvUI
+ 14.09.2019 22:20:56 Log  drag zone Enable:628  BaseShipInventoryUI(Clone)
+ 14.09.2019 22:20:56 Log  Init drag zone 628
+ 14.09.2019 22:20:56 Log  drag zone Enable:638  ShipInvUI
+ 14.09.2019 22:20:56 Log  Init drag zone 638
+ 14.09.2019 22:20:56 Log  drag zone Enable:646  ShipInvUI
+ 14.09.2019 22:20:56 Log  Init drag zone 646
+ 14.09.2019 22:20:56 Log  drag zone Enable:701  InventoryUI
+ 14.09.2019 22:20:56 Log  Init drag zone 701
+ 14.09.2019 22:20:56 Log  Map cell complete 76
+ 14.09.2019 22:20:58 Log   cam dims:1,777898   1,6    cameraSize:(3,6, 2,0)   spriteSize:(19,2, 12,0)
+ 14.09.2019 22:20:58 Log  OpenWindow play
+ 14.09.2019 22:20:58 Log  <color=red>Cells inited. SizeX:7  </color>
+ 14.09.2019 22:20:58 Error can't find enought free points
+ UnityEngine.Debug:LogError(Object)
+AICellDataRaound:FindFreeCorePoints() (at Assets/SSG/Battlefield/CellData/AICellDataRaound.cs:160)
+AICellDataRaound:Init(Vector3, Int32, Single) (at Assets/SSG/Battlefield/CellData/AICellDataRaound.cs:128)
+CellController:Init(Int32) (at Assets/SSG/Battlefield/CellData/CellController.cs:31)
+<LoadGameTask>d__28:MoveNext() (at Assets/SSG/BattleController.cs:111)
+UnityEngine.UnitySynchronizationContext:ExecuteTasks()
+
+ 14.09.2019 22:20:58 Log  Asteroids count: 161.  FieldRadius:20
+ 14.09.2019 22:20:58 Log  green power:16,8  red army:7
+ 14.09.2019 22:20:58 Warning  Try to register bullet with same id:754  NextFrameBullet   PriorityTargetBullet
+ 14.09.2019 22:20:58 Warning  Try to register bullet with same id:754  NextFrameBullet   PriorityTargetBullet
+ 14.09.2019 22:20:58 Warning  Try to register bullet with same id:45699  LinearBullet   shieldOffBullet
+ 14.09.2019 22:20:58 Warning  Try to register bullet with same id:9312  LinearBullet   throwAroundBullet
+ 14.09.2019 22:20:58 Log  AIcommander Inited. Spells: 0
+ 14.09.2019 22:20:58 Log  <color=red>Damage done:1/3  to:4. Time:22,64</color>
+ 14.09.2019 22:20:58 Log  <color=red>Damage done:1/3  to:4. Time:22,64</color>
+ 14.09.2019 22:20:58 Log  <color=red>Damage done:1/3  to:1. Time:22,64</color>
+ 14.09.2019 22:20:58 Log  <color=red>Damage done:1/3  to:1. Time:22,64</color>
+ 14.09.2019 22:20:58 Log  <color=red>Damage done:1/3  to:1. Time:22,64</color>
+ 14.09.2019 22:20:58 Log  <color=red>Damage done:1/3  to:1. Time:22,64</color>
+ 14.09.2019 22:20:58 Log  <color=red>Damage done:1/3  to:1. Time:22,64</color>
+ 14.09.2019 22:20:58 Log  <color=yellow>Task1:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:20:58 Log  <color=yellow>Task1:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:20:58 Log  <color=yellow>Task1:4  ReturnActionToBattlefield</color>
+ 14.09.2019 22:20:58 Log  <color=yellow>Task1:5  ReturnActionToBattlefield</color>
+ 14.09.2019 22:20:58 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:out bf  Time:23,02667</color>
+ 14.09.2019 22:20:58 Log  <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 22:20:58 Log  DragZone dispose:628  BaseShipInventoryUI(Clone)
+ 14.09.2019 22:20:58 Log  drag zone Disable:628  BaseShipInventoryUI(Clone)
+ 14.09.2019 22:20:58 Log  DragZone dispose:638  ShipInvUI
+ 14.09.2019 22:20:58 Log  drag zone Disable:638  ShipInvUI
+ 14.09.2019 22:20:58 Log  DragZone dispose:646  ShipInvUI
+ 14.09.2019 22:20:58 Log  drag zone Disable:646  ShipInvUI
+ 14.09.2019 22:20:58 Log  DragZone dispose:701  InventoryUI
+ 14.09.2019 22:20:58 Log  drag zone Disable:701  InventoryUI
+ 14.09.2019 22:20:59 Log  <color=green>End Action  Id:5  Action:returnToBattle  Cause:out bf  Time:23,65446</color>
+ 14.09.2019 22:20:59 Log  <color=yellow>Task2:5  AttackAction</color>
+ 14.09.2019 22:20:59 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:out bf  Time:24,14305</color>
+ 14.09.2019 22:20:59 Log  <color=yellow>Task2:3  AttackAction</color>
+ 14.09.2019 22:20:59 Log  <color=green>End Action  Id:4  Action:returnToBattle  Cause:out bf  Time:24,4483</color>
+ 14.09.2019 22:20:59 Log  <color=yellow>Task2:4  AttackAction</color>
+ 14.09.2019 22:21:00 Log  spell select Shield Locker
+ 14.09.2019 22:21:01 Log  spell TryCast Shield Locker
+ 14.09.2019 22:21:01 Log  <color=green>End Action  Id:3  Action:attack  Cause:is Shoot End  Time:25,85903</color>
+ 14.09.2019 22:21:01 Log  <color=yellow>Task2:3  AfterAttackAction</color>
+ 14.09.2019 22:21:01 Log  <color=green>End Action  Id:2  Action:attack  Cause:is Shoot End  Time:25,92506</color>
+ 14.09.2019 22:21:01 Log  <color=yellow>Task2:2  AfterAttackAction</color>
+ 14.09.2019 22:21:01 Log  spell select Power explotion
+ 14.09.2019 22:21:01 Log  <color=red>Damage done:4/4  to:4. Time:26,44</color>
+ 14.09.2019 22:21:01 Log  <color=red>Damage done:8/8  to:4. Time:26,44</color>
+ 14.09.2019 22:21:02 Log  <color=red>Damage done:2/2  to:2. Time:26,66</color>
+ 14.09.2019 22:21:02 Log  <color=green>End Action  Id:4  Action:attack  Cause:is Shoot End  Time:26,84771</color>
+ 14.09.2019 22:21:02 Log  <color=yellow>Task2:4  AfterAttackAction</color>
+ 14.09.2019 22:21:02 Log  spell TryCast Power explotion
+ 14.09.2019 22:21:02 Log  <color=green>End Action  Id:5  Action:attack  Cause:is Shoot End  Time:27,06826</color>
+ 14.09.2019 22:21:02 Log  <color=yellow>Task2:5  AfterAttackAction</color>
+ 14.09.2019 22:21:02 Log  <color=red>Damage done:2/2  to:3. Time:27,12</color>
+ 14.09.2019 22:21:02 Log  <color=red>Damage done:3/0  to:4. Time:27,32</color>
+ 14.09.2019 22:21:02 Log  <color=red>Damage done:3/0  to:5. Time:27,32</color>
+ 14.09.2019 22:21:02 Log  <color=red>Damage done:2/2  to:3. Time:27,4</color>
+ 14.09.2019 22:21:02 Log  <color=red>Damage done:2/2  to:3. Time:27,4</color>
+ 14.09.2019 22:21:03 Log  <color=red>Damage done:0/4  to:4. Time:27,88</color>
+ 14.09.2019 22:21:03 Log  Ship removed:4    isENemy:True
+ 14.09.2019 22:21:03 Log  Ship removed:4    isENemy:True
+ 14.09.2019 22:21:03 Log  Ship removed:4    isENemy:True
+ 14.09.2019 22:21:03 Log  <color=red>Damage done:0/4  to:5. Time:27,88</color>
+ 14.09.2019 22:21:04 Log  <color=green>End Action  Id:3  Action:afterAttack  Cause:path complete  Time:29,0341</color>
+ 14.09.2019 22:21:04 Log  <color=yellow>Task2:3  AfterAttackAction</color>
+ 14.09.2019 22:21:04 Log  <color=green>End Action  Id:2  Action:afterAttack  Cause:out bf  Time:29,50571</color>
+ 14.09.2019 22:21:04 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:04 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:29,52245</color>
+ 14.09.2019 22:21:04 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:05 Log  <color=red>Damage done:1/3  to:2. Time:29,8</color>
+ 14.09.2019 22:21:05 Log  <color=green>End Action  Id:3  Action:afterAttack  Cause:out bf  Time:29,90998</color>
+ 14.09.2019 22:21:05 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:05 Log  <color=red>Damage done:1/3  to:3. Time:30,4</color>
+ 14.09.2019 22:21:05 Log  <color=red>Damage done:1/3  to:2. Time:30,42</color>
+ 14.09.2019 22:21:05 Log  <color=red>Damage done:1/3  to:2. Time:30,46</color>
+ 14.09.2019 22:21:06 Log  <color=red>Damage done:1/3  to:3. Time:30,76</color>
+ 14.09.2019 22:21:06 Log  <color=red>Damage done:1/3  to:2. Time:31,04</color>
+ 14.09.2019 22:21:06 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:out bf  Time:31,51446</color>
+ 14.09.2019 22:21:06 Log  <color=yellow>Task2:3  AfterAttackAction</color>
+ 14.09.2019 22:21:06 Log  <color=red>Damage done:1/3  to:3. Time:31,56</color>
+ 14.09.2019 22:21:07 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:out bf  Time:32,04251</color>
+ 14.09.2019 22:21:07 Log  <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 22:21:08 Log  <color=green>End Action  Id:5  Action:afterAttack  Cause:weapon load  Time:33,0703</color>
+ 14.09.2019 22:21:08 Log  <color=yellow>Task2:5  AttackAction</color>
+ 14.09.2019 22:21:08 Log  <color=green>End Action  Id:3  Action:afterAttack  Cause:path complete  Time:33,32304</color>
+ 14.09.2019 22:21:08 Log  <color=yellow>Task2:3  AfterAttackAction</color>
+ 14.09.2019 22:21:09 Log  <color=green>End Action  Id:2  Action:attack  Cause:is Shoot End  Time:34,40139</color>
+ 14.09.2019 22:21:09 Log  <color=yellow>Task2:2  AfterAttackAction</color>
+ 14.09.2019 22:21:10 Log  <color=green>End Action  Id:5  Action:attack  Cause:is Shoot End  Time:35,24975</color>
+ 14.09.2019 22:21:10 Log  <color=yellow>Task2:5  AfterAttackAction</color>
+ 14.09.2019 22:21:11 Log  <color=green>End Action  Id:3  Action:afterAttack  Cause:weapon load  Time:35,85632</color>
+ 14.09.2019 22:21:11 Log  <color=yellow>Task2:3  AttackAction</color>
+ 14.09.2019 22:21:13 Log  <color=green>End Action  Id:2  Action:afterAttack  Cause:weapon load  Time:38,39803</color>
+ 14.09.2019 22:21:13 Log  <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 22:21:14 Log  <color=green>End Action  Id:3  Action:attack  Cause:is Shoot End  Time:38,9372</color>
+ 14.09.2019 22:21:14 Log  <color=yellow>Task2:3  AfterAttackAction</color>
+ 14.09.2019 22:21:14 Log  <color=green>End Action  Id:2  Action:attack  Cause:is Shoot End  Time:39,32473</color>
+ 14.09.2019 22:21:14 Log  <color=yellow>Task2:2  AfterAttackAction</color>
+ 14.09.2019 22:21:15 Log  <color=green>End Action  Id:5  Action:afterAttack  Cause:path complete  Time:39,66193</color>
+ 14.09.2019 22:21:15 Log  <color=yellow>Task2:5  ReadyToAttackAction</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:5  Action:readyToAttack  Cause:weapon load  Time:41,25326</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:5  AttackAction</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:afterAttack  Cause:out bf  Time:41,32092</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,33785</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,37915</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,396</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,41285</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,4297</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,44656</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,46352</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,48045</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,4971</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,51455</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,53156</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,54765</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:16 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:path complete  Time:41,5645</color>
+ 14.09.2019 22:21:16 Log  <color=yellow>Task2:3  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:17 Log  <color=red>Damage done:1/3  to:3. Time:42,2</color>
+ 14.09.2019 22:21:17 Log  <color=red>Damage done:1/3  to:3. Time:42,52</color>
+ 14.09.2019 22:21:17 Log  <color=red>Damage done:1/3  to:3. Time:42,52</color>
+ 14.09.2019 22:21:18 Log  <color=red>Damage done:2/6  to:5. Time:42,6</color>
+ 14.09.2019 22:21:18 Log  <color=red>Damage done:2/6  to:5. Time:42,62</color>
+ 14.09.2019 22:21:18 Log  <color=green>End Action  Id:2  Action:afterAttack  Cause:path complete  Time:42,80743</color>
+ 14.09.2019 22:21:18 Log  <color=yellow>Task2:2  ReadyToAttackAction</color>
+ 14.09.2019 22:21:18 Log  <color=green>End Action  Id:2  Action:readyToAttack  Cause:weapon load  Time:43,31301</color>
+ 14.09.2019 22:21:18 Log  <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 22:21:19 Log  <color=green>End Action  Id:3  Action:returnToBattle  Cause:out bf  Time:43,90264</color>
+ 14.09.2019 22:21:19 Log  <color=yellow>Task2:3  AfterAttackAction</color>
+ 14.09.2019 22:21:19 Log  spell select Shield Locker
+ 14.09.2019 22:21:20 Log  spell select Power explotion
+ 14.09.2019 22:21:20 Log  <color=green>End Action  Id:2  Action:attack  Cause:is Shoot End  Time:45,26721</color>
+ 14.09.2019 22:21:20 Log  <color=yellow>Task2:2  AfterAttackAction</color>
+ 14.09.2019 22:21:21 Log  spell TryCast Power explotion
+ 14.09.2019 22:21:21 Log  <color=red>Damage done:2/2  to:2. Time:45,78</color>
+ 14.09.2019 22:21:21 Log  <color=red>Damage done:2/2  to:2. Time:45,78</color>
+ 14.09.2019 22:21:21 Log  <color=green>End Action  Id:5  Action:attack  Cause:is Shoot End  Time:45,82472</color>
+ 14.09.2019 22:21:21 Log  <color=yellow>Task2:5  AfterAttackAction</color>
+ 14.09.2019 22:21:21 Log  <color=red>Damage done:8/8  to:5. Time:45,84</color>
+ 14.09.2019 22:21:21 Log  <color=red>Damage done:4/4  to:5. Time:45,86</color>
+ 14.09.2019 22:21:21 Log  <color=red>Damage done:2/2  to:2. Time:46,1</color>
+ 14.09.2019 22:21:21 Log  <color=red>Damage done:2/2  to:2. Time:46,1</color>
+ 14.09.2019 22:21:22 Log  <color=green>End Action  Id:3  Action:afterAttack  Cause:path complete  Time:47,19956</color>
+ 14.09.2019 22:21:22 Log  <color=yellow>Task2:3  ReadyToAttackAction</color>
+ 14.09.2019 22:21:22 Log  spell select Power explotion
+ 14.09.2019 22:21:23 Log  spell TryCast Power explotion
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:afterAttack  Cause:out bf  Time:48,34988</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,36644</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,38337</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,40032</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,41663</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,43348</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,45033</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,46718</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,48409</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,5011</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,51773</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,53548</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,55143</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:23 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,56838</color>
+ 14.09.2019 22:21:23 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:24 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,58534</color>
+ 14.09.2019 22:21:24 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:24 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:path complete  Time:48,60224</color>
+ 14.09.2019 22:21:24 Log  <color=yellow>Task2:2  ReturnActionToBattlefield</color>
+ 14.09.2019 22:21:24 Log  <color=green>End Action  Id:3  Action:readyToAttack  Cause:weapon load  Time:48,92211</color>
+ 14.09.2019 22:21:24 Log  <color=yellow>Task2:3  AttackAction</color>
+ 14.09.2019 22:21:24 Log  <color=green>End Action  Id:3  Action:attack  Cause:is Shoot End  Time:49,20881</color>
+ 14.09.2019 22:21:24 Log  <color=yellow>Task2:3  AfterAttackAction</color>
+ 14.09.2019 22:21:25 Log  <color=red>Damage done:1/3  to:2. Time:49,94</color>
+ 14.09.2019 22:21:25 Log  <color=red>Damage done:1/3  to:2. Time:49,98</color>
+ 14.09.2019 22:21:25 Log  <color=red>Damage done:2/6  to:5. Time:50,08</color>
+ 14.09.2019 22:21:25 Log  <color=red>Damage done:2/6  to:5. Time:50,08</color>
+ 14.09.2019 22:21:26 Log  spell select Power explotion
+ 14.09.2019 22:21:27 Log  spell TryCast Power explotion
+ 14.09.2019 22:21:27 Log  <color=green>End Action  Id:2  Action:returnToBattle  Cause:out bf  Time:51,19123</color>
+ 14.09.2019 22:21:27 Log  <color=yellow>Task2:2  AttackAction</color>
+ 14.09.2019 22:21:27 Log  <color=red>Damage done:0/4  to:5. Time:51,24211</color>
+ 14.09.2019 22:21:27 Log  Ship removed:5    isENemy:True
+ 14.09.2019 22:21:27 Log  Ship removed:5    isENemy:True
+ 14.09.2019 22:21:27 Log  Ship removed:5    isENemy:True
+ 14.09.2019 22:21:27 Log  <color=green>End Action  Id:2  Action:attack  Cause:target is dead  Time:51,26296</color>
+ 14.09.2019 22:21:27 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:27 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,28</color>
+ 14.09.2019 22:21:27 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:27 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,29696</color>
+ 14.09.2019 22:21:27 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:27 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,31395</color>
+ 14.09.2019 22:21:27 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:27 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,33036</color>
+ 14.09.2019 22:21:27 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,34782</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,36406</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,38091</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,39776</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,41461</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,43159</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,4483</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,46515</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,48246</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,49885</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,5157</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,54062</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,55747</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,57432</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,59119</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,6082</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,62487</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,64213</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,6591</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,67605</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,69226</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,70911</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,72622</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,74315</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,75966</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,77651</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,79404</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,81021</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,82706</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,84391</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,86077</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,87761</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,89474</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,9113</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,92815</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,945</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,96261</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,9787</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:51,99555</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,01248</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,02925</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,04639</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,06295</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,0798</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,09665</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,11349</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,13034</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,14725</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,16416</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,18111</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,19808</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,21459</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:3  Action:afterAttack  Cause:path complete  Time:52,21459</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,232</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,232</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,24899</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,24899</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,26514</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,26514</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,28199</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,28199</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,29884</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,29884</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,31581</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,31581</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,33324</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:28 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,33324</color>
+ 14.09.2019 22:21:28 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,35024</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,35024</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,36625</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,36625</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,38326</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,38326</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,40018</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,40018</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,41722</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,41722</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,43414</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,43414</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,45111</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,45111</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,46733</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,46733</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,48418</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,48418</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,50103</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,50103</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,51797</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,51797</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,53473</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,53473</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,552</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,552</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,56906</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,56906</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,58527</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,58527</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,60212</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,60212</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,61905</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,61905</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,63598</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,63598</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,65303</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,65303</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,66997</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,66997</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,68636</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,68636</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,70387</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,70387</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,72006</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,72006</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,73691</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,73691</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,75377</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,75377</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,77075</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,77075</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,78762</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,78762</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,8046</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,8046</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,82156</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,82156</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,83853</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,83853</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,85485</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,85485</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,87171</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,87171</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,88855</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,88855</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,90541</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,90541</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,92225</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,92225</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,9391</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,9391</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,95605</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,95605</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,97305</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,97305</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:52,98965</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:52,98965</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,00694</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,00694</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,0239</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,0239</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,0402</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,0402</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,05791</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,05791</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,07389</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,07389</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,09077</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,09077</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,10772</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,10772</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,12469</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,12469</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,14165</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,14165</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,15865</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,15865</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,17499</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,17499</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,19184</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,19184</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,20869</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,20869</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,22554</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,22554</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,24243</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,24243</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,25938</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,25938</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,27608</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,27608</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,29327</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,29327</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,30978</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,30978</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,32663</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:29 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,32663</color>
+ 14.09.2019 22:21:29 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,34348</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,34348</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,36033</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,36033</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,37719</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,37719</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,39413</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,39413</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,41088</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,41088</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,428</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,428</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,44495</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,44495</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,46143</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,46143</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,63091</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,63091</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,66045</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,66045</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,67879</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,67879</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,69564</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,69564</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,71253</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,71253</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:2  Action:waitEdnGame  Cause:out bf  Time:53,72948</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:2  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  <color=green>End Action  Id:3  Action:waitEdnGame  Cause:out bf  Time:53,72948</color>
+ 14.09.2019 22:21:30 Log  <color=yellow>Task2:3  EndGameWaitAction</color>
+ 14.09.2019 22:21:30 Log  End battle 1:win
+ 14.09.2019 22:21:30 Log  End battle 1:win
+ 14.09.2019 22:21:31 Log  End battle 2 LastWinner:win
+ 14.09.2019 22:21:31 Log  End game health remain percent:1   baseRepairPercent:0,24   isDead:False
+ 14.09.2019 22:21:31 Log  End game health remain percent:0,7272727   baseRepairPercent:0,24   isDead:False
+ 14.09.2019 22:21:31 Log  End game health remain percent:1   baseRepairPercent:0,24   isDead:False
+ 14.09.2019 22:21:31 Log  Player end battle. Reward setted.  reward:money
+ 14.09.2019 22:21:31 Log  OpenWindow endBattle
+ 14.09.2019 22:21:32 Log  OpenWindow map
+ 14.09.2019 22:21:33 Log  rank update : Kills 0.  rank:Cadet
+ 14.09.2019 22:21:33 Log  rank update : Kills 0.  rank:Cadet
+ 14.09.2019 22:21:33 Log  drag zone Enable:762  BaseShipInventoryUI(Clone)
+ 14.09.2019 22:21:33 Log  Init drag zone 762
+ 14.09.2019 22:21:33 Log  drag zone Enable:772  ShipInvUI
+ 14.09.2019 22:21:33 Log  Init drag zone 772
+ 14.09.2019 22:21:33 Log  drag zone Enable:780  ShipInvUI
+ 14.09.2019 22:21:33 Log  Init drag zone 780
+ 14.09.2019 22:21:33 Log  drag zone Enable:835  InventoryUI
+ 14.09.2019 22:21:33 Log  Init drag zone 835
+ 14.09.2019 22:21:40 Error drag zone OnDisable error:762  BaseShipInventoryUI(Clone)
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:240)
+
+ 14.09.2019 22:21:40 Error Parents info:  Layout  PlayerArmyUI(Clone)  Left  Left
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:241)
+
+ 14.09.2019 22:21:40 Error drag zone OnDisable error:772  ShipInvUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:240)
+
+ 14.09.2019 22:21:40 Error Parents info:  ShipPilotInventoryUI(Clone)  Layout  Player  Player
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:241)
+
+ 14.09.2019 22:21:40 Error drag zone OnDisable error:780  ShipInvUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:240)
+
+ 14.09.2019 22:21:40 Error Parents info:  ShipPilotInventoryUI(Clone)  Layout  Player  Player
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:241)
+
+ 14.09.2019 22:21:40 Error drag zone OnDisable error:835  InventoryUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:240)
+
+ 14.09.2019 22:21:40 Error Parents info:  Right  Layout  WindowMap  WindowMap
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDisable() (at Assets/SSG/UI/Drag/DragZone.cs:241)
+
+ 14.09.2019 22:21:40 Error drag zone OnDestroy error:762  BaseShipInventoryUI(Clone)
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:259)
+
+ 14.09.2019 22:21:40 Error Parents info:  Layout  PlayerArmyUI(Clone)  Left  Left
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:260)
+
+ 14.09.2019 22:21:40 Error drag zone OnDestroy error:772  ShipInvUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:259)
+
+ 14.09.2019 22:21:40 Error Parents info:  ShipPilotInventoryUI(Clone)  Layout  Player  Player
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:260)
+
+ 14.09.2019 22:21:40 Error drag zone OnDestroy error:780  ShipInvUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:259)
+
+ 14.09.2019 22:21:40 Error Parents info:  ShipPilotInventoryUI(Clone)  Layout  Player  Player
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:260)
+
+ 14.09.2019 22:21:40 Error drag zone OnDestroy error:835  InventoryUI
+ UnityEngine.Debug:LogError(Object)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:259)
+
+ 14.09.2019 22:21:40 Error Parents info:  Right  Layout  WindowMap  WindowMap
+ UnityEngine.Debug:LogError(Object)
+DragZone:TryDebugParent() (at Assets/SSG/UI/Drag/DragZone.cs:284)
+DragZone:OnDestroy() (at Assets/SSG/UI/Drag/DragZone.cs:260)

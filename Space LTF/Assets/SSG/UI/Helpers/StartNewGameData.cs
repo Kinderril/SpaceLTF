@@ -10,12 +10,12 @@ public class StartNewGameData
     public int SectorCount;
     public List<WeaponType> posibleStartWeapons;
     public ShipConfig shipConfig;
-    public SpellType posibleSpell;
+    public List<SpellType> posibleSpell;
     public Dictionary<PlayerParameterType, int> startParametersLevels;
 
     public StartNewGameData(Dictionary<PlayerParameterType, int> startParametersLevels,
         ShipConfig shipConfig, List<WeaponType> posibleStartWeapons, int SectorSize,  int SectorCount,
-        int CellsStartDeathStep, int CoreElementsCount, int BasePower, SpellType posibleSpell)
+        int CellsStartDeathStep, int CoreElementsCount, int BasePower, List<SpellType> posibleSpell)
     {
         Debug.Log(($"StartNewGameData {shipConfig.ToString()} SectorSize:{SectorSize} " +
                   $" SectorCount:{SectorCount} CellsStartDeathStep:{CellsStartDeathStep}  CoreElementsCount:{CoreElementsCount}" +

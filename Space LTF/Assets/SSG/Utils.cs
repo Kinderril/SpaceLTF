@@ -29,8 +29,11 @@ public class WDictionary<T> : Dictionary<float, T>
 
     public void Remove(T type)
     {
-        var key = reversed[type];
-        Remove(key);
+        if (reversed.ContainsKey(type))
+        {
+            var key = reversed[type];
+            Remove(key);
+        }
     }
 
     public T Random()

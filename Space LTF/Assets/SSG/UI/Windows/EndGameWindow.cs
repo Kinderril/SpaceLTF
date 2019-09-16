@@ -95,7 +95,7 @@ public class EndGameWindow : BaseWindow
 //        foreach (var shipPilotData in player.Army)
 //        {
 //            percents.Add(shipPilotData,0f);
-//            if (shipPilotData.Ship.LastBattleData.Destroyed)
+//            if (shipPilotData.Ship.FinalBattleData.Destroyed)
 //            {
 ////                shipPilotData.Ship.DamageTimes++;
 ////                if (shipPilotData.Ship.DamageTimes >= 3)

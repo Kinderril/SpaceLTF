@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
     public Transform GameCameraHolderY;
     private float SpeedXZ = 0.5f;
     private float SpeedY = 1.5f;
+    private float SpeedYByKey = 0.3f;
     public float MIN_Y = 10f;
     public float MAX_Y = 19f;
     private Vector3 _min;
@@ -72,8 +73,22 @@ public class CameraController : MonoBehaviour
             }
         }
 
+        UpdateCamUpDown();
         UpdateWheel();
     }
+
+    private void UpdateCamUpDown()
+    {
+        if (Input.GetKey(KeyCode.Z))
+        {
+            MoveMainCamUp(-SpeedYByKey);
+        }
+        else if (Input.GetKey(KeyCode.X))
+        {
+            MoveMainCamUp(SpeedYByKey);
+        }
+    }
+
     public void SetCameraTo(Vector3 v, float coef = 1f)
     {
         startMoveTime = Time.time;

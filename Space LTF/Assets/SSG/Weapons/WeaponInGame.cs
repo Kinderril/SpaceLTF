@@ -30,6 +30,7 @@ public enum WeaponType
     nextFrame = 17,
     beam = 18,
     artilleryBullet = 19,
+    fireDamageMine = 20,
 }
 
 public class WeaponAffectionAdditionalParams
@@ -71,6 +72,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
     public bool IsCrahed { get; private set; }
     private bool _inProcess;
     private bool _isRoundAng;
+    private bool _nextShootMorePower;
     private AudioSource Source;
     private AudioClip Clip;
 
@@ -112,7 +114,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
         DestroyAction = weaponInv.BulletDestroyed;
         _level = weaponInv.Level;
         _bulletTurnSpeed = weaponInv._bulletTurnSpeed;
-        AffectAction = new WeaponInventoryAffectTarget(Affect);
+        AffectAction = new WeaponInventoryAffectTarget(AffectDamage);
         _isRoundAng = weaponInv.isRoundAng;
         CreateBulletAction = weaponInv.BulletCreate;
         ShootPerTime = weaponInv.ShootPerTime;
@@ -160,10 +162,23 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 //        }
     }
 
-    public void Affect(ShipParameters shipParameters, ShipBase target, Bullet bullet,
+    public void AffectDamage(ShipParameters shipParameters, ShipBase target, Bullet bullet,
         DamageDoneDelegate callback, WeaponAffectionAdditionalParams additional)
     {
-        shipParameters.Damage(CurrentDamage.ShieldDamage, CurrentDamage.BodyDamage,callback, target);
+        float shield = CurrentDamage.ShieldDamage;
+        float body = CurrentDamage.BodyDamage;
+        if (_nextShootMorePower)
+        {
+            _nextShootMorePower = false;
+            shield *= 2f;
+            body *= 2f;
+        }
+        shipParameters.Damage(shield, body, callback, target);
+    }
+
+    public void ChargeWeaponsForNextShoot()
+    {
+        _nextShootMorePower = true;
     }
 
     protected bool IsAimedStraight(ShipPersonalInfo targInfo, ShipBase owner, Vector3 shootPos,float distShoot)
@@ -370,7 +385,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 #if UNITY_EDITOR
             if (damageAppliyer.IsDead == Owner)
             {
-                Debug.LogError($"Strange things. I wanna kill my self??? {Owner.Id}_{Owner.name}");
+                Debug.LogError($"Strange things. I wanna kill my self??? {Owner.Id}_{Owner.name}  side:{Owner.TeamIndex}  weap:{this.Name}");
             }
 #endif
             if (damageAppliyer.IsDead)

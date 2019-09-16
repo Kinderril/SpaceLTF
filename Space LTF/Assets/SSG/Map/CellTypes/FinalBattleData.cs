@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 
 [Serializable]
-public class LastBattleData
+public class FinalBattleData
 {
 //    [field: NonSerialized]
 //    private Action<MessageDialogData, Action> _lauchDialog;
@@ -21,7 +21,7 @@ public class LastBattleData
 
     private const int MONEY_TO_BUY = 140;
 
-    public LastBattleData()
+    public FinalBattleData()
     {
     }
 

@@ -60,6 +60,7 @@ public enum SimpleModulType
     ShipDecreaseSpeed = 39,
     ShieldDouble = 40,
     WeaponShootPerTime = 41,
+    fireMines = 42,
 }
 
 public abstract class BaseModul
@@ -106,6 +107,8 @@ public abstract class BaseModul
                 return new EngineLocker(baseModulInv);
             case SimpleModulType.damageMines:
                 return new MineDamageModul(baseModulInv);
+            case SimpleModulType.fireMines:
+                return new MineFireModul(baseModulInv);
             case SimpleModulType.systemMines:
                 return new MineSystemModul(baseModulInv);
 //            case SimpleModulType.ShipSpeed:

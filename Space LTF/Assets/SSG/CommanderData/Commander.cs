@@ -361,6 +361,20 @@ public class Commander
         }
         return false;
     }
+
+    public bool TryWeaponBuffShip(ShipBase ship)
+    {
+        var c = Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD;
+        var delay = Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY;
+        if (CoinController.CanUseCoins(c))
+        {
+            CoinController.UseCoins(c,delay);
+            ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.ChargePowerWeapons);
+            ship.WeaponsController.ChargePowerToAllWeapons();
+            return true;
+        }
+        return false;
+    }
     public bool TryBuffShip(ShipBase ship)
     {
         var c = Library.COINS_TO_CHARGE_SHIP_SHIELD;

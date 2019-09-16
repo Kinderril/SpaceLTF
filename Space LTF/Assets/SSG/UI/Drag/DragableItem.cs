@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using TMPro;
@@ -57,7 +58,13 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
         daragbleElement.Icon.sprite = daragbleElement.GetIcon();
 //        Debug.Log("Dragabale element created:" + daragbleElement.id);
         daragbleElement.Lable.text = item.GetInfo();
+        daragbleElement.Init();
         return daragbleElement;
+    }
+
+    protected virtual void Init()
+    {
+
     }
 
     protected override string TextToTooltip()
@@ -254,6 +261,25 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
         }
 
         return false;
+    }
+
+    protected virtual void Dispose()
+    {
+
+    }  
+    protected virtual void Refresh()
+    {
+
+    }
+
+    void OnEnable()
+    {
+        Refresh();
+    }
+
+    void OnDestroy()
+    {
+        Dispose();
     }
 }
 

@@ -8,11 +8,12 @@ using UnityEngine;
 [System.Serializable]
 public class MineFieldSpell : BaseSpellModulInv 
 {
-    public const int MINES_COUNT = 2;
+    public const int MINES_COUNT = 3;
     public const float MINES_PERIOD = 20f;
-    private const float rad = 2f;
-    private const float damageBody = 3f;
-    private const float damageShield = 2f;
+    public const float MINES_DIST = 30f;
+    private const float rad = 3.5f;
+    private const float damageBody = 2f;
+    private const float damageShield = 1f;
     private float _distToShoot;
 
     private int MinesCount => MINES_COUNT + Level;
@@ -20,7 +21,7 @@ public class MineFieldSpell : BaseSpellModulInv
     private float dist;//Костыльный параметр
     public MineFieldSpell(int costCount, int costTime)
         : base(SpellType.mineField, costCount, costTime,
-             new BulleStartParameters(9.7f, 36f, 25, 25), false)
+             new BulleStartParameters(9.7f, 36f, MINES_DIST, MINES_DIST), false)
     {
 
     }

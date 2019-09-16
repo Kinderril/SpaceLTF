@@ -89,7 +89,7 @@ public class Pool
         }
         else
         {
-            Debug.LogError("Try to register bullet with same id:" + bullet.ID + "  " + bullet.GetType().ToString() + "   " + bullet.name);
+            Debug.LogWarning("Try to register bullet with same id:" + bullet.ID + "  " + bullet.GetType().ToString() + "   " + bullet.name);
         }
         if (!registeredBulletsPrefabs.ContainsKey(bullet.ID))
             registeredBulletsPrefabs.Add(bullet.ID,bullet);

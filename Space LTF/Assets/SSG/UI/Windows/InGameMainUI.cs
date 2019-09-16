@@ -472,6 +472,10 @@ public class InGameMainUI : BaseWindow
 
     public override void Dispose()
     {
+        if (_spellSelected != null)
+        {
+            _spellSelected.EndShowCast();
+        }
         WindowKeys.gameObject.SetActive(false);
         FlyingNumbersController.Dispose();
         UnselectSpell();

@@ -121,7 +121,13 @@ public class InputManager : MonoBehaviour
     {
         var ships = _commander.Ships.Values;
         var list = ships.ToList();
-        if (index <= 0 || list.Count >= index)
+        if (index >= 0)
+        {
+            var toSelect = list[index];
+            inGameMainUi.ActionShipSelected(toSelect);
+            return;
+        }
+        if (list.Count >= index)
         {
             if (list.Count > 0)
             {
@@ -139,11 +145,6 @@ public class InputManager : MonoBehaviour
                 }
 
             }
-        }
-        else
-        {
-            var toSelect = list[index];
-            inGameMainUi.ActionShipSelected(toSelect);
         }
 
     }

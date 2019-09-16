@@ -96,12 +96,14 @@ public class FlyingNumberWithDependencesHoldin : MonoBehaviour
 
     private void OnShildChanged(float curent, float max, float delta, ShieldChangeSt state, ShipBase shipowner)
     {
-        Merge(delta);
+        if (Mathf.Abs(delta) > 0.5f)
+            Merge(delta);
     }
 
     private void OnHealthChanged(float curent, float max, float delta, ShipBase shipowner)
     {
-        Merge(delta);
+        if (Mathf.Abs(delta) > 0.5f)
+            Merge(delta);
     }
 
     private void Merge(float delta)

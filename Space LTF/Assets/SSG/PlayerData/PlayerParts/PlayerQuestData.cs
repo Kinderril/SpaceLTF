@@ -10,7 +10,7 @@ public class PlayerQuestData
 {
     public int mainElementsFound = 0;
     public int MaxMainElements = 4;
-    public LastBattleData LastBattleData { get; private set; }
+    public FinalBattleData LastBattleData { get; private set; }
 
     [field: NonSerialized]
     public event Action OnElementFound;
@@ -32,7 +32,7 @@ public class PlayerQuestData
 
     public void ComeToLastPoint()
     {
-        LastBattleData = new LastBattleData();
+        LastBattleData = new FinalBattleData();
         LastBattleData.Init();
     }
 

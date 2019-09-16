@@ -99,7 +99,7 @@ public class Player
     }
 
     private List<StartShipPilotData> CreateStartArmy(ShipConfig config, List<WeaponType> posibleStartWeapons,
-        SpellType posibleSpell)
+        List<SpellType> posibleSpell)
     {
         ArmyCreatorLogs logs = new ArmyCreatorLogs();
         float r = 1000;
@@ -110,11 +110,13 @@ public class Player
         var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), config, this, logs);
         
         int simpleIndex;
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        foreach (var spellType in posibleSpell)
         {
-            var e = posibleSpell;
-            var m1 = Library.CreateSpell(e);
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+            if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+            {
+                var m1 = Library.CreateSpell(spellType);
+                bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+            }
         }
         AddWeaponsToShips(ref r, ship1, posibleStartWeapons);
         AddWeaponsToShips(ref r, ship2, posibleStartWeapons);

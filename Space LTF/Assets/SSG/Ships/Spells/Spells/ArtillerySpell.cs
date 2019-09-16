@@ -8,11 +8,11 @@ using UnityEngine;
 [System.Serializable]
 public class ArtillerySpell : BaseSpellModulInv
 {
-    private const float DIST_SHOT = 11f;
-    private const float DAMAGE = 4;
-    private const float rad = 5f;
+    private const float DIST_SHOT = 40f;
+    private const float DAMAGE = 3;
+    private const float rad = 6f;
 
-    public int BulletsCount => Level * 3 + 14;
+    public int BulletsCount => Level * 4 + 15;
 
     public ArtillerySpell(int costCount, int costTime)
         : base(SpellType.artilleryPeriod, costCount, costTime,  new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
@@ -52,11 +52,13 @@ public class ArtillerySpell : BaseSpellModulInv
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var offset = rad / 2;
+//        var offset = rad / 2;
+        var offset =0.3f;
         var xx = MyExtensions.Random(-offset, offset);
         var zz = MyExtensions.Random(-offset, offset);
 
-        var startPos = target.Position + Vector3.up * DIST_SHOT + new Vector3(xx, 0, zz);
+//        var startPos = target.Position + Vector3.up * DIST_SHOT + new Vector3(xx, 0, zz);
+        var startPos = shootpos + new Vector3(xx, 0, zz);
         var dir = Utils.NormalizeFastSelf(target.Position - startPos);
         Bullet.Create(origin, weapon, dir, startPos,
             null, bullestartparameters);

@@ -1,0 +1,19 @@
+
+
+=============== Game started ================
+
+
+ 14.09.2019 20:30:10 Log 
+ Game Loaded C:/Users/Kinderril/AppData/LocalLow/DefaultCompany/TestProjectstats.stat
+ UnityEngine.Debug:Log(Object)
+PlayerStatistics:LoadGame(PlayerStatistics&) (at Assets/SSG/Statistic/PlayerStatistics.cs:201)
+PlayerStatistics:Load() (at Assets/SSG/Statistic/PlayerStatistics.cs:90)
+MainController:Awake() (at Assets/SSG/MainController.cs:26)
+
+ 14.09.2019 20:30:10 Log 
+ OpenWindow start
+ UnityEngine.Debug:Log(Object)
+WindowManager:OpenWindow(MainState, Object) (at Assets/SSG/UI/Windows/WindowManager.cs:141)
+WindowManager:OpenWindow(MainState) (at Assets/SSG/UI/Windows/WindowManager.cs:88)
+MainController:StartGame() (at Assets/SSG/MainController.cs:45)
+MainController:Start() (at Assets/SSG/MainController.cs:34)

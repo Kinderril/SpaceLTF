@@ -12,8 +12,8 @@ public class DistShotSpell : BaseSpellModulInv
 {
     //    private const float dist = 28f;
 
-    private const int DIST_BASE_DAMAGE = 6;
-    private const int BASE_DAMAGE = 8;
+    private const int DIST_BASE_DAMAGE = 4;
+    private const int BASE_DAMAGE = 5;
     private const int LEVEL_DAMAGE = 4;
     private const float DIST_COEF = .065f;
 
@@ -37,7 +37,7 @@ public class DistShotSpell : BaseSpellModulInv
 
     private void DistShotCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition, weapon.CurPosition, null, bullestartparameters);
+        var b = Bullet.Create(origin, weapon, target.Position - shootpos, shootpos, null, bullestartparameters);
     }
 
     public int BASE_damage => BASE_DAMAGE + LEVEL_DAMAGE * Level;
