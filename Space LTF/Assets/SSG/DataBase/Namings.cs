@@ -78,10 +78,10 @@ public static class Namings
                 Name = "Shield Locker";
                 break;
             case SimpleModulType.autoShieldRepair:
-                Name = "Auto shiled";
+                Name = "Auto shield";
                 break;
             case SimpleModulType.shieldRegen:
-                Name = "Shield regen";
+                Name = "Shield regeneration";
                 break;
             case SimpleModulType.autoRepair:
                 Name = "Repair drone";
@@ -217,7 +217,7 @@ public static class Namings
         switch (config)
         {
             case SimpleModulType.shieldLocker:
-                Name = "Lock shild of target enemy.";
+                Name = "Lock shield of target enemy.";
                 break;
             case SimpleModulType.autoShieldRepair:
                 Name = "Repair shield when it's down.";
@@ -266,9 +266,6 @@ public static class Namings
                 break;
             case SimpleModulType.bombUpgrade:
                 Name = "Increase power of all bomb weapons for +1/+1 per level.";
-                break;   
-            case SimpleModulType.ResistDamages:
-                Name = "Protect ships engine, weapons, shields. And your ship cannot be fired.";
                 break;
 //            case SimpleModulType.ShipSpeed:
 //                Name = String.Format("Increase ship max speed for {0}% per level.", ShipTurnModul.PER_LEVEL);
@@ -278,12 +275,7 @@ public static class Namings
 //                break;
 
             default:
-#if UNITY_EDITOR
-                if (!LibraryModuls.IsSupport(config))
-                {
-                    Debug.LogError($"NO DescSimpleModul NOT SUPPORT    {config.ToString()}");
-                }
-#endif
+                Debug.LogError($"NO DescSimpleModul {config.ToString()}");
                 break;
         }
         return Name;
@@ -351,9 +343,9 @@ public static class Namings
             case PlayerParameterType.scout:
                 return "Scouts";
             case PlayerParameterType.diplomaty:
-                return "Diplomaty";
+                return "Diplomacy";
             case PlayerParameterType.repair:
-                return "Repair servies";
+                return "Repair services";
             case PlayerParameterType.chargesCount:
                 return "Charges Count";
             case PlayerParameterType.chargesSpeed:
@@ -373,10 +365,10 @@ public static class Namings
     public static string StartNewGameBasePower = "Enemies power";
     public static string StartNewGameSectorsCount = "Sectors count";
 
-    public static string StartInfo = "All is very simple. This galaxy crashing becouse of... nobody knows why." +
+    public static string StartInfo = "All is very simple. This galaxy crashing because of... nobody knows why." +
                                      "\nYou should run away as fast as you can, but you are not only one who want to do it." +
                                      "\nFind gates and activate it, before galaxy becomes dead. " +
-                                     "\nTo activate gate you need to collect keys as many keys as you can, and bring them to gates." +
+                                     "\nTo activate gate you need to collect energy elements." +
                                      "\nGood luck!";
 
     public static string DamageInfoUI = "Damage: {0}/{1}";
@@ -442,7 +434,7 @@ public static class Namings
         switch (pilotTactic)
         {
             case PilotTcatic.defenceBase:
-                return "Defence";
+                return "Defense";
             case PilotTcatic.attack:
                 return "Balance";
             case PilotTcatic.attackBase:
@@ -452,7 +444,7 @@ public static class Namings
     }
 
     public static string Fleet = "Fleet";
-    public static string RechargeButton = "Recharge Shiled.\nCost[{0}/{1}]"; 
+    public static string RechargeButton = "Recharge Shield.\nCost[{0}/{1}]"; 
     public static string BuffButton = "Increase parameters of ship.\n[Cost:{0}/{1}]";
     public static string PowerWeaponButton = "Increase next shoot damage of ship.\n[Cost:{0}/{1}]";
     public static string CellScouted = "Coordinates Scouted [{0},{1}]";
@@ -565,15 +557,15 @@ public static class Namings
     public static string NoSafeGame = "No save game";
     public static string MaxLevel = "Max";
     public static string And = "And";
-    public static string SupportModul = "Support modul";
-    public static string ActionModul = "Action modul";
+    public static string SupportModul = "Support module";
+    public static string ActionModul = "Action module";
     public static string CataclysmProcess = "{0} cells destroyed";
     public static string RemainCataclysm = "Days remain:{0}";
     public static string VeryEasy = "Very easy";
     public static string Easy = "Easy";
     public static string Normal = "Normal";
     public static string Hard = "Hard";
-    public static string Imposilbe = "Imposilbe";
+    public static string Imposilbe = "Impossible";
     public static string Radius = "Radius";
     public static string Sector = "Sector";
     public static string Reload = "Reload";
@@ -622,5 +614,15 @@ public static class Namings
     public static string NotCoreSector = "Simple sector";
     public static string Populated = "Populated by";
     public static string OpenCoordinates = "Coordinates of some fleets open";
-    public static string TutorCloseForever = "Do not show this again.";
+    public static string StatisticDifficulty = "Difficulty:{0}%.";
+    public static string StatisticConfig = "Army:{0}.";
+    public static string StatisticMapSize = "Map size:{0}.";
+    public static string StatisticFinalArmyPower = "Final power:{0}.";
+    public static string StatisticDate = "{0}";
+    public static string Fight = "Fight";
+    public static string StatisticNoResult = "No results";
+    public static string StatisticNoLastResult = "Wait for game...";
+    public static string StatisticLastResult = "Last result:";
+    public static string Sacrifice = "Sacrifice ship {0} the {1} of {2}";
+    public static string TutorCloseForever = "Do not show this tip again";
 }

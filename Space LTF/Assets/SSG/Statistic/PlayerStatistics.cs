@@ -48,9 +48,16 @@ public class PlayerStatistics
     public List<OpenShipConfig> OpenShipsTypes = new List<OpenShipConfig>();
     public List<WeaponsPair> WeaponsPairs = new List<WeaponsPair>();
     public EndBattleType LastBattle = EndBattleType.win;
+    public EndGameStatistics EndGameStatistics = new EndGameStatistics();
+    private float _lastDifficulty;
 
     public void Init()
     {
+        if (EndGameStatistics==null)
+        {
+            EndGameStatistics=new EndGameStatistics();
+        }
+        EndGameStatistics.Init();
         if (OpenShipsTypes.Count == 0)
         {
             var sc1 = new OpenShipConfig(ShipConfig.raiders);
@@ -206,5 +213,13 @@ public class PlayerStatistics
         return false;
     }
 
+    public void EndGameAll(bool win,Player player)
+    {
+        var mainShip = player.Army.First(x => x.Ship.ShipType == ShipType.Base);
+        var finalPower = ArmyCreator.CalcArmyPower(player.Army);
+        EndGameResult res = new EndGameResult(win,_lastDifficulty, mainShip.Ship.ShipConfig, player.MapData.GalaxyData.Size, DateTime.Now, finalPower);
+        EndGameStatistics.AddResult(res);
+        SaveGame();
+    }
 }
 

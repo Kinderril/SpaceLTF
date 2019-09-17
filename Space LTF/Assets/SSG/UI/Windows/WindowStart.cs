@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 public class WindowStart : BaseWindow
 {
+    public StatisticsController Statistics;
     public override void Init()
     {
+        Statistics.Init();
         base.Init();
     }
 

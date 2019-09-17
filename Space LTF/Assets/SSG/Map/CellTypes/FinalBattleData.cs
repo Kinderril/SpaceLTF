@@ -8,16 +8,12 @@ using System.Threading.Tasks;
 [Serializable]
 public class FinalBattleData
 {
-//    [field: NonSerialized]
-//    private Action<MessageDialogData, Action> _lauchDialog;
-//    [field: NonSerialized]
-//    private Action _complete;
-
     private PlayerQuestData mainQuest;
     private bool _isDimplomatyUsed = false;
     private bool _isBuyUsed = false;
     private bool _isStealUsed = false;
     private bool _lastFight = false;
+    private int _power;
 
     private const int MONEY_TO_BUY = 140;
 
@@ -25,8 +21,9 @@ public class FinalBattleData
     {
     }
 
-    public void Init()
+    public void Init(int power)
     {
+        _power = power;
         mainQuest = MainController.Instance.MainPlayer.QuestData;
     }
 
@@ -34,21 +31,78 @@ public class FinalBattleData
     {
         int current = mainQuest.mainElementsFound;
         int need = mainQuest.MaxMainElements;
-        //        var percents = (float)mainQuest.mainElementsFound / (float)PlayerQuestData.MaxMainElements;
+        var isFull = current >= need;
 
         var list = new List<AnswerDialogData>();
-        list.Add(new AnswerDialogData("Ok", null, FirstDialogEnds));
-        var mesData = new MessageDialogData(String.Format("This is your main goal. You have {0}/{1} parts.\n Now you should acquire all others.",
-            current, need), list);
+        MessageDialogData mesData;
+        if (isFull)
+        {
+            list.Add(new AnswerDialogData(Namings.Ok, null, ReadyToGo));
+            mesData = new MessageDialogData(String.Format("This is your main goal. You have {0}/{1} parts to open gates.\n You are ready to go in.",
+                current, need), list);
+        }
+        else
+        {
+            var player = MainController.Instance.MainPlayer;
+            var armyCount = player.Army.Count;
+            var delta = need - current;
+            if (delta > armyCount - 1)
+            {
+                list.Add(new AnswerDialogData(Namings.Ok, LoseGame, null));
+                mesData = new MessageDialogData(String.Format("This is your main goal. You have {0}/{1} parts to open gates.\n" +
+                            " Now you should acquire all others." +
+                            "\n Only one way to do it send one of your ships to block energy on gates. " +
+                            "\n But you don't have enought ship" +
+                            "\n Your are dead.",
+                    current, need), list);
+            }
+            else
+            {
+                var shipsYouCanScriface = player.Army.Where(x => x.Ship.ShipType != ShipType.Base).ToList();
+                foreach (var data in shipsYouCanScriface)
+                {
+                    StartShipPilotData shipToDel = data;
+                    void Sacrifice()
+                    {
+                        player.RemoveShip(shipToDel);
+                        player.QuestData.AddElement();
+                    }
+                    list.Add(new AnswerDialogData(String.Format(Namings.Sacrifice, shipToDel.Ship.Name,
+                        Namings.ShipType(shipToDel.Ship.ShipType), Namings.ShipConfig(shipToDel.Ship.ShipConfig)), null, ()=>
+                    {
+                        Sacrifice();
+                        return GetDialog();
+                    }));
+                }
+                mesData = new MessageDialogData(String.Format("This is your main goal. You have {0}/{1} parts to open gates.\n" +
+                        " Now you should acquire all others." +
+                        "\n Only one way to do it send one of your ships to block energy on gates. ",
+                    current, need), list);
+            }
+        }
         return mesData;
     }
 
+    private void LoseGame()
+    {
+        MainController.Instance.EndGame(false);
+    }
+
+    private MessageDialogData ReadyToGo()
+    {
+        var list = new List<AnswerDialogData>();
+        list.Add(new AnswerDialogData(Namings.Fight, Fight, null));
+        var mesData = new MessageDialogData("But somebody don't want let you go and attacks you", list);
+        return mesData;
+    }
+       
+    /*
     private MessageDialogData FirstDialogEnds()
     {
         if (mainQuest.Completed())
         {
             var list = new List<AnswerDialogData>();
-            list.Add(new AnswerDialogData("Ok", () =>
+            list.Add(new AnswerDialogData(Namings.Ok, () =>
             {
                 MainController.Instance.EndGameWin();
             },null));
@@ -96,27 +150,41 @@ public class FinalBattleData
             return mesData;
         }
     }
-
+     */
     private void Fight()
     {
         _lastFight = true;
         var player = new Player("Final boss");
-        var army = ArmyCreator.CreateArmy(90, ArmyCreationMode.equalize, 5, 7, ArmyCreatorData.GetRandom(ShipConfig.federation),
+        var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize, 5, 7, ArmyCreatorData.GetRandom(ShipConfig.federation),
             true, player);
         player.Army = army;
-        MainController.Instance.LaunchBattle(MainController.Instance.MainPlayer,player);
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer,player,true);
     }
 
-    private void EndPart()
-    {
-        if (mainQuest.Completed())
-        {
+//    private void EndPart()
+//    {
+//        if (mainQuest.Completed())
+//        {
+//
+//        }
+//        else
+//        {
+//            FirstDialogEnds();
+//        }
+//    }
 
-        }
-        else
-        {
-            FirstDialogEnds();
-        }
+    public MessageDialogData GetAfterBattleDialog()
+    {
+        var list = new List<AnswerDialogData>();
+        list.Add(new AnswerDialogData(Namings.Ok, EndGameWin, null));
+        var mesData = new MessageDialogData("Now way is free and you can go whatever you want.", list);
+        return mesData;
+    }
+
+    private void EndGameWin()
+    {
+        MainController.Instance.EndGame(true);
+
     }
 }
 

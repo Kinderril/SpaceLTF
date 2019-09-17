@@ -155,8 +155,10 @@ public class CellIinfoObjectUI : MonoBehaviour
 
     public void Disable()
     {
-//        Debug.Log("Disable");
-        _disabled = true;
+        //        Debug.Log("Disable");
+        haveObj = false;
+        curObj = null;
+                _disabled = true;
         MovingObject.gameObject.SetActive(false);
     }
 }

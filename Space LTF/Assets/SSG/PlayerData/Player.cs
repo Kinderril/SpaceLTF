@@ -285,7 +285,7 @@ public class Player
         }
     }
 
-    public void DestroyShip(ShipInventory shipInventory)
+    public void RemoveShip(ShipInventory shipInventory)
     {
         var shipTo = Army.FirstOrDefault(x => x.Ship == shipInventory);
         if (shipTo == null)
@@ -294,11 +294,18 @@ public class Player
             return;
         }
 
-        Army.Remove(shipTo);
+        RemoveShip(shipTo);
+    }
+
+    public void RemoveShip(StartShipPilotData shipToDel)
+    {
+
+        Army.Remove(shipToDel);
         if (OnAddShip != null)
         {
-            OnAddShip(shipTo, false);
+            OnAddShip(shipToDel, false);
         }
+
     }
 }
 

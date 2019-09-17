@@ -18,6 +18,11 @@ public class WindowEndGame : BaseWindow
         base.Dispose();
     }
 
+    public void OnToNewGame()
+    {
+        WindowManager.Instance.OpenWindow(MainState.startNewGame);
+    }
+
     
 }
 

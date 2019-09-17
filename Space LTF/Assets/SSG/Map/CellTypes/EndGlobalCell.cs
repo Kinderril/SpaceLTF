@@ -8,12 +8,14 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class EndGlobalCell : GlobalMapCell
+public class EndGlobalCell : ArmyGlobalMapCell
 {
     private FinalBattleData _data;
 
-    public EndGlobalCell(int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
+    public EndGlobalCell(int power, int id, int intX, int intZ, SectorData secto) 
+        : base(power,ShipConfig.droid,id, ArmyCreatorType.destroy, intX, intZ, secto)
     {
+        _power = SectorData.CalcCellPower(0, power, power);
         InfoOpen = true;
         Scouted();
     }
@@ -36,14 +38,20 @@ public class EndGlobalCell : GlobalMapCell
 
     protected override MessageDialogData GetLeavedActionInner()
     {
-        var getDialog = _data.GetDialog();
+        var getDialog = _data.GetAfterBattleDialog();
         return getDialog;
     }
 
     public override MessageDialogData GetDialog()
     {
-//        list.Add(new AnswerDialogData("Ok", null));
-//        var mesData = new MessageDialogData(String.Format("This is your main goal. You have {0}/{1} parts", mainQuest.mainElementsFound, PlayerQuestData.MaxMainElements), list);
+        if (_data == null)
+        {
+            var questData = MainController.Instance.MainPlayer.QuestData;
+            questData.ComeToLastPoint();
+            questData.CheckIfOver();
+            _data = questData.LastBattleData;
+            _data.Init(_power);
+        }
         return _data.GetDialog();
     }
 
@@ -54,10 +62,14 @@ public class EndGlobalCell : GlobalMapCell
 
     public override void ComeTo()
     {
-        var questData = MainController.Instance.MainPlayer.QuestData;
-        questData.ComeToLastPoint();
-        questData.CheckIfOver();
-        _data = questData.LastBattleData;
+        if (_data == null)
+        {
+            var questData = MainController.Instance.MainPlayer.QuestData;
+            questData.ComeToLastPoint();
+            questData.CheckIfOver();
+            _data = questData.LastBattleData;
+            _data.Init(_power);
+        }
     }
 
     public override bool OneTimeUsed()

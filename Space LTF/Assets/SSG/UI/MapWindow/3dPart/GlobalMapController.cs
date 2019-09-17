@@ -81,6 +81,24 @@ public class GlobalMapController : MonoBehaviour
         SetBorders();
     }
 
+    public void ClearAll()
+    {
+        isInited = false;
+        Dispsoe();
+        CallbackNearObjec = null;
+        _lastNearObject = null;
+        _lastSelectedSector = null;
+        SectorsContainer.ClearTransform();
+        PointsContainer.ClearTransform();
+        ConnectionsContainer.ClearTransform();
+        WaysContainer.ClearTransform();
+        _cellsWaysObjects.Clear();
+        _allSectros.Clear();
+        _connectors.Clear();
+        _allCells = new GlobalMapCellObject[0,0];
+        _data = null;
+    }
+
     private void DrawSectors(GalaxyData data)
     {
         foreach (var sector in data.AllSectors)
@@ -199,10 +217,11 @@ public class GlobalMapController : MonoBehaviour
     {
         for (int i = 0; i < _data.Size; i++)
         {
-            for (int j = 0; j < _data.Size; j++)
+            for (int j = 0; j < GalaxyData.VERTICAL_COUNT * _data.SizeOfSector - 1; j++)
             {
                 var cell = _allCells[i, j];
-                cell.Cell.OnDestoyedCell -= OnDestoyedCell;
+                if (cell != null)
+                    cell.Cell.OnDestoyedCell -= OnDestoyedCell;
             }
         }
     }
@@ -372,8 +391,7 @@ public class GlobalMapController : MonoBehaviour
             }
         }
     }
-
-
+    
     private void UpdateClosest(Vector3? ray)
     {
         if (ray.HasValue)
@@ -395,8 +413,7 @@ public class GlobalMapController : MonoBehaviour
         CallbackNearObjec(null);
 
     }
-
-
+     
     private void SetClosetsObject(GlobalMapCellObject nearObject)
     {
 
@@ -410,8 +427,7 @@ public class GlobalMapController : MonoBehaviour
         if (_lastNearObject!=null)
             _lastNearObject.Selected();
     }
-
-
+     
     [CanBeNull]
     private GlobalMapCellObject ClosestObject(Vector3 pos,out float dist)
     {
@@ -482,8 +498,7 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-
-    [CanBeNull]
+     [CanBeNull]
     private GlobalMapCellObject GetCellObjectByCell(GlobalMapCell cell)
     {
 //        GlobalMapCellObject cellToNavigate = null;

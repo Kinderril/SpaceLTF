@@ -22,7 +22,8 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     private PlayerQuestData Quest => MainController.Instance.MainPlayer.QuestData;
 
 
-    public CoreGlobalMapCell(int power, int id, int intX, int intZ,SectorData  secto) : base( power,ShipConfig.mercenary, id, ArmyCreatorType.destroy, intX, intZ, secto)
+    public CoreGlobalMapCell(int power, int id, int intX, int intZ,SectorData  secto) 
+        : base( power,ShipConfig.mercenary, id, ArmyCreatorType.destroy, intX, intZ, secto)
     {
         _power = power;
         WDictionary<GlobalCellType> chances = new WDictionary<GlobalCellType>(new Dictionary<GlobalCellType, float>()

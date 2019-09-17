@@ -299,6 +299,21 @@ public class MapWindow : BaseWindow
         }
     }
 
+    public void DebugActivateEndDialog()
+    {
+        var endCell =
+            MainController.Instance.MainPlayer.MapData.GalaxyData.GetAllList()
+                .FirstOrDefault(x => x is EndGlobalCell) as EndGlobalCell;
+        if (endCell != null)
+        {
+            StartDialog(endCell.GetDialog(), OnMainDialogEnds);
+        }
+        else
+        {
+            Debug.LogError("Can't find end game cell");
+        }
+    }
+
     private void OnMainDialogEnds()
     {
         player.MapData.CurrentCell.Complete();

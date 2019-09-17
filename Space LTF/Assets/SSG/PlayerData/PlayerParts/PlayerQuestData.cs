@@ -33,7 +33,7 @@ public class PlayerQuestData
     public void ComeToLastPoint()
     {
         LastBattleData = new FinalBattleData();
-        LastBattleData.Init();
+//        LastBattleData.Init();
     }
 
     public void AddElement()

@@ -103,7 +103,7 @@ public class GalaxyData
 
         xCell = endSector.StartX + 1 + RndIndex(sizeSector - 1);
         zCell = endSector.StartZ  + RndIndex(sizeSector);
-        var endCell = new EndGlobalCell(Utils.GetId(), xCell, zCell, endSector);
+        var endCell = new EndGlobalCell(startPower,Utils.GetId(), xCell, zCell, endSector);
         endSector.SetCell(endCell,id);
         unPopulatedSectors.Remove(endSector);
         endSector.Populate(startPower,startSector);

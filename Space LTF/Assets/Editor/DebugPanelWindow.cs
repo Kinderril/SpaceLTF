@@ -95,6 +95,14 @@ public class DebugPanelWindow : EditorWindow
             {
                 DebugParamsController.TestHire();
             }
+            if (GUILayout.Button("Go End"))
+            {
+                GoToEnd();
+            }
+            if (GUILayout.Button("Add core"))
+            {
+                AddCore();
+            }
             if (BattleController.Instance != null && BattleController.Instance.InGameMainUI != null)
             {
                 var ss = BattleController.Instance.InGameMainUI.SelectedShip;
@@ -123,6 +131,25 @@ public class DebugPanelWindow : EditorWindow
                 }
             }
         }
+    }
+
+    private void AddCore()
+    {
+        MainController.Instance.MainPlayer.QuestData.AddElement();
+    }
+
+    private void GoToEnd()
+    {
+        var isCurMapWindow = WindowManager.Instance.CurrentWindow as MapWindow;
+        if (isCurMapWindow != null)
+        {
+            isCurMapWindow.DebugActivateEndDialog();
+        }
+        else
+        {
+            Debug.LogError("Current window is not Map Window");
+        }
+
     }
 
     public static void SwitchEngine()
