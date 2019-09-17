@@ -4,6 +4,7 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+Space LTF/Logs
 
 # Visual Studio cache directory
 .vs/
@@ -16,6 +17,7 @@ ExportedObj/
 *.sln
 *.suo
 *.tmp
+*.log
 *.user
 *.userprefs
 *.pidb

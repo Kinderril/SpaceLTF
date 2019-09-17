@@ -61,6 +61,7 @@ public enum SimpleModulType
     ShieldDouble = 40,
     WeaponShootPerTime = 41,
     fireMines = 42,
+    frontShield = 43,
 }
 
 public abstract class BaseModul
@@ -95,6 +96,8 @@ public abstract class BaseModul
                 return new AntiEnergyModul(baseModulInv);
             case SimpleModulType.blink:
                 return new BlinkModul(baseModulInv);
+            case SimpleModulType.frontShield:
+                return new FrontShieldModul(baseModulInv);
             case SimpleModulType.autoRepair:
                 return new AutoRepairModul(baseModulInv);
             case SimpleModulType.autoShieldRepair:

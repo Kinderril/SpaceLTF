@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class DifficultyNewGame : MonoBehaviour
     public ToggleWithTextMeshPro Normal;
     public ToggleWithTextMeshPro Hard;
     public ToggleWithTextMeshPro Imposilbe;
+    private Action _callback;
 
     public void Init()
     {
@@ -26,25 +28,49 @@ public class DifficultyNewGame : MonoBehaviour
     public void ONVeryWasyClick()
     {
         CurDifficulty = Library.MAX_GLOBAL_MAP_VERYEASY_BASE_POWER;
+        if (_callback != null)
+        {
+            _callback();
+        }
     }
     public void ONEasyClick()
     {
         CurDifficulty = Library.MIN_GLOBAL_MAP_EASY_BASE_POWER;
+        if (_callback != null)
+        {
+            _callback();
+        }
 
     }
     public void ONNormalClick()
     {
         CurDifficulty = Library.MIN_GLOBAL_MAP_NORMAL_BASE_POWER;
+        if (_callback != null)
+        {
+            _callback();
+        }
     } 
     public void ONHradClick()
     {
 
         CurDifficulty = Library.MIN_GLOBAL_MAP_HARD_BASE_POWER;
+        if (_callback != null)
+        {
+            _callback();
+        }
     } 
     public void ONImposilbeyClick()
     {
 
         CurDifficulty = Library.MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER;
+        if (_callback != null)
+        {
+            _callback();
+        }
     }
 
+    public void InitCallback(Action fieldChange)
+    {
+        _callback = fieldChange;
+    }
 }

@@ -165,15 +165,17 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
     public void AffectDamage(ShipParameters shipParameters, ShipBase target, Bullet bullet,
         DamageDoneDelegate callback, WeaponAffectionAdditionalParams additional)
     {
-        float shield = CurrentDamage.ShieldDamage;
-        float body = CurrentDamage.BodyDamage;
+//        target.BulletHitModification()
+
+//        float shield = CurrentDamage.ShieldDamage;
+//        float body = CurrentDamage.BodyDamage;    
         if (_nextShootMorePower)
         {
             _nextShootMorePower = false;
-            shield *= 2f;
-            body *= 2f;
+            CurrentDamage.ShieldDamage *= 2f;
+            CurrentDamage.BodyDamage *= 2f;
         }
-        shipParameters.Damage(shield, body, callback, target);
+        shipParameters.DamageByWeaponBullet(bullet,CurrentDamage, callback, target);
     }
 
     public void ChargeWeaponsForNextShoot()

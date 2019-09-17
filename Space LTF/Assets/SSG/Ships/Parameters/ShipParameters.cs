@@ -12,6 +12,8 @@ public enum DamageType
 }
 
 public delegate void DamageDoneDelegate(float healthDelta, float shieldDelta,ShipBase attacker);
+public delegate float DamageModifDelegate(float damage);
+public delegate CurWeaponDamage BulletDamageModif(CurWeaponDamage damage,Bullet bullet,ShipBase target);
 
 public class ShipParameters  : IShipAffectableParams
 {
@@ -19,6 +21,9 @@ public class ShipParameters  : IShipAffectableParams
     public const float MaxShieldCoef = 2.4f;
     public const float MaxSpeedCoef = 0.13f;
     public const float TurnSpeedCoef = 2f;
+    public List<DamageModifDelegate> BodyModifications = null;
+    public List<DamageModifDelegate> ShieldModifications = null;
+    public List<BulletDamageModif> BulletHitModificators = null;
 
     public float CurShiled
     {
@@ -138,6 +143,8 @@ public class ShipParameters  : IShipAffectableParams
 
     public void DamageIgnoreShield(float bodyDamage, DamageDoneDelegate damageDoneCallback)
     {
+        bodyDamage = ModifDamage(bodyDamage, BodyModifications);
+
         Debug.Log(String.Format("Damage done:{0}/{1}  to:{2}. Time:{3}", 0, bodyDamage, _shipOwner.Id, Time.time).Red()); var c = CurHealth;
 
         float healthDelta = 0f;
@@ -148,10 +155,17 @@ public class ShipParameters  : IShipAffectableParams
         }
         healthDelta = Mathf.Abs(CurHealth - c);
         HealthAction(-healthDelta);
+        if (damageDoneCallback != null)
+        {
+            damageDoneCallback(healthDelta, 0, null);
+        }
     }
 
     public void Damage(float shildDamage, float bodyDamage, DamageDoneDelegate damageDoneCallback,ShipBase attacker)
     {
+        bodyDamage = ModifDamage(bodyDamage, BodyModifications);
+        shildDamage = ModifDamage(shildDamage, ShieldModifications);
+
         Debug.Log(String.Format("Damage done:{0}/{1}  to:{2}. Time:{3}",shildDamage,bodyDamage,_shipOwner.Id,Time.time).Red() );
         float healthDelta = 0f;
         float shieldDelta = 0f;
@@ -179,9 +193,33 @@ public class ShipParameters  : IShipAffectableParams
         {
             damageDoneCallback(healthDelta, shieldDelta,attacker);
         }
-
     }
 
+    private float ModifDamage(float dmg, List<DamageModifDelegate> modificators)
+    {
+        if (modificators != null)
+        {
+            foreach (var func in modificators)
+            {
+                dmg = func(dmg);
+            }
+        }
+
+        return dmg;
+    }
+    public void DamageByWeaponBullet(Bullet bullet, CurWeaponDamage currentDamage, DamageDoneDelegate callback, ShipBase target)
+    {
+        if (BulletHitModificators != null)
+        {
+            foreach (var hitModificator in BulletHitModificators)
+            {
+                currentDamage = hitModificator(currentDamage, bullet, target);
+            }
+        }
+        Damage(currentDamage.ShieldDamage, currentDamage.BodyDamage, callback, target);
+    }
+
+    /*     DamageByType
     public void DamageByType(float val, DamageType damageType)
     {
         float delta;
@@ -230,7 +268,7 @@ public class ShipParameters  : IShipAffectableParams
 
         
     }
-
+      */
     public void Dispose()
     {
         ShieldParameters.Dispose();

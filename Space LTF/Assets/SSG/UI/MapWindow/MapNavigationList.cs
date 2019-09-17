@@ -150,5 +150,9 @@ public class MapNavigationList : MonoBehaviour
         MainController.Instance.MainPlayer.QuestData.OnElementFound -= OnElementFound;
     }
 
+    public void ClearAll()
+    {
+        NewGameDrop();
+    }
 }
 

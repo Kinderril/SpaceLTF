@@ -15,8 +15,11 @@ public class WindowNewGame : BaseWindow
     public SliderWithTextMeshPro SectorSize;
     public SliderWithTextMeshPro StartDeathTime;
     public SliderWithTextMeshPro CoresCount;
+
     public DifficultyNewGame DifficultyNewGame;
     public SliderWithTextMeshPro SectorsCount;
+    public TextMeshProUGUI DifficultyFIeld;
+    private StartNewGameData gameData;
 
     public override void Init()
     {
@@ -34,7 +37,18 @@ public class WindowNewGame : BaseWindow
         CoresCount.InitBorders(Library.MIN_GLOBAL_MAP_CORES, Library.MAX_GLOBAL_MAP_CORES, true);
 //        BasePower.InitBorders(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER, true);
         SectorsCount.InitBorders(Library.MIN_GLOBAL_MAP_SECTOR_COUNT, Library.MAX_GLOBAL_MAP_SECTOR_COUNT, true);
+        SectorSize.InitCallback(OnFieldChange);
+        StartDeathTime.InitCallback(OnFieldChange);
+        CoresCount.InitCallback(OnFieldChange);
+        SectorsCount.InitCallback(OnFieldChange);
+        DifficultyNewGame.InitCallback(OnFieldChange);
+        UpdateStartData();
         base.Init();
+    }
+
+    private void OnFieldChange()
+    {
+        UpdateStartData();
     }
 
     public void OnClickStart()
@@ -45,29 +59,36 @@ public class WindowNewGame : BaseWindow
             PlayerStartParametersUI.OnParamClick(PlayerParameterType.scout, true);
         }
      
-        var posibleStartSpells = new List<SpellType>()
-    {
-        SpellType.lineShot,
-        SpellType.engineLock,
-        SpellType.shildDamage,
-        SpellType.mineField,
-        SpellType.throwAround,
-        SpellType.distShot,
-        SpellType.artilleryPeriod,
-//            SpellType.spaceWall,
-    };
+
 //#if UNITY_EDITOR
 //        posibleStartSpells = new List<SpellType>();
 //        posibleStartSpells.Add(SpellType.engineLock);
 //
 //#endif
-        List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
-        var gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
-            ArmyTypeSelectorUI.Selected, posibleStartWeapons, 
-            SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(),
-            DifficultyNewGame.CurDifficulty, posibleStartSpells.RandomElement(2));
+        UpdateStartData();
         MainController.Instance.CreateNewPlayerAndStartGame(gameData);
         
+    }
+
+    private void UpdateStartData()
+    {
+        var posibleStartSpells = new List<SpellType>()
+        {
+            SpellType.lineShot,
+            SpellType.engineLock,
+            SpellType.shildDamage,
+            SpellType.mineField,
+            SpellType.throwAround,
+            SpellType.distShot,
+            SpellType.artilleryPeriod,
+//            SpellType.spaceWall,
+        };
+        List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
+        gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
+            ArmyTypeSelectorUI.Selected, posibleStartWeapons,
+            SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(),
+            DifficultyNewGame.CurDifficulty, posibleStartSpells.RandomElement(2));
+        DifficultyFIeld.text = String.Format(Namings.StatisticDifficulty, Utils.FloatToChance(gameData.CalcDifficulty()));
     }
 
     public void OnClickRandomStart()

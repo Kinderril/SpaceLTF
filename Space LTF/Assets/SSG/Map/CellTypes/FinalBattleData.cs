@@ -85,7 +85,7 @@ public class FinalBattleData
 
     private void LoseGame()
     {
-        MainController.Instance.EndGame(false);
+        MainController.Instance.BattleData.EndGame(false);
     }
 
     private MessageDialogData ReadyToGo()
@@ -183,7 +183,7 @@ public class FinalBattleData
 
     private void EndGameWin()
     {
-        MainController.Instance.EndGame(true);
+        MainController.Instance.BattleData.EndGame(true);
 
     }
 }

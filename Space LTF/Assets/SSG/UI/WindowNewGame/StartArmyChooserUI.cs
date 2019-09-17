@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Toggle))]
-public class StartArmyChooserUI : MonoBehaviour
+public class StartArmyChooserUI : UIElementWithTooltip
 {
     public TextMeshProUGUI Field;
     public ShipConfig Config { get; private set; }
@@ -26,6 +26,10 @@ public class StartArmyChooserUI : MonoBehaviour
     public void OnClick()
     {
         oncallback(this);
+    }
+    protected override string TextToTooltip()
+    {
+        return Namings.Tooltip(Config);
     }
 }
 

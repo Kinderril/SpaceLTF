@@ -30,4 +30,14 @@ public class StartNewGameData
         this.BasePower = BasePower;
         this.posibleSpell = posibleSpell;
     }
+
+    public float CalcDifficulty()
+    {
+        var deltaPower = (BasePower - Library.MAX_GLOBAL_MAP_VERYEASY_BASE_POWER) * 0.2f;
+        var deltaSize = (SectorSize - Library.MIN_GLOBAL_SECTOR_SIZE) * 0.05f;
+        var deltaCore = (CoreElementsCount - Library.MIN_GLOBAL_MAP_CORES) * 0.12f;
+        var deltaDeath = (Library.MAX_GLOBAL_MAP_DEATHSTART - CellsStartDeathStep) * 0.014f;
+
+        return deltaDeath + deltaCore + deltaSize + deltaPower + 0.03f;
+    }
 }

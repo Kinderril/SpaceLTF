@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Toggle))]
-public class StartWeaponToggleUI : MonoBehaviour
+public class StartWeaponToggleUI : UIElementWithTooltip
 {
     public TextMeshProUGUI Field;
     public WeaponsPair WeaponsPair { get; private set; }
@@ -26,6 +26,10 @@ public class StartWeaponToggleUI : MonoBehaviour
     public void OnClick()
     {
         oncallback(this);
+    }
+    protected override string TextToTooltip()
+    {
+        return Namings.TooltipWeapons(WeaponsPair);
     }
 }
 

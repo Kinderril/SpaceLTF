@@ -246,19 +246,6 @@ public static class Library
                         return new ShipInventory(new StartShipParams(shipType, config, 46, 28, 1.1f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
-            case ShipConfig.krios:
-                switch (shipType)
-                {
-                    case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 15, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player);
-                    case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 19, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player);
-                    case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 22, 41, 2.2f, 53, 3, 3, 0, 1, 0.4f), player);
-                    case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 15, 57, 0.6f, 40, 0, 0, 4, 1, 0f), player);
-                }
-                break;
             case ShipConfig.mercenary:
                 switch (shipType)
                 {
@@ -279,7 +266,7 @@ public static class Library
                     case ShipType.Light:
                         return new ShipInventory(new StartShipParams(shipType, config, 20, 16, 3.4f, 70, 2, 1, 0, 1, 0.2f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 25, 22, 2.9f, 61, 2, 2, 0, 1, 0.25f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 25, 21, 2.7f, 59, 3, 2, 0, 1, 0.25f), player);
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player);
                     case ShipType.Base:
@@ -297,6 +284,19 @@ public static class Library
                         return new ShipInventory(new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f), player);
                     case ShipType.Base:
                         return new ShipInventory(new StartShipParams(shipType, config, 66, 10, 0.75f, 40, 0, 0, 2, 1, 0f), player);
+                }
+                break;
+            case ShipConfig.krios:
+                switch (shipType)
+                {
+                    case ShipType.Light:
+                        return new ShipInventory(new StartShipParams(shipType, config, 15, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player);
+                    case ShipType.Middle:
+                        return new ShipInventory(new StartShipParams(shipType, config, 19, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player);
+                    case ShipType.Heavy:
+                        return new ShipInventory(new StartShipParams(shipType, config, 22, 41, 2.2f, 53, 3, 3, 0, 1, 0.4f), player);
+                    case ShipType.Base:
+                        return new ShipInventory(new StartShipParams(shipType, config, 15, 57, 0.6f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             default:

@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 
 
-public class StartParameterUI : MonoBehaviour
+public class StartParameterUI : UIElementWithTooltip
 {
     public TextMeshProUGUI Field;
     private Action<PlayerParameterType, bool> callbackClick;
@@ -32,6 +32,11 @@ public class StartParameterUI : MonoBehaviour
     public void OnClickDown()
     {
         callbackClick(_type, false);
+    }
+
+    protected override string TextToTooltip()
+    {
+        return Namings.TooltipParam(_type);
     }
 }
 

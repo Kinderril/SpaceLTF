@@ -99,8 +99,7 @@ public class ShipBase : MovingObject
     private DebugTurnData DebugTurnData;
 
     public float MaxTurnRadius => Mathf.Rad2Deg * (ShipParameters.MaxSpeed / ShipParameters.TurnSpeed);
-    public float CurTurnRadius => Mathf.Rad2Deg * (CurSpeed / TurnSpeed());
-
+  
     public void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos,
         IPilotParameters pilotParams, Commander commander, Action<ShipBase> dealthCallback)
     {

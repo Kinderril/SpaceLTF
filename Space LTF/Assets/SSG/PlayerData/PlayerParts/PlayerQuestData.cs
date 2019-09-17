@@ -24,7 +24,7 @@ public class PlayerQuestData
     {
         if (Completed())
         {
-            MainController.Instance.EndGameWin();
+            MainController.Instance.BattleData.EndGameWin();
             return true;
         }
         return false;

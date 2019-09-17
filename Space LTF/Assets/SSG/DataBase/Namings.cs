@@ -107,6 +107,9 @@ public static class Namings
             case SimpleModulType.fireMines:
                 Name = "Fire mine";
                 break;
+            case SimpleModulType.frontShield:
+                Name = "Front shield";
+                break;
             case SimpleModulType.blink:
                 Name = "Teleportation";
                 break;
@@ -245,6 +248,9 @@ public static class Namings
                 break;
             case SimpleModulType.damageMines:
                 Name = "Put damage mines to hit enemies";
+                break;
+            case SimpleModulType.frontShield:
+                Name = "If bullet bullet hit at front reflects it.";
                 break; 
             case SimpleModulType.fireMines:
                 Name = $"Put damage mines, witch can fire enemies for {MineFireModul.PERIOD_DAMAGE} sec.";
@@ -625,4 +631,55 @@ public static class Namings
     public static string StatisticLastResult = "Last result:";
     public static string Sacrifice = "Sacrifice ship {0} the {1} of {2}";
     public static string TutorCloseForever = "Do not show this tip again";
+
+    public static string TooltipWeapons(WeaponsPair weaponsPair)
+    {
+        return $"On start your ships will have one of {Weapon(weaponsPair.Part1)} or {Weapon(weaponsPair.Part2)} complect.";
+    }
+
+    public static string Tooltip(ShipConfig config)
+    {
+        switch (config)
+        {
+            case global::ShipConfig.raiders:
+                return "Positive: Good speed, many slots for modules." +
+                    "\nNegative: Few weapon slots. No shield regeneration.";
+            case global::ShipConfig.federation:
+                return "Positive: Many weapon slots. Shield regeneration." +
+                       "\nNegative: Low speed.";
+            case global::ShipConfig.mercenary:
+                return "Positive: Balanced." +
+                       "\nNegative: Balanced.";
+            case global::ShipConfig.ocrons:
+                return "Positive: Perfect body health. Many slots for modules." +
+                       "\nNegative: No shied. No shield regeneration";
+            case global::ShipConfig.krios:
+                return "Positive: Good shield. Perfect shield regeneration" +
+                       "\nNegative: Low body health.";
+            case global::ShipConfig.droid:
+                return "";
+        }
+
+        return "null";
+
+    }
+
+    public static string TooltipParam(PlayerParameterType type)
+    {
+        switch (type)
+        {
+            case PlayerParameterType.scout:
+                return "Scout can provide you information about ememies army. And sometimes can try steal something.";
+            case PlayerParameterType.diplomaty:
+                return "Usable in map events. Sometimes you can simple use it instead of fight.";
+            case PlayerParameterType.repair:
+                return "Between battles you will need to repair your fleet. This one will help you.";
+            case PlayerParameterType.chargesCount:
+                return "Increase main ship charges count.";
+            case PlayerParameterType.chargesSpeed:
+                return "Increase main ship charges regeneration speed.";
+        }
+
+        return "null";
+    }
 }

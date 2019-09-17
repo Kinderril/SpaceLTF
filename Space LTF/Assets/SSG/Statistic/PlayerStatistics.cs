@@ -221,5 +221,10 @@ public class PlayerStatistics
         EndGameStatistics.AddResult(res);
         SaveGame();
     }
+
+    public void PlayNewGame(StartNewGameData data)
+    {
+        _lastDifficulty = data.CalcDifficulty();
+    }
 }
 

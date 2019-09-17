@@ -9,7 +9,7 @@ public class LogHandler : MonoBehaviour
     void Awake()
     {
 //        var way = $"Log {DateTime.Now.Date.ToShortDateString()} {DateTime.Now.ToLongDateString()}.txt";
-        var way = $"Log {DateTime.Now.ToString("MM/dd/yyyy H-mm")}.txt";
+        var way = $"Log {DateTime.Now.ToString("MM/dd/yyyy H-mm")}.log";
 //        var way = $"Log.txt";
 
         var file = File.Open(way, FileMode.OpenOrCreate, FileAccess.ReadWrite);

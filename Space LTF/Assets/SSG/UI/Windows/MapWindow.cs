@@ -125,10 +125,28 @@ public class MapWindow : BaseWindow
 
     private void OnAddShip(StartShipPilotData pilotData, bool arg2)
     {
-        var element = DataBaseController.GetItem(SideShipGlobalMapInfoPrefabs);
-        element.gameObject.transform.SetParent(LayoutSideShips, false);
-        element.Init(pilotData,this);
-        _sideInfos.Add(element);
+        if (arg2)
+        {
+            var element = DataBaseController.GetItem(SideShipGlobalMapInfoPrefabs);
+            element.gameObject.transform.SetParent(LayoutSideShips, false);
+            element.Init(pilotData, this);
+            _sideInfos.Add(element);
+        }
+        else
+        {
+            var shipToDel = _sideInfos.FirstOrDefault(x => x.Ship == pilotData);
+            if (shipToDel != null)
+            {
+                _sideInfos.Remove(shipToDel);
+                GameObject.Destroy(shipToDel.gameObject);
+                shipToDel.Dispose();
+            }
+            else
+            {
+                Debug.LogError($"OnAddShip. Delete error {pilotData}");
+            }
+            
+        }
     }
 
 
@@ -440,6 +458,16 @@ public class MapWindow : BaseWindow
         playerArmyUI.Dispose();
         Cataclysm.Dispose();
         GameObject.Destroy(playerArmyUI.gameObject);
+    }
+
+    public void ClearAll()
+    {
+        NavigationList.ClearAll();
+        LayoutSideShips.ClearTransform();
+        _sideInfos.Clear();
+        GlobalMap.ClearAll();
+        MapConsoleUI.ClearAll();
+        Dispose();
     }
 }
 

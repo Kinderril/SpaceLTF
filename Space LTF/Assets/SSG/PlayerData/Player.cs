@@ -43,6 +43,7 @@ public class Player
         QuestData  = new PlayerQuestData(data.CoreElementsCount);
         MapData = new PlayerMapData();
         MapData.Init(data);
+
         Army = CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell);
         RepairData.Init(Army, MapData,Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
@@ -51,16 +52,28 @@ public class Player
 
     private void AddModuls(int count)
     {
-        for (int i = 0; i < count; i++)
+        int index;
+        if (Inventory.GetFreeSimpleSlot(out index))
         {
-            if (Inventory.GetFreeSimpleSlot(out var index))
-            {
-                var modul = Library.CreatSimpleModul(1,MyExtensions.IsTrueEqual());
-                Inventory.TryAddSimpleModul(modul,index);
-            }
+            var modul = Library.CreatSimpleModul(SimpleModulType.fireMines,1);
+            Inventory.TryAddSimpleModul(modul,index);
         }
+        if (Inventory.GetFreeSimpleSlot(out index))
+        {
+            var modul = Library.CreatSimpleModul(SimpleModulType.frontShield,1);
+            Inventory.TryAddSimpleModul(modul,index);
+        }
+
+//        for (int i = 0; i < count; i++)
+//        {
+//            if (Inventory.GetFreeSimpleSlot(out var index))
+//            {
+//                var modul = Library.CreatSimpleModul(1,MyExtensions.IsTrueEqual());
+//                Inventory.TryAddSimpleModul(modul,index);
+//            }
+//        }
 #if UNITY_EDITOR
-        if (DebugParamsController.AllModuls)
+            if (DebugParamsController.AllModuls)
         {
 
             var allVals = (SimpleModulType[]) Enum.GetValues(typeof(SimpleModulType));

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class SideShipGlobalMapInfo : MonoBehaviour
 {
+    public StartShipPilotData Ship => _ship;
     private StartShipPilotData _ship;
     public GameObject LevelUpButton;
     public GameObject RepairButton;

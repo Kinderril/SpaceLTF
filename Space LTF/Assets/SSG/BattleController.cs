@@ -417,13 +417,13 @@ public class BattleController :Singleton<BattleController>
         switch (LastWinner)
         {
             case EndBattleType.win:
-                MainController.Instance.EndGameWin();
+                MainController.Instance.BattleData.EndGameWin();
                 break;
             case EndBattleType.lose:
-                MainController.Instance.EndGameLose();
+                MainController.Instance.BattleData.EndGameLose();
                 break;
             case EndBattleType.runAway:
-                MainController.Instance.EndGameRunAway();
+                MainController.Instance.BattleData.EndGameRunAway();
                 break;
         }
     }

@@ -42,5 +42,11 @@ public class MapConsoleUI : MonoBehaviour
         txt.transform.SetParent(SpaceConsole, false);
         txt.Field.text = msg;
     }
+
+    public void ClearAll()
+    {
+        SpaceConsole.ClearTransform();
+        existedElements.Clear();
+    }
 }
 
