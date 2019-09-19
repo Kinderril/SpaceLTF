@@ -81,23 +81,23 @@ public class MapWindow : BaseWindow
         InventoryUI.Init(player.Inventory,null);
         GlobalMap.UnBlock();
         player.QuestData.OnElementFound += OnElementFound;
-        if (!player.MapData.CurrentCell.LeaveComplete)
-        {
-            if (!player.QuestData.CheckIfOver())
-            {
-                var leavedDialog = player.MapData.CurrentCell.GetLeavedAction();
-                if (leavedDialog != null)
-                {
-                    //                leavedDialog();
-                    StartDialog(leavedDialog, () =>
-                    {
-                        CanvasGroup.interactable = true;
-                        GlobalMap.UnBlock();
-                    });
-
-                }
-            }
-        }
+//        if (!player.MapData.CurrentCell.LeaveComplete)
+//        {
+//            if (!player.QuestData.CheckIfOver())
+//            {
+//                var leavedDialog = player.MapData.CurrentCell.GetLeavedAction();
+//                if (leavedDialog != null)
+//                {
+//                    //                leavedDialog();
+//                    StartDialog(leavedDialog, () =>
+//                    {
+//                        CanvasGroup.interactable = true;
+//                        GlobalMap.UnBlock();
+//                    });
+//
+//                }
+//            }
+//        }
         EnableModif(false);
         EnableArmy(false);
         UpdateMainQuestelements();

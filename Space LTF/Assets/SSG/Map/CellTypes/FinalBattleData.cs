@@ -158,7 +158,7 @@ public class FinalBattleData
         var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize, 5, 7, ArmyCreatorData.GetRandom(ShipConfig.federation),
             true, player);
         player.Army = army;
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer,player,true);
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer,player,true,false);
     }
 
 //    private void EndPart()

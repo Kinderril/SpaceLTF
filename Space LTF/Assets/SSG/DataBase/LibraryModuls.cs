@@ -77,6 +77,7 @@ public static class LibraryModuls
             SimpleModulType.damageMines,
             SimpleModulType.fireMines,
             SimpleModulType.frontShield,
+            SimpleModulType.armor,
             SimpleModulType.systemMines,
             SimpleModulType.blink,
             SimpleModulType.laserUpgrade,
@@ -201,6 +202,7 @@ public static class LibraryModuls
             SimpleModulType.frontShield,
             SimpleModulType.fireMines,
             SimpleModulType.blink,
+            SimpleModulType.armor,
             SimpleModulType.ResistDamages,
             SimpleModulType.shieldRegen,
 

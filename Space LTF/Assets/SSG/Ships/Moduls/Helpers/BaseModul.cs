@@ -62,6 +62,7 @@ public enum SimpleModulType
     WeaponShootPerTime = 41,
     fireMines = 42,
     frontShield = 43,
+    armor = 44,
 }
 
 public abstract class BaseModul
@@ -97,7 +98,9 @@ public abstract class BaseModul
             case SimpleModulType.blink:
                 return new BlinkModul(baseModulInv);
             case SimpleModulType.frontShield:
-                return new FrontShieldModul(baseModulInv);
+                return new FrontShieldModul(baseModulInv);      
+            case SimpleModulType.armor:
+                return new ArmorModul(baseModulInv);
             case SimpleModulType.autoRepair:
                 return new AutoRepairModul(baseModulInv);
             case SimpleModulType.autoShieldRepair:

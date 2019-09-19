@@ -12,6 +12,11 @@ public class CurWeaponDamage
 
     public float ShieldDamage;
     public float BodyDamage;
+
+    public CurWeaponDamage Copy()
+    {
+        return new CurWeaponDamage(ShieldDamage,BodyDamage);
+    }
 }
 
 public class WeaponInventoryParameters

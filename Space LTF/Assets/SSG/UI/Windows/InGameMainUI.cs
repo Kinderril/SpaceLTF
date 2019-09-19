@@ -33,6 +33,7 @@ public class InGameMainUI : BaseWindow
     public SpellModulsContainer SpellModulsContainer;
     public event Action<SpellInGame> OnSelectSpell;
     public WindowKeys WindowKeys;
+    public GameObject RetireButtonObject;
 
     public TimeScaleBattleUI TimeScaleBattle;
     //    public Button DebugKillAllEnemies;
@@ -107,6 +108,7 @@ public class InGameMainUI : BaseWindow
         MyCommander = battle.GreenCommander;
         BattleCoinUI.Init(MyCommander.CoinController);
         battle.OnShipAdd += OnShipAdd;
+        RetireButtonObject.gameObject.SetActive(battle.CanRetire);
         DebugUiControl.Init();
 //        HoldClearCoinUI.Init(HoldComplete);
         CreditController.Init(MyCommander);

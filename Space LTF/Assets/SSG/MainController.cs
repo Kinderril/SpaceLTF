@@ -72,9 +72,9 @@ public class MainController : Singleton<MainController>
 
     }
 
-    public void PreBattle(Player player1, Player player2,bool isFinalBattle = false)
+    public void PreBattle(Player player1, Player player2,bool isFinalBattle = false, bool canRetire = true)
     {
-        BattleData.PreBattle(player1,player2,isFinalBattle);
+        BattleData.PreBattle(player1,player2,isFinalBattle, canRetire);
     }
 
     public void LaunchBattle(Player greenSide, Player redSide)

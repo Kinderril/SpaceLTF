@@ -228,6 +228,10 @@ public class GlobalMapController : MonoBehaviour
 
     public void SingleReset(GlobalMapCell currentCell,List<GlobalMapCell> posibleWays)
     {
+        if (_data == null)
+        {
+            return;
+        }
 //        var cells = _data.AllCells();
         for (int i = 0; i < _data.Size; i++)
         {

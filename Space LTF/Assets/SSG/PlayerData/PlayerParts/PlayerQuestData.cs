@@ -20,15 +20,15 @@ public class PlayerQuestData
         MaxMainElements = targetElements;
     }
 
-    public bool CheckIfOver()
-    {
-        if (Completed())
-        {
-            MainController.Instance.BattleData.EndGameWin();
-            return true;
-        }
-        return false;
-    }
+//    public bool CheckIfOver()
+//    {
+//        if (Completed())
+//        {
+//            MainController.Instance.BattleData.EndGameWin();
+//            return true;
+//        }
+//        return false;
+//    }
 
     public void ComeToLastPoint()
     {

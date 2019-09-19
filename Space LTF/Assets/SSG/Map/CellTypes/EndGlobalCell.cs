@@ -48,7 +48,7 @@ public class EndGlobalCell : ArmyGlobalMapCell
         {
             var questData = MainController.Instance.MainPlayer.QuestData;
             questData.ComeToLastPoint();
-            questData.CheckIfOver();
+//            questData.CheckIfOver();
             _data = questData.LastBattleData;
             _data.Init(_power);
         }
@@ -66,7 +66,7 @@ public class EndGlobalCell : ArmyGlobalMapCell
         {
             var questData = MainController.Instance.MainPlayer.QuestData;
             questData.ComeToLastPoint();
-            questData.CheckIfOver();
+//            questData.CheckIfOver();
             _data = questData.LastBattleData;
             _data.Init(_power);
         }

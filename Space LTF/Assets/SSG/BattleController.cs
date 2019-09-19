@@ -39,6 +39,7 @@ public class BattleController :Singleton<BattleController>
 
     public AICommander AICommander;
 
+    public bool CanRetire => _canRetire;
     public CellController CellController { get; private set; }
     public Battlefield Battlefield;
 
@@ -59,9 +60,12 @@ public class BattleController :Singleton<BattleController>
 
     public PauseData PauseData = new PauseData();
     private EndBattleType LastWinner;
-    
-    public void LaunchGame(Player greenSide, Player redSide)
+    private bool _canRetire;
+
+
+    public void LaunchGame(Player greenSide, Player redSide,bool canRetire)
     {
+        _canRetire = canRetire;
         ActiveBullet.Clear();
         ActiveBulletKillers.Clear();
         PreLaunchGame(greenSide, redSide);

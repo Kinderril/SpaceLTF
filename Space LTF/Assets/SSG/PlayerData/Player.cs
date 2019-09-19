@@ -62,6 +62,11 @@ public class Player
         {
             var modul = Library.CreatSimpleModul(SimpleModulType.frontShield,1);
             Inventory.TryAddSimpleModul(modul,index);
+        } 
+        if (Inventory.GetFreeSimpleSlot(out index))
+        {
+            var modul = Library.CreatSimpleModul(SimpleModulType.armor,1);
+            Inventory.TryAddSimpleModul(modul,index);
         }
 
 //        for (int i = 0; i < count; i++)

@@ -51,6 +51,10 @@ public class PlayerStatistics
     public EndGameStatistics EndGameStatistics = new EndGameStatistics();
     private float _lastDifficulty;
 
+    public WeaponsPair LastWeaponsPairOpen = null;
+    public OpenShipConfig LastOpenShipConfig = null;
+    public int Wins { get; private set; }
+
     public void Init()
     {
         if (EndGameStatistics==null)
@@ -106,54 +110,9 @@ public class PlayerStatistics
         return ps;
     }
 
-    public void EndGame(EndBattleType type)
+    public void EndBattle(EndBattleType type)
     {
         LastBattle = type;
-        switch (type)
-        {
-            case EndBattleType.win:
-                var weaponsOpen = WeaponsPairs.Count(x => x.IsOpen);
-                var configsOpen = OpenShipsTypes.Count(x => x.IsOpen);
-                bool openWeapons = false;
-                bool openConfigs = false;
-                if (weaponsOpen < OPEN_FOR_END_GAME && configsOpen < OPEN_FOR_END_GAME)
-                {
-                    if (weaponsOpen < configsOpen)
-                    {
-                        openWeapons = true;
-                    }
-                    else
-                    {
-                        openConfigs = true;
-                    }
-                }
-                else
-                {
-                    if (weaponsOpen < OPEN_FOR_END_GAME)
-                    {
-                        openWeapons = true;
-                    }
-                    if (configsOpen < OPEN_FOR_END_GAME)
-                    {
-
-                        openConfigs = true;
-                    }
-                }
-                if (openWeapons)
-                {
-                    OpenWeapon();
-                }
-                else if (openConfigs)
-                {
-                    OpenConfig();
-                }
-                break;  
-            case EndBattleType.runAway:
-
-                break;
-        }
-
-
     }
 
     private void OpenConfig()
@@ -163,6 +122,7 @@ public class PlayerStatistics
         {
             if (!openShipConfig.IsOpen)
             {
+                LastOpenShipConfig = openShipConfig;
                 openShipConfig.IsOpen = true;
                 break;
             }
@@ -176,6 +136,7 @@ public class PlayerStatistics
         {
             if (!weaponsPair.IsOpen)
             {
+                LastWeaponsPairOpen = weaponsPair;
                 weaponsPair.IsOpen = true;
                 break;
             }
@@ -215,6 +176,10 @@ public class PlayerStatistics
 
     public void EndGameAll(bool win,Player player)
     {
+        if (win)
+        {
+            OpenNewData();
+        }
         var mainShip = player.Army.First(x => x.Ship.ShipType == ShipType.Base);
         var finalPower = ArmyCreator.CalcArmyPower(player.Army);
         EndGameResult res = new EndGameResult(win,_lastDifficulty, mainShip.Ship.ShipConfig, player.MapData.GalaxyData.Size, DateTime.Now, finalPower);
@@ -222,9 +187,58 @@ public class PlayerStatistics
         SaveGame();
     }
 
+    private void OpenNewData()
+    {
+        var OpenWeapons = false;
+        var OpenConfigs = false;
+        var notOpendTypes = OpenShipsTypes.Where(x => !x.IsOpen).ToList();
+        var notOpendWeapons = WeaponsPairs.Where(x => !x.IsOpen).ToList();
+        var notOpendTypesCount = notOpendTypes.Count;
+        var notOpendWeaponsCount = notOpendWeapons.Count;
+
+        var weaponsOpen = WeaponsPairs.Count - notOpendWeaponsCount;
+        var configsOpen = OpenShipsTypes.Count - notOpendTypesCount;
+        if (weaponsOpen == 1 && configsOpen == 1)
+        {
+            OpenWeapons = OpenConfigs = true;
+        }
+        else
+        {
+            if (weaponsOpen < configsOpen)
+            {
+                OpenWeapons = true;
+            }
+            else
+            {
+                OpenConfigs = true;
+            }
+        }
+        if (OpenWeapons)
+        {
+            OpenWeapon();
+        }
+        else
+        {
+            LastWeaponsPairOpen = null;
+        }
+        if (OpenConfigs)
+        {
+            OpenConfig();
+        }
+        else
+        {
+            LastOpenShipConfig = null;
+        }
+    }
+
     public void PlayNewGame(StartNewGameData data)
     {
         _lastDifficulty = data.CalcDifficulty();
+    }
+
+    public void AddWin()
+    {
+        Wins++;
     }
 }
 

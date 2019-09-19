@@ -109,6 +109,9 @@ public static class Namings
                 break;
             case SimpleModulType.frontShield:
                 Name = "Front shield";
+                break; 
+            case SimpleModulType.armor:
+                Name = "Body armor";
                 break;
             case SimpleModulType.blink:
                 Name = "Teleportation";
@@ -251,6 +254,9 @@ public static class Namings
                 break;
             case SimpleModulType.frontShield:
                 Name = "If bullet bullet hit at front reflects it.";
+                break; 
+            case SimpleModulType.armor:
+                Name = "Decrease damage on ships body";
                 break; 
             case SimpleModulType.fireMines:
                 Name = $"Put damage mines, witch can fire enemies for {MineFireModul.PERIOD_DAMAGE} sec.";
@@ -682,4 +688,11 @@ public static class Namings
 
         return "null";
     }
+
+    public static string EndGameDays = "Days:{0}";
+    public static string BattleWinsStat = "Wins:{0}";
+    public static string OpenWeaponsEndGame = "New weapons for start open {0} and {1}";
+    public static string OpenConfigEndGame = "New fleet type available to play: {0}";
+    public static string WinEnd = "All fine now you are free and everything will be fine. Maybe...";
+    public static string LoseEnd = "Your fleet destroyed.";
 }

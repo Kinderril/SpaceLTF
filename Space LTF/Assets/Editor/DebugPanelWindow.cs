@@ -90,11 +90,18 @@ public class DebugPanelWindow : EditorWindow
             }
 
             EditorGUILayout.EndHorizontal();
-            //        SelectedShip = (ShipBase)EditorGUILayout.ObjectField("Selected ship ", SelectedShip, typeof(ShipBase), true);     
+            //        SelectedShip = (ShipBase)EditorGUILayout.ObjectField("Selected ship ", SelectedShip, typeof(ShipBase), true);      
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Hire test."))
             {
                 DebugParamsController.TestHire();
             }
+            if (GUILayout.Button("LevelUp."))
+            {
+                LevelUpRandom();
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Go End"))
             {
                 GoToEnd();
@@ -103,6 +110,7 @@ public class DebugPanelWindow : EditorWindow
             {
                 AddCore();
             }
+            EditorGUILayout.EndHorizontal();
             if (BattleController.Instance != null && BattleController.Instance.InGameMainUI != null)
             {
                 var ss = BattleController.Instance.InGameMainUI.SelectedShip;
@@ -131,6 +139,25 @@ public class DebugPanelWindow : EditorWindow
                 }
             }
         }
+    }
+
+    private void LevelUpRandom()
+    {
+        var army = MainController.Instance.MainPlayer.Army.Suffle();
+        var points = 1000f;
+        foreach (var pilotData in army)
+        {
+            if (pilotData.Ship.ShipType != ShipType.Base)
+            {
+                if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
+                {
+                    Debug.Log("LevelUpRandom complete");
+                    return;
+                }
+            }
+        }
+        Debug.LogError("can't upgrade");
+
     }
 
     private void AddCore()

@@ -195,7 +195,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     private void Fight()
     {
         _afterFightActivated = true;
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy());
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(),false);
     }
 
     protected override Player GetArmy()

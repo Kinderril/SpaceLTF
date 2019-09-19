@@ -5,6 +5,7 @@ using System.Linq;
 public class NextBattleData
 {
     private bool _isFinalBattle;
+    private bool _canRetire;
     private Player MainPlayer;
     private PlayerStatistics Statistics;
     public NextBattleData(Player mainPlayer, PlayerStatistics statistics)
@@ -13,15 +14,16 @@ public class NextBattleData
         Statistics = statistics;
     }
 
-    public void PreBattle(Player player1, Player player2, bool isFinalBattle = false)
+    public void PreBattle(Player player1, Player player2, bool isFinalBattle = false, bool canRetire = true)
     {
         _isFinalBattle = isFinalBattle;
+        _canRetire = canRetire;
         WindowManager.Instance.OpenWindow(MainState.preBattle, new Tuple<Player, Player>(player1, player2));
     }
 
     public void LaunchBattle(Player greenSide, Player redSide)
     {
-        BattleController.Instance.LaunchGame(greenSide, redSide);
+        BattleController.Instance.LaunchGame(greenSide, redSide, _canRetire);
     }
 
     public void EndGameWin()
@@ -32,12 +34,11 @@ public class NextBattleData
         }
         else
         {
+            Statistics.AddWin();
             WindowManager.Instance.OpenWindow(MainState.endBattle);
-            Statistics.EndGame(EndBattleType.win);
+            Statistics.EndBattle(EndBattleType.win);
             MainPlayer.MessagesToConsole.AddMsg("Battle won!");
         }
-
-        //        MainPlayer.EndGame();
     }
 
     public void EndGameLose()
@@ -49,7 +50,7 @@ public class NextBattleData
         else
         {
             WindowManager.Instance.OpenWindow(MainState.loseBattle);
-            Statistics.EndGame(EndBattleType.lose);
+            Statistics.EndBattle(EndBattleType.lose);
             MainPlayer.EndGame();
         }
 
@@ -59,7 +60,7 @@ public class NextBattleData
     {
         WindowManager.Instance.OpenWindow(MainState.map);
         //        WindowManager.Instance.OpenWindow(MainState.runAwayBattle);
-        Statistics.EndGame(EndBattleType.runAway);
+        Statistics.EndBattle(EndBattleType.runAway);
         //        MainPlayer.EndGame();
         MainPlayer.MessagesToConsole.AddMsg("Running away complete");
     }
