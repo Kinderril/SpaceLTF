@@ -6,21 +6,21 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class MineFieldSpell : BaseSpellModulInv 
+public class RepairDronesSpell : BaseSpellModulInv 
 {
-    public const int MINES_COUNT = 3;
-    public const float MINES_PERIOD = 20f;
-    public const float MINES_DIST = 15f;
+    public const int DRONES_COUNT = 3;
+    public const float HEAL_PERCENT = 0.2f;
+    public const float MINES_DIST = 5f;
     private const float rad = 3.5f;
-    private const float damageBody = 2f;
-    private const float damageShield = 1f;
+
     private float _distToShoot;
 
-    private int MinesCount => MINES_COUNT + Level;
+    private int DronesCount => DRONES_COUNT + Level;
+    private float HealPercent => HEAL_PERCENT + Level/50f;
 
     private float dist;//Костыльный параметр
-    public MineFieldSpell(int costCount, int costTime)
-        : base(SpellType.mineField, costCount, costTime,
+    public RepairDronesSpell(int costCount, int costTime)
+        : base(SpellType.repairDrones, costCount, costTime,
              new BulleStartParameters(9.7f, 36f, MINES_DIST, MINES_DIST), false)
     {
 
@@ -31,40 +31,26 @@ public class MineFieldSpell : BaseSpellModulInv
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
-        var deltaAng = 360f / MinesCount;
-        var direction = MyExtensions.IsTrueEqual() ? Vector3.right : Vector3.left;
-        var baseDist = (target.Position - weapon.CurPosition).magnitude;
-//        Debug.LogError($"Mine base dist {baseDist}");
-        for (int i = 0; i < MinesCount; i++)
-        {
-            direction = Utils.RotateOnAngUp(direction, MyExtensions.GreateRandom((deltaAng * i)));
-            var position = target.Position + direction * MyExtensions.Random(rad / 4, rad);
-            var dir = (position - weapon.CurPosition);
-            bullestartparameters.distanceShoot = baseDist;
-            MainCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, bullestartparameters);
+        var dir = (target.Position - weapon.CurPosition);
+        MainCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, bullestartparameters);
         }
-    }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var dir = (target.Position - weapon.CurPosition);
-        //        Debug.LogError("");                  
-        var dist = dir.magnitude;
-//        Debug.LogError($"Mine result dist {dist}");
-        Bullet.Create(origin, weapon, dir, weapon.CurPosition, null,
-                new BulleStartParameters(Library.MINE_SPEED, 0f, dist, dist));
+        Bullet.Create(origin, weapon, dir, weapon.CurPosition, null,  BulleStartParameters);
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        shipparameters.Damage(2, 3, damagedone, target);
+        shipparameters.HealHp(shipparameters.CurHealth * HealPercent);
     }
     public override bool ShowLine => false;
     public override float ShowCircle => rad;
     public override Bullet GetBulletPrefab()
     {
-        var bullet = DataBaseController.Instance.GetBullet(WeaponType.castMine);
+        var bullet = DataBaseController.Instance.GetBullet(WeaponType.spellRerairDrone);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
     }
@@ -81,7 +67,7 @@ public class MineFieldSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return    String.Format(Namings.MinesSpell, MinesCount, MineFieldSpell.MINES_PERIOD.ToString("0"), damageShield, damageBody);
+        return    String.Format(Namings.RepairDroneSpell, DronesCount, Utils.FloatToChance(HealPercent));
 //            $"Set {MinesCount} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location. Each mine damage {damageShield}/{damageBody}";
     }
 }

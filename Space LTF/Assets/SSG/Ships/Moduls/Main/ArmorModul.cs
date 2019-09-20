@@ -28,9 +28,9 @@ public class ArmorModul : BaseModul
 
     private CurWeaponDamage HitModification(CurWeaponDamage damage, Bullet bullet, ShipBase target)
     {
-        var copy = damage.Copy();
-        copy.BodyDamage = Mathf.Clamp(copy.BodyDamage - ModulData.Level,0,9999);
-        return copy;
+
+        damage.BodyDamage = Mathf.Clamp(damage.BodyDamage - ModulData.Level,0,9999);
+        return damage;
     }
 
     public override void Dispose()

@@ -15,7 +15,7 @@ public class CurWeaponDamage
 
     public CurWeaponDamage Copy()
     {
-        return new CurWeaponDamage(ShieldDamage,BodyDamage);
+        return new CurWeaponDamage(ShieldDamage, BodyDamage);
     }
 }
 

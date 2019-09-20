@@ -6,8 +6,8 @@ using UnityEngine;
 
 public enum BulletAffectType
 {
-    repair,
-    damage,
+    damage = 0,
+    repair = 1,
 }
 
 public enum BulletDamageType
@@ -67,7 +67,7 @@ public abstract class Bullet : MovingObject
     protected float _turnSpeed;
     protected float _curTime;
     protected float _distanceShoot;
-    protected BulletAffectType AffectType = BulletAffectType.damage;
+    public BulletAffectType AffectTypeHit;
     //    private float _endTime;
     public IWeapon Weapon { get; private set; }
     public bool IsAcive { get;private set; }
@@ -345,7 +345,7 @@ public abstract class Bullet : MovingObject
 
             if (ship != null && IsCatch(ship))
             {
-                switch (AffectType)
+                switch (AffectTypeHit)
                 {
                     case BulletAffectType.repair:
                         if (ship.TeamIndex != Weapon.TeamIndex)

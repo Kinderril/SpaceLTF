@@ -44,15 +44,26 @@ public class ShipPeriodDamage :ShipData
         _owner.ShipParameters.DamageIgnoreShield(1f,null);
     }
 
-    public void Start(int ticks)
+    public int Start(int ticks)
     {
 //        Debug.LogError("Start period damage period:" + period);
+        if (_using)
+        {
+            var nextTicks = _ticksRemain +  ticks / 2;
+           
+            _ticksRemain = Mathf.Max(nextTicks, ticks);
+        }
+        else
+        {
+
+            _ticksRemain = ticks;
+        }
+
         if (_owner.PeriodDamageEffect != null)
             _owner.PeriodDamageEffect.Play();
         _using = true;
-        _ticksRemain = ticks;
-        //        _endTime = Time.time + period;
         _nextDamageTime = 0f;
+        return _ticksRemain;
     }
 
     public void Stop()

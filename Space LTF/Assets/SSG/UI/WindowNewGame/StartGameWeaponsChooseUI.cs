@@ -53,5 +53,13 @@ public class StartGameWeaponsChooseUI :MonoBehaviour
         element.Toggle.isOn = true;
 
     }
+
+    public void DebugOpenAll()
+    {
+        foreach (var toggleUi in _toggleElements)
+        {
+            toggleUi.Toggle.interactable = true;
+        }
+    }
 }
 

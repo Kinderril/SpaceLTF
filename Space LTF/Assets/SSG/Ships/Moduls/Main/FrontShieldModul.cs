@@ -42,11 +42,17 @@ public class FrontShieldModul : BaseModul
 
     private CurWeaponDamage HitModification(CurWeaponDamage damage, Bullet bullet, ShipBase target)
     {
-        var copy = damage.Copy();
-        if (IsReady())
+        var isAtFront = Utils.FastDot(bullet.LookDirection, target.LookDirection) < 0;
+
+        if (isAtFront)
         {
-            _isActivated = true;
-            _activationTimeEnd = Time.time + 1f;
+            if (IsReady())
+            {
+                
+                _isActivated = true;
+                FlyNumberWithDependence.Create(_owner.transform, Namings.FrontShieldActivate, Color.red, FlyNumerDirection.right);
+                _activationTimeEnd = Time.time + 1f;
+            }
         }
 
         if (_isActivated)
@@ -55,16 +61,15 @@ public class FrontShieldModul : BaseModul
             {
                 _isActivated = false;
             }
-            var dot = Utils.FastDot(bullet.LookDirection, target.LookDirection) < 0;
-            if (dot)
+            if (isAtFront)
             {
-                copy.BodyDamage = 0;
-                copy.ShieldDamage = 0;
+                damage.BodyDamage = 0;
+                damage.ShieldDamage = 0;
                 Use();
             }
         }
 
-        return copy;
+        return damage;
     }
 
     public override void Dispose()

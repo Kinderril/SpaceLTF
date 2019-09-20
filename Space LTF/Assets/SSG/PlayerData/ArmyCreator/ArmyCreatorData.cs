@@ -46,6 +46,7 @@ public class ArmyCreatorData
             spell.Add(SpellType.engineLock);
             spell.Add(SpellType.distShot);
             spell.Add(SpellType.artilleryPeriod);
+            spell.Add(SpellType.repairDrones);
             return spell;
         }
         else
@@ -60,9 +61,14 @@ public class ArmyCreatorData
         {
 //            SpellType.allToBase,
             SpellType.engineLock,
+            SpellType.repairDrones,
             SpellType.artilleryPeriod,
-            SpellType.lineShot,SpellType.shildDamage,SpellType.throwAround,
-            SpellType.mineField,SpellType.randomDamage,SpellType.distShot
+            SpellType.lineShot,
+            SpellType.shildDamage,
+            SpellType.throwAround,
+            SpellType.mineField,
+            SpellType.randomDamage,
+            SpellType.distShot
         };
     }
 

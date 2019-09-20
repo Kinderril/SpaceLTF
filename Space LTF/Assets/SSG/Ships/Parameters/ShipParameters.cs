@@ -209,14 +209,15 @@ public class ShipParameters  : IShipAffectableParams
     }
     public void DamageByWeaponBullet(Bullet bullet, CurWeaponDamage currentDamage, DamageDoneDelegate callback, ShipBase target)
     {
+        var copy = currentDamage.Copy();
         if (BulletHitModificators != null)
         {
             foreach (var hitModificator in BulletHitModificators)
             {
-                currentDamage = hitModificator(currentDamage, bullet, target);
+                copy = hitModificator(copy, bullet, target);
             }
         }
-        Damage(currentDamage.ShieldDamage, currentDamage.BodyDamage, callback, target);
+        Damage(copy.ShieldDamage, copy.BodyDamage, callback, target);
     }
 
     /*     DamageByType

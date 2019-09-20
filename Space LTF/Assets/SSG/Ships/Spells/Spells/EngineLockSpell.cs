@@ -8,7 +8,7 @@ using UnityEngine;
 [System.Serializable]
 public  class EngineLockSpell : BaseSpellModulInv
 {
-    public const float DIST_SHOT = 8f;
+    public const float DIST_SHOT = 18f;
     public const float LOCK_PERIOD = 4;
     public const float LOCK_LEVEL = 2f;
     private const float rad = 8f;

@@ -18,8 +18,10 @@ public enum SpellType
 //    spaceWall = 9,//DO NOT USE!
     distShot = 10,
     priorityTarget = 11,
+
     artilleryPeriod = 12,
     BaitPriorityTarget = 13,
+    repairDrones = 14,
 }
 
 

@@ -324,7 +324,9 @@ public static class Namings
             case SpellType.distShot:
                 return "Power shot";
             case SpellType.artilleryPeriod:
-                return "Artillery";
+                return "Artillery";  
+            case SpellType.repairDrones:
+                return "Repair drones";
             default:
                 throw new ArgumentOutOfRangeException(nameof(spellType), spellType, null);
         }
@@ -675,11 +677,11 @@ public static class Namings
         switch (type)
         {
             case PlayerParameterType.scout:
-                return "Scout can provide you information about ememies army. And sometimes can try steal something.";
+                return "Scout can provide you information about ememies army.\nAnd sometimes can try steal something.";
             case PlayerParameterType.diplomaty:
-                return "Usable in map events. Sometimes you can simple use it instead of fight.";
+                return "Usable in map events.\nSometimes you can simple use it instead of fight.";
             case PlayerParameterType.repair:
-                return "Between battles you will need to repair your fleet. This one will help you.";
+                return "Between battles you will need to repair your fleet.\nThis one will help you.";
             case PlayerParameterType.chargesCount:
                 return "Increase main ship charges count.";
             case PlayerParameterType.chargesSpeed:
@@ -693,6 +695,11 @@ public static class Namings
     public static string BattleWinsStat = "Wins:{0}";
     public static string OpenWeaponsEndGame = "New weapons for start open {0} and {1}";
     public static string OpenConfigEndGame = "New fleet type available to play: {0}";
+    public static string FrontShieldActivate = "Front shield activated";
+    public static string Crit = "Crit {0}!";
     public static string WinEnd = "All fine now you are free and everything will be fine. Maybe...";
     public static string LoseEnd = "Your fleet destroyed.";
+
+    public static string RepairDroneSpell =
+        "launch {0} drones. When ship comes near drone starts healing it. Heal {1}% of maximum heath points.";
 }

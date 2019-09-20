@@ -25,9 +25,9 @@ public class SpellZoneVisualLine : MonoBehaviour
         }
         gameObject.SetActive(true);
         var list = new List<Vector3>();
-        list.Add(from);
-        list.Add((from + to) / 2f);
-        list.Add(to);
+        list.Add(_from);
+        list.Add((_from + _to) / 2f);
+        list.Add(_to);
         ParticleAttractor.CreateByPoints(list);
     }
 

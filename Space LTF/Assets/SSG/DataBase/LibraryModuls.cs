@@ -137,11 +137,9 @@ public static class LibraryModuls
             SimpleModulType.engineLocker,
             SimpleModulType.systemMines,
             SimpleModulType.autoRepair,
-            SimpleModulType.autoShieldRepair,
             SimpleModulType.blink,
             SimpleModulType.ResistDamages,
             SimpleModulType.WeaponSpray,
-            SimpleModulType.WeaponFire,
             SimpleModulType.WeaponEngine,
             SimpleModulType.WeaponCrit,
             SimpleModulType.WeaponAOE,
@@ -151,6 +149,8 @@ public static class LibraryModuls
             SimpleModulType.WeaponFireNear,
             SimpleModulType.ShieldDouble,
             SimpleModulType.WeaponShootPerTime,
+            SimpleModulType.armor,
+            SimpleModulType.frontShield,
         };
         return typesToRnd;
     }
@@ -170,6 +170,7 @@ public static class LibraryModuls
             SimpleModulType.WeaponSpeed,
             SimpleModulType.WeaponDist,
             SimpleModulType.WeaponShield,
+            SimpleModulType.autoShieldRepair,
             SimpleModulType.WeaponWeapon,
             SimpleModulType.WeaponSector,
             SimpleModulType.WeaponLessDist,
@@ -179,6 +180,7 @@ public static class LibraryModuls
             SimpleModulType.WeaponPush,
             SimpleModulType.ShipDecreaseSpeed,
             SimpleModulType.fireMines,
+            SimpleModulType.WeaponFire,
 
 
         };

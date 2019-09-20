@@ -237,13 +237,13 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 21, 10, 4.1f, 70,1, 3, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 21, 14, 4.3f, 78,1, 3, 0, 1, 0.0f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 28, 12, 3.6f, 63, 1, 4, 0, 1, 0.05f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 28, 16, 3.8f, 70, 1, 4, 0, 1, 0.05f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 32, 14, 3.1f, 55, 2, 4, 0, 1, 0.01f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 32, 18, 3.5f, 68, 2, 4, 0, 1, 0.1f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 46, 28, 1.1f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 46, 28, 1.5f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             case ShipConfig.mercenary:
@@ -290,13 +290,13 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 15, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 14, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 19, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 18, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 22, 41, 2.2f, 53, 3, 3, 0, 1, 0.4f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 20, 44, 2.2f, 53, 2, 3, 0, 1, 0.4f), player);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 15, 57, 0.6f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 16, 55, 0.6f, 40, 0, 0, 4, 1, 0f), player);
                 }
                 break;
             default:
@@ -337,7 +337,9 @@ public static class Library
             case SpellType.shildDamage:
                 return new ShieldOffSpell(3, 17);
             case SpellType.artilleryPeriod:
-                return new ArtillerySpell(4, 10);
+                return new ArtillerySpell(4, 10);   
+            case SpellType.repairDrones:
+                return new RepairDronesSpell(4, 30);
             default:
                 Debug.LogError("spellType not implemented " + spellType.ToString());
                 break;

@@ -44,7 +44,7 @@ public class OpenShipConfig
 public class PlayerStatistics
 {
     public const int OPEN_FOR_END_GAME = 3;
-    private const string mainPlayer = "stats.stat";
+    private const string mainPlayer = "/stats.stat";
     public List<OpenShipConfig> OpenShipsTypes = new List<OpenShipConfig>();
     public List<WeaponsPair> WeaponsPairs = new List<WeaponsPair>();
     public EndBattleType LastBattle = EndBattleType.win;
@@ -70,9 +70,9 @@ public class PlayerStatistics
             var sc4 = new OpenShipConfig(ShipConfig.ocrons);
             var sc5 = new OpenShipConfig(ShipConfig.krios);
             sc2.IsOpen = true;
-#if UNITY_EDITOR
-            sc1.IsOpen = sc2.IsOpen = sc3.IsOpen = sc4.IsOpen = sc5.IsOpen = true;
-#endif
+//#if UNITY_EDITOR
+//            sc1.IsOpen = sc2.IsOpen = sc3.IsOpen = sc4.IsOpen = sc5.IsOpen = true;
+//#endif
             OpenShipsTypes.Add(sc1);
             OpenShipsTypes.Add(sc2);
             OpenShipsTypes.Add(sc3);
@@ -147,11 +147,11 @@ public class PlayerStatistics
     public void SaveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + mainPlayer);
-        //        MoneyData.Dispose();
+        var path = Application.persistentDataPath + mainPlayer;
+        FileStream file = File.Create(path);
         bf.Serialize(file, this);
         file.Close();
-        Debug.Log("Stats Saved");
+        Debug.Log($"Stats Saved {path}");
     }
 
 

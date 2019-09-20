@@ -53,5 +53,13 @@ public class ArmyTypeSelectorUI : MonoBehaviour
         var element = _toggleElements.First(x => x.Config == config);
         element.Toggle.isOn = true;
     }
+
+    public void DebugOpenAll()
+    {
+        foreach (var toggleElement in _toggleElements)
+        {
+            toggleElement.Toggle.interactable = true;
+        }
+    }
 }
 

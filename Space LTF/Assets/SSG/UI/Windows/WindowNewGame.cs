@@ -81,13 +81,18 @@ public class WindowNewGame : BaseWindow
             SpellType.throwAround,
             SpellType.distShot,
             SpellType.artilleryPeriod,
+            SpellType.repairDrones,
 //            SpellType.spaceWall,
         };
         List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
+        var posibleSpells = posibleStartSpells.RandomElement(2);
+#if UNITY_EDITOR
+        posibleSpells.Add(SpellType.repairDrones);
+#endif
         gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
             ArmyTypeSelectorUI.Selected, posibleStartWeapons,
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(),
-            DifficultyNewGame.CurDifficulty, posibleStartSpells.RandomElement(2));
+            DifficultyNewGame.CurDifficulty, posibleSpells);
         DifficultyFIeld.text = String.Format(Namings.StatisticDifficulty, Utils.FloatToChance(gameData.CalcDifficulty()));
     }
 
@@ -134,6 +139,12 @@ public class WindowNewGame : BaseWindow
         PlayerStartParametersUI.Dispose();
         StartGameWeaponsChooseUI.Dispose();
         base.Dispose();
+    }
+
+    public void DebugOpenAll()
+    {
+        StartGameWeaponsChooseUI.DebugOpenAll();
+        ArmyTypeSelectorUI.DebugOpenAll();
     }
 }
 

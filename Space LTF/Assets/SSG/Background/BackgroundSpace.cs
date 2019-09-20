@@ -10,9 +10,10 @@ public class BackgroundSpace : MonoBehaviour
     public MeshRenderer MainRenderer;
     public ParticleSystem MainParticleSystem;
     public List<ParticleSystem> effects;
-    public List<SpaceObject> Stars; 
-    public List<SpaceObject> Planets; 
-    public List<SpaceObject> BigPlanets;
+    public List<SpaceObject> Stars;   //prefabs 
+    public List<SpaceObject> Planets;//prefabs 
+    public List<SpaceObject> BigPlanets;  //prefabs 
+    public List<SpaceObject> Galaxies;   //prefabs 
     public List<Color> Colors; 
 
     public BoxCollider StartsContainer;
@@ -35,6 +36,7 @@ public class BackgroundSpace : MonoBehaviour
 
         int starsCount = (int)MyExtensions.Random(50, 90);
         int planetsCount = (int)MyExtensions.Random(3, 7);
+        int galaxisCount = (int)MyExtensions.Random(1, 3);
 
         if (Stars.Count > 0)
         {
@@ -55,6 +57,19 @@ public class BackgroundSpace : MonoBehaviour
             {
                 var p = GetRandomPositions();
                 var pref = Planets.RandomElement();
+                var planet = DataBaseController.GetItem(pref);
+                planet.Randomize();
+                planet.SetColor(color);
+                planet.transform.SetParent(Container, true);
+                planet.transform.position = p;
+            }
+        }  
+        if (Galaxies.Count > 0)
+        {
+            for (int i = 0; i < galaxisCount; i++)
+            {
+                var p = GetRandomPositions();
+                var pref = Galaxies.RandomElement();
                 var planet = DataBaseController.GetItem(pref);
                 planet.Randomize();
                 planet.SetColor(color);
