@@ -67,7 +67,7 @@ public class ArmyCreatorData
             SpellType.shildDamage,
             SpellType.throwAround,
             SpellType.mineField,
-            SpellType.randomDamage,
+//            SpellType.randomDamage,
             SpellType.distShot
         };
     }

@@ -20,7 +20,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(         String.Format("Hide and provocate them",ScoutsLevel),null,provacation));
         mianAnswers.Add(new AnswerDialogData($"Try to reconcile all sides", null, reconcile));
-        mianAnswers.Add(new AnswerDialogData("Leave", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         
 
         var mesData = new MessageDialogData("You see some ships stands against each other.", mianAnswers);
@@ -70,7 +70,7 @@ var mianAnswers = new List<AnswerDialogData>();
     private MessageDialogData runOpt()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData("Ok.", null, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Ok, null, null));
         var mesData = new MessageDialogData("You run away", mianAnswers);
         return mesData;
     }
@@ -91,7 +91,7 @@ var mianAnswers = new List<AnswerDialogData>();
             var money = GlobalMapCell.AddMoney(4, 30);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
             var mianAnswers = new List<AnswerDialogData>();
-            mianAnswers.Add(new AnswerDialogData("Ok", null, null));
+            mianAnswers.Add(new AnswerDialogData(Namings.Ok, null, null));
             var mesData = new MessageDialogData($"Battle ends. They kill each other. And you find some credits {money}.", mianAnswers);
             return mesData;
         }

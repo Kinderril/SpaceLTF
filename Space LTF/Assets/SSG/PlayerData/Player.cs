@@ -92,19 +92,19 @@ public class Player
 
             }
 
-            for (int i = 0; i < 3; i++)
-            {
-                if (Inventory.GetFreeWeaponSlot(out var index2))
-                {
-                    var modul1 = Library.CreateWeapon(WeaponType.beam);
-                    Inventory.TryAddWeaponModul(modul1, index2);
-                }
-            }
+//            for (int i = 0; i < 3; i++)
+//            {
+//                if (Inventory.GetFreeWeaponSlot(out var index2))
+//                {
+//                    var modul1 = Library.CreateWeapon(WeaponType.beam);
+//                    Inventory.TryAddWeaponModul(modul1, index2);
+//                }
+//            }
 
             var allSpellType = (SpellType[]) Enum.GetValues(typeof(SpellType));
             foreach (var type in allSpellType)
             {
-                if (Inventory.GetFreeSpellSlot(out var index1))
+                if (type  != SpellType.BaitPriorityTarget && type != SpellType.priorityTarget &&  Inventory.GetFreeSpellSlot(out var index1))
                 {
                     var modul = Library.CreateSpell(type);
                     Inventory.TryAddSpellModul(modul, index1);

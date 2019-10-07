@@ -27,7 +27,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
 
 
         var mesData = new MessageDialogData("Criminal try to escapes from the police. But your fleet can catch him", mianAnswers);
-        mianAnswers.Add(new AnswerDialogData("Leave", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         return mesData;
     }
 

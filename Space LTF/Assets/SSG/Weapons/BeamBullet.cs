@@ -13,6 +13,8 @@ public class BeamBullet : Bullet
     private float _baseDist = 10;
 //    public GameObject LineObject;
     public BaseEffectAbsorber ProcessEvent;
+    private Vector3 _offset;
+
 
     public override void Init()
     {
@@ -24,6 +26,9 @@ public class BeamBullet : Bullet
 
     public override void LateInit()
     {
+        float xx = MyExtensions.Random(-1f, 1f);
+        float zz = MyExtensions.Random(-1f, 1f);
+        _offset = new Vector3(xx,0,zz);
         _deathTime = Time.time + 2f;
         _targetIsDead = false;
         base.LateInit();
@@ -50,7 +55,10 @@ public class BeamBullet : Bullet
                 _canActivate = false;
                 ProcessEvent.gameObject.SetActive(true);
             }
-            MoveTo(Target.Position, Weapon.CurPosition); 
+
+            var p = (_deathTime - Time.time) / _deathTime;
+            var trg = Target.Position + _offset * p;
+            MoveTo(trg, Weapon.CurPosition); 
         }
     }
 

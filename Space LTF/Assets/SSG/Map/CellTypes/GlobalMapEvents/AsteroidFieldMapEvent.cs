@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 [System.Serializable]
 public class AsteroidFieldMapEvent : BaseGlobalMapEvent
 {
-    const float goodSpeed = 3.6f;
-    const float goodShield= 22f;
     private int weaponTryies = 0;
 
     public override string Desc()
@@ -53,7 +51,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
         {
             var ans = new List<AnswerDialogData>()
             {
-                new AnswerDialogData("Ok.")
+                new AnswerDialogData(Namings.Ok)
             };
             MessageDialogData mesData;
             if (SkillWork(2, RepairLevel))
@@ -118,7 +116,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
         {
             var ans = new List<AnswerDialogData>()
             {
-                new     AnswerDialogData("Ok.")
+                new     AnswerDialogData(Namings.Ok)
             };
             var mesData = new MessageDialogData("Explosive weapons easily destroy enough asteroid. Now you have a way.", ans);
             return mesData;
@@ -131,7 +129,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
             {
                 var ans = new List<AnswerDialogData>()
                 {
-                    new     AnswerDialogData("Ok.")
+                    new     AnswerDialogData(Namings.Ok)
                 };
                 mesData = new MessageDialogData("Finally you have a way! But some of your ships get damage", ans);
             }

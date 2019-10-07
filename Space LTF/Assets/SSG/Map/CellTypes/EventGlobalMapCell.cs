@@ -10,7 +10,7 @@ public enum GlobalMapEventType
     nothing = 0,
     spaceGarbage = 1,//Находишь чутка денег в зависимости от уровня скаутов
     battleField = 2,//Находишь некоторый лут (оружие/модули) + шанс покоцать корабли
-    retranslatorMessage = 3,//инфа о ретрансляторах
+    creditStorage = 3,//хранение бабла
     asteroidsField = 4,//можно послать какойнить корабль. Если ок - +бабки, если фейл то дамаг.
     scienceLab = 5, //Можно попытаться выклянчить в зависимости от скила торговли (спелы или модуль)
     anomaly = 6,//Гонки. Можно выставить корабль и ставка в 20, 30, 50 кредитов. Если победа то корабль + к скорости.
@@ -18,7 +18,9 @@ public enum GlobalMapEventType
     brokenNavigation = 7,//Провести закоулками. Если уровень скаутов больче чем 2 то проводит. + пушка.
     prisoner = 9,//Побег заключенного.
     teach = 10,//Обучение.
-    trade = 11//Обмен.
+    trade = 11,//Обмен.
+    mercHideout = 12,//Наемники.
+    change = 13,//Вещть на вещь.
 //    repairShip = 8,//Если увроень ремонта больше чем 2 то чиним. + деньги.
 }
 
@@ -39,8 +41,12 @@ public class EventGlobalMapCell : GlobalMapCell
             case GlobalMapEventType.spaceGarbage:
                 _mapEvent = new SpaceGarbageMapEvent();
                 break;
-            case GlobalMapEventType.retranslatorMessage:
-                _mapEvent = new RetranslaitorMapEvent();
+            case GlobalMapEventType.creditStorage:
+                List<ShipConfig>  configs = new List<ShipConfig>()
+                {
+                    ShipConfig.federation,ShipConfig.krios,ShipConfig.ocrons
+                };
+                _mapEvent = new RetranslaitorMapEvent(configs.RandomElement());
                 break;
             case GlobalMapEventType.asteroidsField:
                 _mapEvent = new AsteroidFieldMapEvent();
@@ -51,8 +57,11 @@ public class EventGlobalMapCell : GlobalMapCell
             case GlobalMapEventType.anomaly:
                 _mapEvent = new AnomalyMapEvent();
                 break;
-                case GlobalMapEventType.battleField:
+            case GlobalMapEventType.battleField:
                 _mapEvent = new BattlefieldMapEvent();
+                break; 
+            case GlobalMapEventType.mercHideout:
+                _mapEvent = new MercenaryHideout();
                 break;
             case GlobalMapEventType.brokenNavigation:
                 _mapEvent = new BrokenNavigationMapEvent();
@@ -63,6 +72,9 @@ public class EventGlobalMapCell : GlobalMapCell
 
             case GlobalMapEventType.trade:
                 _mapEvent = new TradeMapEvent();
+                break;   
+            case GlobalMapEventType.change:
+                _mapEvent = new ChangeItemMapEvent();
                 break;     
             case GlobalMapEventType.teach:
                 _mapEvent = new TeacherMapEvent();
@@ -75,6 +87,10 @@ public class EventGlobalMapCell : GlobalMapCell
         if (_mapEvent == null)
         {
             Debug.LogError("_mapEvent " + _eventType.ToString() + "   not implimented");
+        }
+        else
+        {
+            _mapEvent.Init();
         }
     }
 

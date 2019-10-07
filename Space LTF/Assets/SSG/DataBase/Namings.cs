@@ -677,7 +677,7 @@ public static class Namings
         switch (type)
         {
             case PlayerParameterType.scout:
-                return "Scout can provide you information about ememies army.\nAnd sometimes can try steal something.";
+                return "Scout can provide you information about enemies army.\nAnd sometimes can try steal something.";
             case PlayerParameterType.diplomaty:
                 return "Usable in map events.\nSometimes you can simple use it instead of fight.";
             case PlayerParameterType.repair:
@@ -702,4 +702,10 @@ public static class Namings
 
     public static string RepairDroneSpell =
         "launch {0} drones. When ship comes near drone starts healing it. Heal {1}% of maximum heath points.";
+
+    public static string MercGlobal= "Mercenary hideout";
+    public static string NotEnoughtMoney = "Not enough money";
+    public static string leave  = "Leave";
+    public static string HireMerc = "Hire {1} the {0}. Level:{2}. Cost:{3} credits.";
+    public static string Take = "Take";
 }

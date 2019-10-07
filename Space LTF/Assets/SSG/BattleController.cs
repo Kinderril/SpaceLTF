@@ -214,7 +214,8 @@ public class BattleController :Singleton<BattleController>
 
     private void CommanderDeath(Commander commander)
     {
-        EndPart1Battle();
+        BattleController.Instance.WaitEndBattle();
+//        EndPart1Battle();
     }
 
     private void OnShipDestroy(ShipBase ship)
@@ -244,7 +245,7 @@ public class BattleController :Singleton<BattleController>
                 LastWinner = EndBattleType.win;
             }
             WaitEndBattle();
-
+            return;
         }
 
         if (SideGreen.Count == 0 || SideRed.Count == 0)
@@ -284,8 +285,6 @@ public class BattleController :Singleton<BattleController>
     {
         var timer = MainController.Instance.BattleTimerManager.MakeTimer(2.5f, false);
         timer.OnTimer += () => { EndPart1Battle(); };
-//        var taskWait = new Task(EndPart1Battle);
-//        taskWait.
     }
 
     private void ShipInited(ShipBase ship)

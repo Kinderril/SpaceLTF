@@ -10,6 +10,12 @@ using UnityEngine;
 [System.Serializable]
 public class BrokenNavigationMapEvent : BaseGlobalMapEvent
 {
+    private bool _isTrap;
+    public override void Init()
+    {
+        _isTrap = MyExtensions.IsTrueEqual();
+    }
+
     public override string Desc()
     {
         return "Broken navigation";
@@ -19,7 +25,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
     {         
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData("Come closer", null, comeCloser));
-        mianAnswers.Add(new AnswerDialogData("Leave", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         var mesData = new MessageDialogData("You have a distress signal", mianAnswers);
         return mesData;
     }
@@ -27,7 +33,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
     private MessageDialogData comeCloser()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        if (MyExtensions.IsTrueEqual())
+        if (_isTrap)
         {
 
             var mesData = new MessageDialogData("It's a trap!", mianAnswers);
@@ -39,7 +45,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
             var mesData = new MessageDialogData("You see a ship with broken navigation system. He asking for help", mianAnswers);
             mianAnswers.Add(new AnswerDialogData(String.Format("Send scout to deliver him to closest shelter. [Scouts: {0}]", ScoutsLevel), null,tryFindWay));
             mianAnswers.Add(new AnswerDialogData(String.Format("Try repair navigation system. [Repair {0}]",RepairLevel), null, tryRepair));
-            mianAnswers.Add(new AnswerDialogData("Leave", null));
+            mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
             return mesData;
         }
     }

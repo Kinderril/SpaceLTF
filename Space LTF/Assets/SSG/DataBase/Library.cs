@@ -73,9 +73,10 @@ public static class Library
     const float EMI_SPEED = 12f;
 
     public const float BASE_WEAPON_VALUE = 1f;
-    public const float BASE_SPELL_VALUE = 1;
+    public const float BASE_SPELL_VALUE = 0.5f;
     public const float BASE_SIMPLE_MODUL_VALUE = 0.8f;
     public const float BASE_SIMPLE_MODUL_VALUE_UPGRADE = 0.6f;
+    public const float MIN_POINTS_TO_CREATE_ARMY_WITH_BASESHIP = 20f;
     public const float BASE_SHIP_VALUE = 2f;
     public const float WEAPON_LEVEL_COEF = 0.8f;
     public const float PILOT_INNER_COEF = 0.4f;

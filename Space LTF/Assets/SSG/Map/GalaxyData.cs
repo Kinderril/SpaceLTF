@@ -37,7 +37,7 @@ public class GalaxyData
 
     private Dictionary<GlobalMapEventType, int> _maxCount = new Dictionary<GlobalMapEventType, int>()
     {
-        {GlobalMapEventType.retranslatorMessage, 2},
+        {GlobalMapEventType.creditStorage, 2},
         {GlobalMapEventType.prisoner, 2},
         {GlobalMapEventType.asteroidsField, 3},
         {GlobalMapEventType.scienceLab, 3},

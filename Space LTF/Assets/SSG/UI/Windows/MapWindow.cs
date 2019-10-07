@@ -41,6 +41,7 @@ public class MapWindow : BaseWindow
     private bool _sideShipsInited = false;
     private List<SideShipGlobalMapInfo> _sideInfos = new List<SideShipGlobalMapInfo>();
 
+    public event Action<bool> OnOpenInventory;
 
     public override void Init()
     {
@@ -378,12 +379,9 @@ public class MapWindow : BaseWindow
 
     private void EnableArmy(bool val)
     {
-
         if (val)
         {
             ArmyInfoContainer.transform.position = _stablePos;
-//            playerArmyUI.Enable();
-//            InventoryUI.Enable();
         }
         else
         {
@@ -394,7 +392,10 @@ public class MapWindow : BaseWindow
             }
             var v = new Vector3(5000,0,0);
             ArmyInfoContainer.transform.position = v;
-
+        }
+        if (OnOpenInventory != null)
+        {
+            OnOpenInventory(val);
         }
         isArmyActive = val;
     }

@@ -126,6 +126,24 @@ public static class Utils
         {
             return list.ToList();
         }
+        var nList = list.Suffle();
+        for (int i = 0; i < count; i++)
+        {
+            listOut.Add(nList[i]);
+        }
+
+        return listOut;
+
+
+//        var toDel = list.Count - count;
+//        for (int i = 0; i < toDel; i++)
+//        {
+//            var rnd = nList.RandomElement();
+//            nList.Remove(rnd);
+//        }
+//
+//        return nList;
+
 
 //        if (list.Count <= count)
 //        {
@@ -140,8 +158,7 @@ public static class Utils
         {
             var a = (list.Count/count);
             var index = UnityEngine.Random.Range(i*a + 1, (i + 1)*a);
-            var e = list[Mathf.Clamp(index,0,list.Count-1)];
-//            if (!listOut.Contains(e))
+            var e = list[Mathf.Clamp(index,0,list.Count)];
                 listOut.Add(e);
         }
 

@@ -11,6 +11,11 @@ public abstract class BaseGlobalMapEvent
     public abstract string Desc();
     public abstract MessageDialogData GetDialog();
 
+    public virtual void Init()
+    {
+
+    }
+
     public virtual MessageDialogData GetLeavedActionInner()
     {
         return null;
@@ -18,27 +23,32 @@ public abstract class BaseGlobalMapEvent
 
     protected StartShipPilotData HireAction(int itemsCount = 1)
     {
-        var pilot = Library.CreateDebugPilot();
         WDictionary<ShipType> types = new WDictionary<ShipType>(new Dictionary<ShipType, float>()
         {
             {ShipType.Heavy, 2 },
             {ShipType.Light, 2 },
             {ShipType.Middle, 2 },
         });
-
         var configsD = new Dictionary<ShipConfig, float>();
         configsD.Add(ShipConfig.krios, 3);
         configsD.Add(ShipConfig.raiders, 5);
         configsD.Add(ShipConfig.ocrons, 3);
         configsD.Add(ShipConfig.federation, 2);
         configsD.Add(ShipConfig.mercenary, 5);
-
         WDictionary<ShipConfig> configs = new WDictionary<ShipConfig>(configsD);
-
         var type = types.Random();
         var cng = configs.Random();
+        return HireAction(itemsCount,cng,type,1);
+    }
+
+    protected StartShipPilotData HireAction(int itemsCount,ShipConfig congif,ShipType shipType,int level)
+    {
+        var type = shipType;
+        var cng = congif;
+        var pilot = Library.CreateDebugPilot();
         var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer);
-        WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}", Namings.ShipConfig(cng), Namings.ShipType(type)));
+        WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}",
+            Namings.ShipConfig(cng), Namings.ShipType(type)));
         var data = new StartShipPilotData(pilot, ship);
         data.Ship.SetRepairPercent(0.1f);
         for (int i = 0; i < itemsCount; i++)
@@ -47,6 +57,15 @@ public abstract class BaseGlobalMapEvent
             {
                 var weapon = Library.CreateWeapon(true);
                 data.Ship.TryAddWeaponModul(weapon, inex);
+            }
+        }
+
+        if (level > 1)
+        {
+            var upgs = ArmyCreator.PosiblePilotUpgrades(pilot);
+            for (int i = 0; i < level; i++)
+            {
+                data.Pilot.UpgradeLevelByType(upgs.RandomElement(), false);
             }
         }
         MainController.Instance.MainPlayer.TryHireShip(data);
@@ -105,7 +124,7 @@ public abstract class BaseGlobalMapEvent
     {
         var ans = new List<AnswerDialogData>()
         {
-            new     AnswerDialogData("Ok.")
+            new     AnswerDialogData(Namings.Ok)
         };
         int money = MyExtensions.Random(min, max);
         MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
@@ -117,7 +136,7 @@ public abstract class BaseGlobalMapEvent
     {
         var ans = new List<AnswerDialogData>()
         {
-            new     AnswerDialogData("Ok.")
+            new     AnswerDialogData(Namings.Ok)
         };
         var mesData = new MessageDialogData("Action fail.", ans);
         return mesData;

@@ -52,6 +52,7 @@ public static class ArmyCreator
         {
             return CreateSimpleEnemyArmyDroid(remainPoints, data, player);
         }
+
         ArmyCreatorLogs logger = new ArmyCreatorLogs();
         float pointsOnStart = remainPoints;
         ArmyRemainPoints points = new ArmyRemainPoints(remainPoints);
@@ -60,7 +61,17 @@ public static class ArmyCreator
             remainPoints = Library.MIN_WORKING_SHIP + 1;
         }
 
+        StartShipPilotData baseShip = null;
+        if (remainPoints > Library.MIN_POINTS_TO_CREATE_ARMY_WITH_BASESHIP)
+        {
+            baseShip = CreateBaseShip(points, data.ArmyConfig, player);
+            TryAddCastModul(points, baseShip.Ship, data, logger);
+            TryAddCastModul(points, baseShip.Ship, data, logger);
+        }
+
         var army = CreateShips(points, data, player, pointsOnStart,0.5f, logger);
+        if (baseShip != null)
+            army.Add(baseShip);
 
         int index = 0;
         int upgradeIterations = 100;

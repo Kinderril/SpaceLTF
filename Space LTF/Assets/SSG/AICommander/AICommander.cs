@@ -52,15 +52,12 @@ public class AICommander
                 return new MineFieldSpellAI(baseSpellModulInv as MineFieldSpell, commander);
             case SpellType.randomDamage:
                 return new RandomDamageSpellAI(baseSpellModulInv as RandomDamageSpell, commander);
-                break;
+            case SpellType.artilleryPeriod:
+                return new ArtilleryAI(baseSpellModulInv as ArtillerySpell, commander);
+            case SpellType.repairDrones:
+                break;  
             case SpellType.throwAround:
-                break;
-//            case SpellType.allToBase:
-//                break;
-//            case SpellType.invisibility:
-//                break;
-//            case SpellType.spaceWall:
-//                break;
+                return new ThrowAroundAI(baseSpellModulInv as ThrowAroundSpell, commander);
         }
         return null;
     }

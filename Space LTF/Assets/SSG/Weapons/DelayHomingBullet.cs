@@ -17,10 +17,11 @@ public class DelayHomingBullet : LinearBullet
     public float HomigRadius = 12f;
     public float SimpleTurnSpeed = 52f;
     public float HomingPeriodSec = 3f;
+    public float TurnSpeedCoefHomingPeriod = 1f;
+    public float TurnSpeedDeltaHomingPeriod = 1.5f;
     private float _endHomingPeriod;
-
+    private float _moreTurnHomingPeriod;
     private bool _isLeft;
-    //    public BaseEffectAbsorber StayEffect;
 
     public override BulletType GetType => BulletType.delayHoming;
 
@@ -110,6 +111,7 @@ public class DelayHomingBullet : LinearBullet
             TrailEffect.StartEmmision();
             _homing = true;
             _endHomingPeriod = Time.time + HomingPeriodSec;
+            _moreTurnHomingPeriod = Time.time + TurnSpeedDeltaHomingPeriod;
             _isActive = true;
             moveState = false;
             _deathTime = Time.time + HomingTimeSec;
@@ -158,10 +160,20 @@ public class DelayHomingBullet : LinearBullet
         TimeEndCheck();
     }
 //
-//    protected override float TurnSpeed()
-//    {
-//        renderer
-//    }
+    protected override float TurnSpeed()
+    {
+        var turn = base.TurnSpeed();
+        
+        var remainHoming = _moreTurnHomingPeriod - Time.time;
+        if (remainHoming > 0)
+        {
+            var p = remainHoming / _moreTurnHomingPeriod;
+            var percent = (1 + p * TurnSpeedCoefHomingPeriod);
+            return turn * percent;
+        }
+
+        return turn;
+    }
 
     private void TimeEndCheck()
     {

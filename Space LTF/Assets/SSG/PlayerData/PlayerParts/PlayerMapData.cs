@@ -89,7 +89,6 @@ public class PlayerMapData
         OpenAllNear();
         Step++;
         GalaxyData.StepComplete(Step, CurrentCell);
-        MainController.Instance.MainPlayer.SaveGame();
         if (OnCellChanged != null)
         {
             OnCellChanged(CurrentCell);

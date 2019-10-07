@@ -26,7 +26,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         mianAnswers.Add(new AnswerDialogData("Snd scouts to laboratory",null,sendScouts));
 
         _moneyToBuy = MyExtensions.Random(5, 30);
-        mianAnswers.Add(new AnswerDialogData("Leave", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         var mesData = new MessageDialogData("You are close to science laboratory. But this one is under siege.", mianAnswers);
         return mesData;
     }
@@ -36,7 +36,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData($"Try to frighten them.", null, frighten));
         mianAnswers.Add(new AnswerDialogData("No, better I contact with them.", null, contacWithCommander));
-        mianAnswers.Add(new AnswerDialogData("Leave", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         var mesData = new MessageDialogData("This isn't regular army. We can try to frighten them.", mianAnswers);
         return mesData;
     }
@@ -65,7 +65,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     {
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData($"Maybe if just give you some credits and you will leave [Credits:{_moneyToBuy}]", null,moneyGive));
-        mianAnswers.Add(new AnswerDialogData("Leave", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         var mesData = new MessageDialogData("They look like simple thief.", mianAnswers);
         return mesData;
     }
@@ -108,7 +108,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
             if (_scienceKilled)
             {
                 var mianAnswers = new List<AnswerDialogData>();
-                mianAnswers.Add(new AnswerDialogData("Ok.", null));
+                mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
                 var mesData = new MessageDialogData("All scientists were killed.", mianAnswers);
                 return mesData;
             }
@@ -178,7 +178,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
             allParams.Add(playerParams.Scouts);
         }
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData("Ok.", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
         if (allParams.Count > 0)
         {
             var rnd = allParams.RandomElement();

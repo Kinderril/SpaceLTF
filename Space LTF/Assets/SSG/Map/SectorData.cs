@@ -319,11 +319,12 @@ public class SectorData
         list.Add(GlobalMapEventType.prisoner);
         list.Add(GlobalMapEventType.spaceGarbage);
         list.Add(GlobalMapEventType.battleField);
-//        list.Add(GlobalMapEventType.retranslatorMessage);
+        list.Add(GlobalMapEventType.creditStorage);
         list.Add(GlobalMapEventType.asteroidsField);
         list.Add(GlobalMapEventType.scienceLab);
         list.Add(GlobalMapEventType.brokenNavigation);
         list.Add(GlobalMapEventType.anomaly);
+        list.Add(GlobalMapEventType.mercHideout);
         return list.RandomElement();
     }
 
@@ -332,59 +333,10 @@ public class SectorData
         List<GlobalMapEventType> list = new List<GlobalMapEventType>();
         list.Add(GlobalMapEventType.trade);
         list.Add(GlobalMapEventType.teach);
+        list.Add(GlobalMapEventType.change);
         return list.RandomElement();
     }
-    private GlobalMapEventType? GetEventType()
-    {
-        float step = 2;
-        float delta = 0.3f;
-//        int halfDixt = maxDist / 2;
-        var d = new Dictionary<GlobalMapEventType, float>();
 
-        if (CanAdd(GlobalMapEventType.nothing))
-            d.Add(GlobalMapEventType.nothing, Mathf.Abs(1));
-        step += delta;
-        if (CanAdd(GlobalMapEventType.prisoner))
-            d.Add(GlobalMapEventType.prisoner, Mathf.Abs(1));
-        step += delta;
-        if (CanAdd(GlobalMapEventType.spaceGarbage))
-            d.Add(GlobalMapEventType.spaceGarbage, Mathf.Abs(1));
-        step += delta;
-        if (CanAdd(GlobalMapEventType.battleField))
-            d.Add(GlobalMapEventType.battleField, Mathf.Abs(1));
-        step += delta;
-        if (CanAdd(GlobalMapEventType.retranslatorMessage))
-            d.Add(GlobalMapEventType.retranslatorMessage, Mathf.Abs(1));
-        step += delta;
-        if (CanAdd(GlobalMapEventType.asteroidsField))
-            d.Add(GlobalMapEventType.asteroidsField, Mathf.Abs(1));
-        step += delta;
-        if (CanAdd(GlobalMapEventType.scienceLab))
-            d.Add(GlobalMapEventType.scienceLab, Mathf.Abs(1));
-        step += delta;
-        if (CanAdd(GlobalMapEventType.anomaly))
-            d.Add(GlobalMapEventType.anomaly, Mathf.Abs(1));
-        step += delta;
-        if (CanAdd(GlobalMapEventType.brokenNavigation))
-            d.Add(GlobalMapEventType.brokenNavigation, Mathf.Abs(1));
-        step += delta;
-        //        if (CanAdd(GlobalMapEventType.repairShip))
-        //            d.Add(GlobalMapEventType.repairShip, Mathf.Abs(halfDixt + step - distFromStart));
-
-        if (d.Count == 0)
-        {
-            return null;
-        }
-
-        WDictionary<GlobalMapEventType> rnd = new WDictionary<GlobalMapEventType>(d);
-        var eventType = rnd.Random();
-        if (!_eventsCount.ContainsKey(eventType))
-        {
-            _eventsCount.Add(eventType,0);
-        }
-        _eventsCount[eventType] = _eventsCount[eventType] + 1;
-        return eventType;
-    }
     public void MarkAsVisited()
     {
         _isVisited = true;

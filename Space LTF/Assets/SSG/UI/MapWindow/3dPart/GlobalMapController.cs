@@ -537,6 +537,7 @@ public class GlobalMapController : MonoBehaviour
 
     public void MoveToCell(GlobalMapCell target,Action callback)
     {
+        MainController.Instance.MainPlayer.SaveGame();
         Block();
         var targetCell = GetCellObjectByCell(target);
         

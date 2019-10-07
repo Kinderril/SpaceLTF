@@ -12,10 +12,11 @@ public class BattleMapTutorial : TutorialElement
 
     private void OnWindowSetted(BaseWindow obj)
     {
-
-        if (obj is InGameMainUI)
+        var imGameWindow = obj as InGameMainUI;
+        if (imGameWindow != null)
         {
             Open();
+            BattleController.Instance.PauseData.Pause();
         }
     }
 

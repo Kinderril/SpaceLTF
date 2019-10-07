@@ -64,12 +64,12 @@ public class PlayerStatistics
         EndGameStatistics.Init();
         if (OpenShipsTypes.Count == 0)
         {
-            var sc1 = new OpenShipConfig(ShipConfig.raiders);
-            var sc2 = new OpenShipConfig(ShipConfig.mercenary);
+            var sc1 = new OpenShipConfig(ShipConfig.mercenary);
+            var sc2 = new OpenShipConfig(ShipConfig.raiders);
             var sc3 = new OpenShipConfig(ShipConfig.federation);
             var sc4 = new OpenShipConfig(ShipConfig.ocrons);
             var sc5 = new OpenShipConfig(ShipConfig.krios);
-            sc2.IsOpen = true;
+            sc1.IsOpen = true;
 //#if UNITY_EDITOR
 //            sc1.IsOpen = sc2.IsOpen = sc3.IsOpen = sc4.IsOpen = sc5.IsOpen = true;
 //#endif
@@ -81,17 +81,21 @@ public class PlayerStatistics
         }
         if (WeaponsPairs.Count == 0)
         {
-            var p = new WeaponsPair(WeaponType.laser, WeaponType.rocket);
-            p.IsOpen = true;
+            var p = new WeaponsPair(WeaponType.laser, WeaponType.casset);
+            var p1 = new WeaponsPair(WeaponType.rocket, WeaponType.eimRocket);
+            var p2 = new WeaponsPair(WeaponType.laser, WeaponType.impulse);
+            var p3 = new WeaponsPair(WeaponType.impulse, WeaponType.casset);
+            var p4 = new WeaponsPair(WeaponType.rocket, WeaponType.beam);
+            var p5 = new WeaponsPair(WeaponType.eimRocket, WeaponType.beam);
             WeaponsPairs.Add(p);
-            var p1 = new WeaponsPair(WeaponType.laser, WeaponType.eimRocket);
             WeaponsPairs.Add(p1);
-            var p2 = new WeaponsPair(WeaponType.casset, WeaponType.rocket);
             WeaponsPairs.Add(p2);
-            var p3 = new WeaponsPair(WeaponType.eimRocket, WeaponType.impulse);
             WeaponsPairs.Add(p3);
-            var p4 = new WeaponsPair(WeaponType.casset, WeaponType.impulse);
             WeaponsPairs.Add(p4);
+            WeaponsPairs.Add(p5);
+
+            p.IsOpen = true;
+            p1.IsOpen = true;
         }
     }
 

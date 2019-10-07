@@ -148,6 +148,7 @@ public class CamerasController : Singleton<CamerasController>
     public void StartBattle()
     {
         OpenGameCamera();
+
         BackgroundCamera.StartGame();
     }
 

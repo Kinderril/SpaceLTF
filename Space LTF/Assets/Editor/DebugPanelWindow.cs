@@ -34,6 +34,8 @@ public class DebugPanelWindow : EditorWindow
     private Editor _e;
     public const float DIST_CHECK_EARTH = 10f;
     private int Hour;
+    private int EnemyPower;
+    private int MyPower;
     private bool SetCarve = false;
     int selected = 0;
 
@@ -111,6 +113,17 @@ public class DebugPanelWindow : EditorWindow
                 AddCore();
             }
             EditorGUILayout.EndHorizontal();
+            EnemyPower = EditorGUILayout.IntField("EP", EnemyPower);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Fight"))
+            {
+                FightDebug();
+            }
+            if (GUILayout.Button("CalcMy"))
+            {
+                CalcMyPower();
+            }
+            EditorGUILayout.EndHorizontal();
             if (BattleController.Instance != null && BattleController.Instance.InGameMainUI != null)
             {
                 var ss = BattleController.Instance.InGameMainUI.SelectedShip;
@@ -139,6 +152,18 @@ public class DebugPanelWindow : EditorWindow
                 }
             }
         }
+    }
+
+    private void CalcMyPower()
+    {
+        var army = MainController.Instance.MainPlayer.Army;
+        var power = ArmyCreator.CalcArmyPower(army);
+        Debug.Log($"YOU ARMY POWER:{power}".Green());
+    }
+
+    private void FightDebug()
+    {
+        ArmyCreatorDebug.DoFight(EnemyPower);
     }
 
     private void LevelUpRandom()

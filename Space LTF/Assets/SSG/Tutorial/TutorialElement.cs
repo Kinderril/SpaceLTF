@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class TutorialElement : MonoBehaviour
     public bool _isCompleted;
     public Toggle DontShowNoreToggle;
     public TextMeshProUGUI Field;
+    public List<TutorialFieldElement> elements = new List<TutorialFieldElement>();
     public TextMeshProUGUI ShallCloseForever;
 
     void Awake()
@@ -28,6 +30,10 @@ public class TutorialElement : MonoBehaviour
         if (!_isCompleted)
         {
             gameObject.SetActive(true);
+            foreach (var element in elements)
+            {
+                element.gameObject.SetActive(true);
+            }
         }
     } 
     public void OnClose()
@@ -36,6 +42,10 @@ public class TutorialElement : MonoBehaviour
         {
             PlayerPrefs.SetInt(Id,1);
             gameObject.SetActive(false);
+            foreach (var element in elements)
+            {
+                element.gameObject.SetActive(false);
+            }
             _isCompleted = true;
             Dispose();
         }

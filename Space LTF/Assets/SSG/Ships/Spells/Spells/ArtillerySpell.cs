@@ -12,6 +12,7 @@ public class ArtillerySpell : BaseSpellModulInv
     private const float DAMAGE = 3;
     private const float rad = 6f;
 
+
     public int BulletsCount => Level * 4 + 15;
 
     public ArtillerySpell(int costCount, int costTime)
@@ -39,7 +40,7 @@ public class ArtillerySpell : BaseSpellModulInv
                     var zz = MyExtensions.Random(-offset, offset);
 
                     var nTargte = new BulletTarget(target.Position + new Vector3(xx, 0, zz));
-                    MainCreateBullet(nTargte, origin,weapon, nTargte.Position , bullestartparameters);
+                    MainCreateBullet(nTargte, origin,weapon, weapon.CurPosition , bullestartparameters);
                 }
             };
         }
@@ -53,12 +54,12 @@ public class ArtillerySpell : BaseSpellModulInv
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
 //        var offset = rad / 2;
-        var offset =0.3f;
-        var xx = MyExtensions.Random(-offset, offset);
-        var zz = MyExtensions.Random(-offset, offset);
+//        var offset =0.3f;
+//        var xx = MyExtensions.Random(-offset, offset);
+//        var zz = MyExtensions.Random(-offset, offset);
 
 //        var startPos = target.Position + Vector3.up * DIST_SHOT + new Vector3(xx, 0, zz);
-        var startPos = shootpos + new Vector3(xx, 0, zz);
+        var startPos = weapon.CurPosition;
         var dir = Utils.NormalizeFastSelf(target.Position - startPos);
         Bullet.Create(origin, weapon, dir, startPos,
             null, bullestartparameters);
@@ -75,7 +76,7 @@ public class ArtillerySpell : BaseSpellModulInv
         return bullet;
     }
 
-    public override bool ShowLine => false;
+    public override bool ShowLine => true;
     public override float ShowCircle => rad;
     //    public override bool S => false;
 

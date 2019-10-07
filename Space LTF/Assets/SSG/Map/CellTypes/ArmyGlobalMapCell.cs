@@ -28,8 +28,8 @@ public class ArmyGlobalMapCell : GlobalMapCell
         {
             CacheArmy();
         }
-        return _player;
 
+        return _player;
     }
 
     private void CacheArmy()
@@ -50,6 +50,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 data = new ArmyCreatorDestroy(_config, true);
                 break;
         }
+
         //        var data = new ArmyCreatorRocket(ShipConfig.mercenary);
         var player = new Player(name);
 //        float coreShipChance = 0;
@@ -78,6 +79,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 canHire = MyExtensions.IsTrue01(HIRE_CHANCE);
                 break;
         }
+
         _player = player;
     }
 
@@ -86,14 +88,16 @@ public class ArmyGlobalMapCell : GlobalMapCell
         return true;
     }
 
-    public ArmyGlobalMapCell(int power, ShipConfig config, int id, ArmyCreatorType type, int Xind, int Zind, SectorData secto) 
+    public ArmyGlobalMapCell(int power, ShipConfig config, int id, ArmyCreatorType type, int Xind, int Zind,
+        SectorData secto)
         : base(id, Xind, Zind, secto)
     {
         _config = config;
         _armyType = type;
         _power = power;
     }
-    public override void UpdatePowers(int visitedSectors,int startPower)
+
+    public override void UpdatePowers(int visitedSectors, int startPower)
     {
         var nextPower = SectorData.CalcCellPower(visitedSectors + 1, _sector.Size, startPower);
         _player = null;
@@ -116,10 +120,11 @@ public class ArmyGlobalMapCell : GlobalMapCell
             var info = scoutData[i];
             scoutsField = $"{scoutsField}\n{info}\n";
         }
+
         if (isSameSide && rep > 40)
         {
             masinMsg = $"This fleet looks friendly.\n {scoutsField}";
-            ans.Add(new AnswerDialogData($"Ask for help. [Reputation:{rep}]",null, DimlomatyOption));
+            ans.Add(new AnswerDialogData($"Ask for help. [Reputation:{rep}]", null, DimlomatyOption));
         }
         else
         {
@@ -130,13 +135,14 @@ public class ArmyGlobalMapCell : GlobalMapCell
             {
                 if (myPlaer.MoneyData.HaveMoney(buyoutCost))
                 {
-                    ans.Add(new AnswerDialogData($"Try to buy out. [Cost :{buyoutCost}]", null, () => BuyOutOption(buyoutCost)));
+                    ans.Add(new AnswerDialogData($"Try to buy out. [Cost :{buyoutCost}]", null,
+                        () => BuyOutOption(buyoutCost)));
                 }
-               masinMsg = $"You see enemies. They look stronger than you. Shall we fight? \n {scoutsField}";
+
+                masinMsg = $"You see enemies. They look stronger than you. Shall we fight? \n {scoutsField}";
             }
             else
             {
-
                 masinMsg = $"You see enemies. Shall we fight? \n {scoutsField}";
             }
         }
@@ -153,7 +159,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 String.Format("Try Run. [Scouts:{0}]", ScoutsLevel),
                 () =>
                 {
-                    bool doRun = MyExtensions.IsTrue01((float)ScoutsLevel / 4f);
+                    bool doRun = MyExtensions.IsTrue01((float) ScoutsLevel / 4f);
 #if UNITY_EDITOR
                     doRun = true;
 #endif
@@ -167,10 +173,10 @@ public class ArmyGlobalMapCell : GlobalMapCell
                     }
                 }));
         }
+
         var mesData = new MessageDialogData(masinMsg, ans);
         return mesData;
     }
-
 
 
     public string PowerDesc()
@@ -187,15 +193,15 @@ public class ArmyGlobalMapCell : GlobalMapCell
         }
         else
         {
-
-            powerToCompare = SectorData.CalcCellPower(player.MapData.VisitedSectors+1, _sector.Size, _sector.StartPowerGalaxy);
+            powerToCompare = SectorData.CalcCellPower(player.MapData.VisitedSectors + 1, _sector.Size,
+                _sector.StartPowerGalaxy);
 //            Debug.LogError($"power1  :{powerToCompare}");
         }
 //        Debug.LogError($"mySctorID:{player.MapData.CurrentCell.SectorId}    _sector.Id:{_sector.Id}");
 
 
 //        Debug.LogError($"playersPower  :{playersPower}");
-        var delta = playersPower/powerToCompare;
+        var delta = playersPower / powerToCompare;
 //        if (Mathf.Abs(delta) < 2)
 //        {                                                           d
 //        }
@@ -204,13 +210,16 @@ public class ArmyGlobalMapCell : GlobalMapCell
         {
             return "Risky";
         }
+
         if (delta > 1.15f)
         {
             return "Easily";
         }
+
         return "Comparable";
     }
-    private MessageDialogData BuyOutOption(int buyoutCost )
+
+    private MessageDialogData BuyOutOption(int buyoutCost)
     {
         var player = MainController.Instance.MainPlayer;
         var ans = new List<AnswerDialogData>();
@@ -225,7 +234,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData("Ok"));
         var rep = MainController.Instance.MainPlayer.ReputationData.Reputation;
-        bool doDip = MyExtensions.IsTrue01((float)rep / PlayerReputationData.MAX_REP);
+        bool doDip = MyExtensions.IsTrue01((float) rep / PlayerReputationData.MAX_REP);
         if (doDip)
         {
             int a = 0;
@@ -242,10 +251,11 @@ public class ArmyGlobalMapCell : GlobalMapCell
                     a = 1;
                     break;
             }
+
             string helpInfo;
             if (a == 0)
             {
-                var money = AddMoney(_power/3, _power/2);
+                var money = AddMoney(_power / 3, _power / 2);
                 helpInfo = String.Format("They give you some credits {0}", money);
             }
             else
@@ -257,7 +267,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 int slot;
                 if (MyExtensions.IsTrue01(.5f))
                 {
-                    var m = Library.CreatSimpleModul(2,MyExtensions.IsTrueEqual());
+                    var m = Library.CreatSimpleModul(2, MyExtensions.IsTrueEqual());
                     itemName = Namings.SimpleModulName(m.Type);
                     canAdd = player.Inventory.GetFreeSimpleSlot(out slot);
                     if (canAdd)
@@ -275,6 +285,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                         player.Inventory.TryAddWeaponModul(w, slot);
                     }
                 }
+
                 if (canAdd)
                 {
                     helpInfo = String.Format("They give {0}.", itemName);
@@ -284,6 +295,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                     helpInfo = "But you have no free space";
                 }
             }
+
             var pr = $"They help you as much as they can. {helpInfo}";
             var mesData = new MessageDialogData(pr, ans);
             return mesData;
@@ -297,7 +309,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     public override Color Color()
     {
-        return new Color(255f/255f, 102f/255f, 0f/255f);
+        return new Color(255f / 255f, 102f / 255f, 0f / 255f);
     }
 
     public override bool OneTimeUsed()
@@ -327,12 +339,10 @@ public class ArmyGlobalMapCell : GlobalMapCell
         {
             return null;
         }
-
     }
 
     public ShipConfig GetConfig()
     {
-        return _config ;
+        return _config;
     }
 }
-

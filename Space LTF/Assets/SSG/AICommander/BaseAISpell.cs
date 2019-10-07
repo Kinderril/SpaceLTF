@@ -48,15 +48,41 @@ public abstract class BaseAISpell<T> : BaseAISpell  where T : BaseSpellModulInv
 {
     protected Commander _commander;
     protected T _spell;
+    protected float ShootDistSqrt;
 
     protected BaseAISpell(T spell,Commander commander)
     {
         Debug.Log("AI spell controller init:" + spell.GetType());
         _spell = spell;
         _commander = commander;
+        ShootDistSqrt = spell.AimRadius * spell.AimRadius;
 
     }
+    protected override void PeriodInnerUpdate()
+    {
+        Vector3 trg;
+        if (CanCast())
+        {
+            if (IsEnemyClose(out trg))
+            {
+                TryUse(trg);
+            }
+        }
+    }
 
+    private bool IsEnemyClose(out Vector3 trg)
+    {
+        var oIndex = BattleController.OppositeIndex(_commander.TeamIndex);
+        float sDist;
+        var ship = BattleController.Instance.ClosestShipToPos(_commander.MainShip.Position, oIndex, out sDist);
+        if (sDist < ShootDistSqrt)
+        {
+            trg = ship.Position;
+            return true;
+        }
+        trg = Vector3.zero;
+        return false;
+    }
     protected bool CanCast()
     {
         return _commander.CoinController.CanUseCoins(_spell.CostCount);
@@ -66,14 +92,6 @@ public abstract class BaseAISpell<T> : BaseAISpell  where T : BaseSpellModulInv
     {
         _spell.TryCast(_commander.CoinController, v);
     }
-
-    //    protected override void PeriodInnerUpdate()
-    //    {
-    //        if (_commander.CoinController.CanUseCoins(_spell.CostCount))
-    //        {
-    //
-    //        }
-    //    }
 
 }
 

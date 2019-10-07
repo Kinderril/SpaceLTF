@@ -49,9 +49,9 @@ public class NextBattleData
         }
         else
         {
-            WindowManager.Instance.OpenWindow(MainState.loseBattle);
             Statistics.EndBattle(EndBattleType.lose);
-            MainPlayer.EndGame();
+//            MainPlayer.EndGame();
+            MainController.Instance.BattleData.EndGame(false);
         }
 
     }

@@ -20,7 +20,7 @@ public class SecretDeal : BaseGlobalMapEvent
     {
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData($"Send scouts", null, scoutsSend));
-        mianAnswers.Add(new AnswerDialogData($"Leave", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         var mesData =
             new MessageDialogData("A lot of space garbage and other useless thing here. Do you want to investigate?",
                 mianAnswers);
@@ -77,7 +77,7 @@ public class SecretDeal : BaseGlobalMapEvent
         if (SkillWork(2, ScoutsLevel + coef))
         {
             ;
-            mianAnswers.Add(new AnswerDialogData($"Ok", null, null));
+            mianAnswers.Add(new AnswerDialogData(Namings.Ok, null, null));
             var mesData = new MessageDialogData($"You run away. {add} [Scouts:{ScoutsLevel}]", mianAnswers);
             return mesData;
         }
@@ -149,7 +149,7 @@ public class SecretDeal : BaseGlobalMapEvent
         }
         else
         {
-            mianAnswers.Add(new AnswerDialogData($"Ok.", null));
+            mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
         }
         var mesData = new MessageDialogData("They complete trade, and ready to jump.", mianAnswers);
         return mesData;
