@@ -21,6 +21,7 @@ public enum GlobalMapEventType
     trade = 11,//Обмен.
     mercHideout = 12,//Наемники.
     change = 13,//Вещть на вещь.
+    excavation = 14,//Раскопки
 //    repairShip = 8,//Если увроень ремонта больше чем 2 то чиним. + деньги.
 }
 
@@ -59,6 +60,9 @@ public class EventGlobalMapCell : GlobalMapCell
                 break;
             case GlobalMapEventType.battleField:
                 _mapEvent = new BattlefieldMapEvent();
+                break; 
+            case GlobalMapEventType.excavation:
+                _mapEvent = new ExcavationsEvent();
                 break; 
             case GlobalMapEventType.mercHideout:
                 _mapEvent = new MercenaryHideout();

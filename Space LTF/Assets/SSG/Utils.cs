@@ -89,7 +89,7 @@ public static class Utils
 
     public static string FloatToChance(float f)
     {
-        return (f*100).ToString();
+        return (f*100).ToString("0.0");
     }
 
     public static void Init(Terrain terrain)

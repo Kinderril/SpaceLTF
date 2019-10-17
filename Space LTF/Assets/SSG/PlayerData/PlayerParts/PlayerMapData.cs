@@ -12,6 +12,7 @@ public class PlayerMapData
     public GalaxyData GalaxyData;
     public int Step = 0;
     public int VisitedSectors = 0;
+    private PlayerByStepDamage _stepDamage;
 
     [field: NonSerialized]
     public event Action<GlobalMapCell> OnCellChanged;    
@@ -23,12 +24,13 @@ public class PlayerMapData
 
     }
 
-    public void Init(StartNewGameData data)
+    public void Init(StartNewGameData data,PlayerByStepDamage stepDamage)
     {
+        _stepDamage = stepDamage;
         Step = 0;
         var sectorIndex = MyExtensions.Random(10 * data.SectorSize, 100 * data.SectorSize);
         var sector = new GalaxyData("Sector " + sectorIndex.ToString());
-        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount,data.CellsStartDeathStep);
+        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount,data.StepsBeforeDeath);
         GalaxyData = sector;
         CurrentCell = startCell;
         OpenAllNear();
@@ -89,6 +91,7 @@ public class PlayerMapData
         OpenAllNear();
         Step++;
         GalaxyData.StepComplete(Step, CurrentCell);
+        _stepDamage.StepComplete(Step);
         if (OnCellChanged != null)
         {
             OnCellChanged(CurrentCell);

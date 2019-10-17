@@ -231,7 +231,6 @@ public class BattleController :Singleton<BattleController>
 
     private void CheckEndBattle(ShipBase lastShip)
     {
-
         PauseData.Unpase(1f);
         IsWin();
         if (lastShip.ShipParameters.StartParams.ShipType == ShipType.Base)

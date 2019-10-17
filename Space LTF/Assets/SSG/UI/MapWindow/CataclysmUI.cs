@@ -38,7 +38,7 @@ public class CataclysmUI : MonoBehaviour
 
     public void Dispose()
     {
-        _data.OnStep += OnStpe;
+        _data.OnStep -= OnStpe;
     }
 
 }

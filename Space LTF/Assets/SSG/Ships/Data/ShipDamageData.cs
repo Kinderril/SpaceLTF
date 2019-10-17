@@ -83,7 +83,7 @@ public class ShipDamageData : ShipData
                 break;
             case ShipDamageType.shiled:
                 FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
-                _owner.ShipParameters.ShieldParameters.Crash();
+                _owner.ShipParameters.ShieldParameters.Crash(time);
                 break;
             case ShipDamageType.fire:
                 var remainTime = _owner.PeriodDamage.Start((int)time);

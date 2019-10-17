@@ -70,6 +70,11 @@ public class Asteroid : MonoBehaviour
 
     void Update()
     {
+        RotateUpdate();
+    }
+
+    protected void RotateUpdate()
+    {
         if (_wannaRotate)
             transform.Rotate(_rotateDir, _rotateSpeed);
     }

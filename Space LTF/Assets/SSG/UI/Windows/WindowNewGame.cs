@@ -93,7 +93,8 @@ public class WindowNewGame : BaseWindow
             ArmyTypeSelectorUI.Selected, posibleStartWeapons,
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(),
             DifficultyNewGame.CurDifficulty, posibleSpells);
-        DifficultyFIeld.text = String.Format(Namings.StatisticDifficulty, Utils.FloatToChance(gameData.CalcDifficulty()));
+        var dif = Utils.FloatToChance(gameData.CalcDifficulty());
+        DifficultyFIeld.text = String.Format(Namings.StatisticDifficulty, dif);
     }
 
     public void OnClickRandomStart()

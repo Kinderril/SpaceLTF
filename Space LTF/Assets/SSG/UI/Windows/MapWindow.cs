@@ -33,7 +33,8 @@ public class MapWindow : BaseWindow
     private PlayerArmyUI playerArmyUI;
     public WindowModif modifWindowUI;
     public GlobalMapController GlobalMap;
-    public CataclysmUI Cataclysm;
+//    public CataclysmUI Cataclysm;
+    public PlayerByStepUI PlayerByStepUI;
     private GlobalMapCell _lastClosest = null;
     public GameObject StartInfo;
     public Transform LayoutSideShips;
@@ -57,7 +58,7 @@ public class MapWindow : BaseWindow
 //        ArmyInfoContainer.gameObject.SetActive(false);
         player = MainController.Instance.MainPlayer;
         player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
-        Cataclysm.Init(player.MapData);
+//        Cataclysm.Init(player.MapData);
         bool showFirstInfo = player.MapData.Step == 0;
         StartInfo.gameObject.SetActive(showFirstInfo);
         if (showFirstInfo)
@@ -65,6 +66,8 @@ public class MapWindow : BaseWindow
             var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
             field.text = Namings.StartInfo;
         }
+
+        PlayerByStepUI.Init(player.ByStepDamage);
         //        player.MapData.OnCellChanged += OnCellChanged;
         //        player.MapData.OnSectorChanged += OnSectorChanged;
         //        _selectedCell = data.GetNextCell(player.MapData.CurrentCell);
@@ -170,7 +173,7 @@ public class MapWindow : BaseWindow
     private void UpdateMainQuestelements()
     {
         var player = MainController.Instance.MainPlayer.QuestData;
-        MainQuestELelemntField.text = player.mainElementsFound + "/" + player.MaxMainElements;
+        MainQuestELelemntField.text = $"{Namings.MainElements}:{player.mainElementsFound}/{player.MaxMainElements}";
 //        NavigationList.UpdateInfo();
     }
 
@@ -230,12 +233,6 @@ public class MapWindow : BaseWindow
         CellsOfSector();
     }
 
-//    private void UpdateDayField()
-//    {
-//        SectorNameField.text = String.Format("Day:{0}", player.MapData.Step);
-//    }
-    
-
     private void OnCellChanged(GlobalMapCell cell)
     {
 //        UpdateDayField();
@@ -288,8 +285,8 @@ public class MapWindow : BaseWindow
         {
             var dialog = obj.GetDialog();
             if (dialog != null)
-            {
-                if (obj.Completed && obj.OneTimeUsed())
+            {                  
+                if (obj.Completed && obj.OneTimeUsed() )
                 {
                     WindowManager.Instance.InfoWindow.Init(OnMainDialogEnds, Namings.BeenBefore);
                 }
@@ -441,6 +438,7 @@ public class MapWindow : BaseWindow
 
     public override void Dispose()
     {
+        PlayerByStepUI.Dispose();
         NavigationList.Dispose();
         _lastClosest = null;
         GlobalMap.Close();
@@ -457,7 +455,7 @@ public class MapWindow : BaseWindow
         InventoryUI.Dispose();
         DialogWindow.Dispose();
         playerArmyUI.Dispose();
-        Cataclysm.Dispose();
+//        Cataclysm.Dispose();
         GameObject.Destroy(playerArmyUI.gameObject);
     }
 

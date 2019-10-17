@@ -104,7 +104,7 @@ public static class Library
     public const float MIN_GLOBAL_SECTOR_SIZE = 3;
     public const float MAX_GLOBAL_SECTOR_SIZE = 5;
     public const float MIN_GLOBAL_MAP_DEATHSTART = 1;
-    public const float MAX_GLOBAL_MAP_DEATHSTART= 40;
+    public const float MAX_GLOBAL_MAP_DEATHSTART= 10;
     public const float MIN_GLOBAL_MAP_CORES = 2;
     public const float MAX_GLOBAL_MAP_CORES = 5;
 

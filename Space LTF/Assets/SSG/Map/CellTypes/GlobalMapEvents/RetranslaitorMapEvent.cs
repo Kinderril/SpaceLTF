@@ -24,8 +24,9 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-
-        var mesData = new MessageDialogData(String.Format("Power fleet of {0} protect storage of energy.",Namings.ShipConfig(_shipConfig)), new List<AnswerDialogData>()
+        var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * 1.9f;
+        _credits = (int)MyExtensions.GreateRandom(myArmyPower);
+         var mesData = new MessageDialogData(String.Format("Power fleet of {0} protect storage of energy.",Namings.ShipConfig(_shipConfig)), new List<AnswerDialogData>()
         {
             new AnswerDialogData("Fight",null,Figth),
 //            new AnswerDialogData("Send fail message",null,FailMessage),

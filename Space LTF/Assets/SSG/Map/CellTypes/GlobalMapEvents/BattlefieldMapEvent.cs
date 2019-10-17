@@ -13,8 +13,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     {
         return "Old battlefield";
     }
-
-
+    
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();

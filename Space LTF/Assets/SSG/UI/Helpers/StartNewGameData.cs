@@ -4,7 +4,7 @@ using UnityEngine;
 public class StartNewGameData
 {
     public int BasePower;
-    public int CellsStartDeathStep;
+    public int StepsBeforeDeath;
     public int CoreElementsCount;
     public int SectorSize;
     public int SectorCount;
@@ -15,17 +15,17 @@ public class StartNewGameData
 
     public StartNewGameData(Dictionary<PlayerParameterType, int> startParametersLevels,
         ShipConfig shipConfig, List<WeaponType> posibleStartWeapons, int SectorSize,  int SectorCount,
-        int CellsStartDeathStep, int CoreElementsCount, int BasePower, List<SpellType> posibleSpell)
+        int stepsBeforeDeath, int CoreElementsCount, int BasePower, List<SpellType> posibleSpell)
     {
         Debug.Log(($"StartNewGameData {shipConfig.ToString()} SectorSize:{SectorSize} " +
-                  $" SectorCount:{SectorCount} CellsStartDeathStep:{CellsStartDeathStep}  CoreElementsCount:{CoreElementsCount}" +
+                  $" SectorCount:{SectorCount} StepsBeforeDeath:{stepsBeforeDeath}  CoreElementsCount:{CoreElementsCount}" +
                   $"  BasePower:{BasePower}   posibleSpell:{posibleSpell}").Red());
         this.startParametersLevels = startParametersLevels;
         this.shipConfig = shipConfig;
         this.SectorSize = SectorSize;
         this.SectorCount = SectorCount;
         this.CoreElementsCount = CoreElementsCount;
-        this.CellsStartDeathStep = CellsStartDeathStep;
+        this.StepsBeforeDeath = stepsBeforeDeath;
         this.posibleStartWeapons = posibleStartWeapons;
         this.BasePower = BasePower;
         this.posibleSpell = posibleSpell;
@@ -36,8 +36,9 @@ public class StartNewGameData
         var deltaPower = (BasePower - Library.MAX_GLOBAL_MAP_VERYEASY_BASE_POWER) * 0.2f;
         var deltaSize = (SectorSize - Library.MIN_GLOBAL_SECTOR_SIZE) * 0.05f;
         var deltaCore = (CoreElementsCount - Library.MIN_GLOBAL_MAP_CORES) * 0.12f;
-        var deltaDeath = (Library.MAX_GLOBAL_MAP_DEATHSTART - CellsStartDeathStep) * 0.014f;
 
-        return deltaDeath + deltaCore + deltaSize + deltaPower + 0.03f;
+        var deltaDeath = (Library.MAX_GLOBAL_MAP_DEATHSTART - StepsBeforeDeath) * 0.08f;
+
+        return deltaDeath + deltaCore + deltaSize + deltaPower - 0.01f;
     }
 }

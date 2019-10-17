@@ -43,6 +43,7 @@ public class GalaxyData
         {GlobalMapEventType.scienceLab, 3},
         {GlobalMapEventType.anomaly, 3},
         {GlobalMapEventType.spaceGarbage, 3},
+        {GlobalMapEventType.excavation, 3},
     };
 
     public GlobalMapCell Init2(int sectorCount, int sizeSector,int startPower, int coreCells, int startDeathStep)
@@ -510,15 +511,15 @@ public class GalaxyData
 
     public void StepComplete(int step, GlobalMapCell curCell)
     {
-        if (step > StartDeathStep)
-        {
-            if (_prevStepDestroy)
-            {
-                TryDestroyCell(curCell);
-            }
-
-            _prevStepDestroy = !_prevStepDestroy;
-        }
+//        if (step > StartDeathStep)
+//        {
+//            if (_prevStepDestroy)
+//            {
+//                TryDestroyCell(curCell);
+//            }
+//
+//            _prevStepDestroy = !_prevStepDestroy;
+//        }
     }
 
     public GlobalMapCell GetRandomCell()

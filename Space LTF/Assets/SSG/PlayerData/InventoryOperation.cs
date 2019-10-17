@@ -31,7 +31,6 @@ public  static  class  InventoryOperation
 
     public static void TryItemTransfered(IInventory to, IItemInv item,Action<bool> callback)
     {
-
         IInventory from = item.CurrentInventory;
         int index;
         switch (item.ItemType)

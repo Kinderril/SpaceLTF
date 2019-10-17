@@ -374,16 +374,16 @@ public static class Namings
     public static string Completed = "Completed";
 
     public static string StartNewGameFieldSize = "Sector size";
-    public static string StartNewGameStartDeathTime = "Cataclysm time";
+    public static string StartNewGameStartDeathTime = "Stability level";
     public static string StartNewGameCoresCount = "Keys count";
     public static string StartNewGameBasePower = "Enemies power";
     public static string StartNewGameSectorsCount = "Sectors count";
 
-    public static string StartInfo = "All is very simple. This galaxy crashing because of... nobody knows why." +
-                                     "\nYou should run away as fast as you can, but you are not only one who want to do it." +
-                                     "\nFind gates and activate it, before galaxy becomes dead. " +
-                                     "\nTo activate gate you need to collect energy elements." +
-                                     "\nGood luck!";
+    public static string StartInfo = "One of the scientific stations was destroyed, and energy blocks from the " +
+                                     " station scattered across the galaxy. One of these blocks hit your ship." +
+                                     " You managed to isolate it. You must find other parts to try to disconnect " +
+                                     "your ship from the energy block at the station. Good luck, but remember," +
+                                     " the blocks are extremely unstable.";
 
     public static string DamageInfoUI = "Damage: {0}/{1}";
     public static string KillsInfoUI = "Kills: {0}";
@@ -708,4 +708,7 @@ public static class Namings
     public static string leave  = "Leave";
     public static string HireMerc = "Hire {1} the {0}. Level:{2}. Cost:{3} credits.";
     public static string Take = "Take";
+    public static string BrokenItem = "Your item broken {0}";
+    public static string StabilizaInfo = "Stability level:{0}";
+    public static string MainElements = "Energy blocks";
 }

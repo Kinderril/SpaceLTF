@@ -28,7 +28,6 @@ public class DragableWeaponItem : DragableItem
         {
             Debug.LogError("try to _isSubscribed Second time DragableWeaponItem");
         }
-
         base.Init();
         OnUpgrade(Weapon);
     }
@@ -61,14 +60,16 @@ public class DragableWeaponItem : DragableItem
         }
         var cost = MoneyConsts.WeaponUpgrade[Weapon.Level];
         var haveMoney = MainController.Instance.MainPlayer.MoneyData.HaveMoney(cost);
-        var canUse = Weapon.CanUpgrade() && haveMoney && Usable;
+        var isMy = MainController.Instance.MainPlayer == Weapon.CurrentInventory.Owner;
+        var canUse = Weapon.CanUpgrade() && haveMoney && Usable && isMy;
         UpgradeButton.gameObject.SetActive(canUse); 
 
     }
 
     public void OnTryUpgradeClick()
-    {
-        Weapon.TryUpgrade();
+    {        
+        if (Usable)
+            Weapon.TryUpgrade();
     }
     public override Sprite GetIcon()
     {

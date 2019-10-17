@@ -26,6 +26,7 @@ public class Player
     public PlayerReputationData ReputationData;
     public PlayerAfterBattleOptions AfterBattleOptions;
     public PlayerMapData MapData;
+    public PlayerByStepDamage ByStepDamage;
     public PlayerMessagesToConsole MessagesToConsole;
     public List<StartShipPilotData> Army = new List<StartShipPilotData>();
     public StartShipPilotData MainShip;
@@ -41,9 +42,10 @@ public class Player
     {
         MessagesToConsole = new PlayerMessagesToConsole();
         QuestData  = new PlayerQuestData(data.CoreElementsCount);
+        ByStepDamage = new PlayerByStepDamage();
+        ByStepDamage.Init(data.StepsBeforeDeath,this);
         MapData = new PlayerMapData();
-        MapData.Init(data);
-
+        MapData.Init(data,ByStepDamage);
         Army = CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell);
         RepairData.Init(Army, MapData,Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();

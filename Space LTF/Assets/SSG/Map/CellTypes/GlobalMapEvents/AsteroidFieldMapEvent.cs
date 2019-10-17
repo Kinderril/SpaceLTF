@@ -54,14 +54,14 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
                 new AnswerDialogData(Namings.Ok)
             };
             MessageDialogData mesData;
-            if (SkillWork(2, RepairLevel))
+            if (SkillWork(2, ScoutsLevel))
             {
                 mesData = new MessageDialogData("Nothing happens. You successfully complete way", ans);
             }
             else
             {
                 BrokeShipWithRandom();
-                mesData = new MessageDialogData("Nothing happens, except some ships crashed with asteroids. You successfully complete way", ans);
+                mesData = new MessageDialogData("Nothing happens, but some ships need to be repaired. You successfully complete way", ans);
 
             }
             return mesData;

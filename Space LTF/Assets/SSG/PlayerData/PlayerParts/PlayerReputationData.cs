@@ -17,17 +17,35 @@ public class PlayerReputationData
     private const float MAX_COEF = 2f;
     public int Reputation = 50;
 
+    public Dictionary<ShipConfig,int> ReputationFaction = new Dictionary<ShipConfig, int>();
+
     [field: NonSerialized]
     public event Action<int> OnReputationChange;
+    [field: NonSerialized]
+    public event Action<ShipConfig,int> OnReputationNationChange;
 
     public PlayerReputationData()
     {
 #if UNITY_EDITOR
-//        MoneyCount = 1000;
+        //        MoneyCount = 1000;
 #endif
         //        _player = player;
+        ReputationFaction.Add(ShipConfig.droid,30);
+        ReputationFaction.Add(ShipConfig.federation,30);
+        ReputationFaction.Add(ShipConfig.krios,30);
+        ReputationFaction.Add(ShipConfig.mercenary,30);
+        ReputationFaction.Add(ShipConfig.ocrons,30);
+        ReputationFaction.Add(ShipConfig.raiders,30);
     }
 
+    public void AddReputation(ShipConfig config, int val)
+    {
+        ReputationFaction[config] = ReputationFaction[config] + val;
+        if (OnReputationNationChange != null)
+        {
+            OnReputationNationChange(config, val);
+        }
+    }
     public void AddReputation(int moneyToReward)
     {
         var old = Reputation;

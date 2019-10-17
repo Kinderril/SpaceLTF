@@ -22,6 +22,7 @@ public class ShieldParameters
     private float _nextTimeShiledRegen;
     public ShieldChangeSt State { get; private set; }
     private float _curShiled;
+    private float _endDisablePeriod;
     private Collider shieldCollider;
     private float ShieldDeltaTick = 1f;
     private ShipBase _shipBase;
@@ -64,38 +65,49 @@ public class ShieldParameters
 //            {
 //                return;
 //            }
-            _curShiled = value;
-            if (State == ShieldChangeSt.active)
+            var delta = value - _curShiled;
+            var isActive = State == ShieldChangeSt.active;
+            if (delta > 0)
+            {
+               _curShiled = value;
+            }
+            else
+            {
+                if (isActive)
+                    _curShiled = value;
+               }
+            if (isActive)
             {
                 if (_curShiled <= 0f)
                 {
                     SetState(ShieldChangeSt.restoring);
                 }
             }
-//            if (_shiledIsActive)
-//            {
-//                ShiledIsActive = _curShiled > 0.9f;
-//            }
-//            else
-//            {
-//                ShiledIsActive = _curShiled > MaxShiled * 0.1f;
-//            }
+
+            //            if (_shiledIsActive)
+            //            {
+            //                ShiledIsActive = _curShiled > 0.9f;
+            //            }
+            //            else
+            //            {
+            //                ShiledIsActive = _curShiled > MaxShiled * 0.1f;
+            //            }
         }
     }
 
-    public void Crash()
+    public void Crash(float period = -1)
     {
+        if (period > 0)
+        {
+            _endDisablePeriod = Time.time + period;
+        }
         if (State == ShieldChangeSt.disable)
         {
             return;
         }
-        SetState(ShieldChangeSt.restoring);
-    }
-
-    public void Disable()
-    {
         SetState(ShieldChangeSt.disable);
     }
+
 
     public void Enable()
     {
@@ -157,13 +169,28 @@ public class ShieldParameters
     {
         switch (State)
         {
-//            case ShieldChangeSt.changeToActive:
-//                break;
+            case ShieldChangeSt.disable:
+                if (_endDisablePeriod > 0)
+                {
+                    if (Time.time > _endDisablePeriod)
+                    {
+                        _endDisablePeriod = -1;
+                        if (CanActivate())
+                        {
+                            SetState(ShieldChangeSt.active);
+                        }
+                        else
+                        {
+                            SetState(ShieldChangeSt.restoring);
+                        }
+                    }
+                }
+                break;
             case ShieldChangeSt.active:
                 RegenShield();
                 break;
             case ShieldChangeSt.restoring:
-                if (_curShiled > MaxShield * RestoreShieldPercent)
+                if (CanActivate())
                 {
                     if (Time.time - _startRestore > 5)
                     {
@@ -176,6 +203,11 @@ public class ShieldParameters
                 }
                 break;
         }
+    }
+
+    private bool CanActivate()
+    {
+        return (_curShiled > MaxShield * RestoreShieldPercent);
     }
 
     private void SetState(ShieldChangeSt v)

@@ -325,6 +325,7 @@ public class SectorData
         list.Add(GlobalMapEventType.brokenNavigation);
         list.Add(GlobalMapEventType.anomaly);
         list.Add(GlobalMapEventType.mercHideout);
+        list.Add(GlobalMapEventType.excavation);
         return list.RandomElement();
     }
 

@@ -42,5 +42,12 @@ public class InfoWindow : MonoBehaviour
             OnClickOk();
         }
     }
+
+    public void Close()
+    {
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        WindowManager.Instance.WindowSubCanvas.interactable = false;
+        gameObject.SetActive(false);
+    }
 }
 

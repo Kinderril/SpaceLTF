@@ -5,8 +5,9 @@ using UnityEngine;
 [Serializable]
 public class RepairStationGlobalCell : GlobalMapCell
 {
+    public int RemainEnergyRepairs = 1;
 
-    public RepairStationGlobalCell( int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
+    public RepairStationGlobalCell(int id, int intX, int intZ, SectorData secto) : base(id, intX, intZ, secto)
     {
     }
 
@@ -17,7 +18,7 @@ public class RepairStationGlobalCell : GlobalMapCell
 
     public override void Take()
     {
-        WindowManager.Instance.InfoWindow.Init(null,"Repair compete");
+        WindowManager.Instance.InfoWindow.Init(null, "Repair compete");
     }
 
     public override MessageDialogData GetDialog()
@@ -29,19 +30,32 @@ public class RepairStationGlobalCell : GlobalMapCell
         {
             var pointToRepair = startShipPilotData.Ship.HealthPointToRepair();
             var cost = Library.GetReapairCost(pointToRepair, startShipPilotData.Pilot.CurLevel);
-            var thisShip = (int)Mathf.Clamp((int)cost * Library.REPAIR_DISCOUTNT, 1, 99999);
+            var thisShip = (int) Mathf.Clamp((int) cost * Library.REPAIR_DISCOUTNT, 1, 99999);
             total += thisShip;
         }
 
-        
-        //var half = total/2;
+        var answers = new List<AnswerDialogData>();
+        string mainMsg;
+        if (player.ByStepDamage.IsEnable)
+        {
+            mainMsg =
+                "This is repair station. We can repair our fleet here.\n And we can try to stabilize energy module of core ship.";
+            if (RemainEnergyRepairs > 0)
+            {
+                answers.Add(new AnswerDialogData(
+                    String.Format("Statilize energy module. Remain charges:{0}", RemainEnergyRepairs), null,
+                    Statilize));
+            }
+        }
+        else
+        {
+            mainMsg = "This is repair station. We can repair our fleet here.";
+        }
+
         MessageDialogData mesData;
         if (total > 0)
         {
             var canRepairFull = player.MoneyData.HaveMoney(total);
-            //var canRepairHalf = player.MoneyData.HaveMoney(half);
-            var answers = new List<AnswerDialogData>();
-          
             if (canRepairFull)
             {
                 answers.Add(new AnswerDialogData(String.Format("Yes repair all.{0} credits", total), () =>
@@ -49,27 +63,38 @@ public class RepairStationGlobalCell : GlobalMapCell
                     RepairFor(total);
                     Take();
                 }));
-                answers.Add(new AnswerDialogData("No", null));
+                answers.Add(new AnswerDialogData(Namings.leave, null));
             }
             else
             {
-                answers.Add(new AnswerDialogData("I don't have enought credits", null));
+                answers.Add(new AnswerDialogData("I don't have enough credits", null));
             }
-            mesData = new MessageDialogData("Do you want to rapair your ships?.", answers);
         }
         else
         {
-            mesData = new MessageDialogData("We can repair ships. But you don't need it?", new List<AnswerDialogData>
-            {
-                new AnswerDialogData("Ok", null)
-            });
+            answers.Add(new AnswerDialogData(Namings.leave));
         }
+
+        mesData = new MessageDialogData(mainMsg, answers);
+        return mesData;
+    }
+
+    private MessageDialogData Statilize()
+    {
+        var answers = new List<AnswerDialogData>();
+        answers.Add(new AnswerDialogData(Namings.Ok));
+        var player = MainController.Instance.MainPlayer;
+        RemainEnergyRepairs--;
+        player.ByStepDamage.Repair();
+        var mesData =
+            new MessageDialogData(String.Format("Module stabilized for {0} days", player.ByStepDamage._curRemainSteps),
+                answers);
         return mesData;
     }
 
     public override Color Color()
     {
-        return new Color(255f/255f, 204f/255f, 153f/255f);
+        return new Color(255f / 255f, 204f / 255f, 153f / 255f);
     }
 
     public override bool OneTimeUsed()
@@ -81,6 +106,7 @@ public class RepairStationGlobalCell : GlobalMapCell
     {
         return true;
     }
+
     private void RepairFor(int count)
     {
         var player = MainController.Instance.MainPlayer;

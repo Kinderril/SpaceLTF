@@ -102,6 +102,7 @@ public class DataStructPrefabs : MonoBehaviour
     public SelfCamera SelfCameraPrefab;
     public Texture BackgroundRenderTexture;
     public ArrowTarget ArrowTargetPersonal;
+    public List<FlyingAsteroid> FlyingAsteroids;
 
 
     public void Init()

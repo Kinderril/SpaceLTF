@@ -26,6 +26,13 @@ public class SliderWithTextMeshPro : MonoBehaviour
                 UpdateFiled();
             });
         }
+
+        subInit();
+    }
+
+    protected virtual void subInit()
+    {
+        
     }
 
     public void InitName(string name)
@@ -65,7 +72,7 @@ public class SliderWithTextMeshPro : MonoBehaviour
         UpdateFiled();
     }
 
-    private void UpdateFiled()
+    protected virtual void UpdateFiled()
     {
         Field.text = Slider.value.ToString("0");
         if (_changeCallback != null)
