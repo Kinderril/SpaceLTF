@@ -13,9 +13,23 @@ public class StartMapTutorial : TutorialElement
     private void OnWindowSetted(BaseWindow obj)
     {
 
-        if (obj is MapWindow)
+        var mapWindow = obj as MapWindow;
+        if (mapWindow != null)
         {
-            Open();
+            if (mapWindow.StartInfo.activeInHierarchy)
+            {
+                void OnStartInfoClose()
+                {
+                    Open();
+                    mapWindow.OnStartInfoClose -= OnStartInfoClose;
+                }
+
+                mapWindow.OnStartInfoClose += OnStartInfoClose;
+            }
+            else
+            {
+                Open();
+            }
         }
     }
 

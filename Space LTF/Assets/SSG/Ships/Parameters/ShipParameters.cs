@@ -69,6 +69,7 @@ public class ShipParameters  : IShipAffectableParams
     private Action _deathCallback;
     private ShipBase _shipOwner;
     public ShieldParameters ShieldParameters;
+    public HealthRegenParameter HealthRegen { get; private set; }
 
     public IStartShipParams StartParams;
 
@@ -88,6 +89,7 @@ public class ShipParameters  : IShipAffectableParams
 //        CurShiled = MaxShiled;
 //        ShieldRegenPerSec = startParams.ShiledRegen;
         _deathCallback = dealthCallback;
+        HealthRegen = new HealthRegenParameter(shipOwner);
         ShieldParameters = new ShieldParameters(shipOwner,shieldCollider, startParams.ShiledRegen, maxShiled);
     }
 
@@ -104,15 +106,8 @@ public class ShipParameters  : IShipAffectableParams
     public void Update()
     {
         ShieldParameters.Update();
+        HealthRegen.Update();
     }
-
-//    public bool IsOnLowHealth()
-//    {
-//        var percentHp = CurHealth/MaxHealth;
-////        var pecrcentShield = CurShiled/MaxShiled;
-//        return percentHp < 0.2f;
-//    }
-
 
     private void HealthAction(float delta )
     {

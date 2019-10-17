@@ -18,12 +18,14 @@ public class MainController : Singleton<MainController>
     public StartMode StartMode;
     public DataBaseController DataBase;
     public NextBattleData BattleData;
+    public TutorialController TutorialController;
 
     void Awake()
     {
         Library.Init();
         DataBase.Init();
         ShipNames.Init();
+        TutorialController.Init();
         Statistics = PlayerStatistics.Load();
         WindowManager.Instance.Init();
         DataBase.DataStructPrefabs.CheckShipsWeaponsPosition();
@@ -72,9 +74,9 @@ public class MainController : Singleton<MainController>
 
     }
 
-    public void PreBattle(Player player1, Player player2,bool isFinalBattle = false, bool canRetire = true)
+    public void PreBattle(Player player1, Player player2,bool isFinalBattle = false, bool canRetire = true, BattlefildEventType? battleEvent = null)
     {
-        BattleData.PreBattle(player1,player2,isFinalBattle, canRetire);
+        BattleData.PreBattle(player1,player2,isFinalBattle, canRetire,battleEvent);
     }
 
     public void LaunchBattle(Player greenSide, Player redSide)

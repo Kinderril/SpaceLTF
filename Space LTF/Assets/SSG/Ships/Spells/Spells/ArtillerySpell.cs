@@ -9,7 +9,7 @@ using UnityEngine;
 public class ArtillerySpell : BaseSpellModulInv
 {
     private const float DIST_SHOT = 40f;
-    private const float DAMAGE = 3;
+    private const float DAMAGE = 2;
     private const float rad = 6f;
 
 

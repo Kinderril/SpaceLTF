@@ -31,6 +31,7 @@ public class SpellDataBase : MonoBehaviour
     public BaseEffectAbsorber ShieldHitEffect;
     public BaseEffectAbsorber GoPlaceOk;
     public BaseEffectAbsorber GoPlaceFail;
+    public BaseEffectAbsorber BattlefieldEMIEffect;
 
     public void Init()
     {

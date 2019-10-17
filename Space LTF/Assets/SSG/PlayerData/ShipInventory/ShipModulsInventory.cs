@@ -10,7 +10,7 @@ using UnityEngine;
 public class ShipModulsInventory
 {
     public BaseModulInv[] SimpleModuls;
-    private int simpleModulsCount;
+//    private int simpleModulsCount;
     private IInventory _inventory;
     private int _id;
 
@@ -18,8 +18,12 @@ public class ShipModulsInventory
     {
         _id = Utils.GetId();
         _inventory = inventory;
-        this.simpleModulsCount = simpleModulsCount;
+//        this.simpleModulsCount = simpleModulsCount;
         SimpleModuls = new BaseModulInv[simpleModulsCount];
+        for (int i = 0; i < simpleModulsCount; i++)
+        {
+            SimpleModuls[i] = null;
+        }
     }
 
     public bool GetFreeSimpleSlot(out int index)

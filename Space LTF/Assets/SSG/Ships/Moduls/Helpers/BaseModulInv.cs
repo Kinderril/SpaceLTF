@@ -8,15 +8,19 @@ using System.Text;
 [System.Serializable]
 public class BaseModulInv : IItemInv
 {
-//    public bool SupportType;
     public SimpleModulType Type;
     public int Level = 1;
     public string Name { get; set; }
 
     public virtual bool IsSupport => false;
+#if UNITY_EDITOR
+     public int UnityEditorID = 10;
+#endif
     public BaseModulInv(SimpleModulType type,int level)
     {
-//        SupportType = supportType;
+#if UNITY_EDITOR
+        UnityEditorID = 1000 + Utils.GetId();
+#endif
         Type = type;
         Level = level;
         Name = Namings.SimpleModulName(type);

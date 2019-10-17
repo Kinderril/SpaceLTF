@@ -7,7 +7,9 @@ public abstract class BaseSupportModul :  BaseModulInv
     public BaseSupportModul(SimpleModulType type, int level)
         : base(type, level)
     {
-
+#if UNITY_EDITOR
+        UnityEditorID = 500000 + Utils.GetId();
+#endif
     }
 
     public override bool IsSupport => true;

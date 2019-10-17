@@ -29,6 +29,18 @@ public class ShipInventoryUI : DragZone
 
     public void Init(StartShipPilotData shipData, bool usable, ConnectInventory connectedInventory)
     {
+//#if UNITY_EDITOR
+//
+//        var moduls = shipData.Ship.Moduls.SimpleModuls;
+//        for (int i = 0; i < moduls.Length; i++)
+//        {
+//            var modul = moduls[i];
+//            if (modul != null && modul.CurrentInventory == null)
+//            {
+//                moduls[i] = null;
+//            }
+//        }
+//#endif
         _shipData = shipData;
         _pilot = _shipData.Pilot;
         _shipInventory = _shipData.Ship;

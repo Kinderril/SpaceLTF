@@ -160,19 +160,6 @@ public class FinalBattleData
         player.Army = army;
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,player,true,false);
     }
-
-//    private void EndPart()
-//    {
-//        if (mainQuest.Completed())
-//        {
-//
-//        }
-//        else
-//        {
-//            FirstDialogEnds();
-//        }
-//    }
-
     public MessageDialogData GetAfterBattleDialog()
     {
         var list = new List<AnswerDialogData>();
@@ -184,7 +171,6 @@ public class FinalBattleData
     private void EndGameWin()
     {
         MainController.Instance.BattleData.EndGame(true);
-
     }
 }
 

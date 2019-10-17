@@ -711,4 +711,25 @@ public static class Namings
     public static string BrokenItem = "Your item broken {0}";
     public static string StabilizaInfo = "Stability level:{0}";
     public static string MainElements = "Energy blocks";
+
+    public static string BattleEvent(BattlefildEventType? eventType)
+    {
+        switch (eventType)
+        {
+            case BattlefildEventType.asteroids:
+                return "Asteroid vortex";
+                break;
+            case BattlefildEventType.shieldsOff:
+                return "EMP surge";
+                break;
+            case BattlefildEventType.engineOff:
+                break;
+            case BattlefildEventType.turrets:
+                break;
+            case null:
+                break;
+        }
+
+        return $"Error {eventType.ToString()}";
+    }
 }

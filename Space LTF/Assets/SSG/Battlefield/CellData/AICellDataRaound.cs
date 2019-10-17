@@ -164,7 +164,7 @@ public class AICellDataRaound
                 var zz = MyExtensions.Random(-InsideRadius, InsideRadius);
                 var p = CenterZone + new Vector3(xx, 0, zz);
                 FreePoints.Add(p);
-
+                Asteroids.RemoveAll(predata => (p - predata.Position).sqrMagnitude < 4);
             }
         }
     }

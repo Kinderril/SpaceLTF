@@ -79,14 +79,19 @@ public class Asteroid : MonoBehaviour
             transform.Rotate(_rotateDir, _rotateSpeed);
     }
 
-    private void Death()
+    protected virtual void Death()
+    {
+        subDeath();
+        _aiAsteroidPredata.Death();
+    }
+
+    protected void subDeath()
     {
         Source.Play();
         EffectOnHit.gameObject.SetActive(true);
         EffectController.Instance.LeaveEffect(EffectOnHit, transform, 5f);
         EffectOnHit.Play();
         gameObject.transform.position = new Vector3(9999, 9999, 9999);
-        _aiAsteroidPredata.Death();
     }
 
     public void InitRad()

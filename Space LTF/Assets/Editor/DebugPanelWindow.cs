@@ -483,7 +483,7 @@ public class DebugPanelWindow : EditorWindow
         var selected = BattleController.Instance.InGameMainUI.SelectedShip;
         if (selected != null)
         {
-            selected.DamageData.ApplyEffect(ShipDamageType.fire,10,true);
+            selected.DamageData.ApplyEffect(ShipDamageType.fire,10);
         }
 
     }

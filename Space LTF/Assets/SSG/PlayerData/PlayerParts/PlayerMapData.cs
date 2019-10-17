@@ -57,8 +57,6 @@ public class PlayerMapData
         }
     }
 
-
-
     public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap,Action callback)
     {
         if (CanGoTo(target))

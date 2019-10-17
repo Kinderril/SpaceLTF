@@ -27,6 +27,7 @@ public class CameraController : MonoBehaviour
     public AudioSource SourceAmbient;
     public AudioListener MainListerer;
     private bool isAudioEnabled = true;
+    public CameraEffects Effects;
 
     public void InitBorders(Vector3 min, Vector3 max)
     {
@@ -138,6 +139,15 @@ public class CameraController : MonoBehaviour
     public Ray ScreenPointToRay(Vector3 pos)
     {
         return Camera.ScreenPointToRay(pos);
+    }
+
+    public void ApplyEMPEffect()
+    {
+        if (Effects != null)
+        {
+            Effects.StartBloom(1.5f);
+        }
+
     }
 }
 

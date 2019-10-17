@@ -29,6 +29,7 @@ public class TutorialElement : MonoBehaviour
     {
         if (!_isCompleted)
         {
+//            WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
             gameObject.SetActive(true);
             foreach (var element in elements)
             {
@@ -38,10 +39,11 @@ public class TutorialElement : MonoBehaviour
     } 
     public void OnClose()
     {
+//        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
+        gameObject.SetActive(false);
         if (DontShowNoreToggle.isOn)
         {
             PlayerPrefs.SetInt(Id,1);
-            gameObject.SetActive(false);
             foreach (var element in elements)
             {
                 element.gameObject.SetActive(false);
@@ -53,6 +55,6 @@ public class TutorialElement : MonoBehaviour
 
     public virtual void Dispose()
     {
-
+//        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
     }
 }

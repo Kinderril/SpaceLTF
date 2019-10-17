@@ -51,19 +51,12 @@ public class ShipDamageData : ShipData
         return false;
     }
 
-    public void ApplyEffect(ShipDamageType damageType, float time = -1, bool unresistable = false)
+    public void ApplyEffect(ShipDamageType damageType, float time = -1)
     {
         if (IsReflecOn)
         {
             return;
         }
-//        if (!unresistable)
-//        {
-//            if (_owner.ShipParameters.ShieldParameters.ShiledIsActive && damageType != ShipDamageType.shiled)
-//            {
-//                return;
-//            }
-//        }
 
         damagedDetails[damageType] = true;
         var info = Namings.Damage(damageType, time);

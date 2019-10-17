@@ -42,6 +42,7 @@ public class BattleController :Singleton<BattleController>
     public bool CanRetire => _canRetire;
     public CellController CellController { get; private set; }
     public Battlefield Battlefield;
+    private BattlefieldEventController _eventController = new BattlefieldEventController();
 
     public InGameMainUI InGameMainUI;
     public InputManager InputManager;
@@ -63,20 +64,20 @@ public class BattleController :Singleton<BattleController>
     private bool _canRetire;
 
 
-    public void LaunchGame(Player greenSide, Player redSide,bool canRetire)
+    public void LaunchGame(Player greenSide, Player redSide,bool canRetire, BattlefildEventType? eventType)
     {
         _canRetire = canRetire;
         ActiveBullet.Clear();
         ActiveBulletKillers.Clear();
-        PreLaunchGame(greenSide, redSide);
+        PreLaunchGame(greenSide, redSide, eventType);
     }
 
-    public async void PreLaunchGame(Player greenSide, Player redSide)
+    public async void PreLaunchGame(Player greenSide, Player redSide, BattlefildEventType? eventType)
     {
-        await LoadGameTask(greenSide, redSide);
+        await LoadGameTask(greenSide, redSide, eventType);
     }
 
-    private async Task LoadGameTask(Player greenSide, Player redSide)
+    private async Task LoadGameTask(Player greenSide, Player redSide, BattlefildEventType? eventType)
     {
         WindowManager.Instance.LoadingScreen.gameObject.SetActive(true);
         await Task.Yield();
@@ -87,7 +88,7 @@ public class BattleController :Singleton<BattleController>
         {
             PauseData = new PauseData();
         }
-
+        _eventController.Init(this, eventType, false);
         PauseData.Unpase(1f);
         CamerasController.Instance.StartBattle();
         CanFastEnd = false;
@@ -390,6 +391,7 @@ public class BattleController :Singleton<BattleController>
             GameObject.Destroy(activeBulletKiller.gameObject);
         }
         ActiveBulletKillers.Clear();
+        _eventController.Dispose();
         Dispose();
     }
 

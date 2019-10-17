@@ -41,6 +41,7 @@ public class MapWindow : BaseWindow
     public SideShipGlobalMapInfo SideShipGlobalMapInfoPrefabs;
     private bool _sideShipsInited = false;
     private List<SideShipGlobalMapInfo> _sideInfos = new List<SideShipGlobalMapInfo>();
+    public event Action OnStartInfoClose;
 
     public event Action<bool> OnOpenInventory;
 
@@ -162,6 +163,10 @@ public class MapWindow : BaseWindow
     public void OnStartInfoClick()
     {
         StartInfo.gameObject.SetActive(false);
+        if (OnStartInfoClose != null)
+        {
+            OnStartInfoClose();
+        }
     }
 
 

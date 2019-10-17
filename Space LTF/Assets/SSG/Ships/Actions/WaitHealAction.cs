@@ -52,7 +52,7 @@ public class WaitHealAction : BaseAction
         if (_nextStep < Time.time)
         {
             _nextStep = 1 + _nextStep;
-            _owner.ShipParameters.HealHp(_hpPercentHeal);
+            _owner.ShipParameters.HealthRegen.Start((int)_hpPercentHeal,3);
             _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
             _owner.ShipParameters.ShieldParameters.HealShield(_sdPercentHeal);
             _secRemain--;

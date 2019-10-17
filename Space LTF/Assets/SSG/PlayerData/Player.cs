@@ -71,16 +71,29 @@ public class Player
             Inventory.TryAddSimpleModul(modul,index);
         }
 
-//        for (int i = 0; i < count; i++)
-//        {
-//            if (Inventory.GetFreeSimpleSlot(out var index))
-//            {
-//                var modul = Library.CreatSimpleModul(1,MyExtensions.IsTrueEqual());
-//                Inventory.TryAddSimpleModul(modul,index);
-//            }
-//        }
+        //        for (int i = 0; i < count; i++)
+        //        {
+        //            if (Inventory.GetFreeSimpleSlot(out var index))
+        //            {
+        //                var modul = Library.CreatSimpleModul(1,MyExtensions.IsTrueEqual());
+        //                Inventory.TryAddSimpleModul(modul,index);
+        //            }
+        //        }
+
+
 #if UNITY_EDITOR
-            if (DebugParamsController.AllModuls)
+
+        foreach (var inventoryModul in Inventory.Moduls)
+        {
+            if (inventoryModul.CurrentInventory == null)
+            {
+                Debug.LogError($"Item with null inv {inventoryModul.Name}");
+            }
+        }
+#endif
+
+#if UNITY_EDITOR
+        if (DebugParamsController.AllModuls)
         {
 
             var allVals = (SimpleModulType[]) Enum.GetValues(typeof(SimpleModulType));

@@ -53,7 +53,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
 var mianAnswers = new List<AnswerDialogData>();
         if (MyExtensions.IsTrueEqual())
         {
-            mianAnswers.Add(new AnswerDialogData("Shit.", null, null));
+            mianAnswers.Add(new AnswerDialogData("Shit.", Fight, null));
             mesData = new MessageDialogData("This is not your day. They attacking you!", mianAnswers);
         }
         else

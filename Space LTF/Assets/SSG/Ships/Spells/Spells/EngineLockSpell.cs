@@ -77,7 +77,7 @@ public  class EngineLockSpell : BaseSpellModulInv
 
     private void ActionShip(ShipBase shipBase)
     {
-        shipBase.DamageData.ApplyEffect(ShipDamageType.engine, CurLockPeriod, true);//.EngineStop.Stop(2.5f);
+        shipBase.DamageData.ApplyEffect(ShipDamageType.engine, CurLockPeriod);//.EngineStop.Stop(2.5f);
     }
 
     public override Bullet GetBulletPrefab()

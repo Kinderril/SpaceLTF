@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using JetBrains.Annotations;
 
 public class NextBattleData
 {
     private bool _isFinalBattle;
     private bool _canRetire;
+    private BattlefildEventType? _battleEvent;
     private Player MainPlayer;
     private PlayerStatistics Statistics;
     public NextBattleData(Player mainPlayer, PlayerStatistics statistics)
@@ -14,16 +16,17 @@ public class NextBattleData
         Statistics = statistics;
     }
 
-    public void PreBattle(Player player1, Player player2, bool isFinalBattle = false, bool canRetire = true)
+    public void PreBattle(Player player1, Player player2, bool isFinalBattle, bool canRetire, BattlefildEventType? battleEvent )
     {
         _isFinalBattle = isFinalBattle;
         _canRetire = canRetire;
+        _battleEvent = battleEvent;
         WindowManager.Instance.OpenWindow(MainState.preBattle, new Tuple<Player, Player>(player1, player2));
     }
 
     public void LaunchBattle(Player greenSide, Player redSide)
     {
-        BattleController.Instance.LaunchGame(greenSide, redSide, _canRetire);
+        BattleController.Instance.LaunchGame(greenSide, redSide, _canRetire, _battleEvent);
     }
 
     public void EndGameWin()

@@ -14,6 +14,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
     protected ShipConfig _config;
     private bool canHire = false;
     private Player _player;
+    private BattlefildEventType? _eventType = null;
 
     public int Power
     {
@@ -95,6 +96,15 @@ public class ArmyGlobalMapCell : GlobalMapCell
         _config = config;
         _armyType = type;
         _power = power;
+        if (MyExtensions.IsTrue01(0.15f))
+        {
+            WDictionary<BattlefildEventType> chance = new WDictionary<BattlefildEventType>(new Dictionary<BattlefildEventType, float>()
+            {
+                { BattlefildEventType.asteroids,1f},
+                { BattlefildEventType.shieldsOff,1f},
+            });
+            _eventType = chance.Random();
+        }
     }
 
     public override void UpdatePowers(int visitedSectors, int startPower)
@@ -114,7 +124,15 @@ public class ArmyGlobalMapCell : GlobalMapCell
         var ans = new List<AnswerDialogData>();
         var rep = MainController.Instance.MainPlayer.ReputationData.Reputation;
         var scoutData = GetArmy().ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
-        string scoutsField = "";
+        string scoutsField;
+        if (_eventType.HasValue)
+        {
+            scoutsField = $"Sector event:{Namings.BattleEvent(_eventType.Value)}\n";
+        }
+        else
+        {
+            scoutsField = "";
+        }
         for (int i = 0; i < scoutData.Count; i++)
         {
             var info = scoutData[i];
@@ -319,12 +337,12 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     public override string Desc()
     {
-        return $"Amry:{Namings.ShipConfig(_config)} ";
+        return $"Amry:{Namings.ShipConfig(_config)} \n Zone:{Namings.BattleEvent(_eventType)}";
     }
 
     public override void Take()
     {
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy());
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(),false,true, _eventType);
     }
 
     protected override MessageDialogData GetLeavedActionInner()

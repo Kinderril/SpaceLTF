@@ -10,7 +10,7 @@ public class RepairDronesSpell : BaseSpellModulInv
 {
     public const int DRONES_COUNT = 3;
     public const float HEAL_PERCENT = 0.2f;
-    public const float MINES_DIST = 5f;
+    public const float MINES_DIST = 10f;
     private const float rad = 3.5f;
 
     private float _distToShoot;
@@ -44,7 +44,8 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        shipparameters.HealHp(shipparameters.CurHealth * HealPercent);
+        var addHealth = shipparameters.CurHealth * HealPercent;
+        shipparameters.HealthRegen.Start(addHealth,5f);
     }
     public override bool ShowLine => false;
     public override float ShowCircle => rad;

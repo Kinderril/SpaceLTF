@@ -117,7 +117,13 @@ public class DragableItemSlot : MonoBehaviour
 #if UNITY_EDITOR
         if (item != null && item.CurrentInventory == null)
         {
-            Debug.LogError("Item with null inventory " + item.WideInfo() + "   " + item + "   " + item.ItemType.ToString());
+            var modul = item as BaseModulInv;
+            string modulNUll = "";
+            if (modul != null)
+            {
+                modulNUll = $"UnityEditorID:{modul.UnityEditorID}";
+            }
+            Debug.LogError("Item with null inventory " + item.WideInfo() + "  2:" + item + $"   3:{item.ItemType.ToString()}   4:{modulNUll}   " );
         }
         if (_inventory == null)
         {

@@ -40,7 +40,7 @@ public class AutoRepairModul : BaseModul
             if (IsReady())
             {
                 var hpToHeal = _owner.ShipParameters.MaxHealth * 0.5f;
-                _owner.ShipParameters.HealHp(hpToHeal);
+                _owner.ShipParameters.HealthRegen.Start(hpToHeal,4f);
                 UpdateTime();
             }
         }

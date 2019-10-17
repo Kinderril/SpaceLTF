@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BattleMapTutorial : TutorialElement
+public class ShopMapTutorial : TutorialElement
 {
     public override void Init()
-    {                                                                                           
+    {        
         if (!_isCompleted)
             WindowManager.Instance.OnWindowSetted += OnWindowSetted;
         base.Init();
@@ -12,7 +12,7 @@ public class BattleMapTutorial : TutorialElement
 
     private void OnWindowSetted(BaseWindow obj)
     {
-        var imGameWindow = obj as InGameMainUI;
+        var imGameWindow = obj as WindowShop;
         if (imGameWindow != null)
         {
             Open();

@@ -5,7 +5,7 @@ using System.Text;
 using JetBrains.Annotations;
 using UnityEngine;
 
-public  class AttackAction : AbstractAttackAction
+public class AttackAction : AbstractAttackAction
 {
     protected bool _isShootEnd = false;
     protected bool _isDogFight = false;
@@ -15,7 +15,8 @@ public  class AttackAction : AbstractAttackAction
     private float _minAttackDistToStart;
     private float _minAttackDistToEnd;
 
-    public AttackAction([NotNull] ShipBase owner, [NotNull] ShipPersonalInfo target,ActionType actionType = ActionType.attack)
+    public AttackAction([NotNull] ShipBase owner, [NotNull] ShipPersonalInfo target,
+        ActionType actionType = ActionType.attack)
         : base(owner, actionType)
     {
         _isDogFight = false;
@@ -39,7 +40,7 @@ public  class AttackAction : AbstractAttackAction
     {
         _isShootEnd = true;
     }
-    
+
     public override void ManualUpdate()
     {
         MoveToTarget();
@@ -59,7 +60,7 @@ public  class AttackAction : AbstractAttackAction
             }
             else
             {
-               var dir = Target.ShipLink.PredictionPosAim() - _owner.Position;
+                var dir = Target.ShipLink.PredictionPosAim() - _owner.Position;
                 _owner.MoveToDirection(dir);
             }
         }
@@ -67,8 +68,8 @@ public  class AttackAction : AbstractAttackAction
         {
             if (Target.Dist < _minAttackDistToStart && Target.ShipLink.CurSpeed < 0.01f)
             {
-
             }
+
             ShallStartDogFight();
             //            bool tooClose = false;
             if (Target.ShipLink.CurSpeed <= 0.1f)
@@ -98,7 +99,7 @@ public  class AttackAction : AbstractAttackAction
                 _owner.MaxTurnRadius);
             if (pp1 != null)
             {
-                 _owner.MoveByWay(pp1.Right);
+                _owner.MoveByWay(pp1.Right);
             }
             else
             {
@@ -165,6 +166,7 @@ public  class AttackAction : AbstractAttackAction
                 }
             }
         }
+
         return false;
     }
 
@@ -175,7 +177,6 @@ public  class AttackAction : AbstractAttackAction
 
     public override void DrawGizmos()
     {
-
         if (Target != null)
         {
 //            Gizmos.color = Color.blue;
@@ -189,4 +190,3 @@ public  class AttackAction : AbstractAttackAction
         }
     }
 }
-
