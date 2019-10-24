@@ -9,10 +9,12 @@ public class TimeScaleBattleUI : MonoBehaviour
     public Button SpeedButton1;
     public Button SpeedButton2;
     private BattleController _battleController;
+    public GameObject PauseObject;
     public void Init(BattleController battleController)
     {
         _battleController = battleController;
         _battleController.PauseData.OnPause += OnPause;
+        PauseObject.gameObject.SetActive(false);
         OnClick1();
     }
 
@@ -20,7 +22,12 @@ public class TimeScaleBattleUI : MonoBehaviour
     {
         if (Time.timeScale == 0f)
         {
+            PauseObject.gameObject.SetActive(true);
             SetButtonPause();
+        }
+        else
+        {
+            PauseObject.gameObject.SetActive(false);
         }
 
         if (Time.timeScale == 0.5f)

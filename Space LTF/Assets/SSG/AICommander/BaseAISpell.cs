@@ -49,13 +49,15 @@ public abstract class BaseAISpell<T> : BaseAISpell  where T : BaseSpellModulInv
     protected Commander _commander;
     protected T _spell;
     protected float ShootDistSqrt;
+    private TeamIndex oIndex;
 
     protected BaseAISpell(T spell,Commander commander)
     {
-        Debug.Log("AI spell controller init:" + spell.GetType());
         _spell = spell;
         _commander = commander;
+        oIndex = BattleController.OppositeIndex(_commander.TeamIndex);
         ShootDistSqrt = spell.AimRadius * spell.AimRadius;
+        Debug.Log($"AI spell controller init: {spell.GetType()}  spell.AimRadius:{spell.AimRadius}" );
 
     }
     protected override void PeriodInnerUpdate()
@@ -72,9 +74,7 @@ public abstract class BaseAISpell<T> : BaseAISpell  where T : BaseSpellModulInv
 
     private bool IsEnemyClose(out Vector3 trg)
     {
-        var oIndex = BattleController.OppositeIndex(_commander.TeamIndex);
-        float sDist;
-        var ship = BattleController.Instance.ClosestShipToPos(_commander.MainShip.Position, oIndex, out sDist);
+        var ship = BattleController.Instance.ClosestShipToPos(_commander.MainShip.Position, oIndex, out var sDist);
         if (sDist < ShootDistSqrt)
         {
             trg = ship.Position;

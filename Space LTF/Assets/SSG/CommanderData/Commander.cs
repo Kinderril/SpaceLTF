@@ -16,6 +16,7 @@ public enum BattleRewardType
 public class Commander
 {
     public Dictionary<int,ShipBase> Ships = new Dictionary<int, ShipBase>();
+    public List<ShipInventory> _destroyedShips = new List<ShipInventory>();
     private List<ShipBase> _shipsToRemove = new List<ShipBase>();
     private Dictionary<int, CommanderShipEnemy> _enemies = new Dictionary<int, CommanderShipEnemy>();
     public ShipBase MainShip;
@@ -236,6 +237,7 @@ public class Commander
                 _enemies.Remove(shipBase.Id);
                 shipBase.Dispose();
                 Ships.Remove(shipBase.Id);
+                _destroyedShips.Add(shipBase.ShipInventory);
                 BattleStats.ShipDestoyed(shipBase.ShipParameters.StartParams.ShipType, shipBase.ShipParameters.StartParams.ShipConfig);
             }
             _shipsToRemove.Clear();
@@ -319,30 +321,33 @@ public class Commander
     private void ApplyBattleDamage()
     {
 
+        var baseRepairPercent = _player.Parameters.RepairPercentPerStep();
+        float percent = 0f;
         foreach (var shipBase in Ships)
         {
-            var baseRepairPercent = _player.Parameters.RepairPercentPerStep();
             var isDead = shipBase.Value.IsDead;
-            float percent;
-            if (isDead)
-            {
-
-                percent = baseRepairPercent;
-                shipBase.Value.ShipInventory.SetCriticalyDamage();
-            }
-            else
+            if (!isDead)
             {
                 percent = shipBase.Value.ShipParameters.CurHealth / shipBase.Value.ShipParameters.MaxHealth;
                 if (percent < baseRepairPercent)
                 {
                     percent = baseRepairPercent;
                 }
-            }      
-            Debug.Log($"End game health remain percent:{percent}   baseRepairPercent:{baseRepairPercent}   isDead:{isDead}");
-            shipBase.Value.ShipInventory.SetRepairPercent(percent);
+                Debug.Log($"End game health remain percent:{percent}   baseRepairPercent:{baseRepairPercent}   isDead:{isDead}");
+                shipBase.Value.ShipInventory.SetRepairPercent(percent);
+            }
+            else
+            {
+                Debug.LogError($"IMPOSIBLE! this ship is dead");
+            }    
         }
-        //TODO ADD DEATH SHIP AFFECT
-
+        foreach (var destroyedShip in _destroyedShips)
+        {
+            percent = baseRepairPercent;
+            destroyedShip.SetRepairPercent(percent);
+            destroyedShip.SetCriticalyDamage();
+        }
+        _destroyedShips.Clear();
     }
 
     public bool TryRecharge(ShipBase ship)
@@ -437,6 +442,29 @@ public class Commander
             BattleController.Instance.RunAway();
         }
 
+    }
+
+    public ShipBase GetClosestShip(Vector3 targetPosition, bool withBase)
+    {
+        ShipBase closets = null;
+        float mDist = Single.MaxValue;
+        foreach (var shipBase in Ships)
+        {
+            if (!withBase && shipBase.Value.ShipParameters.StartParams.ShipType == ShipType.Base)
+            {
+                continue;
+            }
+
+            var trg = targetPosition - shipBase.Value.Position;
+            var sDist = trg.sqrMagnitude;
+            if (sDist < mDist)
+            {
+                mDist = sDist;
+                closets = shipBase.Value;
+            }
+        }
+
+        return closets;
     }
 }
 

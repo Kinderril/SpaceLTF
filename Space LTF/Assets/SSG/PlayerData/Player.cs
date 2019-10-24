@@ -54,22 +54,22 @@ public class Player
 
     private void AddModuls(int count)
     {
-        int index;
-        if (Inventory.GetFreeSimpleSlot(out index))
-        {
-            var modul = Library.CreatSimpleModul(SimpleModulType.fireMines,1);
-            Inventory.TryAddSimpleModul(modul,index);
-        }
-        if (Inventory.GetFreeSimpleSlot(out index))
-        {
-            var modul = Library.CreatSimpleModul(SimpleModulType.frontShield,1);
-            Inventory.TryAddSimpleModul(modul,index);
-        } 
-        if (Inventory.GetFreeSimpleSlot(out index))
-        {
-            var modul = Library.CreatSimpleModul(SimpleModulType.armor,1);
-            Inventory.TryAddSimpleModul(modul,index);
-        }
+//        int index;
+//        if (Inventory.GetFreeSimpleSlot(out index))
+//        {
+//            var modul = Library.CreatSimpleModul(SimpleModulType.fireMines,1);
+//            Inventory.TryAddSimpleModul(modul,index);
+//        }
+//        if (Inventory.GetFreeSimpleSlot(out index))
+//        {
+//            var modul = Library.CreatSimpleModul(SimpleModulType.frontShield,1);
+//            Inventory.TryAddSimpleModul(modul,index);
+//        } 
+//        if (Inventory.GetFreeSimpleSlot(out index))
+//        {
+//            var modul = Library.CreatSimpleModul(SimpleModulType.armor,1);
+//            Inventory.TryAddSimpleModul(modul,index);
+//        }
 
         //        for (int i = 0; i < count; i++)
         //        {

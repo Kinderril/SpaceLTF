@@ -23,6 +23,9 @@ public class FlyingAsteroid : Asteroid
         _startPoint = center;
     }
 
+    protected override float BodyDamage => 2f;
+    protected override float ShieldDamage => 2f;
+
     void Update()
     {
         RotateUpdate();

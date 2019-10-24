@@ -291,6 +291,13 @@ public abstract class Bullet : MovingObject
 
     private void InitHoming(IWeapon weapon, Vector3 dir, Vector3 position, ShipBase target, float bulletSpeed, float turnSpeed, float distanceShoot)
     {
+#if UNITY_EDITOR
+        if (target == null)
+        {
+            Debug.LogError("Homing bullet without target");
+            return;
+        }
+#endif
         _curSpeed = weapon.CurOwnerSpeed/2f;
         _startTime = Time.time;
         _turnSpeed = turnSpeed;
@@ -349,6 +356,11 @@ public abstract class Bullet : MovingObject
                 {
                     case BulletAffectType.repair:
                         if (ship.TeamIndex != Weapon.TeamIndex)
+                        {
+                            return;
+                        }
+
+                        if (ship.ShipBase == Weapon.Owner)
                         {
                             return;
                         }

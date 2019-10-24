@@ -10,18 +10,18 @@ public class RepairDronesSpell : BaseSpellModulInv
 {
     public const int DRONES_COUNT = 3;
     public const float HEAL_PERCENT = 0.2f;
-    public const float MINES_DIST = 10f;
+    public const float MINES_DIST = 7f;
     private const float rad = 3.5f;
 
     private float _distToShoot;
 
-    private int DronesCount => DRONES_COUNT + Level;
+    private int DronesCount => 1;//DRONES_COUNT + Level/2;
     private float HealPercent => HEAL_PERCENT + Level/50f;
 
     private float dist;//Костыльный параметр
     public RepairDronesSpell(int costCount, int costTime)
         : base(SpellType.repairDrones, costCount, costTime,
-             new BulleStartParameters(9.7f, 36f, MINES_DIST, MINES_DIST), false)
+             new BulleStartParameters(15f, 46f, MINES_DIST, MINES_DIST), false)
     {
 
     }
@@ -39,13 +39,26 @@ public class RepairDronesSpell : BaseSpellModulInv
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var dir = (target.Position - weapon.CurPosition);
-        Bullet.Create(origin, weapon, dir, weapon.CurPosition, null,  BulleStartParameters);
+        Commander commnder;
+        if (weapon.TeamIndex == TeamIndex.green)
+        {
+            commnder = BattleController.Instance.GreenCommander;
+        }
+        else
+        {
+            commnder = BattleController.Instance.RedCommander;
+        }
+
+        ShipBase closestShip = commnder.GetClosestShip(target.Position,false);
+
+
+        Bullet.Create(origin, weapon, dir, weapon.CurPosition, closestShip,  BulleStartParameters);
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         var addHealth = shipparameters.CurHealth * HealPercent;
-        shipparameters.HealthRegen.Start(addHealth,5f);
+        shipparameters.HealthRegen.Start(addHealth,4f);
     }
     public override bool ShowLine => false;
     public override float ShowCircle => rad;

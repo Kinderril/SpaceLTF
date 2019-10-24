@@ -17,6 +17,8 @@ public class Asteroid : MonoBehaviour
 
     private float _rad;
     public Vector3 Position { get; set; }
+    protected virtual float BodyDamage => 3f; 
+    protected virtual float ShieldDamage => 1f; 
 
     public float Rad
     {
@@ -53,7 +55,7 @@ public class Asteroid : MonoBehaviour
 
             if (ship != null)
             {
-                ship.ShipBase.ShipParameters.Damage(1,3,null,null);
+                ship.ShipBase.ShipParameters.Damage(ShieldDamage, BodyDamage, null,null);
                 Death(true);
             }
         }
@@ -67,6 +69,7 @@ public class Asteroid : MonoBehaviour
             }
         }
     }
+
 
     void Update()
     {

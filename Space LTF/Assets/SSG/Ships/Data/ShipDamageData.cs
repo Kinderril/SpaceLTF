@@ -55,6 +55,7 @@ public class ShipDamageData : ShipData
     {
         if (IsReflecOn)
         {
+            FlyNumberWithDependence.Create(_owner.transform, Namings.Reflected, Color.red, FlyNumerDirection.right);
             return;
         }
 

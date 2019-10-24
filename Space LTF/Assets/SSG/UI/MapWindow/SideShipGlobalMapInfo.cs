@@ -110,6 +110,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         foreach (var criticalDamage in CriticalDamages)
         {
             var isActive = index < _ship.Ship.CriticalDamages;
+            index++;
             criticalDamage.gameObject.SetActive(isActive);
         }
     }

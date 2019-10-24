@@ -732,4 +732,6 @@ public static class Namings
 
         return $"Error {eventType.ToString()}";
     }
+
+    public static string Reflected = "Effect reflected";
 }

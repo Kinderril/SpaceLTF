@@ -85,9 +85,9 @@ public static class Library
 
     public const int COINS_TO_POWER_WEAPON_SHIP_SHIELD = 1;
     public const int COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY = 40;
-    public const int COINS_TO_CHARGE_SHIP_SHIELD = 2;
+    public const int COINS_TO_CHARGE_SHIP_SHIELD = 1;
     public const int COINS_TO_CHARGE_SHIP_SHIELD_DELAY = 20;
-    public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.3f;
+    public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.25f;
 
     public const int PriorityTargetCostTime = 120;
     public const int PriorityTargetCostCount = 1;
