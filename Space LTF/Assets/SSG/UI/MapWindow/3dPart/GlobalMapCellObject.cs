@@ -18,6 +18,8 @@ public class GlobalMapCellObject : MonoBehaviour
     public GameObject Destroyed;
     public GameObject ExitObject;
     public GameObject StartObject;
+    public GameObject AsteroidsEvent;
+    public GameObject EMPSurgeEvent;
     public Renderer ActiveRenderer;
 
     private GameObject ObjectPainted;
@@ -46,6 +48,8 @@ public class GlobalMapCellObject : MonoBehaviour
         Destroyed.gameObject.SetActive(false);
         ExitObject.gameObject.SetActive(false);
         StartObject.gameObject.SetActive(false);
+        AsteroidsEvent.gameObject.SetActive(false);
+        EMPSurgeEvent.gameObject.SetActive(false);
     }
 
     public void Init(GlobalMapCell cell, float cellSize)
@@ -70,7 +74,6 @@ public class GlobalMapCellObject : MonoBehaviour
         {
             OnDestoyedCell(cell);
         }
-        UpdateConnetedGates();
     }
 
 //    void OnEnable()
@@ -87,6 +90,7 @@ public class GlobalMapCellObject : MonoBehaviour
         {
             SetColor(CompleteColor);
         }
+        TryOpenBattleEvent();
     }
 
     private void SetColor(Color color)
@@ -103,17 +107,35 @@ public class GlobalMapCellObject : MonoBehaviour
     {
         Unknown.gameObject.SetActive(false);
         ObjectPainted.gameObject.SetActive(true);
+        TryOpenBattleEvent();
+    }
+
+    private void TryOpenBattleEvent()
+    {
+        if (Cell is ArmyGlobalMapCell army)
+        {
+            if (army.EventType.HasValue)
+            {
+                switch (army.EventType)
+                {
+                    case BattlefildEventType.asteroids:
+                        AsteroidsEvent.gameObject.SetActive(true);
+                        break;
+                    case BattlefildEventType.shieldsOff:
+                        EMPSurgeEvent.gameObject.SetActive(true);
+                        break;
+                    case BattlefildEventType.engineOff:
+                        break;
+                    case BattlefildEventType.turrets:
+                        break;
+                }
+            }
+        }
     }
 
     private void OnUnconnect(GlobalMapCell obj)
     {
-        UpdateConnetedGates();
-    }
 
-    private void UpdateConnetedGates()
-    {
-        var shallDraw = Cell.ConnectedGates > 0;
-//        CanBeTargetObject.SetActive(shallDraw);
     }
 
     private void InitMainObject()
@@ -180,16 +202,9 @@ public class GlobalMapCellObject : MonoBehaviour
 
     private void OnDestoyedCell(GlobalMapCell cell)
     {
-//        Container.gameObject.SetActive(!Cell.IsDestroyed);
         Destroyed.gameObject.SetActive(Cell.IsDestroyed);
         Unknown.gameObject.SetActive(false);
         ObjectPainted.gameObject.SetActive(false);
-//        Destroyed.gameObject.SetActive(true);
-//        _mainGameObject.SetColor(Color.black);
-//        foreach (var allPartile in allPartiles)
-//        {
-//            allPartile.gameObject.SetActive(false);
-//        }
     }
 
     public void SetIAmHere(bool iAmHere)
@@ -223,16 +238,7 @@ public class GlobalMapCellObject : MonoBehaviour
 //            ma.startColor = new ParticleSystem.MinMaxGradient(SelectColor);
 //        }
     }
-
-//    private void SetColorToPS(Color color)
-//    {
-//        foreach (var systemsColor in _systemsColors)
-//        {
-//            ParticleSystem.MainModule ma = systemsColor.Key.main;
-//            ma.startColor = new ParticleSystem.MinMaxGradient(color);
-//        }
-//    }
-
+    
     public void UnSelected()
     {
         if (!_IamHere)

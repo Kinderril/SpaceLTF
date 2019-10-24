@@ -89,7 +89,7 @@ public class ShipParameters  : IShipAffectableParams
 //        CurShiled = MaxShiled;
 //        ShieldRegenPerSec = startParams.ShiledRegen;
         _deathCallback = dealthCallback;
-        HealthRegen = new HealthRegenParameter(shipOwner);
+        HealthRegen = new HealthRegenParameter(this);
         ShieldParameters = new ShieldParameters(shipOwner,shieldCollider, startParams.ShiledRegen, maxShiled);
     }
 

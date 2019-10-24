@@ -35,7 +35,7 @@ public class FlyingAsteroid : Asteroid
         var spendSDist = (transform.position - _startPoint).sqrMagnitude;
         if (spendSDist > _sDistToDestroy)
         {
-            Death();
+            Death(false);
         }
     }
 
@@ -44,8 +44,10 @@ public class FlyingAsteroid : Asteroid
         transform.position = transform.position + _dir * Time.time;
     }
 
-    protected override void Death()
+    protected override void Death(bool withSound)
     {
+        if (withSound)
+            PlaySound();
         _callbackDeath(this);
         subDeath();
     }

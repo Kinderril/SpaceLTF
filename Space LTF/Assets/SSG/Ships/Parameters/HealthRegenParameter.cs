@@ -9,9 +9,9 @@ public class HealthRegenParameter
     private float _nextHealTime;
     public float _remainToHeal;
     private ShipParameters _ship;
-    public HealthRegenParameter(ShipBase ship)
+    public HealthRegenParameter(ShipParameters ship)
     {
-        _ship = ship.ShipParameters;
+        _ship = ship;
     }
 
     public void Start(float toHeal, float perTick)

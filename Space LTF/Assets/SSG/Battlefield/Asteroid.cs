@@ -54,7 +54,7 @@ public class Asteroid : MonoBehaviour
             if (ship != null)
             {
                 ship.ShipBase.ShipParameters.Damage(1,3,null,null);
-                Death();
+                Death(true);
             }
         }
         if (other.CompareTag(TagController.BULLET_TAG))
@@ -63,7 +63,7 @@ public class Asteroid : MonoBehaviour
             if (bullet != null)
             {
                 bullet.Death();
-                Death();
+                Death(true);
             }
         }
     }
@@ -79,19 +79,30 @@ public class Asteroid : MonoBehaviour
             transform.Rotate(_rotateDir, _rotateSpeed);
     }
 
-    protected virtual void Death()
+    protected virtual void Death(bool withSound)
     {
+        if (withSound)
+            PlaySound();
         subDeath();
         _aiAsteroidPredata.Death();
     }
 
     protected void subDeath()
     {
-        Source.Play();
         EffectOnHit.gameObject.SetActive(true);
         EffectController.Instance.LeaveEffect(EffectOnHit, transform, 5f);
         EffectOnHit.Play();
         gameObject.transform.position = new Vector3(9999, 9999, 9999);
+    }
+
+    protected void PlaySound()
+    {
+
+        if (!Source.enabled)
+        {
+            Source.enabled = true;
+        }
+        Source.Play();
     }
 
     public void InitRad()

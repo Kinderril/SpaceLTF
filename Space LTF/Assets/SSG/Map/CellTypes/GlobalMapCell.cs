@@ -11,7 +11,6 @@ using UnityEngine;
 public abstract class GlobalMapCell
 {
     protected string name;
-    public bool LeaveComplete = false;
     public bool Completed { get; private set; }
     public bool InfoOpen = false;
     public bool IsDestroyed = false;
@@ -67,11 +66,6 @@ public abstract class GlobalMapCell
         _ways.Add(extraWay);
     }
 
-    public MessageDialogData GetLeavedAction()
-    {
-        LeaveComplete = true;
-        return GetLeavedActionInner();
-    }
     public void SetConnectedCell(int coreIndex)
     {
         ConnectedGates = coreIndex;

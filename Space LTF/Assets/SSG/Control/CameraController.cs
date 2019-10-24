@@ -141,11 +141,11 @@ public class CameraController : MonoBehaviour
         return Camera.ScreenPointToRay(pos);
     }
 
-    public void ApplyEMPEffect()
+    public void ApplyEMPEffect(float period)
     {
         if (Effects != null)
         {
-            Effects.StartBloom(1.5f);
+            Effects.StartBloom(period);
         }
 
     }

@@ -5,8 +5,10 @@ using System.Collections.Generic;
 public class ShieldOffEvent : BattleFieldEvent
 {
     private TimerManager.ITimer _battleTimer ;
+    private TimerManager.ITimer _affectTimer ;
     private const float MIN_OFF_TIME = 3f;
     private const float MAX_OFF_TIME = 7f;
+    private const float VisualEffectPeriod = 1.5f;
     private float _offTime;
     public override BattlefildEventType Type => BattlefildEventType.shieldsOff;
     
@@ -25,15 +27,17 @@ public class ShieldOffEvent : BattleFieldEvent
 
     private void OnTimer()
     {
-//        var center = _battle.CellController.Data.CenterZone;
-//        var rad = _battle.CellController.Data.Radius;
-//        var xx = MyExtensions.Random(-rad, rad);
-//        var zz = MyExtensions.Random(-rad, rad);
-//        var pos = center + new Vector3(xx, 0, zz);
+        CamerasController.Instance.GameCamera.ApplyEMPEffect(VisualEffectPeriod);
+        if (_affectTimer != null && _affectTimer.IsActive)
+        {
+            _affectTimer.Stop();
+        }
+        _affectTimer = MainController.Instance.BattleTimerManager.MakeTimer(VisualEffectPeriod / 2f);
+        _affectTimer.OnTimer += OnTimerAffect;
+    }
 
-//        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.BattlefieldEMIEffect, pos, 5f);
-        CamerasController.Instance.GameCamera.ApplyEMPEffect();
-
+    private void OnTimerAffect()
+    {
         _offTime = MyExtensions.Random(MIN_OFF_TIME, MAX_OFF_TIME);
         DeactivateAllByCommander(_battle.GreenCommander);
         DeactivateAllByCommander(_battle.RedCommander);

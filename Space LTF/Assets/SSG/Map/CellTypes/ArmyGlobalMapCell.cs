@@ -16,6 +16,8 @@ public class ArmyGlobalMapCell : GlobalMapCell
     private Player _player;
     private BattlefildEventType? _eventType = null;
 
+    public BattlefildEventType? EventType => _eventType;
+
     public int Power
     {
         get { return _power; }
@@ -96,7 +98,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         _config = config;
         _armyType = type;
         _power = power;
-        if (MyExtensions.IsTrue01(0.15f))
+        if (MyExtensions.IsTrue01(0.35f))
         {
             WDictionary<BattlefildEventType> chance = new WDictionary<BattlefildEventType>(new Dictionary<BattlefildEventType, float>()
             {
