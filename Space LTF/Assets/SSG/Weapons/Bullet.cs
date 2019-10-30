@@ -391,7 +391,7 @@ public abstract class Bullet : MovingObject
 
     public virtual void Death()
     {
-        float delay = 3.8f;
+        float delay = 1.7f;
         if (TrailEffect != null)
         {
             TrailEffect.StopEmmision();

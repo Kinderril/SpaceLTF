@@ -93,7 +93,7 @@ public class Asteroid : MonoBehaviour
     protected void subDeath()
     {
         EffectOnHit.gameObject.SetActive(true);
-        EffectController.Instance.LeaveEffect(EffectOnHit, transform, 5f);
+        EffectController.Instance.LeaveEffect(EffectOnHit, transform, 1.5f);
         EffectOnHit.Play();
         gameObject.transform.position = new Vector3(9999, 9999, 9999);
     }

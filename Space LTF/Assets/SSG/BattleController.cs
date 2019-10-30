@@ -59,6 +59,7 @@ public class BattleController :Singleton<BattleController>
     public Transform BulletContainer;
     public Transform OneBattleContainer;
     public Transform AsteroidContainer;
+    public BackgroundParticles GroundParticles;
 
     public PauseData PauseData = new PauseData();
     private EndBattleType LastWinner;
@@ -127,7 +128,7 @@ public class BattleController :Singleton<BattleController>
         RedCommander = new Commander(TeamIndex.red, Battlefield, redSide, this);
 
         var d = CellController.Data;
-
+        GroundParticles.Init(CellController.Data.CenterZone,10);
         var posTeam1 = d.StartPosition1;
         var posTeam2 = d.StartPosition2;
 
@@ -441,6 +442,7 @@ public class BattleController :Singleton<BattleController>
         OnShipAdd = null;
         GreenCommander.Dispose();
         RedCommander.Dispose();
+        GroundParticles.Disable();
     }
 
     public static TeamIndex OppositeIndex(TeamIndex teamIndex)
