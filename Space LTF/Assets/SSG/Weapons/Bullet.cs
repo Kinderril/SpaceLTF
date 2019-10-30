@@ -33,7 +33,7 @@ public class BulleStartParameters
     public BulleStartParameters(
         float bulletSpeed,
         float turnSpeet,
-        float distanceShoot    ,
+        float distanceShoot,
         float radiusShoot
     )
     {

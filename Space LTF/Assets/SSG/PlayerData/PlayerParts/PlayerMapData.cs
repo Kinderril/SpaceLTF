@@ -55,6 +55,8 @@ public class PlayerMapData
         {
             globalMapCell.OpenInfo();
         }
+
+        ScoutAllAround(CurrentCell);
     }
 
     public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap,Action callback)
@@ -70,6 +72,7 @@ public class PlayerMapData
                     GoNextAfterDialog(target);
                     target.VisitCell(this);
                     target.ComeTo();
+                    ScoutAllAround(target);
                 });
             }
             else
@@ -81,6 +84,17 @@ public class PlayerMapData
         }
 
         return false;
+    }
+
+    private void ScoutAllAround(GlobalMapCell target)
+    {
+        foreach (var cell in target.GetCurrentPosibleWays())
+        {
+            if (!cell.IsScouted && cell is ArmyGlobalMapCell)
+            {
+                cell.Scouted();
+            }
+        }
     }
 
     private void GoNextAfterDialog(GlobalMapCell target)

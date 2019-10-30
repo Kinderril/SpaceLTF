@@ -7,7 +7,7 @@ public class AsteroidEvent : BattleFieldEvent
     public List<FlyingAsteroid> _asteroids = new List<FlyingAsteroid>();
     private List<TimerManager.ITimer> _battleTimers = new List<TimerManager.ITimer>();
     List<FlyingAsteroid> _allAsteroidsPrefabs;
-    private const int maximumAsteroids = 50;
+    private const int maximumAsteroids = 30;
     private const int timers = 5;
     private Vector3 _baseDir;
 
@@ -78,6 +78,7 @@ public class AsteroidEvent : BattleFieldEvent
             var asteroid = DataBaseController.GetItem(rnd);
             asteroid.Init(callbackDeath, startPoint, -dir, rad * coef);
             _asteroids.Add(asteroid);
+            asteroid.transform.SetParent(_battle.AsteroidContainer,true);
         }
     }
 
@@ -87,6 +88,10 @@ public class AsteroidEvent : BattleFieldEvent
     {
 
         _asteroids.Remove(obj);
+        if (obj.gameObject != null)
+        {
+            GameObject.Destroy(obj.gameObject);
+        }
 
     }
 
@@ -104,6 +109,7 @@ public class AsteroidEvent : BattleFieldEvent
         {
             GameObject.Destroy(flyingAsteroid);
         }
+        _battle.AsteroidContainer.ClearTransformImmediate();
         _asteroids.Clear();
         _battleTimers.Clear();
     }

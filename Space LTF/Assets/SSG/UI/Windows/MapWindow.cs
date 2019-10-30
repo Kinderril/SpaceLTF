@@ -466,6 +466,8 @@ public class MapWindow : BaseWindow
 
     public void ClearAll()
     {
+        _sideShipsInited = false;
+//        _stablePosCached = true;
         NavigationList.ClearAll();
         LayoutSideShips.ClearTransform();
         _sideInfos.Clear();

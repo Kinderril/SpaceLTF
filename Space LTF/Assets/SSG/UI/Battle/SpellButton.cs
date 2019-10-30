@@ -76,7 +76,8 @@ public class SpellButton : UIElementWithTooltip
 
     protected override string TextToTooltip()
     {
-        return String.Format(_spell.Name);
+        var spellName = String.Format(_spell.Name);
+        return $"{spellName}\n{_spell.Desc}";
     }
 }
 

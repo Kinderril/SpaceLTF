@@ -58,6 +58,7 @@ public class BattleController :Singleton<BattleController>
     public List<BulletKiller> ActiveBulletKillers = new List<BulletKiller>();
     public Transform BulletContainer;
     public Transform OneBattleContainer;
+    public Transform AsteroidContainer;
 
     public PauseData PauseData = new PauseData();
     private EndBattleType LastWinner;
@@ -418,6 +419,7 @@ public class BattleController :Singleton<BattleController>
         State = BattleState.end;
         MainController.Instance.BattleTimerManager.StopAll();
         CamerasController.Instance.EndGame();
+        _eventController.Dispose();
         switch (LastWinner)
         {
             case EndBattleType.win:

@@ -11,6 +11,15 @@ public class SpellZoneVisualLine : MonoBehaviour
     public RoadMeshCreator ParticleAttractor;
     private Vector3 _from;
     private Vector3 _to;
+    public GameObject EndObject;
+    public GameObject StartObject;
+    private bool _haveEndObj;
+    private bool _haveStartObj;
+    void Awake()
+    {
+        _haveEndObj = EndObject != null;
+        _haveStartObj = StartObject != null;
+    }
 
     public void SetDirection(Vector3 from, Vector3 to,float maxDist)
     {
@@ -29,6 +38,14 @@ public class SpellZoneVisualLine : MonoBehaviour
         list.Add((_from + _to) / 2f);
         list.Add(_to);
         ParticleAttractor.CreateByPoints(list);
+        if (_haveEndObj)
+        {
+            EndObject.transform.position = _to;
+        }
+        if (_haveStartObj)
+        {
+            StartObject.transform.position = _from;
+        }
     }
 
     void OnDrawGizmosSelected()

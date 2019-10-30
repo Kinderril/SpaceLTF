@@ -19,7 +19,7 @@ public class ShipInventoryUI : DragZone
     public Transform ModulsLayout;
     private IPilotParameters _pilot;
     private ShipInventory _shipInventory;
-    public GameObject[] CriticalDamages;
+    public CriticalDamageObject[] CriticalDamages;
     public SliderWithTextMeshPro HealthSlider;
 
     public TextMeshProUGUI RepairCost;
@@ -107,7 +107,7 @@ public class ShipInventoryUI : DragZone
         for (int i = 0; i < Library.CRITICAL_DAMAGES_TO_DEATH; i++)
         {
             var haveDmg = i < _shipInventory.CriticalDamages;
-            CriticalDamages[i].SetActive(haveDmg);
+            CriticalDamages[i].gameObject.SetActive(haveDmg);
         }
     }
     private void OnLevelUp(IPilotParameters obj)

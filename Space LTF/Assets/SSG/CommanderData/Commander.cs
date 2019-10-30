@@ -345,7 +345,7 @@ public class Commander
         {
             percent = baseRepairPercent;
             destroyedShip.SetRepairPercent(percent);
-            destroyedShip.SetCriticalyDamage();
+            destroyedShip.AddCriticalyDamage();
         }
         _destroyedShips.Clear();
     }

@@ -17,7 +17,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
     public TextMeshProUGUI RepairCostField;
     public TextMeshProUGUI LevelField;
     public Image RankImage;
-    public GameObject[] CriticalDamages;
+    public CriticalDamageObject[] CriticalDamages;
     private MapWindow _window;
 
 
@@ -83,7 +83,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         for (int i = 0; i < Library.CRITICAL_DAMAGES_TO_DEATH; i++)
         {
             var haveDmg = i < _ship.Ship.CriticalDamages;
-            CriticalDamages[i].SetActive(haveDmg);
+            CriticalDamages[i].gameObject.SetActive(haveDmg);
         }
     }
 

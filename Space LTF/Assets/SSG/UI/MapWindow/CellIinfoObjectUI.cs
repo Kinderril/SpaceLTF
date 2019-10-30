@@ -63,6 +63,7 @@ public class CellIinfoObjectUI : MonoBehaviour
             
             if (!cell.IsDestroyed)
             {
+//                Debug.LogError($"cell.IsScouted.id:{cell.Id}  scouted:{cell.IsScouted}  ");
                 var coreCell = cell is StartGlobalCell || cell is EndGlobalCell;
                 var isArmy = cell as ArmyGlobalMapCell;
                 var isEvent = cell is EventGlobalMapCell;
@@ -93,6 +94,11 @@ public class CellIinfoObjectUI : MonoBehaviour
                         if (cell.IsScouted)
                         {
                             desc += $"({Namings.ShipConfig(isArmy.GetConfig())})";
+                            if (isArmy.EventType.HasValue)
+                            {
+                                var nameEvent = Namings.BattleEvent(isArmy.EventType.Value);
+                                desc = $"{desc}\n{Namings.Event}:{nameEvent}";
+                            }
                         }
                     }
                     else

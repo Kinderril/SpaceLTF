@@ -443,10 +443,10 @@ public class GalaxyData
         var configs = new WDictionary<ShipConfig>(d);
         return configs.Random();
     }
-    private void SubscribeCell(GlobalMapCell cell)
-    {
-        cell.OnScouted += OnCellScouted;
-    }
+//    private void SubscribeCell(GlobalMapCell cell)
+//    {
+//        cell.OnScouted += OnCellScouted;
+//    }
 
     private void OnCellScouted(GlobalMapCell obj)
     {
@@ -502,8 +502,8 @@ public class GalaxyData
     public GlobalMapCell GetRandomConnectedCell()
     {
         return cells.GetRandomConnectedCell();
-    }
-
+    } 
+ 
     public GalaxyData(string name)
     {
         Name = name;

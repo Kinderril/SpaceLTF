@@ -484,7 +484,7 @@ public static class Namings
     }
 
     public static string PriorityTarget = "Priority Target";
-    public static string FakePriorityTarget = "Bait Target";
+    public static string BaitPriorityTarget = "Bait Target";
 
     public static string Damage(ShipDamageType damageType, float time)
     {
@@ -507,7 +507,7 @@ public static class Namings
     }
 
     public static string PriorityTargetDesc = "All your ship will try to attack selected ship.";
-    public static string FakePriorityTargetDesc = "All enemies ships will try to attack selected ship";
+    public static string BaitPriorityTargetDesc = "All enemies ships will try to attack selected ship";
     public static string SpellModulChargers = "Charges require: {0} with delay {1} sec.";
 
     public static string ArtillerySpell =
@@ -734,4 +734,6 @@ public static class Namings
     }
 
     public static string Reflected = "Effect reflected";
+    public static string CriticalDamage = $"Critical damages. If damages more than {Library.CRITICAL_DAMAGES_TO_DEATH} ship destroyed";
+    public static string Event = "Event";
 }

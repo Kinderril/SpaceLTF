@@ -13,6 +13,6 @@ public class CoreSpellUI : UIElementWithTooltip
     protected override string TextToTooltip()
     {
         var isZero = index == 0;
-        return isZero ? Namings.PriorityTarget : Namings.FakePriorityTarget;
+        return isZero ? Namings.PriorityTarget : Namings.BaitPriorityTarget;
     }
 }

@@ -24,6 +24,7 @@ public class ShipSlidersInfo : MonoBehaviour
     {
         withText = ShieldText != null && HealthText != null;
         _shipBase = shipBase;
+        _shipBase.DamageData.OnDamageDone += OnDamageDone;
         _shipBase.ShipParameters.OnHealthChanged += OnHealthChanged;
         _shipBase.ShipParameters.ShieldParameters.OnShildChanged += OnShildChanged;
         //        _ship.ShipParameters.DebugInfo();
@@ -32,6 +33,18 @@ public class ShipSlidersInfo : MonoBehaviour
         _lastState = shipBase.ShipParameters.ShieldParameters.ShiledIsActive;
         //        backShieldSlider = ShieldSlider.GetComponent<Image>();
         BackSet();
+    }
+
+    private void OnDamageDone(ShipBase arg1, ShipDamageType arg2, bool arg3)
+    {
+        if (arg2 == ShipDamageType.shiled)
+        {
+            if (_shipBase.ShipParameters.ShieldParameters.ShiledIsActive != _lastState)
+            {
+                _lastState = _shipBase.ShipParameters.ShieldParameters.ShiledIsActive;
+                BackSet();
+            }
+        }
     }
 
     private void BackSet()
@@ -65,6 +78,7 @@ public class ShipSlidersInfo : MonoBehaviour
 
     public void Dispose()
     {
+        _shipBase.DamageData.OnDamageDone -= OnDamageDone;
         _shipBase.ShipParameters.OnHealthChanged -= OnHealthChanged;
         _shipBase.ShipParameters.ShieldParameters.OnShildChanged -= OnShildChanged;
     }

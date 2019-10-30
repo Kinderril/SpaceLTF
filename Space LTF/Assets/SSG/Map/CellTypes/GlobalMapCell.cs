@@ -92,6 +92,7 @@ public abstract class GlobalMapCell
 
     public virtual void Scouted()
     {
+//        Debug.LogError($"Scouted {Id}");
         //UnconnectAll();
         IsScouted = true;
         if (!Completed)

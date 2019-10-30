@@ -253,7 +253,7 @@ public class ShipInventory : IStartShipParams , IInventory
         return false;
     }
 
-    public void SetCriticalyDamage()
+    public void AddCriticalyDamage()
     {
         CriticalDamages++;
         if (CriticalDamages >= Library.CRITICAL_DAMAGES_TO_DEATH)

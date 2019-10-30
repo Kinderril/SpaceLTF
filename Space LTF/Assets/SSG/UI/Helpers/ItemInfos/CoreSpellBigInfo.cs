@@ -22,8 +22,8 @@ public class CoreSpellBigInfo : AbstractBaseInfoUI
         base.Init(callback);
 
 
-        NameField.text = isZero ? Namings.PriorityTarget : Namings.FakePriorityTarget;
-        DescField.text = isZero ? Namings.PriorityTargetDesc : Namings.FakePriorityTargetDesc;
+        NameField.text = isZero ? Namings.PriorityTarget : Namings.BaitPriorityTarget;
+        DescField.text = isZero ? Namings.PriorityTargetDesc : Namings.BaitPriorityTargetDesc;
 
 
         var costDelay = isZero ? Library.PriorityTargetCostTime : Library.BaitPriorityTargetCostTime;

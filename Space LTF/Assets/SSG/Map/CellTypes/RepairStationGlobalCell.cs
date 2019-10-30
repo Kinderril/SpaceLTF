@@ -26,12 +26,17 @@ public class RepairStationGlobalCell : GlobalMapCell
         var player = MainController.Instance.MainPlayer;
         var allShips = player.Army;
         var total = 0;
+        bool haveDamages = false;
         foreach (var startShipPilotData in allShips)
         {
             var pointToRepair = startShipPilotData.Ship.HealthPointToRepair();
             var cost = Library.GetReapairCost(pointToRepair, startShipPilotData.Pilot.CurLevel);
             var thisShip = (int) Mathf.Clamp((int) cost * Library.REPAIR_DISCOUTNT, 1, 99999);
             total += thisShip;
+            if (startShipPilotData.Ship.CriticalDamages > 0)
+            {
+                haveDamages = true;
+            }
         }
 
         var answers = new List<AnswerDialogData>();
@@ -50,6 +55,11 @@ public class RepairStationGlobalCell : GlobalMapCell
         else
         {
             mainMsg = "This is repair station. We can repair our fleet here.";
+        }
+
+        if (haveDamages)
+        {
+            answers.Add(new AnswerDialogData("Fix all critical damages", null, FixCrit));
         }
 
         MessageDialogData mesData;
@@ -76,6 +86,19 @@ public class RepairStationGlobalCell : GlobalMapCell
         }
 
         mesData = new MessageDialogData(mainMsg, answers);
+        return mesData;
+    }
+
+    private MessageDialogData FixCrit()
+    {
+        var player = MainController.Instance.MainPlayer;
+        foreach (var startShipPilotData in player.Army)
+        {
+            startShipPilotData.Ship.RestoreAllCriticalDamages();
+        }
+        var answers = new List<AnswerDialogData>();
+        answers.Add(new AnswerDialogData(Namings.Ok,null,()=>GetDialog()));
+        var mesData = new MessageDialogData("Critical damages fixed", answers);
         return mesData;
     }
 

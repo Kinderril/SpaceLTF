@@ -56,6 +56,7 @@ public class CellsInGalaxy
         return rnd;
     }
 
+
     public GlobalMapCell GetRandomClosestCellWithNoData(ShipConfig config, int indX, int indZ)
     {
         int minLengh = 9999;
