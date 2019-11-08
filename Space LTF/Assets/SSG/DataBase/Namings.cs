@@ -650,20 +650,20 @@ public static class Namings
         switch (config)
         {
             case global::ShipConfig.raiders:
-                return "Positive: Good speed, many slots for modules." +
-                    "\nNegative: Few weapon slots. No shield regeneration.";
+                return "Advantages: Good speed, many slots for modules." +
+                    "\nDisadvantages: Few weapon slots. No shield regeneration.";
             case global::ShipConfig.federation:
-                return "Positive: Many weapon slots. Shield regeneration." +
-                       "\nNegative: Low speed.";
+                return "Advantages: Many weapon slots. Shield regeneration." +
+                       "\nDisadvantages: Low speed.";
             case global::ShipConfig.mercenary:
-                return "Positive: Balanced." +
-                       "\nNegative: Balanced.";
+                return "Advantages: Balanced." +
+                       "\nDisadvantages: Balanced.";
             case global::ShipConfig.ocrons:
-                return "Positive: Perfect body health. Many slots for modules." +
-                       "\nNegative: No shied. No shield regeneration";
+                return "Advantages: Perfect body health. Many slots for modules." +
+                       "\nDisadvantages: No shied. No shield regeneration";
             case global::ShipConfig.krios:
-                return "Positive: Good shield. Perfect shield regeneration" +
-                       "\nNegative: Low body health.";
+                return "Advantages: Good shield. Perfect shield regeneration" +
+                       "\nDisadvantages: Low body health.";
             case global::ShipConfig.droid:
                 return "";
         }
@@ -736,4 +736,12 @@ public static class Namings
     public static string Reflected = "Effect reflected";
     public static string CriticalDamage = $"Critical damages. If damages more than {Library.CRITICAL_DAMAGES_TO_DEATH} ship destroyed";
     public static string Event = "Event";
+
+    public static string UnstableCore1 =
+        "Some of your ships damaged cause your core is unstable.\n\n Find repair services for stabilize your core.\n\n If core stability level become less than -10 your fleet destroyed.";    
+    public static string UnstableCore2 =
+        "Some of your ships damaged and some of your items was destroyed cause your core is unstable.\n\n Find repair services for stabilize your core.\n\n If core stability level become less than -10 your fleet destroyed.";
+
+    public static string UnstableCore0 = "Some of your ships can get damage cause your core is unstable.\n\n Find repair services to stabilize your core.\n\n If core stability level become less than -10 your fleet will be destroyed.";
+
 }

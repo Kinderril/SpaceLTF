@@ -31,16 +31,22 @@ public class PlayerByStepDamage
         if (_isEnable)
         {
             _curRemainSteps--;
+            if (_curRemainSteps == -1)
+            {
+                WindowManager.Instance.InfoWindow.Init(null, Namings.UnstableCore0);
+            }
             if (_curRemainSteps < 0)
             {
                 if (_curRemainSteps >= -3)
                 {
                     BrokeShipWithRandom();
+//                    WindowManager.Instance.InfoWindow.Init(null, Namings.UnstableCore1);
                 }
                 else if (_curRemainSteps >= -9)
                 {
                     BrokeShipWithRandom();
                     BrokeRandomItem();
+//                    WindowManager.Instance.InfoWindow.Init(null, Namings.UnstableCore2);
 
                 }
                 else

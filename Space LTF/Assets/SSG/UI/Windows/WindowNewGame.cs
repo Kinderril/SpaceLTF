@@ -42,6 +42,7 @@ public class WindowNewGame : BaseWindow
         CoresCount.InitCallback(OnFieldChange);
         SectorsCount.InitCallback(OnFieldChange);
         DifficultyNewGame.InitCallback(OnFieldChange);
+        StartDeathTime.SetValue(Library.MAX_GLOBAL_MAP_DEATHSTART + 1);
         UpdateStartData();
         base.Init();
     }
