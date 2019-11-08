@@ -81,8 +81,8 @@ public class FXMakerMain : MonoBehaviour
 	public		enum TOOLDIR_TYPE		{DEFAULTSHADERMATERIALS=0, TEMPPREVIEWTEXTURE, BACKGROUNDPREFABS, BACKGROUNDRESOURCES, PROJECTS, SCRIPTS, SCREENSHOTSAVEDIR, SPRITE_TOOL, SPRITE_USER, EXPORTSPLITDIR};
 	protected	string					m_DefaultShaderMaterialsDir	= "ToolResources/DefaultShaderMaterials";
 	protected	string					m_TempPreviewTextureDir		= "ToolResources/TempPreviewTexture";
-	protected	string					m_BackgroundPrefabsDir		= "Backgrounds/BackgroundPrefabs";
-	protected	string					m_BackgroundResourcesDir	= "Backgrounds/BackgroundResources";
+	protected	string					m_BackgroundPrefabsDir		= "BackgroundsGlobal/BackgroundPrefabs";
+	protected	string					m_BackgroundResourcesDir	= "BackgroundsGlobal/BackgroundResources";
 	protected	string					m_ProjectsDir				= "Projects";
 	protected	string					m_ScriptsDir				= "Scripts";
 	protected	string					m_ScreenShotSaveDir			= "ScreenShot";

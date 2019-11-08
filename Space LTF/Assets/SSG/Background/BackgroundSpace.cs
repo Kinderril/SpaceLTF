@@ -28,7 +28,7 @@ public class BackgroundSpace : MonoBehaviour
         var backMats = DataBaseController.Instance.Backgrounds.BackMaterials;
         if (backMats.Count > 0)
         {
-            var rnd = DataBaseController.Instance.Backgrounds.BackMaterials.RandomElement();
+            var rnd = backMats.RandomElement();
             MainRenderer.material = rnd.MainMetarial;
             var renderParticle = MainParticleSystem.GetComponent<ParticleSystemRenderer>();
             renderParticle.material = rnd.ParticleMetarial;

@@ -161,7 +161,7 @@ public class CamerasController : Singleton<CamerasController>
     public void EndGame()
     {
         CloseGameCamera();
-//        BackgroundCamera.EndBattleGame();
+        BackgroundCamera.EndBattleGame();
         OpenUICamera();
     }
 

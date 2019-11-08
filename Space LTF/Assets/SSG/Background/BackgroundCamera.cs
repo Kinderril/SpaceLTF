@@ -10,11 +10,18 @@ public class BackgroundCamera : MonoBehaviour
     public Camera Camera;
 //    public Camera MiniBackgroundCamera;
     public SpriteRenderer SpriteRenderer;
-    public List<Sprite> Backgrounds = new List<Sprite>();
+    private Sprite _spriteGlobal;
+    public List<Sprite> BackgroundsGlobal = new List<Sprite>();
+    public List<Sprite> BackgroundsBattle = new List<Sprite>();
 
     void Awake()
     {
-//        CheckSize();
+        _spriteGlobal = BackgroundsBattle.RandomElement();
+        SpriteRenderer.sprite = _spriteGlobal;
+    }
+    public void EndBattleGame()
+    {
+        SpriteRenderer.sprite = _spriteGlobal;
     }
 
     private void CheckSize()
@@ -61,7 +68,7 @@ public class BackgroundCamera : MonoBehaviour
 
     public void StartGame()
     {
-        SpriteRenderer.sprite = Backgrounds.RandomElement();
+        SpriteRenderer.sprite = BackgroundsBattle.RandomElement();
         CheckSize();
         Camera.enabled = true;
 //        MiniBackgroundCamera.enabled = true;
@@ -82,5 +89,6 @@ public class BackgroundCamera : MonoBehaviour
 //        MiniBackgroundCamera.enabled = false;
         SpriteRenderer.enabled = false;
     }
+
 }
 

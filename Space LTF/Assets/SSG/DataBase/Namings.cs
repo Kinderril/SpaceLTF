@@ -379,11 +379,13 @@ public static class Namings
     public static string StartNewGameBasePower = "Enemies power";
     public static string StartNewGameSectorsCount = "Sectors count";
 
-    public static string StartInfo = "One of the scientific stations was destroyed, and energy blocks from the " +
-                                     " station scattered across the galaxy. One of these blocks hit your ship." +
-                                     " You managed to isolate it. You must find other parts to try to disconnect " +
-                                     "your ship from the energy block at the station. Good luck, but remember," +
-                                     " the blocks are extremely unstable.";
+    public static string StartInfo = "You are in the remote sector of the galaxy on the very edge of inhabited space. " +
+                                     "\nOn the way, you collided a strange object that caused serious damage to the ship's systems. " +
+                                     "\nAfter checking and repair, you found out that this mysterious object is firmly stuck in the " +
+                                     "\nship's hull and unstable, and its extraction is impossible in this sector.You have to head to the" +
+                                     "\nintergalactic gates immidiatelly. According to the latest information, they are discharged." +
+                                     "\nTo activate them, you need energy cells.Find them and go to the gates " +
+                                     "\n(by coincidence, they are far from you, on the other side of the galaxy)!";
 
     public static string DamageInfoUI = "Damage: {0}/{1}";
     public static string KillsInfoUI = "Kills: {0}";
