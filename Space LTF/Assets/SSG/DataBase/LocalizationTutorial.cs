@@ -22,7 +22,7 @@ public static class LocalizationTutorial
 
         _locKeys.Add("mapUpgrade", "One of your ships can be upgraded.");
 
-        _locKeys.Add("shopMain", "Here you can buy or sell something.");
+        _locKeys.Add("shopMain", "This is shop \nHere you can buy or sell something. Different good at different sectors can costs different money. Try to sell and buy at right sectors");
 
         _locKeys.Add("endBattle", "Choose a way to split bonus credits.\n If you want to level up battleships choose \"to pilots\".\nIf you want to buy weapons or upgrade something choose \"to main\" ");
     }

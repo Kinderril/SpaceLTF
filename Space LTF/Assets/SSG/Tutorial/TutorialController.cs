@@ -10,6 +10,7 @@ public class TutorialController : Singleton<TutorialController>
     public StartMapTutorial mapMain;
     public StartMapTutorial mapMain2;
     public OpenInventoryTutorial mapInventory;
+    public EndBattleTutorial endBattle;
     public ShopMapTutorial shopMain;
     public bool EnableTutor = false;
 
@@ -17,6 +18,8 @@ public class TutorialController : Singleton<TutorialController>
     {
         if (EnableTutor)
         {
+            if (endBattle != null)
+                endBattle.Init();  
             if (battleStart != null)
                 battleStart.Init();
             if (battleStart2 != null)

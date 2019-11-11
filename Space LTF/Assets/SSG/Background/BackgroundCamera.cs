@@ -16,7 +16,7 @@ public class BackgroundCamera : MonoBehaviour
 
     void Awake()
     {
-        _spriteGlobal = BackgroundsBattle.RandomElement();
+        _spriteGlobal = BackgroundsGlobal.RandomElement();
         SpriteRenderer.sprite = _spriteGlobal;
     }
     public void EndBattleGame()
