@@ -22,6 +22,7 @@ public class BackgroundCamera : MonoBehaviour
     public void EndBattleGame()
     {
         SpriteRenderer.sprite = _spriteGlobal;
+        CheckSize();
     }
 
     private void CheckSize()

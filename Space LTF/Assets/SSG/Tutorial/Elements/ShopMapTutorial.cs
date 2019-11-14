@@ -16,7 +16,6 @@ public class ShopMapTutorial : TutorialElement
         if (imGameWindow != null)
         {
             Open();
-            BattleController.Instance.PauseData.Pause();
         }
     }
 

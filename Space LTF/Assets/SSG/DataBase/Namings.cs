@@ -382,10 +382,10 @@ public static class Namings
     public static string StartInfo = "You are in the remote sector of the galaxy on the very edge of inhabited space. " +
                                      "\nOn the way, you collided a strange object that caused serious damage to the ship's systems. " +
                                      "\nAfter checking and repair, you found out that this mysterious object is firmly stuck in the " +
-                                     "\nship's hull and unstable, and its extraction is impossible in this sector.You have to head to the" +
-                                     "\nintergalactic gates immidiatelly. According to the latest information, they are discharged." +
-                                     "\nTo activate them, you need energy cells.Find them and go to the gates " +
-                                     "\n(by coincidence, they are far from you, on the other side of the galaxy)!";
+                                     "\nship's hull and unstable, and its extraction is impossible in this sector.\nYou have to head to the" +
+                                     "intergalactic gates immidiatelly.According to the latest information, they are discharged." +
+                                     "To activate them, you need energy cells.Find them and go to the gates " +
+                                     "(by coincidence, they are far from you, on the other side of the galaxy)!";
 
     public static string DamageInfoUI = "Damage: {0}/{1}";
     public static string KillsInfoUI = "Kills: {0}";
@@ -746,4 +746,5 @@ public static class Namings
 
     public static string UnstableCore0 = "Some of your ships can get damage cause your core is unstable.\n\n Find repair services to stabilize your core.\n\n If core stability level become less than -10 your fleet will be destroyed.";
 
+    public static string MapExit = "Do you want to exit to main menu?\nProgress will be saved and you can resume later.";
 }

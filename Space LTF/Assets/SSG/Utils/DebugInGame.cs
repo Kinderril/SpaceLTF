@@ -39,6 +39,6 @@ public class DebugInGame : MonoBehaviour
 
     private void OnDebugChangeSound()
     {
-        CamerasController.Instance.GameCamera.MainListenerSwitch();
+        CamerasController.Instance.MainListenerSwitch();
     }
 }

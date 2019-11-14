@@ -24,8 +24,8 @@ public class AsteroidEvent : BattleFieldEvent
         var rndZ = MyExtensions.Random(-1f, 1f);
         var dir = Utils.NormalizeFastSelf(new Vector3(rndX, 0, rndZ));
         _baseDir = dir;
-
-        var preBattleTimer = MainController.Instance.BattleTimerManager.MakeTimer(0,0.1f, true);
+        _battle.AsteroidContainer.gameObject.SetActive(true);
+var preBattleTimer = MainController.Instance.BattleTimerManager.MakeTimer(0,0.1f, true);
         preBattleTimer.OnTimer += PreOnTimer;
 
         for (int i = 0; i < timers; i++)
@@ -109,6 +109,7 @@ public class AsteroidEvent : BattleFieldEvent
         {
             GameObject.Destroy(flyingAsteroid);
         }
+        _battle.AsteroidContainer.gameObject.SetActive(false);
         _battle.AsteroidContainer.ClearTransformImmediate();
         _asteroids.Clear();
         _battleTimers.Clear();

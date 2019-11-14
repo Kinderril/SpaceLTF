@@ -42,6 +42,7 @@ public class MapWindow : BaseWindow
     private bool _sideShipsInited = false;
     private List<SideShipGlobalMapInfo> _sideInfos = new List<SideShipGlobalMapInfo>();
     public event Action OnStartInfoClose;
+    public MapSettingsWindow WindowSettings;
 
     public event Action<bool> OnOpenInventory;
 
@@ -54,6 +55,7 @@ public class MapWindow : BaseWindow
         //        ShipRepairedObject.gameObject.SetActive(false);
         DialogWindow.Dispose();
         GlobalMap.gameObject.SetActive(true);
+        WindowSettings.gameObject.SetActive(false);
         CamerasController.Instance.StartGlobalMap();
         GlobalMap.UnBlock();
 //        ArmyInfoContainer.gameObject.SetActive(false);
@@ -432,6 +434,15 @@ public class MapWindow : BaseWindow
                 return;
             }
         }
+    }
+    public void OnClickSettings()
+    {
+        CanvasGroup.interactable = false;
+        WindowSettings.Init();
+        WindowSettings.Open(() =>
+        {
+            CanvasGroup.interactable = true;
+        });
     }
 
     private void StartDialog(MessageDialogData dialog,Action callbackOnEnd)

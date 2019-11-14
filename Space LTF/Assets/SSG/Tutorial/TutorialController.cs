@@ -12,12 +12,15 @@ public class TutorialController : Singleton<TutorialController>
     public OpenInventoryTutorial mapInventory;
     public EndBattleTutorial endBattle;
     public ShopMapTutorial shopMain;
+    public PreBattleTutorial preBattle;
     public bool EnableTutor = false;
 
     public void Init()
     {
         if (EnableTutor)
         {
+            if (preBattle != null)
+                preBattle.Init();  
             if (endBattle != null)
                 endBattle.Init();  
             if (battleStart != null)

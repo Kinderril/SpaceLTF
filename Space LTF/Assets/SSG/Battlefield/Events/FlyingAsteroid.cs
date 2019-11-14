@@ -28,6 +28,10 @@ public class FlyingAsteroid : Asteroid
 
     void Update()
     {
+        if (Time.timeScale <= 0.001f)
+        {
+            return;
+        }
         RotateUpdate();
         MoveAsteroid();
         CheckDist();

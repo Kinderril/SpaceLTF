@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Toggle = UnityEngine.UI.Toggle;
 
 public class WindowKeys : MonoBehaviour
 {
@@ -10,9 +11,11 @@ public class WindowKeys : MonoBehaviour
     public bool IsInited { get; set; }
     public CanvasGroup Canvas;
     private Action _closeCallback;
+    public Toggle SoundToggle;
 
     public void Init()
     {
+        SoundToggle.isOn = (CamerasController.Instance.IsAudioEnable);
         if (!IsInited)
         {
             Canvas.ignoreParentGroups = true;
@@ -35,7 +38,7 @@ public class WindowKeys : MonoBehaviour
             foreach (var keyCode in list)
             {
                 var elemnt = DataBaseController.GetItem(HotkeyElementPrefab);
-                elemnt.gameObject.transform.SetParent(Layout,false);
+                elemnt.gameObject.transform.SetParent(Layout, false);
                 elemnt.Init(keyCode);
             }
         }
@@ -51,6 +54,11 @@ public class WindowKeys : MonoBehaviour
     {
         gameObject.SetActive(false);
         _closeCallback();
+    }
+
+    public void OnSound()
+    {
+        CamerasController.Instance.MainListenerSwitch();
     }
 
 }

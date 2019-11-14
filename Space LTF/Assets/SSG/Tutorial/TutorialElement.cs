@@ -29,7 +29,8 @@ public class TutorialElement : MonoBehaviour
     {
         if (!_isCompleted)
         {
-//            WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
+//            Debug.LogError($"Open tutor:{gameObject.name}  _isCompleted:{_isCompleted}");
+            //            WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
             gameObject.SetActive(true);
             foreach (var element in elements)
             {
@@ -39,7 +40,8 @@ public class TutorialElement : MonoBehaviour
     } 
     public void OnClose()
     {
-//        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
+//        Debug.LogError($"Close tutor:{gameObject.name}");
+        //        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
         gameObject.SetActive(false);
         if (DontShowNoreToggle.isOn)
         {

@@ -16,11 +16,13 @@ public static class LocalizationTutorial
 
         _locKeys.Add("mapInsideInventory", "This is your fleet page. Here you can change equipment of your ships, or do some upgrades.");
 
-        _locKeys.Add("mapMain","This is global map. There you move to different places of galaxy.\nYou can move only to close places. To move click to point you want to go.");
+        _locKeys.Add("mapMain","This is global map.\nYou can move only to near places. To move click to point you want to go.");
         _locKeys.Add("mapInventory", "Click here to choose equipment of your fleet.");
         _locKeys.Add("mapFleetFast", "Your fleet.");
 
         _locKeys.Add("mapUpgrade", "One of your ships can be upgraded.");
+
+        _locKeys.Add("preBattle", "Preparation for the battle.\nChoose equipment suitable against the current opponent, based on information from scouts");
 
         _locKeys.Add("shopMain", "This is shop \nHere you can buy or sell something. Different good at different sectors can costs different money. Try to sell and buy at right sectors");
 

@@ -10,16 +10,26 @@ public class CamerasController : Singleton<CamerasController>
     public CameraController GameCamera;
     public BackgroundCamera BackgroundCamera;
     public CameraController GlobalMapCamera;
+    public AudioListener BattleListerer;
+    public AudioListener MenuListerer;
+    private bool _isAudioEnabled = true;
     public Camera UICamera;
 
     public Vector3 keybordDir;
     private CameraController _activeCamera;
     private const float MinOffset = 40;
     private const float MaxOffset = 20;
+    public bool IsAudioEnable => _isAudioEnabled;
 
     void Awake()
     {
         OpenUICamera();
+    }
+
+    public void MainListenerSwitch()
+    {
+        _isAudioEnabled = !_isAudioEnabled;
+        AudioListener.volume = _isAudioEnabled ? 1f : 0f;
     }
 
     private void CameraMove()

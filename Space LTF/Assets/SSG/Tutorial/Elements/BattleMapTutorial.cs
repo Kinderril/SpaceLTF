@@ -16,7 +16,8 @@ public class BattleMapTutorial : TutorialElement
         if (imGameWindow != null)
         {
             Open();
-            BattleController.Instance.PauseData.Pause();
+            if (!_isCompleted)
+                BattleController.Instance.PauseData.Pause();
         }
     }
 
