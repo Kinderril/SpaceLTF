@@ -130,10 +130,11 @@ public  static  class  InventoryOperation
 
     private static void CanDo(Action CallbackSuccsess, Action failCallback, IInventory to, IItemInv item)
     {
-        if (to.IsShop())
+        if (to.IsShop())         //Игрок продает в магазин
         {
             //Selling item to shop
-            var preSellPrice = (int) ((float)item.CostValue * Library.SELL_COEF);
+            var valuableCoef = to.ValuableItem(item);
+            var preSellPrice = (int) ((float)item.CostValue * Library.SELL_COEF * valuableCoef);
 #if UNITY_EDITOR
             if (preSellPrice <= 1)
             {
@@ -163,9 +164,10 @@ public  static  class  InventoryOperation
                 , failCallback, msg);
             return;
         }
-        if (item.CurrentInventory.IsShop())
+        if (item.CurrentInventory.IsShop())    //Игрок покупает у магазина
         {
-            var preBuyPrice = item.CostValue;
+            var valuableCoef = item.CurrentInventory.ValuableItem(item);
+            var preBuyPrice = (int)(item.CostValue * valuableCoef);
             int buyPrice;
             if (item.CurrentInventory.Owner != null)
             {

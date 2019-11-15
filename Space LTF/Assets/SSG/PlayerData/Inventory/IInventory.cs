@@ -31,6 +31,7 @@ public interface IInventory
     event ItemTransferedTo OnItemAdded;
 
     void TransferItem(IItemInv item, bool val);
+    float ValuableItem(IItemInv item);
 
     Player Owner { get; }
     int SlotsCount { get; }

@@ -491,7 +491,7 @@ public static class ArmyCreator
 
     public static bool TryUpgradePilot(ArmyRemainPoints v, IPilotParameters pilot, ArmyCreatorLogs logs)
     {
-        var d = Library.PILOT_INNER_COEF ; //Cost of point
+        var d = Library.PILOT_LEVEL_COEF ; //Cost of point
         if (v.Points >= d)
         {
             List<LibraryPilotUpgradeType> list = PosiblePilotUpgrades(pilot);

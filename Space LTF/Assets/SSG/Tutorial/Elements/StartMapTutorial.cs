@@ -20,7 +20,7 @@ public class StartMapTutorial : TutorialElement
             {
                 void OnStartInfoClose()
                 {
-                    Open();
+                    OpenIfNotCompleted();
                     mapWindow.OnStartInfoClose -= OnStartInfoClose;
                 }
 
@@ -28,7 +28,7 @@ public class StartMapTutorial : TutorialElement
             }
             else
             {
-                Open();
+                OpenIfNotCompleted();
             }
         }
     }

@@ -15,14 +15,17 @@ public class WindowShop : BaseWindow
     private Player _greenPlayer;
     private PlayerArmyUI _greeArmyUi;
     public ChangingCounter MoneyField;
+    public Transform ValuableLayout;
+    public Transform NotValuableLayout;
+    public ObjectWithTextMeshPro ValuableIteMeshProPrefab;
+    public ObjectWithTextMeshPro NotValuableIteMeshProPrefab;
 
 
     public override void Init<T>(T obj)
     {
         _shopInventory = obj as ShopInventory;
         _greenPlayer = MainController.Instance.MainPlayer;
-
-
+        
         MoneyField.Init(_greenPlayer.MoneyData.MoneyCount);
         _greenPlayer.MoneyData.OnMoneyChange += OnMoneyChange;
         _greeArmyUi = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.PlayerArmyUIPrefab);
@@ -30,6 +33,38 @@ public class WindowShop : BaseWindow
         base.Init(obj);
         PlayersInventory.Init(_greenPlayer.Inventory, null);
         ShoInventoryUI.Init(_shopInventory, new ConnectInventory(_greenPlayer.Inventory));
+        InitValuables();
+    }
+
+    private void InitValuables()
+    {
+        ValuableLayout.ClearTransform();
+        NotValuableLayout.ClearTransform();
+        foreach (var weaponType in _shopInventory.ValuableTypesWeaponList)
+        {
+            var valItem = DataBaseController.GetItem(ValuableIteMeshProPrefab);
+            valItem.Field.text = Namings.Weapon(weaponType);
+            valItem.transform.SetParent(ValuableLayout);
+        }  
+        foreach (var modulType in _shopInventory.ValuableTypesModulsList)
+        {
+            var valItem = DataBaseController.GetItem(ValuableIteMeshProPrefab);
+            valItem.Field.text = Namings.SimpleModulName(modulType);
+            valItem.transform.SetParent(ValuableLayout);
+        }
+        foreach (var weaponType in _shopInventory.NotValuableTypesWeaponList)
+        {
+            var valItem = DataBaseController.GetItem(NotValuableIteMeshProPrefab);
+            valItem.Field.text = Namings.Weapon(weaponType);
+            valItem.transform.SetParent(NotValuableLayout);
+        }
+        foreach (var modulType in _shopInventory.NotValuableTypesModulsList)
+        {
+            var valItem = DataBaseController.GetItem(NotValuableIteMeshProPrefab);
+            valItem.Field.text = Namings.SimpleModulName(modulType);
+            valItem.transform.SetParent(NotValuableLayout);
+        }
+
     }
 
     private void OnMoneyChange(int obj)

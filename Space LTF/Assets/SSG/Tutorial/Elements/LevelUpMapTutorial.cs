@@ -21,7 +21,7 @@ public class LevelUpMapTutorial : TutorialElement
             {
                 if (data.Pilot.CanUpgradeAnyParameter(0))
                 {
-                    Open();
+                    OpenIfNotCompleted();
                     return;
                 }
             }

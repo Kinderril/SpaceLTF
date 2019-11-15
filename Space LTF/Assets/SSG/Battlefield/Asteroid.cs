@@ -73,6 +73,10 @@ public class Asteroid : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale < 0.001f)
+        {
+            return;
+        }
         RotateUpdate();
     }
 

@@ -506,10 +506,10 @@ public class BattleController :Singleton<BattleController>
     {
         ShipBase shipBase = null;
         sDist = Single.MaxValue;
-        List<ShipBase> _ship = index == TeamIndex.green ? SideGreen : SideRed;
-        for (int i = 0; i < _ship.Count; i++)
+        List<ShipBase> shipsToTest = index == TeamIndex.green ? SideGreen : SideRed;
+        for (int i = 0; i < shipsToTest.Count; i++)
         {
-            var b = _ship[i];
+            var b = shipsToTest[i];
             var xx = p.x - b.Position.x;
             var zz = p.z - b.Position.z;
             var d = xx*xx + zz*zz;

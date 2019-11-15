@@ -15,7 +15,7 @@ public class BattleMapTutorial : TutorialElement
         var imGameWindow = obj as InGameMainUI;
         if (imGameWindow != null)
         {
-            Open();
+            OpenIfNotCompleted();
             if (!_isCompleted)
                 BattleController.Instance.PauseData.Pause();
         }

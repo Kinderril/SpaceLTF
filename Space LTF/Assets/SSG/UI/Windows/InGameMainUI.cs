@@ -319,28 +319,6 @@ public class InGameMainUI : BaseWindow
         FlyNumberWithDependence.Create(shipOwner.transform, info, Color.red, FlyingInfosContainer, FlyNumerDirection.right);
     }
 
-//    private void OnShildChanged(float cur, float max, float delta, ShieldChangeSt state, ShipBase shipOwner)
-//    {
-//        FlyingNumbers number = null;
-//        if (Mathf.Abs(delta) < 1)
-//        {
-//            return;
-//        }
-//        Color color = delta >= 0 ? Color.blue : Color.cyan;
-//        FlyNumberWithDependence.Create(shipOwner.transform, GetDeltaStr(delta), color, FlyingInfosContainer, FlyNumerDirection.right);
-//    }
-//
-//    private void OnHealthChanged(float cur, float max, float delta, ShipBase shipOwner)
-//    {
-//        FlyingNumbers number = null;
-//        if (Mathf.Abs(delta) < 1)
-//        {
-//            return;
-//        }
-//        Color color = delta >= 0 ? Color.green : Color.red;
-//        FlyNumberWithDependence.Create(shipOwner.transform, GetDeltaStr(delta), color, FlyingInfosContainer, FlyNumerDirection.left);
-//    }
-
     private string GetDeltaStr(float delta)
     {
         return ((delta > 0) ? "+" : "") + delta.ToString("0");
@@ -430,7 +408,7 @@ public class InGameMainUI : BaseWindow
                     var ray = GetPointByClick(pos);
                     if (ray.HasValue)
                     {
-                        SelectedShip.GoToPointAction(ray.Value);
+                        SelectedShip.GoToPointAction(ray.Value,true);
                     }
                 }
             }

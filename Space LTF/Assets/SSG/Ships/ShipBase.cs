@@ -600,21 +600,23 @@ public class ShipBase : MovingObject
         //        _moveWay = null;
     }
 
-    public void GoToPointAction(Vector3 pos)
+    public void GoToPointAction(Vector3 pos,bool withEffect)
     {
         var battle = BattleController.Instance;
         var center = battle.CellController.Data.CenterZone;
         var rad = battle.CellController.Data.InsideRadius;
         var dist = (center - pos).magnitude;
-        if (dist < rad)
+        if (dist - 3 < rad)
         {
             var a = new GoToCurrentPointAction(this, pos);
             SetAction(a);
-            EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceOk,pos,2);
+            if (withEffect)
+                EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceOk,pos,2);
         }
         else
         {
-            EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceFail, pos, 2);
+            if (withEffect)
+                EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceFail, pos, 2);
         }
     }
 

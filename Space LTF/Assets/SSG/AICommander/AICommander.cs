@@ -11,6 +11,7 @@ public class AICommander
     private Commander _commander;
     private bool enable = false;
     private BaseAISpell[] _spells;
+    private AICommanderMainShip _mainShip;
 
     public AICommander(Commander commander)
     {
@@ -19,6 +20,7 @@ public class AICommander
         enable = _commander.MainShip != null;
         if (enable)
         {
+            _mainShip = new AICommanderMainShip(_commander);
             foreach (var baseSpellModulInv in commander.MainShip.ShipInventory.SpellsModuls)
             {
                 if (baseSpellModulInv != null)
@@ -72,6 +74,8 @@ public class AICommander
                 spell.ManualUpdate();
                 spell.PeriodlUpdate();
             }
+
+            _mainShip.Update();
         }
     }
 }

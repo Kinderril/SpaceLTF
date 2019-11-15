@@ -34,20 +34,12 @@ public class InventoryUI : DragZone
         InitFreeSlots();
 //        InitMoney();
         base.Init(player, true, _allSLots, connectedInventory);
-//        Enable();
+        //        Enable();
         //        SlotsController = new InventorySlots(player,_allSLots);
+        //Layout.localPosition = new Vector3(0, 9999, 0);
 
     }
 
-//    private void InitMoney()
-//    {
-//        if (_player != null)
-//        {
-//            MoneySlotUI d = InventoryOperation.GetMoneySlot();
-//            d.transform.SetParent(Layout);
-//            d.Init(_player.MoneyData.MoneyCount);
-//        }
-//    }
 
     private void InitCurrentItems()
     {

@@ -66,14 +66,6 @@ public class PilotInventoryUI : MonoBehaviour
         KillsField.text = String.Format(Namings.KillUIPilot, kills, nextKills);
     }
 
-//    public void OnLevelUpClick()
-//    {
-//        if (_pilot.CanUpgradeAnyParameter(0))
-//        {
-//            _pilot.UpgradeLevel(true,type);
-//        }
-//    }
-
     private void OnLevelUp(IPilotParameters obj)
     {
         SetParamsAndMoney();

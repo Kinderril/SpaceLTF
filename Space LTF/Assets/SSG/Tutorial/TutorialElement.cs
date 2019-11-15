@@ -13,19 +13,15 @@ public class TutorialElement : MonoBehaviour
     public List<TutorialFieldElement> elements = new List<TutorialFieldElement>();
     public TextMeshProUGUI ShallCloseForever;
 
-    void Awake()
+    public virtual void Init()
     {
         gameObject.SetActive(false);
         _isCompleted = PlayerPrefs.GetInt(Id, 0) == 1;
-    }
-
-    public virtual void Init()
-    {
         Field.text = LocalizationTutorial.GetKey(Id);
         ShallCloseForever.text = Namings.TutorCloseForever;
     }
 
-    public void Open()
+    protected void OpenIfNotCompleted()
     {
         if (!_isCompleted)
         {

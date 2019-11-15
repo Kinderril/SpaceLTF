@@ -126,7 +126,7 @@ public class SectorData
             foreach (var container in cellsForShop)
             {
                 var shopCell = new ShopGlobalMapCell(_power, Utils.GetId(), StartX + container.indX,
-                    StartZ + container.indZ,this);
+                    StartZ + container.indZ,this,_shipConfig);
                 container.SetData(shopCell);
                 remainFreeCells.Remove(container);
             }

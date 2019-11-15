@@ -15,7 +15,7 @@ public class ShopMapTutorial : TutorialElement
         var imGameWindow = obj as WindowShop;
         if (imGameWindow != null)
         {
-            Open();
+            OpenIfNotCompleted();
         }
     }
 

@@ -15,7 +15,7 @@ public class PreBattleTutorial : TutorialElement
         var imGameWindow = obj as PreBattleWindow;
         if (imGameWindow != null)
         {
-            Open();                                      
+            OpenIfNotCompleted();                                      
         }
     }
 

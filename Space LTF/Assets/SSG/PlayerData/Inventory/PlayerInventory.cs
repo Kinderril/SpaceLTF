@@ -72,6 +72,10 @@ public class PlayerInventory : IInventory
         return false;
     }
 
+    public virtual float ValuableItem(IItemInv item)
+    {
+        return 1f;
+    }
     public bool GetFreeSpellSlot(out int index)
     {
         index = Spells.Count;

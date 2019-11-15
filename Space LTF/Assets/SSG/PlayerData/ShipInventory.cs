@@ -80,6 +80,10 @@ public class ShipInventory : IStartShipParams , IInventory
         return Moduls.GetFreeSimpleSlot(out index);
     }
 
+    public float ValuableItem(IItemInv item)
+    {
+        return 1f;
+    }
     public bool GetFreeSpellSlot(out int index)
     {
         if (SpellsModuls == null)

@@ -6,48 +6,10 @@ using UnityEngine;
 public class ShopGlobalMapCell : GlobalMapCell
 {
     private readonly ShopInventory _shopInventory;
-    private const int MIN_ITEMS = 5;
-    private const int MAX_ITEMS = 25;
-    private const float MODULS_PERCENT = 0.4f; 
-    private const float WEAPON_PERCENT = 0.4f; 
-    private const float SPELL_PERCENT = 0.2f; 
-    public ShopGlobalMapCell(float power, int id, int intX, int intZ, SectorData secto) : base(id, intX, intZ, secto)
+    public ShopGlobalMapCell(float power, int id, int intX, int intZ, SectorData sector,ShipConfig config) : base(id, intX, intZ, sector)
     {
         _shopInventory = new ShopInventory(null);
-        int totalItems =(int)((power + 5) / 2);
-        totalItems = Mathf.Clamp(totalItems, MIN_ITEMS, MAX_ITEMS);
-        var weaponsCount = (int)(totalItems * WEAPON_PERCENT);
-        var countModuls = (int)(totalItems * MODULS_PERCENT);
-        var spells = (int)(totalItems * SPELL_PERCENT);
-
-        bool goodPower = power > 22;
-        for (var i = 0; i < weaponsCount; i++)
-        {
-            var w = Library.CreateWeapon(goodPower);
-            w.CurrentInventory = _shopInventory;
-            _shopInventory.Weapons.Add(w);
-        }
-
-       
-        WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
-            {
-                {1,4f},
-                {2,4f},
-                {3, 1f},
-            });
-        for (var i = 0; i < countModuls; i++)
-        {
-            var m = Library.CreatSimpleModul(levels.Random(),MyExtensions.IsTrueEqual());
-            m.CurrentInventory = _shopInventory;
-            _shopInventory.Moduls.Add(m);
-        }
-
-        for (int i = 0; i < spells; i++)
-        {
-            var s = Library.CreateSpell();
-            s.CurrentInventory = _shopInventory;
-            _shopInventory.Spells.Add(s);
-        }
+        _shopInventory.FillItems(power, config);
     }
 
     public override bool CanCellDestroy()

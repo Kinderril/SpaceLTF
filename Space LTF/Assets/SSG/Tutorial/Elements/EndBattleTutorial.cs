@@ -15,7 +15,7 @@ public class EndBattleTutorial : TutorialElement
         var imGameWindow = obj as EndGameWindow;
         if (imGameWindow != null)
         {
-            Open();
+            OpenIfNotCompleted();
         }
     }
 

@@ -16,7 +16,9 @@ public enum PilotRank
 public class TotalStats
 {
     public PilotRank CurRank;
+//    public PilotRank LastUpdatedRank;
     public int Kills { get; private set; }
+
 
     [field: NonSerialized] public event Action<PilotRank> OnRankChange; 
 
