@@ -32,7 +32,7 @@ public class ModulBigInfoUI : AbstractBaseInfoUI
             DescField.text = Namings.DescSimpleModul(modul.Type);
         }
         LevelField.text =(modul.Level.ToString("0"));
-        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild, modul.RequireLevel);
+        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild, modul.RequireLevel());
     }
     
 }

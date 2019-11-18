@@ -166,7 +166,17 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         get { return MoneyConsts.BASE_WEAPON_MONEY_COST + MoneyConsts.LEVEL_WEAPON_MONEY_COST * (Level - 1); }
     }
 
-    public int RequireLevel => 1 + (Level - 1) * Library.WEAPON_REQUIRE_LEVEL_COEF;
+    public int RequireLevel(int posibleLevel = -1)
+    {
+        if (posibleLevel > 0)
+        {
+            return RequireLevelByLevel(posibleLevel);
+        }
+        else
+        {
+            return RequireLevelByLevel(Level);
+        }
+    }
 
     public string GetInfo()
     {
@@ -179,15 +189,14 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         return String.Format("Damage: Shield:{0}. Body:{1}", dmg.ShieldDamage, dmg.BodyDamage);
     }
 
+    private int RequireLevelByLevel(int lvl)
+    {
+          return 1 + (lvl - 1) * Library.WEAPON_REQUIRE_LEVEL_COEF;
+    }
+
     public string WideInfo()
     {
-//        var curDesc = CurrentUpgradesDesc();
         var info = GetInfo() + "\n" + DamageInfo();
-//        if (curDesc.Length > 1)
-//        {
-//            info = info + "\n" + curDesc;
-//        }
-
         return info;
     }
 
@@ -231,24 +240,41 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         var owner = CurrentInventory.Owner;
         if (CanUpgrade())
         {
-            if (MoneyConsts.WeaponUpgrade.ContainsKey(Level))
+            if (CurrentInventory.CanMoveToByLevel(this,Level + 1))
             {
-                var cost = MoneyConsts.WeaponUpgrade[Level];
-                if (owner.MoneyData.HaveMoney(cost))
+                if (MoneyConsts.WeaponUpgrade.ContainsKey(Level))
                 {
-                    var txt = String.Format( Namings.WANT_UPGRADE_WEAPON , Namings.Weapon(WeaponType));
-                    WindowManager.Instance.ConfirmWindow.Init(() =>
+                    var cost = MoneyConsts.WeaponUpgrade[Level];
+                    if (owner.MoneyData.HaveMoney(cost))
                     {
-                        owner.MoneyData.RemoveMoney(cost);
-                        Upgrade();
-                        //                        WindowManager.Instance.InfoWindow.Init(null, "Upgrade completed");
-                    }, null, txt);
+                        var txt = String.Format(Namings.WANT_UPGRADE_WEAPON, Namings.Weapon(WeaponType));
+                        WindowManager.Instance.ConfirmWindow.Init(() =>
+                        {
+                            owner.MoneyData.RemoveMoney(cost);
+                            Upgrade();
+                            //                        WindowManager.Instance.InfoWindow.Init(null, "Upgrade completed");
+                        }, null, txt);
+                    }
+                    else
+                    {
+                        WindowManager.Instance.NotEnoughtMoney(cost);
+                    }
                 }
                 else
                 {
-                    WindowManager.Instance.NotEnoughtMoney(cost);
+                    Debug.LogError("don't have money consts to upgrade");
                 }
             }
+            else
+            {
+                if (CurrentInventory is ShipInventory shipInv)
+                {
+                    int pilotLevel = shipInv.PilotParameters.CurLevel;
+                    int targetLevel = this.RequireLevel(Level+1);
+                    WindowManager.Instance.InfoWindow.Init(null, String.Format(Namings.CanCauseNoLevel, pilotLevel, targetLevel));
+                }
+            }
+
         }
         else
         {

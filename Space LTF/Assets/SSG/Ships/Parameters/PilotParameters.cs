@@ -159,18 +159,9 @@ public class PilotParameters : IPilotParameters
     {
         switch (PilotTcaticlData)
         {
-//            case PilotTcatic.defenceBase:
-//                PilotTcaticlData = PilotTcatic.support;
-//                break;
-//            case PilotTcatic.support:
-//                PilotTcaticlData = PilotTcatic.attack;
-//                break;
             case PilotTcatic.defenceBase:
                 PilotTcaticlData = PilotTcatic.attack;
                 break;
-//            case PilotTcatic.attack:
-//                PilotTcaticlData = PilotTcatic.sneakAttack;
-//                break;
             case PilotTcatic.attack:
                 PilotTcaticlData = PilotTcatic.attackBase;
                 break;
@@ -182,95 +173,9 @@ public class PilotParameters : IPilotParameters
         {
             OnTacticChange(this, PilotTcaticlData);
         }
-    }
+    }   
 
-
-//    public void CheckWannaLvlUp()
-//    {
-////        var rnd = upgradeOrder.Suffle();
-//        int index = 0;
-//        foreach (var libraryPilotUpgradeType in upgradeOrder)
-//        {
-//            if (index > 1)
-//            {
-//                return;
-//            }
-//            index++;
-//            int paramLvl = 0;
-//            switch (libraryPilotUpgradeType)
-//            {
-//                case LibraryPilotUpgradeType.health:
-//                    paramLvl = MaxHealthLvl;
-//                    break;
-//                case LibraryPilotUpgradeType.shield:
-//                    paramLvl = MaxShieldLvl;
-//                    break;
-//                case LibraryPilotUpgradeType.speed:
-//                    paramLvl = MaxSpeedLvl;
-//                    break;
-//                case LibraryPilotUpgradeType.turnSpeed:
-//                    paramLvl = MaxTurnSpeedLvl;
-//                    break;
-//            }
-//            if (MoneyData.CanLvlUp(paramLvl))
-//            {
-//                if (MoneyData.PayLvlUp(paramLvl))
-//                {
-//                    UpgradeByType(libraryPilotUpgradeType);
-//                    _unCheckedLevelUp.Add(libraryPilotUpgradeType);
-//#if UNITY_EDITOR
-//                    DrawOrder("before");
-//#endif
-//                    upgradeOrder = upgradeOrder.Suffle();
-//#if UNITY_EDITOR
-//                    DrawOrder("after");
-//#endif
-//                    break;
-//                }
-//            }
-//        }
-//    }
-
-    //public Dictionary<LibraryPilotUpgradeType, float> Progress(float money)
-    //{
-    //    Dictionary<LibraryPilotUpgradeType, float> progress = new Dictionary<LibraryPilotUpgradeType, float>();
-    //    foreach (var libraryPilotUpgradeType in upgradeOrder)
-    //    {
-    //        int paramLvl = 0;
-    //        switch (libraryPilotUpgradeType)
-    //        {
-    //            case LibraryPilotUpgradeType.health:
-    //                paramLvl = MaxHealthLvl;
-    //                break;
-    //            case LibraryPilotUpgradeType.shield:
-    //                paramLvl = MaxShieldLvl;
-    //                break;
-    //            case LibraryPilotUpgradeType.speed:
-    //                paramLvl = MaxSpeedLvl;
-    //                break;
-    //            case LibraryPilotUpgradeType.turnSpeed:
-    //                paramLvl = MaxTurnSpeedLvl;
-    //                break;
-    //        }
-    //        var pp   = Library.PilotLvlUpCost(paramLvl);
-
-    //        progress.Add(libraryPilotUpgradeType, money/pp);
-    //    }
-    //    return progress;
-    //}
-
-//    private void DrawOrder(string pre)
-//    {
-//        string ss = "";
-//        foreach (var upgradeType in upgradeOrder)
-//        {
-//            ss += ">>>>  " + upgradeType.ToString();
-//        }
-//        UnityEngine.Debug.Log(pre + "  Upgrade order:" + ss);
-//    }
-
-
-    public void UpgradeLevelByType(LibraryPilotUpgradeType rnd,bool withMsg)
+    public void UpgradeLevelByType(LibraryPilotUpgradeType rnd, bool withMsg)
     {
         switch (rnd)
         {
@@ -288,7 +193,7 @@ public class PilotParameters : IPilotParameters
                 break;
         }
         if (withMsg)
-            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format("Ship upgraded!"));
+            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format("Ship {0} upgraded!",Namings.ParameterName(rnd)));
         if (OnLevelUp != null)
         {
             OnLevelUp(this);

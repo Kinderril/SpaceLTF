@@ -30,7 +30,10 @@ public class ShieldOffSpell : BaseSpellModulInv
     {
         MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
     }
-
+    public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
+    {
+        return targetdistpos;
+    }
     protected override CreateBulletDelegate createBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;

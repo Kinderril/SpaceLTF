@@ -102,8 +102,8 @@ public static class Library
     public const float BATTLE_REWARD_WIN_MONEY_COEF = 1.3f;
     public const float MONEY_PILOT_LEVEL_UP_COST_BASE = 5f;
     public const float MONEY_PILOT_LEVEL_UP_COST_COEF = 0.75f;
-    public static int WEAPON_REQUIRE_LEVEL_COEF = 3;
-    public static int MODUL_REQUIRE_LEVEL_COEF = 3;
+    public static int WEAPON_REQUIRE_LEVEL_COEF = 2;
+    public static int MODUL_REQUIRE_LEVEL_COEF = 2;
 
 
     #region GLOBAL_MAP_DATA

@@ -107,7 +107,14 @@ public class BaseModulInv : IItemInv
         }
     }
 
-    public int RequireLevel => 1 + (Level - 1) * Library.MODUL_REQUIRE_LEVEL_COEF + _baseRequreLevel;
+    public int RequireLevel(int posibleLevel =-1)
+    {
+        if (posibleLevel <= 0)
+        {
+            posibleLevel = Level;
+        }
+        return 1 + (posibleLevel - 1) * Library.MODUL_REQUIRE_LEVEL_COEF + _baseRequreLevel;
+    } 
 
     public string GetInfo()
     {

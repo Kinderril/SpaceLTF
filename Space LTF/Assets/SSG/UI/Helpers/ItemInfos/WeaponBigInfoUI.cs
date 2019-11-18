@@ -85,7 +85,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
             var cost = MoneyConsts.WeaponUpgrade[_weapon.Level];
             UpgradeCost.Init(cost);
         }
-        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild,_weapon.RequireLevel);
+        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild,_weapon.RequireLevel());
     }
 
     public void OnClickUpgrade()

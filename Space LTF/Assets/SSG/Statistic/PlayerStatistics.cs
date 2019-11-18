@@ -81,20 +81,20 @@ public class PlayerStatistics
         }
         if (WeaponsPairs.Count == 0)
         {
-            var p = new WeaponsPair(WeaponType.laser, WeaponType.casset);
-            var p1 = new WeaponsPair(WeaponType.rocket, WeaponType.eimRocket);
-            var p2 = new WeaponsPair(WeaponType.laser, WeaponType.impulse);
+            var p0 = new WeaponsPair(WeaponType.laser, WeaponType.impulse);
+            var p1 = new WeaponsPair(WeaponType.laser, WeaponType.rocket);
+            var p2 = new WeaponsPair(WeaponType.rocket, WeaponType.eimRocket);
             var p3 = new WeaponsPair(WeaponType.impulse, WeaponType.casset);
-            var p4 = new WeaponsPair(WeaponType.rocket, WeaponType.beam);
+            var p4 = new WeaponsPair(WeaponType.casset, WeaponType.beam);
             var p5 = new WeaponsPair(WeaponType.eimRocket, WeaponType.beam);
-            WeaponsPairs.Add(p);
+            WeaponsPairs.Add(p0);
             WeaponsPairs.Add(p1);
             WeaponsPairs.Add(p2);
             WeaponsPairs.Add(p3);
             WeaponsPairs.Add(p4);
             WeaponsPairs.Add(p5);
 
-            p.IsOpen = true;
+            p0.IsOpen = true;
             p1.IsOpen = true;
         }
     }

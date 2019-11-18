@@ -15,7 +15,7 @@ public interface IItemInv
     ItemType ItemType { get;}
     IInventory CurrentInventory { get; set; }
     int CostValue { get; }
-    int RequireLevel { get; }
+    int RequireLevel(int posibleLevel = -1);
     string GetInfo();
     string WideInfo();
 }

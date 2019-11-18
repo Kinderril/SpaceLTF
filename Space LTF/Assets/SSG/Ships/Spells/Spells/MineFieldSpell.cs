@@ -56,6 +56,11 @@ public class MineFieldSpell : BaseSpellModulInv
                 new BulleStartParameters(Library.MINE_SPEED, 0f, dist, dist));
     }
 
+    public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
+    {
+        return targetdistpos;
+    }
+
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         shipparameters.Damage(2, 3, damagedone, target);

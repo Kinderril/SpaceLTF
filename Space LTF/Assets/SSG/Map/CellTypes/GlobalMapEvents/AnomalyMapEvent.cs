@@ -79,13 +79,13 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
             switch (_lastPlus)
             {
                 case 2:
-                    move = "Something change. ";
+                    move = "Something change.";
                     break;
                 case 1:
-                    move = "Looks like you doing right. ";
+                    move = "Looks like you doing right.";
                     break;
                 case 0:
-                    move = "Wrong. ";
+                    move = "Wrong.";
                     break;
             }
         }

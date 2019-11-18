@@ -37,6 +37,6 @@ public interface IInventory
     int SlotsCount { get; }
 
     bool IsShop();
-    bool CanMoveToByLevel(IItemInv item);
+    bool CanMoveToByLevel(IItemInv item,int posibleLevel);
 }
 

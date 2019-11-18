@@ -29,7 +29,7 @@ public class ShipInventory : IStartShipParams , IInventory
     public ShipConfig ShipConfig { get; private set; }
     public int WeaponModulsCount { get; private set; }
     public int SimpleModulsCount { get; private set; }
-    public PilotParameters PilotParameters { get; set; }
+    public PilotParameters PilotParameters => _pilot;
     public int SpellModulsCount { get; private set; }
     public int CriticalDamages { get; private set; }
     public string Name { get; private set; }
@@ -230,9 +230,16 @@ public class ShipInventory : IStartShipParams , IInventory
         return false;
     }
 
-    public bool CanMoveToByLevel(IItemInv item)
+    public bool CanMoveToByLevel(IItemInv item, int posibleLevel)
     {
-        return item.RequireLevel <= _pilot.CurLevel;
+        if (posibleLevel <= 0)
+        {
+            return item.RequireLevel() <= _pilot.CurLevel;
+        }
+        else
+        {
+            return item.RequireLevel(posibleLevel) <= _pilot.CurLevel;
+        }
     }
 
     public int HealthPointToRepair()

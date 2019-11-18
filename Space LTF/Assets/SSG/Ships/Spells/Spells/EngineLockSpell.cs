@@ -26,6 +26,10 @@ public  class EngineLockSpell : BaseSpellModulInv
         EngineCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
 
     }
+    public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
+    {
+        return targetdistpos;
+    }
     public override SpellDamageData RadiusAOE()
     {
         return new SpellDamageData(rad);

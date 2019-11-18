@@ -749,4 +749,7 @@ public static class Namings
     public static string MapExit = "Do you want to exit to main menu?\nProgress will be saved and you can resume later.";
     public static string CantByLevel = "Can't use this item cause ship level is too low";
     public static string ReqireLevelFeild = "Require pilot level:{0}";
+
+    public static string CanCauseNoLevel =
+        "Can't upgrade weapon cause pilot don't have enough level.\nPilot level:{0}. Target Level{1}";
 }

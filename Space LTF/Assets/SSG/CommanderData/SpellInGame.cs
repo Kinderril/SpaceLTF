@@ -5,6 +5,11 @@ using System.Collections;
 [System.Serializable]
 public delegate void CastActionSpell(BulletTarget target, Bullet origin, IWeapon weapon,
     Vector3 shootpos, BulleStartParameters bullestartparameters);
+
+[System.Serializable]
+public delegate Vector3 DistCounter(Vector3 maxDistPos,Vector3 targetDistPos);
+
+
 public class SpellDamageData
 {
     public float AOERad;
@@ -56,17 +61,20 @@ public class SpellInGame : IWeapon
     bool ShowLine { get; }
     private float _maxDist;
     public bool ShowCircle => ShowCircleRadius > 0;
+    private DistCounter _distCounter;
 
     public SpellInGame(ISpellToGame spellData,Func<Vector3> modulPos,
         TeamIndex teamIndex,ShipBase owner,int level,string name,int period,
-        int count, SpellType spellType,float maxDist, string desc)
+        int count, SpellType spellType,float maxDist, string desc, DistCounter distCounter)
     {
         if (maxDist < 1)
         {
             Debug.LogError($"Shoot dist is vey low {spellData}  {maxDist}  name:{name}");
         }
 
-        Desc = desc;
+        _distCounter = distCounter;
+
+Desc = desc;
         _maxDist = maxDist;
         ShowCircleRadius = spellData.ShowCircle;
         ShowLine = spellData.ShowLine;
@@ -154,7 +162,10 @@ public class SpellInGame : IWeapon
         _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetCastSpell(SpellType));
         var startPos = _modulPos();
         var dir = Utils.NormalizeFastSelf(target - startPos);
-        CastSpell(new BulletTarget(startPos + dir * _maxDist), _bulletOrigin, this, startPos, _bulletStartParams);
+        var maxDistPos = startPos + dir * _maxDist;
+        var distCal = _distCounter(maxDistPos, target);
+        CastSpell(new BulletTarget(distCal), _bulletOrigin, this, startPos, _bulletStartParams);
+//        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
     }
 
 

@@ -100,8 +100,12 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
     public abstract string Desc();
 
 
-    public int CostValue { get { return MoneyConsts.SPELL_BASE_MONEY_COST; } }
-    public int RequireLevel => 1;
+    public int CostValue => MoneyConsts.SPELL_BASE_MONEY_COST;
+
+    public int RequireLevel(int posiblLevel)
+    {
+        return 1;
+    }
 
     public string GetInfo()
     {
@@ -181,5 +185,10 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
                 OnUpgrade(this);
             }
         }
+    }
+
+    public virtual Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
+    {
+        return maxdistpos;
     }
 }

@@ -164,7 +164,7 @@ public  static  class  InventoryOperation
                 , failCallback, msg);
             return;
         }
-        if (!to.CanMoveToByLevel(item))
+        if (!to.CanMoveToByLevel(item,-1))
         {
             WindowManager.Instance.InfoWindow.Init(null, Namings.CantByLevel);
             failCallback();

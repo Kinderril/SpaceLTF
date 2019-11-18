@@ -54,7 +54,7 @@ public class PlayerInventory : IInventory
         return false;
     }
 
-    public bool CanMoveToByLevel(IItemInv item)
+    public bool CanMoveToByLevel(IItemInv item, int posibleLevel)
     {
         return true;
     }
