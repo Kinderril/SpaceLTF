@@ -13,6 +13,7 @@ public class ModulBigInfoUI : AbstractBaseInfoUI
     public TextMeshProUGUI NameField;
     public TextMeshProUGUI LevelField;
     public TextMeshProUGUI SupportField;
+    public TextMeshProUGUI ReqireLevelFeild;
 
     public void Init(BaseModulInv modul, Action callback)
     {
@@ -31,6 +32,7 @@ public class ModulBigInfoUI : AbstractBaseInfoUI
             DescField.text = Namings.DescSimpleModul(modul.Type);
         }
         LevelField.text =(modul.Level.ToString("0"));
+        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild, modul.RequireLevel);
     }
     
 }

@@ -154,8 +154,8 @@ public class Player
         AddWeaponsToShips(ref r, ship1, posibleStartWeapons);
         AddWeaponsToShips(ref r, ship2, posibleStartWeapons);
         
-        ship1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1,false), 0);
-        ship2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, false), 0);
+        ship1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1,2), 0);
+        ship2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1,2), 0);
 
         List<StartShipPilotData> army = new List<StartShipPilotData>();
         army.Add(bShip);
@@ -294,7 +294,7 @@ public class Player
                     {2,isWeak?3f:4f},
                     {3,isWeak?0f:2f},
                 });
-                var m = Library.CreatSimpleModul(levels.Random(),MyExtensions.IsTrueEqual());
+                var m = Library.CreatSimpleModul(levels.Random());
                 if (Inventory.GetFreeSpellSlot(out slotIndex))
                 {
                     LastReward.Moduls.Add(m);
@@ -302,7 +302,7 @@ public class Player
                 }
                 break;
         }
-        int moneyToReward = (int) (moneyCoef*power);
+        int moneyToReward = (int) (moneyCoef*power*Library.BATTLE_REWARD_WIN_MONEY_COEF);
         moneyToReward = Library.ModificationMoneyBattleReward(moneyToReward);
         LastReward.Money = moneyToReward;
         MoneyData.AddMoney(moneyToReward);

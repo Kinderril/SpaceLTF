@@ -26,15 +26,6 @@ public class DebugShipInShop : MonoBehaviour
         _player = player;
         Select(false);
         Prefab.gameObject.SetActive(false);
-        if (ship != null)
-        {
-            _shipInv = ship;
-        }
-        else
-        {
-            Debug.LogError("using debug ship");
-            _shipInv = Library.CreateShip(ShipType.Middle,ShipConfig.mercenary, _player);
-        }
         if (pilot != null)
         {
             PilotParameters = pilot;
@@ -43,6 +34,15 @@ public class DebugShipInShop : MonoBehaviour
         {
             Debug.LogError("using debug pilot");
             PilotParameters = Library.CreateDebugPilot();
+        }
+        if (ship != null)
+        {
+            _shipInv = ship;
+        }
+        else
+        {
+            Debug.LogError("using debug ship");
+            _shipInv = Library.CreateShip(ShipType.Middle,ShipConfig.mercenary, _player, PilotParameters as PilotParameters);
         }
         UpdateImages();
     }
@@ -70,7 +70,7 @@ public class DebugShipInShop : MonoBehaviour
 
     public void SetBody(ShipType shiopType,ShipConfig config)
     {
-        _shipInv = Library.CreateShip(shiopType, config, _player);
+        _shipInv = Library.CreateShip(shiopType, config, _player,Library.CreateDebugPilot());
         UpdateImages();
     }
 

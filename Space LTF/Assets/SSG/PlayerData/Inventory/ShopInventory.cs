@@ -190,17 +190,18 @@ public class ShopInventory : PlayerInventory
             w.CurrentInventory = this;
             Weapons.Add(w);
         }
-
-
+        
         WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
         {
-            {1,4f},
+            {1,5f},
             {2,4f},
-            {3, 1f},
+            {3, 3f},
+            {4, 2f},
+            {5, 2f},
         });
         for (var i = 0; i < countModuls; i++)
         {
-            var m = Library.CreatSimpleModul(levels.Random(), MyExtensions.IsTrueEqual());
+            var m = Library.CreatSimpleModul(levels.Random());
             m.CurrentInventory = this;
             Moduls.Add(m);
         }

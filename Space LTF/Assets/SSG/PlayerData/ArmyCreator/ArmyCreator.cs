@@ -284,8 +284,8 @@ public static class ArmyCreator
 
     public static StartShipPilotData CreateBaseShip(ArmyRemainPoints v,ShipConfig config,Player player)
     {
-        var ship = Library.CreateShip(ShipType.Base, config, player);
         var pilot = Library.CreateDebugPilot();
+        var ship = Library.CreateShip(ShipType.Base, config, player,pilot);
         return new StartShipPilotData(pilot, ship);
     }
 
@@ -298,8 +298,8 @@ public static class ArmyCreator
             return null;
         }
         var listTyper = new List<ShipType>() { ShipType.Light, ShipType.Heavy, ShipType.Middle };
-        var ship = Library.CreateShip(listTyper.RandomElement(), config, player);
         var pilot = Library.CreateDebugPilot();
+        var ship = Library.CreateShip(listTyper.RandomElement(), config, player,pilot);
         v.Points -= Library.BASE_SHIP_VALUE;
         logs.AddLog(v.Points,"create ship");
         var startData = new StartShipPilotData(pilot, ship);

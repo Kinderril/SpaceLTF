@@ -150,8 +150,8 @@ public static class ArmyCreatorSpecial
         var remainPoints = points;
         var player = new Player("Boss1");
 
-        var shipMain = Library.CreateShip(ShipType.Base, config, player);
         var pilot = Library.CreateDebugPilot();
+        var shipMain = Library.CreateShip(ShipType.Base, config, player, pilot);
         var shipMainStartData = new StartShipPilotData(pilot, shipMain);
         list.Add(shipMainStartData);
 
@@ -248,8 +248,8 @@ public static class ArmyCreatorSpecial
     private static StartShipPilotData AddShipWithWeapons(ShipType type, ShipConfig config, Player player,
         WeaponType weaponType)
     {
-        var shipHeavy = Library.CreateShip(type, config, player);
         var pilotH = Library.CreateDebugPilot();
+        var shipHeavy = Library.CreateShip(type, config, player, pilotH);
         var shipMainStartDataH = new StartShipPilotData(pilotH, shipHeavy);
         var weaponSlots = shipHeavy.WeaponsModuls.Length;
         for (int i = 0; i < weaponSlots; i++)

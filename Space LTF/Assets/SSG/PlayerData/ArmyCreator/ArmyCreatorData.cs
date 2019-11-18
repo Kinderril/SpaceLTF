@@ -24,7 +24,7 @@ public class ArmyCreatorData
     {
         _isAi = isAi;
         ArmyConfig = config;
-        simlplModuls = LibraryModuls.GetNormalList();
+        simlplModuls = LibraryModuls.GetExistsCacheList();
         spellModuls =  AllSpells();
         weapons = AllWeaponModuls();
     }

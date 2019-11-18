@@ -209,7 +209,7 @@ public class DataStructPrefabs : MonoBehaviour
         var p = new Player("Debug test player");
         foreach (var shipStruct in Ships)
         {
-            var s = Library.CreateShip(shipStruct.ShipType, shipStruct.ShipConfig, p);
+            var s = Library.CreateShip(shipStruct.ShipType, shipStruct.ShipConfig, p,Library.CreateDebugPilot());
             if (s.WeaponModulsCount != shipStruct.ShipBase.WeaponPosition.Count && shipStruct.ShipType != ShipType.Base)
             {
                 Debug.LogError(String.Format("wrong weapons postions count {0} and {1}.   target:{2}  onPrefab:{3}", shipStruct.ShipType,

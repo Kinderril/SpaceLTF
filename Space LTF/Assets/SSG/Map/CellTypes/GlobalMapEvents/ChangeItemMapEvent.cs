@@ -50,7 +50,7 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
                     break;
                 case ItemType.modul:
                     var list = new List<int>() { 1, 2 };
-                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(), MyExtensions.IsTrueEqual());
+                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(),2);
                     break;
                 case ItemType.spell:
                     _itemsToTrade = Library.CreateSpell();

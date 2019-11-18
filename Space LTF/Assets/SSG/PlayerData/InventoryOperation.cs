@@ -164,6 +164,12 @@ public  static  class  InventoryOperation
                 , failCallback, msg);
             return;
         }
+        if (!to.CanMoveToByLevel(item))
+        {
+            WindowManager.Instance.InfoWindow.Init(null, Namings.CantByLevel);
+            failCallback();
+            return;
+        }
         if (item.CurrentInventory.IsShop())    //Игрок покупает у магазина
         {
             var valuableCoef = item.CurrentInventory.ValuableItem(item);
@@ -200,6 +206,7 @@ public  static  class  InventoryOperation
 
             return;
         }
+
 
         CallbackSuccsess();
     }

@@ -101,6 +101,7 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
 
 
     public int CostValue { get { return MoneyConsts.SPELL_BASE_MONEY_COST; } }
+    public int RequireLevel => 1;
 
     public string GetInfo()
     {

@@ -57,7 +57,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
             MainController.Instance.MainPlayer.MoneyData.RemoveMoney(_itemCost);
             string d = "";
             int slot;
-            var m = Library.CreatSimpleModul(2,SkillWork(3,ScoutsLevel));
+            var m = Library.CreatSimpleModul(2);
             var itemName = Namings.SimpleModulName(m.Type);
             var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out slot);
             if (canAdd)

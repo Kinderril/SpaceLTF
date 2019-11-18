@@ -166,6 +166,8 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         get { return MoneyConsts.BASE_WEAPON_MONEY_COST + MoneyConsts.LEVEL_WEAPON_MONEY_COST * (Level - 1); }
     }
 
+    public int RequireLevel => 1 + (Level - 1) * Library.WEAPON_REQUIRE_LEVEL_COEF;
+
     public string GetInfo()
     {
         return Name + " (" + Level + ")";

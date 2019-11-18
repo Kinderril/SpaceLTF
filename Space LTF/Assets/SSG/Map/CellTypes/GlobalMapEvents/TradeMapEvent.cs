@@ -55,7 +55,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
                     break;
                 case ItemType.modul:
                     var list = new List<int>() { 1, 2 };
-                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(), MyExtensions.IsTrueEqual());
+                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(),3);
                     break;
                 case ItemType.spell:
                     _itemsToTrade = Library.CreateSpell();

@@ -65,7 +65,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
 
             if (MyExtensions.IsTrueEqual())
             {
-                var m = Library.CreatSimpleModul(2, SkillWork(3, DiplomacyLevel));
+                var m = Library.CreatSimpleModul(2);
                 var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);
                 if (canAdd)
                 {

@@ -47,7 +47,7 @@ public class DebugParamsController
 
         var type = types.Random();
         var cng = configs.Random();
-        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer);
+        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer,pilot);
         WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}", Namings.ShipConfig(cng), Namings.ShipType(type)));
         var data = new StartShipPilotData(pilot, ship);
         data.Ship.SetRepairPercent(0.1f);

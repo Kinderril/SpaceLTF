@@ -54,6 +54,11 @@ public class PlayerInventory : IInventory
         return false;
     }
 
+    public bool CanMoveToByLevel(IItemInv item)
+    {
+        return true;
+    }
+
     public List<IItemInv> GetAllItems()
     {
         var list = new List<IItemInv>();

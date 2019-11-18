@@ -62,7 +62,8 @@ public static class MoneyConsts
     public const int LEVEL_WEAPON_MONEY_COST = 13;
     public const int SPELL_BASE_MONEY_COST = 16;
     public const int MODUL_BASE_MONEY_COST = 16;
-    public const int MODUL_LEVEL_MONEY_COST = 14;
+    public const float MODUL_BASE_MONEY_COST_MID = 2f;
+    public const int MODUL_LEVEL_MONEY_COST = 11;
     public const int MODUL_RARE_MONEY_COST = 26;
 
 

@@ -53,7 +53,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             string names = "";
             for (int i = 0; i < MyExtensions.Random(1,2); i++)
             {
-                var m = Library.CreatSimpleModul(MyExtensions.Random(1, 2), SkillWork(4, ScoutsLevel));
+                var m = Library.CreatSimpleModul(MyExtensions.Random(1, 2),3);
                 var itemName = Namings.SimpleModulName(m.Type);
                 var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);
                 if (canAdd)

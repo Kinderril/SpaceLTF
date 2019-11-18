@@ -435,7 +435,7 @@ public class PlayerAfterBattleOptions
             MainController.Instance.MainPlayer.MoneyData.RemoveMoney(moneyCost);
             var type = types.Random();
             var cng = config.HasValue ? config.Value : configs.Random();
-            var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer);
+            var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer,pilot);
             WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}", Namings.ShipConfig(cng), Namings.ShipType(type)));
             int itemsCount = MyExtensions.Random(1, 2);
             for (int i = 0; i < itemsCount; i++)

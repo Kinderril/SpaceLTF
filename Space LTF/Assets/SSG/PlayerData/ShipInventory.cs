@@ -29,6 +29,7 @@ public class ShipInventory : IStartShipParams , IInventory
     public ShipConfig ShipConfig { get; private set; }
     public int WeaponModulsCount { get; private set; }
     public int SimpleModulsCount { get; private set; }
+    public PilotParameters PilotParameters { get; set; }
     public int SpellModulsCount { get; private set; }
     public int CriticalDamages { get; private set; }
     public string Name { get; private set; }
@@ -40,10 +41,12 @@ public class ShipInventory : IStartShipParams , IInventory
     public WeaponInv[] WeaponsModuls ;
     public BaseSpellModulInv[] SpellsModuls ;
     private readonly Player _player;
+    private PilotParameters _pilot;
 
 
-    public ShipInventory(IStartShipParams pParams, Player player)
+    public ShipInventory(IStartShipParams pParams, Player player, PilotParameters pilot)
     {
+        _pilot = pilot;
         CriticalDamages = 0;
         HealthPercent = 1f;
         _player = player;
@@ -225,6 +228,11 @@ public class ShipInventory : IStartShipParams , IInventory
     public bool IsShop()
     {
         return false;
+    }
+
+    public bool CanMoveToByLevel(IItemInv item)
+    {
+        return item.RequireLevel <= _pilot.CurLevel;
     }
 
     public int HealthPointToRepair()

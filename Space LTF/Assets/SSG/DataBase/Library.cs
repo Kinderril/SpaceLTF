@@ -99,6 +99,11 @@ public static class Library
     public const int SHIELD_COEF_EXTRA_CHARGE = 10;
     public static int RANK_ERIOD = 8;
     public static int BASE_CHARGES_COUNT = 5;
+    public const float BATTLE_REWARD_WIN_MONEY_COEF = 1.3f;
+    public const float MONEY_PILOT_LEVEL_UP_COST_BASE = 5f;
+    public const float MONEY_PILOT_LEVEL_UP_COST_COEF = 0.75f;
+    public static int WEAPON_REQUIRE_LEVEL_COEF = 3;
+    public static int MODUL_REQUIRE_LEVEL_COEF = 3;
 
 
     #region GLOBAL_MAP_DATA
@@ -141,7 +146,7 @@ public static class Library
         _lvlUps = new int[MAX_PILOT_PARAMETER_LEVEL];
         for (int i = 0; i < MAX_PILOT_PARAMETER_LEVEL; i++)
         {
-            _lvlUps[i] = (int)(i * 0.5f + 4f);
+            _lvlUps[i] = (int)(i * MONEY_PILOT_LEVEL_UP_COST_COEF + MONEY_PILOT_LEVEL_UP_COST_BASE);
         }
         LibraryModuls.Init();
     }
@@ -218,7 +223,7 @@ public static class Library
         return w;
     }
     
-    public static ShipInventory CreateShip(ShipType shipType, ShipConfig config,Player player)
+    public static ShipInventory CreateShip(ShipType shipType, ShipConfig config,Player player,PilotParameters pilot)
     {
         switch (config)
         {
@@ -226,39 +231,39 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 15, 5, 3.2f, 89,1, 0, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 15, 5, 3.2f, 89,1, 0, 0, 1, 0.0f), player,pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 18, 7, 2.8f, 71, 1, 0, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 18, 7, 2.8f, 71, 1, 0, 0, 1, 0.0f), player, pilot);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 33, 10, 0.51f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 33, 10, 0.51f, 40, 0, 0, 4, 1, 0f), player, pilot);
                 }
                 break;
             case ShipConfig.raiders:
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 21, 14, 4.3f, 78,1, 3, 0, 1, 0.0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 21, 14, 4.3f, 78,1, 3, 0, 1, 0.0f), player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 28, 16, 3.8f, 70, 1, 4, 0, 1, 0.05f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 28, 16, 3.8f, 70, 1, 4, 0, 1, 0.05f), player, pilot);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 32, 18, 3.5f, 68, 2, 4, 0, 1, 0.1f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 32, 18, 3.5f, 68, 2, 4, 0, 1, 0.1f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 46, 28, 1.5f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 46, 28, 1.5f, 40, 0, 0, 4, 1, 0f), player, pilot);
                 }
                 break;
             case ShipConfig.mercenary:
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 22, 11, 3.8f, 72, 2, 2, 0, 1, 0.1f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 22, 11, 3.8f, 72, 2, 2, 0, 1, 0.1f), player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 26, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 26, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f), player, pilot);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 41, 28, 0.81f, 40, 0, 0, 3, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 41, 28, 0.81f, 40, 0, 0, 3, 1, 0f), player, pilot);
                 }
 
                 break;
@@ -266,39 +271,39 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 20, 16, 3.4f, 70, 2, 1, 0, 1, 0.2f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 20, 16, 3.4f, 70, 2, 1, 0, 1, 0.2f), player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 25, 21, 2.7f, 59, 3, 2, 0, 1, 0.25f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 25, 21, 2.7f, 59, 3, 2, 0, 1, 0.25f), player, pilot);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 35, 35, 0.71f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 35, 35, 0.71f, 40, 0, 0, 4, 1, 0f), player, pilot);
                 }
                 break;
             case ShipConfig.ocrons:
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 52, 0, 3.6f, 75, 2, 3, 0, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 52, 0, 3.6f, 75, 2, 3, 0, 1, 0f), player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 62, 0, 3.2f, 62, 2, 3, 0, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 62, 0, 3.2f, 62, 2, 3, 0, 1, 0f), player, pilot);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 66, 10, 0.75f, 40, 0, 0, 2, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 66, 10, 0.75f, 40, 0, 0, 2, 1, 0f), player, pilot);
                 }
                 break;
             case ShipConfig.krios:
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 14, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 14, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f), player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 18, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 18, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f), player, pilot);
                     case ShipType.Heavy:
-                        return new ShipInventory(new StartShipParams(shipType, config, 20, 44, 2.2f, 53, 2, 3, 0, 1, 0.4f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 20, 44, 2.2f, 53, 2, 3, 0, 1, 0.4f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 16, 55, 0.6f, 40, 0, 0, 4, 1, 0f), player);
+                        return new ShipInventory(new StartShipParams(shipType, config, 16, 55, 0.6f, 40, 0, 0, 4, 1, 0f), player, pilot);
                 }
                 break;
             default:
@@ -361,19 +366,27 @@ public static class Library
         }
     }
 
-    public static BaseModulInv CreatSimpleModul(int level,bool rare)
+    public static BaseModulInv CreatSimpleModul(int level)
     {
-        List<SimpleModulType> list;
-        if (rare)
+        List<SimpleModulType> list = LibraryModuls.GetExistsCacheList();
+        var type = list.RandomElement();
+        return CreatSimpleModul(type, level);
+    }    
+    
+    public static BaseModulInv CreatSimpleModul(int level,int maxLvl)
+    {
+        List<SimpleModulType> list = LibraryModuls.GetExistsCacheList();
+        var onlyLevel = list.Where(x => BaseModulInv.GetBaseReuire(x) <= maxLvl).ToList();
+        SimpleModulType type;
+        if (onlyLevel.Count > 0)
         {
-            list = LibraryModuls.GetRareList();
+            type = onlyLevel.RandomElement();
         }
         else
         {
-            list = LibraryModuls.GetNormalList();
+            Debug.LogError($"can't create moduls with max level:{maxLvl}");
+            type = list.RandomElement();
         }
-
-        var type = list.RandomElement();
         return CreatSimpleModul(type, level);
     }
 

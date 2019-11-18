@@ -23,13 +23,14 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     public SliderWithTextMeshPro AngField;
     public SliderWithTextMeshPro ReloadField;       
     public SliderWithTextMeshPro BulletSpeedField;       
-    public SliderWithTextMeshPro ShootPerTime;       
+    public SliderWithTextMeshPro ShootPerTime;
 
     public Transform Layout;
 
     public GameObject ButtonContainer;
     public Button ButtonUpgrade;
     public TextMeshProUGUI MaxLevel;
+    public TextMeshProUGUI ReqireLevelFeild;
     public MoneySlotUI UpgradeCost;
     private WeaponUIParams dataModif;
     private bool _withModul;
@@ -84,6 +85,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
             var cost = MoneyConsts.WeaponUpgrade[_weapon.Level];
             UpgradeCost.Init(cost);
         }
+        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild,_weapon.RequireLevel);
     }
 
     public void OnClickUpgrade()

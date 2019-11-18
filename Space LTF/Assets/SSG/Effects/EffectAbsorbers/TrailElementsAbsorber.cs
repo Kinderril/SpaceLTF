@@ -7,12 +7,12 @@ using UnityEngine;
 
 public class TrailElementsAbsorber :BaseEffectAbsorber
 {
-    public FXTrailSeries FXTrailSeries;
+//    public FXTrailSeries FXTrailSeries;
 
     public override void Play(Vector3 pos1, Vector3 pos2)
     {
         transform.position = pos1;
-        FXTrailSeries.SetTarget(pos2);
+//        FXTrailSeries.SetTarget(pos2);
         base.Play(pos1, pos2);
         //        FXTrailSeries.enableEmission = true;
     }
@@ -20,7 +20,7 @@ public class TrailElementsAbsorber :BaseEffectAbsorber
     public override void UpdatePositions(Vector3 pos1, Vector3 pos2)
     {
         transform.position = pos1;
-        FXTrailSeries.SetTarget(pos2);
+//        FXTrailSeries.SetTarget(pos2);
     }
 
     public override void Play()

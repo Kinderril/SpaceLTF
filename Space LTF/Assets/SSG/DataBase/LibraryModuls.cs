@@ -6,8 +6,9 @@ using System.Linq;
 
 public static class LibraryModuls
 {
-    private static List<SimpleModulType> CommonModuls;
-    private static List<SimpleModulType> RareModuls;
+    private static List<SimpleModulType> ExistModuls;
+    private static WDictionary<SimpleModulType> ExistModulsDictionary;
+//    private static List<SimpleModulType> RareModuls;
     private static List<SimpleModulType> NotExistModuls;
 
     private static List<SimpleModulType> NonSupportList;
@@ -30,13 +31,21 @@ public static class LibraryModuls
         }
 
 
-        CommonModuls = GetCommonList().ToList();
-        RareModuls = RareList().ToList();
+        ExistModuls = GetExisList().ToList();
+//        RareModuls = RareList().ToList();
+Dictionary< SimpleModulType ,float> typesDictionary = new Dictionary<SimpleModulType, float>();
+        foreach (var simpleModulType in ExistModuls)
+        {
+            var coef = BaseModulInv.GetBaseReuire(simpleModulType);
+            typesDictionary.Add(simpleModulType,10f - coef);
+
+        }
+        ExistModulsDictionary = new WDictionary<SimpleModulType>(typesDictionary);
         NotExistModuls = NotExistList().ToList();
 
-        if (CommonModuls.Count + RareModuls.Count + NotExistModuls.Count != all.Length)
+        if (ExistModuls.Count + NotExistModuls.Count != all.Length)
         {
-            Debug.LogError($"Wrong delemiter of CommonModuls {CommonModuls.Count} + RareModuls {RareModuls.Count} + NotExistModuls {NotExistModuls.Count}  != all:{all.Length}");
+            Debug.LogError($"Wrong delemiter of ExistModuls {ExistModuls.Count} + NotExistModuls {NotExistModuls.Count}  != all:{all.Length}");
         }
     }
 
@@ -44,23 +53,28 @@ public static class LibraryModuls
     {
         return SupportHashSet.Contains(type);
     }
-    public static bool IsRare(SimpleModulType type)
-    {
-        return RareModuls.Contains(type);
-    }
+//    public static bool IsRare(SimpleModulType type)
+//    {
+//        return RareModuls.Contains(type);
+//    }
 
-    public static List<SimpleModulType> GetNormalList()
+    public static List<SimpleModulType> GetExistsCacheList()
     {
-        return CommonModuls;
+        return ExistModuls;
+    }  
+    public static WDictionary<SimpleModulType> GetExistsCacheDictionary()
+    {
+
+        return ExistModulsDictionary;
     }   
 //    public static List<SimpleModulType> GetUpgradesList()
 //    {
 //        return UpgradesModuls;
 //    }  
-    public static List<SimpleModulType> GetRareList()
-    {
-        return RareModuls;
-    }
+//    public static List<SimpleModulType> GetRareList()
+//    {
+//        return RareModuls;
+//    }
 
 
     private static HashSet<SimpleModulType> All()
@@ -130,7 +144,15 @@ public static class LibraryModuls
         return typesToRnd;
     }
 
-    private static HashSet<SimpleModulType> RareList()
+//    private static HashSet<SimpleModulType> RareList()
+//    {
+//        var typesToRnd = new HashSet<SimpleModulType>()
+//        {
+//        };
+//        return typesToRnd;
+//    }
+
+    private static HashSet<SimpleModulType> GetExisList()
     {
         var typesToRnd = new HashSet<SimpleModulType>()
         {
@@ -151,14 +173,6 @@ public static class LibraryModuls
             SimpleModulType.WeaponShootPerTime,
             SimpleModulType.armor,
             SimpleModulType.frontShield,
-        };
-        return typesToRnd;
-    }
-
-    private static HashSet<SimpleModulType> GetCommonList()
-    {
-        var typesToRnd = new HashSet<SimpleModulType>()
-        {
             SimpleModulType.antiPhysical,
             SimpleModulType.antiEnergy,
             SimpleModulType.shieldLocker,
@@ -181,8 +195,6 @@ public static class LibraryModuls
             SimpleModulType.ShipDecreaseSpeed,
             SimpleModulType.fireMines,
             SimpleModulType.WeaponFire,
-
-
         };
         return typesToRnd;
     }

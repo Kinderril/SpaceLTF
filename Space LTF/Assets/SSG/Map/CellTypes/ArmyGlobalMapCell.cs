@@ -287,7 +287,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 int slot;
                 if (MyExtensions.IsTrue01(.5f))
                 {
-                    var m = Library.CreatSimpleModul(2, MyExtensions.IsTrueEqual());
+                    var m = Library.CreatSimpleModul(2);
                     itemName = Namings.SimpleModulName(m.Type);
                     canAdd = player.Inventory.GetFreeSimpleSlot(out slot);
                     if (canAdd)

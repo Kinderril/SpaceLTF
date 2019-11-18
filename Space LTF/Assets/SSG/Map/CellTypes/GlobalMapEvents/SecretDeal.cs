@@ -55,7 +55,7 @@ public class SecretDeal : BaseGlobalMapEvent
     private MessageDialogData tryRunWithAll()
     {
         var money = GlobalMapCell.AddMoney(24, 47);
-        var m = Library.CreatSimpleModul(2,MyExtensions.IsTrueEqual());
+        var m = Library.CreatSimpleModul(2,4);
         var itemName = Namings.SimpleModulName(m.Type);
         var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);
         if (canAdd)

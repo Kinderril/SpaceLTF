@@ -747,4 +747,6 @@ public static class Namings
     public static string UnstableCore0 = "Some of your ships can get damage cause your core is unstable.\n\n Find repair services to stabilize your core.\n\n If core stability level become less than -10 your fleet will be destroyed.";
 
     public static string MapExit = "Do you want to exit to main menu?\nProgress will be saved and you can resume later.";
+    public static string CantByLevel = "Can't use this item cause ship level is too low";
+    public static string ReqireLevelFeild = "Require pilot level:{0}";
 }
