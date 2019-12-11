@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -116,7 +117,7 @@ public class PilotParameters : IPilotParameters
         }
 
         var rnd = type;
-        if (CanUpgradeByLevel(CurLevel) && MoneyData.PayLvlUp(CurLevel))
+        if (CanUpgradeByLevel(CurLevel)) // && MoneyData.PayLvlUp(CurLevel))
         {
             UpgradeLevelByType(rnd,withMsg);
         }
@@ -192,8 +193,11 @@ public class PilotParameters : IPilotParameters
                 UpgradeMaxTurnSpeedCoef();
                 break;
         }
+
+        var msg = String.Format("Ship {0} upgraded!", Namings.ParameterName(rnd));
+        UnityEngine.Debug.Log(msg.Yellow());
         if (withMsg)
-            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format("Ship {0} upgraded!",Namings.ParameterName(rnd)));
+            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(msg);
         if (OnLevelUp != null)
         {
             OnLevelUp(this);

@@ -365,6 +365,23 @@ public class Commander
             return true;
         }
         return false;
+    }     
+    
+    public bool TryWave(ShipBase ship)
+    {
+        var c = Library.COINS_TO_WAVE_SHIP;
+        var delay = Library.COINS_TO_WAVE_SHIP_DELAY;
+//        var percent = Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT;
+        if (CoinController.CanUseCoins(c))
+        {
+            CoinController.UseCoins(c,delay);
+            ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.WaveStrikeShip);
+            ship.WeaponsController.StrikeWave();
+//            Bullet.Create(DataBaseController.Instance.GetBullet(WeaponType.waveStrike))
+//            ship.ShipParameters.ShieldParameters.HealShield(countToHeal);
+            return true;
+        }
+        return false;
     }
 
     public bool TryWeaponBuffShip(ShipBase ship)

@@ -13,11 +13,18 @@ public class MapNavigationList : MonoBehaviour
     public NavigationButton ButtonPrefab;
     public GlobalMapController GlobalMap;
     private bool IsScoutsInited;
+    private bool _isHomeInited;
     private NavigationButton _lastSoutButton;
 
     public void Init(GlobalMapController globalMap)
     {
         GlobalMap = globalMap;
+//        subInit();
+        InitHome();
+    }
+
+    private void subInit()
+    {
         MainController.Instance.MainPlayer.QuestData.OnElementFound += OnElementFound;
         MainController.Instance.MainPlayer.LastScoutsData.OnLastScouts += OnLastScouts;
 
@@ -26,7 +33,6 @@ public class MapNavigationList : MonoBehaviour
             IsScoutsInited = true;
             InitButtons();
         }
-
     }
 
     private void OnLastScouts()
@@ -36,7 +42,6 @@ public class MapNavigationList : MonoBehaviour
 
     private void InitScoutsButton()
     {
-        var player = MainController.Instance.MainPlayer;
         _lastSoutButton = InitScout();
         _lastSoutButton.Field.text = Namings.Scouted;
         _lastSoutButton.gameObject.SetActive(false);
@@ -47,6 +52,7 @@ public class MapNavigationList : MonoBehaviour
     {
         IsScoutsInited = true;
         Layout.ClearTransform();
+        _isHomeInited = false;
     }
 
     private void InitButtons()
@@ -108,13 +114,18 @@ public class MapNavigationList : MonoBehaviour
 
     private void InitHome()
     {
+        if (_isHomeInited)
+        {
+            return;
+        }
         var homeBtn = DataBaseController.GetItem(ButtonPrefab);
         homeBtn.gameObject.transform.SetParent(Layout, false);
         homeBtn.Button.onClick.AddListener(() =>
         {
             GlobalMap.SetCameraHome();
         });
-        homeBtn.Field.text = Namings.Home; 
+        homeBtn.Field.text = Namings.Home;
+        _isHomeInited = true;
     }
 
     private NavigationButton InitCellButton(GlobalMapCell c)

@@ -11,6 +11,8 @@ public enum StartMode
 
 public class MainController : Singleton<MainController>
 {
+    public const string VERSION = "017";
+
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
     public Player MainPlayer;

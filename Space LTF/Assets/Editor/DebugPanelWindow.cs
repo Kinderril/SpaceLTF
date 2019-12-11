@@ -107,6 +107,10 @@ public class DebugPanelWindow : EditorWindow
             if (GUILayout.Button("Go End"))
             {
                 GoToEnd();
+            } 
+            if (GUILayout.Button("Anomaly"))
+            {
+                DebugEventStart.AcitvateDialog(GlobalMapEventType.anomaly);
             }
             if (GUILayout.Button("Add core"))
             {

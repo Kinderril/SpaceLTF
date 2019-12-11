@@ -47,6 +47,7 @@ public class Pool
         CreateNewTooltip();
         RegisterEffect(Utils.GetId(),DataBaseController.Instance.DataStructPrefabs.OnShipDeathEffect);
         RegisterEffect(Utils.GetId(),DataBaseController.Instance.DataStructPrefabs.ShieldChagedEffect);
+        RegisterEffect(Utils.GetId(),DataBaseController.Instance.DataStructPrefabs.WeaponWaveStrike);
 //        var baseT = _canvasContainer;
         for (int i = 0; i < 10; i++)
         {

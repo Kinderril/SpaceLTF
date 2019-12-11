@@ -13,7 +13,7 @@ public delegate void ItemTransfer(IInventory from, IInventory to, IItemInv item)
 public class Player
 {
     public const int MAX_ARMY = 5;
-    public const string mainPlayer = "myPlayerData.data";
+    public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
     //    public int CoinsCount = 7;
     public PlayerInventory Inventory;
     public PlayerParameters Parameters;

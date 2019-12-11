@@ -31,6 +31,7 @@ public class AudioDataBase : MonoBehaviour
     public AudioClip SelectSpell;
     public AudioClip CastDefaultSpell;
     public AudioClip HealSheild;
+    public AudioClip WaveStrikeShip;
     public AudioClip ChargePowerWeapons;
     public AudioClip BufffShip;
     public AudioClip EngineDamage;

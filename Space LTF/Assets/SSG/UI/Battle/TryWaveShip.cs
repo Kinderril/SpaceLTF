@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class TryChargeButton : UIElementWithTooltip
+public class TryWaveShip : UIElementWithTooltip
 {
     public Animator FailObject;
     private ShipBase _ship;
@@ -19,7 +19,7 @@ public class TryChargeButton : UIElementWithTooltip
 
     public void OnTryChargeClick()
     {
-        if (!_ship.Commander.TryRecharge(_ship))
+        if (!_ship.Commander.TryWave(_ship))
         {
             FailObject.SetTrigger("Play");
         }
@@ -32,7 +32,8 @@ public class TryChargeButton : UIElementWithTooltip
 
     protected override string TextToTooltip()
     {
-        return String.Format(Namings.RechargeButton,Library.COINS_TO_CHARGE_SHIP_SHIELD,Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY);
+        return String.Format(Namings.RoundWaveStrike,Library.COINS_TO_WAVE_SHIP,
+            Library.COINS_TO_WAVE_SHIP_DELAY, WeaponRoundWaveStrike.SHIELD_DAMAGE, WeaponRoundWaveStrike.BODY_DAMAGE);
     }
 }
 

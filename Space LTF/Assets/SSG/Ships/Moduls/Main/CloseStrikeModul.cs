@@ -146,10 +146,6 @@ public class CloseStrikeModul : BaseModul,IWeapon
         _striking = false;
     }
 
-
-    
-
-
     private void StrikeToShip(ShipBase ship)
     {
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public enum AnomalyTypeUnlock
 {
-    freezing,
+     freezing,
      explosive,
      fire,
      impulse

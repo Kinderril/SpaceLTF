@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[Serializable]
+//[Serializable]
 public class WeaponsPair
 {
     public WeaponsPair(WeaponType Part1, WeaponType Part2)
@@ -27,7 +27,7 @@ public class WeaponsPair
     }
 }
 
-[Serializable]
+//[Serializable]
 public class OpenShipConfig
 {
     public OpenShipConfig(ShipConfig config)
@@ -44,9 +44,31 @@ public class OpenShipConfig
 public class PlayerStatistics
 {
     public const int OPEN_FOR_END_GAME = 3;
-    private const string mainPlayer = "/stats.stat";
-    public List<OpenShipConfig> OpenShipsTypes = new List<OpenShipConfig>();
-    public List<WeaponsPair> WeaponsPairs = new List<WeaponsPair>();
+    private static string mainPlayer = $"/stats_{MainController.VERSION}.stat";
+
+    [field: NonSerialized]
+    public List<OpenShipConfig> OpenShipsTypes = new List<OpenShipConfig>()
+        {
+            new OpenShipConfig(ShipConfig.mercenary),
+            new OpenShipConfig(ShipConfig.raiders),
+            new OpenShipConfig(ShipConfig.federation),
+            new OpenShipConfig(ShipConfig.ocrons),
+            new OpenShipConfig(ShipConfig.krios),
+        };
+
+    [field: NonSerialized]
+    public List<WeaponsPair> WeaponsPairs = new List<WeaponsPair>()
+    {
+        new WeaponsPair(WeaponType.laser, WeaponType.impulse),
+        new WeaponsPair(WeaponType.laser, WeaponType.rocket),
+        new WeaponsPair(WeaponType.rocket, WeaponType.eimRocket),
+        new WeaponsPair(WeaponType.impulse, WeaponType.casset),
+        new WeaponsPair(WeaponType.casset, WeaponType.beam),
+        new WeaponsPair(WeaponType.eimRocket, WeaponType.beam),
+    };
+
+    private int _openedWeapons = 0;
+    private int _openedConfigs = 0;
     public EndBattleType LastBattle = EndBattleType.win;
     public EndGameStatistics EndGameStatistics = new EndGameStatistics();
     private float _lastDifficulty;
@@ -62,40 +84,37 @@ public class PlayerStatistics
             EndGameStatistics=new EndGameStatistics();
         }
         EndGameStatistics.Init();
-        if (OpenShipsTypes.Count == 0)
-        {
-            var sc1 = new OpenShipConfig(ShipConfig.mercenary);
-            var sc2 = new OpenShipConfig(ShipConfig.raiders);
-            var sc3 = new OpenShipConfig(ShipConfig.federation);
-            var sc4 = new OpenShipConfig(ShipConfig.ocrons);
-            var sc5 = new OpenShipConfig(ShipConfig.krios);
-            sc1.IsOpen = true;
-//#if UNITY_EDITOR
-//            sc1.IsOpen = sc2.IsOpen = sc3.IsOpen = sc4.IsOpen = sc5.IsOpen = true;
-//#endif
-            OpenShipsTypes.Add(sc1);
-            OpenShipsTypes.Add(sc2);
-            OpenShipsTypes.Add(sc3);
-            OpenShipsTypes.Add(sc4);
-            OpenShipsTypes.Add(sc5);
-        }
-        if (WeaponsPairs.Count == 0)
-        {
-            var p0 = new WeaponsPair(WeaponType.laser, WeaponType.impulse);
-            var p1 = new WeaponsPair(WeaponType.laser, WeaponType.rocket);
-            var p2 = new WeaponsPair(WeaponType.rocket, WeaponType.eimRocket);
-            var p3 = new WeaponsPair(WeaponType.impulse, WeaponType.casset);
-            var p4 = new WeaponsPair(WeaponType.casset, WeaponType.beam);
-            var p5 = new WeaponsPair(WeaponType.eimRocket, WeaponType.beam);
-            WeaponsPairs.Add(p0);
-            WeaponsPairs.Add(p1);
-            WeaponsPairs.Add(p2);
-            WeaponsPairs.Add(p3);
-            WeaponsPairs.Add(p4);
-            WeaponsPairs.Add(p5);
+        RefreshOpened();
+    }
 
-            p0.IsOpen = true;
-            p1.IsOpen = true;
+    private void RefreshOpened()
+    {
+        if (_openedWeapons < 2)
+        {
+            _openedWeapons = 2;
+        }
+
+        if (_openedConfigs < 1)
+        {
+            _openedConfigs = 1;
+        }
+
+        _openedConfigs = _openedConfigs > OpenShipsTypes.Count ? OpenShipsTypes.Count : _openedConfigs;
+        _openedWeapons = _openedWeapons > WeaponsPairs.Count ? WeaponsPairs.Count : _openedWeapons;
+
+        for (int i = 0; i < _openedWeapons; i++)
+        {
+            var weap = WeaponsPairs[i];
+            weap.IsOpen = true;
+        }
+        for (int i = 0; i < _openedConfigs; i++)
+        {
+            var ships = OpenShipsTypes[i];
+            ships.IsOpen = true;
+            if (i == _openedConfigs)
+            {
+                LastOpenShipConfig = ships;
+            }
         }
     }
 
@@ -121,30 +140,15 @@ public class PlayerStatistics
 
     private void OpenConfig()
     {
-
-        foreach (var openShipConfig in OpenShipsTypes)
-        {
-            if (!openShipConfig.IsOpen)
-            {
-                LastOpenShipConfig = openShipConfig;
-                openShipConfig.IsOpen = true;
-                break;
-            }
-        }
+        _openedConfigs++;
+        RefreshOpened();
         SaveGame();
     }
 
     private void OpenWeapon()
     {
-        foreach (var weaponsPair in WeaponsPairs)
-        {
-            if (!weaponsPair.IsOpen)
-            {
-                LastWeaponsPairOpen = weaponsPair;
-                weaponsPair.IsOpen = true;
-                break;
-            }
-        }
+        _openedWeapons++;
+        RefreshOpened();
         SaveGame();
     }
 
@@ -195,20 +199,20 @@ public class PlayerStatistics
     {
         var OpenWeapons = false;
         var OpenConfigs = false;
-        var notOpendTypes = OpenShipsTypes.Where(x => !x.IsOpen).ToList();
-        var notOpendWeapons = WeaponsPairs.Where(x => !x.IsOpen).ToList();
-        var notOpendTypesCount = notOpendTypes.Count;
-        var notOpendWeaponsCount = notOpendWeapons.Count;
+//        var notOpendTypes = OpenShipsTypes.Where(x => !x.IsOpen).ToList();
+//        var notOpendWeapons = WeaponsPairs.Where(x => !x.IsOpen).ToList();
+//        var notOpendTypesCount = notOpendTypes.Count;
+//        var notOpendWeaponsCount = notOpendWeapons.Count;
 
-        var weaponsOpen = WeaponsPairs.Count - notOpendWeaponsCount;
-        var configsOpen = OpenShipsTypes.Count - notOpendTypesCount;
-        if (weaponsOpen == 1 && configsOpen == 1)
+//        var weaponsOpen = WeaponsPairs.Count - notOpendWeaponsCount;
+//        var configsOpen = OpenShipsTypes.Count - notOpendTypesCount;
+        if (_openedWeapons == 1 && _openedConfigs == 1)
         {
             OpenWeapons = OpenConfigs = true;
         }
         else
         {
-            if (weaponsOpen < configsOpen)
+            if (_openedWeapons < _openedConfigs)
             {
                 OpenWeapons = true;
             }

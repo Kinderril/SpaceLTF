@@ -9,19 +9,11 @@ using UnityEngine.UI;
 
 public class CommanderCoinController
 {
-//    private List<CommandCoin> _availableCoins = new List<CommandCoin>();
     private CommandCoin[] _coins ;
     private int availableCount;
     public event Action<CommandCoin, bool> OnCoinChange;
-//    public event Action< bool> OnRegenEnable;
     private ShipBase _controlShip;
-//    private bool _isRegenEnable = true;
-//    public event Action<bool> OnRegenEnableChange;
-
-//    public bool EnableCharge { get; private set; }
-
     public float CoefSpeed  { get; private set; }
-//    private bool _isRegenEnable;
 
 public CommanderCoinController(int coinsCount,int levelcharges)
     {

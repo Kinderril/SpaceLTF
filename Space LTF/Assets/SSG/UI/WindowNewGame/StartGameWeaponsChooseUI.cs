@@ -18,7 +18,7 @@ public class StartGameWeaponsChooseUI :MonoBehaviour
     public void Init()
     {
         _toggleElements.Clear();
-           var pairs = MainController.Instance.Statistics.WeaponsPairs;
+        var pairs = MainController.Instance.Statistics.WeaponsPairs;
         Selected = pairs.FirstOrDefault(x => x.IsOpen);
         foreach (var sc in pairs)
         {

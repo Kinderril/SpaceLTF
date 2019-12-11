@@ -21,7 +21,7 @@ public class MapWindow : BaseWindow
     public MapConsoleUI MapConsoleUI;
     public InventoryUI InventoryUI;
     public DialogWindow DialogWindow;
-//    public TextMeshProUGUI SectorNameField;
+
     public TextMeshProUGUI MainQuestELelemntField;
     public TextMeshProUGUI ReputationField;
 
@@ -335,6 +335,11 @@ public class MapWindow : BaseWindow
         {
             Debug.LogError("Can't find end game cell");
         }
+    }
+
+    public void DebugActivateCellDialog(GlobalMapCell cell)
+    {
+         StartDialog(cell.GetDialog(), OnMainDialogEnds);
     }
 
     private void OnMainDialogEnds()

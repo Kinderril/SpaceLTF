@@ -26,9 +26,10 @@ public class SideShipInfo : MonoBehaviour
 
     public Transform WeaponsLayout;
 
+    public TryWaveShip TryWaveButton;
     public TryChargeButton TryChargeButton;
-    public TryBuffShip TryReloadButton;
-    public TryWeaponsShip TryWeaponsShipButton;
+//    public TryBuffShip TryReloadButton;
+//    public TryWeaponsShip TryWeaponsShipButton;
 
     public TextMeshProUGUI DamageDoneField;
     public TextMeshProUGUI KillsField;
@@ -64,9 +65,10 @@ public class SideShipInfo : MonoBehaviour
         _ship.DamageData.OnDamageDone += OnDamageDone;
         OnShipDesicionChange(ship, ship.DesicionData);
         ShipSlidersInfo.Init(ship);
+        TryWaveButton.Init(_ship);
         TryChargeButton.Init(_ship);
-        TryWeaponsShipButton.Init(_ship);
-        TryReloadButton.Init(_ship);
+//        TryWeaponsShipButton.Init(_ship);
+//        TryReloadButton.Init(_ship);
         InitWeapons();
         ShipTypeIcon.sprite =
             DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(ship.ShipParameters.StartParams.ShipType);
@@ -200,7 +202,7 @@ public class SideShipInfo : MonoBehaviour
         _ship.OnShipDesicionChange -= OnShipDesicionChange;
         ShipSlidersInfo.Dispose();
         TryChargeButton.Dispose();
-        TryWeaponsShipButton.Dispose();
+//        TryWeaponsShipButton.Dispose();
     }
 
 //    void Update()

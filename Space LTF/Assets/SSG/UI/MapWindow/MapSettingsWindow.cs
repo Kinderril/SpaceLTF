@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using Toggle = UnityEngine.UI.Toggle;
 
@@ -37,5 +38,11 @@ public class MapSettingsWindow : MonoBehaviour
     private void OnConfigrmClick()
     {
          WindowManager.Instance.OpenWindow(MainState.start);
+         var mapWindow = WindowManager.Instance.windows.FirstOrDefault(x => x.window is MapWindow);
+         if (mapWindow.window != null)
+         {
+             var mp = mapWindow.window as MapWindow;
+             mp.ClearAll();
+         }
     }
 }

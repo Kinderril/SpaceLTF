@@ -652,20 +652,20 @@ public static class Namings
         switch (config)
         {
             case global::ShipConfig.raiders:
-                return "Advantages: Good speed, many slots for modules." +
-                    "\nDisadvantages: Few weapon slots. No shield regeneration.";
+                return "Pros: Good speed, many slots for modules." +
+                    "\nCons: Few weapon slots. No shield regeneration.";
             case global::ShipConfig.federation:
-                return "Advantages: Many weapon slots. Shield regeneration." +
-                       "\nDisadvantages: Low speed.";
+                return "Pros: Many weapon slots. Shield regeneration." +
+                       "\nCons: Low speed.";
             case global::ShipConfig.mercenary:
-                return "Advantages: Balanced." +
-                       "\nDisadvantages: Balanced.";
+                return "Pros: Balanced." +
+                       "\nCons: Balanced.";
             case global::ShipConfig.ocrons:
-                return "Advantages: Perfect body health. Many slots for modules." +
-                       "\nDisadvantages: No shied. No shield regeneration";
+                return "Pros: Perfect body health. Many slots for modules." +
+                       "\nCons: No shied. No shield regeneration";
             case global::ShipConfig.krios:
-                return "Advantages: Good shield. Perfect shield regeneration" +
-                       "\nDisadvantages: Low body health.";
+                return "Pros: Good shield. Perfect shield regeneration" +
+                       "\nCons: Low body health.";
             case global::ShipConfig.droid:
                 return "";
         }
@@ -720,12 +720,10 @@ public static class Namings
         {
             case BattlefildEventType.asteroids:
                 return "Asteroid vortex";
-                break;
             case BattlefildEventType.shieldsOff:
                 return "EMP surge";
-                break;
             case BattlefildEventType.engineOff:
-                break;
+                return "Engines off";
             case BattlefildEventType.turrets:
                 break;
             case null:
@@ -739,11 +737,6 @@ public static class Namings
     public static string CriticalDamage = $"Critical damages. If damages more than {Library.CRITICAL_DAMAGES_TO_DEATH} ship destroyed";
     public static string Event = "Event";
 
-    public static string UnstableCore1 =
-        "Some of your ships damaged cause your core is unstable.\n\n Find repair services for stabilize your core.\n\n If core stability level become less than -10 your fleet destroyed.";    
-    public static string UnstableCore2 =
-        "Some of your ships damaged and some of your items was destroyed cause your core is unstable.\n\n Find repair services for stabilize your core.\n\n If core stability level become less than -10 your fleet destroyed.";
-
     public static string UnstableCore0 = "Some of your ships can get damage cause your core is unstable.\n\n Find repair services to stabilize your core.\n\n If core stability level become less than -10 your fleet will be destroyed.";
 
     public static string MapExit = "Do you want to exit to main menu?\nProgress will be saved and you can resume later.";
@@ -752,4 +745,6 @@ public static class Namings
 
     public static string CanCauseNoLevel =
         "Can't upgrade weapon cause pilot don't have enough level.\nPilot level:{0}. Target Level{1}";
+
+    public static string RoundWaveStrike = "Damage all ships near by [{2}/{3}].\n[Cost:{0}/{1}]";
 }

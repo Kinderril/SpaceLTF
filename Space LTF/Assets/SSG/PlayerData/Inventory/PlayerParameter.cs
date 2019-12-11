@@ -10,8 +10,8 @@ public class PlayerParameter
 {
     public string Name;
     public bool IsBattle;
-    public int Level;
-    private Player _player;
+    public virtual int Level { get; set; }
+    protected Player _player;
 
     [field: NonSerialized]
     public event Action<PlayerParameter> OnUpgrade;

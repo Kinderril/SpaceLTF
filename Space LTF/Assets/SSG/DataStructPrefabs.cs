@@ -75,6 +75,7 @@ public class DataStructPrefabs : MonoBehaviour
     public BaseEffectAbsorber OnShipDeathEffect;
     public BaseEffectAbsorber ShieldChagedEffect;
     public BaseEffectAbsorber EngineLockerEffect;
+    public BaseEffectAbsorber WeaponWaveStrike;
 
     //    public List<ActionIcon> ActionIcons = new List<ActionIcon>();
     //    private Dictionary<ActionType,Sprite> ActionIconsDic = new Dictionary<ActionType, Sprite>(); 

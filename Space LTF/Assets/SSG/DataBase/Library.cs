@@ -87,7 +87,9 @@ public static class Library
     public const int COINS_TO_POWER_WEAPON_SHIP_SHIELD = 1;
     public const int COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY = 40;
     public const int COINS_TO_CHARGE_SHIP_SHIELD = 1;
+    public const int COINS_TO_WAVE_SHIP = 1;
     public const int COINS_TO_CHARGE_SHIP_SHIELD_DELAY = 20;
+    public const int COINS_TO_WAVE_SHIP_DELAY = 30;
     public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.25f;
 
     public const int PriorityTargetCostTime = 120;
@@ -131,6 +133,7 @@ public static class Library
     public static int REPUTATION_SCIENS_LAB_ADD = 7;
     public static int REPUTATION_FIND_WAY_ADD = 8;
     public static float CHARGE_SPEED_COEF_PER_LEVEL = 0.12f;
+    public static float REPURARTION_TO_DIPLOMATY_COEF = .05f;
 
     public const int REPUTATION_STEAL_REMOVE = 5;
     public const int REPUTATION_REPAIR_REMOVE = 4;

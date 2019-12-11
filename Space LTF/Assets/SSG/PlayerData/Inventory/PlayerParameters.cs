@@ -27,7 +27,7 @@ public class PlayerParameters
     public PlayerParameters(Player player,Dictionary<PlayerParameterType,int> level = null)
     {
         Scouts = new PlayerParameter(player) {IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.scout) };
-        Diplomaty = new PlayerParameter(player) {IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.diplomaty) };
+        Diplomaty = new PlayerParameterDiplomacy(player) {IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.diplomaty) };
         ChargesCount = new PlayerParameter(player) {IsBattle = true, Level = 1, Name = Namings.ParameterName(PlayerParameterType.chargesCount) };
         ChargesSpeed = new PlayerParameter(player) {IsBattle = true, Level = 1, Name = Namings.ParameterName(PlayerParameterType.chargesSpeed) };
         Repair = new PlayerParameter(player) {IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.repair) };
