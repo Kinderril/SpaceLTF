@@ -6,20 +6,26 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class TryWeaponsShip : UIElementWithTooltip
+public class TryWeaponsShip : TryApplyToShip
 {
     public Animator FailObject;
-    private ShipBase _ship;
     private float _nextClickTime;
 
-    public void Init(ShipBase ship)
-    {
-        _ship = ship;
-    }
 
     public void OnTryPowerChargeClick()
     {
-        if (!_ship.Commander.TryWeaponBuffShip(_ship))
+
+        if (!IsReady)
+        {
+            FailObject.SetTrigger("Play");
+            return;
+        }
+
+        if (_ship.Commander.TryWeaponBuffShip(_ship))
+        {
+            StartCooldown();
+        }
+        else
         {
             FailObject.SetTrigger("Play");
         }

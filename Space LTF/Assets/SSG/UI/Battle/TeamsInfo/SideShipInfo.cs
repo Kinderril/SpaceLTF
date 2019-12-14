@@ -65,8 +65,8 @@ public class SideShipInfo : MonoBehaviour
         _ship.DamageData.OnDamageDone += OnDamageDone;
         OnShipDesicionChange(ship, ship.DesicionData);
         ShipSlidersInfo.Init(ship);
-        TryWaveButton.Init(_ship);
-        TryChargeButton.Init(_ship);
+        TryWaveButton.Init(_ship,5);
+        TryChargeButton.Init(_ship,5);
 //        TryWeaponsShipButton.Init(_ship);
 //        TryReloadButton.Init(_ship);
         InitWeapons();

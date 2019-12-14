@@ -29,6 +29,7 @@ public class ShipBase : MovingObject
     private SelectedElement SelectedElement { get; set; }
     public GameObject PriorityObject { get; protected set; }
     public GameObject FakePriorityObject { get; protected set; }
+    public GameObject SelectedObject { get; protected set; }
     private Vector3 _backPredictionPos;
 
     private Action<ShipBase> _dealthCallback;
@@ -179,7 +180,12 @@ public class ShipBase : MovingObject
         var priorityTarget = DataBaseController.Instance.PriorityTarget;
         PriorityObject = DataBaseController.GetItem(priorityTarget);
         PriorityObject.transform.SetParent(ShipVisual.transform, false);
-        PriorityObject.gameObject.SetActive(false);
+        PriorityObject.gameObject.SetActive(false); 
+
+        var selectedObject = DataBaseController.Instance.DataStructPrefabs.ShipSelectedObject;
+        SelectedObject = DataBaseController.GetItem(selectedObject);
+        SelectedObject.transform.SetParent(ShipVisual.transform, false);
+        SelectedObject.gameObject.SetActive(false);
 
         var fakePriorityTarget = DataBaseController.Instance.BaitPriorityTarget;
         FakePriorityObject = DataBaseController.GetItem(fakePriorityTarget);

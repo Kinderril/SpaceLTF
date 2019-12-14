@@ -101,8 +101,8 @@ public class DataStructPrefabs : MonoBehaviour
     public Tooltip TooltipPrefab;
     public FlyingNumberWithDependencesHoldin FlyingNumberWithDependencesHoldinPrefab;
     public SelfCamera SelfCameraPrefab;
-    public Texture BackgroundRenderTexture;
     public ArrowTarget ArrowTargetPersonal;
+    public GameObject ShipSelectedObject;
     public List<FlyingAsteroid> FlyingAsteroids;
 
 

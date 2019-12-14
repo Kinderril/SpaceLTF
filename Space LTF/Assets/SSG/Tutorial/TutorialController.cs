@@ -6,6 +6,7 @@ public class TutorialController : Singleton<TutorialController>
     public BattleMapTutorial battleStart;
     public BattleMapTutorial battleStart2;
     public BattleMapTutorial battleStart3;
+    public BattleMapTutorial battleStartEnemy;
     public LevelUpMapTutorial mapUpgrade;
     public StartMapTutorial mapMain;
     public StartMapTutorial mapMain2;
@@ -28,7 +29,9 @@ public class TutorialController : Singleton<TutorialController>
             if (battleStart2 != null)
                 battleStart2.Init();
             if (battleStart3 != null)
-                battleStart3.Init();
+                battleStart3.Init();    
+            if (battleStartEnemy != null)
+                battleStartEnemy.Init();
 
             if (mapMain != null)
                 mapMain.Init();

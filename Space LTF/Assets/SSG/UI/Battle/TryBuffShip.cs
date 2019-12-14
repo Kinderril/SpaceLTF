@@ -6,27 +6,28 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class TryBuffShip : UIElementWithTooltip
+public class TryBuffShip : TryApplyToShip
 {
     public Animator FailObject;
-    private ShipBase _ship;
     private float _nextClickTime;
 
-    public void Init(ShipBase ship)
-    {
-        _ship = ship;
-    }
 
     public void OnTryChargeClick()
     {
-//        if (_nextClickTime < Time.time)
-//        {
-//            _nextClickTime = Time.time +
-            if (!_ship.Commander.TryBuffShip(_ship))
-            {
-                FailObject.SetTrigger("Play");
-            }
-//        }
+        if (!IsReady)
+        {
+            FailObject.SetTrigger("Play");
+            return;
+        }
+
+        if (_ship.Commander.TryBuffShip(_ship))
+        {
+            StartCooldown();
+        }
+        else
+        {
+            FailObject.SetTrigger("Play");
+        }
     }
 
     public void Dispose()

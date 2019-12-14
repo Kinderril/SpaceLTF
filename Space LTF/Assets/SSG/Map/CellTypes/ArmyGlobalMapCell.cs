@@ -98,14 +98,18 @@ public class ArmyGlobalMapCell : GlobalMapCell
         _config = config;
         _armyType = type;
         _power = power;
-        if (MyExtensions.IsTrue01(0.35f))
+        if (power > 11)
         {
-            WDictionary<BattlefildEventType> chance = new WDictionary<BattlefildEventType>(new Dictionary<BattlefildEventType, float>()
+            if (MyExtensions.IsTrue01(0.35f))
             {
-                { BattlefildEventType.asteroids,1f},
-                { BattlefildEventType.shieldsOff,1f},
-            });
-            _eventType = chance.Random();
+                WDictionary<BattlefildEventType> chance = new WDictionary<BattlefildEventType>(
+                    new Dictionary<BattlefildEventType, float>()
+                    {
+                        {BattlefildEventType.asteroids, 1f},
+                        {BattlefildEventType.shieldsOff, 1f},
+                    });
+                _eventType = chance.Random();
+            }
         }
     }
 

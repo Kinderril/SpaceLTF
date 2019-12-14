@@ -6,20 +6,26 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class TryChargeButton : UIElementWithTooltip
+public class TryChargeButton : TryApplyToShip
 {
     public Animator FailObject;
-    private ShipBase _ship;
     private float _nextClickTime;
 
-    public void Init(ShipBase ship)
-    {
-        _ship = ship;
-    }
 
     public void OnTryChargeClick()
     {
-        if (!_ship.Commander.TryRecharge(_ship))
+
+        if (!IsReady)
+        {
+            FailObject.SetTrigger("Play");
+            return;
+        }
+
+        if (_ship.Commander.TryRechargeShield(_ship))
+        {
+            StartCooldown();
+        }
+        else
         {
             FailObject.SetTrigger("Play");
         }

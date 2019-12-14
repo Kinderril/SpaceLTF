@@ -90,7 +90,7 @@ public static class Library
     public const int COINS_TO_WAVE_SHIP = 1;
     public const int COINS_TO_CHARGE_SHIP_SHIELD_DELAY = 20;
     public const int COINS_TO_WAVE_SHIP_DELAY = 30;
-    public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.25f;
+    public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.35f;
 
     public const int PriorityTargetCostTime = 120;
     public const int PriorityTargetCostCount = 1;
