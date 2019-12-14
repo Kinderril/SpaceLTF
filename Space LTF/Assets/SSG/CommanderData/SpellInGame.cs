@@ -9,6 +9,12 @@ public delegate void CastActionSpell(BulletTarget target, Bullet origin, IWeapon
 [System.Serializable]
 public delegate Vector3 DistCounter(Vector3 maxDistPos,Vector3 targetDistPos);
 
+[System.Serializable]
+public delegate void SubUpdateShowCast(Vector3 pos, TeamIndex teamIndex, GameObject objectToShow); 
+
+[System.Serializable]
+public delegate bool CanCastAtPoint(Vector3 pos);
+
 
 public class SpellDamageData
 {
@@ -52,6 +58,8 @@ public class SpellInGame : IWeapon
     public int CostCount { get; private set; }
     public int CostPeriod { get; private set; }
     public CastActionSpell CastSpell { get; private set; }
+    public SubUpdateShowCast SubUpdateShowCast { get; private set; }
+    public CanCastAtPoint CanCastAtPoint { get; private set; }
     public float CurOwnerSpeed => 0.001f;
     public CurWeaponDamage CurrentDamage => new CurWeaponDamage(0, 0);
     public string Name { get; private set; }
@@ -91,6 +99,8 @@ Desc = desc;
         _bulletStartParams = spellData.BulleStartParameters;
         AffectAction = spellData.AffectAction;
         CastSpell = spellData.CastSpell;
+        SubUpdateShowCast = spellData.SubUpdateShowCast;
+        CanCastAtPoint = spellData.CanCastAtPoint;
         CreateBulletAction = spellData.CreateBulletAction;
     }
     public bool CanCast(CommanderCoinController coinController)
@@ -114,6 +124,11 @@ Desc = desc;
         {
             var dir = (pos - _modulPos());
             LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir, _maxDist);
+        }
+
+        if (SubUpdateShowCast != null)
+        {
+            SubUpdateShowCast(pos,TeamIndex, CircleObjectToShow.gameObject);
         }
     }
 
@@ -224,9 +239,12 @@ Desc = desc;
     {
         if (CanCast(commanderCoinController))
         {
-            commanderCoinController.UseCoins(CostCount,CostPeriod);
-            Cast(trg);
-            return true;
+            if (CanCastAtPoint(trg))
+            {
+                commanderCoinController.UseCoins(CostCount, CostPeriod);
+                Cast(trg);
+                return true;
+            }
         }
 
         return false;

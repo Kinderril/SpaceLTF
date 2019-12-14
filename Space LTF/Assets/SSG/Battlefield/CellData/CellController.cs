@@ -67,6 +67,10 @@ public class CellController : MonoBehaviour
     {
         Data.AddShip(shipBase);
     }
+    public void ClearPosition(Vector3 vector3)
+    {
+        Data.ClearPosition(vector3);
+    }
 
     public AICell GetCellByDir(AICell curCell, Vector3 dir)
     {

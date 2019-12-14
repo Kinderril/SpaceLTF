@@ -9,16 +9,12 @@ using UnityEngine;
 public class ShipDesicionDataAttack : ShipDesicionDataBase
 {
 
-    public ShipDesicionDataAttack(ShipBase owner)
-        :base(owner)
+    public ShipDesicionDataAttack(ShipBase owner, PilotTactic tactic)
+        :base(owner,tactic)
     {
 
     }
     
-    public override PilotTcatic GetTacticType()
-    {
-        return PilotTcatic.attack;
-    }
 
     protected override ActionType DoAttackAction(ShipBase ship)
     {
@@ -34,18 +30,14 @@ public class ShipDesicionDataAttack : ShipDesicionDataBase
 
     protected override bool HaveEnemyInDangerZone(out ShipBase ship)
     {
-        float enemyRating;
         if (_owner.Enemies.Count > 0)
         {
-            var enemy = CalcBestEnemy(out enemyRating, _owner.Enemies);
+            var enemy = CalcBestEnemy(out var enemyRating, _owner.Enemies);
             ship = enemy.ShipLink;
             return true;
         }
-        else
-        {
-            ship = null;
-            return false;
-        }
+        ship = null;
+        return false;
     }
 
     public override string GetName()

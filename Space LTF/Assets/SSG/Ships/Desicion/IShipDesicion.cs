@@ -9,13 +9,15 @@ public interface IShipDesicion
 {
     ActionType CalcTask(out ShipBase ship);
     void Dispose();
-    PilotTcatic GetTacticType();
     void SetLastAction(ActionType actionType);
     void Select(bool val);
     void DrawUpdate();
     string GetName();
-    BaseAction CalcAction();
-    void TryChangeTactic(PilotTcatic nextTactic);
+    BaseAction CalcAction();                      
+    void ChangePriority(ESideAttack SideAttack);
+    void ChangePriority(EBaseDefence BaseDefence);
+    void ChangePriority(ECommanderPriority1 CommanderPriority1);
+
 }
 
 

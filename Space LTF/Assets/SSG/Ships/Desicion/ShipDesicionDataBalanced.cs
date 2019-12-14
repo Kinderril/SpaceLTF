@@ -9,8 +9,8 @@ using UnityEngine;
 public class ShipDesicionDataBalanced : ShipDesicionDataBase
 {
 
-    public ShipDesicionDataBalanced(ShipBase owner)
-        :base(owner)
+    public ShipDesicionDataBalanced(ShipBase owner, PilotTactic tactic)
+        : base(owner, tactic)
     {
 
     }
@@ -31,10 +31,6 @@ public class ShipDesicionDataBalanced : ShipDesicionDataBase
         throw new NotImplementedException();
     }
 
-    public override PilotTcatic GetTacticType()
-    {
-        throw new NotImplementedException();
-    }
 
     public override string GetName()
     {

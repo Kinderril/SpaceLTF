@@ -141,7 +141,7 @@ public class MapWindow : BaseWindow
         }
         else
         {
-            var shipToDel = _sideInfos.FirstOrDefault(x => x.Ship == pilotData);
+            var shipToDel = _sideInfos.FirstOrDefault(x => x.pilot == pilotData);
             if (shipToDel != null)
             {
                 _sideInfos.Remove(shipToDel);

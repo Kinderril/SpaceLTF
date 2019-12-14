@@ -22,6 +22,9 @@ public enum SpellType
     artilleryPeriod = 12,
     BaitPriorityTarget = 13,
     repairDrones = 14,
+
+    rechargeShield = 15,
+    roundWave = 16,
 }
 
 
@@ -93,7 +96,12 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
     public abstract Bullet GetBulletPrefab();
     public abstract float ShowCircle { get; }
     public abstract bool ShowLine { get; }
+    public virtual SubUpdateShowCast SubUpdateShowCast { get; }
 
+    public virtual CanCastAtPoint CanCastAtPoint
+    {
+        get { return pos => true; }
+    }
 
     protected abstract void CastAction(Vector3 pos);
 

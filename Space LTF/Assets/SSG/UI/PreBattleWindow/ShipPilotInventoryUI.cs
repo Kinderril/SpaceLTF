@@ -15,12 +15,10 @@ public class ShipPilotInventoryUI : MonoBehaviour
 
     private Action ontoggleSwitched;
     public Toggle ToggleElement;
-//    public Image Destroyed;
 
     public void Init(StartShipPilotData data,bool usable, ConnectInventory connectedInventory,Action ontoggleSwitched)
     {
         this.ontoggleSwitched = ontoggleSwitched;
-//        Destroyed.gameObject.SetActive(data.Ship.Destroyed);
         ShipInventory.Init(data, usable, connectedInventory);
         var openInfoPilot = true;
         ToggleElement.interactable = usable;
@@ -30,10 +28,6 @@ public class ShipPilotInventoryUI : MonoBehaviour
         {
             PilotInventory.Init(data.Pilot, data.Ship);
         }
-//        else
-//        {
-//            PilotInventory.gameObject.SetActive(false);
-//        }
     }
 
     public void OnEnableAdditionsClick()

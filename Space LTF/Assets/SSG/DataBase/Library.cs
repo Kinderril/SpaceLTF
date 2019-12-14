@@ -240,7 +240,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 33, 10, 0.51f, 40, 0, 0, 4, 1, 0f), player, pilot);
+                        return new ShipInventory(new StartShipParams(shipType, config, 33, 10, 0.51f, 40, 0, 0, 6, 1, 0f), player, pilot);
                 }
                 break;
             case ShipConfig.raiders:
@@ -253,7 +253,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 32, 18, 3.5f, 68, 2, 4, 0, 1, 0.1f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 46, 28, 1.5f, 40, 0, 0, 4, 1, 0f), player, pilot);
+                        return new ShipInventory(new StartShipParams(shipType, config, 46, 28, 1.5f, 40, 0, 0, 6, 1, 0f), player, pilot);
                 }
                 break;
             case ShipConfig.mercenary:
@@ -266,7 +266,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 41, 28, 0.81f, 40, 0, 0, 3, 1, 0f), player, pilot);
+                        return new ShipInventory(new StartShipParams(shipType, config, 41, 28, 0.81f, 40, 0, 0, 5, 1, 0f), player, pilot);
                 }
 
                 break;
@@ -280,7 +280,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 35, 35, 0.71f, 40, 0, 0, 4, 1, 0f), player, pilot);
+                        return new ShipInventory(new StartShipParams(shipType, config, 35, 35, 0.71f, 40, 0, 0, 6, 1, 0f), player, pilot);
                 }
                 break;
             case ShipConfig.ocrons:
@@ -293,7 +293,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 66, 10, 0.75f, 40, 0, 0, 2, 1, 0f), player, pilot);
+                        return new ShipInventory(new StartShipParams(shipType, config, 66, 10, 0.75f, 40, 0, 0, 4, 1, 0f), player, pilot);
                 }
                 break;
             case ShipConfig.krios:
@@ -306,7 +306,7 @@ public static class Library
                     case ShipType.Heavy:
                         return new ShipInventory(new StartShipParams(shipType, config, 20, 44, 2.2f, 53, 2, 3, 0, 1, 0.4f), player, pilot);
                     case ShipType.Base:
-                        return new ShipInventory(new StartShipParams(shipType, config, 16, 55, 0.6f, 40, 0, 0, 4, 1, 0f), player, pilot);
+                        return new ShipInventory(new StartShipParams(shipType, config, 16, 55, 0.6f, 40, 0, 0, 6, 1, 0f), player, pilot);
                 }
                 break;
             default:
@@ -349,7 +349,12 @@ public static class Library
             case SpellType.artilleryPeriod:
                 return new ArtillerySpell(4, 10);   
             case SpellType.repairDrones:
-                return new RepairDronesSpell(4, 30);
+                return new RepairDronesSpell(4, 30); 
+            case SpellType.rechargeShield:
+                return new RechargeShieldSpell(1, 30); 
+            case SpellType.roundWave:
+                return new WaveStrikeOnShipSpell(1, 30);
+            
             default:
                 Debug.LogError("spellType not implemented " + spellType.ToString());
                 break;
@@ -466,7 +471,6 @@ public static class Library
     public static PilotParameters CreateDebugPilot()
     {
         var pilot = new PilotParameters();
-        pilot.Init(PilotTcatic.attack);
         return pilot;
     }
 

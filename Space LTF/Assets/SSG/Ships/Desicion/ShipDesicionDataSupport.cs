@@ -12,8 +12,8 @@ public class ShipDesicionDataSupport : ShipDesicionDataBase
     private ShipBase _supportedShip;
     private SpellZoneVisualCircle _radiusEffect;
 
-    public ShipDesicionDataSupport(ShipBase owner)
-        :base(owner)
+    public ShipDesicionDataSupport(ShipBase owner, PilotTactic tactic)
+        : base(owner, tactic)
     {
 
         var re = DataBaseController.Instance.SpellDataBase.RadiusAttackEffect;
@@ -24,12 +24,6 @@ public class ShipDesicionDataSupport : ShipDesicionDataBase
     public override string GetName()
     {
         return "Support";
-    }
-
-    public override PilotTcatic GetTacticType()
-    {
-        return PilotTcatic.attack;
-//        return PilotTcatic.support;
     }
 
     protected override ActionType DoAttackAction(ShipBase ship)

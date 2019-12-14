@@ -325,6 +325,17 @@ public class AICellDataRaound
             }
         }
     }
+    public void ClearPosition(Vector3 vector3)
+    {
+        for (int i = 0; i < MaxIx; i++)
+        {
+            for (int j = 0; j < MaxIz; j++)
+            {
+                var point = List[i, j];
+                point.ClearPosition(vector3);
+            }
+        }
+    }
 
     public void SetCellSize(float val)
     {

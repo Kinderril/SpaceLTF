@@ -12,8 +12,8 @@ public class ShipDesicionDataSneakyAttack : ShipDesicionDataBase
     private bool _timeToHide = false;
     private float _timeToChange = 0f;
 
-    public ShipDesicionDataSneakyAttack(ShipBase owner)
-        :base(owner)
+    public ShipDesicionDataSneakyAttack(ShipBase owner, PilotTactic tactic)
+        : base(owner, tactic)
     {
 
     }
@@ -35,8 +35,7 @@ public class ShipDesicionDataSneakyAttack : ShipDesicionDataBase
             ship = null;
             return HideOrWait();
         }
-        float rating;
-        ship = CalcBestEnemy(out rating, _owner.Enemies).ShipLink;
+        ship = CalcBestEnemy(out var rating, _owner.Enemies).ShipLink;
         return ActionType.attackSide;
     }
 
@@ -54,14 +53,5 @@ public class ShipDesicionDataSneakyAttack : ShipDesicionDataBase
         ship = null;
         return false;
     }
-
-    public override PilotTcatic GetTacticType()
-    {
-        return PilotTcatic.attack;
-//        return PilotTcatic.sneakAttack;
-    }
-
-
-
 }
 

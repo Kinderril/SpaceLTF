@@ -33,6 +33,8 @@ public class ShipInventory : IStartShipParams , IInventory
     public int SpellModulsCount { get; private set; }
     public int CriticalDamages { get; private set; }
     public string Name { get; private set; }
+    public PilotTactic Tactic => PilotParameters.Tactic;
+
     public int Id { get; private set; }
 //    public bool Destroyed { get; set; }
 

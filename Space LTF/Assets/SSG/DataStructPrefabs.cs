@@ -38,10 +38,16 @@ public struct SpellIcon
     public SpellType SpellType;
 }
 [Serializable]
-public struct PilotTacticIcon
+public struct PilotTacticIconPriority
 {
     public Sprite Icon;
-    public PilotTcatic Tactic;
+    public ECommanderPriority1 Tactic;
+}
+[Serializable]
+public struct PilotTacticIconSide
+{
+    public Sprite Icon;
+    public ESideAttack Tactic;
 }
 
 public class DataStructPrefabs : MonoBehaviour
@@ -80,8 +86,10 @@ public class DataStructPrefabs : MonoBehaviour
     //    public List<ActionIcon> ActionIcons = new List<ActionIcon>();
     //    private Dictionary<ActionType,Sprite> ActionIconsDic = new Dictionary<ActionType, Sprite>(); 
 
-    public List<PilotTacticIcon> ShipTacticIcons = new List<PilotTacticIcon>();
-    private Dictionary<PilotTcatic, Sprite> ShipTacticIconsDic = new Dictionary<PilotTcatic, Sprite>(); 
+    public List<PilotTacticIconPriority> ShipTacticIcons = new List<PilotTacticIconPriority>();
+    private Dictionary<ECommanderPriority1, Sprite> ShipTacticIconsDic = new Dictionary<ECommanderPriority1, Sprite>();
+    public List<PilotTacticIconSide> ShipTacticSideIcons = new List<PilotTacticIconSide>();
+    private Dictionary<ESideAttack, Sprite> ShipTacticIconsSideDic = new Dictionary<ESideAttack, Sprite>(); 
 
     public List<ShipTypeIcon> ShipTypeIcons = new List<ShipTypeIcon>();
     private Dictionary<ShipType, Sprite> ShipTypeIconsDic = new Dictionary<ShipType, Sprite>(); 
@@ -96,7 +104,6 @@ public class DataStructPrefabs : MonoBehaviour
     public List<SpellIcon> SpellTypeIcons = new List<SpellIcon>();
     private Dictionary<SpellType, Sprite> SpellTypeIconsDic = new Dictionary<SpellType, Sprite>();
     public PlayerArmyUI PlayerArmyUIPrefab;
-    public TacticChooseButton TacticBtn;
     public MoneySlotUI MoneySlotUIPrefab;
     public Tooltip TooltipPrefab;
     public FlyingNumberWithDependencesHoldin FlyingNumberWithDependencesHoldinPrefab;
@@ -162,10 +169,22 @@ public class DataStructPrefabs : MonoBehaviour
         {
             ShipTacticIconsDic.Add(actionIcon.Tactic,actionIcon.Icon);
         }
-        var values5 = Enum.GetValues(typeof(PilotTcatic)).Length;
+        var values5 = Enum.GetValues(typeof(ECommanderPriority1)).Length;
         if (values5 != ShipTacticIcons.Count)
         {
-            Debug.LogError("not enought pilot tactics");
+            Debug.LogError($"not enought pilot ECommanderPriority1 tactics {values5}  !=  {ShipTacticIcons.Count } ");
+           
+        }  
+        
+        //----------
+        foreach (var actionIcon in ShipTacticSideIcons)
+        {
+            ShipTacticIconsSideDic.Add(actionIcon.Tactic,actionIcon.Icon);
+        }
+        var values8 = Enum.GetValues(typeof(ESideAttack)).Length;
+        if (values8 != ShipTacticSideIcons.Count)
+        {
+            Debug.LogError("not enought pilot ESideAttack tactics");
         }
         
     }
@@ -233,7 +252,7 @@ public class DataStructPrefabs : MonoBehaviour
 //        return ActionIconsDic[actionType];
 //    }
 
-    public Sprite GetTacticIcon(PilotTcatic actionType)
+    public Sprite GetTacticIcon(ECommanderPriority1 actionType)
     {
 #if UNITY_EDITOR
         if (!ShipTacticIconsDic.ContainsKey(actionType))
@@ -243,6 +262,17 @@ public class DataStructPrefabs : MonoBehaviour
 #endif
 
         return ShipTacticIconsDic[actionType];
+    }  
+    public Sprite GetTacticIcon(ESideAttack actionType)
+    {
+#if UNITY_EDITOR
+        if (!ShipTacticIconsSideDic.ContainsKey(actionType))
+        {
+            Debug.LogError("have no pilot tactic icon" + actionType.ToString());
+        }
+#endif
+
+        return ShipTacticIconsSideDic[actionType];
     }
 
     public Sprite GetSpellIcon(SpellType actionType)

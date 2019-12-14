@@ -36,7 +36,7 @@ public static class Namings
                 return "Light";
                 break;
             case global::ShipType.Middle:
-                return "Middle";
+                return "Medium";
                 break;
             case global::ShipType.Heavy:
                 return "Heavy";
@@ -326,7 +326,11 @@ public static class Namings
             case SpellType.artilleryPeriod:
                 return "Artillery";  
             case SpellType.repairDrones:
-                return "Repair drones";
+                return "Repair drones"; 
+            case SpellType.rechargeShield:
+                return "Recharge shield"; 
+            case SpellType.roundWave:
+                return "Round damage";
             default:
                 throw new ArgumentOutOfRangeException(nameof(spellType), spellType, null);
         }
@@ -444,21 +448,7 @@ public static class Namings
         }
         return "";
     }
-
-    public static string TacticName(PilotTcatic pilotTactic)
-    {
-        switch (pilotTactic)
-        {
-            case PilotTcatic.defenceBase:
-                return "Defense";
-            case PilotTcatic.attack:
-                return "Balance";
-            case PilotTcatic.attackBase:
-                return "Only base.";
-        }
-        return "";
-    }
-
+                
     public static string Fleet = "Fleet";
     public static string RechargeButton = "Recharge Shield.\nCost[{0}/{1}]"; 
     public static string BuffButton = "Increase parameters of ship.\n[Cost:{0}/{1}]";
@@ -747,4 +737,32 @@ public static class Namings
         "Can't upgrade weapon cause pilot don't have enough level.\nPilot level:{0}. Target Level{1}";
 
     public static string RoundWaveStrike = "Damage all ships near by [{2}/{3}].\n[Cost:{0}/{1}]";
+
+    private static Dictionary<string,string> _locals = new Dictionary<string, string>()
+    {
+        {"ESideAttackStraight", "Attack as usual"},
+        {"ESideAttackFlangs", "Attack from flags"},
+        {"BaseDefenceYes", "Defend the base"},
+        {"BaseDefenceNo", "No"},
+        {"ECommanderPriority1MinShield","Choose to attack ships with minimum shield" },
+        {"ECommanderPriority1MinHealth","Choose to attack ships with minimum body"  },
+        {"ECommanderPriority1MaxShield","Choose to attack ships with max shield"  },
+        {"ECommanderPriority1MaxHealth","Choose to attack ships with max body"  },
+        {"ECommanderPriority1Any", "Any ships to attack"},
+        {"ECommanderPriority1Light","Light ships will be a priority" },
+        {"ECommanderPriority1Mid","Medium ships will be a priority" },
+        {"ECommanderPriority1Heavy", "Heavy ships will be a priority"},
+    };
+
+    public static string Tag(string tag)
+    {
+        if (_locals.TryGetValue(tag, out var info))
+        {
+            return info;
+        }
+        return $"ERROR:{tag}";
+    }
+
+    public static string WaveStrikeSpell = "Strikes a bullets to each close enemy. Damage:{0}/{1}";
+    public static string RechargeSheildSpell = "Recharge shield on {0}%";
 }

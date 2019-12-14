@@ -35,5 +35,6 @@ public interface IStartShipParams
     int SimpleModulsCount { get; }
     int SpellModulsCount { get; }
     string Name { get;}
-    //    int BodyVisualType { get; }
+
+//    PilotTactic Tactic { get; }
 }

@@ -13,23 +13,12 @@ public class SideShipInfo : MonoBehaviour
     public const string PREFS_KEY = "SideShipInfo{0}";
 
     public ShipSlidersInfo ShipSlidersInfo;
-    public Image ActionIcon;
+//    public Image ActionIcon;
     public Image ShipTypeIcon;
-    public TacticsButton TacticIcons;
 
-//    public Transform ControlBlockHolder;
-
-
-//    public Transform FullOpenHolder;
-//    public Transform MinorOpenHolder;
     public Transform FullInfoContainer;
 
     public Transform WeaponsLayout;
-
-    public TryWaveShip TryWaveButton;
-    public TryChargeButton TryChargeButton;
-//    public TryBuffShip TryReloadButton;
-//    public TryWeaponsShip TryWeaponsShipButton;
 
     public TextMeshProUGUI DamageDoneField;
     public TextMeshProUGUI KillsField;
@@ -41,7 +30,12 @@ public class SideShipInfo : MonoBehaviour
     public Image ShiedDamage;
     public Image WeaponsDamage;
     public Image EngineDamage;
-    
+
+    public Image TacticPriorityIcon;
+    public Image TacticSideIcon;
+    public PriorityTooltipInfo PriorityTooltipInfo;
+    public SideAttackTooltipInfo SideAttackTooltipInfo;
+
     private ShipBase _ship;
     private Action<ShipBase> _shipSelectedAction;
     private Action<SideShipInfo> _toggleCallback;
@@ -57,7 +51,6 @@ public class SideShipInfo : MonoBehaviour
         EngineDamage.gameObject.SetActive(false);
         _toggleCallback = toggleCallback;
         FullInfoContainer.gameObject.SetActive(false);
-        TacticIcons.gameObject.SetActive(false);
         _shipSelectedAction = shipSelectedAction;
         _ship = ship;
         _ship.ShipInventory.LastBattleData.OnStatChanged += OnStatChanged;
@@ -65,8 +58,8 @@ public class SideShipInfo : MonoBehaviour
         _ship.DamageData.OnDamageDone += OnDamageDone;
         OnShipDesicionChange(ship, ship.DesicionData);
         ShipSlidersInfo.Init(ship);
-        TryWaveButton.Init(_ship,5);
-        TryChargeButton.Init(_ship,5);
+//        TryWaveButton.Init(_ship,5);
+//        TryChargeButton.Init(_ship,5);
 //        TryWeaponsShipButton.Init(_ship);
 //        TryReloadButton.Init(_ship);
         InitWeapons();
@@ -74,9 +67,16 @@ public class SideShipInfo : MonoBehaviour
             DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(ship.ShipParameters.StartParams.ShipType);
         ToggleOpen.isOn = shallOpen;
         UpdateToggle(shallOpen);
+        UpdateTacticField();
 
     }
-
+    private void UpdateTacticField()
+    {
+        TacticPriorityIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.PilotParameters.Tactic.Priority);
+        TacticSideIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.PilotParameters.Tactic.SideAttack);
+        PriorityTooltipInfo.SetData(_ship.PilotParameters.Tactic.Priority);
+        SideAttackTooltipInfo.SetData(_ship.PilotParameters.Tactic.SideAttack);
+    }
     private void OnDamageDone(ShipBase arg1, ShipDamageType arg2, bool val)
     {
         switch (arg2)
@@ -109,9 +109,7 @@ public class SideShipInfo : MonoBehaviour
                 var e = DataBaseController.GetItem(prefab);
                 e.transform.SetParent(WeaponsLayout);
                 e.gameObject.SetActive(false);
-//                var wModul = _weaponModuls[weaponIndex];
                 e.Init(baseModul);
-//                weaponIndex++;
             }
         }
     }
@@ -166,28 +164,7 @@ public class SideShipInfo : MonoBehaviour
 
     private void OnShipDesicionChange(ShipBase arg1, IShipDesicion arg2)
     {
-        if (arg2 != null)
-        {
-            Sprite icon = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(arg2.GetTacticType());
-            ActionIcon.sprite = icon;
-//            ActionIcon.gameObject.SetActive(true);
-        }
-        else
-        {
-//            ActionIcon.gameObject.SetActive(false);
-        }
-    }
 
-    public void OnTacticClick()
-    {
-        TacticIcons.gameObject.SetActive(!TacticIcons.gameObject.activeSelf);
-        TacticIcons.Init(_ship.DesicionData.GetTacticType(),OnTatciClick);
-    }
-
-    private void OnTatciClick(PilotTcatic obj)
-    {
-        _ship.DesicionData.TryChangeTactic(obj);
-        TacticIcons.gameObject.SetActive(false);
     }
 
     public void OnClick()
@@ -201,7 +178,7 @@ public class SideShipInfo : MonoBehaviour
         _ship.ShipInventory.LastBattleData.OnStatChanged -= OnStatChanged;
         _ship.OnShipDesicionChange -= OnShipDesicionChange;
         ShipSlidersInfo.Dispose();
-        TryChargeButton.Dispose();
+//        TryChargeButton.Dispose();
 //        TryWeaponsShipButton.Dispose();
     }
 

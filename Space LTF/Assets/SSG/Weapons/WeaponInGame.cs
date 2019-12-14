@@ -32,6 +32,7 @@ public enum WeaponType
     artilleryBullet = 19,
     fireDamageMine = 20,
     spellRerairDrone = 21,
+    beamWaveStrike = 22,
 }
 
 public class WeaponAffectionAdditionalParams

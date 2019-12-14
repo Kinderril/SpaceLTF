@@ -7,53 +7,55 @@ public class PilotInventoryUI : MonoBehaviour
 {
     private IPilotParameters _pilot;
     private ShipInventory _ship;
-    public SliderWithTextMeshPro DelaySlider;
+//    public SliderWithTextMeshPro DelaySlider;
     public ParameterWithLevelUp HealthField;
     public MoneySlotUI MoneyField;
     public Slider LevelUpSlider;
     public ParameterWithLevelUp ShieldField;
     public ParameterWithLevelUp SpeedField;
-    public TextMeshProUGUI TacticField;
+//    public TextMeshProUGUI TacticField;
     public TextMeshProUGUI RankField;
     public TextMeshProUGUI KillsField;
-    public Image TacticIcon;
+    public Image TacticPriorityIcon;
+    public Image TacticSideIcon;
     public Image RankIcon;
     public ParameterWithLevelUp TurnField;
     public Button LevelUpButton;
+    public PriorityTooltipInfo PriorityTooltipInfo;
+    public SideAttackTooltipInfo SideAttackTooltipInfo;
 
-//    public GameObject LevelUpObject;
-//    public TextMeshProUGUI LevelUpField;
-    
+    //    public GameObject LevelUpObject;
+    //    public TextMeshProUGUI LevelUpField;
+
     public void Init(IPilotParameters pilot, ShipInventory ship)
     {
         _ship = ship;
         _pilot = pilot;
         _ship.OnShipRepaired += OnShipRepaired;
         _ship.OnItemAdded += OnItemAdded;
-        _pilot.OnTacticChange += OnTacticChange;
+        _pilot.Tactic.OnPriorityChange += OnTacticPriorityChange;
+        _pilot.Tactic.OnSideChange += OnTacticSideChange;
         _pilot.OnLevelUp += OnLevelUp;
         UpdateTacticField();
-        DelaySlider.InitBorders(0f,20f,true);
-        DelaySlider.InitName(Namings.Delay );
-        DelaySlider.SetValue(pilot.Delay);
-        DelaySlider.InitCallback(SliderChange);
-        if (_ship.ShipType == ShipType.Base)
-        {
-            DelaySlider.enabled = false;
-        }
 
         RankUpdate();
         SetParamsAndMoney();
+        UpdateTacticField();
+    }
 
-        //HealthField.SetLevelUp(pilot, LibraryPilotUpgradeType.health);
-        //SpeedField.SetLevelUp(pilot, LibraryPilotUpgradeType.speed);
-        //ShieldField.SetLevelUp(pilot, LibraryPilotUpgradeType.shield);
-        //TurnField.SetLevelUp(pilot, LibraryPilotUpgradeType.turnSpeed);
+
+    private void OnTacticSideChange(ESideAttack obj)
+    {
+        UpdateTacticField();
+    }
+
+    private void OnTacticPriorityChange(ECommanderPriority1 obj)
+    {
+        UpdateTacticField();
     }
 
     private void OnItemAdded(IItemInv item, bool val)
     {
-
         SetInfoParams();
     }
 
@@ -73,7 +75,6 @@ public class PilotInventoryUI : MonoBehaviour
 
     private void SetParamsAndMoney()
     {
-//        LevelUpButton.gameObject.SetActive(_pilot.CanUpgradeAnyParameter(0));
         MoneyField.Init(_pilot.Money);
         SetInfoParams();
         LevelUpSlider.value = _pilot.PercentLevel;
@@ -81,20 +82,12 @@ public class PilotInventoryUI : MonoBehaviour
 
     private void UpdateTacticField()
     {
-        TacticIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_pilot.Tactic);
-        TacticField.text = Namings. TacticName(_pilot.Tactic);
+        TacticPriorityIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_pilot.Tactic.Priority);
+        TacticSideIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_pilot.Tactic.SideAttack);
+        PriorityTooltipInfo.SetData(_pilot.Tactic.Priority);
+        SideAttackTooltipInfo.SetData(_pilot.Tactic.SideAttack);
     }
-
-    private void SliderChange()
-    {
-        if (_ship.ShipType == ShipType.Base)
-        {
-            return;
-        }
-        _pilot.Delay = DelaySlider.GetValueInt();
-    }
-
-
+               
     private void OnShipRepaired(ShipInventory obj)
     {
         SetParamsAndMoney();
@@ -131,14 +124,10 @@ public class PilotInventoryUI : MonoBehaviour
         var hpTxt = String.Format("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel));
         var txt = LevelInfo(Namings.Health, _pilot.HealthLevel, hpTxt);
 
-
-
         ShieldField.SetData(shiledInfo, _pilot.ShieldLevel,_pilot,LibraryPilotUpgradeType.shield);
         SpeedField.SetData(speedInfo,_pilot.SpeedLevel,_pilot,LibraryPilotUpgradeType.speed);
         TurnField.SetData(turnInfo,_pilot.TurnSpeedLevel,_pilot,LibraryPilotUpgradeType.turnSpeed);
         HealthField.SetData(txt, _pilot.HealthLevel, _pilot, LibraryPilotUpgradeType.health);
-
-//        SetCurHealths();
     }
 
     private static string LevelInfo(string name,int level,string info)
@@ -158,17 +147,6 @@ public class PilotInventoryUI : MonoBehaviour
         return p.ToString(format);;
     }
     
-
-    public void OnTacticHcangeClick()
-    {
-        _pilot.ChangeTactic();
-    }
-
-    private void OnTacticChange(IPilotParameters arg1, PilotTcatic arg2)
-    {
-        UpdateTacticField();
-    }
-
     public void Dispose()
     {
 //#if UNITY_EDITOR
@@ -179,7 +157,8 @@ public class PilotInventoryUI : MonoBehaviour
 //#endif
         if (_pilot != null)
         {
-            _pilot.OnTacticChange -= OnTacticChange;
+            _pilot.Tactic.OnPriorityChange -= OnTacticPriorityChange;
+            _pilot.Tactic.OnSideChange -= OnTacticSideChange;
         }
         if (_pilot != null)
         {
@@ -190,5 +169,50 @@ public class PilotInventoryUI : MonoBehaviour
             _ship.OnItemAdded -= OnItemAdded;
             _ship.OnShipRepaired -= OnShipRepaired;
         }
+    }
+
+
+    //Straight|Flangs
+    public void ClickStraight()
+    {
+        _pilot.Tactic.ChangeTo(ESideAttack.Straight);
+    }
+    public void ClickFlangs()
+    {
+        _pilot.Tactic.ChangeTo(ESideAttack.Flangs);
+    }
+
+    //Base CommanderPriority   
+    public void ClickECommanderPriority1Any()
+    {
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.Any);
+    }
+    public void ClickECommanderPriority1MinShield()
+    {
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.MinShield);
+    }
+    public void ClickECommanderPriority1MinHealth()
+    {
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.MinHealth);
+    }
+    public void ClickECommanderPriority1MaxShield()
+    {
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.MaxShield);
+    }
+    public void ClickECommanderPriority1MaxHealth()
+    {
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.MaxHealth);
+    }
+    public void ClickECommanderPriority1Light()
+    {
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.Light);
+    }
+    public void ClickECommanderPriority1Mid()
+    {
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.Mid);
+    }
+    public void ClickECommanderPriority1Heavy()
+    {
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.Heavy);
     }
 }

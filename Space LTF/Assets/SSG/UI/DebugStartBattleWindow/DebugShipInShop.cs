@@ -151,7 +151,7 @@ public class DebugShipInShop : MonoBehaviour
 
     private void OnClickTactic(Text obj)
     {
-        PilotParameters.ChangeTactic();
+//        PilotParameters.ChangeTactic();
         obj.text = "Tactic:" + PilotParameters.Tactic.ToString();
     }
     

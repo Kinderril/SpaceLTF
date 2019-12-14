@@ -9,22 +9,17 @@ public class PilotParameters : IPilotParameters
 {
 
     [field: NonSerialized]
-    public event Action<IPilotParameters, PilotTcatic> OnTacticChange;
-    [field: NonSerialized]
     public event Action<IPilotParameters> OnLevelUp;
 
 
     public TotalStats Stats { get; set; }
-    //    public Dictionary<ShipType,float> PreferableShipTypeData =new Dictionary<ShipType, float>();
-    //    public float MoneyGetterData = 1f;
-    public PilotTcatic PilotTcaticlData;
+    public PilotTactic Tactic { get; set; }
 
     public int HealthLevel { get { return MaxHealthLvl; } }
     public int ShieldLevel { get { return MaxShieldLvl; } }
     public int SpeedLevel { get { return MaxSpeedLvl; } }
     public int TurnSpeedLevel { get { return MaxTurnSpeedLvl; } }
 
-    //public HashSet<LibraryPilotUpgradeType> UnCheckedLevelUp => _unCheckedLevelUp;
 
     public int CurLevel
     {
@@ -35,44 +30,18 @@ public class PilotParameters : IPilotParameters
     public int MaxShieldLvl = 1;
     public int MaxSpeedLvl = 1;
     public int MaxTurnSpeedLvl = 1;
-//    private List<LibraryPilotUpgradeType> upgradeOrder;
-//    public int MoneyData = 1;
     public int DelayData = 0;
-//    private HashSet<LibraryPilotUpgradeType> _unCheckedLevelUp = new HashSet<LibraryPilotUpgradeType>();
 
     public PilotMoneyData MoneyData;
 
-    public PilotTcatic Tactic
-    {
-        get { return PilotTcaticlData; }
-    }
-
     public PilotParameters()
     {
-        Stats = new TotalStats();
-    }
-
-//    public LibraryPilotUpgradeType GetUpgradeType()
-//    {
-//        var upg = upgradeOrder.RandomElement();
-//        upgradeOrder = upgradeOrder.Suffle();
-//        return upg;
-//    }
-
-    public void Init(PilotTcatic taTcatic)
-    {
         MoneyData = new PilotMoneyData();
-//        upgradeOrder = ArmyCreator.PosiblePilotUpgrades(this);
-//        upgradeOrder = upgradeOrder.Suffle();
-//#if UNITY_EDITOR
-//        DrawOrder("Init");
-//#endif
-        PilotTcaticlData = taTcatic;
-        if (OnTacticChange != null)
-        {
-            OnTacticChange(this, PilotTcaticlData);
-        }
+        Stats = new TotalStats();
+        Tactic = new PilotTactic(ECommanderPriority1.Any,ESideAttack.Straight);
     }
+
+
 
     public bool CanUpgradeByLevel(int curValue)
     {
@@ -155,26 +124,6 @@ public class PilotParameters : IPilotParameters
     {
         MaxTurnSpeedLvl++;
     }
-
-    public void ChangeTactic()
-    {
-        switch (PilotTcaticlData)
-        {
-            case PilotTcatic.defenceBase:
-                PilotTcaticlData = PilotTcatic.attack;
-                break;
-            case PilotTcatic.attack:
-                PilotTcaticlData = PilotTcatic.attackBase;
-                break;
-            case PilotTcatic.attackBase:
-                PilotTcaticlData = PilotTcatic.defenceBase;
-                break;
-        }
-        if (OnTacticChange != null)
-        {
-            OnTacticChange(this, PilotTcaticlData);
-        }
-    }   
 
     public void UpgradeLevelByType(LibraryPilotUpgradeType rnd, bool withMsg)
     {

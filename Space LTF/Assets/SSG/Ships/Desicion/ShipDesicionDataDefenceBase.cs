@@ -8,13 +8,12 @@ using UnityEngine;
 
 public class ShipDesicionDataDefenceBase : ShipDesicionDataBase
 {
-    public const float _defDist = 12f;
     private ShipBase _shipToDefence;
 
     private SpellZoneVisualCircle _radiusEffect;
 
-    public ShipDesicionDataDefenceBase(ShipBase owner,ShipBase shipToDefence)
-        :base(owner)
+    public ShipDesicionDataDefenceBase(ShipBase owner,ShipBase shipToDefence,PilotTactic tactic)
+        :base(owner, tactic)
     {
         _shipToDefence = shipToDefence;
         var re = DataBaseController.Instance.SpellDataBase.RadiusAttackEffect;
@@ -22,10 +21,6 @@ public class ShipDesicionDataDefenceBase : ShipDesicionDataBase
         _radiusEffect.SetSize(_defDist);
     }
 
-    public override PilotTcatic GetTacticType()
-    {
-        return PilotTcatic.defenceBase;
-    }
 
     protected override ActionType DoAttackAction(ShipBase ship)
     {

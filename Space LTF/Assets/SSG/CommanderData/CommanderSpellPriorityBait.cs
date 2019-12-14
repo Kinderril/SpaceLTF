@@ -38,4 +38,10 @@ public class CommanderSpellPriorityBait : ISpellToGame
 
     public float ShowCircle => 1;
     public bool ShowLine => false;
+    public SubUpdateShowCast SubUpdateShowCast { get; }
+
+    public CanCastAtPoint CanCastAtPoint
+    {
+        get { return pos => true; }
+    }
 }

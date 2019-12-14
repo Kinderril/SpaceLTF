@@ -88,8 +88,10 @@ public class WindowNewGame : BaseWindow
         List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
         var posibleSpells = posibleStartSpells.RandomElement(2);
 #if UNITY_EDITOR
-//        posibleSpells.Add(SpellType.repairDrones);
+        //        posibleSpells.Add(SpellType.repairDrones);
 #endif
+        posibleSpells.Add(SpellType.rechargeShield);
+        posibleSpells.Add(SpellType.roundWave);
         gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
             ArmyTypeSelectorUI.Selected, posibleStartWeapons,
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(),

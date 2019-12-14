@@ -11,4 +11,6 @@ public interface ISpellToGame
     Bullet GetBulletPrefab();
     float ShowCircle { get; }
     bool ShowLine { get; }
+    SubUpdateShowCast SubUpdateShowCast { get; }
+    CanCastAtPoint CanCastAtPoint { get; }
 }

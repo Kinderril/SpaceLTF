@@ -11,15 +11,10 @@ public class ShipDesicionDataAttackBase : ShipDesicionDataBase
     public const float distToAttack = 10f;
     private ShipBase _mainEnemyShip;
 
-    public ShipDesicionDataAttackBase(ShipBase owner,ShipBase enemyCommanderMainShip)
-        :base(owner)
+    public ShipDesicionDataAttackBase(ShipBase owner,ShipBase enemyCommanderMainShip, PilotTactic tactic)
+        : base(owner, tactic)
     {
         _mainEnemyShip = enemyCommanderMainShip;
-    }
-
-    public override PilotTcatic GetTacticType()
-    {
-        return PilotTcatic.attackBase;
     }
 
     protected override ActionType DoAttackAction(ShipBase ship)

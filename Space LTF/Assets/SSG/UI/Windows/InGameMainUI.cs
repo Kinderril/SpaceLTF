@@ -21,7 +21,7 @@ public class InGameMainUI : BaseWindow
     public Transform FlyingInfosContainer;
     public Camera MainCamera { get; set; }
     public Toggle debugToggle;
-    private Commander MyCommander;
+    public Commander MyCommander { get; private set; }
     private BattleController _battle;
     private int layerMask = 1;
     public Button FastEndButton;
@@ -33,7 +33,9 @@ public class InGameMainUI : BaseWindow
     public SpellModulsContainer SpellModulsContainer;
     public event Action<SpellInGame> OnSelectSpell;
     public WindowKeys WindowKeys;
-    public GameObject RetireButtonObject;
+//    public GameObject RetireButtonObject;
+    //    public CommanderPriorityUI CommanderPriority;    
+    public RetirreButton RetireButton;
 
     public TimeScaleBattleUI TimeScaleBattle;
     //    public Button DebugKillAllEnemies;
@@ -85,20 +87,21 @@ public class InGameMainUI : BaseWindow
     
     public void Init(BattleController battle)
     {
-//#if UNITY_EDITOR
-//        DebugKillAllEnemies.gameObject.SetActive(true);
-//#else
-//        DebugKillAllEnemies.gameObject.SetActive(false);
-//#endif
-//        if (WindowKeys != null)
-//        {
-//            WindowKeys = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.WindowKeys);
-//            WindowKeys.transform.SetParent(transform);
-//            WindowKeys.transform.localPosition = Vector3.zero;
-//            WindowKeys.Init();
-//            WindowKeys.transform.SetAsLastSibling();
-//            WindowKeys.gameObject.SetActive(false);
-//        }
+        //#if UNITY_EDITOR
+        //        DebugKillAllEnemies.gameObject.SetActive(true);
+        //#else
+        //        DebugKillAllEnemies.gameObject.SetActive(false);
+        //#endif
+        //        if (WindowKeys != null)
+        //        {
+        //            WindowKeys = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.WindowKeys);
+        //            WindowKeys.transform.SetParent(transform);
+        //            WindowKeys.transform.localPosition = Vector3.zero;
+        //            WindowKeys.Init();
+        //            WindowKeys.transform.SetAsLastSibling();
+        //            WindowKeys.gameObject.SetActive(false);
+        //        }
+//        CommanderPriority.Init(MyCommander);
         FlyingNumbersController.Init(FlyingInfosContainer);
         PreFinish.Init();
         FastEndButton.gameObject.SetActive(false);
@@ -108,7 +111,7 @@ public class InGameMainUI : BaseWindow
         MyCommander = battle.GreenCommander;
         BattleCoinUI.Init(MyCommander.CoinController);
         battle.OnShipAdd += OnShipAdd;
-        RetireButtonObject.gameObject.SetActive(battle.CanRetire);
+        RetireButton.Init( this,15f,battle.CanRetire);
         DebugUiControl.Init();
 //        HoldClearCoinUI.Init(HoldComplete);
         CreditController.Init(MyCommander);
@@ -203,36 +206,6 @@ public class InGameMainUI : BaseWindow
         SelectedShip = obj;
     }
 
-    public void OnClickRetire()
-    {
-//        HashSet<ShipBase> shipsToDamage = new HashSet<ShipBase>();
-//        float closestDist = 20f;
-//        foreach (var ship in MyCommander.Ships)
-//        {
-//            foreach (var enemy in ship.Value.Enemies)
-//            {
-//                var closer = enemy.Value.Dist < closestDist;
-//                if (closer)
-//                {
-//                    shipsToDamage.Add(ship.Value);
-//                    break;
-//                }
-//            }
-//        }
-        OnPause();
-        WindowManager.Instance.ConfirmWindow.Init(() =>
-            {
-                foreach (var ship in MyCommander.Ships)
-                {
-                    if (ship.Value.ShipParameters.StartParams.ShipType != ShipType.Base)
-                    {
-                        ship.Value.RunAwayAction();
-                    }
-                }
-                OnPause();
-            }, OnPause,
-            String.Format(Namings.DoWantRetire));
-    }
 
     private void DoRunAway(HashSet<ShipBase> shipsToDamage)
     {

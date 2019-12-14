@@ -11,7 +11,7 @@ public class SpellZoneVisualCircle : MonoBehaviour
 
     public void SetSize(float val)
     {
-        MainVisual.transform.localScale = Vector3.one*val;
+        MainVisual.transform.localScale = Vector3.one*val/2f;
     }
 }
 

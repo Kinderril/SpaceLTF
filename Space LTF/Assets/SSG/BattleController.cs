@@ -132,8 +132,15 @@ public class BattleController :Singleton<BattleController>
         var posTeam1 = d.StartPosition1;
         var posTeam2 = d.StartPosition2;
 
-        var shipsA = GreenCommander.InitShips(posTeam1, posTeam2);
-        var shipsB = RedCommander.InitShips(posTeam2, posTeam1);
+        List<Vector3> positionsToClear = new List<Vector3>();
+        var shipsA = GreenCommander.InitShips(posTeam1, posTeam2, positionsToClear);
+        var shipsB = RedCommander.InitShips(posTeam2, posTeam1, positionsToClear);
+
+        foreach (var vector3 in positionsToClear)
+        {
+            CellController.ClearPosition(vector3);
+        }
+
         foreach (var shipBase in shipsA)
         {
             CellController.AddShip(shipBase.Value);

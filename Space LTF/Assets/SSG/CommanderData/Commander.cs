@@ -29,12 +29,13 @@ public class Commander
     public Battlefield Battlefield { get; private set; }
 //    public List<ShipBornPosition> BornPositions { get; private set; }
     public Vector3 StartMyPosition { get; private set; }
+    public CommanderPriority Priority { get; private set; }
     public event Action<ShipBase> OnShipDestroy;
     public event Action<ShipBase> OnShipAdd;
     private Action<Commander> OnCommanderDeathCallback;
     private Action<Commander,ShipBase> OnShipInited;
     private Action<ShipBase> OnShipLauched;
-    private List<StartShipPilotData> _delayedShips = new List<StartShipPilotData>();
+//    private List<StartShipPilotData> _delayedShips = new List<StartShipPilotData>();
     private int index = 0;
     private CommanderShipEnemy LastPriorityTarget;
 //    private bool isRunawayComplete = false;
@@ -67,34 +68,41 @@ public class Commander
         CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(),player.Parameters.ChargesSpeed.Level);
 //        RewardController= new CommanderRewardController(this);
         SpellController = new CommanderSpells(this);
+        Priority = new CommanderPriority(this);
     }
 
-    public Dictionary<int, ShipBase> InitShips(Vector3 startPosition, Vector3 enemyCenterCell)
+    public Dictionary<int, ShipBase> InitShips(Vector3 startPosition, Vector3 enemyCenterCell,List<Vector3> positionsToClear)
     {
         _enemyCell = enemyCenterCell;
         HavePerairPlace = false;
 //        var closestCell = Battlefield.CellController.Data.FindClosestCellByType(startPosition, CellType.Free);
         StartMyPosition = startPosition;
-//        var closestCells = Battlefield.CellController.Data.FindClosestCellsByType(startPosition, CellType.Free);
+        var dirToEnemy = Utils.NormalizeFastSelf(_enemyCell - startPosition);
+        var count = _paramsOfShips.Count;
         foreach (var v in _paramsOfShips)
         {
-            if (v.Pilot.Delay < 1f || v.Ship.ShipType == ShipType.Base)
+            int rowIndex = 1;
+            float rowDelta = 3;
+            float lineDelta = 3;
+            var halfShip = count / 2;
+            Vector3 side;
+            if (index <= halfShip)
             {
-                InitShip(v, startPosition, _enemyCell, ref index);
+                side = Utils.Rotate90(dirToEnemy, SideTurn.left) * lineDelta * index;
             }
             else
             {
-                v.TimeToLaunch = Time.time + v.Pilot.Delay; 
-                _delayedShips.Add(v);
-                Debug.Log("Ship delayed for:" + v.Pilot.Delay);
+                side = Utils.Rotate90(dirToEnemy, SideTurn.right) * lineDelta * (count - index);
             }
+            var shipPosition = startPosition + side + dirToEnemy * rowDelta * rowIndex;
+
+            index++;
+            InitShip(v, shipPosition, dirToEnemy);
+            positionsToClear.Add(shipPosition);
         }
         if (MainShip != null)
         {
             var weaponsIndex = 0;
-//            SpellController..Init();
-
-            SpellController.AddPriorityTarget();
             foreach (var baseSpellModul in MainShip.ShipParameters.Spells)
             {
                 if (baseSpellModul != null)
@@ -111,7 +119,7 @@ public class Commander
         return Ships;
     }
 
-    private ShipBase InitShip(StartShipPilotData v,Vector3 closestCell, Vector3 enemyStartPosition,ref int index)
+    private void InitShip(StartShipPilotData v,Vector3 position, Vector3 direction)
     {
         var shipPrefab = DataBaseController.Instance.GetShip(v.Ship.ShipType, v.Ship.ShipConfig);
         //            var freeCell = closestCells[index];
@@ -122,13 +130,6 @@ public class Commander
         }
         CheckModuls(shipPrefab, v);
 #endif
-        index++;
-        var half = BattleController.START_SAFE_RADIUS;
-        var xx = MyExtensions.Random(-half, half);
-        var zz = MyExtensions.Random(-half, half);
-        var p1 = closestCell + new Vector3(xx, 0, zz);
-        Vector3 position = p1;
-        Vector3 direction = enemyStartPosition - position;
         ShipBase ship1;
         switch (v.Ship.ShipType)
         {
@@ -158,7 +159,6 @@ public class Commander
         {
             OnShipInited(this, ship1);
         }
-        return ship1;
     }
 
     private void CheckModuls(ShipBase rndShip, StartShipPilotData startShipPilotData)
@@ -228,7 +228,6 @@ public class Commander
             return;
         }
 
-        DelayedShips();
 //        SpellController.ManualUpdate();
         if (_shipsToRemove.Count > 0)
         {
@@ -273,25 +272,7 @@ public class Commander
             return ship.Position;
         }
     }
-
-    private void DelayedShips()
-    {
-        if (_delayedShips.Count == 0)
-        {
-            return;
-        }
-        foreach (var data in _delayedShips)
-        {
-            if (data.TimeToLaunch < Time.time)
-            {
-                _delayedShips.Remove(data);
-                var ship = InitShip(data,StartMyPosition , _enemyCell, ref index);
-                ship.Launch(OnShipLauched);
-                return;//At one frame only one
-            }
-        }
-    }
-    
+                 
     public ShipBase GetNextShip(ShipBase selectedShip)
     {
         if (Ships.ContainsValue(selectedShip))

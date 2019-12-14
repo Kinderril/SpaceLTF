@@ -170,6 +170,19 @@ public class AICell
         }
         return null;
     }
+
+    public void ClearPosition(Vector3 vector3)
+    {
+        HaveAsteroids = asteroidsPreData != null && asteroidsPreData.Count > 0;
+        if (HaveAsteroids)
+        {
+            asteroidsPreData.RemoveAll(cellASteroid =>
+            {
+                var sDist = (cellASteroid.Position - vector3).sqrMagnitude;
+                return (sDist <= 9);
+            });
+        }
+    }
     public void AddShip(ShipBase shipBase)
     {
         HaveAsteroids = asteroidsPreData != null && asteroidsPreData.Count > 0;

@@ -29,10 +29,6 @@ public class ControlCenterDesicionData : IShipDesicion
         
     }
 
-    public PilotTcatic GetTacticType()
-    {
-        return PilotTcatic.defenceBase;
-    }
 
     public void SetLastAction(ActionType actionType)
     {
@@ -59,9 +55,21 @@ public class ControlCenterDesicionData : IShipDesicion
         return new WaitEnemyTime(_shipBase,20f);
     }
 
-    public void TryChangeTactic(PilotTcatic nextTactic)
+
+    public void ChangePriority(ESideAttack SideAttack)
     {
         
     }
+
+    public void ChangePriority(EBaseDefence BaseDefence)
+    {
+
+    }
+
+    public void ChangePriority(ECommanderPriority1 CommanderPriority1)
+    {
+
+    }
+
 }
 
