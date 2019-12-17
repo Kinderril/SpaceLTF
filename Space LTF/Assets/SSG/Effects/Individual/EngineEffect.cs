@@ -11,12 +11,14 @@ public class EngineEffect : MonoBehaviour
     private float _lastFrameSpeed;
     public ParticleSystem[] Particles;
     private bool _failed;
+    private bool _inited;
 //    public AudioClip AudioEngine;
     public AudioSource SourceEngine;
 
     public void Init(MovingObject mobj)
     {
         _mobj = mobj;
+        _inited = true;
         SourceEngine.loop = true;
         SourceEngine.volume = 0.1f;
         SourceEngine.clip = DataBaseController.Instance.AudioDataBase.EngineDefault;
@@ -27,7 +29,7 @@ public class EngineEffect : MonoBehaviour
 
     void Update()
     {
-        if (_failed)
+        if (_failed || !_inited)
         {
             return;
         }

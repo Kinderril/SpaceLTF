@@ -18,19 +18,8 @@ public class ArmorModul : BaseModul
     public override void Apply(ShipParameters Parameters, ShipBase owner)
     {
         base.Apply(Parameters,owner);
-        if (Parameters.BulletHitModificators == null)
-        {
-            Parameters.BulletHitModificators = new List<BulletDamageModif>();
-        }
-        Parameters.BulletHitModificators.Add(HitModification);
-//        Parameters.ShieldModifications.Add();
-    }
-
-    private CurWeaponDamage HitModification(CurWeaponDamage damage, Bullet bullet, ShipBase target)
-    {
-
-        damage.BodyDamage = Mathf.Clamp(damage.BodyDamage - ModulData.Level,0,9999);
-        return damage;
+        Parameters.BodyArmor += ModulData.Level;
+        Parameters.ShieldArmor += ModulData.Level;
     }
 
     public override void Dispose()

@@ -27,7 +27,9 @@ public interface IStartShipParams
     float MaxShiled { get; }
     float MaxSpeed { get; }
     float TurnSpeed { get; }
-    float ShiledRegen { get; }
+    float ShieldRegen { get; }   
+    float BodyArmor { get; }
+    float ShiledArmor { get; }
     float HealthPercent { get; }
     ShipType ShipType { get; }
     ShipConfig ShipConfig { get; }

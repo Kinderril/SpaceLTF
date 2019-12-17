@@ -13,6 +13,7 @@ public class ShipInventoryUI : DragZone
     public TextMeshProUGUI ConfigType;
     public TextMeshProUGUI NameField;
     public TextMeshProUGUI LevelField;
+    public TextMeshProUGUI ArmorField;
 
 
     public Transform WeaponsLayout;
@@ -47,6 +48,7 @@ public class ShipInventoryUI : DragZone
         _pilot.OnLevelUp += OnLevelUp;
         _shipInventory.OnShipCriticalChange += OnShipCriticalChange;
         _shipInventory.OnShipRepaired += OnShipRepaired;
+        _shipInventory.OnItemAdded += OnItemAdded;
 //        _weaponsSlots.Clear();
 //        _modulsSlots.Clear();
 //        _spellsSlots.Clear();
@@ -72,7 +74,31 @@ public class ShipInventoryUI : DragZone
         }
 
         UpdateHealth();
+        UpdateArmor();
 
+    }
+
+    private void OnItemAdded(IItemInv item, bool val)
+    {
+        UpdateArmor();
+    }
+
+    private void UpdateArmor()
+    {
+        float bArmor = _shipInventory.BodyArmor;
+        float sArmor = _shipInventory.ShiledArmor;
+        foreach (var modul in _shipInventory.Moduls.SimpleModuls)   //Это пздц костыль. Если будут еще подобный модули то переделать все это!
+        {
+            if (modul != null && modul.Type == SimpleModulType.armor)
+            {
+                bArmor += modul.Level;
+                sArmor += modul.Level;
+            }
+            
+
+        }
+
+        ArmorField.text = String.Format(Namings.ArmorField, bArmor, sArmor);
     }
 
     private void OnShipRepaired(ShipInventory obj)
@@ -179,6 +205,7 @@ public class ShipInventoryUI : DragZone
     public override void Dispose()
     {
         _shipInventory.OnShipRepaired -= OnShipRepaired;
+        _shipInventory.OnItemAdded -= OnItemAdded;
         _shipInventory.OnShipCriticalChange -= OnShipCriticalChange;
         _pilot.OnLevelUp -= OnLevelUp;
         base.Dispose();

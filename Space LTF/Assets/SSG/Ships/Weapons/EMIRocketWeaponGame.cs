@@ -15,14 +15,8 @@ public class EMIRocketWeaponGame : WeaponInGame
 
     public override bool IsAimed(ShipPersonalInfo target)
     {
-        return Owner.IsInFromt(target.ShipLink);
+        return target.IsInFrontSector();
     }
-
-//    public override void Affect(ShipParameters shipParameters, ShipBase target, Bullet bullet)
-//    {
-//        target.HitData.HitTo(ShipHitVisual.soft);
-//        base.Affect(shipParameters, target, bullet);
-//    }
 
 }
 

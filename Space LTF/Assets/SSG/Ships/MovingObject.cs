@@ -20,8 +20,8 @@ public abstract class MovingObject : PoolElement
 {
     const float MAX_ACCELERATION = 1.5f;
     const float ACCELERATION_POWER = 2f;
-    const float BANK_MAX = 0.7f;
-    const float BANK_SPEED = 0.9f;
+    public const float BANK_MAX = 0.7f;
+    public const float BANK_SPEED = 0.9f;
     public float EulerY = 0f;
     public bool EngineWork = true;
     public Vector3 LookDirection = Vector3.forward;
@@ -58,6 +58,8 @@ public abstract class MovingObject : PoolElement
 #endif
     public Transform RotatableObject;
     private float _curBank = 0f;
+    protected virtual float BankMax => BANK_MAX;
+    protected virtual float BankSpeed => BANK_SPEED;
 
     public event Action<MovingObject, bool> OnStop;
 
@@ -111,7 +113,7 @@ public abstract class MovingObject : PoolElement
         ApplyRotation(dir, true);
     }
     
-    public bool ApplyRotation(Vector3 dir, bool exactlyPoint)
+    public virtual bool ApplyRotation(Vector3 dir, bool exactlyPoint)
     {
         if (EngineStop.IsCrash())
         {
@@ -163,16 +165,20 @@ public abstract class MovingObject : PoolElement
         {
             lerpRes = Utils.RotateOnAngUp(LookDirection, -angPerFrameTurn);
         }
-        
 
-        _banking = new BankingData(dir, steps);
+
+        SetBankData(new BankingData(dir, steps));
 #if UNITY_EDITOR
         DebugMovingData.AddDir(lerpRes, false, LookDirection);
 #endif
         Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
         return false;
     }
-    
+
+    public void SetBankData(BankingData bankingData)
+    {
+        _banking = bankingData;
+    }
 
     private bool? _haveRotatingObject = null;
 
@@ -203,7 +209,7 @@ public abstract class MovingObject : PoolElement
             return;
         }
 
-        var bSpeed = BANK_SPEED * Time.deltaTime;
+        var bSpeed = BankSpeed * Time.deltaTime;
         if (_banking != null)
         {
             Vector3 dir = _banking.Dir;
@@ -216,17 +222,17 @@ public abstract class MovingObject : PoolElement
                 if (isRight)
                 {
                     _curBank += bSpeed;
-                    if (_curBank >= BANK_MAX)
+                    if (_curBank >= BankMax)
                     {
-                        _curBank = BANK_MAX;
+                        _curBank = BankMax;
                     }
                 }
                 else
                 {
                     _curBank -= bSpeed;
-                    if (_curBank <= -BANK_MAX)
+                    if (_curBank <= -BankMax)
                     {
-                        _curBank = -BANK_MAX;
+                        _curBank = -BankMax;
                     }
                 }
 
@@ -298,34 +304,9 @@ public abstract class MovingObject : PoolElement
 
     }
 
-    private void ApplyAccelerationOld()
-    {
-        float delta;
-        if (_targetAcceleration > 0f)
-        {
-
-            delta = ACCELERATION_POWER;
-        }
-        else
-        {
-            delta = -ACCELERATION_POWER;
-        }
-
-//        delta = speedUp ? ACCELERATION_POWER : -ACCELERATION_POWER;
-        var d = delta * Time.time;
-        if (EngineStop.IsCrash())
-        {
-            _acceleraion = Mathf.Clamp(_acceleraion - d, -MAX_ACCELERATION / 2, MAX_ACCELERATION / 2);
-        }
-        else
-        {
-            _acceleraion = Mathf.Clamp(_acceleraion + d, -MAX_ACCELERATION, _targetAcceleration * MAX_ACCELERATION);
-        }
-    }
-
     public void SetTargetSpeed(float percent)
     {
-        _targetPercentSpeed = percent;
+        _targetPercentSpeed = Mathf.Clamp(percent,-1f,1f);
     }
 
     void OnDestroy()
@@ -357,7 +338,7 @@ public abstract class MovingObject : PoolElement
         DrawGizmos();
     }
 
-    protected void ApplyMove()
+    protected void ApplyMove(Vector3 additionalMove,bool useAdditive)
     {
 #if UNITY_EDITOR
         if (DebugParamsController.EngineOff && this is ShipBase)
@@ -367,13 +348,25 @@ public abstract class MovingObject : PoolElement
 #endif
         if (EngineWork)
         {
-            Vector3 dir = CurSpeed * LookDirection.normalized * Time.deltaTime;
+            Vector3 dir = CurSpeed * LookDirection * Time.deltaTime;
             if (ExternalForce.IsActive)
             {
                 dir = dir + ExternalForce.Update();
             }
-            Position = Position + dir ;
+
+            if (useAdditive)
+            {
+                Position = Position + additionalMove;
+            }
+            else
+            {
+                Position = Position + dir;
+            }
         }
+    }  
+    protected void ApplyMove()
+    {
+        ApplyMove(Vector3.zero,false);
     }
     
 }

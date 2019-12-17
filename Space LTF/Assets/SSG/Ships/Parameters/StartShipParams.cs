@@ -6,14 +6,16 @@
     public float HealthPercentData;
     public float MaxShieldData;
     public float MaxSpeedData;
-//    public float ShiledRegenData;
+//    public float ShieldRegenData;
     public ShipType ShipTypeData;
     public ShipConfig ShipConfigData;
     public int WeaponModulsCountData;
     public int SimpleModulsCountData;
     public int SpellModulsCountData;
     public float TurnSpeedData;
-    public float ShiledRegenData = 0f;
+    public float BodyArmorData = 0f;
+    public float ShieldArmorData = 0f;
+    public float ShieldRegenData = 0f;
     public string NameData;
 
     public StartShipParams(
@@ -27,11 +29,11 @@
         int SimpleModulsCountData,
         int SpellModulsCount,
         int BodyVisualTypeData,
-        float ShiledRegenData,
+        float shieldRegenData,
         float HealthPercentData = 1f
         )
     {
-        this.ShiledRegenData = ShiledRegenData;
+        this.ShieldRegenData = shieldRegenData;
         this.ShipTypeData = ShipTypeData;
         this.ShipConfigData = ShipConfigData;
         this.MaxHealthData = MaxHealthData;
@@ -44,7 +46,7 @@
         this.SimpleModulsCountData = SimpleModulsCountData;
         this.BodyVisualTypeData = BodyVisualTypeData;
         NameData = ShipNames.GetRandom();
-//        this.ShiledRegenData = 0;
+//        this.ShieldRegenData = 0;
 //        this.EvationData = 0;
     }
 
@@ -73,10 +75,13 @@
         get { return TurnSpeedData; }
     }
 
-    public float ShiledRegen
+    public float ShieldRegen
     {
-        get { return ShiledRegenData; }
+        get { return ShieldRegenData; }
     }
+
+    public float BodyArmor => BodyArmorData;
+    public float ShiledArmor => ShieldArmorData;
 
     public float HealthPercent
     {

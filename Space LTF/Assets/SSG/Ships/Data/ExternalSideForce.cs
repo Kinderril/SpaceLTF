@@ -18,10 +18,10 @@ public class ExternalSideForce
         IsActive = false;
     }
 
-    public void Init(float sideForce,float delay, SideTurn side)
+    public void Init(float power,float delay, SideTurn side)
     {
         this._side = side;
-        Power = sideForce;
+        Power = power;
         EndTime = Time.time + delay;
         Period = delay;
     }

@@ -14,6 +14,7 @@ public class ShipPersonalInfo
     public float Rating { get; private set; }
     public DebugRating DebugRating { get; private set; }
     public bool CanShoot { get; set; }
+    private ShipBase _owner;
 
     public bool Visible
     {
@@ -23,8 +24,11 @@ public class ShipPersonalInfo
         }
     }
 
-    public ShipPersonalInfo(ShipBase mover, CommanderShipEnemy commanderShipEnemy)
+
+
+    public ShipPersonalInfo(ShipBase owner,ShipBase mover, CommanderShipEnemy commanderShipEnemy)
     {
+        _owner = owner;
         CommanderShipEnemy = commanderShipEnemy;
         ShipLink = mover;
     }
@@ -38,6 +42,17 @@ public class ShipPersonalInfo
     public void SetRaing(float total)
     {
         Rating = total;
+    }
+
+    public bool IsInFrontSector()
+    {
+        var isAng = Utils.IsAngLessNormazied(_owner.LookDirection, DirNorm, UtilsCos.COS_90_RAD);
+        return isAng;
+    }   
+    public bool IsInBack()
+    {
+        var isAng = Utils.FastDot(_owner.LookDirection, DirNorm) < 0;
+        return isAng;
     }
 
     public void SetDebugRaing(DebugRating debugRating)

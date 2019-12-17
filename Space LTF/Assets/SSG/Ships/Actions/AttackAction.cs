@@ -21,6 +21,7 @@ public class AttackAction : AbstractAttackAction
     {
         _isDogFight = false;
         Target = target;
+        Target.ShipLink.AttackersData.ShipStartsAttack(owner);
         _minAttackDist = Single.MaxValue;
         foreach (var weapon in owner.WeaponsController.GelAllWeapons())
         {
@@ -48,6 +49,20 @@ public class AttackAction : AbstractAttackAction
 
     protected void MoveToTarget()
     {
+        if (Target.Dist < _minAttackDistToStart)
+        {
+            if (_owner.Boost.CanUse)
+            {
+                _owner.Boost.ActivateTurn(Target.DirNorm);
+            }
+        }
+        else if (Target.IsInBack() && Target.Dist < 14)
+        {
+            if (_owner.Boost.CanUse)
+            {
+                _owner.Boost.ActivateBack();
+            }
+        }
         if (_isDogFight)
         {
             ShallEndDogFight();
@@ -63,13 +78,10 @@ public class AttackAction : AbstractAttackAction
                 var dir = Target.ShipLink.PredictionPosAim() - _owner.Position;
                 _owner.MoveToDirection(dir);
             }
+
         }
         else
         {
-            if (Target.Dist < _minAttackDistToStart && Target.ShipLink.CurSpeed < 0.01f)
-            {
-            }
-
             ShallStartDogFight();
             //            bool tooClose = false;
             if (Target.ShipLink.CurSpeed <= 0.1f)
@@ -110,7 +122,7 @@ public class AttackAction : AbstractAttackAction
 
     private void ShallStartDogFight()
     {
-        var isInFront = _owner.IsInFromt(Target.ShipLink);
+        var isInFront = Target.IsInFrontSector();
         if (isInFront)
         {
             if (Target.Dist < _minAttackDistToStart)
@@ -130,6 +142,7 @@ public class AttackAction : AbstractAttackAction
 
     protected override void Dispose()
     {
+        Target.ShipLink.AttackersData.ShipEndsAttack(_owner);
         foreach (var weapon in _owner.WeaponsController.GelAllWeapons())
         {
             weapon.OnShootEnd -= OnShootEnd;

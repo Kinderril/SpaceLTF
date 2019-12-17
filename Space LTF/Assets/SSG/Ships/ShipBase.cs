@@ -57,6 +57,8 @@ public class ShipBase : MovingObject
     public CellController CellController { get; private set; }
     public ShipLocator Locator { get; private set; }
     public ShipHitData HitData { get; private set; }
+    public ShipBoost Boost { get; private set; }
+    public ShipAttackersData AttackersData { get; private set; }
 
     public ShipDamageData DamageData { get; private set; }
     //    public const string TAG = "Ship";
@@ -80,6 +82,34 @@ public class ShipBase : MovingObject
     public List<WeaponPlace> WeaponPosition;
     public IShipDesicion DesicionData { get; protected set; }
 
+    protected override float BankMax
+    {
+        get
+        {
+            if (Boost.BoostTurn.IsActive)
+            {
+                return base.BankMax * 1.5f;
+            }
+            else
+            {
+                 return base.BankMax;
+            }
+        }
+    }  
+    protected override float BankSpeed
+    {
+        get
+        {
+            if (Boost.BoostTurn.IsActive)
+            {
+                return base.BankSpeed * 1.5f;
+            }
+            else
+            {
+                 return base.BankSpeed;
+            }
+        }
+    }
     public bool Pause { get; set; }
     public bool InBattlefield { get; set; }
     public bool InAsteroidField { get; private set; }
@@ -111,8 +141,8 @@ public class ShipBase : MovingObject
         shipInventory.LastBattleData = new ShipBattleData();
         ShipInventory = shipInventory;
         CellController = commander.Battlefield.CellController;
-
-        var selectedElementPrefab = DataBaseController.Instance.SelectedElement;
+        AttackersData = new ShipAttackersData(this);
+  var selectedElementPrefab = DataBaseController.Instance.SelectedElement;
         SelectedElement = DataBaseController.GetItem<SelectedElement>(selectedElementPrefab);
         SelectedElement.Init(shipInventory.ShipType);
         SelectedElement.transform.SetParent(ShipVisual.transform, false);
@@ -164,6 +194,7 @@ public class ShipBase : MovingObject
             WeaponCrashEffect.Stop();
         PathController = new ShipPathController2(this,  1.25f);
         BuffData = new ShipBuffData(this);
+        Boost = new ShipBoost(this, 15);
         DamageData.Activate();
         PathController.Activate();
         if (TeamIndex == TeamIndex.green)
@@ -336,8 +367,10 @@ public class ShipBase : MovingObject
         }
 
         UpdateShieldRegen();
+
+//        SetTargetSpeed(Boost.BoostTurn.TargetBoosSpeed);
         EngineUpdate();
-        ApplyMove();
+        ApplyMove(Boost.BoostTurn.LastTurnAddtionalMove,Boost.BoostTurn.IsActive);
         Locator.ManualUpdate();
         CheckYEnemies();
         _predictionPos = LookDirection * PREDICTION_DIST + Position;
@@ -414,6 +447,21 @@ public class ShipBase : MovingObject
         ApplyRotation(dir, false);
         SetTargetSpeed(1f);
     }
+
+    public override bool ApplyRotation(Vector3 dir, bool exactlyPoint)
+    {
+        if (Boost.BoostTurn.IsActive)
+        {
+            SetTargetSpeed(Boost.BoostTurn.TargetBoosSpeed);
+            return Boost.BoostTurn.ApplyRotation(dir);
+        }
+        else
+        {
+            SetTargetSpeed(1f);
+            return base.ApplyRotation(dir, exactlyPoint);
+        }
+    }
+
     public void MoveByWay(Vector3 target)
     {
         bool exactlyPoint;
@@ -443,7 +491,6 @@ public class ShipBase : MovingObject
         var direction4 = PathController.GetCurentDirection(target, out exactlyPoint, out goodDir,out speedREcommended);
         if (!goodDir)
         {
-
             ApplyRotation(direction4, exactlyPoint);
         }
 
@@ -639,7 +686,7 @@ public class ShipBase : MovingObject
 
     public void AddEnemy(ShipBase enemy, bool isEnemy, CommanderShipEnemy commanderShipEnemy)
     {
-        var enemyInfo = new ShipPersonalInfo(enemy,commanderShipEnemy);
+        var enemyInfo = new ShipPersonalInfo(this,enemy,commanderShipEnemy);
         var dir = enemy.Position - Position;
         enemyInfo.SetParams(dir, dir.magnitude);
         if (isEnemy)
@@ -766,7 +813,9 @@ public class ShipBase : MovingObject
         Debug.Log("Ship removed:" + p0.Id + "    isENemy:" + isEnemy);
         if (isEnemy)
         {
+            var info = Enemies[p0];
             Enemies.Remove(p0);
+            AttackersData.Remove(info);
         }
         else
         {
@@ -936,4 +985,5 @@ public class ShipBase : MovingObject
         // Draw enabled states name
 //        Handles.Label(position, nameContent, s_Styles.enabledStateName);
     }
+
 }

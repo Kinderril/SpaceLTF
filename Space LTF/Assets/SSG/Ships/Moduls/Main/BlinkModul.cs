@@ -72,7 +72,7 @@ public class BlinkModul : TimerModul
     {
 
         var trg = attackAction.Target;
-        var isInFront = _owner.IsInFromt(trg.ShipLink);
+        var isInFront = trg.IsInFrontSector();
         var isClose = trg.Dist < 6 && trg.Dist > 2;
         if (!isInFront && isClose)
         {

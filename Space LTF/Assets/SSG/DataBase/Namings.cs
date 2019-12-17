@@ -766,4 +766,5 @@ public static class Namings
 
     public static string WaveStrikeSpell = "Strikes a bullets to each close enemy. Damage:{0}/{1}";
     public static string RechargeSheildSpell = "Recharge shield on {0}%";
+    public static string ArmorField = "Armor:{0}/{0}";
 }

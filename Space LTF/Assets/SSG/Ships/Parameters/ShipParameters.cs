@@ -45,6 +45,9 @@ public class ShipParameters  : IShipAffectableParams
     public float MaxSpeed { get; set; }
     public float TurnSpeed { get; set; }
 
+    public int BodyArmor = 0;
+    public int ShieldArmor = 0;
+
 
     public float CurHealth
     {
@@ -87,10 +90,10 @@ public class ShipParameters  : IShipAffectableParams
         var maxShiled = ParamUpdate(startParams.MaxShiled, pilotParams.ShieldLevel, ShipParameters.MaxShieldCoef);
         CurHealth = CurHealthWIthPercent;
 //        CurShiled = MaxShiled;
-//        ShieldRegenPerSec = startParams.ShiledRegen;
+//        ShieldRegenPerSec = startParams.ShieldRegen;
         _deathCallback = dealthCallback;
         HealthRegen = new HealthRegenParameter(this);
-        ShieldParameters = new ShieldParameters(shipOwner,shieldCollider, startParams.ShiledRegen, maxShiled);
+        ShieldParameters = new ShieldParameters(shipOwner,shieldCollider, startParams.ShieldRegen, maxShiled);
     }
 
     public float CurHealthWIthPercent
@@ -212,6 +215,9 @@ public class ShipParameters  : IShipAffectableParams
                 copy = hitModificator(copy, bullet, target);
             }
         }
+
+        currentDamage.ShieldDamage = currentDamage.ShieldDamage - ShieldArmor;
+        currentDamage.BodyDamage = currentDamage.BodyDamage - BodyArmor;
         Damage(copy.ShieldDamage, copy.BodyDamage, callback, target);
     }
 

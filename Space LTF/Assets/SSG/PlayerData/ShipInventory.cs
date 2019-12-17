@@ -12,7 +12,9 @@ public class ShipInventory : IStartShipParams , IInventory
     public float MaxShiled { get; private set; }
     public float MaxSpeed { get; private set; }
     public float TurnSpeed { get; private set; }
-    public float ShiledRegen { get; private set; }
+    public float ShieldRegen { get; private set; }
+    public float BodyArmor { get; set; }
+    public float ShiledArmor { get; set; }
     public float HealthPercent { get; private set; }
 
 
@@ -56,9 +58,11 @@ public class ShipInventory : IStartShipParams , IInventory
         MaxShiled = pParams.MaxShiled;
         MaxSpeed = pParams.MaxSpeed;
         TurnSpeed = pParams.TurnSpeed;
-        ShiledRegen = pParams.ShiledRegen;
+        ShieldRegen = pParams.ShieldRegen;
         ShipType = pParams.ShipType;
         ShipConfig = pParams.ShipConfig;
+        BodyArmor = pParams.BodyArmor;
+        ShiledArmor = pParams.ShiledArmor;
         WeaponModulsCount = pParams.WeaponModulsCount;
         WeaponsModuls = new WeaponInv[WeaponModulsCount];
         SimpleModulsCount = pParams.SimpleModulsCount;

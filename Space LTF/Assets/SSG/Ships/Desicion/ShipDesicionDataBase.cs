@@ -434,12 +434,16 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             switch (commanderPriority1)
             {
                 case ECommanderPriority1.MinShield:
-                    curShield = target.Key.ShipParameters.CurShiled / target.Key.ShipParameters.MaxShield;
-                    if (curShield < curPercent)
+                    if (target.Key.ShipParameters.MaxShield > 0)
                     {
-                        curPercent = curShield;
-                        curTarget = target.Value;
+                        curShield = target.Key.ShipParameters.CurShiled / target.Key.ShipParameters.MaxShield;
+                        if (curShield < curPercent)
+                        {
+                            curPercent = curShield;
+                            curTarget = target.Value;
+                        }
                     }
+
                     break;
                 case ECommanderPriority1.MinHealth:
                     curHp = target.Key.ShipParameters.CurHealth / target.Key.ShipParameters.MaxHealth;
@@ -450,12 +454,16 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                     }
                     break;  
                 case ECommanderPriority1.MaxShield:
-                    curShield = target.Key.ShipParameters.CurShiled / target.Key.ShipParameters.MaxShield;
-                    if (curShield > curPercent)
+                    if (target.Key.ShipParameters.MaxShield > 0)
                     {
-                        curPercent = curShield;
-                        curTarget = target.Value;
+                        curShield = target.Key.ShipParameters.CurShiled / target.Key.ShipParameters.MaxShield;
+                        if (curShield > curPercent)
+                        {
+                            curPercent = curShield;
+                            curTarget = target.Value;
+                        }
                     }
+
                     break;
                 case ECommanderPriority1.MaxHealth:
                     curHp = target.Key.ShipParameters.CurHealth / target.Key.ShipParameters.MaxHealth;

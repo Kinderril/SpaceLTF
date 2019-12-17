@@ -20,6 +20,7 @@ public class AfterAttackAction : BaseAction
         _owner.SetTargetSpeed(1f);
         if (_targetPoint != null)
             _owner.MoveByWay(_targetPoint.Value);
+        _owner.AttackersData.UpdateData();
     }
 
     private void FindWay()

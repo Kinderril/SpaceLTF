@@ -35,6 +35,7 @@ public class SideShipInfo : MonoBehaviour
     public Image TacticSideIcon;
     public PriorityTooltipInfo PriorityTooltipInfo;
     public SideAttackTooltipInfo SideAttackTooltipInfo;
+    public Slider BoostSlider;
 
     private ShipBase _ship;
     private Action<ShipBase> _shipSelectedAction;
@@ -69,6 +70,19 @@ public class SideShipInfo : MonoBehaviour
         UpdateToggle(shallOpen);
         UpdateTacticField();
 
+    }
+
+    void Update()
+    {
+        if (_ship.Boost.CanUse)
+        {
+            if (BoostSlider.value < 1f)
+                BoostSlider.value = 1f;
+        }
+        else
+        {
+            BoostSlider.value = _ship.Boost.LoadPercent;
+        }
     }
     private void UpdateTacticField()
     {

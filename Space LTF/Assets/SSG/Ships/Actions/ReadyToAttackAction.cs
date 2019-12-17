@@ -30,7 +30,7 @@ public  class ReadyToAttackAction : AbstractAttackAction
 
     protected void MoveToTarget()
     {
-        var isInFront = _owner.IsInFromt(Target.ShipLink);
+        var isInFront = Target.IsInFrontSector();
         if (isInFront && Target.ShipLink.CurSpeed < _owner.CurSpeed && Target.Dist < 10)
         {
             //slow little bit;

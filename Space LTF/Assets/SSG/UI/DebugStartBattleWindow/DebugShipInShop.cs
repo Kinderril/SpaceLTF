@@ -143,7 +143,7 @@ public class DebugShipInShop : MonoBehaviour
 //        CreatAndText("TurnSpeed:" + TurnSpeed.ToString("0"), LayoutParameters);
 //        CreatAndText("MaxSpeed:" + MaxSpeed.ToString("0"), LayoutParameters);
 
-        CreatAndText("ShiledRegen:" + _shipInv.ShiledRegen.ToString("0"), LayoutParameters);
+        CreatAndText("ShieldRegen:" + _shipInv.ShieldRegen.ToString("0"), LayoutParameters);
         CreatAndText("Level:" + PilotParameters.CurLevel.ToString("0"), LayoutParameters);
         CreatAndButton("Tactic:" + PilotParameters.Tactic.ToString(), LayoutParameters,OnClickTactic);
 
