@@ -15,7 +15,9 @@ public class PreBattleWindow : BaseWindow
     private PlayerArmyUI _greeArmyUi;
     private PlayerArmyUI _redArmyUi;
 
-    public ArmyDataInfoUI ArmyDataInfoUIPrefab;
+    public ScoutShipInfoUI ScoutShipInfoPrefab;
+
+    //    public ArmyDataInfoUI ArmyDataInfoUIPrefab;
 
     public override void Init<T>(T obj)
     {
@@ -42,12 +44,12 @@ public class PreBattleWindow : BaseWindow
                 }
                 else
                 {
-                    var scoutData = _redPlayer.ScoutData.GetInfo(_greenPlayer.Parameters.Scouts.Level);
-                    foreach (var data1 in scoutData)
+                    var scouts = _redPlayer.ScoutData.GetShipScouts(_greenPlayer.Parameters.Scouts.Level);
+                    foreach (var shipScoutData in scouts)
                     {
-                        var infoPlace = DataBaseController.GetItem(ArmyDataInfoUIPrefab);
-                        infoPlace.transform.SetParent(EnemyPlayersLayout);
-                        infoPlace.Init(data1);
+                        var scoutInfo = DataBaseController.GetItem(ScoutShipInfoPrefab);
+                        scoutInfo.transform.SetParent(EnemyPlayersLayout,false);
+                        scoutInfo.Init(shipScoutData);
                     }
                 }
             }

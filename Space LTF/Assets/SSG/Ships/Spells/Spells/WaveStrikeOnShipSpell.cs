@@ -33,7 +33,7 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
         {
             var indToSearch = BattleController.OppositeIndex(weapon.TeamIndex);
             var nearShips = BattleController.Instance.GetAllShipsInRadius(_lastClosest.Position, indToSearch, BULLET_SHOOT_DIST);
-            Debug.LogError($"WaveStrikeOnShipSpell ships in raius {nearShips.Count} ,  {BULLET_SHOOT_DIST}  indToSearch:{indToSearch.ToString()}");
+//            Debug.LogError($"WaveStrikeOnShipSpell ships in raius {nearShips.Count} ,  {BULLET_SHOOT_DIST}  indToSearch:{indToSearch.ToString()}");
             foreach (var nearShip in nearShips)
             {
                 MainCreateBullet(new BulletTarget(nearShip), origin, weapon, _lastClosest.Position, bullestartparameters);

@@ -740,6 +740,7 @@ public static class Namings
 
     private static Dictionary<string,string> _locals = new Dictionary<string, string>()
     {
+        {"Level", "Level"},
         {"ESideAttackStraight", "Attack as usual"},
         {"ESideAttackFlangs", "Attack from flags"},
         {"BaseDefenceYes", "Defend the base"},
