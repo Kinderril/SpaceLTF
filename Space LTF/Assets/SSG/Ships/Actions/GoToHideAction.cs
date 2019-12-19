@@ -20,7 +20,7 @@ public class GoToHideAction : BaseAction
 
     public override void ManualUpdate()
     {
-        _owner.SetTargetSpeed(1f);
+        // _owner.SetTargetSpeed(1f);
         if (_targetCell != null)
             _owner.MoveByWay(_targetCell.Center);
     }

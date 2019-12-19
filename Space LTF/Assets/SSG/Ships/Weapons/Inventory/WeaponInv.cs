@@ -251,6 +251,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                         WindowManager.Instance.ConfirmWindow.Init(() =>
                         {
                             owner.MoneyData.RemoveMoney(cost);
+                            GlobalEventDispatcher.UpgradeWeapon(this);
                             Upgrade();
                             //                        WindowManager.Instance.InfoWindow.Init(null, "Upgrade completed");
                         }, null, txt);

@@ -33,7 +33,7 @@ public class EvadeAction : BaseAction
     {
         if (_clouds != null)
         {
-            _owner.SetTargetSpeed(1f);
+            // _owner.SetTargetSpeed(1f);
             var pos = _clouds.Center;
             _targetPoint = pos;
             _owner.MoveByWay(pos);
@@ -46,7 +46,7 @@ public class EvadeAction : BaseAction
         if (_owner.ShipParameters.MaxSpeed > danger.ShipLink.ShipParameters.MaxSpeed)
         {
             //GO STRAIGHT
-            _owner.SetTargetSpeed(1f);
+            // _owner.SetTargetSpeed(1f);
             var pos = _owner.Position + _owner.LookDirection * 10;
             var cell = _owner.CellController.FindCell(pos);
             if (cell.IsFree())
@@ -60,7 +60,7 @@ public class EvadeAction : BaseAction
         {
             //DO TURN
             Vector3 side = GetSideDir(danger);
-            _owner.SetTargetSpeed(1f);
+            // _owner.SetTargetSpeed(1f);
             var pos = _owner.Position + side * 7;
             var cell = _owner.CellController.FindCell(pos);
             if (cell.IsFree())
@@ -73,14 +73,14 @@ public class EvadeAction : BaseAction
         else
         {
             var side = GetSideDir(danger);
-            if (_owner.IsInFromt(danger.ShipLink.Position))
-            {
-                _owner.SetTargetSpeed(1f);
-            }
-            else
-            {
-                _owner.SetTargetSpeed(0.1f);
-            }
+            // if (_owner.IsInFromt(danger.ShipLink.Position))
+            // {
+            //     // _owner.SetTargetSpeed(1f);
+            // }
+            // else
+            // {
+            //     _owner.SetTargetSpeed(0.1f);
+            // }
 
             var pos = _owner.Position + side * 7;
             _targetPoint = pos;

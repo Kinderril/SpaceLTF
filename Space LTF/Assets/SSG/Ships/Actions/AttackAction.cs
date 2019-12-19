@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using UnityEngine;
 
 public class AttackAction : AbstractAttackAction
 {
-    protected bool _isShootEnd = false;
-    protected bool _isDogFight = false;
-    public ShipPersonalInfo Target;
+    protected bool _isDogFight;
+    protected bool _isShootEnd;
+    private readonly float _minAttackDist;
+    private readonly float _minAttackDistToEnd;
+    private readonly float _minAttackDistToStart;
     private float _nextRecalTime;
-    private float _minAttackDist;
-    private float _minAttackDistToStart;
-    private float _minAttackDistToEnd;
+    public ShipPersonalInfo Target;
 
     public AttackAction([NotNull] ShipBase owner, [NotNull] ShipPersonalInfo target,
         ActionType actionType = ActionType.attack)
@@ -22,14 +18,11 @@ public class AttackAction : AbstractAttackAction
         _isDogFight = false;
         Target = target;
         Target.ShipLink.AttackersData.ShipStartsAttack(owner);
-        _minAttackDist = Single.MaxValue;
+        _minAttackDist = float.MaxValue;
         foreach (var weapon in owner.WeaponsController.GelAllWeapons())
         {
             weapon.OnShootEnd += OnShootEnd;
-            if (weapon.AimRadius < _minAttackDist)
-            {
-                _minAttackDist = weapon.AimRadius;
-            }
+            if (weapon.AimRadius < _minAttackDist) _minAttackDist = weapon.AimRadius;
         }
 
         _minAttackDistToStart = _minAttackDist * 1.3f;
@@ -51,72 +44,54 @@ public class AttackAction : AbstractAttackAction
     {
         if (Target.Dist < _minAttackDistToStart)
         {
-            if (_owner.Boost.CanUse)
-            {
-                _owner.Boost.ActivateTurn(Target.DirNorm);
-            }
+            if (_owner.Boost.CanUse) _owner.Boost.ActivateTurn(Target.DirNorm);
         }
         else if (Target.IsInBack() && Target.Dist < 14)
         {
-            if (_owner.Boost.CanUse)
-            {
-                _owner.Boost.ActivateBack();
-            }
+            if (_owner.Boost.CanUse) _owner.Boost.ActivateBack();
         }
+
         if (_isDogFight)
         {
             ShallEndDogFight();
             _owner.WeaponsController.CheckWeaponFire(Target);
-            _owner.SetTargetSpeed(1f);
+            // _owner.SetTargetSpeed(1f);
             if (Target.ShipLink.CurSpeed < 0.01f)
             {
-                var dir = Target.ShipLink.Position - _owner.Position;
-                _owner.MoveToDirection(dir);
+                _owner.MoveToDirection(Target.DirNorm);
             }
             else
             {
                 var dir = Target.ShipLink.PredictionPosAim() - _owner.Position;
                 _owner.MoveToDirection(dir);
             }
-
         }
         else
         {
             ShallStartDogFight();
             //            bool tooClose = false;
-            if (Target.ShipLink.CurSpeed <= 0.1f)
+            if (Target.ShipLink.CurSpeed <= 0.1f && Target.Dist < _owner.MaxTurnRadius * 2)
             {
-                var maxTurn = _owner.MaxTurnRadius * 2;
-                if (Target.Dist < maxTurn)
+                var pp = AIUtility.GetByWayDirection(_owner.Position, Target.ShipLink.Position,
+                    _owner.LookDirection,
+                    _owner.MaxTurnRadius);
+                if (pp != null)
                 {
-                    var pp = AIUtility.GetByWayDirection(_owner.Position, Target.ShipLink.Position,
-                        _owner.LookDirection,
-                        _owner.MaxTurnRadius);
-                    if (pp != null)
+                    var trg = _owner.CellController.FindCell(pp.Right);
+                    if (trg.IsFree())
                     {
-                        var trg = _owner.CellController.FindCell(pp.Right);
-                        if (trg.IsFree())
-                        {
-                            //                            _owner.SetTargetSpeed(tooClose ? 0.3f : 1f);
-                            _owner.MoveByWay(pp.Right);
-                            return;
-                        }
+                        _owner.MoveByWay(pp.Right);
+                        return;
                     }
-
-                    //Делаем по прямой
                 }
             }
 
             var pp1 = AIUtility.GetByWayDirection(_owner.Position, Target.ShipLink.Position, _owner.LookDirection,
                 _owner.MaxTurnRadius);
             if (pp1 != null)
-            {
                 _owner.MoveByWay(pp1.Right);
-            }
             else
-            {
                 _owner.MoveByWay(Target.ShipLink);
-            }
         }
     }
 
@@ -124,34 +99,24 @@ public class AttackAction : AbstractAttackAction
     {
         var isInFront = Target.IsInFrontSector();
         if (isInFront)
-        {
             if (Target.Dist < _minAttackDistToStart)
-            {
                 _isDogFight = true;
-            }
-        }
     }
 
     private void ShallEndDogFight()
     {
-        if (Target.Dist > _minAttackDistToEnd)
-        {
-            _isDogFight = false;
-        }
+        if (Target.Dist > _minAttackDistToEnd) _isDogFight = false;
     }
 
     protected override void Dispose()
     {
         Target.ShipLink.AttackersData.ShipEndsAttack(_owner);
-        foreach (var weapon in _owner.WeaponsController.GelAllWeapons())
-        {
-            weapon.OnShootEnd -= OnShootEnd;
-        }
+        foreach (var weapon in _owner.WeaponsController.GelAllWeapons()) weapon.OnShootEnd -= OnShootEnd;
     }
 
     protected override CauseAction[] GetEndCauses()
     {
-        var c = new CauseAction[]
+        var c = new[]
         {
             new CauseAction("out bf", () => !_owner.InBattlefield),
             new CauseAction("is Shoot End", () => _isShootEnd),
@@ -173,10 +138,7 @@ public class AttackAction : AbstractAttackAction
             if (Target.Dist > 20)
             {
                 var besstEnemy = _shipDesicionDataBase.CalcBestEnemy(_owner.Enemies);
-                if (besstEnemy != Target)
-                {
-                    return true;
-                }
+                if (besstEnemy != Target) return true;
             }
         }
 

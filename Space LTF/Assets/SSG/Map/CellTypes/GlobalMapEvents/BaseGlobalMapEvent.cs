@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 [System.Serializable]
 public abstract class BaseGlobalMapEvent
 {
+    protected int _power;
     public abstract string Desc();
     public abstract MessageDialogData GetDialog();
-
+             
     public virtual void Init()
     {
 

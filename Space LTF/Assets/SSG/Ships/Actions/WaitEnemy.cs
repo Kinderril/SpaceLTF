@@ -40,7 +40,7 @@ public class WaitEnemy : BaseAction
                 _owner.ApplyRotation(dir, true);
             }
         }
-        _owner.SetTargetSpeed(0f);
+        // _owner.SetTargetSpeed(0f);
     }
 
     protected override CauseAction[] GetEndCauses()

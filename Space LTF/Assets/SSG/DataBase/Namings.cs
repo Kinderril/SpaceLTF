@@ -158,9 +158,9 @@ public static class Namings
             case SimpleModulType.WeaponShield:
                 Name = "Locker";
                 break;   
-            case SimpleModulType.WeaponWeapon:
-                Name = "Blind";
-                break;   
+            // case SimpleModulType.WeaponWeapon:
+            //     Name = "Blind";
+            //     break;   
             case SimpleModulType.WeaponCrit:
                 Name = "Critical";
                 break;    
@@ -414,7 +414,7 @@ public static class Namings
             case ActionType.closeStrikeAction:
                 break;
             case ActionType.evade:
-                return "Evade";
+                return "Evade enemy";
                 break;
             case ActionType.afterAttack:
                 return "Evade";
@@ -455,6 +455,64 @@ public static class Namings
     public static string PowerWeaponButton = "Increase next shoot damage of ship.\n[Cost:{0}/{1}]";
     public static string CellScouted = "Coordinates Scouted [{0},{1}]";
 
+    public static string QuestName(EQuestOnStart type)
+    {
+        switch (type)
+        {
+            case EQuestOnStart.killLight:
+                return "Light ships kills";
+            case EQuestOnStart.killMed:
+                return "Medium ships kills";
+            case EQuestOnStart.killHeavy:
+                return "Heavy ships kills";
+            case EQuestOnStart.killRaiders:
+                return $"{Namings.ShipConfig(global::ShipConfig.raiders)} kills";
+            case EQuestOnStart.killMerc:
+                return $"{Namings.ShipConfig(global::ShipConfig.mercenary)} kills";
+            case EQuestOnStart.killFed:
+                return $"{Namings.ShipConfig(global::ShipConfig.federation)} kills";
+            case EQuestOnStart.killKrios:
+                return $"{Namings.ShipConfig(global::ShipConfig.krios)} kills";
+            case EQuestOnStart.killOcrons:
+                return $"{Namings.ShipConfig(global::ShipConfig.ocrons)} kills";
+            case EQuestOnStart.killDroids:
+                return $"{Namings.ShipConfig(global::ShipConfig.droid)} kills";
+
+            case EQuestOnStart.mainShipKills:
+                return "Kills by commander";
+                break;
+            case EQuestOnStart.laserDamage:
+                return $"Damage by {Weapon(WeaponType.laser)}";  
+                break;
+            case EQuestOnStart.rocketDamage:
+                return $"Damage by {Weapon(WeaponType.rocket)}";
+            case EQuestOnStart.impulseDamage:
+                return $"Damage by {Weapon(WeaponType.impulse)}";
+            case EQuestOnStart.emiDamage:
+                return $"Damage by {Weapon(WeaponType.eimRocket)}";
+            case EQuestOnStart.cassetDamage:
+                return $"Damage by {Weapon(WeaponType.casset)}";
+
+            case EQuestOnStart.upgradeWeapons:
+                return "Weapons levels upgrades";
+                break;
+            case EQuestOnStart.sellModuls:
+                return "Sell modules";
+            case EQuestOnStart.winRaiders:
+                return $"Wins against {Namings.ShipConfig(global::ShipConfig.raiders)}";
+            case EQuestOnStart.winMerc:
+                return $"Wins against {Namings.ShipConfig(global::ShipConfig.mercenary)}";
+            case EQuestOnStart.winFed:
+                return $"Wins against {Namings.ShipConfig(global::ShipConfig.federation)}";
+            case EQuestOnStart.winKrios:
+                return $"Wins against {Namings.ShipConfig(global::ShipConfig.krios)}";
+            case EQuestOnStart.winOcrons:
+                return $"Wins against {Namings.ShipConfig(global::ShipConfig.ocrons)}";
+            case EQuestOnStart.winDroids:
+                return $"Wins against {Namings.ShipConfig(global::ShipConfig.droid)}";
+        }
+        return $"ERROR{type.ToString()}";
+    }
     public static object ShipDamage(ShipDamageType damageType)
     {
         switch (damageType)
@@ -462,8 +520,8 @@ public static class Namings
             case ShipDamageType.engine:
                 return "Engine";
                 break;
-            case ShipDamageType.weapon:
-                return "Weapon";
+            // case ShipDamageType.weapon:
+            //     return "Weapon";
             case ShipDamageType.shiled:
                 return "Shield";
             case ShipDamageType.fire:
@@ -485,8 +543,8 @@ public static class Namings
             case ShipDamageType.engine:
                 return $"Engine crashed for {time:0} sec";
                 break;
-            case ShipDamageType.weapon:
-                return $"Weapons turn off for {time:0} sec";
+            // case ShipDamageType.weapon:
+            //     return $"Weapons turn off for {time:0} sec";
             case ShipDamageType.shiled:
                 return $"Shield turn off for {time:0} sec";
             case ShipDamageType.fire:
@@ -554,7 +612,7 @@ public static class Namings
     public static string KillUIPilot = "Kills:{0}/{1}";
     public static string Remain = "Remain";
     public static string EngineDest = "Engine destroyed";
-    public static string WeaponDest= "Weapon destroyed";
+    // public static string WeaponDest= "Weapon destroyed";
     public static string ShieldDest = "Shield destroyed";
     public static string FireDest = "Fire on board";
     public static string DoWantRetire = "Do you want run away?";
@@ -753,6 +811,7 @@ public static class Namings
         {"ECommanderPriority1Light","Light ships will be a priority" },
         {"ECommanderPriority1Mid","Medium ships will be a priority" },
         {"ECommanderPriority1Heavy", "Heavy ships will be a priority"},
+        {"QuestReward", "Choose one reward"},
     };
 
     public static string Tag(string tag)

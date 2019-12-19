@@ -35,7 +35,7 @@ public class AudioDataBase : MonoBehaviour
     public AudioClip ChargePowerWeapons;
     public AudioClip BufffShip;
     public AudioClip EngineDamage;
-    public AudioClip WeaponDamage;
+    // public AudioClip WeaponDamage;
     public AudioClip ShieldDamage;
     public AudioClip FireDamage;
 
@@ -139,8 +139,8 @@ public class AudioDataBase : MonoBehaviour
         {
             case ShipDamageType.engine:
                 return EngineDamage;
-            case ShipDamageType.weapon:
-                return WeaponDamage;
+            // case ShipDamageType.weapon:
+            //     return WeaponDamage;
             case ShipDamageType.shiled:
                 return ShieldDamage;
             case ShipDamageType.fire:

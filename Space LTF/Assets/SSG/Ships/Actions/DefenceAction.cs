@@ -41,7 +41,7 @@ public class DefenceAction : BaseAction
 
     public override void ManualUpdate()
     {
-        _owner.SetTargetSpeed(1f);
+        // _owner.SetTargetSpeed(1f);
         if (_targetPoint != null)
         {
             if (!_owner.PathController.Complete(_targetPoint.Value))

@@ -34,8 +34,8 @@ public class WeaponDamageTimeEffect : BaseSupportModul
         {
             case ShipDamageType.engine:
                 return $"Turn off engine {period}";
-            case ShipDamageType.weapon:
-                return $"Off all weapons {period}";
+            // case ShipDamageType.weapon:
+            //     return $"Off all weapons {period}";
             case ShipDamageType.shiled:
                 return $"Off all shield {period}";
             case ShipDamageType.fire:
@@ -57,8 +57,8 @@ public class WeaponDamageTimeEffect : BaseSupportModul
         {
             case ShipDamageType.engine:
                 return SimpleModulType.WeaponEngine;
-            case ShipDamageType.weapon:
-                return SimpleModulType.WeaponWeapon;
+            // case ShipDamageType.weapon:
+            //     return SimpleModulType.WeaponWeapon;
             case ShipDamageType.shiled:
                 return SimpleModulType.WeaponShield;
             case ShipDamageType.fire:

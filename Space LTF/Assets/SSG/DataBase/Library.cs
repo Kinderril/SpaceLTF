@@ -134,6 +134,7 @@ public static class Library
     public static int REPUTATION_FIND_WAY_ADD = 8;
     public static float CHARGE_SPEED_COEF_PER_LEVEL = 0.12f;
     public static float REPURARTION_TO_DIPLOMATY_COEF = .05f;
+    public static float MONEY_QUEST_COEF = 0.09f;
 
     public const int REPUTATION_STEAL_REMOVE = 5;
     public const int REPUTATION_REPAIR_REMOVE = 4;
@@ -202,8 +203,11 @@ public static class Library
             {2,low?4:3 },
             {3,low?0.5f:1 },
         });
-        var lvl = level.Random();
-
+        return CreateWeapon(level.Random());
+    }
+    public static WeaponInv CreateWeapon(int level)
+    {
+                                      
         WDictionary<WeaponType> types = new WDictionary<WeaponType>(new Dictionary<WeaponType, float>
         {
             { WeaponType.laser,9},
@@ -215,11 +219,11 @@ public static class Library
         });
 
         var w = CreateWeapon(types.Random());
-        if (lvl ==  2)
+        if (level ==  2)
         {
             w.Upgrade();
         }
-        else if (lvl == 3)
+        else if (level == 3)
         {
             w.Upgrade();
         }
@@ -431,8 +435,8 @@ public static class Library
                 return new WeaponDamageTimeEffect(ShipDamageType.engine, level);
             case SimpleModulType.WeaponShield:
                 return new WeaponDamageTimeEffect(ShipDamageType.shiled, level);
-            case SimpleModulType.WeaponWeapon:
-                return new WeaponDamageTimeEffect(ShipDamageType.weapon, level);
+            // case SimpleModulType.WeaponWeapon:
+            //     return new WeaponDamageTimeEffect(ShipDamageType.weapon, level);
             case SimpleModulType.WeaponCrit:
                 return new WeaponCritModul(level);
             case SimpleModulType.WeaponAOE:

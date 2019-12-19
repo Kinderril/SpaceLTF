@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 
 public class WindowStart : BaseWindow
@@ -35,6 +36,11 @@ public class WindowStart : BaseWindow
         {
             WindowManager.Instance.InfoWindow.Init(null,Namings.NoSafeGame);
         }
+    }
+
+    public void OnQuit()
+    {
+        Application.Quit();
     }
 }
 

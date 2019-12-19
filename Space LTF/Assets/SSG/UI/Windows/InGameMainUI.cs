@@ -275,9 +275,9 @@ public class InGameMainUI : BaseWindow
 //            case ShipDamageType.turnEngine:
 //                info = "Turn engine destroyed";
 //                break;
-            case ShipDamageType.weapon:
-                info = Namings.WeaponDest; 
-                break;
+            // case ShipDamageType.weapon:
+            //     info = Namings.WeaponDest; 
+            //     break;
             case ShipDamageType.shiled:
                 info = Namings.ShieldDest; 
                 break;

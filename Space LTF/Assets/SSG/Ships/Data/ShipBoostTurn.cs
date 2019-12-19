@@ -2,8 +2,20 @@
 
 public class ShipBoostTurn : ShipData
 {
-//    private float EndTime;
-//    public bool IsActive => EndTime > Time.time;
+    private float _angle;
+    private bool _isLeft;
+    private Vector3 _lookDirOnStart;
+    private float _speedOnStart;
+    private Vector3 _targetDir;
+    private readonly float _turnSpeed;
+
+    // private float Period;
+
+    public ShipBoostTurn(ShipBase owner) : base(owner)
+    {
+        _turnSpeed = _owner.ShipParameters.TurnSpeed * 1.5f;
+    }
+
     public Vector3 LastTurnAddtionalMove { get; private set; }
     public bool IsActive { get; private set; }
 
@@ -11,82 +23,44 @@ public class ShipBoostTurn : ShipData
     {
         get
         {
-            if (_angle < 25f)
-            {
+            if (_angle < 25f) 
                 return 1f;
-            }
-            return 0.1f;
+            return 0.01f;
         }
-    }
-
-    private Vector3 _lookDirOnStart;
-
-    private float Period;
-    private Vector3 _targetDir;
-//    private bool _haveTargetDir;
-    private bool _isLeft;
-    private float _turnSpeed;
-    private float _speedOnStart;
-    private float _angle;
-
-    public ShipBoostTurn(ShipBase owner,float period) : base(owner)
-    {
-        Period = period;
-        _turnSpeed = _owner.ShipParameters.TurnSpeed * 1.5f;
     }
 
     private void ActivateTime()
     {
-//        EndTime = Time.time + Period;
         _isLeft = Vector3.Dot(_targetDir, _owner.LookLeft) > 0;
         _speedOnStart = _owner.CurSpeed;
         _lookDirOnStart = _owner.LookDirection;
         IsActive = true;
-//       LookDirOnStart =(_isLeft)? _owner.LookLeft: _owner.LookRight;
     }
-
-//    public void Activate()
-//    {
-//        Debug.LogError($"TURN ACTIVATED ");
-//        ActivateTime();
-//        _haveTargetDir = false;
-//    }
 
     public void Activate(Vector3 dir)
     {
-        Debug.LogError($"TURN ACTIVATED {dir}");
-//        _haveTargetDir = true;
         _targetDir = dir;
         ActivateTime();
     }
-       
-    public bool ApplyRotation(Vector3 incomingDir)
+
+    public float ApplyRotation(Vector3 incomingDir)
     {
 //        if (!IsActive)
 //        {
 //            Deactivate();
 //        }
-        if (_owner.EngineStop.IsCrash())
-        {
-            return false;
-        }
+        if (_owner.EngineStop.IsCrash()) 
+            return 0f;
 #if UNITY_EDITOR
-        if (DebugParamsController.EngineOff && _owner is ShipBase)
-        {
-            return false;
-        }
+        if (DebugParamsController.EngineOff && _owner is ShipBase) 
+            return 0f;
 #endif
-        if (!_owner.EngineWork)
-        {
-            return false;
-        }
-        if (Time.deltaTime < 0.00001f)
-        {
-            return false;
-        }
-        Vector3 dirToMove;
+        if (!_owner.EngineWork) 
+            return 0f;
+        if (Time.deltaTime < 0.00001f) 
+            return 0f;
 
-        dirToMove = _targetDir;
+        var dirToMove = _targetDir;
         _angle = Vector3.Angle(dirToMove, _owner.LookDirection);
         var angPerFrameTurn = _turnSpeed * Time.deltaTime;
         var steps = _angle / angPerFrameTurn;
@@ -94,20 +68,13 @@ public class ShipBoostTurn : ShipData
         {
             Deactivate();
             _owner.Rotation = Quaternion.FromToRotation(Vector3.forward, dirToMove);
-            return true;
+            return 1f;
         }
-        //        var percentOfRotate = Mathf.Clamp01(1f / steps);
-        //        var lerpRes = EulerLerp.LerpVectorByY(LookDirection, dir, percentOfRotate);
         Vector3 lerpRes;
-//        var isLeft = Vector3.Dot(dirToMove, _owner.LookLeft) > 0;
         if (_isLeft)
-        {
             lerpRes = Utils.RotateOnAngUp(_owner.LookDirection, angPerFrameTurn);
-        }
         else
-        {
             lerpRes = Utils.RotateOnAngUp(_owner.LookDirection, -angPerFrameTurn);
-        }
 
         float straightSpeed, curvSpeed;
 
@@ -125,22 +92,20 @@ public class ShipBoostTurn : ShipData
         {
             straightSpeed = curSpeed;
             curvSpeed = _speedOnStart;
-
         }
 
         var dir1 = straightSpeed * _owner.LookDirection;
-        Vector3 dir2 = curvSpeed * _lookDirOnStart;// * Time.deltaTime;
-        var dirSum = (dir1 + dir2) * Time.deltaTime;
+        var dir2 = curvSpeed * _lookDirOnStart;
+        var dirSum = dir1 + dir2;
 
-        LastTurnAddtionalMove = dirSum;
+        LastTurnAddtionalMove = dirSum * Time.deltaTime; 
         _owner.SetBankData(new BankingData(dirToMove, steps));
         _owner.Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
 
-        return false;
-
+        return 1f;
     }
 
-    private void Deactivate()
+    public void Deactivate()
     {
         IsActive = false;
         _angle = 90f;

@@ -12,7 +12,10 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     private bool _scienceKilled = false;
     private bool _fightStarts = false;
     private int _moneyToBuy;
-
+    public ScienceLabMapEvent(int power)
+    {
+        _power = power;
+    }
     public override string Desc()
     {
         return "Science laboratory";
@@ -25,7 +28,9 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         mianAnswers.Add(new AnswerDialogData("Contact with fleet commander",null,contacWithCommander));
         mianAnswers.Add(new AnswerDialogData("Snd scouts to laboratory",null,sendScouts));
 
-        _moneyToBuy = MyExtensions.Random(5, 30);
+
+        var coef = (float)_power * Library.MONEY_QUEST_COEF;
+        _moneyToBuy = (int)(MyExtensions.Random(10, 30) * coef);
         mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         var mesData = new MessageDialogData("You are close to science laboratory. But this one is under siege.", mianAnswers);
         return mesData;
@@ -82,8 +87,6 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         }
         else
         {
-
-            MainController.Instance.MainPlayer.MoneyData.RemoveMoney(_moneyToBuy);
             mianAnswers.Add(new AnswerDialogData("Fight.", ()=>AttackNow(false), null));
             var mesData = new MessageDialogData("Bad joke! [Not enough credits]", mianAnswers);
             return mesData;

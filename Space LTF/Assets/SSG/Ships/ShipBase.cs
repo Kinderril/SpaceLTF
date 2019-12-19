@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 //using UnityEditor;
 using UnityEngine;
 
@@ -30,14 +31,14 @@ public class ShipBase : MovingObject
     public GameObject PriorityObject { get; protected set; }
     public GameObject FakePriorityObject { get; protected set; }
     public GameObject SelectedObject { get; protected set; }
-    private Vector3 _backPredictionPos;
+    // private Vector3 _backPredictionPos;
 
     private Action<ShipBase> _dealthCallback;
     public AudioSource Audio;
 
     //    private MoveWayNoLerp _moveWay;
-    private float _nextPosibleRecalcWay = 0;
-    private float _nextRecalc = 0;
+    // private float _nextPosibleRecalcWay = 0;
+    // private float _nextRecalc = 0;
     private Vector3 _predictionPos;
     private Vector3 _predictionPosAim;
     private readonly Dictionary<ShipBase, ShipPersonalInfo> Allies = new Dictionary<ShipBase, ShipPersonalInfo>();
@@ -59,7 +60,6 @@ public class ShipBase : MovingObject
     public ShipHitData HitData { get; private set; }
     public ShipBoost Boost { get; private set; }
     public ShipAttackersData AttackersData { get; private set; }
-
     public ShipDamageData DamageData { get; private set; }
     //    public const string TAG = "Ship";
 
@@ -96,20 +96,6 @@ public class ShipBase : MovingObject
             }
         }
     }  
-    protected override float BankSpeed
-    {
-        get
-        {
-            if (Boost.BoostTurn.IsActive)
-            {
-                return base.BankSpeed * 1.5f;
-            }
-            else
-            {
-                 return base.BankSpeed;
-            }
-        }
-    }
     public bool Pause { get; set; }
     public bool InBattlefield { get; set; }
     public bool InAsteroidField { get; private set; }
@@ -194,7 +180,7 @@ public class ShipBase : MovingObject
             WeaponCrashEffect.Stop();
         PathController = new ShipPathController2(this,  1.25f);
         BuffData = new ShipBuffData(this);
-        Boost = new ShipBoost(this, 15);
+        Boost = new ShipBoost(this, ShipParameters.StartParams.BoostChargeTime,Commander.TeamIndex == TeamIndex.green);
         DamageData.Activate();
         PathController.Activate();
         if (TeamIndex == TeamIndex.green)
@@ -279,7 +265,6 @@ public class ShipBase : MovingObject
             OnDeath(this);
         }
         EffectController.Instance.Create(DataBaseController.Instance.DataStructPrefabs.OnShipDeathEffect, transform.position, 5f);
-
         Dispose();
     }
 
@@ -375,7 +360,7 @@ public class ShipBase : MovingObject
         CheckYEnemies();
         _predictionPos = LookDirection * PREDICTION_DIST + Position;
         _predictionPosAim = LookDirection * PREDICTION_DIST_AIM + Position;
-        _backPredictionPos = -LookDirection * PREDICTION_DIST + Position;
+        // _backPredictionPos = -LookDirection * PREDICTION_DIST + Position;
     }
     
     const float ySpeed = 1.1f;
@@ -445,56 +430,53 @@ public class ShipBase : MovingObject
     public void MoveToDirection(Vector3 dir)
     {
         ApplyRotation(dir, false);
-        SetTargetSpeed(1f);
+        // SetTargetSpeed(1f);
     }
 
-    public override bool ApplyRotation(Vector3 dir, bool exactlyPoint)
+    public override float ApplyRotation(Vector3 dir, bool exactlyPoint)
     {
         if (Boost.BoostTurn.IsActive)
         {
-            SetTargetSpeed(Boost.BoostTurn.TargetBoosSpeed);
-            return Boost.BoostTurn.ApplyRotation(dir);
+            Boost.BoostTurn.ApplyRotation(dir);
+            return Boost.BoostTurn.TargetBoosSpeed;
         }
         else
         {
-            SetTargetSpeed(1f);
             return base.ApplyRotation(dir, exactlyPoint);
         }
     }
 
     public void MoveByWay(Vector3 target)
     {
-        bool exactlyPoint;
-        bool goodDir;
         DebugTurnData = null;
-        Vector3? curTarget;
-        bool shallSlow = false;
-        float speedREcommended;
-        var direction4 = PathController.GetCurentDirection(target, out exactlyPoint, out goodDir, out speedREcommended);
+        var direction4 = PathController.GetCurentDirection(target, out var exactlyPoint, out var goodDir, out var speedRecommended);
         if (!goodDir)
         {
-
-            ApplyRotation(direction4, exactlyPoint);
+            var speed = ApplyRotation(direction4, exactlyPoint);
+            SetTargetSpeed(speed);
+        }
+        else
+        {
+            Boost.Deactivate();
+            SetTargetSpeed(speedRecommended);
         }
 
-        SetTargetSpeed(speedREcommended);
     }
 
     public void MoveByWay(ShipBase target)
     {
-        bool exactlyPoint;
-        bool goodDir;
         DebugTurnData = null;
-        Vector3? curTarget;
-        bool shallSlow = false;
-        float speedREcommended;
-        var direction4 = PathController.GetCurentDirection(target, out exactlyPoint, out goodDir,out speedREcommended);
+        var direction4 = PathController.GetCurentDirection(target, out var exactlyPoint, out var goodDir,out var speedRecommended);
         if (!goodDir)
         {
-            ApplyRotation(direction4, exactlyPoint);
+            var speed = ApplyRotation(direction4, exactlyPoint);
+            SetTargetSpeed(speed);
         }
-
-        SetTargetSpeed(speedREcommended);
+        else
+        {
+            Boost.Deactivate();
+            SetTargetSpeed(speedRecommended);
+        }
     }
 
     private bool GetClosestBorderPoint(Vector3 dirWanted, Vector3 target)

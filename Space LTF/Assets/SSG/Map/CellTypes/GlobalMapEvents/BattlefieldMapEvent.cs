@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 [System.Serializable]
 public class BattlefieldMapEvent : BaseGlobalMapEvent
 {
+    public BattlefieldMapEvent(int power)
+    {
+        _power = power;
+    }
     public override string Desc()
     {
         return "Old battlefield";
@@ -87,7 +91,8 @@ var mianAnswers = new List<AnswerDialogData>();
     {
         if (MyExtensions.IsTrue01(.2f))
         {
-            var money = GlobalMapCell.AddMoney(4, 30);
+            var coef = (float)_power * Library.MONEY_QUEST_COEF;
+            var money = (int)(MyExtensions.Random(14, 30) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
             var mianAnswers = new List<AnswerDialogData>();
             mianAnswers.Add(new AnswerDialogData(Namings.Ok, null, null));

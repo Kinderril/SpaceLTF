@@ -19,7 +19,7 @@ public class RepairAction : BaseAction
     
     public override void ManualUpdate()
     {
-        _owner.SetTargetSpeed(0f);
+        // _owner.SetTargetSpeed(0f);
         if (_repairEnd < Time.time)
         {
             _owner.DamageData.RepairAll();

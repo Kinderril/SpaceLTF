@@ -37,6 +37,7 @@ public interface IStartShipParams
     int SimpleModulsCount { get; }
     int SpellModulsCount { get; }
     string Name { get;}
+    float BoostChargeTime { get; }
 
-//    PilotTactic Tactic { get; }
+    //    PilotTactic Tactic { get; }
 }

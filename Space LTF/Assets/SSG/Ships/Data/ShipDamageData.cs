@@ -9,7 +9,7 @@ public enum ShipDamageType
 {
     engine = 0,
 //    turnEngine = 1,
-    weapon = 2,
+    // weapon = 2,
     shiled = 3,
 //    moduls,
     fire = 4
@@ -71,10 +71,10 @@ public class ShipDamageData : ShipData
                 break;
 //            case ShipDamageType.turnEngine:
 //                break;
-            case ShipDamageType.weapon:
-                FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
-                _weaponsController.CrashAllWeapons(true);
-                break;
+            // case ShipDamageType.weapon:
+            //     FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
+            //     _weaponsController.CrashAllWeapons(true);
+            //     break;
             case ShipDamageType.shiled:
                 FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
                 _owner.ShipParameters.ShieldParameters.Crash(time);
@@ -117,8 +117,8 @@ public class ShipDamageData : ShipData
 //            case ShipDamageType.turnEngine:
 //                //TODO
 //                break;
-            case ShipDamageType.weapon:
-                _weaponsController.CrashAllWeapons(false);
+            // case ShipDamageType.weapon:
+            //     _weaponsController.CrashAllWeapons(false);
                 break;
             case ShipDamageType.shiled:
                 _owner.ShipParameters.ShieldParameters.Repair();

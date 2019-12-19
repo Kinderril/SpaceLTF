@@ -29,7 +29,7 @@ public class MineFieldAction : BaseAction
         {
             SetMine();
         }
-        _owner.SetTargetSpeed(1f);
+        // _owner.SetTargetSpeed(1f);
         if (_targetPoint != null)
             _owner.MoveByWay(_targetPoint.Value);
     }

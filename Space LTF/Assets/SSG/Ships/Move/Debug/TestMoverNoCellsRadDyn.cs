@@ -28,8 +28,8 @@ public class TestMoverNoCellsRadDyn : MovingObject
             return;
         }
         var v = TargetPOsition.position;
-        var direction4 = GetCurentDirection1(v,out float speedREcommended);
-        if (CurSpeed > speedREcommended)
+        var direction4 = GetCurentDirection1(v,out float speedRecommended);
+        if (CurSpeed > speedRecommended)
         {
             SetTargetSpeed(-1f);
         }

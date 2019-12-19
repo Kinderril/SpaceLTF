@@ -62,7 +62,7 @@ public class WaitHealAction : BaseAction
 
     private void LinkToPoint()
     {
-        _owner.SetTargetSpeed(0f);
+        // _owner.SetTargetSpeed(0f);
     }
 
     protected override CauseAction[] GetEndCauses()

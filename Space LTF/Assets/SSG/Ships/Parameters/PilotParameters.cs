@@ -77,17 +77,17 @@ public class PilotParameters : IPilotParameters
     }
     public void UpgradeLevel(bool withMoney,LibraryPilotUpgradeType type,bool withMsg)
     {
-        if (withMoney)
+        if (CanUpgradeByLevel(CurLevel))
         {
-            if (!CanUpgradeAnyParameter(0))
+            if (withMoney)
             {
-                return;
+                if (!CanUpgradeAnyParameter(0))
+                {
+                    return;
+                }
+                MoneyData.PayLvlUp(CurLevel);
             }
-        }
-
-        var rnd = type;
-        if (CanUpgradeByLevel(CurLevel)) // && MoneyData.PayLvlUp(CurLevel))
-        {
+            var rnd = type;
             UpgradeLevelByType(rnd,withMsg);
         }
     }

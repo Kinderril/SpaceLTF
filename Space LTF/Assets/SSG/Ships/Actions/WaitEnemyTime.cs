@@ -14,7 +14,7 @@ public class WaitEnemyTime : BaseAction
 
     public override void ManualUpdate()
     {
-        _owner.SetTargetSpeed(1f);
+        // _owner.SetTargetSpeed(1f);
     }
 
     protected override CauseAction[] GetEndCauses()

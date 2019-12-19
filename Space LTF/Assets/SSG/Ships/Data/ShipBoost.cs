@@ -12,25 +12,21 @@ public class ShipBoost : ShipData
     private float _chargePeriod;
 
     public ShipBoostTurn BoostTurn;
+    private bool _isWorkable;
 
-    public ShipBoost(ShipBase owner,float chargePeriod) : base(owner)
+    public ShipBoost(ShipBase owner,float chargePeriod,bool isWorkable) 
+        : base(owner)
     {
+        _isWorkable = isWorkable;
         _chargePeriod = chargePeriod;
         _nextBoostUse = Time.time + chargePeriod;
-        BoostTurn = new ShipBoostTurn(owner,2.5f);
+        BoostTurn = new ShipBoostTurn(owner);
     }
 
 
-//    public void ActivateTurn()
-//    {
-//        BoostTurn.Activate();
-//        Debug.LogError("Actuivate to dir");
-//        SetUsed();
-//    }
-
     public float LoadPercent => 1f - Mathf.Clamp01((_nextBoostUse - Time.time) / _chargePeriod);
 
-    public bool CanUse => _nextBoostUse < Time.time;
+    public bool CanUse => _isWorkable && _nextBoostUse < Time.time;
 
     public void SetUsed()
     {
@@ -68,6 +64,11 @@ public class ShipBoost : ShipData
         Debug.LogError("Actuivate targetDirNorm");
         BoostTurn.Activate(targetDirNorm);
 
+    }
+
+    public void Deactivate()
+    {
+        BoostTurn.Deactivate();
     }
 }
 

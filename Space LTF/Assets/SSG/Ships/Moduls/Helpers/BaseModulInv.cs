@@ -47,7 +47,7 @@ public class BaseModulInv : IItemInv
             case SimpleModulType.closeStrike:
             case SimpleModulType.shieldRegen:
             case SimpleModulType.WeaponShield:
-            case SimpleModulType.WeaponWeapon:
+            // case SimpleModulType.WeaponWeapon:
                 return 2;
             case SimpleModulType.WeaponAOE:
             case SimpleModulType.WeaponNoBulletDeath:

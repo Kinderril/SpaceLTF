@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class CurActionUI : MonoBehaviour
 {
     public TextMeshProUGUI ActionText;
-    public TextMeshProUGUI TacticText;
+    // public TextMeshProUGUI TacticText;
 //    public Image ActionImage;
     private ShipBase _ship;
 
@@ -19,15 +19,15 @@ public class CurActionUI : MonoBehaviour
         _ship = ship;
         _ship.OnDispose += OnDispose;
         _ship.OnActionChange += OnActionChange;
-        _ship.OnShipDesicionChange += OnShipDesicionChange;
+        // _ship.OnShipDesicionChange += OnShipDesicionChange;
         OnActionChange(_ship, _ship.CurAction);
-        TacticText.text = ship.DesicionData.GetName();
+        // TacticText.text = ship.DesicionData.GetName();
     }
 
-    private void OnShipDesicionChange(ShipBase arg1, IShipDesicion arg2)
-    {
-        TacticText.text = arg2.GetName();
-    }
+    // private void OnShipDesicionChange(ShipBase arg1, IShipDesicion arg2)
+    // {
+    //     // TacticText.text = arg2.GetName();
+    // }
 
     private void OnActionChange(ShipBase arg1, BaseAction arg2)
     {
@@ -51,7 +51,7 @@ public class CurActionUI : MonoBehaviour
         if (_ship != null)
         {
             _ship.OnActionChange -= OnActionChange;
-            _ship.OnShipDesicionChange -= OnShipDesicionChange;
+            // _ship.OnShipDesicionChange -= OnShipDesicionChange;
             _ship.OnDispose -= OnDispose;
         }
     }

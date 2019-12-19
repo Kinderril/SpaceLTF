@@ -1,4 +1,6 @@
-﻿public class StartShipParams : IStartShipParams
+﻿using System;
+
+public class StartShipParams : IStartShipParams
 {
     public int BodyVisualTypeData;
 //    public float EvationData;
@@ -16,6 +18,7 @@
     public float BodyArmorData = 0f;
     public float ShieldArmorData = 0f;
     public float ShieldRegenData = 0f;
+    public float BoostChargeTimeData = 0f;
     public string NameData;
 
     public StartShipParams(
@@ -46,6 +49,21 @@
         this.SimpleModulsCountData = SimpleModulsCountData;
         this.BodyVisualTypeData = BodyVisualTypeData;
         NameData = ShipNames.GetRandom();
+        switch (ShipTypeData)
+        {
+            case ShipType.Light:
+                BoostChargeTimeData = 12f;
+                break;
+            case ShipType.Middle:
+                BoostChargeTimeData = 17f;
+                break;
+            case ShipType.Heavy:
+                BoostChargeTimeData = 22f;
+                break;
+            case ShipType.Base:
+                BoostChargeTimeData = 40f;
+                break;
+        }
 //        this.ShieldRegenData = 0;
 //        this.EvationData = 0;
     }
@@ -116,6 +134,8 @@
     {
         get { return NameData; }
     }
+
+    public float BoostChargeTime => BoostChargeTimeData;
 
     public int BodyVisualType
     {

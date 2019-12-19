@@ -43,6 +43,7 @@ public class MapWindow : BaseWindow
     private List<SideShipGlobalMapInfo> _sideInfos = new List<SideShipGlobalMapInfo>();
     public event Action OnStartInfoClose;
     public MapSettingsWindow WindowSettings;
+    public QuestOnStartControllerUI QuestsOnStartController;
 
     public event Action<bool> OnOpenInventory;
 
@@ -110,6 +111,7 @@ public class MapWindow : BaseWindow
         UpdateMainQuestelements();
         UpdateReputation();
         InitSideShip();
+        QuestsOnStartController.Init(player.QuestsOnStartController);
     }
     private void InitSideShip()
     {
@@ -489,6 +491,7 @@ public class MapWindow : BaseWindow
         _sideInfos.Clear();
         GlobalMap.ClearAll();
         MapConsoleUI.ClearAll();
+        QuestsOnStartController.ClearAll();
         Dispose();
     }
 }

@@ -11,6 +11,11 @@ using UnityEngine;
 public class BrokenNavigationMapEvent : BaseGlobalMapEvent
 {
     private bool _isTrap;
+
+    public BrokenNavigationMapEvent(int power)
+    {
+        _power = power;
+    }
     public override void Init()
     {
         _isTrap = MyExtensions.IsTrueEqual();
@@ -119,7 +124,8 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
 
     private void TakeMoney()
     {
-        var money = GlobalMapCell.AddMoney(24, 29);
+        var coef = (float) _power * Library.MONEY_QUEST_COEF;
+        var money = (int)(GlobalMapCell.AddMoney(24, 29) * coef);
         MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
     }
 

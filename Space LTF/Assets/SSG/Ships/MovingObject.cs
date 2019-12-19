@@ -113,31 +113,31 @@ public abstract class MovingObject : PoolElement
         ApplyRotation(dir, true);
     }
     
-    public virtual bool ApplyRotation(Vector3 dir, bool exactlyPoint)
+    public virtual float ApplyRotation(Vector3 dir, bool exactlyPoint)
     {
         if (EngineStop.IsCrash())
         {
-            return false;
+            return 0f;
         }
 #if UNITY_EDITOR
         if (DebugParamsController.EngineOff && this is ShipBase)
         {
-            return false;
+            return 0f;
         }
 #endif
         if (!EngineWork)
         {
-            return false;
+            return 0f;
         }
         if (Time.deltaTime < 0.00001f)
         {
-            return false;
+            return 0f;
         }
         if (ExternalSideForce.IsActive)
         {
             Vector3 lerpRes2 = ExternalSideForce.GetLerpPercent(this);
             Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes2);
-            return true;
+            return 1f;
         }
 
         var ang = Vector3.Angle(dir, LookDirection);
@@ -151,7 +151,7 @@ public abstract class MovingObject : PoolElement
 #endif
             Rotation = Quaternion.FromToRotation(Vector3.forward, dir);
 
-            return true;
+            return 1f;
         }
 //        var percentOfRotate = Mathf.Clamp01(1f / steps);
 //        var lerpRes = EulerLerp.LerpVectorByY(LookDirection, dir, percentOfRotate);
@@ -172,7 +172,7 @@ public abstract class MovingObject : PoolElement
         DebugMovingData.AddDir(lerpRes, false, LookDirection);
 #endif
         Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
-        return false;
+        return 1f;
     }
 
     public void SetBankData(BankingData bankingData)

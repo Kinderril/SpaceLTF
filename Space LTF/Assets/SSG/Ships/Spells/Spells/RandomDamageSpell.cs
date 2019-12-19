@@ -76,7 +76,7 @@ public class RandomDamageSpell : BaseSpellModulInv
         WDictionary< ShipDamageType > wd = new WDictionary<ShipDamageType>(new Dictionary<ShipDamageType, float>()
         {
             { ShipDamageType.engine,3f},
-            { ShipDamageType.weapon,2f},
+            // { ShipDamageType.weapon,2f},
             { ShipDamageType.fire,3f},
             { ShipDamageType.shiled,2f}
         });
@@ -86,8 +86,8 @@ public class RandomDamageSpell : BaseSpellModulInv
             case ShipDamageType.engine:
                 shipBase.DamageData.ApplyEffect(ShipDamageType.engine, timeDelay);
                 break;
-            case ShipDamageType.weapon:
-                shipBase.DamageData.ApplyEffect(ShipDamageType.weapon, timeDelay);
+            // case ShipDamageType.weapon:
+            //     shipBase.DamageData.ApplyEffect(ShipDamageType.weapon, timeDelay);
                 break;
             case ShipDamageType.shiled:
                 shipBase.DamageData.ApplyEffect(ShipDamageType.shiled, timeDelay);

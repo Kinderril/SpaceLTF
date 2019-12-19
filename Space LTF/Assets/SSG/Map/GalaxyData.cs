@@ -44,6 +44,7 @@ public class GalaxyData
         {GlobalMapEventType.anomaly, 3},
         {GlobalMapEventType.spaceGarbage, 3},
         {GlobalMapEventType.excavation, 3},
+        {GlobalMapEventType.secretDeal, 2},
     };
 
     public GlobalMapCell Init2(int sectorCount, int sizeSector,int startPower, int coreCells, int startDeathStep)

@@ -35,6 +35,7 @@ public class ShipInventory : IStartShipParams , IInventory
     public int SpellModulsCount { get; private set; }
     public int CriticalDamages { get; private set; }
     public string Name { get; private set; }
+    public float BoostChargeTime { get; private set; }
     public PilotTactic Tactic => PilotParameters.Tactic;
 
     public int Id { get; private set; }
@@ -70,7 +71,8 @@ public class ShipInventory : IStartShipParams , IInventory
         SpellModulsCount = pParams.SpellModulsCount;
         SpellsModuls = new BaseSpellModulInv[SpellModulsCount];
         Name = pParams.Name;
-//        Debug.Log("ShipInventory create:" + pParams.Name);
+        BoostChargeTime = pParams.BoostChargeTime;
+        //        Debug.Log("ShipInventory create:" + pParams.Name);
         Id = Utils.GetId();
 //        BodyVisualType = pParams.BodyVisualType;
     }

@@ -10,7 +10,10 @@ public class SecretDeal : BaseGlobalMapEvent
 {
     private float fullCoef = 1.4f;
     private float halfCoef = 0.7f;
-
+    public SecretDeal(int power)
+    {
+        _power = power;
+    }
     public override string Desc()
     {
         return "Quiet place";
@@ -54,7 +57,10 @@ public class SecretDeal : BaseGlobalMapEvent
 
     private MessageDialogData tryRunWithAll()
     {
-        var money = GlobalMapCell.AddMoney(24, 47);
+
+        var coef = (float)_power * Library.MONEY_QUEST_COEF;
+        var money = (int)(MyExtensions.Random(24, 47) * coef);
+        MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
         var m = Library.CreatSimpleModul(2,4);
         var itemName = Namings.SimpleModulName(m.Type);
         var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);

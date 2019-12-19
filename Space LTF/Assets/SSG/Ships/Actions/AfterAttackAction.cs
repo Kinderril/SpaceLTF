@@ -17,7 +17,7 @@ public class AfterAttackAction : BaseAction
     public override void ManualUpdate()
     {
         _owner.ShipModuls.Update();
-        _owner.SetTargetSpeed(1f);
+        // _owner.SetTargetSpeed(1f);
         if (_targetPoint != null)
             _owner.MoveByWay(_targetPoint.Value);
         _owner.AttackersData.UpdateData();

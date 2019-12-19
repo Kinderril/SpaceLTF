@@ -13,7 +13,18 @@ public class ExcavationsEvent : BaseGlobalMapEvent
     private const float speedToWin = 4f;
     private const int excvScounts = 3;
     private const int Nothing = 3;
-    private const int moneyTotal = 100;
+    private int moneyTotal = 100;
+
+    public ExcavationsEvent(int power)
+    {
+        _power = power;
+    }
+    public override void Init()
+    {
+        var coef = (float)_power * Library.MONEY_QUEST_COEF;
+        moneyTotal = (int)(GlobalMapCell.AddMoney(34, 55) * coef);
+        base.Init();
+    }
 
     public override string Desc()
     {

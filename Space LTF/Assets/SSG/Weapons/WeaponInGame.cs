@@ -98,6 +98,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
     public float AimRadius { get; set; }
 
     public ShipBase Owner { get; private set; }
+    private WeaponType _weaponType;
 
     public TeamIndex TeamIndex => Owner.TeamIndex;
 
@@ -109,6 +110,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 
     public WeaponInGame(WeaponInv weaponInv)
     {
+        _weaponType = weaponInv.WeaponType;
         Name = weaponInv.Name;
         BulletSpeed = weaponInv.BulletSpeed;
         _fixedDelta = weaponInv.fixedDelta;
@@ -383,6 +385,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 
     public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
+        GlobalEventDispatcher.ShipDamage(Owner,healthdelta, shielddelta,_weaponType);
         Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta);
         if (damageAppliyer != null)
         {
@@ -394,6 +397,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable,  IAffectParameters
 #endif
             if (damageAppliyer.IsDead)
             {
+                GlobalEventDispatcher.ShipDeath(damageAppliyer,Owner);
                 Owner.ShipInventory.LastBattleData.AddKill();
             }
         }

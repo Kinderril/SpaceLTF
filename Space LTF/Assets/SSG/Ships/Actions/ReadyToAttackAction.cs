@@ -31,15 +31,15 @@ public  class ReadyToAttackAction : AbstractAttackAction
     protected void MoveToTarget()
     {
         var isInFront = Target.IsInFrontSector();
-        if (isInFront && Target.ShipLink.CurSpeed < _owner.CurSpeed && Target.Dist < 10)
-        {
-            //slow little bit;
-            _owner.SetTargetSpeed(0.2f);                                                                        
-        }
-        else
-        {
-            _owner.SetTargetSpeed(1f);
-        }
+        // if (isInFront && Target.ShipLink.CurSpeed < _owner.CurSpeed && Target.Dist < 10)
+        // {
+        //     //slow little bit;
+        //     _owner.SetTargetSpeed(0.2f);                                                                        
+        // }
+        // else
+        // {
+        //     _owner.SetTargetSpeed(1f);
+        // }
 
 
         var pp1 = AIUtility.GetByWayDirection(_owner.Position, Target.ShipLink.Position, _owner.LookDirection,

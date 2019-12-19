@@ -40,7 +40,7 @@ public enum SimpleModulType
     WeaponFire = 22,
     WeaponEngine = 23,
     WeaponShield = 24,
-    WeaponWeapon = 25,
+    // WeaponWeapon = 25,
 
     WeaponCrit = 26,
     WeaponAOE = 27,

@@ -50,6 +50,7 @@ public class Commander
 
     private List<StartShipPilotData> _paramsOfShips;
     private BattleController _battleController;
+    public ShipConfig FirstShipConfig { get; private set; }
 
     public Commander(TeamIndex teamIndex,Battlefield battlefield,Player player, BattleController battleController)
     {
@@ -59,6 +60,7 @@ public class Commander
         foreach (var startShipPilotData in player.Army)
         {
             var p1 = Library.CalcPower(startShipPilotData);
+            FirstShipConfig = startShipPilotData.Ship.ShipConfig;
             StartPower += p1;
         }
         _player = player;

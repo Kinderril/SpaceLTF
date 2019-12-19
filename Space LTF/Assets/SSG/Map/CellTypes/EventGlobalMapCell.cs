@@ -22,6 +22,7 @@ public enum GlobalMapEventType
     mercHideout = 12,//Наемники.
     change = 13,//Вещть на вещь.
     excavation = 14,//Раскопки
+    secretDeal = 15,//
 //    repairShip = 8,//Если увроень ремонта больше чем 2 то чиним. + деньги.
 }
 
@@ -31,7 +32,8 @@ public class EventGlobalMapCell : GlobalMapCell
     private GlobalMapEventType _eventType;
     private BaseGlobalMapEvent _mapEvent;
 
-    public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
+    public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ, SectorData secto,int power) 
+        : base( id, intX, intZ, secto)
     {
         _eventType = eventType;
         switch (_eventType)
@@ -53,22 +55,22 @@ public class EventGlobalMapCell : GlobalMapCell
                 _mapEvent = new AsteroidFieldMapEvent();
                 break;
             case GlobalMapEventType.scienceLab:
-                _mapEvent = new ScienceLabMapEvent();
+                _mapEvent = new ScienceLabMapEvent(power);
                 break;
             case GlobalMapEventType.anomaly:
                 _mapEvent = new AnomalyMapEvent();
                 break;
             case GlobalMapEventType.battleField:
-                _mapEvent = new BattlefieldMapEvent();
+                _mapEvent = new BattlefieldMapEvent(power);
                 break; 
             case GlobalMapEventType.excavation:
-                _mapEvent = new ExcavationsEvent();
+                _mapEvent = new ExcavationsEvent(power);
                 break; 
             case GlobalMapEventType.mercHideout:
                 _mapEvent = new MercenaryHideout();
                 break;
             case GlobalMapEventType.brokenNavigation:
-                _mapEvent = new BrokenNavigationMapEvent();
+                _mapEvent = new BrokenNavigationMapEvent(power);
                 break;
             case GlobalMapEventType.prisoner:
                 _mapEvent = new PrisonerCatchMapEvent();
@@ -82,6 +84,9 @@ public class EventGlobalMapCell : GlobalMapCell
                 break;     
             case GlobalMapEventType.teach:
                 _mapEvent = new TeacherMapEvent();
+                break;   
+            case GlobalMapEventType.secretDeal:
+                _mapEvent = new SecretDeal(power);
                 break;
 //            case GlobalMapEventType.repairShip:
 //                _mapEvent = new RepairShipMapEvent();

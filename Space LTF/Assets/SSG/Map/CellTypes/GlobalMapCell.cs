@@ -123,7 +123,8 @@ public abstract class GlobalMapCell
         int money = MyExtensions.Random(min, max);
         MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
         return money;
-    }
+    }      
+    
 
     protected bool SkillWork(int baseVal, int skillVal)
     {

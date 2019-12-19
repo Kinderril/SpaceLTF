@@ -27,7 +27,7 @@ public class CloseStrikeAction : BaseAction
     public override void ManualUpdate()
     {
         Debug.Log("CloseStrikeAction ManualUpdate");
-        _owner.SetTargetSpeed(1f);
+        // _owner.SetTargetSpeed(1f);
         _modul.UpdateStrike(_attackShip);
         //        if (_moveWay != null)
         //            _owner.MoveByWay(_moveWay);

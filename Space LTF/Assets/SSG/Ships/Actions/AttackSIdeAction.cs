@@ -35,7 +35,7 @@ public class AttackSideAction : AttackAction
         }
         else
         {
-            _owner.SetTargetSpeed(1f);
+            // _owner.SetTargetSpeed(1f);
             _owner.MoveByWay(_controlPoint);
         }
     }

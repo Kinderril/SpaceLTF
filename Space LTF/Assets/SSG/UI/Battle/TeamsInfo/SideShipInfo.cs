@@ -28,7 +28,7 @@ public class SideShipInfo : MonoBehaviour
 
     public Image FireDamage;
     public Image ShiedDamage;
-    public Image WeaponsDamage;
+    // public Image WeaponsDamage;
     public Image EngineDamage;
 
     public Image TacticPriorityIcon;
@@ -48,7 +48,7 @@ public class SideShipInfo : MonoBehaviour
     {
         FireDamage.gameObject.SetActive(false);
         ShiedDamage.gameObject.SetActive(false);
-        WeaponsDamage.gameObject.SetActive(false);
+        // WeaponsDamage.gameObject.SetActive(false);
         EngineDamage.gameObject.SetActive(false);
         _toggleCallback = toggleCallback;
         FullInfoContainer.gameObject.SetActive(false);
@@ -98,9 +98,9 @@ public class SideShipInfo : MonoBehaviour
             case ShipDamageType.engine:
                 EngineDamage.gameObject.SetActive(val);
                 break;
-            case ShipDamageType.weapon:
-                WeaponsDamage.gameObject.SetActive(val);
-                break;
+            // case ShipDamageType.weapon:
+            //     WeaponsDamage.gameObject.SetActive(val);
+                // break;
             case ShipDamageType.shiled:
                 ShiedDamage.gameObject.SetActive(val);
                 break;

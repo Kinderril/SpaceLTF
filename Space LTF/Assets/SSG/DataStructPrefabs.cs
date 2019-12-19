@@ -111,6 +111,8 @@ public class DataStructPrefabs : MonoBehaviour
     public ArrowTarget ArrowTargetPersonal;
     public GameObject ShipSelectedObject;
     public List<FlyingAsteroid> FlyingAsteroids;
+    public Sprite MoneyIcon;
+    public QuestOnStartElement QuestOnStartElement;
 
 
     public void Init()

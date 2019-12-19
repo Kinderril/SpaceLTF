@@ -30,6 +30,7 @@ public class Player
     public PlayerMessagesToConsole MessagesToConsole;
     public List<StartShipPilotData> Army = new List<StartShipPilotData>();
     public StartShipPilotData MainShip;
+    public QuestsOnStartController QuestsOnStartController;
 
     [field: NonSerialized]
     public event Action<StartShipPilotData, bool> OnAddShip; 
@@ -49,6 +50,16 @@ public class Player
         Army = CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell);
         RepairData.Init(Army, MapData,Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
+
+        var mid1 = (Library.MIN_GLOBAL_SECTOR_SIZE + Library.MAX_GLOBAL_SECTOR_SIZE) * .5f;
+        var mid2 = (Library.MIN_GLOBAL_MAP_SECTOR_COUNT + Library.MAX_GLOBAL_MAP_SECTOR_COUNT) * .5f;
+
+        var midSize = mid1 * mid2;
+
+        var size = ((float)(MapData.GalaxyData.SizeOfSector * MapData.GalaxyData.AllSectors.Count/3f));
+        var coef = size / midSize;
+        QuestsOnStartController = new QuestsOnStartController(coef);
+        QuestsOnStartController.InitQuests();
         AddModuls(1);
     }
 
@@ -315,6 +326,11 @@ public class Player
         if (File.Exists(path))
         {
             File.Delete(path);
+        }
+
+        if (QuestsOnStartController != null)
+        {
+            QuestsOnStartController.DisposeQuests();
         }
     }
 

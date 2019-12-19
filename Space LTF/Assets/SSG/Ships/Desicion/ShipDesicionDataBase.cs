@@ -323,18 +323,31 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             case ECommanderPriority1.MaxShield:
             case ECommanderPriority1.MaxHealth:
                 ShipPersonalInfo trg2 = BestParameter(posibleTargets, CommanderPriority1);
-                rating = ShipValue(trg2);
-                return trg2;
+                if (trg2 != null)
+                {
+                    rating = ShipValue(trg2);
+                    return trg2;
+                }
+                break;
             case ECommanderPriority1.Light:
             case ECommanderPriority1.Mid:
             case ECommanderPriority1.Heavy:
                 ShipPersonalInfo trg = BestByType(posibleTargets, CommanderPriority1);
-                rating = ShipValue(trg);
-                return trg;
+                if (trg != null)
+                {
+                    rating = ShipValue(trg);
+                    return trg;
+                }
+                break;
         }
 
         var bestEnemy = BestByParams(out rating, posibleTargets);
-        return bestEnemy;
+        if (bestEnemy != null)
+        {
+            return bestEnemy;
+        }
+
+        return posibleTargets.FirstOrDefault().Value;
     }
 
     private ShipPersonalInfo BestByParams(out float rating, Dictionary<ShipBase, ShipPersonalInfo> posibleTargets)
