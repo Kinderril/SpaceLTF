@@ -33,10 +33,11 @@ public enum LibraryPilotUpgradeType
 public static class Library
 {
     public static int START_PLAYER_FREE_PARAMETERS = 2;
+    public const float SECTOR_COEF_POWER = 0.3f;
 
-    public const int MAX_WEAPON_LVL = 5;
-    public const int MAX_SPELL_LVL = 5;
-    public const int MAX_MOUDL_LEVEL = 2;
+    public const int MAX_WEAPON_LVL = 4;
+    public const int MAX_SPELL_LVL = 4;
+    public const int MAX_MOUDL_LEVEL = 3;
 
     public const float MIN_WORKING_SHIP = 6;
     public const float MAX_ARMY_POWER_MAP = 70;
@@ -207,7 +208,6 @@ public static class Library
     }
     public static WeaponInv CreateWeapon(int level)
     {
-                                      
         WDictionary<WeaponType> types = new WDictionary<WeaponType>(new Dictionary<WeaponType, float>
         {
             { WeaponType.laser,9},
@@ -219,14 +219,7 @@ public static class Library
         });
 
         var w = CreateWeapon(types.Random());
-        if (level ==  2)
-        {
-            w.Upgrade();
-        }
-        else if (level == 3)
-        {
-            w.Upgrade();
-        }
+        w.Level = level;
         return w;
     }
     
@@ -539,12 +532,7 @@ public static class Library
         var ranAsInt = (int) pilot.Stats.CurRank;
         return ((sumLevel - 4)*PILOT_LEVEL_COEF) + ranAsInt * PILOT_RANK_COEF;
     }
-
-    public static int ModificationMoneyBattleReward(int moneyToReward)
-    {
-        return moneyToReward;
-    }
-
+           
     public static int GetReapairCost(int hpPointToRepair,int shipLevel)
     {
         if (hpPointToRepair == 0)

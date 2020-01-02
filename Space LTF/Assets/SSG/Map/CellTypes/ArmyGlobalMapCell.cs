@@ -221,16 +221,8 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 _sector.StartPowerGalaxy);
 //            Debug.LogError($"power1  :{powerToCompare}");
         }
-//        Debug.LogError($"mySctorID:{player.MapData.CurrentCell.SectorId}    _sector.Id:{_sector.Id}");
-
-
-//        Debug.LogError($"playersPower  :{playersPower}");
         var delta = playersPower / powerToCompare;
-//        if (Mathf.Abs(delta) < 2)
-//        {                                                           d
-//        }
-
-        if (delta < 0.95f)
+       if (delta < 0.95f)
         {
             return "Risky";
         }

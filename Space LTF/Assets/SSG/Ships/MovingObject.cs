@@ -147,7 +147,7 @@ public abstract class MovingObject : PoolElement
         if (steps <= 1f) // && exactlyPoint)
         {
 #if UNITY_EDITOR
-            DebugMovingData.AddDir(dir, true, LookDirection);
+            DebugMovingData.AddDir(dir, true, LookDirection,Position);
 #endif
             Rotation = Quaternion.FromToRotation(Vector3.forward, dir);
 
@@ -169,7 +169,7 @@ public abstract class MovingObject : PoolElement
 
         SetBankData(new BankingData(dir, steps));
 #if UNITY_EDITOR
-        DebugMovingData.AddDir(lerpRes, false, LookDirection);
+        DebugMovingData.AddDir(lerpRes, false, LookDirection,Position);
 #endif
         Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
         return 1f;

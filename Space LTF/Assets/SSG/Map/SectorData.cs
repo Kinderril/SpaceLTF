@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 [System.Serializable]
 public class SectorData
 {
-    private const float COEF_POWER = 1.1f;
     public int StartX;
     public int StartZ;
     public int Size { get; private set; }
@@ -72,8 +71,8 @@ public class SectorData
 
     public static int CalcCellPower(int visited, int Size, int startPowerGalaxy)
     {
-       
-        var additional = (int)(visited * Size * COEF_POWER);
+        var sectorPowerCoef = Library.SECTOR_COEF_POWER + startPowerGalaxy * 0.045f;
+        var additional = (int)(visited * Size * sectorPowerCoef);
         var power = startPowerGalaxy + additional;
         return power;
     }

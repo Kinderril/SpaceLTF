@@ -33,10 +33,10 @@ public static class MoneyConsts
         {1, 14},
         {2, 24},
         {3, 28},
-        {4, 32},
-        {5, 36},
-        {6, 40},
-        {7, 45},
+        {4, 40},
+        {5, 50},
+        {6, 60},
+        {7, 75},
     };
 
     public static Dictionary<int, int> SpellUpgrade = new Dictionary<int, int>()
@@ -49,14 +49,7 @@ public static class MoneyConsts
         {6, 40},
         {7, 45},
     };
-
-    //BUY
-    public const int Weapon1Buyl = 12;
-    public const int Weapon1Buy2 = 33;
-    public const int Weapon1Buy3 = 47;
-    public const int SpellBuy = 20;
-    public const int ModulBuy = 15;
-
+                                       
 
     public const int BASE_WEAPON_MONEY_COST = 10;
     public const int LEVEL_WEAPON_MONEY_COST = 13;

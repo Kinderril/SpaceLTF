@@ -615,6 +615,7 @@ public static class Namings
     // public static string WeaponDest= "Weapon destroyed";
     public static string ShieldDest = "Shield destroyed";
     public static string FireDest = "Fire on board";
+    public static string Retreat = "Retreat";
     public static string DoWantRetire = "Do you want run away?";
     public static string DoWantRetry = "Do you want run away? {0} of your ships will be badly damaged.";
     public static string BeenBefore = "You have been there before.";

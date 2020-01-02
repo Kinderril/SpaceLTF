@@ -19,7 +19,7 @@ public class ArmorModul : BaseModul
     {
         base.Apply(Parameters,owner);
         Parameters.BodyArmor += ModulData.Level;
-        Parameters.ShieldArmor += ModulData.Level;
+        // Parameters.ShieldArmor += ModulData.Level;
     }
 
     public override void Dispose()

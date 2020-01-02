@@ -288,8 +288,17 @@ public class Player
                 moneyCoef = 1;
                 break;
             case BattleRewardType.weapon:
+                var coef2 = power * 0.1f;
                 moneyCoef = 0.7f;
-                var w = Library.CreateWeapon(power < 45);
+                WDictionary<int> levels2 = new WDictionary<int>(new Dictionary<int, float>()
+                {
+                    {1,4f+coef2},
+                    {2,3.7f+coef2},
+                    {3,1.7f+coef2},
+                    {4,1f+coef2},
+                    {5,0f+coef2},
+                });
+                var w = Library.CreateWeapon(levels2.Random());
                 if (Inventory.GetFreeWeaponSlot(out slotIndex))
                 {
                     Inventory.TryAddWeaponModul(w, slotIndex);
@@ -297,14 +306,16 @@ public class Player
                 }
                 break;
             case BattleRewardType.modul:
-                var isWeak = power < 45;
+                // var isWeak = power < 45;
+                var coef = power * 0.1f;
                 moneyCoef = 0.7f;
                 WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
                 {
-                    {1,isWeak?5f:2f },
-                    {2,isWeak?3f:4f},
-                    {3,isWeak?0f:2f},
+                    {1,4f+coef},
+                    {2,3.7f+coef},
+                    {3,1.7f+coef},
                 });
+
                 var m = Library.CreatSimpleModul(levels.Random());
                 if (Inventory.GetFreeSpellSlot(out slotIndex))
                 {
@@ -314,7 +325,6 @@ public class Player
                 break;
         }
         int moneyToReward = (int) (moneyCoef*power*Library.BATTLE_REWARD_WIN_MONEY_COEF);
-        moneyToReward = Library.ModificationMoneyBattleReward(moneyToReward);
         LastReward.Money = moneyToReward;
         MoneyData.AddMoney(moneyToReward);
     }

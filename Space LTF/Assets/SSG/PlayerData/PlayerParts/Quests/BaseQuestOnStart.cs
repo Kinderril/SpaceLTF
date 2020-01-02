@@ -59,22 +59,23 @@ public  abstract class BaseQuestOnStart
         _type = type;
         TargetCounter = targetCounter;
 
-        WDictionary<int> levels2 = new WDictionary<int>(new Dictionary<int, float>()
+        WDictionary<int> levelsWeapons = new WDictionary<int>(new Dictionary<int, float>()
         {
             {2, 3f},
             {3, 4f},
             {4, 2f},
             {5, 1f},
+            {6, 1f},
         });
-        WeaponReward = Library.CreateWeapon(levels2.Random());
-        WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
+        WeaponReward = Library.CreateWeapon(levelsWeapons.Random());
+        WDictionary<int> levelsModuls = new WDictionary<int>(new Dictionary<int, float>()
         {
-            {2,4f},
-            {3, 3f},
+            {2, 5f},
+            {3, 4f},
             {4, 2f},
-            {5, 2f},
+            {5, 1f},
         });
-        ModulReward = Library.CreatSimpleModul(levels.Random());
+        ModulReward = Library.CreatSimpleModul(levelsModuls.Random());
 
 
 

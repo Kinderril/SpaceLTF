@@ -92,10 +92,8 @@ public class ShipInventoryUI : DragZone
             if (modul != null && modul.Type == SimpleModulType.armor)
             {
                 bArmor += modul.Level;
-                sArmor += modul.Level;
+                // sArmor += modul.Level;
             }
-            
-
         }
 
         ArmorField.text = String.Format(Namings.ArmorField, bArmor, sArmor);
