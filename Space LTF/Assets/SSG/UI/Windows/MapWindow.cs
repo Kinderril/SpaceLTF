@@ -28,6 +28,7 @@ public class MapWindow : BaseWindow
     public ChangingCounter MoneyField;
     public MapNavigationList NavigationList;
     public CellIinfoObjectUI CellIinfoObject;
+    public ReputationMapUI ReputationMapUI;
 
     private Player player;
     private PlayerArmyUI playerArmyUI;
@@ -50,6 +51,7 @@ public class MapWindow : BaseWindow
     public override void Init()
     {
         base.Init();
+
         CellIinfoObject.Disable();
         MapConsoleUI.Appear();
         NavigationList.Init(GlobalMap);
@@ -57,6 +59,7 @@ public class MapWindow : BaseWindow
         DialogWindow.Dispose();
         GlobalMap.gameObject.SetActive(true);
         WindowSettings.gameObject.SetActive(false);
+        ReputationMapUI.gameObject.SetActive(false);
         CamerasController.Instance.StartGlobalMap();
         GlobalMap.UnBlock();
 //        ArmyInfoContainer.gameObject.SetActive(false);
@@ -70,7 +73,7 @@ public class MapWindow : BaseWindow
             var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
             field.text = Namings.StartInfo;
         }
-
+//        ReputationMapUI.Init();
         PlayerByStepUI.Init(player.ByStepDamage);
         //        player.MapData.OnCellChanged += OnCellChanged;
         //        player.MapData.OnSectorChanged += OnSectorChanged;
@@ -79,7 +82,7 @@ public class MapWindow : BaseWindow
         player.MoneyData.OnMoneyChange += OnMoneyChange;
         player.MapData.OnCellChanged += OnCellChanged;
         player.OnAddShip += OnAddShip;
-        player.ReputationData.OnReputationChange += OnReputationChange;
+        // player.ReputationData.OnReputationNationChange += OnReputationChange;
         CellsOfSector();
         InitMyArmy();
         GlobalMap.SingleInit(player.MapData.GalaxyData,this,MouseNearObject);
@@ -109,7 +112,7 @@ public class MapWindow : BaseWindow
         EnableModif(false);
         EnableArmy(false);
         UpdateMainQuestelements();
-        UpdateReputation();
+        // UpdateReputation();
         InitSideShip();
         QuestsOnStartController.Init(player.QuestsOnStartController);
     }
@@ -159,11 +162,16 @@ public class MapWindow : BaseWindow
     }
 
 
-    private void OnReputationChange(int obj)
-    {
-        UpdateReputation();
-    }
+    // private void OnReputationChange(ShipConfig config, int curVal, int delta)
+    // {
+    //     UpdateReputation();
+    // }
 
+
+    public void OnClickReputation()
+    {
+        ReputationMapUI.Init();
+    }
     public void OnStartInfoClick()
     {
         StartInfo.gameObject.SetActive(false);
@@ -191,10 +199,10 @@ public class MapWindow : BaseWindow
         player.MessagesToConsole.AddMsg("Ships repaired");
     }
 
-    private void UpdateReputation()
-    {
-        ReputationField.text = String.Format(Namings.Reputation,player.ReputationData.Reputation);
-    }
+    // private void UpdateReputation()
+    // {
+    //     ReputationField.text = String.Format(Namings.Reputation,player.ReputationData.Reputation);
+    // }
 
 
     private void MouseNearObject(GlobalMapCellObject obj)
@@ -471,13 +479,14 @@ public class MapWindow : BaseWindow
         player.MoneyData.OnMoneyChange -= OnMoneyChange;
         player.MapData.OnCellChanged -= OnCellChanged;
         player.OnAddShip -= OnAddShip;
-        player.ReputationData.OnReputationChange -= OnReputationChange;
+        // player.ReputationData.OnReputationNationChange -= OnReputationChange;
         //        player.MapData.OnSectorChanged -= OnSectorChanged;
         //        player.MapData.OnCellChanged -= OnCellChanged;
         GlobalMap.UnBlock();
         InventoryUI.Dispose();
         DialogWindow.Dispose();
         playerArmyUI.Dispose();
+        ReputationMapUI.Dispose();
 //        Cataclysm.Dispose();
         GameObject.Destroy(playerArmyUI.gameObject);
     }

@@ -393,8 +393,8 @@ public static class Namings
 
     public static string DamageInfoUI = "Damage: {0}/{1}";
     public static string KillsInfoUI = "Kills: {0}";
-    public static string ReputationChanges = "Reputation change {0} => {1}.";
-    public static string Reputation = "Reputation: {0}";
+    public static string ReputationChanges = "{2} reputation change {0} => {1}.";
+    public static string Reputation = "{0} reputation: {1}";
 
     public static string ActionName(ActionType arg2ActionType)
     {
@@ -813,6 +813,8 @@ public static class Namings
         {"ECommanderPriority1Mid","Medium ships will be a priority" },
         {"ECommanderPriority1Heavy", "Heavy ships will be a priority"},
         {"QuestReward", "Choose one reward"},
+        {"Reputation", "Reputation"},
+        {"Inventory", "Inventory"},
     };
 
     public static string Tag(string tag)

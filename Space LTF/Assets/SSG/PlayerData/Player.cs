@@ -50,7 +50,7 @@ public class Player
         Army = CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell);
         RepairData.Init(Army, MapData,Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
-
+        ReputationData.AddReputation(data.shipConfig,Library.START_REPUTATION);
         var mid1 = (Library.MIN_GLOBAL_SECTOR_SIZE + Library.MAX_GLOBAL_SECTOR_SIZE) * .5f;
         var mid2 = (Library.MIN_GLOBAL_MAP_SECTOR_COUNT + Library.MAX_GLOBAL_MAP_SECTOR_COUNT) * .5f;
 

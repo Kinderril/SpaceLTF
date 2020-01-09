@@ -15,8 +15,13 @@ public class EMIRocketWeaponGame : WeaponInGame
 
     public override bool IsAimed(ShipPersonalInfo target)
     {
-        return target.IsInFrontSector();
+        return IsAimedStraight(target, Owner, GetShootPos, _radiusShoot);
+        // return target.IsInFrontSector();
     }
 
+    protected override void CutTargetShootDir(ShipBase target)
+    {
+        ShootDir(null);
+    }
 }
 

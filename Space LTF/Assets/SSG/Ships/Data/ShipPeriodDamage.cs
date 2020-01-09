@@ -50,12 +50,10 @@ public class ShipPeriodDamage :ShipData
         if (_using)
         {
             var nextTicks = _ticksRemain +  ticks / 2;
-           
             _ticksRemain = Mathf.Max(nextTicks, ticks);
         }
         else
         {
-
             _ticksRemain = ticks;
         }
 

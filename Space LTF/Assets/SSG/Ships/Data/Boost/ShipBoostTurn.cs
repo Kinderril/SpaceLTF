@@ -99,7 +99,7 @@ public class ShipBoostTurn : ShipData
         var dirSum = dir1 + dir2;
 
         LastTurnAddtionalMove = dirSum * Time.deltaTime; 
-        _owner.SetBankData(new BankingData(dirToMove, steps));
+        _owner.BankingData.SetNewData(dirToMove, steps);          
         _owner.Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
 
         return 1f;

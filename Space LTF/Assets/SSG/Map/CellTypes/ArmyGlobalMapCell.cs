@@ -124,11 +124,11 @@ public class ArmyGlobalMapCell : GlobalMapCell
     public override MessageDialogData GetDialog()
     {
         var myPlaer = MainController.Instance.MainPlayer;
-        bool isSameSide = myPlaer.MainShip.Ship.ShipConfig == _config;
+        bool isSameSide = myPlaer.ReputationData.ReputationFaction[_config] > Library.PEACE_REPUTATION;
         string masinMsg;
 
         var ans = new List<AnswerDialogData>();
-        var rep = MainController.Instance.MainPlayer.ReputationData.Reputation;
+        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config];
         var scoutData = GetArmy().ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
         string scoutsField;
         if (_eventType.HasValue)
@@ -249,7 +249,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData("Ok"));
-        var rep = MainController.Instance.MainPlayer.ReputationData.Reputation;
+        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config];
         bool doDip = MyExtensions.IsTrue01((float) rep / PlayerReputationData.MAX_REP);
         if (doDip)
         {

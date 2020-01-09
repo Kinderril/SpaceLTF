@@ -338,19 +338,19 @@ public class BattleController :Singleton<BattleController>
                 var dist = dirFromAtoB.magnitude;
                 a.SetEnemyData(dirFromAtoB, dist, b);
                 b.SetEnemyData(-dirFromAtoB, dist, a);
-                if (dist < 4f)
-                {
-                    var dot = AIUtility.Vector3Dot(a.LookDirection, b.LookDirection);
-                    if (dot < 0)
-                    {
-                        var dot2 = AIUtility.Vector3Dot(a.LookDirection, dirFromAtoB);
-                        if (dot2 > 0)
-                        {
-                            a.SetEvadeEnemy();
-                            b.SetEvadeEnemy();
-                        }
-                    }
-                }
+                // if (dist < 4f)
+                // {
+                //     var dot = AIUtility.Vector3Dot(a.LookDirection, b.LookDirection);
+                //     if (dot < 0)
+                //     {
+                //         var dot2 = AIUtility.Vector3Dot(a.LookDirection, dirFromAtoB);
+                //         if (dot2 > 0)
+                //         {
+                //             a.SetEvadeEnemy();
+                //             b.SetEvadeEnemy();
+                //         }
+                //     }
+                // }
             }
         }
     }

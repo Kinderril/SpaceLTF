@@ -23,7 +23,8 @@ public class ShipBase : MovingObject
 {
     private const float PREDICTION_DIST = 25;
     private const float PREDICTION_DIST_AIM = 1.5f;
-    private const float MAX_Y_DELTA = 5f;
+    private const float MAX_Y_DELTA = 10f;
+    private const float yHeight = 2.5f;
 
     private static GizmoUtils.Styles s_Styles;
     public BaseAction CurAction { get; private set; }
@@ -31,28 +32,21 @@ public class ShipBase : MovingObject
     public GameObject PriorityObject { get; protected set; }
     public GameObject FakePriorityObject { get; protected set; }
     public GameObject SelectedObject { get; protected set; }
-    // private Vector3 _backPredictionPos;
 
     private Action<ShipBase> _dealthCallback;
     public AudioSource Audio;
 
-    //    private MoveWayNoLerp _moveWay;
-    // private float _nextPosibleRecalcWay = 0;
-    // private float _nextRecalc = 0;
     private Vector3 _predictionPos;
     private Vector3 _predictionPosAim;
     private readonly Dictionary<ShipBase, ShipPersonalInfo> Allies = new Dictionary<ShipBase, ShipPersonalInfo>();
     public Dictionary<ShipBase, ShipPersonalInfo> Enemies = new Dictionary<ShipBase, ShipPersonalInfo>();
 
     public Transform HitHolder;
-//    public int DefenceReward = 0;
     public int Id;
     public bool IsInited;
-//    public bool IsRepared = false;
     public ShipVisual ShipVisual;
     public ShipPathController2 PathController { get; private set; }
     public ShipBuffData BuffData { get; private set; }
-//    public ShipAsteroidDamage AsteroidDamage { get; private set; }
     public ShipVisibilityData VisibilityData { get; private set; }
     public ShipPeriodDamage PeriodDamage { get; private set; }
     public CellController CellController { get; private set; }
@@ -61,14 +55,13 @@ public class ShipBase : MovingObject
     public ShipBoost Boost { get; private set; }
     public ShipAttackersData AttackersData { get; private set; }
     public ShipDamageData DamageData { get; private set; }
-    //    public const string TAG = "Ship";
 
     public IPilotParameters PilotParameters;
     public BaseEffectAbsorber ModulEffectDestroy;
     public BaseEffectAbsorber ShipEngineStop;
     public BaseEffectAbsorber RepairEffect;
     public BaseEffectAbsorber PeriodDamageEffect;
-    public BaseEffectAbsorber WeaponCrashEffect;
+    // public BaseEffectAbsorber WeaponCrashEffect;
 
     private ArrowTarget Arrow;
     public ShipParameters ShipParameters { get; private set; }
@@ -95,13 +88,13 @@ public class ShipBase : MovingObject
                  return base.BankMax;
             }
         }
-    }  
+    }
     public bool Pause { get; set; }
     public bool InBattlefield { get; set; }
     public bool InAsteroidField { get; private set; }
     public bool IsDead { get; private set; }
 
-    private bool _evadeNextFrame;
+    // private bool _evadeNextFrame;
     private float yMove;
     public Collider ShieldCollider;
     public ShipInventory ShipInventory;
@@ -160,7 +153,7 @@ public class ShipBase : MovingObject
         ShipParameters = new ShipParameters(shipInventory, shipInventory.SpellsModuls,
             Death, Id, this, ShieldCollider, pilotParams);
         WeaponsController = new WeaponsController(WeaponPosition, this, 
-            shipInventory.WeaponsModuls, shipInventory.Moduls.SimpleModuls, WeaponCrashEffect);
+            shipInventory.WeaponsModuls, shipInventory.Moduls.SimpleModuls);
         ShipModuls = new ShipModuls(this, shipInventory.Moduls.SimpleModuls);
         ShipModuls.InitModuls();
         _dealthCallback = dealthCallback;
@@ -176,8 +169,8 @@ public class ShipBase : MovingObject
             ModulEffectDestroy.Stop();
         if (PeriodDamageEffect != null)
             PeriodDamageEffect.Stop();
-        if (WeaponCrashEffect != null)
-            WeaponCrashEffect.Stop();
+        // if (WeaponCrashEffect != null)
+        //     WeaponCrashEffect.Stop();
         PathController = new ShipPathController2(this,  1.25f);
         BuffData = new ShipBuffData(this);
         Boost = new ShipBoost(this, ShipParameters.StartParams.BoostChargeTime,Commander.TeamIndex == TeamIndex.green);
@@ -313,6 +306,7 @@ public class ShipBase : MovingObject
         {
             return;
         }
+        Boost.ManualUpdate();
         HitData.Update();
         PeriodDamage.ManualUpdate();
 //        AsteroidDamage.Update();
@@ -355,47 +349,46 @@ public class ShipBase : MovingObject
 
 //        SetTargetSpeed(Boost.BoostTurn.TargetBoosSpeed);
         EngineUpdate();
+        MoveByY(YMoveRotation.YMoveCoef);
         ApplyMove(Boost.BoostTurn.LastTurnAddtionalMove,Boost.BoostTurn.IsActive);
         Locator.ManualUpdate();
-        CheckYEnemies();
+        // CheckYEnemies();
         _predictionPos = LookDirection * PREDICTION_DIST + Position;
         _predictionPosAim = LookDirection * PREDICTION_DIST_AIM + Position;
         // _backPredictionPos = -LookDirection * PREDICTION_DIST + Position;
     }
-    
-    const float ySpeed = 1.1f;
+        
+//     private void CheckYEnemies()
+//     {
+// //        return;
+//         if (_curSpeed <= 0f)
+//         {
+//             return;
+//         }
+//
+//         bool isGreen = (TeamIndex == TeamIndex.green);
+//         if (_evadeNextFrame)
+//         {
+//             _evadeNextFrame = false;
+//             int dir = isGreen ? 1 : -1;
+//             MoveByY(dir, isGreen);
+//             return;
+//         }
+//
+//         if ((isGreen && yMove > 0) || (!isGreen && yMove < 0))
+//         {
+//             int dirInner = isGreen ? -1 : 1;
+//             MoveByY(dirInner, isGreen);
+//         }
+//         else
+//         {
+//             yMove = 0;
+//             var p = ShipVisual.transform.position;
+//             ShipVisual.transform.position = new Vector3(p.x, yMove, p.z);
+//         }
+//     }
 
-    private void CheckYEnemies()
-    {
-//        return;
-        if (_curSpeed <= 0f)
-        {
-            return;
-        }
-
-        bool isGreen = (TeamIndex == TeamIndex.green);
-        if (_evadeNextFrame)
-        {
-            _evadeNextFrame = false;
-            int dir = isGreen ? 1 : -1;
-            MoveByY(dir, isGreen);
-            return;
-        }
-
-        if ((isGreen && yMove > 0) || (!isGreen && yMove < 0))
-        {
-            int dirInner = isGreen ? -1 : 1;
-            MoveByY(dirInner, isGreen);
-        }
-        else
-        {
-            yMove = 0;
-            var p = ShipVisual.transform.position;
-            ShipVisual.transform.position = new Vector3(p.x, yMove, p.z);
-        }
-    }
-
-    private void MoveByY(int dir, bool isGreen)
+    private void MoveByY(float resultY)
     {
 #if UNITY_EDITOR
         if (DebugParamsController.EngineOff)
@@ -403,22 +396,10 @@ public class ShipBase : MovingObject
             return;
         }
 #endif
-        var d = ySpeed*Time.deltaTime*dir;
-        yMove += d;
+        yMove = yHeight * resultY;
         var p = ShipVisual.transform.position;
-//        yMove = yMove*dir;
-        float yy;
-        if (isGreen)
-        {
-            yy = Mathf.Clamp(yMove, 0f, MAX_Y_DELTA);
-        }
-        else
-        {
-            yy = Mathf.Clamp(yMove, -MAX_Y_DELTA, 0);
-        }
-
+        var yy = Mathf.Clamp(yMove, 0f, MAX_Y_DELTA);
         ShipVisual.transform.position = new Vector3(p.x, yy, p.z);
-//        Debug.Log("yMove:" + yMove);
     }
 
     protected void UpdateShieldRegen()
@@ -661,10 +642,10 @@ public class ShipBase : MovingObject
         SetAction(a);
     }
 
-    public void SetEvadeEnemy()
-    {
-        _evadeNextFrame = true;
-    }
+    // public void SetEvadeEnemy()
+    // {
+    //     _evadeNextFrame = true;
+    // }
 
     public void AddEnemy(ShipBase enemy, bool isEnemy, CommanderShipEnemy commanderShipEnemy)
     {
@@ -856,10 +837,10 @@ public class ShipBase : MovingObject
         PathController.OnDrawGizmosSelected();
         Gizmos.DrawWireSphere(transform.position, 0.6f);
 
-        if (WeaponsController != null)
-        {
-            WeaponsController.DrawActiveWeapons();
-        }
+//        if (WeaponsController != null)
+//        {
+//            WeaponsController.DrawActiveWeapons();
+//        }
     }
 
     public void ShipRunAway()

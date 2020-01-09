@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 public class PlayerMoneyData
 {
 //    private Player _player;
-    public int MoneyCount = 10;
+    public int MoneyCount = 1;
 
     [field: NonSerialized]
     public event Action<int> OnMoneyChange;

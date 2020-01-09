@@ -13,7 +13,7 @@ public class WeaponAimedType
         preList.Add(firstWeapon);
     }
 
-    public void TryShoot(ShipPersonalInfo target, Vector3 ownerLokkDir)
+    public bool TryShoot(ShipPersonalInfo target, Vector3 ownerLokkDir)
     {
         bool subCanFire = false;
         switch (WeaponToAim.TargetType)
@@ -27,14 +27,21 @@ public class WeaponAimedType
                 break;
         }
 
+        bool someWeaponSHoot = false;
         if (subCanFire)
         {
             for (int i = 0; i < WeaponsToShoot.Length; i++)
             {
                 var toShoot = WeaponsToShoot[i];
-                toShoot.TryShoot(ownerLokkDir, target.ShipLink);
+                var isDone = toShoot.TryShoot(ownerLokkDir, target.ShipLink);
+                if (isDone)
+                {
+                    someWeaponSHoot = true;
+                }
             }
         }
+
+        return someWeaponSHoot;
     }
 
     private bool CheckWeaponAimed(WeaponInGame weapon, ShipPersonalInfo shipInfo)

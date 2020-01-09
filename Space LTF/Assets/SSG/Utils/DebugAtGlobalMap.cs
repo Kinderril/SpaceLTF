@@ -38,7 +38,7 @@ public class DebugAtGlobalMap : MonoBehaviour
 
     public void OnDebugAddRep()
     {
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(6);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.federation,6);
     }
 
     public void OnDebugAddMoney()

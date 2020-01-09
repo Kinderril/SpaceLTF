@@ -8,11 +8,8 @@ using UnityEngine;
 
 public class AttackSideAction : AttackAction
 {
-    private Vector3 TargetPos
-    {
-        get { return Target.ShipLink.Position; }
-    }
-    
+    private Vector3 TargetPos => Target.ShipLink.Position;
+
     private bool _controlReached = false;
     private Vector3 _controlPoint;
 

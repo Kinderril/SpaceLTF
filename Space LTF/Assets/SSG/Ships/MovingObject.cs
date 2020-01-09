@@ -4,17 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class BankingData
-{
-    public Vector3 Dir;
-    public float Steps;
 
-    public BankingData(Vector3 dir, float steps)
-    {
-        Dir = dir;
-        Steps = steps;
-    }
-}
 
 public abstract class MovingObject : PoolElement
 {
@@ -32,21 +22,14 @@ public abstract class MovingObject : PoolElement
     protected float _targetAcceleration = 0f;
     protected float _targetPercentSpeed = 0f;
 
-    public float TargetAcceleration
-    {
-        get { return _targetAcceleration; }
-    }
+    public float TargetAcceleration => _targetAcceleration;
 
-    public float TargetPercentSpeed
-    {
-        get { return _targetPercentSpeed; }
-    }
+    public float TargetPercentSpeed => _targetPercentSpeed;
 
-    private BankingData _banking = null;
-    //    private bool _stopShip;
-    //    private ExternalForce _externalForce;
-    //    private ExternalSideForce _externalSideForce;
-    //    private EngineStop _engineStop;
+    private BankingData _banking = new BankingData(Vector3.forward, 0f);
+    public YMoveRotation YMoveRotation = new YMoveRotation();
+
+    public BankingData BankingData => _banking;
 
     public ExternalSideForce ExternalSideForce { get; protected set; }
     public ExternalForce ExternalForce { get; protected set; }
@@ -166,19 +149,15 @@ public abstract class MovingObject : PoolElement
             lerpRes = Utils.RotateOnAngUp(LookDirection, -angPerFrameTurn);
         }
 
-
-        SetBankData(new BankingData(dir, steps));
+        BankingData.SetNewData(dir, steps);
 #if UNITY_EDITOR
         DebugMovingData.AddDir(lerpRes, false, LookDirection,Position);
 #endif
-        Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
+        var  qRotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
+        Rotation = qRotation;
         return 1f;
     }
 
-    public void SetBankData(BankingData bankingData)
-    {
-        _banking = bankingData;
-    }
 
     private bool? _haveRotatingObject = null;
 
@@ -196,7 +175,7 @@ public abstract class MovingObject : PoolElement
     }
 
 
-    private void Banking()
+     private void Banking()
     {
 #if UNITY_EDITOR
         if (DebugParamsController.EngineOff && this is ShipBase)
@@ -210,11 +189,11 @@ public abstract class MovingObject : PoolElement
         }
 
         var bSpeed = BankSpeed * Time.deltaTime;
-        if (_banking != null)
+        if (!_banking.ImplementedXZ)
         {
-            Vector3 dir = _banking.Dir;
+            Vector3 dir = _banking.TargetDir;
             float steps = _banking.Steps;
-            _banking = null;
+            _banking.CompleteXZ();
             var crossProduct = Vector3.Cross(LookDirection, dir);
             var isRight = crossProduct.y < 0;
             if (steps > 0)
@@ -247,9 +226,11 @@ public abstract class MovingObject : PoolElement
         {
             _curBank = BankingToZero(_curBank, bSpeed);
         }
-        RotatableObject.localRotation = new Quaternion(0, 0, _curBank, 1f);
-//        Debug.Log("rotation: " + _curBank + "   " + gameObject.name + "   " + RotatableObject.localRotation);
 
+        var rotationToImplement = YMoveRotation.RotateQuaternion;
+        var bankRotation = new Quaternion(rotationToImplement.x, 0, _curBank, rotationToImplement.w);
+
+        RotatableObject.localRotation = bankRotation;
     }
 
     private float BankingToZero(float cur,float bSpeed)
@@ -354,14 +335,11 @@ public abstract class MovingObject : PoolElement
                 dir = dir + ExternalForce.Update();
             }
 
-            if (useAdditive)
-            {
-                Position = Position + additionalMove;
-            }
-            else
-            {
-                Position = Position + dir;
-            }
+            float coef = YMoveRotation.XzMoveCoef;
+            var deltaDir = useAdditive ? additionalMove : dir;
+            Position = Position + deltaDir * coef;
+
+
         }
     }  
     protected void ApplyMove()

@@ -16,6 +16,9 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         return "Prisoner";
     }
 
+    private int Reputation =>
+        MainController.Instance.MainPlayer.ReputationData.ReputationFaction[ShipConfig.federation];
+
     public override MessageDialogData GetDialog()
     {
         _itemCost = 20;
@@ -23,10 +26,10 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         mianAnswers.Add(new AnswerDialogData(String.Format("Buy stolen item. [Cost:{0}]", _itemCost),BuyStolen));
         mianAnswers.Add(new AnswerDialogData(String.Format("Catch and return to police."),ReternToPolice));
         mianAnswers.Add(new AnswerDialogData(String.Format("Hire him"),HireHim));
-        mianAnswers.Add(new AnswerDialogData(String.Format("Hide him from police. [Reputation:{0}]",ReputationLevel), HideHim));
+        mianAnswers.Add(new AnswerDialogData(String.Format("Hide him from police. [Reputation:{0}]", Reputation), HideHim));
 
 
-        var mesData = new MessageDialogData("Criminal try to escapes from the police. But your fleet can catch him", mianAnswers);
+        var mesData = new MessageDialogData("Criminal try to escapes from the federation police. But your fleet can catch him", mianAnswers);
         mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
         return mesData;
     }
@@ -35,7 +38,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
     {
         var rep = Library.REPUTATION_HIRE_CRIMINAL_REMOVED;
         var info = String.Format("Criminal hired. Reputation removed {0}", rep);
-        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(rep);
+        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.federation,rep);
         WindowManager.Instance.InfoWindow.Init(() =>
         {
             HireAction(2);
@@ -70,7 +73,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
                 d = "Not free space for item";
             }
 
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(Library.REPUTATION_FIND_WAY_ADD);
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.federation,Library.REPUTATION_FIND_WAY_ADD);
             WindowManager.Instance.InfoWindow.Init(null,
                 String.Format("Complete. {0}", d));
         }
@@ -82,7 +85,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
 
     private void HideHim()
     {
-        if (SkillWork(60, ReputationLevel))
+        if (SkillWork(60, Reputation))
         {
             var money = GlobalMapCell.AddMoney(24, 47);
             WindowManager.Instance.InfoWindow.Init(null, 
@@ -90,13 +93,13 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         }
         else
         {
-            if (SkillWork(40, ReputationLevel))
+            if (SkillWork(40, Reputation))
             {
                 ShowFail();
             }
             else
             {
-                MainController.Instance.MainPlayer.ReputationData.RemoveReputation(Library.REPUTATION_HIRE_CRIMINAL_REMOVED);
+                MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.federation,Library.REPUTATION_HIRE_CRIMINAL_REMOVED);
                 WindowManager.Instance.InfoWindow.Init(Fight,
                     String.Format("Fail! Now you will fight with police."));
             }
@@ -109,7 +112,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         var rep = Library.REPUTATION_FIND_WAY_ADD;
         WindowManager.Instance.InfoWindow.Init(null, 
             String.Format("You successfully catch him. Reputation added {0}", rep));
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(rep);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.federation,rep);
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class AttackAction : AbstractAttackAction
@@ -154,6 +155,13 @@ public class AttackAction : AbstractAttackAction
     {
         if (Target != null)
         {
+            var all = _owner.WeaponsController.GelAllWeapons();
+            if (all.Count > 0)
+            {
+                var weapon = all.FirstOrDefault();
+                weapon?.GizmosDraw();
+            }
+
 //            Gizmos.color = Color.blue;
 //            Gizmos.DrawRay(_owner.Position, Vector3.up * 5);
 //            Gizmos.color = Color.green;

@@ -16,15 +16,7 @@ public class ShipPersonalInfo
     public bool CanShoot { get; set; }
     private ShipBase _owner;
 
-    public bool Visible
-    {
-        get
-        {
-            return ShipLink.VisibilityData.Visible;
-        }
-    }
-
-
+    public bool Visible => ShipLink.VisibilityData.Visible;
 
     public ShipPersonalInfo(ShipBase owner,ShipBase mover, CommanderShipEnemy commanderShipEnemy)
     {

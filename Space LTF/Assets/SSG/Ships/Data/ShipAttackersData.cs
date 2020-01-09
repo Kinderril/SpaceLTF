@@ -24,14 +24,7 @@ public  class ShipAttackersData       :ShipData
             {
                 if (_owner.Boost.CanUse)
                 {
-                    if (MyExtensions.IsTrueEqual())
-                    {
-                        _owner.Boost.ActivateFront();
-                    }
-                    else
-                    {
-                        _owner.Boost.ActivateBack();
-                    }
+                    _owner.Boost.ActivateBack();
                 }
             }
             else  if (CurAttacker.IsInFrontSector() && CurAttacker.Dist < 19)
@@ -43,11 +36,8 @@ public  class ShipAttackersData       :ShipData
                         _owner.Boost.EvadeToSide();
                     }
                 }
-
             }
-            
         }
-     
     }
 
     public void ShipStartsAttack(ShipBase attacker)

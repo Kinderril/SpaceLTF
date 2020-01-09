@@ -11,21 +11,23 @@ public class WeaponsController
     private WeaponAimedType[] _weaponsToAim;
     private ShipBase _owner;
     private float _maxAttackRadius = -1f;
+    public float LastShootTime { get; private set; }
     private bool _enable = true;
     public event Action<WeaponInGame> OnWeaponShootStart;
-    private BaseEffectAbsorber _weaponCrashEffect;
+    // private BaseEffectAbsorber _weaponCrashEffect;
 //    private WeaponWaveStrike _waveStrike;
     private WeaponsAimSectorController AimSectorController;
 //    private AudioClip _maxinSootClip;
     private WeaponRoundWaveStrike _waveStrike;
 
     public WeaponsController(List<WeaponPlace> weaponPosition, 
-        ShipBase owner,WeaponInv[] weapons, BaseModulInv[] moduls,BaseEffectAbsorber weaponCrashEffect)
+        ShipBase owner,WeaponInv[] weapons, BaseModulInv[] moduls)
     {
+
         _waveStrike = new WeaponRoundWaveStrike(owner);
         AimSectorController = new WeaponsAimSectorController();
         Dictionary<string,WeaponAimedType> weaponsAims = new Dictionary<string, WeaponAimedType>();
-        _weaponCrashEffect = weaponCrashEffect;
+        // _weaponCrashEffect = weaponCrashEffect;
         _owner = owner;
         this.weaponPosition = weaponPosition;
         int slotIndex = 0;
@@ -92,24 +94,24 @@ public class WeaponsController
         }
     }
 
-    public void CrashAllWeapons(bool val)
-    {
-        if (_weaponCrashEffect != null)
-        {
-            if (val)
-            {
-                _weaponCrashEffect.Play();
-            }
-            else
-            {
-                _weaponCrashEffect.Stop();
-            }
-        }
-        foreach (var weapon in _weapons)
-        {
-            weapon.CrashReload(val);
-        }
-    }
+    // public void CrashAllWeapons(bool val)
+    // {
+    //     if (_weaponCrashEffect != null)
+    //     {
+    //         if (val)
+    //         {
+    //             _weaponCrashEffect.Play();
+    //         }
+    //         else
+    //         {
+    //             _weaponCrashEffect.Stop();
+    //         }
+    //     }
+    //     foreach (var weapon in _weapons)
+    //     {
+    //         weapon.CrashReload(val);
+    //     }
+    // }
     public List<WeaponInGame> GelAllWeapons()
     {
         return _weapons;

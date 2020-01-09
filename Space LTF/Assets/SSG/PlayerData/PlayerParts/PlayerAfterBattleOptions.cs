@@ -111,12 +111,12 @@ public class PlayerAfterBattleOptions
         var player = MainController.Instance.MainPlayer;
         if (SkillWork(2, player.Parameters.Repair.Level))
         {
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(Library.REPUTATION_REPAIR_ADD);
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.raiders,Library.REPUTATION_REPAIR_ADD);
             WindowManager.Instance.InfoWindow.Init(null, "Completed!");
         }
         else
         {
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(Library.REPUTATION_REPAIR_REMOVE);
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.raiders, Library.REPUTATION_REPAIR_REMOVE);
             WindowManager.Instance.InfoWindow.Init(null, "His ship broken totaly. You lose reputation.");
         }
     }
@@ -156,7 +156,7 @@ public class PlayerAfterBattleOptions
 
     private void LeavehimAction()
     {
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(Library.REPUTATION_SCIENS_LAB_ADD);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios,Library.REPUTATION_SCIENS_LAB_ADD);
     }
 
     private MessageDialogData Ocrons(float power)
@@ -180,7 +180,7 @@ public class PlayerAfterBattleOptions
             {
                 TeachPilots(teachMoney);
             }));
-            ans.Add(new AnswerDialogData("Search for credits.", SearchFor));
+            ans.Add(new AnswerDialogData("Search for credits.", () => SearchFor(ShipConfig.ocrons)));
             ans.Add(new AnswerDialogData("Leave him.", LeavehimAction));
             var mesData = new MessageDialogData(masinMsg, ans);
             return mesData;
@@ -208,7 +208,7 @@ public class PlayerAfterBattleOptions
             {
                 OpenGloalMap(moneyCost);
             }));
-            ans.Add(new AnswerDialogData("Search for credits.", SearchFor));
+            ans.Add(new AnswerDialogData("Search for credits.", () => SearchFor(ShipConfig.krios)));
             ans.Add(new AnswerDialogData("Leave him.", LeavehimAction));
             var mesData = new MessageDialogData(masinMsg, ans);
             return mesData;
@@ -270,7 +270,7 @@ public class PlayerAfterBattleOptions
             var masinMsg = "After battle you find one of opponents army.";
             var ans = new List<AnswerDialogData>();
             ans.Add(new AnswerDialogData("Ask buyout.", Buyout));
-            ans.Add(new AnswerDialogData("Search for hidden things.", SearchFor));
+            ans.Add(new AnswerDialogData("Search for hidden things.",()=> SearchFor(ShipConfig.federation)));
             int hireMoney = 100;
             if (MainController.Instance.MainPlayer.CanAddShip())
             {
@@ -352,8 +352,9 @@ public class PlayerAfterBattleOptions
         });
         if (ws.Random())
         {
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(Library.REPUTATION_STEAL_REMOVE);
-            int monet = MyExtensions.Random(25, 35);
+            var scouts = MainController.Instance.MainPlayer.Parameters.Scouts.Level;
+            var delta = MoneyConsts.MAX_PASSIVE_LEVEL - scouts;
+            int monet = MyExtensions.Random(delta * 3, delta * 5);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
             WindowManager.Instance.InfoWindow.Init(null, String.Format("Buyout confirm. {0}", monet));
         }
@@ -362,7 +363,7 @@ public class PlayerAfterBattleOptions
             WindowManager.Instance.InfoWindow.Init(null, String.Format("Buyout fail."));
         }
     }
-    private void SearchFor()
+    private void SearchFor(ShipConfig config)
     {
         WDictionary<bool> ws = new WDictionary<bool>(new Dictionary<bool, float>()
         {
@@ -370,10 +371,11 @@ public class PlayerAfterBattleOptions
         });
         if (ws.Random())
         {
-            int monet = MyExtensions.Random(15, 35);
+            var scouts = MainController.Instance.MainPlayer.Parameters.Scouts.Level;
+            int monet = MyExtensions.Random(scouts*3, scouts * 5);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
             WindowManager.Instance.InfoWindow.Init(null, String.Format("Credits add: {0}.", monet));
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(Library.REPUTATION_STEAL_REMOVE);
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config,Library.REPUTATION_STEAL_REMOVE);
         }
         else
         {
@@ -382,7 +384,7 @@ public class PlayerAfterBattleOptions
     }
     private void KillAction(float power)
     {
-        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(Library.REPUTATION_ATTACK_PEACEFULL_REMOVE);
+        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.mercenary,Library.REPUTATION_ATTACK_PEACEFULL_REMOVE);
         if (MyExtensions.IsTrue01(MainController.Instance.MainPlayer.Parameters.Scouts.Level / 4f))
         {
             int monet = (int)MyExtensions.Random(power / 5f, power * 1.5f);

@@ -9,7 +9,8 @@ public class BackgroundCamera : MonoBehaviour
 
     public Camera Camera;
 //    public Camera MiniBackgroundCamera;
-    public SpriteRenderer SpriteRenderer;
+    public SpriteRenderer SpriteBattleRenderer;
+    public SpriteRenderer SpriteMenuRenderer;
     private Sprite _spriteGlobal;
     public List<Sprite> BackgroundsGlobal = new List<Sprite>();
     public List<Sprite> BackgroundsBattle = new List<Sprite>();
@@ -17,28 +18,38 @@ public class BackgroundCamera : MonoBehaviour
     void Awake()
     {
         _spriteGlobal = BackgroundsGlobal.RandomElement();
-        SpriteRenderer.sprite = _spriteGlobal;
+        // SpriteBattleRenderer.sprite = _spriteGlobal;
+        SpriteMenuRenderer.sprite = _spriteGlobal;
+        ActivateSprites(false);
     }
     public void EndBattleGame()
     {
-        SpriteRenderer.sprite = _spriteGlobal;
-        CheckSize();
+        ActivateSprites(false);
+        CheckSize(false);
     }
 
-    private void CheckSize()
+    private void ActivateSprites(bool battle)
+    {
+
+        SpriteBattleRenderer.gameObject.SetActive(battle);
+        SpriteMenuRenderer.gameObject.SetActive(!battle);
+    }
+
+    private void CheckSize(bool isBattle)
     {
         float cameraHeight = Camera.orthographicSize * 2;
         Vector2 cameraSize = new Vector2(Camera.aspect * cameraHeight, cameraHeight);
         cameraSize = cameraSize / Camera.orthographicSize;
-        Vector2 spriteSize = SpriteRenderer.sprite.bounds.size;
+        var sprite = isBattle ? SpriteBattleRenderer : SpriteMenuRenderer;
+        Vector2 spriteSize = sprite.sprite.bounds.size;
         if (spriteSize.y > spriteSize.x)
         {
-            Debug.LogError("wrong background sprite! " + SpriteRenderer.sprite.name);
+            Debug.LogError("wrong background sprite! " + SpriteBattleRenderer.sprite.name);
             return;
         }
         var camDim = cameraSize.x / cameraSize.y;
         var backDim = spriteSize.x / spriteSize.y;
-        Debug.Log(" cam dims:" + camDim + "   " + backDim + "    cameraSize:" + cameraSize + "   spriteSize:" + spriteSize);
+        // Debug.Log(" cam dims:" + camDim + "   " + backDim + "    cameraSize:" + cameraSize + "   spriteSize:" + spriteSize);
         if (camDim > backDim)
         {
 //            MiniBackgroundCamera.orthographicSize= 
@@ -69,27 +80,10 @@ public class BackgroundCamera : MonoBehaviour
 
     public void StartGame()
     {
-        SpriteRenderer.sprite = BackgroundsBattle.RandomElement();
-        CheckSize();
+        SpriteBattleRenderer.sprite = BackgroundsBattle.RandomElement();
+        CheckSize(true);
         Camera.enabled = true;
-//        MiniBackgroundCamera.enabled = true;
-        SpriteRenderer.enabled = true;
+        ActivateSprites(true);
     }
-
-//    void Update()
-//    {
-//        if (Camera.enabled)
-//        {
-//
-//        }
-//    }
-
-    public void EndGame()
-    {
-        Camera.enabled = false;
-//        MiniBackgroundCamera.enabled = false;
-        SpriteRenderer.enabled = false;
-    }
-
 }
 

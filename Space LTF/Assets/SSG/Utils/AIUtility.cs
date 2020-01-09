@@ -33,14 +33,10 @@ public class SegmentPoints
         this.b = b;
     }
 
-    public virtual Vector3 A()
-    {
-        return a;
-    }
-    public virtual Vector3 B()
-    {
-        return b;
-    }
+    public virtual Vector3 A => a;
+    public virtual Vector3 B => b;
+
+
 }
 
 public class Point
@@ -141,8 +137,8 @@ public class AIUtility
 
     public static bool IsParalel(SegmentPoints p1, SegmentPoints p2)
     {
-        return IsParalel(new Point(p1.A()), new Point(p1.B()), new Point(p2.A()),
-            new Point(p2.B()));
+        return IsParalel(new Point(p1.A), new Point(p1.B), new Point(p2.A),
+            new Point(p2.B));
     }
 
     [CanBeNull]
@@ -264,11 +260,11 @@ public class AIUtility
     {
 //        Debug.DrawLine(p1.A(),p1.B(),Color.cyan);
 //        Debug.DrawLine(p2.A(),p2.B(), Color.blue);
-        var result1 = PointOfIntersection(new Point(p1.A()), new Point(p1.B()), new Point(p2.A()),
-            new Point(p2.B()));
+        var result1 = PointOfIntersection(new Point(p1.A), new Point(p1.B), new Point(p2.A),
+            new Point(p2.B));
         if (result1 != null)
         {
-            var v = new Vector3(result1.x, p1.A().y, result1.y);
+            var v = new Vector3(result1.x, p1.A.y, result1.y);
             return v;
         }
         return null;
@@ -309,8 +305,8 @@ public class AIUtility
         {
             if (crossPoint.HasValue)
                 Debug.DrawRay(crossPoint.Value, Vector3.up, Color.red);
-            Debug.DrawLine(s1.A(),s1.B(),Color.green);
-            Debug.DrawLine(s2.A(),s2.B(),Color.yellow);
+            Debug.DrawLine(s1.A,s1.B,Color.green);
+            Debug.DrawLine(s2.A,s2.B,Color.yellow);
         }
 #endif
         if (crossPoint.HasValue)

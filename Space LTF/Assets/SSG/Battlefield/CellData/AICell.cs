@@ -35,15 +35,8 @@ public class AICellSegment : SegmentPoints
         return _bCell;
     }
 
-    public override Vector3 A()
-    {
-        return _aCell.Position;
-    }
-
-    public override Vector3 B()
-    {
-        return _bCell.Position;
-    }
+    public override Vector3 A => _aCell.Position;
+    public override Vector3 B => _bCell.Position;
 }
 
 public class CellDirection

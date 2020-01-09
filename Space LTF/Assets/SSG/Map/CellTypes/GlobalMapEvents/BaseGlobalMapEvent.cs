@@ -149,7 +149,7 @@ public abstract class BaseGlobalMapEvent
         WindowManager.Instance.InfoWindow.Init(callback, "Fail.");
     }
 
-    protected int ReputationLevel { get { return MainController.Instance.MainPlayer.ReputationData.Reputation; } }
+    // protected int ReputationLevel { get { return MainController.Instance.MainPlayer.ReputationData.Reputation; } }
     protected int ScoutsLevel { get { return MainController.Instance.MainPlayer.Parameters.Scouts.Level; } }
     protected int DiplomacyLevel { get { return MainController.Instance.MainPlayer.Parameters.Diplomaty.Level; } }
     protected int RepairLevel { get { return MainController.Instance.MainPlayer.Parameters.Repair.Level; } }

@@ -17,11 +17,9 @@ public class LaserWeapon : WeaponInGame
     {                                                                       
         return IsAimedStraight(target, Owner, GetShootPos,_radiusShoot);
     }
-
-    //public override void Affect(ShipParameters shipParameters, ShipBase target, Bullet bullet)
-    //{
-    //    target.HitData.HitTo(ShipHitVisual.medium);
-    //    base.Affect(shipParameters, target, bullet);
-    //}
+    protected override void CutTargetShootDir(ShipBase target)
+    {
+        ShootDir(null);
+    }
 }
 

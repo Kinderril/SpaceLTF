@@ -47,7 +47,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
         }
         else
         {
-            var mesData = new MessageDialogData("You see a ship with broken navigation system. He asking for help", mianAnswers);
+            var mesData = new MessageDialogData("You see a ocrons ship with broken navigation system. He asking for help", mianAnswers);
             mianAnswers.Add(new AnswerDialogData(String.Format("Send scout to deliver him to closest shelter. [Scouts: {0}]", ScoutsLevel), null,tryFindWay));
             mianAnswers.Add(new AnswerDialogData(String.Format("Try repair navigation system. [Repair {0}]",RepairLevel), null, tryRepair));
             mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
@@ -107,7 +107,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
         if (SkillWork(2, RepairLevel))
         {
 
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(Library.REPUTATION_FIND_WAY_ADD);
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.ocrons,Library.REPUTATION_FIND_WAY_ADD);
 
             var mianAnswers = new List<AnswerDialogData>();
             var mesData = new MessageDialogData($"You successfully repair ship. Reputation add {Library.REPUTATION_FIND_WAY_ADD}.", mianAnswers);

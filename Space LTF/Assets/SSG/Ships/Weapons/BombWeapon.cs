@@ -31,9 +31,9 @@ public class BombWeapon : WeaponInGame
         var baseEndPoint2_1 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd1_2;
         var baseEndPoint3_1 = ShootPos.position + _radiusShoot * MyExtensions.Random(0.9f,1.1f) * rnd1_3;
 
-        CreateBulletWithModif(baseEndPoint1_1);
-        CreateBulletWithModif(baseEndPoint2_1);
-        CreateBulletWithModif(baseEndPoint3_1);
+        CreateBulletWithModif(baseEndPoint1_1, false);
+        CreateBulletWithModif(baseEndPoint2_1, false);
+        CreateBulletWithModif(baseEndPoint3_1, false);
     } 
 //    public override void BulletCreateByDir(ShipBase target, Vector3 dir)
 //    {

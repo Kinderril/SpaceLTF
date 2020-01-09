@@ -215,7 +215,8 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         BulleStartParameters bulleStartParameters)
     {
         //        var dirToShoot = Owner.LookDirection;
-        var dirToShoot = target.Position - shootPos;
+        
+        var dirToShoot = target.IsDir ?target.Position : target.Position - shootPos;
         var b = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, bulleStartParameters);
     }
 

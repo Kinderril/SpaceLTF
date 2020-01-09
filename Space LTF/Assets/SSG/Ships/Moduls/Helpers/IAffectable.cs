@@ -5,6 +5,7 @@ public class BulletTarget
 {
     public ShipBase target;
     public Vector3 Position;
+    public bool IsDir { get; private set; }
 
     public BulletTarget(ShipBase target)
     {

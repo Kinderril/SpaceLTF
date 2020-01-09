@@ -100,7 +100,7 @@ public static class PathDirectionFinder
 
     private static CellPoint GetControlPoint(CrossData data, Vector3 dir)
     {
-        var di1 = data.cellSegment.A() - data.cross;
+        var di1 = data.cellSegment.A - data.cross;
         if (Vector3.Dot(dir, di1) > 0)
         {
             return data.cellSegment.ACell();

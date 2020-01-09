@@ -136,6 +136,9 @@ public static class Library
     public static float CHARGE_SPEED_COEF_PER_LEVEL = 0.12f;
     public static float REPURARTION_TO_DIPLOMATY_COEF = .05f;
     public static float MONEY_QUEST_COEF = 0.09f;
+    public static int PEACE_REPUTATION = 40;
+    public static int START_REPUTATION = 50;
+    public static int BATTLE_REPUTATION_AFTER_FIGHT = 4;
 
     public const int REPUTATION_STEAL_REMOVE = 5;
     public const int REPUTATION_REPAIR_REMOVE = 4;

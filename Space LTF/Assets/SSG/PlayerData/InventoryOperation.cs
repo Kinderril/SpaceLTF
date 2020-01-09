@@ -144,7 +144,8 @@ public  static  class  InventoryOperation
             int sellPrice;
             if (item.CurrentInventory.Owner != null)
             {
-                sellPrice = item.CurrentInventory.Owner.ReputationData.ModifSellValue(preSellPrice);
+                sellPrice = Mathf.Clamp(preSellPrice, 1, 999999);
+                // sellPrice = item.CurrentInventory.Owner.ReputationData.ModifSellValue(,preSellPrice);
             }
             else
             {
@@ -177,7 +178,8 @@ public  static  class  InventoryOperation
             int buyPrice;
             if (item.CurrentInventory.Owner != null)
             {
-                buyPrice = item.CurrentInventory.Owner.ReputationData.ModifBuyValue(preBuyPrice);
+                buyPrice = Mathf.Clamp(preBuyPrice, 1, 999999);
+                // buyPrice = item.CurrentInventory.Owner.ReputationData.ModifBuyValue(preBuyPrice);
             }
             else
             {

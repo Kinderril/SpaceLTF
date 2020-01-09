@@ -32,7 +32,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
         _moneyToBuy = (int)(MyExtensions.Random(10, 30) * coef);
         mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
-        var mesData = new MessageDialogData("You are close to science laboratory. But this one is under siege.", mianAnswers);
+        var mesData = new MessageDialogData("You are close to krios science laboratory. But this one is under siege.", mianAnswers);
         return mesData;
     }
 
@@ -130,7 +130,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     private MessageDialogData ImproveDialog()
     {
 
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(Library.REPUTATION_SCIENS_LAB_ADD);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios,Library.REPUTATION_SCIENS_LAB_ADD);
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData("Improve main ship.", null, improveMainShip));
         mianAnswers.Add(new AnswerDialogData("Improve battle ships.", null, improveBattleShips));

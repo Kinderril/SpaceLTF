@@ -35,7 +35,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
         if (SkillWork(3, DiplomacyLevel))
         {
             var mianAnswers = new List<AnswerDialogData>();
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(Library.REPUTATION_SCIENS_LAB_ADD);
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.mercenary,Library.REPUTATION_SCIENS_LAB_ADD);
             mianAnswers.Add(new AnswerDialogData("Thanks!", () => GetItemsAfterBattle(false), null));
             var mesData = new MessageDialogData("Your diplomacy skills are perfect. They will not fight and send you a gift for helping. Reputation add {Library.REPUTATION_RELEASE_PEACEFULL_ADD}.", mianAnswers);
             return mesData;
@@ -62,7 +62,7 @@ var mianAnswers = new List<AnswerDialogData>();
         }
         else
         {
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(Library.REPUTATION_SCIENS_LAB_ADD); 
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios,Library.REPUTATION_SCIENS_LAB_ADD); 
             mianAnswers.Add(new AnswerDialogData("Ufff... Great.", null, null));
             mesData = new MessageDialogData($"This stop trying attack anybody. Maybe this is not bad. Reputation add {Library.REPUTATION_SCIENS_LAB_ADD}.", mianAnswers);
 
