@@ -1,0 +1,26 @@
+The information about the development progress will be updated regularly.  The first notes will be about how it went so far. At the moment, all the main mechanics are working, no critical bugs remaining revealed. The alpha version of the build exists, for closed testing.
+
+1. Introduction.
+Edge of galaxy is a roguelike realtime strategy. The player’s task is to form a fleet consisting of the mothership and several smaller ships and find a way out of the galaxy. In the beginning you can choose the faction and make basic tuning of the fleet. During the game, you may encounter trading shops, workshops, scientific bases and other places. You can change the composition and armament of your fleet as you wish (and if you have enough money for this). Also the micromanagement of the ships is present, as if you do not monitor and repair your fleet, you will have no forces to fight your enemies. And of course, ships basic parameters can be improveded.
+
+Combat system. 
+You have the mothership. If it is destroyed you will lose. You also have warships for which you can determine a certain simple program of behavior. There is no direct control of warships during the battle. Your mothership has additional capabilities to assist the fleet in battle, and it can also move slowly. In each battle it is required either to destroy all enemies or the mothership of the opponent. If the enemy is too strong, you can try to retreat.
+Before the battle, you can choose the tactics for each ship and suitable equipment. It will be impossible to change equipment after the battle starts. Information from your scouts will help you with choosing the best tactics&setup, so keep in mind to develop it. Most enemy fleets have the same equipment that you can get. But among them there are special fleets with special equipment that guard important objects.
+The battlefield is a circle surrounded by asteroids. The size of the battlefield varies from battle to battle. It may even be that two huge armies encounter in a small area. If the ship gets too far from the battle for some reason, it is considered lost in space. Warships will try to avoid the asteroids inside the battlefield. Any asteroid is destroyed from any hit on it. In some cases, the battlefield may have non-standard conditions, such as an asteroid storm, or electromagnetic radiation, which have a serious impact on the course of the battle.
+
+2. The warship's weapons system
+Each ship has several slots for weapons and several slots for modules. Some modules change the properties of weapons, and some modules are acting independently. Choosing combinations of modules and weapons you can get a perfect setup fitting your battle style.
+The main parameter of the weapon is damage, of course. It is of 2 types: shields damage and hull damage. When the ship gets hit, damage first applied to the shields firstly. If there are no shields or they are turned off then the hull gets the damage. Both types of damage are important. There are well-balanced types of weapons, such as a laser, that hits both shields and hull equally, and quite special ones, like an impulse gun that quickly destroys shields but has low damage over the hull. Some types of weapons inflict fire damage that always hits the hull through shields.
+Weapons also vary in range, rate of fire, aiming radius, firing sector and the number of bullets per burst. All these parameters can be modified using special support modules. But there are other support modules that can cause all weapon bullets to ignore target shields, for instance. However, such modules usually have negative effects, such as characteristics penalties.
+Modules and weapons have a certain level, which directly affects their characteristics. The level of a weapon or module, in turn, determines what level of a warship is needed to use it. Weapons level can be upgraded in the inventory for the credits fee. But modules can be found only with certain level.
+Improvements to the mothership’s weaponry are currently under development. The plans is to increase the number of required charge cells for each level-up, but there will be a small upgrade cost. Or you'll be able to slightly enhance the characteristics, but for bigger great money instead. As an option, both improvement ways will be implemented.
+
+
+
+3. The economic system.
+In the end of each battle, as well as for various tasks, your fleet will receive funds for development. You must choose how to distribute these funds depending on what you want to improve, or perhaps leave this money for repairs or bribes.
+Global map.
+On the global map, the player will have to move around the map, solve mini-quests, trade and equip his fleet in battle. The whole galaxy is divided into sectors, each sector has its own fraction. The player can choose the most convenient sectors to visit.
+
+
+One of the most remodeled mechanics is the asteroid flying system. This system corresponded

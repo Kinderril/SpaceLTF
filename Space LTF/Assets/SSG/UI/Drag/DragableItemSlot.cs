@@ -3,21 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class DragableItemSlot : MonoBehaviour
 {
-    public DragItemType DragItemType;
+    private DragItemType _dragItemType;
+    public DragItemType DragItemType
+    {
+        get => _dragItemType;
+        set
+        {
+            _dragItemType = value;
+            UpdateSlots();
+        }
+    }
+
+
     public DragableItem CurrentItem;
     private bool _usage = false;
     public IInventory _inventory { get; private set; }
 
     public int id;
     private IInventory connectedInventory;
-//    public event Action<DragableItemSlot, DragableItem,bool> OnItemImplemented;
+
+    public Image StandartImage;
+    public Image BlueImage;
+    public Image YellowImage;
+    public Image RedImage;
+
+    //    public event Action<DragableItemSlot, DragableItem,bool> OnItemImplemented;
 
     public void Init(IInventory inventory,bool usage)
     {
+        UpdateSlots();
 #if UNITY_EDITOR
         if (inventory == null)
         {
@@ -28,7 +47,37 @@ public class DragableItemSlot : MonoBehaviour
         _usage = usage;
         id = Utils.GetId();
     }
-    
+
+    private void UpdateSlots()
+    {
+        switch (DragItemType)
+        {
+            case DragItemType.free:
+                StandartImage.gameObject.SetActive(true);
+                BlueImage.gameObject.SetActive(false);
+                YellowImage.gameObject.SetActive(false);
+                RedImage.gameObject.SetActive(false);
+                break;
+            case DragItemType.weapon:
+                StandartImage.gameObject.SetActive(false);
+                BlueImage.gameObject.SetActive(false);
+                YellowImage.gameObject.SetActive(false);
+                RedImage.gameObject.SetActive(true);
+                break;
+            case DragItemType.modul:
+                StandartImage.gameObject.SetActive(false);
+                BlueImage.gameObject.SetActive(true);
+                YellowImage.gameObject.SetActive(false);
+                RedImage.gameObject.SetActive(false);
+                break;
+            case DragItemType.spell:
+                StandartImage.gameObject.SetActive(false);
+                BlueImage.gameObject.SetActive(false);
+                YellowImage.gameObject.SetActive(true);
+                RedImage.gameObject.SetActive(false);
+                break;
+        }
+    }
     public bool CanPutHere(DragableItem element)
     {
 #if UNITY_EDITOR

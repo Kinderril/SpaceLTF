@@ -11,7 +11,12 @@ ModelImporter:
     2300000: SF_Imperial_Corvette_F3
     3300000: SF_Imperial_Corvette_F3
     4300000: SF_Imperial_Corvette_F3
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SF_Corvette_F3
+    second: {fileID: 2100000, guid: 759b0d71d58502e4ca0135a3cc643daa, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
