@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public enum MainState
@@ -22,6 +23,7 @@ public enum MainState
     endGame = 13,
     runAwayBattle = 14,
     loadinbg = 15,
+    achievements = 16,
     //    loading,
 }
 
@@ -52,6 +54,7 @@ public class WindowManager : Singleton<WindowManager>
     public event Action<BaseWindow> OnWindowSetted;
     //    public event Action OnInfoWindowWithShopClose;
     public Action OnItemWindowClose;
+    public TextMeshProUGUI VersionField;
 
     public CanvasGroup WindowMainCanvas;
     public CanvasGroup WindowSubCanvas;
@@ -81,6 +84,9 @@ public class WindowManager : Singleton<WindowManager>
         //        ConfirmWindowWithCount.gameObject.SetActive(false);
         if (InfoWindow != null)
             InfoWindow.gameObject.SetActive(false);
+
+        MainController.CheckVersion();
+        VersionField.text = MainController.VERSION;
     }
 
     public void OpenWindow(MainState state)

@@ -60,6 +60,7 @@ public class PilotParameters : IPilotParameters
     public void AddMoney(int money)
     {
         MoneyData.AddMoney(money);
+        MainController.Instance.Statistics.AddCollectMaxMoney(Money);
     }
 
     public LibraryPilotUpgradeType UpgradeRandomLevel(bool withMoney, bool withMsg)
@@ -89,6 +90,7 @@ public class PilotParameters : IPilotParameters
             }
             var rnd = type;
             UpgradeLevelByType(rnd,withMsg);
+            MainController.Instance.Statistics.AddCollectMaxLevelShip(CurLevel);
         }
     }
 

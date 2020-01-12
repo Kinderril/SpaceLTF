@@ -18,6 +18,10 @@ public class WindowStart : BaseWindow
     public void OnClickNewGame()
     {
         StartNewGame();
+    }  
+    public void OnClickAchievements()
+    {
+        WindowManager.Instance.OpenWindow(MainState.achievements);
     }
 
     private void StartNewGame()

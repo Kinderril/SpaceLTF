@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class ShipBoostTurn : ShipData
 {
@@ -8,16 +9,35 @@ public class ShipBoostTurn : ShipData
     private float _speedOnStart;
     private Vector3 _targetDir;
     private readonly float _turnSpeed;
-
-    // private float Period;
-
-    public ShipBoostTurn(ShipBase owner) : base(owner)
+    private Action<bool> _activateCallback;
+    private Action _endCallback;
+    
+    private bool _isActive;
+    public bool IsActive
+    {
+        get { return _isActive; }
+        private set
+        {
+            _isActive = value;
+            if (_isActive)
+            {
+                _activateCallback(true);
+            }
+            else
+            {
+                _endCallback();
+            }
+        }
+    }
+    public ShipBoostTurn(ShipBase owner,Action<bool> activateCallback,Action endCallback) : base(owner)
     {
         _turnSpeed = _owner.ShipParameters.TurnSpeed * 1.5f;
+        _activateCallback = activateCallback;
+        _endCallback = endCallback;
     }
 
     public Vector3 LastTurnAddtionalMove { get; private set; }
-    public bool IsActive { get; private set; }
+    
 
     public float TargetBoosSpeed
     {
@@ -28,6 +48,8 @@ public class ShipBoostTurn : ShipData
             return 0.01f;
         }
     }
+
+
 
     private void ActivateTime()
     {

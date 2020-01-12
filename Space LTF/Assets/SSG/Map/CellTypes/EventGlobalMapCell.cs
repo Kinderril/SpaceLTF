@@ -121,9 +121,9 @@ public class EventGlobalMapCell : GlobalMapCell
     public override MessageDialogData GetDialog()
     {
         return _mapEvent.GetDialog();
-    }    
+    }
 
-    protected override MessageDialogData GetLeavedActionInner()
+    public override MessageDialogData GetLeavedActionInner()
     {
         return _mapEvent.GetLeavedActionInner();
     }

@@ -253,7 +253,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                         {
                             owner.MoneyData.RemoveMoney(cost);
                             GlobalEventDispatcher.UpgradeWeapon(this);
-                            Upgrade();
+                            Upgrade(true);
                             //                        WindowManager.Instance.InfoWindow.Init(null, "Upgrade completed");
                         }, null, txt);
                     }
@@ -290,11 +290,15 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     }
 
 
-    public void Upgrade()
+    public void Upgrade(bool byPlayer)
     {
         if (CanUpgrade())
         {
             Level++;
+            if (byPlayer && Level == Library.MAX_WEAPON_LVL)
+            {
+                MainController.Instance.Statistics.AddMaxLevelWeapons();
+            }
             if (OnUpgrade != null)
             {
                 OnUpgrade(this);

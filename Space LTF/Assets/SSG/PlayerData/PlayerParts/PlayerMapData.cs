@@ -126,7 +126,14 @@ public class PlayerMapData
             return false;
         }
         var getConnect = ConnectedCellsToCurrent();
-        return getConnect.Contains(target);
+        var isConnected = getConnect.Contains(target);
+#if UNITY_EDITOR
+        if (DebugParamsController.AnyWay)
+        {
+            isConnected = true;
+        }
+#endif
+        return isConnected;
     }
 
     public List<GlobalMapCell> ConnectedCellsToCurrent()

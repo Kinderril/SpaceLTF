@@ -22,7 +22,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
     public override void Init()
     {
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
-        moneyTotal = (int)(GlobalMapCell.AddMoney(34, 55) * coef);
+        moneyTotal = (int)(MyExtensions.Random(34, 55) * coef);
         base.Init();
     }
 

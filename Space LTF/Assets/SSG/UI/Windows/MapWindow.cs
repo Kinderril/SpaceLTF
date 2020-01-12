@@ -92,30 +92,37 @@ public class MapWindow : BaseWindow
         InventoryUI.Init(player.Inventory,null);
         GlobalMap.UnBlock();
         player.QuestData.OnElementFound += OnElementFound;
-//        if (!player.MapData.CurrentCell.LeaveComplete)
-//        {
-//            if (!player.QuestData.CheckIfOver())
-//            {
-//                var leavedDialog = player.MapData.CurrentCell.GetLeavedAction();
-//                if (leavedDialog != null)
-//                {
-//                    //                leavedDialog();
-//                    StartDialog(leavedDialog, () =>
-//                    {
-//                        CanvasGroup.interactable = true;
-//                        GlobalMap.UnBlock();
-//                    });
-//
-//                }
-//            }
-//        }
+
         EnableModif(false);
         EnableArmy(false);
         UpdateMainQuestelements();
         // UpdateReputation();
         InitSideShip();
         QuestsOnStartController.Init(player.QuestsOnStartController);
+        CheckLeaveDialog();
     }
+
+    private void CheckLeaveDialog()
+    {
+        if (!player.MapData.CurrentCell.LeavedDialogComplete)
+        {
+          
+            var leavedDialog = player.MapData.CurrentCell.GetLeavedActionInner();
+            if (leavedDialog != null)
+            {
+                StartDialog(leavedDialog, () =>
+                {
+                    player.MapData.CurrentCell.LeavedDialogComplete = true;
+                    CanvasGroup.interactable = true;
+                    GlobalMap.UnBlock();
+                });
+
+            }
+            
+        }
+
+    }
+
     private void InitSideShip()
     {
         if (!_sideShipsInited)

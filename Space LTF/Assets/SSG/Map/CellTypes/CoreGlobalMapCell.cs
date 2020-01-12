@@ -26,6 +26,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         : base( power,ShipConfig.mercenary, id, ArmyCreatorType.destroy, intX, intZ, secto)
     {
         _power = power;
+//        Debug.LogError($"CoreGlobalMapCell:{intX}  {intZ}");
         WDictionary<GlobalCellType> chances = new WDictionary<GlobalCellType>(new Dictionary<GlobalCellType, float>()
         {
             { GlobalCellType.simple, 2},
@@ -137,7 +138,6 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     {
         SetTake();
         MainController.Instance.MainPlayer.QuestData.AddElement();
-        MainController.Instance.MainPlayer.QuestData.AddElement();
         List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
         answerDialog.Add(new AnswerDialogData("Ok."));
         var mesData = new MessageDialogData(String.Format("Element is yours. {0}/{1}", Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
@@ -176,7 +176,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         }
     }
 
-    protected override MessageDialogData GetLeavedActionInner()
+    public override MessageDialogData GetLeavedActionInner()
     {
         if (_afterFightActivated)
         {

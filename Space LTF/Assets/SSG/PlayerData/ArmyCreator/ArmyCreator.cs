@@ -519,7 +519,7 @@ public static class ArmyCreator
                 v.Points -= val;
                 logs.AddLog(v.Points,"upgrade weapon");
                 var rndWeapon = rndWeapons.RandomElement();
-                rndWeapon.Upgrade();
+                rndWeapon.Upgrade(false);
                 return true;
             }
         }

@@ -66,7 +66,7 @@ public class ShipBase : MovingObject
     private ArrowTarget Arrow;
     public ShipParameters ShipParameters { get; private set; }
     public ShipModuls ShipModuls { get; private set; }
-    public AimingBox AimingBox;
+//    public AimingBox AimingBox;
     public ShipPersonalInfo Target;
     public TeamIndex TeamIndex;
     public AICell Cell;
@@ -142,7 +142,7 @@ public class ShipBase : MovingObject
         PilotParameters = pilotParams;
         Commander = commander;
         TeamIndex = teamIndex;
-        AimingBox.Init(this);
+//        AimingBox.Init(this);
         transform.position = pos.position;
         transform.rotation = Quaternion.FromToRotation(Vector3.forward, pos.direction);
         if (ShieldCollider == null)
@@ -416,15 +416,21 @@ public class ShipBase : MovingObject
 
     public override float ApplyRotation(Vector3 dir, bool exactlyPoint)
     {
-        if (Boost.BoostTurn.IsActive)
+        if (Boost.IsActive && Boost.UseRotationByBoost)
         {
-            Boost.BoostTurn.ApplyRotation(dir);
-            return Boost.BoostTurn.TargetBoosSpeed;
+            if (Boost.BoostTurn.IsActive)
+            {
+                Boost.BoostTurn.ApplyRotation(dir);
+                return Boost.BoostTurn.TargetBoosSpeed;
+            }
+
+            if (Boost.BoostBackflip.IsActive)
+            {
+                return 1f;
+            }
         }
-        else
-        {
-            return base.ApplyRotation(dir, exactlyPoint);
-        }
+        return base.ApplyRotation(dir, exactlyPoint);
+        
     }
 
     public void MoveByWay(Vector3 target)

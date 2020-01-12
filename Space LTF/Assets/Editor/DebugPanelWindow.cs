@@ -21,6 +21,7 @@ public class DebugPanelWindow : EditorWindow
     public static bool NoDamage;
     public static bool NoMouseMove;
     public static bool FastRecharge;
+    public static bool AnyWay;
     public static bool AllModuls;
 
     [MenuItem("Tools/Debug Panel")]
@@ -80,6 +81,10 @@ public class DebugPanelWindow : EditorWindow
             if (GUILayout.Button("FastRecharge." + FastRecharge))
             {
                 SwitchFastRecharge();
+            }  
+            if (GUILayout.Button("AnyWay." + AnyWay))
+            {
+                SwitchAnyWay();
             }
             if (GUILayout.Button("AllModuls." + AllModuls))
             {
@@ -230,6 +235,12 @@ public class DebugPanelWindow : EditorWindow
         DebugParamsController.FastRecharge = FastRecharge;
     }
 
+    public static void SwitchAnyWay()
+    {
+        AnyWay = !AnyWay;
+        DebugParamsController.AnyWay = AnyWay;
+    }
+
     private GameObject _aimingBox;
     private void NoInGame()
     {
@@ -250,20 +261,20 @@ public class DebugPanelWindow : EditorWindow
         }
 
         _aimingBox = EditorGUILayout.ObjectField(_aimingBox, typeof(GameObject), true) as GameObject;
-        if (GUILayout.Button("Update aiming Box"))
-        {
-            List<GameObject> prefabs = new List<GameObject>();
-            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
-            var aimingBox = _aimingBox.GetComponent<AimingBox>();
-            if (aimingBox != null)
-            {
-                foreach (var gameObject in prefabs)
-                {
-                    AddAimingBox(gameObject, aimingBox);
-                }
-            }
-
-        }
+//        if (GUILayout.Button("Update aiming Box"))
+//        {
+//            List<GameObject> prefabs = new List<GameObject>();
+//            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
+//            var aimingBox = _aimingBox.GetComponent<AimingBox>();
+//            if (aimingBox != null)
+//            {
+//                foreach (var gameObject in prefabs)
+//                {
+//                    AddAimingBox(gameObject, aimingBox);
+//                }
+//            }
+//
+//        }
     }
 
     public static void LoadAllPrefabsAt(string path, List<GameObject> prefabs)
@@ -372,7 +383,8 @@ public class DebugPanelWindow : EditorWindow
         // This save method works.
         PrefabUtility.SaveAsPrefabAsset(editable_prefab, asset_path);
         PrefabUtility.UnloadPrefabContents(editable_prefab);
-    }     
+    }   
+    /*
     private void AddAimingBox( GameObject PrefabAsset,AimingBox box)
     {
 //        PrefabAsset = EditorGUILayout.ObjectField("Prefab", PrefabAsset, typeof(GameObject), allowSceneObjects: false);
@@ -389,7 +401,7 @@ public class DebugPanelWindow : EditorWindow
         var par = ShipBase.ShipVisual;
         var item = DataBaseController.GetItem(box);
         item.transform.SetParent(par.transform);
-        ShipBase.AimingBox = item;
+//        ShipBase.AimingBox = item;
         item.transform.localPosition = new Vector3(0,0,0.64f);
 
 
@@ -402,7 +414,7 @@ public class DebugPanelWindow : EditorWindow
         PrefabUtility.SaveAsPrefabAsset(editable_prefab, asset_path);
         PrefabUtility.UnloadPrefabContents(editable_prefab);
     }
-
+              */
     private void FindAnyAI()
     {
         var bots = GameObject.FindObjectsOfType<ShipBase>();

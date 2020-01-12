@@ -14,6 +14,8 @@ public class ShipBoost : ShipData
     public ShipBoostTurn BoostTurn;
     public ShipBoostBackflip BoostBackflip;
     private bool _isWorkable;
+    public bool UseRotationByBoost;
+    public bool IsActive { get; private set; }
 
     public ShipBoost(ShipBase owner,float chargePeriod,bool isWorkable) 
         : base(owner)
@@ -21,8 +23,19 @@ public class ShipBoost : ShipData
         _isWorkable = isWorkable;
         _chargePeriod = chargePeriod;
         _nextBoostUse = Time.time + chargePeriod;
-        BoostTurn = new ShipBoostTurn(owner);
-        BoostBackflip = new ShipBoostBackflip(owner,1f);
+        BoostTurn = new ShipBoostTurn(owner,Activate,EndBoost);
+        BoostBackflip = new ShipBoostBackflip(owner,1f, Activate, EndBoost);
+    }
+
+    private void EndBoost()
+    {
+        IsActive = false;
+    }
+
+    private void Activate(bool isBloackTurn)
+    {
+        UseRotationByBoost = isBloackTurn;
+        IsActive = true;
     }
 
 
@@ -55,7 +68,6 @@ public class ShipBoost : ShipData
     public void ActivateBack()
     {
         SetUsed();
-        // Debug.LogError("Actuivate ActivateBack");
         BoostTurn.Activate(-_owner.LookDirection);
     }
 

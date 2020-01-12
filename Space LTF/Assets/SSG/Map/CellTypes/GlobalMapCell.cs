@@ -71,7 +71,7 @@ public abstract class GlobalMapCell
         ConnectedGates = coreIndex;
     }
 
-    protected virtual MessageDialogData GetLeavedActionInner()
+    public virtual MessageDialogData GetLeavedActionInner()
     {
         return null;
     }
@@ -140,6 +140,7 @@ public abstract class GlobalMapCell
     protected int DiplomacyLevel { get { return MainController.Instance.MainPlayer.Parameters.Diplomaty.Level; } }
     protected int RepairLevel { get { return MainController.Instance.MainPlayer.Parameters.Repair.Level; } }
     protected int ChargesCountLevel { get { return MainController.Instance.MainPlayer.Parameters.ChargesCount.Level; } }
+    public bool LeavedDialogComplete = false;
 
     public void DestroyCell()
     {

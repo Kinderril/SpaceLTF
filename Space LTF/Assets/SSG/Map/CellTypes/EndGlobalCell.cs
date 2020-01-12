@@ -36,7 +36,7 @@ public class EndGlobalCell : ArmyGlobalMapCell
         return false;
     }
 
-    protected override MessageDialogData GetLeavedActionInner()
+    public override MessageDialogData GetLeavedActionInner()
     {
         var getDialog = _data.GetAfterBattleDialog();
         return getDialog;

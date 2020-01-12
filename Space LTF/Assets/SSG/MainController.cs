@@ -11,7 +11,7 @@ public enum StartMode
 
 public class MainController : Singleton<MainController>
 {
-    public const string VERSION = "017";
+    public static string VERSION = "019";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
@@ -31,7 +31,6 @@ public class MainController : Singleton<MainController>
         Statistics = PlayerStatistics.Load();
         WindowManager.Instance.Init();
         DataBase.DataStructPrefabs.CheckShipsWeaponsPosition();
-        //        BattleController.Instance.LaunchBattle();
     }
 
     void Start()
@@ -97,7 +96,12 @@ public class MainController : Singleton<MainController>
     }
 
 
+    public static void CheckVersion()
+    {
+#if DISABLESTEAMWORKS
+        VERSION = VERSION + "demo";
+#endif
 
-
+    }
 }
 

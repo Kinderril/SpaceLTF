@@ -76,6 +76,15 @@ public class PlayerStatistics
     public WeaponsPair LastWeaponsPairOpen = null;
     public OpenShipConfig LastOpenShipConfig = null;
     public int Wins { get; private set; }
+    public int MaxLevelWeapons { get; private set; }
+    public int ShipsDestroyed { get; private set; }
+    public int MaxLevelSpells { get; private set; }
+    public int Damage { get; private set; }
+    public int CollectMaxMoney { get; private set; }
+    public int CollectMaxLevelShip { get; private set; }
+    public bool TeamFive { get; private set; }
+    public bool WinNoweapons { get; private set; }
+    
 
     public void Init()
     {
@@ -247,6 +256,47 @@ public class PlayerStatistics
     public void AddWin()
     {
         Wins++;
+    }  
+    public void AddMaxLevelWeapons()
+    {
+        MaxLevelWeapons++;
+    }  
+    public void AddShipsDestroyed()
+    {
+        ShipsDestroyed++;
+    }  
+    public void AddMaxLevelSpells()
+    {
+        MaxLevelSpells++;
+    }  
+    public void AddDamage(int dmg)
+    {
+        Damage+=dmg;
+    }
+
+    public void AddCollectMaxMoney(int money)
+    {
+        if (money > CollectMaxMoney)
+        {
+            CollectMaxMoney = money;
+            if (CollectMaxMoney > 1000)
+            {
+                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.COLLECT_MONEY_1000);
+            }  
+            if (CollectMaxMoney > 10000)
+            {
+                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.COLLECT_MONEY_10000);
+            }
+        }
+
+    }  
+    public void AddCollectMaxLevelShip(int lvl)
+    {
+        if (lvl > CollectMaxLevelShip)
+        {
+            CollectMaxLevelShip = lvl;
+        }
+
     }
 }
 

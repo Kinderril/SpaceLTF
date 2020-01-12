@@ -180,11 +180,11 @@ public class GalaxyData
         var zCell = coreSector.StartZ + RndIndex(sizeSector);
         var coreId = Utils.GetId();
         var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, startSector);
-        coreSector.SetCell(coreCell, id);
         coreSector.Populate(startPower, startSector);
+        coreSector.SetCell(coreCell, id);
         unPopulatedSectors.Remove(coreSector);
         coreSector.MarkAsCore(coreId);
-        Debug.Log($"Core created {coreSector.StartX} {coreSector.StartZ}.");
+        Debug.Log($"Core created {coreSector.StartX} {coreSector.StartZ}.  coreCell:{coreCell.indX} {coreCell.indZ}");
     }
 
     public List<GlobalMapCell> GetAllList()

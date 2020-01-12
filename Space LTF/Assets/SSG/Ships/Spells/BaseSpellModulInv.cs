@@ -188,6 +188,10 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
         if (CanUpgrade())
         {
             Level++;
+            if (Level == Library.MAX_SPELL_LVL)
+            {
+                MainController.Instance.Statistics.AddMaxLevelSpells();
+            }
             if (OnUpgrade != null)
             {
                 OnUpgrade(this);

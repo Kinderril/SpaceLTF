@@ -6,7 +6,7 @@ public class YMoveRotation
     private float _yMoveCoef = 0f;
     public YMoveRotation()
     {
-        // ImplementedY = true;
+        RotateQuaternion = Quaternion.identity;
     }
 
     // public bool ImplementedY { get; private set; }

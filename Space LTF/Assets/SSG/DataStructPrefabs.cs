@@ -100,6 +100,7 @@ public class DataStructPrefabs : MonoBehaviour
 
     public List<WeaponIcon> WeaponTypeIcons = new List<WeaponIcon>();
     private Dictionary<WeaponType, Sprite> WeaponTypeIconsDic = new Dictionary<WeaponType, Sprite>();
+    private Dictionary<string, Sprite> SpritesByName = new Dictionary<string, Sprite>();
 
     public List<SpellIcon> SpellTypeIcons = new List<SpellIcon>();
     private Dictionary<SpellType, Sprite> SpellTypeIconsDic = new Dictionary<SpellType, Sprite>();
@@ -142,7 +143,7 @@ public class DataStructPrefabs : MonoBehaviour
 
         LoadModulsIcons();
         LoadRankIcons();
-
+        LoadAchievementsIcon();
 
         //----------
 //        foreach (var actionIcon in ActionIcons)
@@ -189,6 +190,29 @@ public class DataStructPrefabs : MonoBehaviour
             Debug.LogError("not enought pilot ESideAttack tactics");
         }
         
+    }
+
+    private void LoadAchievementsIcon()
+    {
+        var singl = SteamStatsAndAchievements.Instance;
+        var array = Enum.GetValues(typeof(SteamStatsAndAchievements.Achievement));
+        var values3 = (SteamStatsAndAchievements.Achievement[])array;
+        foreach (var achievement in values3)
+        {
+            var ss = singl.Achievements.FirstOrDefault(x => x.m_eAchievementID == achievement);
+            if (ss != null)
+            {
+                var str = String.Format("Icons/achievements/{0}", ss.m_strName);
+                var obj = Resources.Load<Sprite>(str);
+                SpritesByName.Add(ss.m_strName, obj);
+            }
+            else
+            {
+                Debug.LogError("can't find icon achivements Icons / achievements / " + achievement);
+            }
+        }
+
+
     }
 
     private void LoadModulsIcons()
@@ -322,6 +346,15 @@ public class DataStructPrefabs : MonoBehaviour
     public Sprite GetRankSprite(PilotRank statsCurRank)
     {
         return PilotRankIconsDic[statsCurRank];
+    }
+
+    public Sprite GetAchiewementIcon(string achievementTMStrName)
+    {
+        if (SpritesByName.TryGetValue(achievementTMStrName, out var spr))
+        {
+            return spr;
+        }
+        return null;
     }
 }
 

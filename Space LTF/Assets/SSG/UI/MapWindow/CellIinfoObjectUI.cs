@@ -10,13 +10,14 @@ public class CellIinfoObjectUI : MonoBehaviour
     public TextMeshProUGUI InfoField;
     private bool haveObj = false;
     private bool _disabled = true;
+    private string _curText;
     private GlobalMapCellObject curObj;
-    public bool IsDisabled {
-        get { return _disabled; }
-        }
+    public bool IsDisabled => _disabled;
+    private bool _isShort = true;
 
     public void Init([CanBeNull]GlobalMapCellObject obj)
     {
+        _isShort = true;
         haveObj = obj != null;
         if (_disabled != haveObj || _disabled)
         {
@@ -40,11 +41,11 @@ public class CellIinfoObjectUI : MonoBehaviour
         }
     }
 
+
     private void Info(GlobalMapCell cell)
     {
         if (cell != null)
         {
-            string txt;
             string ending;
             if (cell.IsDestroyed)
             {
@@ -64,6 +65,15 @@ public class CellIinfoObjectUI : MonoBehaviour
             if (!cell.IsDestroyed)
             {
 //                Debug.LogError($"cell.IsScouted.id:{cell.Id}  scouted:{cell.IsScouted}  ");
+                var isCore = cell as CoreGlobalMapCell;
+                if (isCore != null)
+                {
+                    _curText = isCore.Desc();
+                    TextUpdate(true);
+                    return;
+                }
+                
+
                 var coreCell = cell is StartGlobalCell || cell is EndGlobalCell;
                 var isArmy = cell as ArmyGlobalMapCell;
                 var isEvent = cell is EventGlobalMapCell;
@@ -129,25 +139,16 @@ public class CellIinfoObjectUI : MonoBehaviour
                         desc = Namings.Unknown;
                     }
                 }
-                txt = desc + ending;
+                _curText = desc + ending;
 //                txt = shallShow ? desc + ending : Namings.Unknown;
             }
             else
             {
                 var desc = cell.Desc();
-                txt = desc + ending;
+                _curText = desc + ending;
             }
 
-            //            Debug.Log("InfoField:" + haveObj + "   " + _disabled);
-//#if UNITY_EDITOR       
-//            InfoField.text = txt + $"{cell.indX}.{cell.indZ}";
-//            if (cell is CoreGlobalMapCell)
-//            {
-//                InfoField.text = $"{InfoField.text} [CORE!]";
-//            }
-//#else    
-            InfoField.text = txt;
-//#endif        
+            TextUpdate(true);
         }
     } 
 
@@ -156,6 +157,20 @@ public class CellIinfoObjectUI : MonoBehaviour
         if (haveObj)
         {
             MovingObject.transform.position = CamerasController.Instance.GlobalMapCamera.WorldToScreenPoint(curObj.transform.position) + Vector3.up * 20;
+        }
+
+        TextUpdate(false);
+    }
+
+    private void TextUpdate(bool updateAnyway)
+    {
+        var isShort = (Input.GetKey(KeyCode.LeftControl));
+        //        Debug.LogError($"isShort:{isShort}");
+        if ((isShort != _isShort || updateAnyway) && curObj != null)
+        {
+            _isShort = isShort;
+            var index = $"{curObj.Cell.indX}.{curObj.Cell.indZ}";
+            InfoField.text = !_isShort ? _curText : $"{_curText}\n{index}";
         }
     }
 

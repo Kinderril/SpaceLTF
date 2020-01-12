@@ -98,9 +98,10 @@ public class ArmyGlobalMapCell : GlobalMapCell
         _config = config;
         _armyType = type;
         _power = power;
-        if (power > 11)
+        if (Xind > 5 )
+//        if (true)
         {
-            if (MyExtensions.IsTrue01(0.35f))
+            if (MyExtensions.IsTrue01(0.25f))
             {
                 WDictionary<BattlefildEventType> chance = new WDictionary<BattlefildEventType>(
                     new Dictionary<BattlefildEventType, float>()
@@ -111,6 +112,11 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 _eventType = chance.Random();
             }
         }
+//#if UNITY_EDITOR
+//        _eventType = BattlefildEventType.asteroids;
+//#endif
+
+        //        Debug.LogError($"ArmyGlobalMapCell:{Xind}  {Zind}");
     }
 
     public override void UpdatePowers(int visitedSectors, int startPower)
@@ -343,11 +349,12 @@ public class ArmyGlobalMapCell : GlobalMapCell
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(),false,true, _eventType);
     }
 
-    protected override MessageDialogData GetLeavedActionInner()
+    public override MessageDialogData GetLeavedActionInner()
     {
         if (MainController.Instance.Statistics.LastBattle == EndBattleType.win)
         {
             var player = MainController.Instance.MainPlayer;
+            player.ReputationData.WinBattleAgainst(_config);
             var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power);
             return msg;
         }

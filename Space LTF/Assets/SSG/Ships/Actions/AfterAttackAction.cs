@@ -31,15 +31,16 @@ public class AfterAttackAction : BaseAction
 
     private void CheckBackflip()
     {
-        if (_owner.AttackersData.CurAttacker != null)
+        if (_owner.AttackersData.CurAttacker != null && !_owner.Boost.BoostBackflip.IsActive)
         {
             if (_owner.Boost.CanUse)
             {
-                if (Time.time - _owner.AttackersData.CurAttacker.ShipLink.WeaponsController.LastShootTime <
-                    Time.deltaTime * 2f)
-                {
-                    _owner.Boost.ActivateBackflip();
-                }
+                _owner.Boost.ActivateBackflip();
+//                if (Time.time - _owner.AttackersData.CurAttacker.ShipLink.WeaponsController.LastShootTime <
+//                    Time.deltaTime * 4f)
+//                {
+//                    _owner.Boost.ActivateBackflip();
+//                }
             }
         }
     }

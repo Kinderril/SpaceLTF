@@ -60,6 +60,10 @@ public class ShipParameters  : IShipAffectableParams
                 return;
             }
 #endif
+            if (_shipOwner.TeamIndex == TeamIndex.red)
+            {
+                MainController.Instance.Statistics.AddDamage((int)value);
+            }
             _curHealth = value;
         } }
     private float _curHealth;
@@ -173,6 +177,10 @@ public class ShipParameters  : IShipAffectableParams
             CurHealth -= bodyDamage;
             if (CurHealth < 1f)
             {
+                if (_shipOwner.TeamIndex == TeamIndex.red)
+                {
+                    MainController.Instance.Statistics.AddShipsDestroyed();
+                }
                 _deathCallback();
             }
             healthDelta = Mathf.Abs(CurHealth - c);
