@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 [System.Serializable]
 public class RetranslaitorMapEvent : BaseGlobalMapEvent
 {
-    private ShipConfig _shipConfig;
+    // private ShipConfig _shipConfig;
     private int _credits = -1;
     private bool _doFight;
     public override string Desc()
@@ -17,16 +17,17 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
         return "Energy storage.";
     }
 
-    public RetranslaitorMapEvent(ShipConfig _shipConfig)
+    public RetranslaitorMapEvent(ShipConfig _shipConfig) 
+        :base(_shipConfig)
     {
-        this._shipConfig = _shipConfig;
+        // this._shipConfig = _shipConfig;
     }
 
     public override MessageDialogData GetDialog()
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * 1.9f;
         _credits = (int)MyExtensions.GreateRandom(myArmyPower);
-         var mesData = new MessageDialogData(String.Format("Power fleet of {0} protect storage of energy.",Namings.ShipConfig(_shipConfig)), new List<AnswerDialogData>()
+         var mesData = new MessageDialogData(String.Format("Power fleet of {0} protect storage of energy.",Namings.ShipConfig(_config)), new List<AnswerDialogData>()
         {
             new AnswerDialogData("Fight",null,Figth),
 //            new AnswerDialogData("Send fail message",null,FailMessage),
@@ -100,7 +101,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * 0.8f;
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(_shipConfig, ArmyCreatorType.laser, (int)(powerCoef * myArmyPower)));
+            GetArmy(_config, ArmyCreatorType.laser, (int)(powerCoef * myArmyPower)));
     }
 }
 

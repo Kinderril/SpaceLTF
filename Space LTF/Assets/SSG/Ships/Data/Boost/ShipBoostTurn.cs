@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class ShipBoostTurn : ShipData
+public class ShipBoostTurn : ShipBoostAbstract
 {
     private float _angle;
     private bool _isLeft;
@@ -9,34 +9,14 @@ public class ShipBoostTurn : ShipData
     private float _speedOnStart;
     private Vector3 _targetDir;
     private readonly float _turnSpeed;
-    private Action<bool> _activateCallback;
-    private Action _endCallback;
     
-    private bool _isActive;
-    public bool IsActive
-    {
-        get { return _isActive; }
-        private set
-        {
-            _isActive = value;
-            if (_isActive)
-            {
-                _activateCallback(true);
-            }
-            else
-            {
-                _endCallback();
-            }
-        }
-    }
-    public ShipBoostTurn(ShipBase owner,Action<bool> activateCallback,Action endCallback) : base(owner)
+
+    public ShipBoostTurn(ShipBase owner,Action<bool> activateCallback,Action endCallback, Action<Vector3> setAddMove) 
+        : base(owner, activateCallback,endCallback,setAddMove)
     {
         _turnSpeed = _owner.ShipParameters.TurnSpeed * 1.5f;
-        _activateCallback = activateCallback;
-        _endCallback = endCallback;
     }
 
-    public Vector3 LastTurnAddtionalMove { get; private set; }
     
 
     public float TargetBoosSpeed
@@ -48,8 +28,6 @@ public class ShipBoostTurn : ShipData
             return 0.01f;
         }
     }
-
-
 
     private void ActivateTime()
     {
@@ -67,10 +45,7 @@ public class ShipBoostTurn : ShipData
 
     public float ApplyRotation(Vector3 incomingDir)
     {
-//        if (!IsActive)
-//        {
-//            Deactivate();
-//        }
+
         if (_owner.EngineStop.IsCrash()) 
             return 0f;
 #if UNITY_EDITOR
@@ -120,7 +95,9 @@ public class ShipBoostTurn : ShipData
         var dir2 = curvSpeed * _lookDirOnStart;
         var dirSum = dir1 + dir2;
 
-        LastTurnAddtionalMove = dirSum * Time.deltaTime; 
+
+        var lastTurnAddtionalMove = dirSum * Time.deltaTime;
+        SetAddMove(lastTurnAddtionalMove);
         _owner.BankingData.SetNewData(dirToMove, steps);          
         _owner.Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
 
@@ -131,7 +108,7 @@ public class ShipBoostTurn : ShipData
     {
         IsActive = false;
         _angle = 90f;
-        LastTurnAddtionalMove = Vector3.zero;
+        SetAddMove(Vector3.zero);
 //        EndTime = 0f;
     }
 }

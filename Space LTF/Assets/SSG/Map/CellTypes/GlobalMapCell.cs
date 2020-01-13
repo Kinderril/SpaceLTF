@@ -137,7 +137,7 @@ public abstract class GlobalMapCell
     }
 
     protected int ScoutsLevel { get { return MainController.Instance.MainPlayer.Parameters.Scouts.Level; } }
-    protected int DiplomacyLevel { get { return MainController.Instance.MainPlayer.Parameters.Diplomaty.Level; } }
+    // protected int DiplomacyLevel { get { return MainController.Instance.MainPlayer.Parameters.Diplomaty.Level; } }
     protected int RepairLevel { get { return MainController.Instance.MainPlayer.Parameters.Repair.Level; } }
     protected int ChargesCountLevel { get { return MainController.Instance.MainPlayer.Parameters.ChargesCount.Level; } }
     public bool LeavedDialogComplete = false;

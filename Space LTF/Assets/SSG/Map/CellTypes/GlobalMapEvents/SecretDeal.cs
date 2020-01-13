@@ -10,7 +10,8 @@ public class SecretDeal : BaseGlobalMapEvent
 {
     private float fullCoef = 1.4f;
     private float halfCoef = 0.7f;
-    public SecretDeal(int power)
+    public SecretDeal(int power, ShipConfig config) 
+        :base(config)
     {
         _power = power;
     }
@@ -97,18 +98,18 @@ public class SecretDeal : BaseGlobalMapEvent
 
     private MessageDialogData preventConflict()
     {
-        return TalkTToCommander(0);
+        return TalkTToCommander(1);
     }
 
     private MessageDialogData TalkTToCommander(int coef)
     {
         var mianAnswers = new List<AnswerDialogData>();
-        if (SkillWork(2, DiplomacyLevel + coef))
+        if (SkillWork(2, MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config] * coef))
         {
             mianAnswers.Add(new AnswerDialogData($"Apply deal", null, applyDeal));
             mianAnswers.Add(new AnswerDialogData($"Run", null, tryRun));
             var mesData =
-                new MessageDialogData($"They send you a message with trade options. [Diplomacy:{DiplomacyLevel}]",
+                new MessageDialogData($"They send you a message with trade options.",
                     mianAnswers);
             return mesData;
         }
@@ -117,7 +118,7 @@ public class SecretDeal : BaseGlobalMapEvent
             mianAnswers.Add(new AnswerDialogData($"Fight", () => Fight(fullCoef), null));
             var mesData =
                 new MessageDialogData(
-                    $"Now they going to kill. Diplomacy is not your good side. [Diplomacy:{DiplomacyLevel}]",
+                    $"Now they going to kill. Diplomacy is not your good side.",
                     mianAnswers);
             return mesData;
         }

@@ -18,7 +18,7 @@ public class PilotInventoryUI : MonoBehaviour
     public TextMeshProUGUI KillsField;
     public Image TacticPriorityIcon;
     public Image TacticSideIcon;
-    public Image RankIcon;
+    public ImageWithTooltip RankIcon;
     public ParameterWithLevelUp TurnField;
     public Button LevelUpButton;
     public PriorityTooltipInfo PriorityTooltipInfo;
@@ -61,11 +61,38 @@ public class PilotInventoryUI : MonoBehaviour
 
     private void RankUpdate()
     {
-        RankIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetRankSprite(_pilot.Stats.CurRank);
+        string tricksInfo = "";
+        var tricks = Library.PosibleTricks[_pilot.Stats.CurRank];
+        for (int i = 0; i < tricks.Count; i++)
+        {
+            var ePilotTrickse = tricks[i];
+            var name = Namings.Tag($"Trick{ePilotTrickse.ToString()}");
+            if (i == 0)
+            {
+                tricksInfo = name;
+            }
+            else
+            {
+                tricksInfo = $" ,{name}";
+            }
+        }
+//        var rankName = Namings.Tag(_pilot.Stats.CurRank.ToString());
+        var reloadTime = String.Format(Namings.Tag("reloadBoost"),Library.CalcTrickReload(_pilot.Stats.CurRank,_ship.ShipType));
+        var tooltipInfo = $"{tricksInfo}\n{reloadTime}";
+        RankIcon.Init(DataBaseController.Instance.DataStructPrefabs.GetRankSprite(_pilot.Stats.CurRank), tooltipInfo);
         RankField.text =_pilot.Stats.CurRank.ToString();
         var kills = _pilot.Stats.Kills;
-        var nextKills = (((int) (kills / 10)) + 1) * 10;
-        KillsField.text = String.Format(Namings.KillUIPilot, kills, nextKills);
+        var nextKills = (((int) (kills / Library.RANK_ERIOD)) + 1) * Library.RANK_ERIOD;
+        string info; 
+        if (_pilot.Stats.CurRank == PilotRank.Major)
+        {
+            info = String.Format(Namings.KillUIPilotMini, kills);
+        }
+        else
+        {
+            info = String.Format(Namings.KillUIPilot, kills, nextKills);
+        }
+        KillsField.text = info;
     }
 
     private void OnLevelUp(IPilotParameters obj)

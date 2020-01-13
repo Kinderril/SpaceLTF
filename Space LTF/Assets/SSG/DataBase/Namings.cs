@@ -360,8 +360,8 @@ public static class Namings
         {
             case PlayerParameterType.scout:
                 return "Scouts";
-            case PlayerParameterType.diplomaty:
-                return "Diplomacy";
+            // case PlayerParameterType.diplomaty:
+            //     return "Diplomacy";
             case PlayerParameterType.repair:
                 return "Repair services";
             case PlayerParameterType.chargesCount:
@@ -609,6 +609,7 @@ public static class Namings
     public static string Complete = "Complete {0}";
     public static string Target = "Target {0}";
     public static string Delay = "Delay";
+    public static string KillUIPilotMini = "Kills:{0}";
     public static string KillUIPilot = "Kills:{0}/{1}";
     public static string Remain = "Remain";
     public static string EngineDest = "Engine destroyed";
@@ -729,8 +730,8 @@ public static class Namings
         {
             case PlayerParameterType.scout:
                 return "Scout can provide you information about enemies army.\nAnd sometimes can try steal something.";
-            case PlayerParameterType.diplomaty:
-                return "Usable in map events.\nSometimes you can simple use it instead of fight.";
+            // case PlayerParameterType.diplomaty:
+            //     return "Usable in map events.\nSometimes you can simple use it instead of fight.";
             case PlayerParameterType.repair:
                 return "Between battles you will need to repair your fleet.\nThis one will help you.";
             case PlayerParameterType.chargesCount:
@@ -815,6 +816,17 @@ public static class Namings
         {"QuestReward", "Choose one reward"},
         {"Reputation", "Reputation"},
         {"Inventory", "Inventory"},
+        {"ReputationElement", "Enemies of this faction:{0}"},
+        {"Trickturn", "Quick turn"},
+        {"Trickloop", "Loop"},
+        {"Tricktwist", "Twist"},
+        {"Private", "Private"},
+        {"Lieutenant", "Lieutenant"},
+        {"Achievements", "Achievements"},
+        {"Captain", "Captain"},
+        {"Major", "Major"}, 
+        {"OpenNew", "Unlock"}, 
+        {"reloadBoost", "Trick reload time:{0}"},
     };
 
     public static string Tag(string tag)

@@ -33,7 +33,8 @@ public class StartShipParams : IStartShipParams
         int SpellModulsCount,
         int BodyVisualTypeData,
         float shieldRegenData,
-        float HealthPercentData = 1f
+        float HealthPercentData,
+        float trickReload
         )
     {
         this.ShieldRegenData = shieldRegenData;
@@ -49,23 +50,7 @@ public class StartShipParams : IStartShipParams
         this.SimpleModulsCountData = SimpleModulsCountData;
         this.BodyVisualTypeData = BodyVisualTypeData;
         NameData = ShipNames.GetRandom();
-        switch (ShipTypeData)
-        {
-            case ShipType.Light:
-                BoostChargeTimeData = 12f;
-                break;
-            case ShipType.Middle:
-                BoostChargeTimeData = 17f;
-                break;
-            case ShipType.Heavy:
-                BoostChargeTimeData = 22f;
-                break;
-            case ShipType.Base:
-                BoostChargeTimeData = 40f;
-                break;
-        }
-//        this.ShieldRegenData = 0;
-//        this.EvationData = 0;
+        BoostChargeTimeData = trickReload;
     }
 
 //    public float Evation

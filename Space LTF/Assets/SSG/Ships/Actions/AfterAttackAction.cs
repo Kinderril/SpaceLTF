@@ -31,11 +31,11 @@ public class AfterAttackAction : BaseAction
 
     private void CheckBackflip()
     {
-        if (_owner.AttackersData.CurAttacker != null && !_owner.Boost.BoostBackflip.IsActive)
+        if (_owner.AttackersData.CurAttacker != null && !_owner.Boost.BoostLoop.IsActive)
         {
-            if (_owner.Boost.CanUse)
+            if (_owner.Boost.IsReady)
             {
-                _owner.Boost.ActivateBackflip();
+                _owner.Boost.ActivateLoop();
 //                if (Time.time - _owner.AttackersData.CurAttacker.ShipLink.WeaponsController.LastShootTime <
 //                    Time.deltaTime * 4f)
 //                {
@@ -56,9 +56,9 @@ public class AfterAttackAction : BaseAction
         var c = new CauseAction[]
         {
             new CauseAction("out bf", () => !_owner.InBattlefield),
-            new CauseAction("_targetPoint null", () => _targetPoint == null && !_owner.Boost.BoostBackflip.IsActive),
-            new CauseAction("path complete", () => _owner.PathController.Complete(_targetPoint.Value)  && !_owner.Boost.BoostBackflip.IsActive),
-            new CauseAction("weapon load", () => _owner.WeaponsController.AnyWeaponIsLoaded()  && !_owner.Boost.BoostBackflip.IsActive)
+            new CauseAction("_targetPoint null", () => _targetPoint == null && !_owner.Boost.BoostLoop.IsActive),
+            new CauseAction("path complete", () => _owner.PathController.Complete(_targetPoint.Value)  && !_owner.Boost.BoostLoop.IsActive),
+            new CauseAction("weapon load", () => _owner.WeaponsController.AnyWeaponIsLoaded()  && !_owner.Boost.BoostLoop.IsActive)
         };
         return c;
     }

@@ -44,6 +44,7 @@ public class OpenShipConfig
 public class PlayerStatistics
 {
     public const int OPEN_FOR_END_GAME = 3;
+    public const int POINTS_TO_OPEN = 125;
     private static string mainPlayer = $"/stats_{MainController.VERSION}.stat";
 
     [field: NonSerialized]
@@ -69,9 +70,10 @@ public class PlayerStatistics
 
     private int _openedWeapons = 0;
     private int _openedConfigs = 0;
+    public int CollectedPoints { get; private set; }
     public EndBattleType LastBattle = EndBattleType.win;
     public EndGameStatistics EndGameStatistics = new EndGameStatistics();
-    private float _lastDifficulty;
+    private int _lastDifficulty;
 
     public WeaponsPair LastWeaponsPairOpen = null;
     public OpenShipConfig LastOpenShipConfig = null;
@@ -125,6 +127,23 @@ public class PlayerStatistics
                 LastOpenShipConfig = ships;
             }
         }
+    }
+
+    public bool TryOpenNext()
+    {
+        if (CanOpenNext())
+        {
+            CollectedPoints -= POINTS_TO_OPEN;
+            OpenNewData();
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CanOpenNext()
+    {
+        return CollectedPoints >= POINTS_TO_OPEN;
     }
 
     public static PlayerStatistics Load()
@@ -195,7 +214,7 @@ public class PlayerStatistics
     {
         if (win)
         {
-            OpenNewData();
+            CollectedPoints += _lastDifficulty;
         }
         var mainShip = player.Army.First(x => x.Ship.ShipType == ShipType.Base);
         var finalPower = ArmyCreator.CalcArmyPower(player.Army);
@@ -208,13 +227,6 @@ public class PlayerStatistics
     {
         var OpenWeapons = false;
         var OpenConfigs = false;
-//        var notOpendTypes = OpenShipsTypes.Where(x => !x.IsOpen).ToList();
-//        var notOpendWeapons = WeaponsPairs.Where(x => !x.IsOpen).ToList();
-//        var notOpendTypesCount = notOpendTypes.Count;
-//        var notOpendWeaponsCount = notOpendWeapons.Count;
-
-//        var weaponsOpen = WeaponsPairs.Count - notOpendWeaponsCount;
-//        var configsOpen = OpenShipsTypes.Count - notOpendTypesCount;
         if (_openedWeapons == 1 && _openedConfigs == 1)
         {
             OpenWeapons = OpenConfigs = true;
@@ -250,7 +262,7 @@ public class PlayerStatistics
 
     public void PlayNewGame(StartNewGameData data)
     {
-        _lastDifficulty = data.CalcDifficulty();
+        _lastDifficulty = (int)data.CalcDifficulty();
     }
 
     public void AddWin()

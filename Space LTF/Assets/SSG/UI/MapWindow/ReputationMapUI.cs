@@ -9,12 +9,12 @@ using UnityEngine;
 
 public class ReputationMapUI : MonoBehaviour
 {
-    public TextMeshProUGUI MercField;
-    public TextMeshProUGUI RaidersField;
-    public TextMeshProUGUI FederationField;
-    public TextMeshProUGUI OcronsField;
-    public TextMeshProUGUI KriosField;
-    public TextMeshProUGUI DroidField;
+    public ReputationElement MercField;
+    public ReputationElement RaidersField;
+    public ReputationElement FederationField;
+    public ReputationElement OcronsField;
+    public ReputationElement KriosField;
+    public ReputationElement DroidField;
 
     public void Init()
     {
@@ -30,18 +30,12 @@ public class ReputationMapUI : MonoBehaviour
 
     public void UpdateData()
     {
-        MercField.text = Info(ShipConfig.mercenary);
-        RaidersField.text = Info(ShipConfig.raiders);
-        FederationField.text = Info(ShipConfig.federation);
-        OcronsField.text = Info(ShipConfig.ocrons);
-        KriosField.text = Info(ShipConfig.krios);
-        DroidField.text = Info(ShipConfig.droid);
-    }
-
-    private string Info(ShipConfig mercenary)
-    {
-        var rep = MainController.Instance.MainPlayer.ReputationData;
-        return String.Format(Namings.Reputation, Namings.ShipConfig(mercenary), rep.ReputationFaction[mercenary]);
+        MercField.Init(ShipConfig.mercenary);
+        RaidersField.Init(ShipConfig.raiders);
+        FederationField.Init(ShipConfig.federation);
+        OcronsField.Init(ShipConfig.ocrons);
+        KriosField.Init(ShipConfig.krios);
+        DroidField.Init(ShipConfig.droid);
     }
 
     public void Dispose()

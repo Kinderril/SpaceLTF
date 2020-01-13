@@ -114,5 +114,9 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
             String.Format("You successfully catch him. Reputation added {0}", rep));
         MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.federation,rep);
     }
+
+    public PrisonerCatchMapEvent(ShipConfig config) : base(config)
+    {
+    }
 }
 

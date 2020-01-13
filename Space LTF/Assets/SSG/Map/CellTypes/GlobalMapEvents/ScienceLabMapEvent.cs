@@ -12,7 +12,8 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     private bool _scienceKilled = false;
     private bool _fightStarts = false;
     private int _moneyToBuy;
-    public ScienceLabMapEvent(int power)
+    public ScienceLabMapEvent(int power, ShipConfig config)
+        : base(config)
     {
         _power = power;
     }
@@ -167,10 +168,6 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         if (playerParams.ChargesSpeed.CanUpgrade())
         {
             allParams.Add(playerParams.ChargesSpeed);
-        } 
-        if (playerParams.Diplomaty.CanUpgrade())
-        {
-            allParams.Add(playerParams.Diplomaty);
         } 
         if (playerParams.Repair.CanUpgrade())
         {

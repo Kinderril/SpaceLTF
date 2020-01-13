@@ -1,22 +1,28 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+public enum EPilotTricks
+{
+    turn,
+    twist,
+    loop,
+}
 
 public enum PilotRank
 {
-    Cadet = 0,
-    Private = 1,
-    Lieutenant = 2,
-//    Sergeant,
-    Captain = 3,
-    Major = 4,
-    Colonel = 5,
+    // Cadet = 0,
+    Private = 0,
+    Lieutenant = 1,
+    Captain = 2,
+    Major = 3,
+    // Colonel = 5,
 }
 [System.Serializable]
 public class TotalStats
 {
     public PilotRank CurRank;
-//    public PilotRank LastUpdatedRank;
     public int Kills { get; private set; }
 
 
@@ -24,7 +30,7 @@ public class TotalStats
 
     public TotalStats()
     {
-        CurRank = PilotRank.Cadet;
+        CurRank = PilotRank.Private;
     }
 
     public void AddKills(int kills)

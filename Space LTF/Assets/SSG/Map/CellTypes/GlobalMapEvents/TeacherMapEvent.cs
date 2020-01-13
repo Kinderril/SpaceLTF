@@ -43,9 +43,6 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                         case PlayerParameterType.scout:
                             param = player.Scouts;
                             break;
-                        case PlayerParameterType.diplomaty:
-                            param = player.Diplomaty;
-                            break;
                         case PlayerParameterType.repair:
                             param = player.Repair;
                             break;
@@ -125,9 +122,6 @@ public class TeacherMapEvent : BaseGlobalMapEvent
             case PlayerParameterType.scout:
                 player.Parameters.Scouts.TryUpgrade();
                 break;
-            case PlayerParameterType.diplomaty:
-                player.Parameters.Diplomaty.TryUpgrade();
-                break;
             case PlayerParameterType.repair:
                 player.Parameters.Repair.TryUpgrade();
                 break;
@@ -140,6 +134,10 @@ public class TeacherMapEvent : BaseGlobalMapEvent
             default:
                 throw new ArgumentOutOfRangeException(nameof(paramToUpgrade), paramToUpgrade, null);
         }
+    }
+
+    public TeacherMapEvent(ShipConfig config) : base(config)
+    {
     }
 }
 

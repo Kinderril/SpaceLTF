@@ -40,31 +40,13 @@ public class WindowModif : MonoBehaviour
     {
         MoneyField.Init(_player.MoneyData.MoneyCount);
     }
-
-//    private void InitWeapons(List<StartShipPilotData> army)
-//    {
-//        foreach (var shipPilotData in army)
-//        {
-//            foreach (var weaponInv in shipPilotData.Ship.WeaponsModuls)
-//            {
-//                if (weaponInv != null)
-//                {
-//                    var weaponInfo = DataBaseController.GetItem(WeaponUpgPrefab);
-//                    weaponInfo.transform.SetParent(WeaponsModificationsLayout);
-//                    weaponInfo.Init(weaponInv, shipPilotData.Ship);
-//                }
-//            }
-//        }
-//    }
     
     private void InitParams(Player player)
     {
         AddParameter(player.Parameters.ChargesCount);
         AddParameter(player.Parameters.ChargesSpeed);
         AddParameter(player.Parameters.Scouts);
-        AddParameter(player.Parameters.Diplomaty);
         AddParameter(player.Parameters.Repair);
-
     }
 
     private void AddParameter(PlayerParameter pParameter)

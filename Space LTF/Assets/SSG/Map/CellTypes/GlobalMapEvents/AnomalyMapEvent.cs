@@ -215,5 +215,10 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
             return UnlockDialog();
         }
     }
+
+    public AnomalyMapEvent(ShipConfig config) 
+        : base(config)
+    {
+    }
 }
 

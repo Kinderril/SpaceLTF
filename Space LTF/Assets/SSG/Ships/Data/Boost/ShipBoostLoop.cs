@@ -5,45 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class ShipBoostBackflip   : ShipData
+public class ShipBoostLoop   : ShipBoostAbstract
 {
     private float _yValueDir = 0;
     private float _turnSpeed = 0.5f;
-    public float CurRotationANg = 0;
+    private float _curRotationAng = 0;
     private const float STOPANG_ = 360 * Mathf.PI / 180;
     private float _wCoefl = 0.5f;
     private Quaternion _quaternion;
-    private Action<bool> _activateCallback;
-    private Action _endCallback;
-    private bool _isActive;
-    public bool IsActive
-    {
-        get { return _isActive; }
-        private set
-        {
-            _isActive = value;
-            if (_isActive)
-            {
-                _activateCallback(true);
-            }
-            else
-            {
-                _endCallback();
-            }
-        }
-    }
 
-    public ShipBoostBackflip(ShipBase ship,float turnSpeed, Action<bool> activateCallback, Action endCallback) 
-        : base(ship)
+
+    public ShipBoostLoop(ShipBase ship,float turnSpeed, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMove) 
+        : base(ship, activateCallback,endCallback, setAddMove)
     {
         _turnSpeed = turnSpeed;
-        _activateCallback = activateCallback;
-        _endCallback = endCallback;
     }
 
     public void Start()
     {
-        CurRotationANg = 0f;
+        _curRotationAng = 0f;
         IsActive = true;
     }
     
@@ -55,11 +35,11 @@ public class ShipBoostBackflip   : ShipData
         }
 
         var speed = _turnSpeed * Time.deltaTime;
-        CurRotationANg = CurRotationANg + speed;
-        var halfAng = -CurRotationANg / 2f;
+        _curRotationAng = _curRotationAng + speed;
+        var halfAng = -_curRotationAng / 2f;
         _yValueDir = Mathf.Sin(halfAng);
         _wCoefl = Mathf.Cos(halfAng);
-        if (CurRotationANg > STOPANG_)
+        if (_curRotationAng > STOPANG_)
         {
             Stop();
         }
@@ -68,7 +48,6 @@ public class ShipBoostBackflip   : ShipData
             _quaternion = new Quaternion(_yValueDir, 0, 0, _wCoefl);
             var moveCoef = 1 + _yValueDir;
             _owner.YMoveRotation.SetYDir(_quaternion, moveCoef);
-//            Debug.LogError($"{_owner.Id}: moveCoef:{moveCoef}");
         }
     }
 

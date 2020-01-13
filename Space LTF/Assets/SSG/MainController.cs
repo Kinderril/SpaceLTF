@@ -98,10 +98,9 @@ public class MainController : Singleton<MainController>
 
     public static void CheckVersion()
     {
-#if DISABLESTEAMWORKS
+#if Demo
         VERSION = VERSION + "demo";
 #endif
-
     }
 }
 

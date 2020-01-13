@@ -11,7 +11,14 @@ public abstract class BaseGlobalMapEvent
     protected int _power;
     public abstract string Desc();
     public abstract MessageDialogData GetDialog();
-             
+
+    protected ShipConfig _config;
+
+    protected BaseGlobalMapEvent(ShipConfig config)
+    {
+        _config = config;
+    }
+
     public virtual void Init()
     {
 
@@ -151,7 +158,7 @@ public abstract class BaseGlobalMapEvent
 
     // protected int ReputationLevel { get { return MainController.Instance.MainPlayer.ReputationData.Reputation; } }
     protected int ScoutsLevel { get { return MainController.Instance.MainPlayer.Parameters.Scouts.Level; } }
-    protected int DiplomacyLevel { get { return MainController.Instance.MainPlayer.Parameters.Diplomaty.Level; } }
+    // protected int DiplomacyLevel { get { return MainController.Instance.MainPlayer.Parameters.Diplomaty.Level; } }
     protected int RepairLevel { get { return MainController.Instance.MainPlayer.Parameters.Repair.Level; } }
     protected int ChargesCountLevel { get { return MainController.Instance.MainPlayer.Parameters.ChargesCount.Level; } }
 

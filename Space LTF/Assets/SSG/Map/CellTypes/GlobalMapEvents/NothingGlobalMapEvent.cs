@@ -17,5 +17,9 @@ public class NothingGlobalMapEvent : BaseGlobalMapEvent
     {
         return null;
     }
+
+    public NothingGlobalMapEvent(ShipConfig config) : base(config)
+    {
+    }
 }
 

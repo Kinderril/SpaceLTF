@@ -61,5 +61,14 @@ public class ArmyTypeSelectorUI : MonoBehaviour
             toggleElement.Toggle.interactable = true;
         }
     }
+
+    public void CheckOpens()
+    {
+        foreach (var sc in MainController.Instance.Statistics.OpenShipsTypes)
+        {
+            var element = _toggleElements.First(x => x.Config == sc.Config);
+            element.Toggle.isOn = true;
+        }
+    }
 }
 

@@ -74,7 +74,7 @@ public class SideShipInfo : MonoBehaviour
 
     void Update()
     {
-        if (_ship.Boost.CanUse)
+        if (_ship.Boost.IsReady)
         {
             if (BoostSlider.value < 1f)
                 BoostSlider.value = 1f;

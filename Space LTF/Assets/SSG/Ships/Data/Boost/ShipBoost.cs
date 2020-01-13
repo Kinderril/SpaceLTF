@@ -12,10 +12,14 @@ public class ShipBoost : ShipData
     private float _chargePeriod;
 
     public ShipBoostTurn BoostTurn;
-    public ShipBoostBackflip BoostBackflip;
+    public ShipBoostLoop BoostLoop;
+    public ShipBoostTwist BoostTwist;
     private bool _isWorkable;
     public bool UseRotationByBoost;
     public bool IsActive { get; private set; }
+    public float LoadPercent => 1f - Mathf.Clamp01((_nextBoostUse - Time.time) / _chargePeriod);
+    public bool IsReady => _isWorkable && _nextBoostUse < Time.time;
+    public Vector3 LastTurnAddtionalMove { get; private set; }
 
     public ShipBoost(ShipBase owner,float chargePeriod,bool isWorkable) 
         : base(owner)
@@ -23,8 +27,30 @@ public class ShipBoost : ShipData
         _isWorkable = isWorkable;
         _chargePeriod = chargePeriod;
         _nextBoostUse = Time.time + chargePeriod;
-        BoostTurn = new ShipBoostTurn(owner,Activate,EndBoost);
-        BoostBackflip = new ShipBoostBackflip(owner,1f, Activate, EndBoost);
+        BoostTwist = new ShipBoostTwist(owner, 1f, Activate, EndBoost, SetAdditionaMove);
+        BoostTurn = new ShipBoostTurn(owner,Activate,EndBoost,SetAdditionaMove);
+        BoostLoop = new ShipBoostLoop(owner,1f, Activate, EndBoost, SetAdditionaMove);
+
+        var posibleTricks = Library.PosibleTricks[owner.PilotParameters.Stats.CurRank];
+        foreach (var ePilotTrickse in posibleTricks)
+        {
+            switch (ePilotTrickse)
+            {
+                case EPilotTricks.turn:
+                    BoostTurn.CanUse = true;
+                    break;
+                case EPilotTricks.twist:
+                    break;
+                case EPilotTricks.loop:
+                    BoostLoop.CanUse = true;
+                    break;
+            }
+        }
+    }
+
+    private void SetAdditionaMove(Vector3 dir)
+    {
+        LastTurnAddtionalMove = dir;
     }
 
     private void EndBoost()
@@ -39,8 +65,6 @@ public class ShipBoost : ShipData
     }
 
 
-    public float LoadPercent => 1f - Mathf.Clamp01((_nextBoostUse - Time.time) / _chargePeriod);
-    public bool CanUse => _isWorkable && _nextBoostUse < Time.time;
 
     public void SetUsed()
     {
@@ -49,41 +73,43 @@ public class ShipBoost : ShipData
 
     public void EvadeToSide()
     {
-        SetUsed();
-        // Debug.LogError("Actuivate EvadeToSide");
-        var side = MyExtensions.IsTrueEqual()? _owner.LookRight: _owner.LookLeft;
-        BoostTurn.Activate(side);
+        if (BoostTurn.CanUse)
+        {
+            SetUsed();
+            var side = MyExtensions.IsTrueEqual() ? _owner.LookRight : _owner.LookLeft;
+            BoostTurn.Activate(side);
+        }
     }
 
     public void ManualUpdate()
     {
-        BoostBackflip.ManualUpdate();
+        BoostLoop.ManualUpdate();
     }
 
-    public void ActivateBackflip()
+    public void ActivateLoop()
     {
-        BoostBackflip.Start();
+        if (BoostLoop.CanUse)
+            BoostLoop.Start();
     }
 
     public void ActivateBack()
     {
-        SetUsed();
-        BoostTurn.Activate(-_owner.LookDirection);
+        if (BoostTurn.CanUse)
+        {
+            SetUsed();
+            BoostTurn.Activate(-_owner.LookDirection);
+        }
     }
 
-    public void ActivateFront()
-    {
-        SetUsed();
-        // Debug.LogError("Actuivate ActivateFront");
-        var side = MyExtensions.IsTrueEqual() ? _owner.LookRight : _owner.LookLeft;
-        BoostTurn.Activate(side);
-    }
 
     public void ActivateTurn(Vector3 targetDirNorm)
     {
-        SetUsed();
-        // Debug.LogError("Actuivate targetDirNorm");
-        BoostTurn.Activate(targetDirNorm);
+        if (BoostTurn.CanUse)
+        {
+            SetUsed();
+            // Debug.LogError("Actuivate targetDirNorm");
+            BoostTurn.Activate(targetDirNorm);
+        }
     }
 
     public void Deactivate()

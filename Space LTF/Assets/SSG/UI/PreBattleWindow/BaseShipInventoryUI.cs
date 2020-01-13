@@ -36,7 +36,6 @@ public  class BaseShipInventoryUI : DragZone
         InitParameter(playerParameters.ChargesCount);
         InitParameter(playerParameters.ChargesSpeed);
         InitParameter(playerParameters.Scouts);
-        InitParameter(playerParameters.Diplomaty);
         InitParameter(playerParameters.Repair);
         var rect = PamsLayout.GetComponent<RectTransform>();
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);

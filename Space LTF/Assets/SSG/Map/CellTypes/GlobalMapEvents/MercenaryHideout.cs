@@ -56,7 +56,11 @@ public class MercenaryHideout : BaseGlobalMapEvent
 
     private int creditsToEnter = 10;
     private List<MercsConfig> _mercsConfigs = null;
-
+    
+    public MercenaryHideout(ShipConfig config)
+        : base(config)
+    {
+    }
     public override string Desc()
     {
         return Namings.MercGlobal; 
@@ -171,5 +175,6 @@ public class MercenaryHideout : BaseGlobalMapEvent
 
 
     }
+
 }
 

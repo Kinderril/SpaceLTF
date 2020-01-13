@@ -22,14 +22,14 @@ public  class ShipAttackersData       :ShipData
         {
             if (CurAttacker.IsInBack() && CurAttacker.Dist < 14)
             {
-                if (_owner.Boost.CanUse)
+                if (_owner.Boost.IsReady)
                 {
                     _owner.Boost.ActivateBack();
                 }
             }
             else  if (CurAttacker.IsInFrontSector() && CurAttacker.Dist < 19)
             {
-                if (_owner.Boost.CanUse)
+                if (_owner.Boost.IsReady)
                 {
                     if (MyExtensions.IsTrueEqual())
                     {

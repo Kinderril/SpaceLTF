@@ -26,7 +26,8 @@ public class TradeMapEvent : BaseGlobalMapEvent
         return "Trader";
     }
 
-    public TradeMapEvent()
+    public TradeMapEvent(ShipConfig config)
+        : base(config)
     {
         _inventory = new PlayerInventory(new Player("trader"));
     }

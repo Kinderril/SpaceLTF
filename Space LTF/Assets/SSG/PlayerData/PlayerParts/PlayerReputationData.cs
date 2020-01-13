@@ -19,6 +19,7 @@ public class PlayerReputationData
     private const int REP_DIFF = 10;
 
     public Dictionary<ShipConfig,int> ReputationFaction = new Dictionary<ShipConfig, int>();
+    public Dictionary<ShipConfig,List<ShipConfig>> Enemies = new Dictionary<ShipConfig, List<ShipConfig>>();
 
 
     [field: NonSerialized]
@@ -36,6 +37,13 @@ public class PlayerReputationData
         ReputationFaction.Add(ShipConfig.mercenary, MyExtensions.Random(-REP_DIFF, REP_DIFF));
         ReputationFaction.Add(ShipConfig.ocrons, MyExtensions.Random(-REP_DIFF, REP_DIFF));
         ReputationFaction.Add(ShipConfig.raiders, MyExtensions.Random(-REP_DIFF, REP_DIFF));
+
+        Enemies.Add(ShipConfig.federation,new List<ShipConfig>() {ShipConfig.krios,ShipConfig.ocrons});
+        Enemies.Add(ShipConfig.krios, new List<ShipConfig>() {ShipConfig.mercenary, ShipConfig.federation });
+        Enemies.Add(ShipConfig.ocrons, new List<ShipConfig>() {ShipConfig.mercenary, ShipConfig.raiders });
+        Enemies.Add(ShipConfig.mercenary, new List<ShipConfig>() {ShipConfig.federation, ShipConfig.raiders });
+        Enemies.Add(ShipConfig.raiders, new List<ShipConfig>() {ShipConfig.krios, ShipConfig.ocrons });
+        Enemies.Add(ShipConfig.droid, new List<ShipConfig>());
     }
 
     public void AddReputation(ShipConfig config, int val)
@@ -101,30 +109,12 @@ public class PlayerReputationData
         RemoveReputation(config,Library.BATTLE_REPUTATION_AFTER_FIGHT);
         if (MyExtensions.IsTrueEqual())
         {
-            ShipConfig repToAdd = ShipConfig.droid;
-            switch (config)
+            var enemy = Enemies[config];
+            if (enemy.Count > 0)
             {
-                case ShipConfig.raiders:
-                    repToAdd = (MyExtensions.IsTrueEqual()) ? ShipConfig.krios : ShipConfig.federation;
-                    break;
-                case ShipConfig.federation:
-                    repToAdd = (MyExtensions.IsTrueEqual()) ? ShipConfig.ocrons : ShipConfig.federation;
-                    break;
-                case ShipConfig.mercenary:
-                    repToAdd = ShipConfig.raiders;
-                    break;
-                case ShipConfig.ocrons:
-                    repToAdd = ShipConfig.krios;
-                    break;
-                case ShipConfig.krios:
-                    repToAdd = ShipConfig.ocrons;
-                    break;
-                default:
-                case ShipConfig.droid:
-                    repToAdd = (MyExtensions.IsTrueEqual()) ? ShipConfig.mercenary : ShipConfig.federation;
-                    break;
+                ShipConfig repToAdd = enemy.RandomElement();
+                AddReputation(repToAdd, Library.BATTLE_REPUTATION_AFTER_FIGHT * 2);
             }
-            AddReputation(repToAdd,Library.BATTLE_REPUTATION_AFTER_FIGHT*2);
         }
     }
 }

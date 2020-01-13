@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 [System.Serializable]
 public class BattlefieldMapEvent : BaseGlobalMapEvent
 {
-    public BattlefieldMapEvent(int power)
+    public BattlefieldMapEvent(int power,ShipConfig config)   
+        :base(config)
     {
         _power = power;
     }
@@ -32,7 +33,8 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
 
     private MessageDialogData reconcile()
     {
-        if (SkillWork(3, DiplomacyLevel))
+        var isRep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config] > 40;
+        if (isRep)
         {
             var mianAnswers = new List<AnswerDialogData>();
             MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.mercenary,Library.REPUTATION_SCIENS_LAB_ADD);

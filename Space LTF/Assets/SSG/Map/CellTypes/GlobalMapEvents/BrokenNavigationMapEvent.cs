@@ -12,8 +12,9 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
 {
     private bool _isTrap;
 
-    public BrokenNavigationMapEvent(int power)
-    {
+    public BrokenNavigationMapEvent(int power, ShipConfig config)
+        : base(config) 
+    { 
         _power = power;
     }
     public override void Init()

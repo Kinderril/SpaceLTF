@@ -228,10 +228,8 @@ public abstract class MovingObject : PoolElement
         }
 
         var rotationToImplement = YMoveRotation.RotateQuaternion;
-
-        var bankRotation = new Quaternion(rotationToImplement.x, 0, _curBank, rotationToImplement.w);
-//        var bankRotation = new Quaternion(0, 0, _curBank, 1);
-
+        var bank = _curBank + rotationToImplement.z;
+        var bankRotation = new Quaternion(rotationToImplement.x, 0, bank, rotationToImplement.w);
         RotatableObject.localRotation = bankRotation;
     }
 

@@ -269,7 +269,7 @@ public class PlayerAfterBattleOptions
             OpenCellsByFederation();
             var masinMsg = "After battle you find one of opponents army.";
             var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Ask buyout.", Buyout));
+            ans.Add(new AnswerDialogData("Ask buyout.", ()=>Buyout(ShipConfig.federation)));
             ans.Add(new AnswerDialogData("Search for hidden things.",()=> SearchFor(ShipConfig.federation)));
             int hireMoney = 100;
             if (MainController.Instance.MainPlayer.CanAddShip())
@@ -344,13 +344,10 @@ public class PlayerAfterBattleOptions
 
 
     #region RandomActions
-    private void Buyout()
+    private void Buyout(ShipConfig config)
     {
-        WDictionary<bool> ws = new WDictionary<bool>(new Dictionary<bool, float>()
-        {
-            {true, MainController.Instance.MainPlayer.Parameters.Diplomaty.Level}, {false, 2},
-        });
-        if (ws.Random())
+        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[config];
+        if (rep > 40)
         {
             var scouts = MainController.Instance.MainPlayer.Parameters.Scouts.Level;
             var delta = MoneyConsts.MAX_PASSIVE_LEVEL - scouts;

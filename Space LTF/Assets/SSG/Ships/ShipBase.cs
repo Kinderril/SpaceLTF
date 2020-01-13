@@ -350,7 +350,7 @@ public class ShipBase : MovingObject
 //        SetTargetSpeed(Boost.BoostTurn.TargetBoosSpeed);
         EngineUpdate();
         MoveByY(YMoveRotation.YMoveCoef);
-        ApplyMove(Boost.BoostTurn.LastTurnAddtionalMove,Boost.BoostTurn.IsActive);
+        ApplyMove(Boost.LastTurnAddtionalMove,Boost.IsActive);
         Locator.ManualUpdate();
         // CheckYEnemies();
         _predictionPos = LookDirection * PREDICTION_DIST + Position;
@@ -424,8 +424,14 @@ public class ShipBase : MovingObject
                 return Boost.BoostTurn.TargetBoosSpeed;
             }
 
-            if (Boost.BoostBackflip.IsActive)
+            if (Boost.BoostLoop.IsActive)
             {
+                return 1f;
+            }
+
+            if (Boost.BoostTwist.IsActive)
+            {
+                Boost.BoostTwist.ApplyRotation(dir);
                 return 1f;
             }
         }

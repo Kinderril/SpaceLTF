@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class WindowNewGame : BaseWindow
@@ -20,13 +21,15 @@ public class WindowNewGame : BaseWindow
     public SliderWithTextMeshPro SectorsCount;
     public TextMeshProUGUI DifficultyFIeld;
     private StartNewGameData gameData;
+    public TextMeshProUGUI CollectedPointsField;
+    public Button OpenNewOptions;
 
     public override void Init()
     {
         PlayerStartParametersUI.Init();
         ArmyTypeSelectorUI.Init();
-        DifficultyNewGame.Init();
         StartGameWeaponsChooseUI.Init();
+        DifficultyNewGame.Init();
         SectorSize.InitName(Namings.StartNewGameFieldSize);
         StartDeathTime.InitName(Namings.StartNewGameStartDeathTime);
         CoresCount.InitName(Namings.StartNewGameCoresCount);
@@ -44,7 +47,25 @@ public class WindowNewGame : BaseWindow
         DifficultyNewGame.InitCallback(OnFieldChange);
         StartDeathTime.SetValue(Library.MAX_GLOBAL_MAP_DEATHSTART + 1);
         UpdateStartData();
+        CheckButtonIsOpen();
         base.Init();
+    }
+
+    private void CheckButtonIsOpen()
+    {
+        var stat = MainController.Instance.Statistics;
+        CollectedPointsField.text = $"{stat.CollectedPoints}/{PlayerStatistics.POINTS_TO_OPEN}";
+        OpenNewOptions.interactable = stat.CanOpenNext();
+    }
+
+    public void OnClickOpenNew()
+    {
+        if (MainController.Instance.Statistics.TryOpenNext())
+        {
+            CheckButtonIsOpen();
+            ArmyTypeSelectorUI.CheckOpens();
+            StartGameWeaponsChooseUI.CheckOpens();
+        }
     }
 
     private void OnFieldChange()
@@ -59,8 +80,6 @@ public class WindowNewGame : BaseWindow
             PlayerStartParametersUI.OnParamClick(PlayerParameterType.repair, true);
             PlayerStartParametersUI.OnParamClick(PlayerParameterType.scout, true);
         }
-     
-
 //#if UNITY_EDITOR
 //        posibleStartSpells = new List<SpellType>();
 //        posibleStartSpells.Add(SpellType.engineLock);

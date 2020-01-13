@@ -80,5 +80,9 @@ public class SpaceGarbageMapEvent : BaseGlobalMapEvent
         }
 
     }
+
+    public SpaceGarbageMapEvent(ShipConfig config) : base(config)
+    {
+    }
 }
 

@@ -32,17 +32,17 @@ public class EventGlobalMapCell : GlobalMapCell
     private GlobalMapEventType _eventType;
     private BaseGlobalMapEvent _mapEvent;
 
-    public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ, SectorData secto,int power) 
+    public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ, SectorData secto,int power,ShipConfig config) 
         : base( id, intX, intZ, secto)
     {
         _eventType = eventType;
         switch (_eventType)
         {
             case GlobalMapEventType.nothing:
-                _mapEvent = new NothingGlobalMapEvent();
+                _mapEvent = new NothingGlobalMapEvent(config);
                 break;
             case GlobalMapEventType.spaceGarbage:
-                _mapEvent = new SpaceGarbageMapEvent();
+                _mapEvent = new SpaceGarbageMapEvent(config);
                 break;
             case GlobalMapEventType.creditStorage:
                 List<ShipConfig>  configs = new List<ShipConfig>()
@@ -52,41 +52,41 @@ public class EventGlobalMapCell : GlobalMapCell
                 _mapEvent = new RetranslaitorMapEvent(configs.RandomElement());
                 break;
             case GlobalMapEventType.asteroidsField:
-                _mapEvent = new AsteroidFieldMapEvent();
+                _mapEvent = new AsteroidFieldMapEvent(config);
                 break;
             case GlobalMapEventType.scienceLab:
-                _mapEvent = new ScienceLabMapEvent(power);
+                _mapEvent = new ScienceLabMapEvent(power, config);
                 break;
             case GlobalMapEventType.anomaly:
-                _mapEvent = new AnomalyMapEvent();
+                _mapEvent = new AnomalyMapEvent(config);
                 break;
             case GlobalMapEventType.battleField:
-                _mapEvent = new BattlefieldMapEvent(power);
+                _mapEvent = new BattlefieldMapEvent(power, config);
                 break; 
             case GlobalMapEventType.excavation:
-                _mapEvent = new ExcavationsEvent(power);
+                _mapEvent = new ExcavationsEvent(power, config);
                 break; 
             case GlobalMapEventType.mercHideout:
-                _mapEvent = new MercenaryHideout();
+                _mapEvent = new MercenaryHideout(config);
                 break;
             case GlobalMapEventType.brokenNavigation:
-                _mapEvent = new BrokenNavigationMapEvent(power);
+                _mapEvent = new BrokenNavigationMapEvent(power, config);
                 break;
             case GlobalMapEventType.prisoner:
-                _mapEvent = new PrisonerCatchMapEvent();
+                _mapEvent = new PrisonerCatchMapEvent(config);
                 break;     
 
             case GlobalMapEventType.trade:
-                _mapEvent = new TradeMapEvent();
+                _mapEvent = new TradeMapEvent(config);
                 break;   
             case GlobalMapEventType.change:
-                _mapEvent = new ChangeItemMapEvent();
+                _mapEvent = new ChangeItemMapEvent(config);
                 break;     
             case GlobalMapEventType.teach:
-                _mapEvent = new TeacherMapEvent();
+                _mapEvent = new TeacherMapEvent(config);
                 break;   
             case GlobalMapEventType.secretDeal:
-                _mapEvent = new SecretDeal(power);
+                _mapEvent = new SecretDeal(power, config);
                 break;
 //            case GlobalMapEventType.repairShip:
 //                _mapEvent = new RepairShipMapEvent();

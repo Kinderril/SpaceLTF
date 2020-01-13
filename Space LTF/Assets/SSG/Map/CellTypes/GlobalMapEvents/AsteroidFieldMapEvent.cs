@@ -18,19 +18,6 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-//        var mesDataFast = new MessageDialogData("Ship on the half way. Go Further?.", new List<AnswerDialogData>()
-//        {
-//            new AnswerDialogData("Yes.",() => { FastTest1(2f,true); }),
-//            new AnswerDialogData("Return.",null),
-//        });
-//        var mesDataStrongest = new MessageDialogData("Ship on the half way. Go Further?.", new List<AnswerDialogData>()
-//        {
-//            new AnswerDialogData("Yes.",() => { FastTest1(2f,false); }),
-//            new AnswerDialogData("Return.",null),
-//        });
-
-
-
         var mesData = new MessageDialogData("Big asteroid field. You need somehow get to other side.", StandartOptions());
         return mesData;
     }
@@ -155,42 +142,8 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
             }
         }
     }
-
-//    private void FastTest1(float badCoef,bool obspeed)
-//    {
-//        var player = MainController.Instance.MainPlayer;
-//        var maxP = obspeed?
-//            player.Army.Max(x => ShipParameters.ParamUpdate(x.Ship.MaxSpeed, x.Pilot.SpeedLevel, ShipParameters.MaxSpeedCoef) )
-//            :player.Army.Max(x => ShipParameters.ParamUpdate(x.Ship.MaxShiled, x.Pilot.ShieldLevel, ShipParameters.MaxShieldCoef) );
-//
-//        var c = obspeed ? goodSpeed : goodShield;
-//        WDictionary <bool> IsGood = new WDictionary<bool>(new Dictionary<bool, float>()
-//        {
-//            {false ,c * badCoef},
-//            {true ,maxP},
-//        });
-//        var r = IsGood.Random();
-//        if (r)
-//        {
-//            var money = (int)(MyExtensions.Random(8, 22) * badCoef);
-//            WindowManager.Instance.InfoWindow.Init(null,String.Format("You found some credits:{0}.", money));
-//            player.MoneyData.AddMoney(money);
-//        }
-//        else
-//        {
-//            var ship = obspeed
-//                ? player.Army.FirstOrDefault(
-//                    x => Math.Abs(
-//                            ShipParameters.ParamUpdate(x.Ship.MaxSpeed, x.Pilot.SpeedLevel,ShipParameters.MaxSpeedCoef) - maxP) < 0.0001f)
-//                : player.Army.FirstOrDefault(
-//                    x => Math.Abs(
-//                            ShipParameters.ParamUpdate(x.Ship.MaxShiled, x.Pilot.ShieldLevel, ShipParameters.MaxShieldCoef) - maxP) < 0.0001f);
-//
-//            var damagePercent = MyExtensions.Random(8, 22) * badCoef;
-//            WindowManager.Instance.InfoWindow.Init(null,String.Format("Ship was damaged for:{0}%.", damagePercent));
-//            var p = (100f - damagePercent)/100f;
-//            ship.Ship.SetRepairPercent(ship.Ship.HealthPercent * p);
-//        }
-//    }
+    public AsteroidFieldMapEvent(ShipConfig config) : base(config)
+    {
+    }
 }
 

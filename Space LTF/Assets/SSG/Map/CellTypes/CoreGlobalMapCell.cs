@@ -114,7 +114,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         answerDialog.Add(new AnswerDialogData("Attack.", Fight));
         if (player.MoneyData.HaveMoney(MoneyToBuy()))
             answerDialog.Add(new AnswerDialogData(String.Format("Buy for {0} credits.", MoneyToBuy()), null,Buy));
-        if (player.Parameters.Diplomaty.Level >= 3)
+        if (player.ReputationData.ReputationFaction[_config] > 50)
             answerDialog.Add(new AnswerDialogData(String.Format("Use diplomacy."),null, Diplomaty));
 //        if (player.Parameters.Scouts.Level >= 1)
         answerDialog.Add(new AnswerDialogData(String.Format("Send scouts to steal."), null,Steal));

@@ -45,11 +45,11 @@ public class AttackAction : AbstractAttackAction
     {
         if (Target.Dist < _minAttackDistToStart)
         {
-            if (_owner.Boost.CanUse) _owner.Boost.ActivateTurn(Target.DirNorm);
+            if (_owner.Boost.IsReady) _owner.Boost.ActivateTurn(Target.DirNorm);
         }
         else if (Target.IsInBack() && Target.Dist < 14)
         {
-            if (_owner.Boost.CanUse) _owner.Boost.ActivateBack();
+            if (_owner.Boost.IsReady) _owner.Boost.ActivateBack();
         }
 
         if (_isDogFight)

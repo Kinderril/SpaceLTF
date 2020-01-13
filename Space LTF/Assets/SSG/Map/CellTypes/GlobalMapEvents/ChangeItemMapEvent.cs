@@ -21,7 +21,8 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
         return "Trader";
     }
 
-    public ChangeItemMapEvent()
+    public ChangeItemMapEvent(ShipConfig config)
+        : base(config)
     {
         _traderInventory = new PlayerInventory(new Player("trader change"));
     }

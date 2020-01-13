@@ -145,7 +145,7 @@ public class SectorData
             foreach (var cellContainerForEvent in cellsForEvents)
             {
                 var type = GetMinorEventType();
-                var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ, this, _power);
+                var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ, this, _power, _shipConfig);
                 cellContainerForEvent.SetData(cellEvent);
                 remainFreeCells.Remove(cellContainerForEvent);
             }
@@ -157,7 +157,7 @@ public class SectorData
             foreach (var cellContainerForEvent in cellsForEvents)
             {
                 var type = GetBigEventType();
-                var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ, this, _power);
+                var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ, this, _power, _shipConfig);
                 cellContainerForEvent.SetData(cellEvent);
                 remainFreeCells.Remove(cellContainerForEvent);
             

@@ -345,6 +345,16 @@ public class DataStructPrefabs : MonoBehaviour
 
     public Sprite GetRankSprite(PilotRank statsCurRank)
     {
+#if UNITY_EDITOR
+        try
+        {
+            return PilotRankIconsDic[statsCurRank];
+        }
+        catch (Exception e)
+        {
+             Debug.LogError($"GetRankSprite {statsCurRank.ToString()}");
+        }
+#endif
         return PilotRankIconsDic[statsCurRank];
     }
 

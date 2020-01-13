@@ -15,7 +15,8 @@ public class ExcavationsEvent : BaseGlobalMapEvent
     private const int Nothing = 3;
     private int moneyTotal = 100;
 
-    public ExcavationsEvent(int power)
+    public ExcavationsEvent(int power, ShipConfig config)
+        : base(config)
     {
         _power = power;
     }
