@@ -13,6 +13,10 @@ public class DemoVersionObject : MonoBehaviour
     private bool _isEndGame;
     void Update()
     {
+#if !Demo
+        return;
+#endif
+
         if (_isEndGame)
         {
 
