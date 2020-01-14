@@ -12,9 +12,11 @@ public class AICommander
     private bool enable = false;
     private BaseAISpell[] _spells;
     private AICommanderMainShip _mainShip;
+    private float _createdTime;
 
     public AICommander(Commander commander)
     {
+        _createdTime = Time.time;
         _commander = commander;
         var spellTmp = new List<BaseAISpell>();
         enable = _commander.MainShip != null;
@@ -32,41 +34,55 @@ public class AICommander
                     }
                 }
             }
+
+            _spells = spellTmp.ToArray();
+            if (_spells.Length == 0)
+            {
+                Debug.LogError(
+                    $"AI commander have no spells to use spell modules:{commander.MainShip.ShipInventory.SpellsModuls}");
+            }
         }
-        _spells = spellTmp.ToArray();
-        Debug.Log("AIcommander Inited. Spells: " +_spells.Length);
+
+        Debug.Log("AIcommander Inited. Spells: " + _spells.Length);
     }
 
     [CanBeNull]
-    private BaseAISpell Create(BaseSpellModulInv baseSpellModulInv,Commander commander)
+    private BaseAISpell Create(BaseSpellModulInv baseSpellModul, Commander commander)
     {
-        switch (baseSpellModulInv.SpellType)
+        var mainShip = commander.MainShip;
+        var spellInGame = new SpellInGame(baseSpellModul, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
+            baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount, baseSpellModul.SpellType,
+            baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.Desc(), baseSpellModul.DiscCounter);
+
+
+        switch (baseSpellModul.SpellType)
         {
             case SpellType.shildDamage:
-                return new ShieldDamageSpellAI(baseSpellModulInv as ShieldOffSpell, commander);
+                return new ShieldDamageSpellAI(baseSpellModul as ShieldOffSpell, commander, spellInGame);
             case SpellType.engineLock:
-                return new EngineLockSpellAI(baseSpellModulInv as EngineLockSpell, commander);
+                return new EngineLockSpellAI(baseSpellModul as EngineLockSpell, commander, spellInGame);
             case SpellType.lineShot:
-                return new LineShotSpellAI(baseSpellModulInv as LineShotSpell, commander);
+                return new LineShotSpellAI(baseSpellModul as LineShotSpell, commander, spellInGame);
             case SpellType.distShot:
-                return new DistShotSpellAI(baseSpellModulInv as DistShotSpell, commander);
+                return new DistShotSpellAI(baseSpellModul as DistShotSpell, commander, spellInGame);
             case SpellType.mineField:
-                return new MineFieldSpellAI(baseSpellModulInv as MineFieldSpell, commander);
+                return new MineFieldSpellAI(baseSpellModul as MineFieldSpell, commander, spellInGame);
             case SpellType.randomDamage:
-                return new RandomDamageSpellAI(baseSpellModulInv as RandomDamageSpell, commander);
+                return new RandomDamageSpellAI(baseSpellModul as RandomDamageSpell, commander, spellInGame);
             case SpellType.artilleryPeriod:
-                return new ArtilleryAI(baseSpellModulInv as ArtillerySpell, commander);
+                return new ArtilleryAI(baseSpellModul as ArtillerySpell, commander, spellInGame);
             case SpellType.repairDrones:
-                break;  
+                break;
             case SpellType.throwAround:
-                return new ThrowAroundAI(baseSpellModulInv as ThrowAroundSpell, commander);
+                return new ThrowAroundAI(baseSpellModul as ThrowAroundSpell, commander, spellInGame);
         }
+
         return null;
     }
 
     public void ManualUpdate()
     {
-        if (enable)
+        if (enable && Time.time - _createdTime > 4)
         {
             for (int i = 0; i < _spells.Length; i++)
             {
@@ -79,4 +95,3 @@ public class AICommander
         }
     }
 }
-

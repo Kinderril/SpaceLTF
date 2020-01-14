@@ -32,7 +32,7 @@ public abstract class GlobalMapCell
     [field: NonSerialized]
     public event Action<GlobalMapCell> OnUnconnect;
     [field: NonSerialized]
-    public event Action<GlobalMapCell> OnComplete;
+    public event Action<GlobalMapCell,bool> OnComplete;
 
     protected GlobalMapCell(int id,int iX,int iZ,SectorData sector)
     {
@@ -53,13 +53,15 @@ public abstract class GlobalMapCell
 
     public void Complete()
     {
-        Debug.Log("Map cell complete " + Id);
         Completed = true;
         Scouted();
-        if (OnComplete!= null)
-        {
-            OnComplete(this);
-        }
+        OnComplete?.Invoke(this,true);
+    }
+
+    public void Uncomplete()
+    {
+        Completed = false;
+        OnComplete?.Invoke(this, false);
     }
     public void AddWay(GlobalMapCell extraWay)
     {

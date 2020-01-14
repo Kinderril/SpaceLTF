@@ -11,8 +11,8 @@ public class RandomDamageSpellAI : BaseAISpell<RandomDamageSpell>
 {
     private float ShootDistSqrt;
 
-    public RandomDamageSpellAI([NotNull] RandomDamageSpell spell, Commander commander) 
-        : base(spell, commander)
+    public RandomDamageSpellAI([NotNull] RandomDamageSpell spell, Commander commander, SpellInGame spellData)
+        : base(spellData, spell, commander)
     {
         ShootDistSqrt = RandomDamageSpell.rad * RandomDamageSpell.rad;
     }

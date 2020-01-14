@@ -12,9 +12,11 @@ public class AnswerDialogData
     public Action Callback;
     public Action<AnswerDialogData> EndCallback;
     public Func<MessageDialogData> NextDialog;
+    public bool ShallCompleteCell = true;
 
-    public AnswerDialogData(string Message, [CanBeNull]Action callback = null, Func<MessageDialogData> nextDialog = null)
+    public AnswerDialogData(string Message, [CanBeNull]Action callback = null, Func<MessageDialogData> nextDialog = null, bool shallCompleteCell = true)
     {
+        ShallCompleteCell = shallCompleteCell;
         this.Message = Message;
         NextDialog = nextDialog;
         this.Callback = () =>
@@ -26,6 +28,7 @@ public class AnswerDialogData
             EndCallback(this);
         };
     }
+
 
     public void AddCallback(Action<AnswerDialogData> onOnAnswer)
     {

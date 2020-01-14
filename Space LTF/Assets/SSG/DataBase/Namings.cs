@@ -564,9 +564,9 @@ public static class Namings
         "Starts fire at selected zone. Total bullets {0}. Damage of each bullet:{1}/{1}.";
 
     public static string DistShotSpell =
-        "Single bullet. Base damage {0}. Additional damage dependence on distance.";
+        "Single bullet. Base damage {0}. Additional damage dependence on distance. If target have no shield destroy engine for {1} sec.";
 
-    public static string EnerguLockSpell = "Destroy engines for {0} sec.";
+    public static string EnerguLockSpell = "Destroy engines at all enemies ships in radius {1} for {0} sec.";
 
     public static string LineSHotSpell =
         "Triple shot by selected direction. Base damage: {0}/{1}. And starts fire for {2} sec.";
@@ -619,7 +619,7 @@ public static class Namings
     public static string Retreat = "Retreat";
     public static string DoWantRetire = "Do you want run away?";
     public static string DoWantRetry = "Do you want run away? {0} of your ships will be badly damaged.";
-    public static string BeenBefore = "You have been there before.";
+    // public static string BeenBefore = "You have been there before.";
     public static string NoSafeGame = "No save game";
     public static string MaxLevel = "Max";
     public static string And = "And";
@@ -827,6 +827,7 @@ public static class Namings
         {"Major", "Major"}, 
         {"OpenNew", "Unlock"}, 
         {"reloadBoost", "Trick reload time:{0}"},
+        {"PointsToOpen", "Points to unlock start options:"},
     };
 
     public static string Tag(string tag)

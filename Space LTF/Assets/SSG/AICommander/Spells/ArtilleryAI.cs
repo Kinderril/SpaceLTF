@@ -9,8 +9,8 @@ using UnityEngine;
 
 public class ArtilleryAI : BaseAISpell<ArtillerySpell>
 {
-    public ArtilleryAI([NotNull] ArtillerySpell spell, Commander commander) 
-        : base(spell, commander)
+    public ArtilleryAI([NotNull] ArtillerySpell spell, Commander commander, SpellInGame spellData)
+        : base(spellData, spell, commander)
     {
 
     }   

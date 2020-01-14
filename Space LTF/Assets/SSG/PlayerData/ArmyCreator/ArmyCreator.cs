@@ -65,8 +65,8 @@ public static class ArmyCreator
         if (remainPoints > Library.MIN_POINTS_TO_CREATE_ARMY_WITH_BASESHIP)
         {
             baseShip = CreateBaseShip(points, data.ArmyConfig, player);
-            TryAddCastModul(points, baseShip.Ship, data, logger);
-            TryAddCastModul(points, baseShip.Ship, data, logger);
+            TryAddCastModul(points, baseShip.Ship, data.GetSpellsList(), logger);
+            TryAddCastModul(points, baseShip.Ship, data.GetSpellsList(), logger);
         }
 
         var army = CreateShips(points, data, player, pointsOnStart,0.5f, logger);
@@ -164,8 +164,8 @@ public static class ArmyCreator
         if (withBase)
         {
             var baseShip = CreateBaseShip(pointsArmy, data.ArmyConfig, player);
-            TryAddCastModul(pointsArmy, baseShip.Ship, data, logs);
-            TryAddCastModul(pointsArmy, baseShip.Ship, data, logs);
+            TryAddCastModul(pointsArmy, baseShip.Ship, data.GetSpellsList(), logs);
+            TryAddCastModul(pointsArmy, baseShip.Ship, data.GetSpellsList(), logs);
             army.Add(baseShip);
         }
         switch (mode)
@@ -597,16 +597,16 @@ public static class ArmyCreator
         return false;
     }
 
-    public static bool TryAddCastModul(ArmyRemainPoints v, ShipInventory ship,ArmyCreatorData listSimple, ArmyCreatorLogs logs)
+    public static bool TryAddCastModul(ArmyRemainPoints v, ShipInventory ship, List<SpellType> spellModuls, ArmyCreatorLogs logs)
     {
         int simpleIndex;
         var val = Library.BASE_SPELL_VALUE;// * Library.ShipPowerCoef(ship.ShipType);
-        if (v.Points >= val && ship.GetFreeSpellSlot(out simpleIndex))
+        if (v.Points >= val && ship.GetFreeSpellSlot(out simpleIndex) && spellModuls.Count > 0)
         {
             v.Points -= val;
             logs.AddLog(v.Points,"add cast modul");
-            var e = listSimple.GetSpellType();
-            listSimple.RemoveSpell(e);
+            var e = spellModuls.RandomElement();
+            spellModuls.Remove(e);
             var m1 = Library.CreateSpell(e);
             ship.TryAddSpellModul(m1, simpleIndex);
             return true;

@@ -70,6 +70,7 @@ public class PlayerStartParametersUI : MonoBehaviour
 
     public Dictionary<PlayerParameterType, int> GetCurrentLevels()
     {
+        _curLevel.Clear();
         return _curLevel;
     }
 

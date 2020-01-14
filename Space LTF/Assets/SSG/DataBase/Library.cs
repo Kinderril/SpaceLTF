@@ -100,7 +100,7 @@ public static class Library
     public const int SHIELD_COEF_EXTRA_CHARGE = 10;
     public const float BATTLE_REWARD_WIN_MONEY_COEF = 1.3f;
     public const float MONEY_PILOT_LEVEL_UP_COST_BASE = 5f;
-    public const float MONEY_PILOT_LEVEL_UP_COST_COEF = 0.75f;
+    public const float MONEY_PILOT_LEVEL_UP_COST_COEF = 1.25f;
     public static int START_PLAYER_FREE_PARAMETERS = 2;
     private static int[] _lvlUps = new int[MAX_PILOT_PARAMETER_LEVEL];
     public static int RANK_ERIOD = 12;
@@ -224,25 +224,22 @@ public static class Library
                 {
                     case ShipType.Light:
                         var ship = new ShipInventory(
-                            new StartShipParams(shipType, config, 21, 14, 4.3f, 78, 1, 3, 0, 1, 0.0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 21, 17, 4.3f, 78, 1, 3, 0, 1, 0.0f,1f,reloadTime), player, pilot);
                         ship.ShiledArmor = 1;
                         return ship;
                     case ShipType.Middle:
                         var ship1 = new ShipInventory(
-                            new StartShipParams(shipType, config, 28, 16, 3.8f, 70, 1, 4, 0, 1, 0.05f,1f,reloadTime), player, pilot);
-                        ship1.BodyArmor = 1;
+                            new StartShipParams(shipType, config, 28, 19, 3.8f, 70, 1, 4, 0, 1, 0.05f,1f,reloadTime), player, pilot);
                         ship1.ShiledArmor = 1;
                         return ship1;
                     case ShipType.Heavy:
                         var ship2 = new ShipInventory(
-                            new StartShipParams(shipType, config, 32, 18, 3.5f, 68, 2, 4, 0, 1, 0.1f,1f,reloadTime), player, pilot);
-                        ship2.BodyArmor = 1;
-                        ship2.ShiledArmor = 2;
+                            new StartShipParams(shipType, config, 32, 21, 3.5f, 68, 2, 4, 0, 1, 0.1f,1f,reloadTime), player, pilot);
+                        ship2.ShiledArmor = 1;
                         return ship2;
                     case ShipType.Base:
                         var ship3 = new ShipInventory(
                             new StartShipParams(shipType, config, 46, 28, 1.5f, 40, 0, 0, 6, 1, 0f,1f,reloadTime), player, pilot);
-                        ship3.BodyArmor = 1;
                         ship3.ShiledArmor = 1;
                         return ship3;
                 }
@@ -369,7 +366,7 @@ public static class Library
             case SpellType.rechargeShield:
                 return new RechargeShieldSpell(1, 30);
             case SpellType.roundWave:
-                return new WaveStrikeOnShipSpell(1, 30);
+                return new WaveStrikeOnShipSpell(2, 20);
 
             default:
                 Debug.LogError("spellType not implemented " + spellType);

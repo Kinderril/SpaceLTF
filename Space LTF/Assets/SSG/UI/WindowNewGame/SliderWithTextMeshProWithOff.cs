@@ -23,5 +23,10 @@ public class SliderWithTextMeshProWithOff   : SliderWithTextMeshPro
     {
         OffObject.SetActive(false);
     }
+
+    public void SetOff(bool val)
+    {
+        OffObject.SetActive(val);
+    }
 }
 

@@ -276,7 +276,7 @@ public class BattleController :Singleton<BattleController>
         {
             CanFastEnd = true;
             LastWinner = EndBattleType.win;
-            InGameMainUI.CanFastEnd();
+            // InGameMainUI.CanFastEnd();
         }
     }
 

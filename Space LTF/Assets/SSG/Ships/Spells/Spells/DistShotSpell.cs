@@ -16,6 +16,8 @@ public class DistShotSpell : BaseSpellModulInv
     private const int BASE_DAMAGE = 5;
     private const int LEVEL_DAMAGE = 4;
     private const float DIST_COEF = .065f;
+    private const float ENGINE_OFF_DELTA = 3f;
+    private const float ENGINE_OFF_LEVEL = 1f;
 
     [NonSerialized]
     private CurWeaponDamage CurWeaponDamage;
@@ -41,6 +43,7 @@ public class DistShotSpell : BaseSpellModulInv
     }
 
     public int BASE_damage => BASE_DAMAGE + LEVEL_DAMAGE * Level;
+    public float Engine_Off => ENGINE_OFF_DELTA + ENGINE_OFF_LEVEL * Level;
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
@@ -73,7 +76,7 @@ public class DistShotSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return String.Format(Namings.DistShotSpell, BASE_damage);
+        return String.Format(Namings.DistShotSpell, BASE_damage, Engine_Off.ToString("0.0"));
 //            $"Single bullet. Base damage {BASE_damage}. Additional damage dependence on distance."; 
     }
 

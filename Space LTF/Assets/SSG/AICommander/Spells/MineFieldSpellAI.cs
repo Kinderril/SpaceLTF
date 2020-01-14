@@ -11,8 +11,8 @@ public class MineFieldSpellAI : BaseAISpell<MineFieldSpell>
 {
     private const float ShootDistSqrt = 45*45;
 
-    public MineFieldSpellAI([NotNull] MineFieldSpell spell, Commander commander) 
-        : base(spell, commander)
+    public MineFieldSpellAI([NotNull] MineFieldSpell spell, Commander commander, SpellInGame spellData) 
+        : base(spellData,spell, commander)
     {
 
     }
@@ -59,11 +59,5 @@ public class MineFieldSpellAI : BaseAISpell<MineFieldSpell>
         return false;
     }
 
-
-    private void TryUse(Vector3 v)
-    {
-
-        _spell.TryCast(_commander.CoinController, v);
-    }
 }
 

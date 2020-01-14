@@ -82,7 +82,7 @@ public class GlobalMapCellObject : MonoBehaviour
 //        timer.OnTimer += () => { ShipAnimator.enabled = true; };
 //    }
 
-    private void OnComplete(GlobalMapCell obj)
+    private void OnComplete(GlobalMapCell obj,bool isComplete)
     {
         Unknown.gameObject.SetActive(false);
         ObjectPainted.gameObject.SetActive(true);

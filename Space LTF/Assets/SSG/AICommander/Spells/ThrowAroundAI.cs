@@ -9,8 +9,8 @@ using UnityEngine;
 
 public class ThrowAroundAI : BaseAISpell<ThrowAroundSpell>
 {
-    public ThrowAroundAI([NotNull] ThrowAroundSpell spell, Commander commander) 
-        : base(spell, commander)
+    public ThrowAroundAI([NotNull] ThrowAroundSpell spell, Commander commander, SpellInGame spellData)
+        : base(spellData, spell, commander)
     {
 
     }   

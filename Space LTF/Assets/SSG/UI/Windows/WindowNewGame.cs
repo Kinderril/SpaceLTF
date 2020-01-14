@@ -10,11 +10,11 @@ using UnityEngine.UI;
 
 public class WindowNewGame : BaseWindow
 {
-    public PlayerStartParametersUI PlayerStartParametersUI;
+    // public PlayerStartParametersUI PlayerStartParametersUI;
     public ArmyTypeSelectorUI ArmyTypeSelectorUI;
     public StartGameWeaponsChooseUI StartGameWeaponsChooseUI;
     public SliderWithTextMeshPro SectorSize;
-    public SliderWithTextMeshPro StartDeathTime;
+    public SliderWithTextMeshProWithOff StartDeathTime;
     public SliderWithTextMeshPro CoresCount;
 
     public DifficultyNewGame DifficultyNewGame;
@@ -26,7 +26,7 @@ public class WindowNewGame : BaseWindow
 
     public override void Init()
     {
-        PlayerStartParametersUI.Init();
+        // PlayerStartParametersUI.Init();
         ArmyTypeSelectorUI.Init();
         StartGameWeaponsChooseUI.Init();
         DifficultyNewGame.Init();
@@ -48,13 +48,14 @@ public class WindowNewGame : BaseWindow
         StartDeathTime.SetValue(Library.MAX_GLOBAL_MAP_DEATHSTART + 1);
         UpdateStartData();
         CheckButtonIsOpen();
+        StartDeathTime.SetOff(true);
         base.Init();
     }
 
     private void CheckButtonIsOpen()
     {
         var stat = MainController.Instance.Statistics;
-        CollectedPointsField.text = $"{stat.CollectedPoints}/{PlayerStatistics.POINTS_TO_OPEN}";
+        CollectedPointsField.text = $"{Namings.Tag("PointsToOpen")}\n{stat.CollectedPoints}/{PlayerStatistics.POINTS_TO_OPEN}";
         OpenNewOptions.interactable = stat.CanOpenNext();
     }
 
@@ -75,11 +76,11 @@ public class WindowNewGame : BaseWindow
 
     public void OnClickStart()
     {
-        if (PlayerStartParametersUI.CheckFreePoints())
-        {
-            PlayerStartParametersUI.OnParamClick(PlayerParameterType.repair, true);
-            PlayerStartParametersUI.OnParamClick(PlayerParameterType.scout, true);
-        }
+        // if (PlayerStartParametersUI.CheckFreePoints())
+        // {
+        //     PlayerStartParametersUI.OnParamClick(PlayerParameterType.repair, true);
+        //     PlayerStartParametersUI.OnParamClick(PlayerParameterType.scout, true);
+        // }
 //#if UNITY_EDITOR
 //        posibleStartSpells = new List<SpellType>();
 //        posibleStartSpells.Add(SpellType.engineLock);
@@ -110,8 +111,9 @@ public class WindowNewGame : BaseWindow
         //        posibleSpells.Add(SpellType.repairDrones);
 #endif
         posibleSpells.Add(SpellType.rechargeShield);
-        posibleSpells.Add(SpellType.roundWave);
-        gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
+        // posibleSpells.Add(SpellType.roundWave);
+        // gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
+        gameData = new StartNewGameData(new Dictionary<PlayerParameterType, int>(), 
             ArmyTypeSelectorUI.Selected, posibleStartWeapons,
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), StartDeathTime.GetValueInt(), CoresCount.GetValueInt(),
             DifficultyNewGame.CurDifficulty, posibleSpells);
@@ -149,7 +151,7 @@ public class WindowNewGame : BaseWindow
     private void SetData(Dictionary<PlayerParameterType, int> ppar,
         ShipConfig config, WeaponsPair weaponsPair)
     {
-        PlayerStartParametersUI.SetData(ppar);
+        // PlayerStartParametersUI.SetData(ppar);
         ArmyTypeSelectorUI.SetData(config);
         StartGameWeaponsChooseUI.SetData(weaponsPair);
 
@@ -159,7 +161,7 @@ public class WindowNewGame : BaseWindow
     public override void Dispose()
     {
         ArmyTypeSelectorUI.Dispose();
-        PlayerStartParametersUI.Dispose();
+        // PlayerStartParametersUI.Dispose();
         StartGameWeaponsChooseUI.Dispose();
         base.Dispose();
     }

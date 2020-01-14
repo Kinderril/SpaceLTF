@@ -8,13 +8,9 @@ using UnityEngine;
 [System.Serializable]
 public class ShieldOffSpell : BaseSpellModulInv
 {
-//    public 
-
-    public const float PERIOD = 16f;
+    public const float PERIOD = 13f;
     private const float SHIELD_DAMAGE = 3f;
     private const float rad = 3f;
-    private const float BULLET_SPEED = 13f;
-    private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 25f;
     public CurWeaponDamage CurrentDamage { get; }
 

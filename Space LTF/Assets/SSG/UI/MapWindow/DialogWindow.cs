@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
-
+public delegate void DialogEndsCallback(bool shallCompleteCell);
 
 public class DialogWindow : MonoBehaviour
 {
@@ -14,9 +14,9 @@ public class DialogWindow : MonoBehaviour
     public TextMeshProUGUI MessageField;
     public DialogAnswerUI DialogAnswerPrefab;
     private MessageDialogData _dialog;
-    private Action _endCallback;
+    private DialogEndsCallback _endCallback;
 
-    public void Init(MessageDialogData dialog,Action endCallback)
+    public void Init(MessageDialogData dialog, DialogEndsCallback endCallback)
     {
         Utils.ClearTransform(Layout);
         gameObject.SetActive(true);
@@ -39,7 +39,7 @@ public class DialogWindow : MonoBehaviour
     {
         if (data.NextDialog == null)
         {
-            _endCallback();
+            _endCallback(data.ShallCompleteCell);
             Dispose();
         }
         else

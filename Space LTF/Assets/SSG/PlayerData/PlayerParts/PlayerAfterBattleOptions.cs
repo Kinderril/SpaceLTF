@@ -35,6 +35,7 @@ public class PlayerAfterBattleOptions
 //        _posibleOptions.Add(Ocrons,0f);
     }
 
+
     private void RefreshPosibleList()
     {
         _posibleOptionsListTmp.Clear();

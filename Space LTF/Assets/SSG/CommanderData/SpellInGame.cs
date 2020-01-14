@@ -210,6 +210,9 @@ Desc = desc;
         {
             var shipsToHitIndex = BattleController.OppositeIndex(TeamIndex);
             var shipsInRad = BattleController.Instance.GetAllShipsInRadius(position, shipsToHitIndex, _spellDamageData.AOERad);
+#if UNITY_EDITOR
+            DrawUtils.DebugCircle(position,Vector3.up, Color.cyan, _spellDamageData.AOERad,3f);
+#endif
             foreach (var shipBase in shipsInRad)
             {
                 ApplyToShipSub(shipBase.ShipParameters, shipBase, bullet);

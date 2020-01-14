@@ -104,13 +104,18 @@ public class MapWindow : BaseWindow
 
     private void CheckLeaveDialog()
     {
-        if (!player.MapData.CurrentCell.LeavedDialogComplete)
+        var isCurCellFight = player.MapData.CurrentCell is ArmyGlobalMapCell;
+        if (isCurCellFight && MainController.Instance.Statistics.LastBattle == EndBattleType.runAway)
         {
-          
+            player.MapData.CurrentCell.Uncomplete();
+            ReturnToLastCell();
+        }
+        else if (!player.MapData.CurrentCell.LeavedDialogComplete)
+        {
             var leavedDialog = player.MapData.CurrentCell.GetLeavedActionInner();
             if (leavedDialog != null)
             {
-                StartDialog(leavedDialog, () =>
+                StartDialog(leavedDialog, (val) =>
                 {
                     player.MapData.CurrentCell.LeavedDialogComplete = true;
                     CanvasGroup.interactable = true;
@@ -118,9 +123,16 @@ public class MapWindow : BaseWindow
                 });
 
             }
-            
         }
+    }
 
+    private void ReturnToLastCell()
+    {
+        var lastCell = player.MapData.LastCell;
+        if (player.MapData.GoToTarget(lastCell, GlobalMap, () => {}))
+        {
+
+        }
     }
 
     private void InitSideShip()
@@ -310,9 +322,9 @@ public class MapWindow : BaseWindow
             var dialog = obj.GetDialog();
             if (dialog != null)
             {                  
-                if (obj.Completed && obj.OneTimeUsed() )
+                if (obj.Completed && obj.OneTimeUsed())
                 {
-                    WindowManager.Instance.InfoWindow.Init(OnMainDialogEnds, Namings.BeenBefore);
+                    // WindowManager.Instance.InfoWindow.Init(OnMainDialogEnds, Namings.BeenBefore);
                 }
                 else
                 {
@@ -321,7 +333,7 @@ public class MapWindow : BaseWindow
             }
             else
             {
-                OnMainDialogEnds();
+                OnMainDialogEnds(true);
             }
         }
 
@@ -359,12 +371,19 @@ public class MapWindow : BaseWindow
          StartDialog(cell.GetDialog(), OnMainDialogEnds);
     }
 
-    private void OnMainDialogEnds()
+    private void OnMainDialogEnds(bool shallCompleteCell)
     {
-        player.MapData.CurrentCell.Complete();
+        if (shallCompleteCell)
+        {
+            player.MapData.CurrentCell.Complete();
+        }
         GlobalMap.SingleReset(player.MapData.CurrentCell, player.MapData.ConnectedCellsToCurrent());
         GlobalMap.UnBlock();
         CanvasGroup.interactable = true;
+        if (!shallCompleteCell)
+        {
+            ReturnToLastCell();
+        }
     }
 
     private void InitMyArmy()
@@ -467,7 +486,7 @@ public class MapWindow : BaseWindow
         });
     }
 
-    private void StartDialog(MessageDialogData dialog,Action callbackOnEnd)
+    private void StartDialog(MessageDialogData dialog, DialogEndsCallback callbackOnEnd)
     {
         DialogWindow.Init(dialog, callbackOnEnd);
         GlobalMap.Block();

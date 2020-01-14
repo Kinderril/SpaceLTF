@@ -9,8 +9,8 @@ using UnityEngine;
 
 public class ShieldDamageSpellAI : BaseAISpell<ShieldOffSpell>
 {                                                
-    public ShieldDamageSpellAI([NotNull] ShieldOffSpell spell, Commander commander) 
-        : base(spell, commander)
+    public ShieldDamageSpellAI([NotNull] ShieldOffSpell spell, Commander commander, SpellInGame spellData)
+        : base(spellData, spell, commander)
     {
 
     }        

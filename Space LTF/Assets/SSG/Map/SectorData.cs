@@ -51,6 +51,11 @@ public class SectorData
         }
     }
 
+    public void ChangeSectorOwner(ShipConfig shipConfig)
+    {
+        _shipConfig = shipConfig;
+    }
+
     public void SetCell(GlobalMapCell cell,int subSectotId)
     {
         var x = cell.indX - StartX;

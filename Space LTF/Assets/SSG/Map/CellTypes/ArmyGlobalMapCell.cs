@@ -201,7 +201,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                     {
                         WindowManager.Instance.InfoWindow.Init(Take, "Fail! Now you must fight.");
                     }
-                }));
+                },null,false));
         }
 
         var mesData = new MessageDialogData(masinMsg, ans);

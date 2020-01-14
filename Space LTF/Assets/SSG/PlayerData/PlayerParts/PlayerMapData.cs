@@ -8,7 +8,8 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerMapData
 {
-    public GlobalMapCell CurrentCell;
+    private GlobalMapCell _currentCell;
+    public GlobalMapCell LastCell = null;
     public GalaxyData GalaxyData;
     public int Step = 0;
     public int VisitedSectors = 0;
@@ -24,13 +25,23 @@ public class PlayerMapData
 
     }
 
+    public GlobalMapCell CurrentCell
+    {
+        get => _currentCell;
+        set
+        {
+            LastCell = _currentCell;
+           _currentCell = value;
+        }
+    }
+
     public void Init(StartNewGameData data,PlayerByStepDamage stepDamage)
     {
         _stepDamage = stepDamage;
         Step = 0;
         var sectorIndex = MyExtensions.Random(10 * data.SectorSize, 100 * data.SectorSize);
         var sector = new GalaxyData("Sector " + sectorIndex.ToString());
-        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount,data.StepsBeforeDeath);
+        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount,data.StepsBeforeDeath, data.shipConfig);
         GalaxyData = sector;
         CurrentCell = startCell;
         OpenAllNear();

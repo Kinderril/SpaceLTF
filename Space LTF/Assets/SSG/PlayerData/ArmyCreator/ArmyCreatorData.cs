@@ -20,12 +20,17 @@ public class ArmyCreatorData
     public ShipConfig ArmyConfig;
     private bool _isAi;
 
+    public List<SpellType> GetSpellsList()
+    {
+        return spellModuls;
+    }
+
     public ArmyCreatorData(ShipConfig config,bool isAi)
     {
         _isAi = isAi;
         ArmyConfig = config;
         simlplModuls = LibraryModuls.GetExistsCacheList();
-        spellModuls =  AllSpells();
+        spellModuls =  GetSpellToUse();
         weapons = AllWeaponModuls();
     }
 
@@ -35,7 +40,7 @@ public class ArmyCreatorData
     }
 
     
-    protected virtual List<SpellType> AllSpells()
+    protected virtual List<SpellType> GetSpellToUse()
     {
         if (_isAi)
         {
@@ -47,6 +52,7 @@ public class ArmyCreatorData
             spell.Add(SpellType.distShot);
             spell.Add(SpellType.artilleryPeriod);
             spell.Add(SpellType.repairDrones);
+            // spell.Add(SpellType.roundWave);
             return spell;
         }
         else
@@ -67,6 +73,7 @@ public class ArmyCreatorData
             SpellType.shildDamage,
             SpellType.throwAround,
             SpellType.mineField,
+            SpellType.roundWave,
 //            SpellType.randomDamage,
             SpellType.distShot
         };

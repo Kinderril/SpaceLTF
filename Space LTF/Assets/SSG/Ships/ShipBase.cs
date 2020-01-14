@@ -410,8 +410,8 @@ public class ShipBase : MovingObject
 
     public void MoveToDirection(Vector3 dir)
     {
-        ApplyRotation(dir, false);
-        // SetTargetSpeed(1f);
+        var speed = ApplyRotation(dir, false);
+        SetTargetSpeed(speed);
     }
 
     public override float ApplyRotation(Vector3 dir, bool exactlyPoint)

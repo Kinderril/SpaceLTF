@@ -72,8 +72,6 @@ public class ShipBoostTwist  : ShipBoostAbstract
         straightSpeed = curSpeed;
 
         var dir1 = straightSpeed * _owner.LookDirection + incomingDir;
- 
-
 
         var lastTurnAddtionalMove = dir1 * Time.deltaTime;
         SetAddMove(lastTurnAddtionalMove);

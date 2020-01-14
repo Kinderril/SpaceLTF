@@ -146,12 +146,17 @@ public static class ArmyCreatorSpecial
     private static List<StartShipPilotData> CreateBoss(float points, ShipConfig config,
         Func<ShipConfig, Player, float, List<StartShipPilotData>> getArmy)
     {
+        var bossLogger = new ArmyCreatorLogs();
         List<StartShipPilotData> list = new List<StartShipPilotData>();
         var remainPoints = points;
         var player = new Player("Boss1");
 
         var pilot = Library.CreateDebugPilot();
         var shipMain = Library.CreateShip(ShipType.Base, config, player, pilot);
+
+        var listOfSpells = ArmyCreatorData.AllSpellsStatic();
+        ArmyCreator.TryAddCastModul(new ArmyRemainPoints(points), shipMain, listOfSpells, bossLogger);
+        ArmyCreator.TryAddCastModul(new ArmyRemainPoints(points), shipMain, listOfSpells, bossLogger);
         var shipMainStartData = new StartShipPilotData(pilot, shipMain);
         list.Add(shipMainStartData);
 

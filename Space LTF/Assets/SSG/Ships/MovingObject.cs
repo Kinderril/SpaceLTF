@@ -112,7 +112,7 @@ public abstract class MovingObject : PoolElement
         {
             return 0f;
         }
-        if (Time.deltaTime < 0.00001f)
+        if (Time.timeScale < 0.0000001f)
         {
             return 0f;
         }

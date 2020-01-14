@@ -13,7 +13,7 @@ public class ArtillerySpell : BaseSpellModulInv
     private const float rad = 6f;
 
 
-    public int BulletsCount => Level * 4 + 15;
+    public int BulletsCount => Level * 4 + 12;
 
     public ArtillerySpell(int costCount, int costTime)
         : base(SpellType.artilleryPeriod, costCount, costTime,  new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
@@ -92,7 +92,6 @@ public class ArtillerySpell : BaseSpellModulInv
     public override string Desc()
     {
         return String.Format(Namings.ArtillerySpell,BulletsCount,DAMAGE);
-//            $"Starts fire at selected zone. Total bullets {BulletsCount}. Damage of each bullet:{DAMAGE}/{DAMAGE}.";
     }
 }
 

@@ -10,11 +10,13 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
 {
     public const float BULLET_SHOOT_DIST = 14f;
     private const float _sDistToShoot = 4*4;
-    private const float DAMAGE = 2;
+    private const float BASE_DAMAGE = 2;
     private bool _lastCheckIsOk = false;
 
     [field: NonSerialized]
     private ShipBase _lastClosest;
+
+    public float Damage => BASE_DAMAGE + Level;
 
     public WaveStrikeOnShipSpell(int costCount, int costTime)
         : base(SpellType.roundWave, costCount, costTime,
@@ -57,7 +59,7 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        target.ShipParameters.Damage(DAMAGE, DAMAGE, damagedone, _lastClosest);
+        target.ShipParameters.Damage(Damage, Damage, damagedone, _lastClosest);
     }
 
     public override bool ShowLine => false;
@@ -106,7 +108,7 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return    String.Format(Namings.WaveStrikeSpell, DAMAGE, DAMAGE);
+        return    String.Format(Namings.WaveStrikeSpell, Damage, Damage);
     }
 }
 

@@ -47,7 +47,7 @@ public class GalaxyData
         {GlobalMapEventType.secretDeal, 2},
     };
 
-    public GlobalMapCell Init2(int sectorCount, int sizeSector,int startPower, int coreCells, int startDeathStep)
+    public GlobalMapCell Init2(int sectorCount, int sizeSector,int startPower, int coreCells, int startDeathStep,ShipConfig playerShipConfig)
     {
         StartDeathStep = startDeathStep;
         var allSubSectors =new List<SectorData>();
@@ -82,14 +82,15 @@ public class GalaxyData
         
         //Create start sector
         var startSector = allSubSectors.Where(x => x.StartX == 0).ToList().RandomElement();
-//        var rndX = RndIndex(sizeSector - 2);
-//        var rndZ = RndIndex(sizeSector - 2);
-//        var xCell = startSector.StartX + 1 + rndX;
-//        var zCell = startSector.StartZ + 1 + rndZ;
-//        Debug.Log($"Create start sector X: {xCell} min:{startSector.StartX}  max:{startSector.StartX + sizeSector - 2}   SizeSector:{sizeSector}  rndX:{rndX}");
-//        Debug.Log($"Create start sector Z: {zCell} min:{startSector.StartZ}  max:{startSector.StartZ + sizeSector - 2}   SizeSector:{sizeSector}  rndZ:{rndZ}");
-//        xCell = Mathf.Clamp(xCell, startSector.StartX, startSector.StartX + sizeSector - 1);
-//        zCell = Mathf.Clamp(zCell, startSector.StartZ, startSector.StartZ + sizeSector - 1);
+        startSector.ChangeSectorOwner(playerShipConfig);
+        //        var rndX = RndIndex(sizeSector - 2);
+        //        var rndZ = RndIndex(sizeSector - 2);
+        //        var xCell = startSector.StartX + 1 + rndX;
+        //        var zCell = startSector.StartZ + 1 + rndZ;
+        //        Debug.Log($"Create start sector X: {xCell} min:{startSector.StartX}  max:{startSector.StartX + sizeSector - 2}   SizeSector:{sizeSector}  rndX:{rndX}");
+        //        Debug.Log($"Create start sector Z: {zCell} min:{startSector.StartZ}  max:{startSector.StartZ + sizeSector - 2}   SizeSector:{sizeSector}  rndZ:{rndZ}");
+        //        xCell = Mathf.Clamp(xCell, startSector.StartX, startSector.StartX + sizeSector - 1);
+        //        zCell = Mathf.Clamp(zCell, startSector.StartZ, startSector.StartZ + sizeSector - 1);
 
         var xCell = startSector.StartX + sizeSector / 2;
         var zCell = startSector.StartZ + sizeSector / 2;

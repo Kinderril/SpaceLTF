@@ -215,7 +215,7 @@ public class PlayerStatistics
         if (win)
         {
             CollectedPoints += _lastDifficulty;
-        }
+        }               
         var mainShip = player.Army.First(x => x.Ship.ShipType == ShipType.Base);
         var finalPower = ArmyCreator.CalcArmyPower(player.Army);
         EndGameResult res = new EndGameResult(win,_lastDifficulty, mainShip.Ship.ShipConfig, player.MapData.GalaxyData.Size, DateTime.Now, finalPower);

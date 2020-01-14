@@ -29,7 +29,7 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-       
+        bool itemToTradeWeapon = false;
         var inventory = MainController.Instance.MainPlayer.Inventory;
         if (inventory.Moduls.Count > 0)
         {
@@ -37,13 +37,22 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
         }
         else if (inventory.Weapons.Count > 0)
         {
+            itemToTradeWeapon = true;
             _myItemsToTrade = inventory.Weapons.RandomElement();
         }
         var mianAnswers = new List<AnswerDialogData>();
 
         if (_myItemsToTrade != null)
         {
-            List<ItemType> types = new List<ItemType>() { ItemType.modul, ItemType.weapon, ItemType.spell };
+            List<ItemType> types;
+            if (itemToTradeWeapon)
+            {
+                types = new List<ItemType>() { ItemType.modul, ItemType.spell };
+            }
+            else
+            {
+                types = new List<ItemType>() { ItemType.weapon, ItemType.spell };
+            }
             switch (types.RandomElement())
             {
                 case ItemType.weapon:

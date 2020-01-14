@@ -60,10 +60,10 @@ public class Player
         var coef = size / midSize;
         QuestsOnStartController = new QuestsOnStartController(coef);
         QuestsOnStartController.InitQuests();
-        AddModuls(1);
+        AddModuls();
     }
 
-    private void AddModuls(int count)
+    private void AddModuls()
     {
 //        int index;
 //        if (Inventory.GetFreeSimpleSlot(out index))

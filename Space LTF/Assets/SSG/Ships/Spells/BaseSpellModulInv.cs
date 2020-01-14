@@ -24,56 +24,27 @@ public enum SpellType
     repairDrones = 14,
 
     rechargeShield = 15,
-    roundWave = 16,
+    roundWave = 16
 }
 
 
-[System.Serializable]
-public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame , IAffectParameters
+[Serializable]
+public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, IAffectParameters
 {
-    public int CostCount { get; protected set; }
-    public int CostTime { get; protected set; }
-    public int Level { get; protected set; }
-    public bool IsHoming { get; protected set; }
-    //    private float _nextPosibleCast;
-    public SpellType SpellType { get; private set; }
-
-    [field: NonSerialized] public event Action<BaseSpellModulInv> OnUpgrade;
-
-    //    [field: NonSerialized]
-    //    public ShipBase ShipBase { get; private set; }
-    //    protected int WeaponSlot { get; private set; }
-    //    [field: NonSerialized]
-    //    protected Transform ModulPos { get; private set; }
-    protected CreateBulletDelegate CreateBullet { get; private set; }
-
-
-
-    public string Name
-    {
-        get { return Namings.SpellName(SpellType); }
-    }
-
     public BaseSpellModulInv(IInventory currentInventory)
     {
         CurrentInventory = currentInventory;
     }
 
 
-
-    public ItemType ItemType => ItemType.spell;
-
-    public IInventory CurrentInventory { get; set; }
-
-
-    protected BaseSpellModulInv(SpellType spell,int costCount, int costTime, 
-                 BulleStartParameters bulleStartParameters,bool isHoming)
+    protected BaseSpellModulInv(SpellType spell, int costCount, int costTime,
+        BulleStartParameters bulleStartParameters, bool isHoming)
     {
         Level = 1;
         IsHoming = isHoming;
         CastSpell = castActionSpell;
         BulleStartParameters = bulleStartParameters;
-        AffectAction =  new WeaponInventoryAffectTarget(affectAction);
+        AffectAction = new WeaponInventoryAffectTarget(affectAction);
         CreateBullet = createBullet;
         SpellType = spell;
         CostCount = costCount;
@@ -81,16 +52,53 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
         ShootPerTime = 1;
     }
 
+    public int CostCount { get; protected set; }
+    public int CostTime { get; protected set; }
+    public int Level { get; protected set; }
+    public bool IsHoming { get; protected set; }
+    public SpellType SpellType { get; private set; }
+    protected CreateBulletDelegate CreateBullet { get; private set; }
+    public string Name => Namings.SpellName(SpellType);
+
     protected abstract CreateBulletDelegate createBullet { get; }
     protected abstract CastActionSpell castActionSpell { get; }
-    protected abstract AffectTargetDelegate affectAction  { get; }
+    protected abstract AffectTargetDelegate affectAction { get; }
+    public WeaponInventoryAffectTarget AffectAction { get; private set; }
+    public CreateBulletDelegate CreateBulletAction => CreateBullet;
 
-    public virtual bool TryCast(CommanderCoinController coinController,Vector3 pos)
+    public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
     {
-//        _nextPosibleCast = Time.time + CostTime;
-        coinController.UseCoins(CostCount,CostTime);
-        CastAction(pos);
-        return true;
+        CreateBullet = bulletCreate;
+    }
+
+    public virtual CurWeaponDamage CurrentDamage => new CurWeaponDamage(0, 0);
+    public float AimRadius { get; set; }
+    public float SetorAngle { get; set; }
+    public float BulletSpeed { get; set; }
+    public float ReloadSec { get; set; }
+    public int ShootPerTime { get; set; }
+    public ItemType ItemType => ItemType.spell;
+
+    public IInventory CurrentInventory { get; set; }
+
+
+    public int CostValue => MoneyConsts.SPELL_BASE_MONEY_COST;
+
+    public int RequireLevel(int posiblLevel)
+    {
+        return 1;
+    }
+
+    public string GetInfo()
+    {
+        return Name; // + " (" + 1 + ")";
+    }
+
+    public string WideInfo()
+    {
+        var cost = string.Format(Namings.SpellModulChargers, CostCount, CostTime);
+        return GetInfo() + "\n" + cost
+               + "\n" + Desc();
     }
 
     public abstract Bullet GetBulletPrefab();
@@ -103,51 +111,22 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
         get { return pos => true; }
     }
 
-    protected abstract void CastAction(Vector3 pos);
-
-    public abstract string Desc();
-
-
-    public int CostValue => MoneyConsts.SPELL_BASE_MONEY_COST;
-
-    public int RequireLevel(int posiblLevel)
-    {
-        return 1;
-    }
-
-    public string GetInfo()
-    {
-        return Name;// + " (" + 1 + ")";
-    }
-
-    public string WideInfo()
-    {
-        string cost = String.Format(Namings.SpellModulChargers, CostCount, CostTime);
-        return GetInfo()  + "\n" + cost
-             + "\n" + Desc();
-    }
-
 //    protected abstract void CastAction(Vector3 v);
-         
-    public BulleStartParameters BulleStartParameters { get; private set; }
-    public WeaponInventoryAffectTarget AffectAction { get; private set; }
-    public CastActionSpell CastSpell { get; private set; }
-    public CreateBulletDelegate CreateBulletAction => CreateBullet;
-    public virtual CurWeaponDamage CurrentDamage => new CurWeaponDamage(0,0);
-    public float AimRadius { get; set; }
-    public float SetorAngle { get; set; }
-    public float BulletSpeed { get; set; }
-    public float ReloadSec { get; set; }
-    public int ShootPerTime { get; set; }
 
-    public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
-    {
-        CreateBullet = bulletCreate;
-    }
+    public BulleStartParameters BulleStartParameters { get; private set; }
+    public CastActionSpell CastSpell { get; private set; }
+
     public virtual SpellDamageData RadiusAOE()
     {
         return new SpellDamageData();
     }
+
+    [field: NonSerialized] public event Action<BaseSpellModulInv> OnUpgrade;
+    
+    protected abstract void CastAction(Vector3 pos);
+
+    public abstract string Desc();
+
     public void TryUpgrade()
     {
         var owner = CurrentInventory.Owner;
@@ -158,7 +137,7 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
                 var cost = MoneyConsts.SpellUpgrade[Level];
                 if (owner.MoneyData.HaveMoney(cost))
                 {
-                    var txt = String.Format("You want to upgrade {0}", Namings.SpellName(SpellType));
+                    var txt = string.Format("You want to upgrade {0}", Namings.SpellName(SpellType));
                     WindowManager.Instance.ConfirmWindow.Init(() =>
                     {
                         owner.MoneyData.RemoveMoney(cost);
@@ -188,14 +167,8 @@ public abstract class BaseSpellModulInv: IItemInv  , IAffectable , ISpellToGame 
         if (CanUpgrade())
         {
             Level++;
-            if (Level == Library.MAX_SPELL_LVL)
-            {
-                MainController.Instance.Statistics.AddMaxLevelSpells();
-            }
-            if (OnUpgrade != null)
-            {
-                OnUpgrade(this);
-            }
+            if (Level == Library.MAX_SPELL_LVL) MainController.Instance.Statistics.AddMaxLevelSpells();
+            if (OnUpgrade != null) OnUpgrade(this);
         }
     }
 

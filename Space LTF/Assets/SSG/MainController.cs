@@ -24,6 +24,7 @@ public class MainController : Singleton<MainController>
 
     void Awake()
     {
+        LocalizationManager.Instance.Init();
         Library.Init();
         DataBase.Init();
         ShipNames.Init();

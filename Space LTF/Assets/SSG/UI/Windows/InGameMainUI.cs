@@ -24,7 +24,7 @@ public class InGameMainUI : BaseWindow
     public Commander MyCommander { get; private set; }
     private BattleController _battle;
     private int layerMask = 1;
-    public Button FastEndButton;
+    // public Button FastEndButton;
     public PreFinishWindow PreFinish;
     public TeamInfoContainer GreenTeamInfoContainer;
     public TeamInfoContainer RedTeamInfoContainer;
@@ -80,10 +80,10 @@ public class InGameMainUI : BaseWindow
         }
     }
 
-    public void CanFastEnd()
-    {
-        FastEndButton.gameObject.SetActive(true);
-    }
+    // public void CanFastEnd()
+    // {
+    //     FastEndButton.gameObject.SetActive(true);
+    // }
     
     public void Init(BattleController battle)
     {
@@ -104,7 +104,7 @@ public class InGameMainUI : BaseWindow
 //        CommanderPriority.Init(MyCommander);
         FlyingNumbersController.Init(FlyingInfosContainer);
         PreFinish.Init();
-        FastEndButton.gameObject.SetActive(false);
+        // FastEndButton.gameObject.SetActive(false);
         ShipModulsUI.gameObject.SetActive(false);
         this._battle = battle;
         UnselectSpell();

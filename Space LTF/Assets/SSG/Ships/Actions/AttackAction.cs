@@ -112,7 +112,8 @@ public class AttackAction : AbstractAttackAction
     protected override void Dispose()
     {
         Target.ShipLink.AttackersData.ShipEndsAttack(_owner);
-        foreach (var weapon in _owner.WeaponsController.GelAllWeapons()) weapon.OnShootEnd -= OnShootEnd;
+        foreach (var weapon in _owner.WeaponsController.GelAllWeapons())
+            weapon.OnShootEnd -= OnShootEnd;
     }
 
     protected override CauseAction[] GetEndCauses()
@@ -161,15 +162,6 @@ public class AttackAction : AbstractAttackAction
                 var weapon = all.FirstOrDefault();
                 weapon?.GizmosDraw();
             }
-
-//            Gizmos.color = Color.blue;
-//            Gizmos.DrawRay(_owner.Position, Vector3.up * 5);
-//            Gizmos.color = Color.green;
-//            if (_isClose)
-//            {
-//                Gizmos.color = Color.blue;
-//            }
-//            Gizmos.DrawLine(_owner.Position, Target.ShipLink.Position);
         }
     }
 }
