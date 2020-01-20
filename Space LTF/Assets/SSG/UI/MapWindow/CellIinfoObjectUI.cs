@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -24,10 +23,10 @@ public class CellIinfoObjectUI : MonoBehaviour
             curObj = obj;
             _disabled = !haveObj;
             MovingObject.gameObject.SetActive(haveObj);
-            if (curObj!=null)
+            if (curObj != null)
                 Info(curObj.Cell);
-//            Debug.Log("MovingObject:" + haveObj + "   " + _disabled);
-     
+            //            Debug.Log("MovingObject:" + haveObj + "   " + _disabled);
+
         }
 
         if (obj != curObj)
@@ -46,6 +45,14 @@ public class CellIinfoObjectUI : MonoBehaviour
     {
         if (cell != null)
         {
+            var isWithArmy = cell.CurMovingArmy != null;
+            if (isWithArmy)
+            {
+                var name = cell.CurMovingArmy.ShortDesc();
+                _curText = name;
+                TextUpdate(true);
+                return;
+            }
             string ending;
             if (cell.IsDestroyed)
             {
@@ -61,10 +68,10 @@ public class CellIinfoObjectUI : MonoBehaviour
                 ending = "";
             }
 
-            
+
             if (!cell.IsDestroyed)
             {
-//                Debug.LogError($"cell.IsScouted.id:{cell.Id}  scouted:{cell.IsScouted}  ");
+                //                Debug.LogError($"cell.IsScouted.id:{cell.Id}  scouted:{cell.IsScouted}  ");
                 var isCore = cell as CoreGlobalMapCell;
                 if (isCore != null)
                 {
@@ -72,7 +79,7 @@ public class CellIinfoObjectUI : MonoBehaviour
                     TextUpdate(true);
                     return;
                 }
-                
+
 
                 var coreCell = cell is StartGlobalCell || cell is EndGlobalCell;
                 var isArmy = cell as ArmyGlobalMapCell;
@@ -82,14 +89,14 @@ public class CellIinfoObjectUI : MonoBehaviour
                 if (cell.Completed)
                 {
                     desc = cell.Desc();
-//                    shallShow = true;
+                    //                    shallShow = true;
                 }
                 else if (!coreCell && isArmy != null)
                 {
-//                    shallShow = false;
+                    //                    shallShow = false;
                     if (cell.InfoOpen || cell.IsScouted)
                     {
-//                        shallShow = true;
+                        //                        shallShow = true;
                         if (MainController.Instance.MainPlayer.Parameters.Scouts.Level > 2)
                         {
                             desc = Namings.ShipConfig(isArmy.GetConfig());
@@ -113,7 +120,7 @@ public class CellIinfoObjectUI : MonoBehaviour
                     }
                     else
                     {
-                        desc = Namings.Unknown;
+                        desc = Namings.Tag("Unknown");
                     }
                 }
                 else if (isEvent)
@@ -124,7 +131,7 @@ public class CellIinfoObjectUI : MonoBehaviour
                     }
                     else
                     {
-                        desc = Namings.Unknown;
+                        desc = Namings.Tag("Unknown");
                     }
                 }
                 else
@@ -136,11 +143,11 @@ public class CellIinfoObjectUI : MonoBehaviour
                     }
                     else
                     {
-                        desc = Namings.Unknown;
+                        desc = Namings.Tag("Unknown");
                     }
                 }
                 _curText = desc + ending;
-//                txt = shallShow ? desc + ending : Namings.Unknown;
+                //                txt = shallShow ? desc + ending : Namings.Tag("Unknown");
             }
             else
             {
@@ -150,7 +157,7 @@ public class CellIinfoObjectUI : MonoBehaviour
 
             TextUpdate(true);
         }
-    } 
+    }
 
     void Update()
     {
@@ -179,7 +186,7 @@ public class CellIinfoObjectUI : MonoBehaviour
         //        Debug.Log("Disable");
         haveObj = false;
         curObj = null;
-                _disabled = true;
+        _disabled = true;
         MovingObject.gameObject.SetActive(false);
     }
 }

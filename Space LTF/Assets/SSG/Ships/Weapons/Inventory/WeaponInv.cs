@@ -251,6 +251,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                         var txt = String.Format(Namings.WANT_UPGRADE_WEAPON, Namings.Weapon(WeaponType));
                         WindowManager.Instance.ConfirmWindow.Init(() =>
                         {
+                            WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.Upgrade);
                             owner.MoneyData.RemoveMoney(cost);
                             GlobalEventDispatcher.UpgradeWeapon(this);
                             Upgrade(true);

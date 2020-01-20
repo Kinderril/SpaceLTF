@@ -177,7 +177,7 @@ public class DebugPanelWindow : EditorWindow
 
     private void LevelUpRandom()
     {
-        var army = MainController.Instance.MainPlayer.Army.Suffle();
+        var army = MainController.Instance.MainPlayer.Army.Army.Suffle();
         var points = 1000f;
         foreach (var pilotData in army)
         {

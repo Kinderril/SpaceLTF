@@ -1,9 +1,7 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
+using UnityEngine;
 
 [System.Serializable]
 public class SectorData
@@ -20,18 +18,21 @@ public class SectorData
     private int _power;
     private bool _isVisited;
     public SectorCellContainer[,] Cells;
+    private float _powerPerTurn;
     private HashSet<SectorCellContainer> _listCells = new HashSet<SectorCellContainer>();
 
     Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
 
-//    private static Dictionary<int, WDictionary<ShipConfig>> ShipsDictionary;
+    //    private static Dictionary<int, WDictionary<ShipConfig>> ShipsDictionary;
     private ShipConfig _shipConfig;
+    public ShipConfig ShipConfig => _shipConfig;
     private Dictionary<GlobalMapEventType, int> _maxCount;
 
     public SectorData(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-         ShipConfig shipConfig,int index,int xIndex)
+         ShipConfig shipConfig, int index, int xIndex, float powerPerTurn)
     {
         XIndex = xIndex;
+        _powerPerTurn = powerPerTurn;
         Id = index;
         Cells = new SectorCellContainer[size, size];
         _shipConfig = shipConfig;
@@ -39,7 +40,7 @@ public class SectorData
         StartX = startX;
         StartZ = startZ;
         Size = size;
-//        Debug.Log(String.Format("Sub Sector X:{0} Z:{1}.     Congif:{2}", startX, startZ, shipConfig.ToString()));
+        //        Debug.Log(String.Format("Sub Sector X:{0} Z:{1}.     Congif:{2}", startX, startZ, shipConfig.ToString()));
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -56,11 +57,11 @@ public class SectorData
         _shipConfig = shipConfig;
     }
 
-    public void SetCell(GlobalMapCell cell,int subSectotId)
+    public void SetCell(GlobalMapCell cell, int subSectotId)
     {
         var x = cell.indX - StartX;
         var z = cell.indZ - StartZ;
-//        cell.SectorId = subSectotId;
+        //        cell.SectorId = subSectotId;
 #if UNITY_EDITOR
         try
         {
@@ -68,32 +69,32 @@ public class SectorData
         }
         catch (Exception e)
         {
-            Debug.LogErrorFormat("can't put cell {0}  {1}.  {2}   {3}." ,x,z, cell.indX, cell.indZ);
+            Debug.LogErrorFormat("can't put cell {0}  {1}.  {2}   {3}.", x, z, cell.indX, cell.indZ);
         }
 #endif
         Cells[x, z].SetData(cell);
     }
 
-    public static int CalcCellPower(int visited, int Size, int startPowerGalaxy)
+    public static int CalcCellPower(int visited, int Size, int startPowerGalaxy, int additionalPower)
     {
         var sectorPowerCoef = Library.SECTOR_COEF_POWER + startPowerGalaxy * 0.045f;
         var additional = (int)(visited * Size * sectorPowerCoef);
-        var power = startPowerGalaxy + additional;
+        var power = startPowerGalaxy + additional + additionalPower;
         return power;
     }
 
-    public void Populate(int startPowerGalaxy,SectorData startSectorData)
+    public void Populate(int startPowerGalaxy, SectorData startSectorData)
     {
         IsPopulated = true;
         StartPowerGalaxy = startPowerGalaxy;
-        _power = CalcCellPower(0,startPowerGalaxy,startPowerGalaxy);
+        _power = CalcCellPower(0, startPowerGalaxy, startPowerGalaxy, 0);
         RandomizeBorders();
         var remainFreeCells = _listCells.Where(x => x.IsFreeToPopulate()).ToList();
         //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");
         //Shop cells
         int shopsCount;
         int repairCount;
-//        int eventsCount;
+        //        int eventsCount;
         int bigEventsCount;
         int minorEventsCount;
         int armiesCount;
@@ -130,7 +131,7 @@ public class SectorData
             foreach (var container in cellsForShop)
             {
                 var shopCell = new ShopGlobalMapCell(_power, Utils.GetId(), StartX + container.indX,
-                    StartZ + container.indZ,this,_shipConfig);
+                    StartZ + container.indZ, this, _shipConfig);
                 container.SetData(shopCell);
                 remainFreeCells.Remove(container);
             }
@@ -139,7 +140,7 @@ public class SectorData
         if (repairCount == 1 && remainFreeCells.Count >= 1)
         {
             var cellForRepair = remainFreeCells.RandomElement();
-            var cellRepair = new RepairStationGlobalCell(Utils.GetId(), StartX + cellForRepair.indX, StartZ + cellForRepair.indZ, this);
+            var cellRepair = new RepairStationGlobalCell(Utils.GetId(), StartX + cellForRepair.indX, StartZ + cellForRepair.indZ, this, _shipConfig);
             cellForRepair.SetData(cellRepair);
             remainFreeCells.Remove(cellForRepair);
         }
@@ -165,7 +166,7 @@ public class SectorData
                 var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), StartX + cellContainerForEvent.indX, StartZ + cellContainerForEvent.indZ, this, _power, _shipConfig);
                 cellContainerForEvent.SetData(cellEvent);
                 remainFreeCells.Remove(cellContainerForEvent);
-            
+
             }
         }
 
@@ -189,20 +190,20 @@ public class SectorData
             }
         }
 
-//        Debug.Log($"Sector populated: {Id}");
+        //        Debug.Log($"Sector populated: {Id}");
 #if UNITY_EDITOR
         foreach (var cell in _listCells)
         {
             if (cell.IsFreeToPopulate())
             {
-                Debug.LogErrorFormat("Not all sectors populated sectorId:{0}.  {1}_{2}",Id, cell.indX, cell.indZ);
+                Debug.LogErrorFormat("Not all sectors populated sectorId:{0}.  {1}_{2}", Id, cell.indX, cell.indZ);
             }
         }
 #endif
         Name = Namings.ShipConfig(_shipConfig);
     }
 
-    public bool ComeToSector(int visitedSectors)
+    public bool ComeToSector(int visitedSectors, int step)
     {
         if (!_isVisited)
         {
@@ -212,7 +213,7 @@ public class SectorData
                 for (int j = 0; j < Size; j++)
                 {
                     var cell = Cells[i, j];
-                    cell.Data.UpdatePowers(visitedSectors, StartPowerGalaxy);
+                    cell.Data.UpdatePowers(visitedSectors, StartPowerGalaxy, (int)(_powerPerTurn * step));
                 }
             }
 
@@ -285,9 +286,9 @@ public class SectorData
         }
         else
         {
-            for (int i = 0; i < MyExtensions.Random(0, 2); i++)       
+            for (int i = 0; i < MyExtensions.Random(0, 2); i++)
             {
-                var x = MyExtensions.Random(0, Size-1);
+                var x = MyExtensions.Random(0, Size - 1);
                 var z = MyExtensions.Random(0, Size - 1);
                 SetNullCell(x, z);
             }
@@ -296,14 +297,14 @@ public class SectorData
 
     private void SetNullCell(int x, int z)
     {
-        var c = new GlobalMapNothing(Utils.GetId(),StartX +  x,StartZ + z, this);
+        var c = new GlobalMapNothing(Utils.GetId(), StartX + x, StartZ + z, this, ShipConfig);
         var container = Cells[x, z];
         if (container.IsFreeToPopulate())
         {
             container.SetData(c);
         }
     }
-           
+
     private bool CanAdd(GlobalMapEventType eventType)
     {
         if (_maxCount.ContainsKey(eventType))
@@ -367,7 +368,7 @@ public class SectorData
 
     public void ApplyPointsTo(CellsInGalaxy cellInGalaxy)
     {
-//        Debug.Log(String.Format("Start populate Sector Start:{0}_{1}",StartX,StartZ));
+        //        Debug.Log(String.Format("Start populate Sector Start:{0}_{1}",StartX,StartZ));
         for (int i = 0; i < Size; i++)
         {
             for (int j = 0; j < Size; j++)

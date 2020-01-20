@@ -22,6 +22,7 @@ public class AICommander
         enable = _commander.MainShip != null;
         if (enable)
         {
+            _commander.MainShip.OnDeath += OnDeath;
             _mainShip = new AICommanderMainShip(_commander);
             foreach (var baseSpellModulInv in commander.MainShip.ShipInventory.SpellsModuls)
             {
@@ -41,9 +42,16 @@ public class AICommander
                 Debug.LogError(
                     $"AI commander have no spells to use spell modules:{commander.MainShip.ShipInventory.SpellsModuls}");
             }
+            Debug.Log("AIcommander Inited. Spells: " + _spells.Length);
         }
 
-        Debug.Log("AIcommander Inited. Spells: " + _spells.Length);
+
+    }
+
+    private void OnDeath(ShipBase obj)
+    {
+        Dispose();
+        enable = false;
     }
 
     [CanBeNull]
@@ -92,6 +100,14 @@ public class AICommander
             }
 
             _mainShip.Update();
+        }
+    }
+
+    public void Dispose()
+    {
+        if (enable)
+        {
+            _commander.MainShip.OnDeath -= OnDeath;
         }
     }
 }

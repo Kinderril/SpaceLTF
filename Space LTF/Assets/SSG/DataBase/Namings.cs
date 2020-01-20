@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 
 
@@ -22,7 +18,7 @@ public static class Namings
             case global::ShipConfig.ocrons:
                 return "Ocrons";
             case global::ShipConfig.krios:
-                return "Krios";  
+                return "Krios";
             case global::ShipConfig.droid:
                 return "Droids";
         }
@@ -53,17 +49,17 @@ public static class Namings
         switch (config)
         {
             case WeaponType.laser:
-                return "Laser";
+                return Tag("Laser");
             case WeaponType.rocket:
-                return "Rocket";
+                return Tag("Rocket");
             case WeaponType.impulse:
-                return "Impulse";
+                return Tag("Impulse");
             case WeaponType.casset:
-                return "Swarm";
+                return Tag("Swarm");
             case WeaponType.eimRocket:
-                return "EMI";     
+                return Tag("EMI");
             case WeaponType.beam:
-                return "Beam";
+                return Tag("Beam");
         }
         return $"none.{config.ToString()} ___  {config}";
     }
@@ -103,13 +99,13 @@ public static class Namings
                 break;
             case SimpleModulType.damageMines:
                 Name = "Power mine";
-                break;   
+                break;
             case SimpleModulType.fireMines:
                 Name = "Fire mine";
                 break;
             case SimpleModulType.frontShield:
                 Name = "Front shield";
-                break; 
+                break;
             case SimpleModulType.armor:
                 Name = "Body armor";
                 break;
@@ -139,43 +135,43 @@ public static class Namings
                 break;
             case SimpleModulType.WeaponSpeed:
                 Name = "Bullet speed";
-                break;   
+                break;
             case SimpleModulType.WeaponSpray:
                 Name = "Spray fire";
-                break;   
+                break;
             case SimpleModulType.WeaponDist:
                 Name = "Longer dist";
-                break;   
+                break;
             case SimpleModulType.WeaponPush:
                 Name = "Pusher";
-                break;   
+                break;
             case SimpleModulType.WeaponFire:
                 Name = "Burner";
-                break;   
+                break;
             case SimpleModulType.WeaponEngine:
                 Name = "Stopper";
-                break;   
+                break;
             case SimpleModulType.WeaponShield:
                 Name = "Locker";
-                break;   
+                break;
             // case SimpleModulType.WeaponWeapon:
             //     Name = "Blind";
             //     break;   
             case SimpleModulType.WeaponCrit:
                 Name = "Critical";
-                break;    
+                break;
             case SimpleModulType.WeaponAOE:
                 Name = "AOE";
-                break;    
+                break;
             case SimpleModulType.WeaponSector:
                 Name = "Wider";
-                break;    
+                break;
             case SimpleModulType.WeaponLessDist:
                 Name = "Close strike";
-                break;    
+                break;
             case SimpleModulType.WeaponChain:
                 Name = "Chain strike";
-                break;  
+                break;
             case SimpleModulType.WeaponNoBulletDeath:
                 Name = " Penetrating shot";
                 break;
@@ -184,19 +180,19 @@ public static class Namings
                 break;
             case SimpleModulType.WeaponShieldPerHit:
                 Name = "Shield stealer";
-                break; 
+                break;
             case SimpleModulType.WeaponShootPerTime:
                 Name = "More bullets";
-                break;   
+                break;
             case SimpleModulType.WeaponPowerShot:
                 Name = "Power shot";
-                break;    
+                break;
             case SimpleModulType.WeaponFireNear:
                 Name = "Fire wave";
-                break;  
+                break;
             case SimpleModulType.ResistDamages:
                 Name = "Protector";
-                break; 
+                break;
             case SimpleModulType.beamUpgrade:
                 Name = "Beam upgrade";
                 break;
@@ -205,7 +201,7 @@ public static class Namings
                 break;
             case SimpleModulType.ShieldDouble:
                 Name = "Maximum shield";
-                break;  
+                break;
             case SimpleModulType.WeaponShieldIgnore:
                 Name = "Ignore shield";
                 break;
@@ -254,10 +250,10 @@ public static class Namings
                 break;
             case SimpleModulType.frontShield:
                 Name = "If bullet bullet hit at front reflects it.";
-                break; 
+                break;
             case SimpleModulType.armor:
                 Name = "Decrease damage on ships body";
-                break; 
+                break;
             case SimpleModulType.fireMines:
                 Name = $"Put damage mines, witch can fire enemies for {MineFireModul.PERIOD_DAMAGE} sec.";
                 break;
@@ -279,12 +275,12 @@ public static class Namings
             case SimpleModulType.bombUpgrade:
                 Name = "Increase power of all bomb weapons for +1/+1 per level.";
                 break;
-//            case SimpleModulType.ShipSpeed:
-//                Name = String.Format("Increase ship max speed for {0}% per level.", ShipTurnModul.PER_LEVEL);
-//                break;
-//            case SimpleModulType.ShipTurnSpeed:
-//                Name = String.Format("Increase ship turn speed for {0}% per level.", ShipSpeedModul.PER_LEVEL);
-//                break;
+            //            case SimpleModulType.ShipSpeed:
+            //                Name = String.Format("Increase ship max speed for {0}% per level.", ShipTurnModul.PER_LEVEL);
+            //                break;
+            //            case SimpleModulType.ShipTurnSpeed:
+            //                Name = String.Format("Increase ship turn speed for {0}% per level.", ShipSpeedModul.PER_LEVEL);
+            //                break;
 
             default:
                 Debug.LogError($"NO DescSimpleModul {config.ToString()}");
@@ -292,12 +288,7 @@ public static class Namings
         }
         return Name;
     }
-    
-    public static string Health = "Health";
-    public static string Shield = "Shield";
-    public static string Speed = "Speed";
-    public static string TurnSpeed = "Turn";
-    public static string Unknown = "Unknown";
+
 
     public static string SpellName(SpellType spellType)
     {
@@ -310,25 +301,25 @@ public static class Namings
             case SpellType.lineShot:
                 return "Line shot";
             case SpellType.throwAround:
-                return "Power explotion"; 
-//            case SpellType.allToBase:
-//                return "Phase move";
-//            case SpellType.invisibility:
-//                return "Invisibility";
+                return "Power explotion";
+            //            case SpellType.allToBase:
+            //                return "Phase move";
+            //            case SpellType.invisibility:
+            //                return "Invisibility";
             case SpellType.mineField:
                 return "Mine Field";
             case SpellType.randomDamage:
                 return "Inner Damage";
-//            case SpellType.spaceWall:
-//                return "Power wall";
+            //            case SpellType.spaceWall:
+            //                return "Power wall";
             case SpellType.distShot:
                 return "Power shot";
             case SpellType.artilleryPeriod:
-                return "Artillery";  
+                return "Artillery";
             case SpellType.repairDrones:
-                return "Repair drones"; 
+                return "Repair drones";
             case SpellType.rechargeShield:
-                return "Recharge shield"; 
+                return "Recharge shield";
             case SpellType.roundWave:
                 return "Round damage";
             default:
@@ -343,13 +334,13 @@ public static class Namings
         switch (value)
         {
             case LibraryPilotUpgradeType.health:
-                return Health;
+                return Tag("Health");
             case LibraryPilotUpgradeType.shield:
-                return Shield;
+                return Tag("Shield");
             case LibraryPilotUpgradeType.speed:
-                return Speed;
+                return Tag("Speed");
             case LibraryPilotUpgradeType.turnSpeed:
-                return TurnSpeed;
+                return Tag("TurnSpeed");
         }
         return "todo";
     }
@@ -383,13 +374,15 @@ public static class Namings
     public static string StartNewGameBasePower = "Enemies power";
     public static string StartNewGameSectorsCount = "Sectors count";
 
-    public static string StartInfo = "You are in the remote sector of the galaxy on the very edge of inhabited space. " +
-                                     "\nOn the way, you collided a strange object that caused serious damage to the ship's systems. " +
-                                     "\nAfter checking and repair, you found out that this mysterious object is firmly stuck in the " +
-                                     "\nship's hull and unstable, and its extraction is impossible in this sector.\nYou have to head to the" +
-                                     "intergalactic gates immidiatelly.According to the latest information, they are discharged." +
-                                     "To activate them, you need energy cells.Find them and go to the gates " +
-                                     "(by coincidence, they are far from you, on the other side of the galaxy)!";
+    // public static string StartInfo = "You are in the remote sector of the galaxy on the very edge of inhabited space. " +
+    //                                  "\nOn the way, you collided a strange object that caused serious damage to the ship's systems. " +
+    //                                  "\nAfter checking and repair, you found out that this mysterious object is firmly stuck in the " +
+    //                                  "\nship's hull and unstable, and its extraction is impossible in this sector.\nYou have to head to the" +
+    //                                  "intergalactic gates immediately.According to the latest information, they are discharged." +
+    //                                  "To activate them, you need energy cells.Find them and go to the gates " +
+    //                                  "(by coincidence, they are far from you, on the other side of the galaxy)!";
+
+
 
     public static string DamageInfoUI = "Damage: {0}/{1}";
     public static string KillsInfoUI = "Kills: {0}";
@@ -402,9 +395,12 @@ public static class Namings
         {
             case ActionType.readyToAttack:
                 return "Preparing";
-                break;   
+                break;
             case ActionType.attack:
-                return "Attack";
+                return Namings.Tag("Attack");
+                break;
+            case ActionType.attackHalfLoop:
+                return Namings.Tag("AttackHalfLoop");
                 break;
             case ActionType.moveToBase:
                 break;
@@ -417,7 +413,7 @@ public static class Namings
                 return "Evade enemy";
                 break;
             case ActionType.afterAttack:
-                return "Evade";
+                return Namings.Tag("Evade");
                 break;
             case ActionType.waitHeal:
                 break;
@@ -448,9 +444,9 @@ public static class Namings
         }
         return "";
     }
-                
+
     public static string Fleet = "Fleet";
-    public static string RechargeButton = "Recharge Shield.\nCost[{0}/{1}]"; 
+    public static string RechargeButton = "Recharge Shield.\nCost[{0}/{1}]";
     public static string BuffButton = "Increase parameters of ship.\n[Cost:{0}/{1}]";
     public static string PowerWeaponButton = "Increase next shoot damage of ship.\n[Cost:{0}/{1}]";
     public static string CellScouted = "Coordinates Scouted [{0},{1}]";
@@ -482,7 +478,7 @@ public static class Namings
                 return "Kills by commander";
                 break;
             case EQuestOnStart.laserDamage:
-                return $"Damage by {Weapon(WeaponType.laser)}";  
+                return $"Damage by {Weapon(WeaponType.laser)}";
                 break;
             case EQuestOnStart.rocketDamage:
                 return $"Damage by {Weapon(WeaponType.rocket)}";
@@ -553,7 +549,7 @@ public static class Namings
                 return "null";
         }
 
-//        return "null";
+        //        return "null";
     }
 
     public static string PriorityTargetDesc = "All your ship will try to attack selected ship.";
@@ -593,12 +589,6 @@ public static class Namings
     public static string RunAwayComplete = "Run away complete";
     public static string Type = "Type";
     public static string Regen = "Regeneration";
-    public static string SheildActive = "Shield is active";
-    public static string SheildRestore = "Shield restoring";
-    public static string SheildDisable = "Shield disabled";
-
-    public static string BattleRestor = "Battery restoring";
-    public static string BattleDisable = "Battery disable";
     public static string DamageBody = "Damage body";
     public static string DamageShield = "Damage shield";
     public static string ChargesCount = "Charges count {0}";
@@ -655,17 +645,17 @@ public static class Namings
             case KeyCode.Alpha5:
                 return "Select spell 5";
             case KeyCode.Alpha6:
-                return "Select spell 6";     
+                return "Select spell 6";
             case KeyCode.Space:
                 return "Pause/Unpause";
             case KeyCode.Tab:
                 return "Choose ship";
             case KeyCode.W:
-                return "Move camera Up";   
+                return "Move camera Up";
             case KeyCode.S:
-                return "Move camera down";   
+                return "Move camera down";
             case KeyCode.A:
-                return "Move camera left";   
+                return "Move camera left";
             case KeyCode.D:
                 return "Move camera right";
 
@@ -678,7 +668,6 @@ public static class Namings
     public static string Ok = "Ok";
     public static string CoreSector = "Target sector";
     public static string NotCoreSector = "Simple sector";
-    public static string Populated = "Populated by";
     public static string OpenCoordinates = "Coordinates of some fleets open";
     public static string StatisticDifficulty = "Difficulty:{0}%.";
     public static string StatisticConfig = "Army:{0}.";
@@ -755,14 +744,7 @@ public static class Namings
     public static string RepairDroneSpell =
         "launch {0} drones. When ship comes near drone starts healing it. Heal {1}% of maximum heath points.";
 
-    public static string MercGlobal= "Mercenary hideout";
-    public static string NotEnoughtMoney = "Not enough money";
-    public static string leave  = "Leave";
-    public static string HireMerc = "Hire {1} the {0}. Level:{2}. Cost:{3} credits.";
-    public static string Take = "Take";
-    public static string BrokenItem = "Your item broken {0}";
-    public static string StabilizaInfo = "Stability level:{0}";
-    public static string MainElements = "Energy blocks";
+
 
     public static string BattleEvent(BattlefildEventType? eventType)
     {
@@ -798,9 +780,18 @@ public static class Namings
 
     public static string RoundWaveStrike = "Damage all ships near by [{2}/{3}].\n[Cost:{0}/{1}]";
 
-    private static Dictionary<string,string> _locals = new Dictionary<string, string>()
+    private static Dictionary<string, string> _locals = new Dictionary<string, string>()
     {
+        {"StartInfo", "You are in the remote sector of the galaxy on the very edge of inhabited space.\n" +
+                  "As a result of special operations, you had to steal the command ship and the energy\n" +
+                  " element on it. Now you have to find the rest of the elements to open the galaxy gates," +
+                  "\n and deliver the data to your command"},
         {"Level", "Level"},
+        {"Yes", "Yes"},
+        {"No", "No"},
+        {"Ok", "Ok"},
+
+        {"Shop", "Shop"},
         {"ESideAttackStraight", "Attack as usual"},
         {"ESideAttackFlangs", "Attack from flags"},
         {"BaseDefenceYes", "Defend the base"},
@@ -816,20 +807,133 @@ public static class Namings
         {"QuestReward", "Choose one reward"},
         {"Reputation", "Reputation"},
         {"Inventory", "Inventory"},
-        {"ReputationElement", "Enemies of this faction:{0}"},
+        {"ReputationElement", "Enemies:{0}"},
         {"Trickturn", "Quick turn"},
         {"Trickloop", "Loop"},
         {"Tricktwist", "Twist"},
+        {"Settings", "Settings"},
         {"Private", "Private"},
         {"Lieutenant", "Lieutenant"},
         {"Achievements", "Achievements"},
         {"Captain", "Captain"},
-        {"Major", "Major"}, 
-        {"OpenNew", "Unlock"}, 
+        {"Major", "Major"},
+        {"OpenNew", "Unlock"},
+        {"Attack", "Attack"},
+        {"AttackHalfLoop", "Trick attack"},
+        {"Evade", "Evade"},
         {"reloadBoost", "Trick reload time:{0}"},
         {"PointsToOpen", "Points to unlock start options:"},
+        {"descWinner", "--"},
+        {"descCaptain", "--"},
+        {"descMayor", "--"},
+        {"descBig guns", "--"},
+        {"descImprover", "--"},
+        {"descTeam five", "--"},
+        {"descFriend", "--"},
+        {"descBoss", "--"},
+        {"descMaster", "--"},
+        {"descFighter", "--"},
+        {"descDestroyer", "--"},
+        {"descAnnihilator", "--"},
+        {"descShooter", "--"},
+        {"descSniper", "--"},
+        {"descGunner", "--"},
+        {"descBanker", "--"},
+        {"descCroesus", "--"},
+        {"descUnusual", "--"},
+        {"descNo crash", "--"},
+        {"descFull pack", "--"},
+        {"descFull ammo", "--"},
+
+        {"nameWinner", "--"},
+        {"nameCaptain", "--"},
+        {"nameMayor", "--"},
+        {"nameBig guns", "--"},
+        {"nameImprover", "--"},
+        {"nameTeam five", "--"},
+        {"nameFriend", "--"},
+        {"nameBoss", "--"},
+        {"nameMaster", "--"},
+        {"nameFighter", "--"},
+        {"nameDestroyer", "--"},
+        {"nameAnnihilator", "--"},
+        {"nameShooter", "--"},
+        {"nameSniper", "--"},
+        {"nameGunner", "--"},
+        {"nameBanker", "--"},
+        {"nameCroesus", "--"},
+        {"nameUnusual", "--"},
+        {"nameNo crash", "--"},
+        {"nameFull pack", "--"},
+        {"nameFull ammo", "--"},
+
+        {"MercGlobal", "Mercenary hideout"},
+        {"NotEnoughtMoney", "Not enough money"},
+        {"leave", "Leave"},
+        {"HireMerc", "Hire {1} the {0}. Level:{2}. Cost:{3} credits."},
+        {"Take", "Take"},
+        {"BrokenItem", "Your item broken {0}"},
+        {"StabilizaInfo", "Stability level:{0}"},
+        {"MainElements", "Energy blocks"},
+
+        {"Health", "Health"},
+        {"Shield", "Shield"},
+        {"Speed", "Speed"},
+        {"TurnSpeed", "Turn"},
+        {"Unknown", "Unknown"},
+
+        {"Laser", "Laser"},
+        {"Rocket", "Rocket"},
+        {"Impulse", "Impulse"},
+        {"Swarm", "Swarm"},
+        {"EMI", "EMI"},
+        {"Beam", "Beam"},
+        {"MovingArmy", "Special forces of {1}\nStatus:{2}"},
+        {"MovingArmyBorn", "Special forces of {0} appear. Coordinates:{1}"},
+        {"AdditionalPower", "Enemies upgrades"},
+
+        {"Demo", "This is demo version. We are not ready to show more. Maximum visited sectors:{0}. Maximum turns:{1}"},
+
+        {"RecievePoints", "You will get points to unlock after winning. Amount depends on difficulty."},
+        {"AA_FXAA", "Anti aliasing"},
+        {"Sound", "Sound"},
+
+        {"scout_shipType", "No ship type info"},
+        {"scout_weapons", "No weapons info"},
+        {"scout_level", "No level info"},
+        {"scout_moduls", "No modules info"},
+        {"scout_spells", "No big guns info"},
+        {"targteFar", "Target is too far"},
+
+        {"rep_adv_friend", "You are friends. Maybe they can help you."},
+        {"rep_adv_neutral", "Fleets will fight, but you can trade with them."},
+        {"rep_adv_negative", "You still can trade with them, but prices will be bad"},
+        {"rep_adv_enemy", "No trade. Only fight! Special force will try to find and kill you."},
+        {"rep_friend", "Friends"},
+        {"rep_neutral", "Neutral"},
+        {"rep_negative", "Negative"},
+        {"rep_enemy", "Enemy"},
+
+        {"dialog_MovingArmyStart", "You have been occupied by special force. You have no chanse to run."},
+        {"dialog_MovingArmyFight", "Fight"},
+        {"dialog_MovingArmyWin", "Special forces destroyed."},
+        {"dialog_MovingArmyGerReward", "Get all valuable items."},
+        {"dialog_shopEnemy", "You see shop. Nobody wants to trade with you." },
+        {"dialog_shopTrade", "You see shop. Maybe you want buy something?" },
+        {"dialog_repairEnemy", "This is repair station. They won't help you." },
+        {"dialog_repairStart", "This is repair station. We can repair our fleet here." },
+        {"dialog_fixCrit", "Fix all critical damages" },
+        {"dialog_repairCritFixed", "Critical damages fixed" },
+        {"dialog_repairAll", "Yes repair all.{0} credits" },
+        {"dialog_repairNotEnought", "I don't have enough credits" },
+
+
     };
 
+    public static string DialogTag(string tag)
+    {
+        return Tag($"dialog_{tag}");
+    }
     public static string Tag(string tag)
     {
         if (_locals.TryGetValue(tag, out var info))

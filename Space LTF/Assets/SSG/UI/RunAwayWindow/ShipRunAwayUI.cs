@@ -28,7 +28,7 @@ public class ShipRunAwayUI : MonoBehaviour
     {
         var MaxHealth = ShipParameters.ParamUpdate(shipInventory.MaxHealth, pilot.HealthLevel, ShipParameters.MaxHealthCoef);
         var curHp = MaxHealth * shipInventory.HealthPercent;
-        Health.text = Namings.Health + ":" + curHp.ToString("0") + "/" + PilotInventoryUI.Info(MaxHealth, pilot.HealthLevel);
+        Health.text = Namings.Tag("Health") + ":" + curHp.ToString("0") + "/" + PilotInventoryUI.Info(MaxHealth, pilot.HealthLevel);
     }
 }
 

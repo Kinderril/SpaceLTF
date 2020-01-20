@@ -12,24 +12,27 @@ public class StartNewGameData
     public ShipConfig shipConfig;
     public List<SpellType> posibleSpell;
     public Dictionary<PlayerParameterType, int> startParametersLevels;
+    public int PowerPerTurn;
 
     public StartNewGameData(Dictionary<PlayerParameterType, int> startParametersLevels,
-        ShipConfig shipConfig, List<WeaponType> posibleStartWeapons, int SectorSize,  int SectorCount,
-        int stepsBeforeDeath, int CoreElementsCount, int BasePower, List<SpellType> posibleSpell)
+        ShipConfig shipConfig, List<WeaponType> posibleStartWeapons, int SectorSize, int SectorCount,
+        int stepsBeforeDeath, int CoreElementsCount, int BasePower, List<SpellType> posibleSpell, int PowerPerTurn)
     {
         Debug.Log(($"StartNewGameData {shipConfig.ToString()} SectorSize:{SectorSize} " +
                   $" SectorCount:{SectorCount} StepsBeforeDeath:{stepsBeforeDeath}  CoreElementsCount:{CoreElementsCount}" +
-                  $"  BasePower:{BasePower}   posibleSpell:{posibleSpell}").Red());
+                  $"  BasePower:{BasePower}  PowerPerTurn:{PowerPerTurn}   posibleSpell:{posibleSpell}").Red());
         this.startParametersLevels = startParametersLevels;
         this.shipConfig = shipConfig;
         this.SectorSize = SectorSize;
         this.SectorCount = SectorCount;
         this.CoreElementsCount = CoreElementsCount;
-        this.StepsBeforeDeath = stepsBeforeDeath;
+        this.StepsBeforeDeath = 999;
         this.posibleStartWeapons = posibleStartWeapons;
         this.BasePower = BasePower;
         this.posibleSpell = posibleSpell;
+        this.PowerPerTurn = PowerPerTurn;
     }
+
 
     public float CalcDifficulty()
     {
@@ -37,8 +40,9 @@ public class StartNewGameData
         var deltaSize = (SectorSize - Library.MIN_GLOBAL_SECTOR_SIZE) * 0.05f;
         var deltaCore = (CoreElementsCount - Library.MIN_GLOBAL_MAP_CORES) * 0.12f;
 
-        var deltaDeath = (Library.MAX_GLOBAL_MAP_DEATHSTART - StepsBeforeDeath) * 0.08f;
+        // var deltaDeath = (Library.MAX_GLOBAL_MAP_DEATHSTART - StepsBeforeDeath) * 0.08f;
+        var powerPerTurn = (PowerPerTurn - Library.MIN_GLOBAL_MAP_ADDITIONAL_POWER) * 0.1f;
 
-        return deltaDeath + deltaCore + deltaSize + deltaPower - 0.01f;
+        return deltaCore + deltaSize + deltaPower + powerPerTurn - 0.01f;
     }
 }

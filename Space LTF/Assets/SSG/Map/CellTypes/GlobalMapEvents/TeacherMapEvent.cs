@@ -4,8 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public enum TeachType
 {
@@ -32,7 +30,7 @@ public class TeacherMapEvent : BaseGlobalMapEvent
         switch (_teachType)
         {
             case TeachType.mainShip:
-//                PlayerParameterType tt = PlayerParameterType.diplomaty;
+                //                PlayerParameterType tt = PlayerParameterType.diplomaty;
                 List<PlayerParameterType> posibleUpg = new List<PlayerParameterType>();
                 var player = MainController.Instance.MainPlayer.Parameters;
                 PlayerParameter param = null;
@@ -65,7 +63,7 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                 var paramToUpgrade = posibleUpg.RandomElement();
                 if (param != null)
                 {
-                    _cost = (int)(param.UpgradeCost()*MyExtensions.Random(0.5f,0.75f));
+                    _cost = (int)(param.UpgradeCost() * MyExtensions.Random(0.5f, 0.75f));
                     if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_cost))
                     {
                         mianAnswers.Add(new AnswerDialogData($"Ok.", () => DoUpgradeMain(paramToUpgrade), null));
@@ -76,7 +74,7 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                 return mesData;
             case TeachType.pilots:
                 var army = MainController.Instance.MainPlayer.Army;
-                var midLvl = (army.Sum(x=>x.Pilot.CurLevel)/army.Count) ;
+                var midLvl = (army.Army.Sum(x => x.Pilot.CurLevel) / army.Count);
                 var costMidLvl = Library.PilotLvlUpCost(midLvl);
                 _cost = (int)(costMidLvl * MyExtensions.Random(0.5f, 0.75f));
                 if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_cost))
@@ -97,7 +95,7 @@ public class TeacherMapEvent : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData($"Ok.", null, null));
         MainController.Instance.MainPlayer.MoneyData.RemoveMoney(_cost);
-        var army = MainController.Instance.MainPlayer.Army.Suffle();
+        var army = MainController.Instance.MainPlayer.Army.Army.Suffle();
         var points = 1000f;
         foreach (var pilotData in army)
         {

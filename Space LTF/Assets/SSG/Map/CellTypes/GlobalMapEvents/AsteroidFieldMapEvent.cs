@@ -1,9 +1,5 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
@@ -22,7 +18,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
         return mesData;
     }
 
-    private List<AnswerDialogData>  StandartOptions()
+    private List<AnswerDialogData> StandartOptions()
     {
         var ans = new List<AnswerDialogData>()
         {
@@ -97,7 +93,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
     {
         weaponTryies++;
         var player = MainController.Instance.MainPlayer;
-        var rockectWeapons = player.Army.Where(x =>
+        var rockectWeapons = player.Army.Army.Where(x =>
             x.Ship.WeaponsModuls.FirstOrDefault(y => y != null && (y.WeaponType == WeaponType.rocket || y.WeaponType == WeaponType.casset)) != null);
         if (rockectWeapons.Any())
         {
@@ -133,7 +129,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
     private void BrokeShipWithRandom()
     {
         var player = MainController.Instance.MainPlayer;
-        foreach (var data in player.Army)
+        foreach (var data in player.Army.Army)
         {
             if (MyExtensions.IsTrueEqual())
             {

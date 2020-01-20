@@ -328,10 +328,15 @@ public static class Library
         return null;
     }
 
-    public static BaseSpellModulInv CreateSpell()
+    public static BaseSpellModulInv CreateSpell(int level = 1)
     {
         var allSpells = ArmyCreatorData.AllSpellsStatic();
-        return CreateSpell(allSpells.RandomElement());
+        var spell = CreateSpell(allSpells.RandomElement());
+        for (int i = 0; i < level-1; i++)
+        {
+            spell.Upgrade();
+        }
+        return spell;
     }
 
     public static BaseSpellModulInv CreateSpell(SpellType spellType)
@@ -579,7 +584,9 @@ public static class Library
     public const float MIN_GLOBAL_MAP_DEATHSTART = 1;
     public const float MAX_GLOBAL_MAP_DEATHSTART = 10;
     public const float MIN_GLOBAL_MAP_CORES = 2;
-    public const float MAX_GLOBAL_MAP_CORES = 5;
+    public const float MAX_GLOBAL_MAP_CORES = 5;   
+    public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 0;
+    public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 10;
 
     public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 6;
     public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 7;
@@ -603,7 +610,7 @@ public static class Library
     public static float REPURARTION_TO_DIPLOMATY_COEF = .05f;
     public static float MONEY_QUEST_COEF = 0.09f;
     public static int PEACE_REPUTATION = 50;
-    public static int START_REPUTATION = -50;
+    public static int START_REPUTATION = -35;
     public static int BATTLE_REPUTATION_AFTER_FIGHT = 4;
 
     public const int REPUTATION_STEAL_REMOVE = 5;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public class WindowRunAway : BaseWindow
@@ -15,11 +10,11 @@ public class WindowRunAway : BaseWindow
     public override void Init()
     {
         var player = MainController.Instance.MainPlayer;
-        foreach (var pilotData in player.Army)
+        foreach (var pilotData in player.Army.Army)
         {
             var pref = DataBaseController.GetItem(ShipRunAwayUIPrefab);
             pref.gameObject.transform.SetParent(LayoutMy);
-            pref.Init(pilotData.Ship,pilotData.Pilot);
+            pref.Init(pilotData.Ship, pilotData.Pilot);
         }
         base.Init();
     }

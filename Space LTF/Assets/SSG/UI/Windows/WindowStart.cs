@@ -23,7 +23,10 @@ public class WindowStart : BaseWindow
     {
         WindowManager.Instance.OpenWindow(MainState.achievements);
     }
-
+    public void OnClickSettings()
+    {
+        WindowManager.Instance.OpenSettingsSettings(false);
+    }
     private void StartNewGame()
     {
 //        MainController.Instance.CreateNewPlayer();

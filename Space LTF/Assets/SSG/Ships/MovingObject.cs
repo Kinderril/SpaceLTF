@@ -123,39 +123,44 @@ public abstract class MovingObject : PoolElement
             return 1f;
         }
 
-        var ang = Vector3.Angle(dir, LookDirection);
+        var quatern = ApplyRotationXZ(dir, LookDirection, LookLeft, TurnSpeed, DebugMovingData,Position);
+        Rotation = quatern;
+        return 1f;
+    }
+
+    public static Quaternion ApplyRotationXZ(Vector3 targetDir, Vector3 lookDir, Vector3 lookLeft,
+        Func<float> TurnSpeed, DebugMovingData debugData,Vector3 position)
+    {
+        Quaternion Rotation;
+        var ang = Vector3.Angle(targetDir, lookDir);
         var turnSpeed = TurnSpeed();
         var angPerFrameTurn = (turnSpeed * Time.deltaTime);
-        var steps = ang/angPerFrameTurn;
+        var steps = ang / angPerFrameTurn;
         if (steps <= 1f) // && exactlyPoint)
         {
 #if UNITY_EDITOR
-            DebugMovingData.AddDir(dir, true, LookDirection,Position);
+            if (debugData != null)
+                debugData.AddDir(lookDir, true, lookDir, position);
 #endif
-            Rotation = Quaternion.FromToRotation(Vector3.forward, dir);
-
-            return 1f;
+            Rotation = Quaternion.FromToRotation(Vector3.forward, targetDir);
+            return Rotation;
         }
-//        var percentOfRotate = Mathf.Clamp01(1f / steps);
-//        var lerpRes = EulerLerp.LerpVectorByY(LookDirection, dir, percentOfRotate);
         Vector3 lerpRes;
-        var isLeft = Vector3.Dot(dir, LookLeft) > 0;
+        var isLeft = Vector3.Dot(targetDir, lookLeft) > 0;
         if (isLeft)
         {
-            lerpRes = Utils.RotateOnAngUp(LookDirection, angPerFrameTurn);
+            lerpRes = Utils.RotateOnAngUp(lookDir, angPerFrameTurn);
         }
         else
         {
-            lerpRes = Utils.RotateOnAngUp(LookDirection, -angPerFrameTurn);
+            lerpRes = Utils.RotateOnAngUp(lookDir, -angPerFrameTurn);
         }
-
-        BankingData.SetNewData(dir, steps);
 #if UNITY_EDITOR
-        DebugMovingData.AddDir(lerpRes, false, LookDirection,Position);
+        if (debugData != null)
+            debugData.AddDir(lookDir, true, lookDir, position);
 #endif
-        var  qRotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
-        Rotation = qRotation;
-        return 1f;
+        var qRotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
+        return qRotation;
     }
 
 

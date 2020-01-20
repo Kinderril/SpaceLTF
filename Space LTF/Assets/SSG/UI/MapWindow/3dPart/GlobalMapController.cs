@@ -1,9 +1,7 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,12 +11,12 @@ public class GlobalMapController : MonoBehaviour
     private GlobalMapCellObject[,] _allCells;
     public GlobalMapCellObject CellPrefab;
     public float OffsetCell;
-//    public float OffsetSector;
+    //    public float OffsetSector;
     private GalaxyData _data;
 
     private bool IsEnbale
     {
-        get { return _isEnable;}
+        get { return _isEnable; }
         set
         {
             _isEnable = value;
@@ -38,30 +36,35 @@ public class GlobalMapController : MonoBehaviour
     public Transform ConnectionsContainer;
     public Transform PointsContainer;
     public Transform SectorsContainer;
+    public Transform MovingArmyContainer;
     public GlobalMapCellConnector GlobalMapCellConnectorPrefab;
     public GlobalMapCellConnector GlobalMapCellWayPrefab;
     public GlobalMapMoverObject MapMoverObject;
     public GlobalMapCellConnector GlobalMapCellBorderPrefab;
     private List<GlobalMapCellConnector> _connectors = new List<GlobalMapCellConnector>();
-    private Dictionary<GlobalMapCell,List<GlobalMapCellConnector>> _cellsWaysObjects 
+    private Dictionary<GlobalMapCell, List<GlobalMapCellConnector>> _cellsWaysObjects
         = new Dictionary<GlobalMapCell, List<GlobalMapCellConnector>>();
     GlobalMapCellObject myCEll = null;
     private float _mapPressedDownTime;
     private List<SectorGlobalMapInfo> _allSectros = new List<SectorGlobalMapInfo>();
     private SectorGlobalMapInfo _lastSelectedSector;
+    private Dictionary<GlobalMapCell,GlobalMapCellObject> _logicToVisualObjects = new Dictionary<GlobalMapCell, GlobalMapCellObject>();
+    private List<EnemyGlobalMapMoverObjet> _enemiesObjects = new List<EnemyGlobalMapMoverObjet>();
 
 
-    public void SingleInit(GalaxyData data,MapWindow mapWindow, Action<GlobalMapCellObject> CallbackNearObjec)
+    public void SingleInit(GalaxyData data, MapWindow mapWindow, Action<GlobalMapCellObject> CallbackNearObjec)
     {
         if (isInited)
         {
             return;
         }
+        _logicToVisualObjects.Clear();
         SectorsContainer.ClearTransform();
         this.CallbackNearObjec = CallbackNearObjec;
         _mapWindow = mapWindow;
         isInited = true;
         _data = data;
+        _data.GalaxyEnemiesArmyController.OnAddMovingArmy += OnAddMovingArmy;
         _allCells = new GlobalMapCellObject[data.Size, data.Size];
         min = Vector3.zero;
         max = new Vector3(OffsetCell * data.Size, 0, OffsetCell * data.Size);
@@ -81,6 +84,31 @@ public class GlobalMapController : MonoBehaviour
         SetBorders();
     }
 
+    private void OnAddMovingArmy(MovingArmy arg1, bool arg2)
+    {
+        if (arg2)
+        {
+            var army = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.MovingArmyObject);
+            army.transform.SetParent(MovingArmyContainer);
+            _enemiesObjects.Add(army);
+            var start = GetCellObjectByCell(arg1.CurCell);
+            army.Init(this, start, arg1);
+        }
+        else
+        {
+            var destroyedArmy = _enemiesObjects.FirstOrDefault(x => x.Owner == arg1);
+            if (destroyedArmy != null)
+            {
+                _enemiesObjects.Remove(destroyedArmy);
+                GameObject.Destroy(destroyedArmy.gameObject);
+            }
+            else
+            {
+                Debug.LogError("can't find destroyed moving army");
+            }
+        }
+    }
+
     public void ClearAll()
     {
         isInited = false;
@@ -95,7 +123,7 @@ public class GlobalMapController : MonoBehaviour
         _cellsWaysObjects.Clear();
         _allSectros.Clear();
         _connectors.Clear();
-        _allCells = new GlobalMapCellObject[0,0];
+        _allCells = new GlobalMapCellObject[0, 0];
         _data = null;
     }
 
@@ -114,7 +142,7 @@ public class GlobalMapController : MonoBehaviour
 
     private GlobalMapCell DrawCells(GalaxyData data)
     {
-    
+
         var allCells2 = data.AllCells();
 #if UNITY_EDITOR
         if (allCells2.Length < 10)
@@ -141,8 +169,13 @@ public class GlobalMapController : MonoBehaviour
                     cellObj.transform.SetParent(PointsContainer, true);
                     cellObj.transform.position = v;
                     cellObj.Init(cell, OffsetCell);
+                    _logicToVisualObjects.Add(cell,cellObj);
                     cellObj.Cell.OnDestoyedCell += OnDestoyedCell;
                     _allCells[i, j] = cellObj;
+                }
+                else
+                {
+
                 }
             }
         }
@@ -175,13 +208,13 @@ public class GlobalMapController : MonoBehaviour
             RecursuveDrawWays(sector, target, usedCells);
         }
 
-//        if (currentCell.ExtraWay != null)
-//        {
-//            var extra = currentCell.ExtraWay;
-//            DrawWays(extra, currentCell);
-//            RecursuveDrawWays(sector, extra, usedCells);
-//
-//        }
+        //        if (currentCell.ExtraWay != null)
+        //        {
+        //            var extra = currentCell.ExtraWay;
+        //            DrawWays(extra, currentCell);
+        //            RecursuveDrawWays(sector, extra, usedCells);
+        //
+        //        }
     }
 
     private void DrawWays(GlobalMapCell target, GlobalMapCell currentCell)
@@ -190,15 +223,15 @@ public class GlobalMapController : MonoBehaviour
         var c2 = _allCells[target.indX, target.indZ];
         if (c1 != null && c2 != null)
         {
-             var obj = DataBaseController.GetItem(GlobalMapCellWayPrefab);
+            var obj = DataBaseController.GetItem(GlobalMapCellWayPrefab);
             obj.gameObject.transform.SetParent(WaysContainer);
             obj.Init(c1.ModifiedPosition, c2.ModifiedPosition);
-            AddWayToCell(target,obj);
+            AddWayToCell(target, obj);
             AddWayToCell(currentCell, obj);
         }
     }
 
-    private void AddWayToCell(GlobalMapCell target,GlobalMapCellConnector connector)
+    private void AddWayToCell(GlobalMapCell target, GlobalMapCellConnector connector)
     {
         List<GlobalMapCellConnector> list;
         if (!_cellsWaysObjects.ContainsKey(target))
@@ -224,15 +257,22 @@ public class GlobalMapController : MonoBehaviour
                     cell.Cell.OnDestoyedCell -= OnDestoyedCell;
             }
         }
+
+        foreach (var moverObject in _enemiesObjects)
+        {
+            DestroyImmediate(moverObject.gameObject);
+        }
+        _data.GalaxyEnemiesArmyController.OnAddMovingArmy -= OnAddMovingArmy;
+        _enemiesObjects.Clear();
     }
 
-    public void SingleReset(GlobalMapCell currentCell,List<GlobalMapCell> posibleWays)
+    public void SingleReset(GlobalMapCell currentCell, List<GlobalMapCell> posibleWays)
     {
         if (_data == null)
         {
             return;
         }
-//        var cells = _data.AllCells();
+        //        var cells = _data.AllCells();
         for (int i = 0; i < _data.Size; i++)
         {
             for (int j = 0; j < _data.Size; j++)
@@ -264,7 +304,7 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-    private void DrawConnecttion(GlobalMapCellObject myCEll, GlobalMapCell globalMapCell,ref int connectd)
+    private void DrawConnecttion(GlobalMapCellObject myCEll, GlobalMapCell globalMapCell, ref int connectd)
     {
         for (int i = 0; i < _data.Size; i++)
         {
@@ -278,7 +318,7 @@ public class GlobalMapController : MonoBehaviour
                     {
                         var c = _connectors[connectd];
                         connectd++;
-//                        Debug.Log("Draw connector " + connectd);
+                        //                        Debug.Log("Draw connector " + connectd);
                         SetConnectionObject(myCEll, cell, c);
                     }
                 }
@@ -292,7 +332,7 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-    private void SetConnectionObject(GlobalMapCellObject myCEll, GlobalMapCellObject target,GlobalMapCellConnector connector)
+    private void SetConnectionObject(GlobalMapCellObject myCEll, GlobalMapCellObject target, GlobalMapCellConnector connector)
     {
         connector.Init(myCEll.ModifiedPosition, target.ModifiedPosition);
     }
@@ -300,8 +340,6 @@ public class GlobalMapController : MonoBehaviour
     public void Open()
     {
         IsEnbale = true;
-
-//        CamerasController.Instance.SetCameraTo((min+max)/2f);
         CamerasController.Instance.OpenGlobalCamera();
     }
 
@@ -381,7 +419,7 @@ public class GlobalMapController : MonoBehaviour
             var secot = ClosestSector(point.Value, out var dist);
             if (secot != null)
             {
-//                Debug.LogError($"closest {secot.transform.position}   point:{point}  name:{secot.name}");
+                //                Debug.LogError($"closest {secot.transform.position}   point:{point}  name:{secot.name}");
             }
             if (secot != _lastSelectedSector)
             {
@@ -395,17 +433,17 @@ public class GlobalMapController : MonoBehaviour
             }
         }
     }
-    
+
     private void UpdateClosest(Vector3? ray)
     {
         if (ray.HasValue)
         {
             float dist;
             var nearObject = ClosestObject(ray.Value, out dist);
-            if (nearObject != null )
+            if (nearObject != null)
             {
-//                Debug.Log("dist " + Mathf.Sqrt(dist) + "  " + nearObject.Cell.InfoOpen);
-                if (dist < 13 )
+                //                Debug.Log("dist " + Mathf.Sqrt(dist) + "  " + nearObject.Cell.InfoOpen);
+                if (dist < 13)
                 {
                     SetClosetsObject(nearObject);
                     CallbackNearObjec(nearObject);
@@ -417,7 +455,7 @@ public class GlobalMapController : MonoBehaviour
         CallbackNearObjec(null);
 
     }
-     
+
     private void SetClosetsObject(GlobalMapCellObject nearObject)
     {
 
@@ -428,15 +466,15 @@ public class GlobalMapController : MonoBehaviour
 
         _lastNearObject = nearObject;
 
-        if (_lastNearObject!=null)
+        if (_lastNearObject != null)
             _lastNearObject.Selected();
     }
-     
+
     [CanBeNull]
-    private GlobalMapCellObject ClosestObject(Vector3 pos,out float dist)
+    private GlobalMapCellObject ClosestObject(Vector3 pos, out float dist)
     {
         float vv = Single.MaxValue;
-        var xIndex = (int)((pos.x + OffsetCell/2f) / OffsetCell);
+        var xIndex = (int)((pos.x + OffsetCell / 2f) / OffsetCell);
         var zIndex = (int)((pos.z + OffsetCell / 2f) / OffsetCell);
         if (xIndex >= 0 && xIndex < _data.Size && zIndex >= 0 && zIndex < _data.Size)
         {
@@ -452,7 +490,7 @@ public class GlobalMapController : MonoBehaviour
         return null;
     }
 
-    private SectorGlobalMapInfo ClosestSector(Vector3 pos,out float dist)
+    private SectorGlobalMapInfo ClosestSector(Vector3 pos, out float dist)
     {
         var startDist = Single.MaxValue;
         dist = 0f;
@@ -462,7 +500,7 @@ public class GlobalMapController : MonoBehaviour
             dist = (allSectro.transform.position - pos).sqrMagnitude;
             if (dist < startDist)
             {
-//                Debug.LogError($"dist to secv {dist}   name:{allSectro.name}");
+                //                Debug.LogError($"dist to secv {dist}   name:{allSectro.name}");
                 startDist = dist;
                 secotr = allSectro;
             }
@@ -502,25 +540,14 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-     [CanBeNull]
-    private GlobalMapCellObject GetCellObjectByCell(GlobalMapCell cell)
+    [CanBeNull]
+    public GlobalMapCellObject GetCellObjectByCell(GlobalMapCell cell)
     {
-//        GlobalMapCellObject cellToNavigate = null;
-        for (int i = 0; i < _data.Size; i++)
+        if (_logicToVisualObjects.TryGetValue(cell, out var cellObj))
         {
-            for (int j = 0; j < _data.Size; j++)
-            {
-                var a = _allCells[i, j];
-                if (a != null)
-                {
-                    if (a.Cell == cell)
-                    {
-                        return a;
-
-                    }
-                }
-            }
+            return cellObj;
         }
+                    Debug.LogError($"Can't find cell {cell}");
         return null;
     }
 
@@ -535,12 +562,12 @@ public class GlobalMapController : MonoBehaviour
         IsEnbale = false;
     }
 
-    public void MoveToCell(GlobalMapCell target,Action callback)
+    public void MoveToCell(GlobalMapCell target, Action callback)
     {
         MainController.Instance.MainPlayer.SaveGame();
         Block();
         var targetCell = GetCellObjectByCell(target);
-        
+
         var shallChange2 = WindowManager.Instance.WindowSubCanvas.interactable;
         var shallChange = WindowManager.Instance.WindowMainCanvas.interactable;
         if (shallChange)
@@ -548,30 +575,109 @@ public class GlobalMapController : MonoBehaviour
         if (shallChange2)
             WindowManager.Instance.WindowSubCanvas.interactable = false;
 
-        void AfterAction()
+        bool isMainReady = false, isCallback = false, isEnemiesReady = false;
+
+        void CheckIsAllReady()
         {
-            if (shallChange) WindowManager.Instance.WindowMainCanvas.interactable = true;
-            if (shallChange2) WindowManager.Instance.WindowSubCanvas.interactable = true;
-            UnBlock();
+            if (isCallback)
+            {
+                return;
+            }
+            if (isMainReady && isEnemiesReady)
+            {
+                isCallback = true;
+                callback();
+            }
+
         }
 
         if (targetCell != null)
         {
-            MapMoverObject.MoveTo(targetCell, () =>
+            var timeToMove = MapMoverObject.MoveTo(targetCell, () =>
             {
-                AfterAction();
-                callback();
+                AfterAction(shallChange, shallChange2);
+                isMainReady = true;
+                CheckIsAllReady();
             });
+            MoveEnemies(() =>
+            {
+                isEnemiesReady = true;
+                CheckIsAllReady();
+            }, target, timeToMove);
 
         }
         else
         {
             Debug.LogError("can't find object cell by target cell");
-            AfterAction();
+            AfterAction(shallChange, shallChange2);
+        }
+    }
+
+    private void MoveEnemies(Action callback, GlobalMapCell playersCell,float timeToMove)
+    {
+        int completed = 0;
+        int targetCallbacks = 0;
+        bool isCallbackComlete = false;
+
+        void CheckIsAllComplete()
+        {
+            if (isCallbackComlete)
+            {
+                return;
+            }
+            if (completed >= targetCallbacks)
+            {
+                isCallbackComlete = true;
+                callback();
+            }
         }
 
+        Dictionary<GlobalMapCell,EnemyGlobalMapMoverObjet> objectsCels= new Dictionary<GlobalMapCell, EnemyGlobalMapMoverObjet>();
+        foreach (var globalMapMoverObject in _enemiesObjects)
+        {
+            var place = globalMapMoverObject.FindPlace(playersCell);
+            if (place != null && !objectsCels.ContainsKey(place))
+                objectsCels.Add(place,globalMapMoverObject);
+        }
 
+        foreach (var obj in objectsCels)
+        {
+            if (FindAndGo(timeToMove,obj.Value, obj.Key, () =>
+            {
+                completed++;
+                CheckIsAllComplete();
+            }))
+            {
+                targetCallbacks++;
+            }
+        }
+
+        if (targetCallbacks == 0)
+        {
+            isCallbackComlete = true;
+            callback();
+        }
 
     }
+
+    private bool FindAndGo(float timeToMove,EnemyGlobalMapMoverObjet obj ,GlobalMapCell cell, Action callback)
+    {
+        if (obj.AndGo(callback, cell, timeToMove))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    void AfterAction(bool shallChange, bool shallChange2)
+    {
+        if (shallChange)
+            WindowManager.Instance.WindowMainCanvas.interactable = true;
+        if (shallChange2)
+            WindowManager.Instance.WindowSubCanvas.interactable = true;
+        UnBlock();
+    }
+
 }
 

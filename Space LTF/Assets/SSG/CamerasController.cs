@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public class CamerasController : Singleton<CamerasController>
 {
+    private const string KEY_FXAA = "KEY_FXAA";
+    private const string KEY = "SoundKey";
     public CameraController GameCamera;
     public BackgroundCamera BackgroundCamera;
     public CameraController GlobalMapCamera;
@@ -20,15 +18,30 @@ public class CamerasController : Singleton<CamerasController>
     private const float MinOffset = 40;
     private const float MaxOffset = 20;
     public bool IsAudioEnable => _isAudioEnabled;
+    private bool _fxaaEnable;
+
+    public bool FxaaEnable => _fxaaEnable;
 
     void Awake()
     {
         OpenUICamera();
     }
 
+    public void CheckSoundOnStart()
+    {
+        var key = PlayerPrefs.GetInt(KEY, 1);
+        _isAudioEnabled = key == 1;
+        CheckListaner();
+    }
+
     public void MainListenerSwitch()
     {
         _isAudioEnabled = !_isAudioEnabled;
+        CheckListaner();
+    }
+
+    private void CheckListaner()
+    {
         AudioListener.volume = _isAudioEnabled ? 1f : 0f;
     }
 
@@ -78,7 +91,7 @@ public class CamerasController : Singleton<CamerasController>
         bool shallMove = false;
         float coefMove = 0.5f;
         var mousePos = Input.mousePosition;
-//        Debug.LogError("Mouse pos:" + mousePos);
+        //        Debug.LogError("Mouse pos:" + mousePos);
         if (mousePos.x < MaxOffset)
         {
             shallMove = true;
@@ -147,10 +160,10 @@ public class CamerasController : Singleton<CamerasController>
     {
         CameraMove();
 #if UNITY_EDITOR
-//        if (GameCamera.gameObject.activeSelf && GlobalMapCamera.gameObject.activeSelf)
-//        {
-//            Debug.LogError("Both cameras are active");
-//        }
+        //        if (GameCamera.gameObject.activeSelf && GlobalMapCamera.gameObject.activeSelf)
+        //        {
+        //            Debug.LogError("Both cameras are active");
+        //        }
 #endif
     }
 
@@ -167,7 +180,7 @@ public class CamerasController : Singleton<CamerasController>
         CloseGameCamera();
         CloseGlobalCamera();
     }
-    
+
     public void EndGame()
     {
         CloseGameCamera();
@@ -223,6 +236,36 @@ public class CamerasController : Singleton<CamerasController>
     public void StartGlobalMap()
     {
         OpenGlobalCamera();
+    }
+
+    public void StartCheck()
+    {
+        StartCheckAA();
+        CheckSoundOnStart();
+    }
+
+    private void CheckAntiAlysing(bool fxaaEnable)
+    {
+        GameCamera.CheckAntiAlysing(fxaaEnable);
+        GlobalMapCamera.CheckAntiAlysing(fxaaEnable);
+    }
+
+    public void EnableAA(bool val)
+    {
+        _fxaaEnable = val;
+        PlayerPrefs.SetInt(KEY_FXAA, _fxaaEnable ? 1 : 0);
+        CheckAntiAlysing(_fxaaEnable);
+    }
+
+    public void StartCheckAA()
+    {
+        var isEnableFxaa = PlayerPrefs.GetInt(KEY_FXAA, 0) == 1;
+        _fxaaEnable = isEnableFxaa;
+        CheckAntiAlysing(_fxaaEnable);
+    }
+    public void FXAASwitch()
+    {
+        EnableAA(!_fxaaEnable);
     }
 }
 

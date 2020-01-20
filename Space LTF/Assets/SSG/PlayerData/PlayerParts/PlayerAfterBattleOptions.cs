@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 //public enum AfterbattleType
@@ -9,30 +7,31 @@ using System.Collections.Generic;
 //}
 
 [System.Serializable]
-public class PlayerAfterBattleOptions 
+public class PlayerAfterBattleOptions
 {
-//    private   List<AfterbattleType> _lastUsed = new List<AfterbattleType>();
-    private List<Func<float,MessageDialogData>> _posibleOptionsList = new List<Func<float, MessageDialogData>>();
-    private List<Func<float,MessageDialogData>> _posibleOptionsListTmp = new List<Func<float, MessageDialogData>>();
+    //    private   List<AfterbattleType> _lastUsed = new List<AfterbattleType>();
+    private List<Func<float, MessageDialogData>> _posibleOptionsList = new List<Func<float, MessageDialogData>>();
+    private List<Func<float, MessageDialogData>> _posibleOptionsListTmp = new List<Func<float, MessageDialogData>>();
 
-//    private Dictionary<Func<float,MessageDialogData>,float> _posibleOptions = new Dictionary<Func<float, MessageDialogData>, float>();
-//    private Dictionary<Func<float,MessageDialogData>,float> _posibleOptionsTmp = new Dictionary<Func<float, MessageDialogData>, float>();
+    //    private Dictionary<Func<float,MessageDialogData>,float> _posibleOptions = new Dictionary<Func<float, MessageDialogData>, float>();
+    //    private Dictionary<Func<float,MessageDialogData>,float> _posibleOptionsTmp = new Dictionary<Func<float, MessageDialogData>, float>();
     private int _lastStepGetDialog;
     private const int DialogFrequancy = 3;
 
 
-    public PlayerAfterBattleOptions() {
+    public PlayerAfterBattleOptions()
+    {
         _posibleOptionsList.Add(Federation);
         _posibleOptionsList.Add(Krions);
         _posibleOptionsList.Add(Raides);
         _posibleOptionsList.Add(Mercenaries);
         _posibleOptionsList.Add(Ocrons);
         RefreshPosibleList();
-//        _posibleOptions.Add(Federation,0f);
-//        _posibleOptions.Add(Krions,0);
-//        _posibleOptions.Add(Raides,0f);
-//        _posibleOptions.Add(Mercenaries,0f);
-//        _posibleOptions.Add(Ocrons,0f);
+        //        _posibleOptions.Add(Federation,0f);
+        //        _posibleOptions.Add(Krions,0);
+        //        _posibleOptions.Add(Raides,0f);
+        //        _posibleOptions.Add(Mercenaries,0f);
+        //        _posibleOptions.Add(Ocrons,0f);
     }
 
 
@@ -45,7 +44,7 @@ public class PlayerAfterBattleOptions
         }
     }
 
-    public MessageDialogData GetDialog(int step,float cellPower)
+    public MessageDialogData GetDialog(int step, float cellPower)
     {
         var delta = step - _lastStepGetDialog;
         if (SkillWork(DialogFrequancy, delta))
@@ -60,11 +59,11 @@ public class PlayerAfterBattleOptions
             _lastStepGetDialog = step;
             return option(cellPower);
 
-//               WDictionary<Func<float, MessageDialogData>> _wdic = new WDictionary<Func<float, MessageDialogData>>(_posibleOptions);
-//               var option = _wdic.Random();
-//               var curVal = _posibleOptions[option];
-//               _posibleOptions[option] = curVal - 1f;
-//               return option(cellPower);
+            //               WDictionary<Func<float, MessageDialogData>> _wdic = new WDictionary<Func<float, MessageDialogData>>(_posibleOptions);
+            //               var option = _wdic.Random();
+            //               var curVal = _posibleOptions[option];
+            //               _posibleOptions[option] = curVal - 1f;
+            //               return option(cellPower);
         }
 
         return null;
@@ -89,7 +88,7 @@ public class PlayerAfterBattleOptions
             var ans = new List<AnswerDialogData>();
             ans.Add(new AnswerDialogData("Leave him.", LeavehimAction));
             ans.Add(new AnswerDialogData(String.Format("Try to repair his ship and leave him. [Repair:{0}]", player.Parameters.Repair.Level), LeavehimActionRepair));
-            if (MainController.Instance.MainPlayer.CanAddShip())
+            if (MainController.Instance.MainPlayer.Army.CanAddShip())
             {
                 ans.Add(new AnswerDialogData("Hire him.", () => HireAction()));
             }
@@ -112,7 +111,7 @@ public class PlayerAfterBattleOptions
         var player = MainController.Instance.MainPlayer;
         if (SkillWork(2, player.Parameters.Repair.Level))
         {
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.raiders,Library.REPUTATION_REPAIR_ADD);
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.raiders, Library.REPUTATION_REPAIR_ADD);
             WindowManager.Instance.InfoWindow.Init(null, "Completed!");
         }
         else
@@ -146,7 +145,7 @@ public class PlayerAfterBattleOptions
             )
             );
             int hireMoney = 20;
-            if (MainController.Instance.MainPlayer.CanAddShip())
+            if (MainController.Instance.MainPlayer.Army.CanAddShip())
             {
                 ans.Add(new AnswerDialogData(String.Format("Hire him. {0} credits", hireMoney), () => HireAction(null, hireMoney)));
             }
@@ -157,7 +156,7 @@ public class PlayerAfterBattleOptions
 
     private void LeavehimAction()
     {
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios,Library.REPUTATION_SCIENS_LAB_ADD);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios, Library.REPUTATION_SCIENS_LAB_ADD);
     }
 
     private MessageDialogData Ocrons(float power)
@@ -240,11 +239,11 @@ public class PlayerAfterBattleOptions
         var player = MainController.Instance.MainPlayer;
         if (player.MoneyData.HaveMoney(moneyCost))
         {
-            foreach (var shipPilotData in player.Army)
+            foreach (var shipPilotData in player.Army.Army)
             {
                 if (shipPilotData.Ship.ShipType != ShipType.Base)
                 {
-                    shipPilotData.Pilot.UpgradeRandomLevel(false,true);
+                    shipPilotData.Pilot.UpgradeRandomLevel(false, true);
                 }
             }
         }
@@ -259,7 +258,7 @@ public class PlayerAfterBattleOptions
     {
         if (!MyExtensions.IsTrue01(0.15f))
         {
-            var masinMsg = Namings.OpenCoordinates; 
+            var masinMsg = Namings.OpenCoordinates;
             var ans = new List<AnswerDialogData>();
             ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByFederation));
             var mesData = new MessageDialogData(masinMsg, ans);
@@ -270,10 +269,10 @@ public class PlayerAfterBattleOptions
             OpenCellsByFederation();
             var masinMsg = "After battle you find one of opponents army.";
             var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Ask buyout.", ()=>Buyout(ShipConfig.federation)));
-            ans.Add(new AnswerDialogData("Search for hidden things.",()=> SearchFor(ShipConfig.federation)));
+            ans.Add(new AnswerDialogData("Ask buyout.", () => Buyout(ShipConfig.federation)));
+            ans.Add(new AnswerDialogData("Search for hidden things.", () => SearchFor(ShipConfig.federation)));
             int hireMoney = 100;
-            if (MainController.Instance.MainPlayer.CanAddShip())
+            if (MainController.Instance.MainPlayer.Army.CanAddShip())
             {
                 ans.Add(new AnswerDialogData(String.Format("Hire him. {0} credits", hireMoney), () => HireAction(null, hireMoney)));
             }
@@ -370,10 +369,10 @@ public class PlayerAfterBattleOptions
         if (ws.Random())
         {
             var scouts = MainController.Instance.MainPlayer.Parameters.Scouts.Level;
-            int monet = MyExtensions.Random(scouts*3, scouts * 5);
+            int monet = MyExtensions.Random(scouts * 3, scouts * 5);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
             WindowManager.Instance.InfoWindow.Init(null, String.Format("Credits add: {0}.", monet));
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config,Library.REPUTATION_STEAL_REMOVE);
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, Library.REPUTATION_STEAL_REMOVE);
         }
         else
         {
@@ -382,7 +381,7 @@ public class PlayerAfterBattleOptions
     }
     private void KillAction(float power)
     {
-        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.mercenary,Library.REPUTATION_ATTACK_PEACEFULL_REMOVE);
+        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.mercenary, Library.REPUTATION_ATTACK_PEACEFULL_REMOVE);
         if (MyExtensions.IsTrue01(MainController.Instance.MainPlayer.Parameters.Scouts.Level / 4f))
         {
             int monet = (int)MyExtensions.Random(power / 5f, power * 1.5f);
@@ -435,7 +434,7 @@ public class PlayerAfterBattleOptions
             MainController.Instance.MainPlayer.MoneyData.RemoveMoney(moneyCost);
             var type = types.Random();
             var cng = config.HasValue ? config.Value : configs.Random();
-            var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer,pilot);
+            var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
             WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}", Namings.ShipConfig(cng), Namings.ShipType(type)));
             int itemsCount = MyExtensions.Random(1, 2);
             for (int i = 0; i < itemsCount; i++)
@@ -446,7 +445,7 @@ public class PlayerAfterBattleOptions
                     ship.TryAddWeaponModul(weapon, inex);
                 }
             }
-            MainController.Instance.MainPlayer.TryHireShip(new StartShipPilotData(pilot, ship));
+            MainController.Instance.MainPlayer.Army.TryHireShip(new StartShipPilotData(pilot, ship));
         }
         else
         {

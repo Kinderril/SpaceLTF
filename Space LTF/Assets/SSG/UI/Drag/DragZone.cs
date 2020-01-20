@@ -162,7 +162,6 @@ public class DragZone : MonoBehaviour
 
     public void DropElement(DragableItem item)
     {
-
         InventoryOperation.TryItemTransfered(_inventory, item.ContainerItem, b =>
         {
             if (b)

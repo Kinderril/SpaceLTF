@@ -68,7 +68,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         RadiuesField.InitName(Namings.Radius);
         AngField.InitName(Namings.Sector);
         ReloadField.InitName(Namings.Reload);
-        BulletSpeedField.InitName(Namings.Speed);
+        BulletSpeedField.InitName(Namings.Tag("Speed"));
         DamageHP.InitName(Namings.DamageBody);
         DamageShield.InitName(Namings.DamageShield);
         ShootPerTime.InitName(Namings.ShootPerTime);

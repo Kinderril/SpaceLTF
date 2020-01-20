@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,7 +15,7 @@ public enum DragItemType
 
 [RequireComponent(typeof(GraphicRaycaster))]
 public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
-    IEndDragHandler, IDragHandler,IBeginDragHandler, 
+    IEndDragHandler, IDragHandler, IBeginDragHandler,
     IPointerDownHandler, IPointerUpHandler
 {
     public DragItemType DragItemType;
@@ -33,7 +30,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
     public int id;
     private float _clickTime;
 
-    public static DragableItem Create(IItemInv item,bool usable)
+    public static DragableItem Create(IItemInv item, bool usable)
     {
         DragableItem slotPrefab;
         switch (item.ItemType)
@@ -56,7 +53,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
         daragbleElement.Usable = usable;
         daragbleElement.id = Utils.GetId();
         daragbleElement.Icon.sprite = daragbleElement.GetIcon();
-//        Debug.Log("Dragabale element created:" + daragbleElement.id);
+        //        Debug.Log("Dragabale element created:" + daragbleElement.id);
         daragbleElement.Lable.text = item.GetInfo();
         daragbleElement.Init();
         return daragbleElement;
@@ -78,41 +75,42 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
     }
 
     public abstract Sprite GetIcon();
-    
+
     public virtual string GetInfo()
     {
-        return ContainerItem == null? "":ContainerItem.GetInfo();
+        return ContainerItem == null ? "" : ContainerItem.GetInfo();
     }
 
-    protected void TestSlot(DragableItemSlot findedSlot,Action<bool> callback)
+    protected void TestSlot(DragableItemSlot findedSlot, Action<bool> callback)
     {
         if (findedSlot != null)
         {
             if (findedSlot != Slot)
             {
-//                var slotInventory = findedSlot._inventory;
+                //                var slotInventory = findedSlot._inventory;
 
                 if (findedSlot.CanPutHere(this))
                 {
 
+                    WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.InventoryMove, 1f);
                     findedSlot.ImplimentItem(this, callback);
                     return;
                 }
             }
         }
         callback(false);
-        
+
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-//        Debug.Log("ON DROP DRAG");
-//        Release();
+        //        Debug.Log("ON DROP DRAG");
+        //        Release();
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-//                Debug.Log("END DRAG");
+        //                Debug.Log("END DRAG");
         Release();
         //        Release();
     }
@@ -121,7 +119,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
     {
         if (Usable)
         {
-//            Debug.Log(" OnDrag Input");
+            //            Debug.Log(" OnDrag Input");
             transform.position = Input.mousePosition;
         }
     }
@@ -130,9 +128,10 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
     {
         if (Usable)
         {
+            WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.InventoryMove);
             var p = transform.position;
             DragableItemSlot findedSlot = TryFindSlot(p);
-            Debug.Log($"Release findedSlot:{findedSlot !=null}");
+            Debug.Log($"Release findedSlot:{findedSlot != null}");
             TestSlot(findedSlot, b =>
             {
                 if (!b)
@@ -148,9 +147,9 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
             });
             transform.localPosition = Vector3.zero;
             return;
-//            transform.SetParent(topPanel, false);
+            //            transform.SetParent(topPanel, false);
         }
-//        Debug.Log(" Release SET ZEREO");
+        //        Debug.Log(" Release SET ZEREO");
         transform.localPosition = Vector3.zero;
     }
 
@@ -180,7 +179,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
             {
                 return tmpSlot;
             }
-        } 
+        }
         return null;
     }
 
@@ -201,10 +200,10 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
         }
     }
 
-//    public void OnPointerClick(PointerEventData eventData)
-//    {
-//
-//    }
+    //    public void OnPointerClick(PointerEventData eventData)
+    //    {
+    //
+    //    }
 
     void Update()
     {
@@ -251,7 +250,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
                 return true;
             }
 
-            foreach (var startShipPilotData in MainController.Instance.MainPlayer.Army)
+            foreach (var startShipPilotData in MainController.Instance.MainPlayer.Army.Army)
             {
                 if (startShipPilotData.Ship == ContainerItem.CurrentInventory)
                 {
@@ -266,7 +265,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
     protected virtual void Dispose()
     {
 
-    }  
+    }
     protected virtual void Refresh()
     {
 

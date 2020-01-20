@@ -48,6 +48,7 @@ public class DialogAnswerUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnClickAnswer()
     {
+        WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.ClickDialog);
         data.Callback();
     }
 

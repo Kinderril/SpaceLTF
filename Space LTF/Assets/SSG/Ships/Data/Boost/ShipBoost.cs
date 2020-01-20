@@ -14,6 +14,7 @@ public class ShipBoost : ShipData
     public ShipBoostTurn BoostTurn;
     public ShipBoostLoop BoostLoop;
     public ShipBoostTwist BoostTwist;
+    public ShipBoostHalfLoop BoostHalfLoop;
     private bool _isWorkable;
     public bool UseRotationByBoost;
     public bool IsActive { get; private set; }
@@ -30,6 +31,8 @@ public class ShipBoost : ShipData
         BoostTwist = new ShipBoostTwist(owner, 1f, Activate, EndBoost, SetAdditionaMove);
         BoostTurn = new ShipBoostTurn(owner,Activate,EndBoost,SetAdditionaMove);
         BoostLoop = new ShipBoostLoop(owner,1f, Activate, EndBoost, SetAdditionaMove);
+        BoostHalfLoop = new ShipBoostHalfLoop(owner,1f, Activate, EndBoost, SetAdditionaMove);
+
 
         var posibleTricks = Library.PosibleTricks[owner.PilotParameters.Stats.CurRank];
         foreach (var ePilotTrickse in posibleTricks)

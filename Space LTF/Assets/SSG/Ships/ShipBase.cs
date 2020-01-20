@@ -707,29 +707,6 @@ public class ShipBase : MovingObject
         Allies[mover].SetParams(dirFromAtoB, dist);
     }
 
-    public void SetAttackAction(ShipBase randomElement, bool side)
-    {
-        SetAttackAction(Enemies[randomElement], side);
-    }
-
-    public void SetAttackAction(ShipPersonalInfo shipPersonalInfo, bool side)
-    {
-        Target = shipPersonalInfo;
-        BaseAction action;
-//        action = new AttackAction(this, Target);
-        if (side)
-        {
-            Vector3 controlPoint = AttackSideAction.FindControlPoint(Position,Target.ShipLink.Position,Commander.Battlefield);
-            action = new AttackSideAction(this,Target,controlPoint);
-        }
-        else
-        {
-            action = new AttackAction(this, Target);
-        }
-
-        SetAction(action);
-    }
-
     public void GetHit(IWeapon weapon, Bullet bullet)
     {
         var hitClip = DataBaseController.Instance.AudioDataBase.GetHit();

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,14 +16,14 @@ public class PlayerArmyUI : MonoBehaviour
     private bool _usable;
     private ConnectInventory _connectedInventory;
     private RectTransform myRectTransform;
-    private RectTransform parentRectTransform ;
+    private RectTransform parentRectTransform;
 
     void Awake()
     {
         _shipsLayoutRectTransform = ShipsLayout.GetComponent<RectTransform>();
     }
 
-    public void Init(Player player,Transform parent,bool usable, ConnectInventory connectedInventory)
+    public void Init(Player player, Transform parent, bool usable, ConnectInventory connectedInventory)
     {
         _usable = usable;
         _player = player;
@@ -41,10 +38,10 @@ public class PlayerArmyUI : MonoBehaviour
         transform.SetParent(parent, false);
         myRectTransform.sizeDelta = new Vector2(parentRectTransform.rect.width, parentRectTransform.rect.height);
         //        myRectTransform.transform.
-        player.OnAddShip += OnAddShip;
-        foreach (var shipPilotData in player.Army)
+        player.Army.OnAddShip += OnAddShip;
+        foreach (var shipPilotData in player.Army.Army)
         {
-            AddShip(shipPilotData,false);
+            AddShip(shipPilotData, false);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
         WaitLoadStart();
@@ -63,12 +60,12 @@ public class PlayerArmyUI : MonoBehaviour
 
     }
 
-//    void OnEnable()
-//    {
-//        LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
-//    }
+    //    void OnEnable()
+    //    {
+    //        LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
+    //    }
 
-    private void AddShip(StartShipPilotData shipPilotData,bool withRebuild)
+    private void AddShip(StartShipPilotData shipPilotData, bool withRebuild)
     {
 
         if (shipPilotData.Ship.ShipType == ShipType.Base)
@@ -81,7 +78,7 @@ public class PlayerArmyUI : MonoBehaviour
         {
             var playerInfo = DataBaseController.GetItem(MyPlayerPrefab);
             playerInfo.transform.SetParent(ShipsLayout);
-            playerInfo.Init(shipPilotData, _usable, _connectedInventory,OnToggleSwitched);
+            playerInfo.Init(shipPilotData, _usable, _connectedInventory, OnToggleSwitched);
             playerInfoList.Add(playerInfo);
             if (withRebuild)
                 LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
@@ -97,7 +94,7 @@ public class PlayerArmyUI : MonoBehaviour
     {
         if (arg2)
         {
-            AddShip(arg1,true);
+            AddShip(arg1, true);
         }
     }
 
@@ -109,7 +106,7 @@ public class PlayerArmyUI : MonoBehaviour
 
     public void Dispose()
     {
-        _player.OnAddShip -= OnAddShip;
+        _player.Army.OnAddShip -= OnAddShip;
         mainShipInfo.Dispose();
         foreach (var inventoryUi in playerInfoList)
         {

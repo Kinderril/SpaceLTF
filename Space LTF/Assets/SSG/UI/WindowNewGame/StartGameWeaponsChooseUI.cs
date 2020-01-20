@@ -67,7 +67,7 @@ public class StartGameWeaponsChooseUI :MonoBehaviour
         foreach (var sc in MainController.Instance.Statistics.WeaponsPairs)
         {
             var element = _toggleElements.First(x => x.WeaponsPair == sc);
-            element.Toggle.isOn = true;
+            element.Init(sc, OnClickSelect, sc.IsOpen);
         }
     }
 }

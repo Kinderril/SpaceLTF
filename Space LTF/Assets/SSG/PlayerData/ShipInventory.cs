@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
 [System.Serializable]
-public class ShipInventory : IStartShipParams , IInventory
+public class ShipInventory : IStartShipParams, IInventory
 {
     public float MaxHealth { get; private set; }
     public float MaxShiled { get; private set; }
@@ -21,7 +19,7 @@ public class ShipInventory : IStartShipParams , IInventory
     [field: NonSerialized]
     public event ItemTransferedTo OnItemAdded;
     [field: NonSerialized]
-    public event Action<ShipInventory> OnShipRepaired;   
+    public event Action<ShipInventory> OnShipRepaired;
     [field: NonSerialized]
     public event Action<ShipInventory> OnShipCriticalChange;
 
@@ -39,12 +37,12 @@ public class ShipInventory : IStartShipParams , IInventory
     public PilotTactic Tactic => PilotParameters.Tactic;
 
     public int Id { get; private set; }
-//    public bool Destroyed { get; set; }
+    //    public bool Destroyed { get; set; }
 
-//    public int BodyVisualType { get; private set; }
+    //    public int BodyVisualType { get; private set; }
     public ShipModulsInventory Moduls;
-    public WeaponInv[] WeaponsModuls ;
-    public BaseSpellModulInv[] SpellsModuls ;
+    public WeaponInv[] WeaponsModuls;
+    public BaseSpellModulInv[] SpellsModuls;
     private readonly Player _player;
     private PilotParameters _pilot;
 
@@ -67,14 +65,14 @@ public class ShipInventory : IStartShipParams , IInventory
         WeaponModulsCount = pParams.WeaponModulsCount;
         WeaponsModuls = new WeaponInv[WeaponModulsCount];
         SimpleModulsCount = pParams.SimpleModulsCount;
-        Moduls = new ShipModulsInventory(SimpleModulsCount,this);
+        Moduls = new ShipModulsInventory(SimpleModulsCount, this);
         SpellModulsCount = pParams.SpellModulsCount;
         SpellsModuls = new BaseSpellModulInv[SpellModulsCount];
         Name = pParams.Name;
         BoostChargeTime = pParams.BoostChargeTime;
         //        Debug.Log("ShipInventory create:" + pParams.Name);
         Id = Utils.GetId();
-//        BodyVisualType = pParams.BodyVisualType;
+        //        BodyVisualType = pParams.BodyVisualType;
     }
 
     public List<IItemInv> GetAllItems()
@@ -130,7 +128,7 @@ public class ShipInventory : IStartShipParams , IInventory
         return false;
     }
 
-    public bool TryAddSpellModul(BaseSpellModulInv spellModul,int fieldIndex)
+    public bool TryAddSpellModul(BaseSpellModulInv spellModul, int fieldIndex)
     {
         if (spellModul == null)
         {
@@ -153,11 +151,11 @@ public class ShipInventory : IStartShipParams , IInventory
         return false;
     }
 
-    public bool TryAddSimpleModul(BaseModulInv simpleModul,int fieldIndex)
+    public bool TryAddSimpleModul(BaseModulInv simpleModul, int fieldIndex)
     {
         return Moduls.TryAddSimpleModul(simpleModul, fieldIndex);
     }
-    
+
     public bool TryAddWeaponModul(WeaponInv weaponModul, int fieldIndex)
     {
         if (weaponModul == null)
@@ -216,10 +214,10 @@ public class ShipInventory : IStartShipParams , IInventory
         }
         return false;
     }
-    
+
     public void TransferItem(IItemInv item, bool val)
     {
-//        Debug.Log("Transfer item complete:" + item);
+        //        Debug.Log("Transfer item complete:" + item);
         if (OnItemAdded != null)
         {
             OnItemAdded(item, val);
@@ -252,7 +250,7 @@ public class ShipInventory : IStartShipParams , IInventory
 
     public int HealthPointToRepair()
     {
-        var delta = (int)(MaxHealth*(1f- HealthPercent));
+        var delta = (int)(MaxHealth * (1f - HealthPercent));
         return delta;
     }
 
@@ -263,8 +261,8 @@ public class ShipInventory : IStartShipParams , IInventory
 
     public bool SetRepairPercent(float p)
     {
-//        Debug.Log("SetRepairPercent:" + p);
-        p = Mathf.Clamp(p,0.01f, 1f);
+        //        Debug.Log("SetRepairPercent:" + p);
+        p = Mathf.Clamp(p, 0.01f, 1f);
 
         var delta = Mathf.Abs(p - HealthPercent);
         HealthPercent = p;
@@ -285,8 +283,8 @@ public class ShipInventory : IStartShipParams , IInventory
         CriticalDamages++;
         if (CriticalDamages >= Library.CRITICAL_DAMAGES_TO_DEATH)
         {
-              Debug.Log("Ship fully destroyed cause critical damages");
-              MainController.Instance.MainPlayer.RemoveShip(this);
+            Debug.Log("Ship fully destroyed cause critical damages");
+            MainController.Instance.MainPlayer.Army.RemoveShip(this);
         }
         else
         {

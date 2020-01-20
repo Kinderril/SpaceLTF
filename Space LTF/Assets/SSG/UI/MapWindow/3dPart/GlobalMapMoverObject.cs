@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 
 public class GlobalMapMoverObject : MonoBehaviour
 {
@@ -20,7 +19,14 @@ public class GlobalMapMoverObject : MonoBehaviour
         transform.position = startCell.Container.position;
     }
 
-    public void MoveTo(GlobalMapCellObject target,Action callback)
+    public float MoveTo(float calculatedTime,GlobalMapCellObject target, Action callback)
+    {
+        MoveTo(target, callback);
+        _timeToMove = calculatedTime - 1f;
+        _endTimeToMove = Time.time + _timeToMove;
+        return _timeToMove;
+    }
+    public float MoveTo(GlobalMapCellObject target, Action callback)
     {
         if (!_isActive)
         {
@@ -32,7 +38,10 @@ public class GlobalMapMoverObject : MonoBehaviour
             _timeToMove = dist / Speed;
             _endTimeToMove = Time.time + _timeToMove;
             _isActive = true;
+            return _timeToMove;
         }
+
+        return -1f;
     }
 
     void Update()

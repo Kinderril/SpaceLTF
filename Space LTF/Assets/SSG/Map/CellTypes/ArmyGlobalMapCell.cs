@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -11,7 +8,6 @@ public class ArmyGlobalMapCell : GlobalMapCell
 {
     public float HIRE_CHANCE = 0.01f;
     protected ArmyCreatorType _armyType;
-    protected ShipConfig _config;
     private bool canHire = false;
     private Player _player;
     private BattlefildEventType? _eventType = null;
@@ -24,6 +20,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
     }
 
     protected int _power;
+    protected int _additionalPower;
 
     protected virtual Player GetArmy()
     {
@@ -37,45 +34,45 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     private void CacheArmy()
     {
-        ArmyCreatorData data = new ArmyCreatorData(_config, true);
+        ArmyCreatorData data = new ArmyCreatorData(ConfigOwner, true);
         switch (_armyType)
         {
             case ArmyCreatorType.rocket:
-                data = new ArmyCreatorRocket(_config, true);
+                data = new ArmyCreatorRocket(ConfigOwner, true);
                 break;
             case ArmyCreatorType.laser:
-                data = new ArmyCreatorLaser(_config, true);
+                data = new ArmyCreatorLaser(ConfigOwner, true);
                 break;
             case ArmyCreatorType.mine:
-                data = new ArmyCreatorAOE(_config, true);
+                data = new ArmyCreatorAOE(ConfigOwner, true);
                 break;
             case ArmyCreatorType.destroy:
-                data = new ArmyCreatorDestroy(_config, true);
+                data = new ArmyCreatorDestroy(ConfigOwner, true);
                 break;
         }
 
         //        var data = new ArmyCreatorRocket(ShipConfig.mercenary);
         var player = new Player(name);
-//        float coreShipChance = 0;
-//        switch (_config)
-//        {
-//            case ShipConfig.droid:
-//                coreShipChance = 0f;
-//                break;
-//            case ShipConfig.raiders:
-//                coreShipChance = 0.1f;
-//                break;
-//            case ShipConfig.federation:
-//                coreShipChance = 0.9f;
-//                break;
-//            case ShipConfig.mercenary:
-//                coreShipChance = 0.5f;
-//                break;
-//        }
-//        bool withCore = MyExtensions.IsTrue01(coreShipChance);
-        var army = ArmyCreator.CreateSimpleEnemyArmy(_power, data, player);
-        player.Army = army;
-        switch (_config)
+        //        float coreShipChance = 0;
+        //        switch (_config)
+        //        {
+        //            case ShipConfig.droid:
+        //                coreShipChance = 0f;
+        //                break;
+        //            case ShipConfig.raiders:
+        //                coreShipChance = 0.1f;
+        //                break;
+        //            case ShipConfig.federation:
+        //                coreShipChance = 0.9f;
+        //                break;
+        //            case ShipConfig.mercenary:
+        //                coreShipChance = 0.5f;
+        //                break;
+        //        }
+        //        bool withCore = MyExtensions.IsTrue01(coreShipChance);
+        var army = ArmyCreator.CreateSimpleEnemyArmy(Power, data, player);
+        player.Army.SetArmy(army);
+        switch (ConfigOwner)
         {
             case ShipConfig.raiders:
             case ShipConfig.mercenary:
@@ -92,14 +89,13 @@ public class ArmyGlobalMapCell : GlobalMapCell
     }
 
     public ArmyGlobalMapCell(int power, ShipConfig config, int id, ArmyCreatorType type, int Xind, int Zind,
-        SectorData secto)
-        : base(id, Xind, Zind, secto)
+        SectorData sector)
+        : base(id, Xind, Zind, sector, config)
     {
-        _config = config;
         _armyType = type;
         _power = power;
-        if (Xind > 5 )
-//        if (true)
+        if (Xind > 5)
+        //        if (true)
         {
             if (MyExtensions.IsTrue01(0.25f))
             {
@@ -112,29 +108,30 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 _eventType = chance.Random();
             }
         }
-//#if UNITY_EDITOR
-//        _eventType = BattlefildEventType.asteroids;
-//#endif
+        //#if UNITY_EDITOR
+        //        _eventType = BattlefildEventType.asteroids;
+        //#endif
 
         //        Debug.LogError($"ArmyGlobalMapCell:{Xind}  {Zind}");
     }
 
-    public override void UpdatePowers(int visitedSectors, int startPower)
+    public override void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
     {
-        var nextPower = SectorData.CalcCellPower(visitedSectors + 1, _sector.Size, startPower);
+        _additionalPower = additionalPower;
+        var nextPower = SectorData.CalcCellPower(visitedSectors + 1, _sector.Size, startPower, _additionalPower);
         _player = null;
         Debug.Log($"Army power sector updated prev:{_power}. next:{nextPower}");
         _power = nextPower;
     }
 
-    public override MessageDialogData GetDialog()
+    protected override MessageDialogData GetDialog()
     {
         var myPlaer = MainController.Instance.MainPlayer;
-        bool isSameSide = myPlaer.ReputationData.ReputationFaction[_config] > Library.PEACE_REPUTATION;
+        bool isSameSide = myPlaer.ReputationData.ReputationFaction[ConfigOwner] > Library.PEACE_REPUTATION;
         string masinMsg;
 
         var ans = new List<AnswerDialogData>();
-        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config];
+        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[ConfigOwner];
         var scoutData = GetArmy().ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
         string scoutsField;
         if (_eventType.HasValue)
@@ -158,10 +155,10 @@ public class ArmyGlobalMapCell : GlobalMapCell
         }
         else
         {
-            int buyoutCost = _power;
+            int buyoutCost = Power;
             var playersPower = ArmyCreator.CalcArmyPower(myPlaer.Army);
 
-            if (playersPower < _power)
+            if (playersPower < Power)
             {
                 if (myPlaer.MoneyData.HaveMoney(buyoutCost))
                 {
@@ -189,7 +186,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 String.Format("Try Run. [Scouts:{0}]", ScoutsLevel),
                 () =>
                 {
-                    bool doRun = MyExtensions.IsTrue01((float) ScoutsLevel / 4f);
+                    bool doRun = MyExtensions.IsTrue01((float)ScoutsLevel / 4f);
 #if UNITY_EDITOR
                     doRun = true;
 #endif
@@ -201,7 +198,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                     {
                         WindowManager.Instance.InfoWindow.Init(Take, "Fail! Now you must fight.");
                     }
-                },null,false));
+                }, null, false, true));
         }
 
         var mesData = new MessageDialogData(masinMsg, ans);
@@ -219,16 +216,16 @@ public class ArmyGlobalMapCell : GlobalMapCell
         if (isSameSecto)
         {
             powerToCompare = Power;
-//            Debug.LogError($"power2  :{powerToCompare} ");
+            //            Debug.LogError($"power2  :{powerToCompare} ");
         }
         else
         {
             powerToCompare = SectorData.CalcCellPower(player.MapData.VisitedSectors + 1, _sector.Size,
-                _sector.StartPowerGalaxy);
-//            Debug.LogError($"power1  :{powerToCompare}");
+                _sector.StartPowerGalaxy, _additionalPower);
+            //            Debug.LogError($"power1  :{powerToCompare}");
         }
         var delta = playersPower / powerToCompare;
-       if (delta < 0.95f)
+        if (delta < 0.95f)
         {
             return "Risky";
         }
@@ -255,12 +252,12 @@ public class ArmyGlobalMapCell : GlobalMapCell
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData("Ok"));
-        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config];
-        bool doDip = MyExtensions.IsTrue01((float) rep / PlayerReputationData.MAX_REP);
+        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[ConfigOwner];
+        bool doDip = MyExtensions.IsTrue01((float)rep / PlayerReputationData.MAX_REP);
         if (doDip)
         {
             int a = 0;
-            switch (_config)
+            switch (ConfigOwner)
             {
                 case ShipConfig.droid:
                 case ShipConfig.raiders:
@@ -277,13 +274,13 @@ public class ArmyGlobalMapCell : GlobalMapCell
             string helpInfo;
             if (a == 0)
             {
-                var money = AddMoney(_power / 3, _power / 2);
+                var money = AddMoney(Power / 3, Power / 2);
                 helpInfo = String.Format("They give you some credits {0}", money);
             }
             else
             {
                 var player = MainController.Instance.MainPlayer;
-//                IItemInv item;
+                //                IItemInv item;
                 bool canAdd;
                 string itemName;
                 int slot;
@@ -341,20 +338,20 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     public override string Desc()
     {
-        return $"Amry:{Namings.ShipConfig(_config)} \n Zone:{Namings.BattleEvent(_eventType)}";
+        return $"Amry:{Namings.ShipConfig(ConfigOwner)} \n Zone:{Namings.BattleEvent(_eventType)}";
     }
 
     public override void Take()
     {
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(),false,true, _eventType);
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(), false, true, _eventType);
     }
 
-    public override MessageDialogData GetLeavedActionInner()
+    protected override MessageDialogData GetLeavedActionInner()
     {
         if (MainController.Instance.Statistics.LastBattle == EndBattleType.win)
         {
             var player = MainController.Instance.MainPlayer;
-            player.ReputationData.WinBattleAgainst(_config);
+            player.ReputationData.WinBattleAgainst(ConfigOwner);
             var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power);
             return msg;
         }
@@ -366,6 +363,6 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     public ShipConfig GetConfig()
     {
-        return _config;
+        return ConfigOwner;
     }
 }

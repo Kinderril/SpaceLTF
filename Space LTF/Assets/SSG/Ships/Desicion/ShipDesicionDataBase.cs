@@ -95,7 +95,9 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             case ActionType.readyToAttack:
                 return new ReadyToAttackAction(_owner, _owner.Enemies[target]);  
             case ActionType.attack:
-                return new AttackAction(_owner, _owner.Enemies[target]);
+                return new AttackAction(_owner, _owner.Enemies[target]);  
+            case ActionType.attackHalfLoop:
+                return new AttackTrickAction(_owner, _owner.Enemies[target]);
             case ActionType.moveToBase:
                 return (new GoToBaseAction(_owner, target,false));
             case ActionType.returnToBattle:
@@ -191,6 +193,16 @@ public abstract class ShipDesicionDataBase : IShipDesicion
 
     protected ActionType AttackOrAttackSide(ShipBase target)
     {
+        if (_owner.Boost.IsReady && !_owner.Boost.IsActive &&  _owner.Boost.BoostHalfLoop.CanUse)
+        {
+            var enemy = _owner.Enemies[target];
+            var isBack = enemy.IsInBack();
+            if (isBack && enemy.Dist > 10)
+            {
+                return ActionType.attackHalfLoop;
+            }
+        }
+
         switch (SideAttack)
         {
             case ESideAttack.Straight:
@@ -199,17 +211,6 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 return ActionType.attackSide;
         }
 
-        if (target.ShipParameters.MaxSpeed < _owner.ShipParameters.MaxSpeed)
-        {
-            var cellsDistX = Mathf.Abs(_owner.Cell.Xindex - target.Cell.Xindex);
-            var cellsDistZ = Mathf.Abs(_owner.Cell.Zindex - target.Cell.Zindex);
-
-            var distCells = Mathf.Sqrt(cellsDistX*cellsDistX + cellsDistZ*cellsDistZ);
-            if (distCells > 6)
-            {
-                return ActionType.attackSide;
-            } 
-        }
         return ActionType.attack;
     }
 

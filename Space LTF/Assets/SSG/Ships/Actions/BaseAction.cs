@@ -24,6 +24,7 @@ public enum ActionType
     waitEnemySec,
     waitEdnGame,
     readyToAttack,
+    attackHalfLoop,
 }
 
 public abstract class BaseAction

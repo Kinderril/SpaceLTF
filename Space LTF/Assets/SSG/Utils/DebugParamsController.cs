@@ -1,11 +1,10 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class DebugParamsController
 {
-//#if UNITY_EDITOR
+    //#if UNITY_EDITOR
 
     public static bool EngineOff;
     public static bool NoDamage;
@@ -14,7 +13,7 @@ public class DebugParamsController
     public static bool AllModuls = false;
     public static bool AnyWay = false;
 
-//#endif
+    //#endif
 
     public DebugParamsController()
     {
@@ -48,7 +47,7 @@ public class DebugParamsController
 
         var type = types.Random();
         var cng = configs.Random();
-        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer,pilot);
+        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
         WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}", Namings.ShipConfig(cng), Namings.ShipType(type)));
         var data = new StartShipPilotData(pilot, ship);
         data.Ship.SetRepairPercent(0.1f);
@@ -60,7 +59,7 @@ public class DebugParamsController
                 data.Ship.TryAddWeaponModul(weapon, inex);
             }
         }
-        MainController.Instance.MainPlayer.TryHireShip(data);
+        MainController.Instance.MainPlayer.Army.TryHireShip(data);
         return data;
     }
 }

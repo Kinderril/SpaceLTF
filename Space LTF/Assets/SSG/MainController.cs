@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 public enum StartMode
 {
@@ -25,6 +22,7 @@ public class MainController : Singleton<MainController>
     void Awake()
     {
         LocalizationManager.Instance.Init();
+        CamerasController.Instance.StartCheck();
         Library.Init();
         DataBase.Init();
         ShipNames.Init();
@@ -60,7 +58,7 @@ public class MainController : Singleton<MainController>
         if (Player.LoadGame(out playerToLoad))
         {
             MainPlayer = playerToLoad;
-            BattleData = new NextBattleData(MainPlayer,Statistics);
+            BattleData = new NextBattleData(MainPlayer, Statistics);
             return true;
         }
         return false;
@@ -76,9 +74,9 @@ public class MainController : Singleton<MainController>
 
     }
 
-    public void PreBattle(Player player1, Player player2,bool isFinalBattle = false, bool canRetire = true, BattlefildEventType? battleEvent = null)
+    public void PreBattle(Player player1, Player player2, bool isFinalBattle = false, bool canRetire = true, BattlefildEventType? battleEvent = null)
     {
-        BattleData.PreBattle(player1,player2,isFinalBattle, canRetire,battleEvent);
+        BattleData.PreBattle(player1, player2, isFinalBattle, canRetire, battleEvent);
     }
 
     public void LaunchBattle(Player greenSide, Player redSide)

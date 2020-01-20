@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +20,7 @@ public class EndGameWindow : BaseWindow
     public Image ToShips;
 
 
-//    private PlayerArmyUI _redArmyUi;
+    //    private PlayerArmyUI _redArmyUi;
 
     public FragDataUI FragDataUIPrefab;
     public EndBattleShipPllotInfoUI EndBattleShipPllotInfoUIPrefab;
@@ -36,7 +34,7 @@ public class EndGameWindow : BaseWindow
 
     public override void Init()
     {
-//        ToMiddle.enabled = (false);
+        //        ToMiddle.enabled = (false);
         ToShips.enabled = (false);
         ToMy.enabled = (false);
         base.Init();
@@ -45,7 +43,7 @@ public class EndGameWindow : BaseWindow
         MyMoneyField.Init(player.MoneyData.MoneyCount);
         float baseSum = 0;
         DrawShipsRewards();
-        foreach (var shipStart in player.Army)
+        foreach (var shipStart in player.Army.Army)
         {
             if (shipStart.Ship.ShipType != ShipType.Base)
             {
@@ -70,7 +68,7 @@ public class EndGameWindow : BaseWindow
         {
             var itemSlot = InventoryOperation.GetDragableItemSlot();
             itemSlot.transform.SetParent(LayoutRewards, false);
-            itemSlot.Init(moduls.CurrentInventory,false);
+            itemSlot.Init(moduls.CurrentInventory, false);
             itemSlot.StartItemSet(moduls);
         }
 
@@ -78,12 +76,12 @@ public class EndGameWindow : BaseWindow
         {
             var itemSlot = InventoryOperation.GetDragableItemSlot();
             itemSlot.transform.SetParent(LayoutRewards, false);
-            itemSlot.Init(moduls.CurrentInventory,false);
+            itemSlot.Init(moduls.CurrentInventory, false);
             itemSlot.StartItemSet(moduls);
         }
-        
+
         ClearTransform(LayoutEnemyShipsDestroyed);
-//        ClearTransform(LayoutMyShipsDestroyed);
+        //        ClearTransform(LayoutMyShipsDestroyed);
 
         var enemyStats = BattleController.Instance.RedCommander.BattleStats;
         foreach (var sDestr in enemyStats.ShipsDestroyedDatas)
@@ -92,28 +90,28 @@ public class EndGameWindow : BaseWindow
             d.transform.SetParent(LayoutEnemyShipsDestroyed);
             d.Init(sDestr);
         }
-//        foreach (var shipPilotData in player.Army)
-//        {
-//            percents.Add(shipPilotData,0f);
-//            if (shipPilotData.Ship.FinalBattleData.Destroyed)
-//            {
-////                shipPilotData.Ship.DamageTimes++;
-////                if (shipPilotData.Ship.DamageTimes >= 3)
-////                {
-////                    shipPilotData.Ship.Destroyed = true;
-////                }
-//            }
-//        }
+        //        foreach (var shipPilotData in player.Army)
+        //        {
+        //            percents.Add(shipPilotData,0f);
+        //            if (shipPilotData.Ship.FinalBattleData.Destroyed)
+        //            {
+        ////                shipPilotData.Ship.DamageTimes++;
+        ////                if (shipPilotData.Ship.DamageTimes >= 3)
+        ////                {
+        ////                    shipPilotData.Ship.Destroyed = true;
+        ////                }
+        //            }
+        //        }
         //AllToMe();
         //UpdateMoneys();
     }
 
     public void MiddleMoneys()
     {
-//        ToMiddle.enabled = (true);
+        //        ToMiddle.enabled = (true);
         ToShips.enabled = (true);
         ToMy.enabled = (true);
-        _myMoney =(int)( _totalMoney/2f);
+        _myMoney = (int)(_totalMoney / 2f);
         var nextP = new Dictionary<StartShipPilotData, float>();
         foreach (var percent in percents)
         {
@@ -127,7 +125,7 @@ public class EndGameWindow : BaseWindow
 
     public void AllToMe()
     {
-//        ToMiddle.enabled = (false);
+        //        ToMiddle.enabled = (false);
         ToShips.enabled = (false);
         ToMy.enabled = (true);
         _myMoney = _totalMoney;
@@ -144,7 +142,7 @@ public class EndGameWindow : BaseWindow
 
     public void AllToPilots()
     {
-//        ToMiddle.enabled = (false);
+        //        ToMiddle.enabled = (false);
         ToShips.enabled = (true);
         ToMy.enabled = (false);
         _myMoney = 0;
@@ -172,7 +170,7 @@ public class EndGameWindow : BaseWindow
     private void DrawShipsRewards()
     {
         var player = MainController.Instance.MainPlayer;
-        foreach (var shipPilotData in player.Army)
+        foreach (var shipPilotData in player.Army.Army)
         {
             if (shipPilotData.Ship.ShipType != ShipType.Base)
             {
@@ -187,7 +185,7 @@ public class EndGameWindow : BaseWindow
     private void UpdateMoneys()
     {
         GoToMapButton.interactable = true;
-//        TotalMoneyRewardField.Init(0);
+        //        TotalMoneyRewardField.Init(0);
         var player = MainController.Instance.MainPlayer;
         var lastReward = player.LastReward;
         var forPilots = lastReward.Money - _myMoney;
@@ -196,7 +194,7 @@ public class EndGameWindow : BaseWindow
         foreach (var infoUi in _allMyShips)
         {
             var p = percents[infoUi.StartShipPilotData];
-            var moneyTo = (int) (p* forPilots);
+            var moneyTo = (int)(p * forPilots);
             spendedMoneys += moneyTo;
             infoUi.SetMoneyAdd(moneyTo);
         }
@@ -243,7 +241,7 @@ public class EndGameWindow : BaseWindow
         ClearTransform(LayoutRewards);
         base.Dispose();
     }
-    
+
     private void ApplyMoneys()
     {
         var player = MainController.Instance.MainPlayer;

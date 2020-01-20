@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,8 +28,8 @@ public class ArmyCreatorUI : MonoBehaviour
     private ArmyCreatorUI OppositeArmy;
 
     public void Init(ArmyCreatorUI oppositeArmy,
-        TeamIndex teamIndex, DebugShipInShop prefabDebugShipInShop, 
-        Action<DebugShipInShop> OnUnselect,Action<DebugShipInShop,TeamIndex> OnSelect)
+        TeamIndex teamIndex, DebugShipInShop prefabDebugShipInShop,
+        Action<DebugShipInShop> OnUnselect, Action<DebugShipInShop, TeamIndex> OnSelect)
     {
         OppositeArmy = oppositeArmy;
         PlayerOwner = new Player("Bot_" + Utils.GetId());
@@ -41,11 +39,11 @@ public class ArmyCreatorUI : MonoBehaviour
         SliderPointsCount.value = (SliderPointsCount.maxValue - SliderPointsCount.minValue) / 2;
         SliderArmyCount.minValue = 2;
         SliderArmyCount.maxValue = 5;
-        SliderArmyCount.value = (SliderArmyCount.maxValue - SliderArmyCount.minValue)/2;
+        SliderArmyCount.value = (SliderArmyCount.maxValue - SliderArmyCount.minValue) / 2;
         _teamIndex = teamIndex;
         _onUnselect = OnUnselect;
         _onSelect = OnSelect;
-        CreateShip(ShipType.Base,ShipConfig.mercenary);
+        CreateShip(ShipType.Base, ShipConfig.mercenary);
         _armyCreatorTypes.Clear();
         _armyModesTypes.Clear();
         List<string> m_DropOptions = new List<string>();
@@ -71,7 +69,7 @@ public class ArmyCreatorUI : MonoBehaviour
         }
         SliderAddOption(ArmyWeaponTypes, m_DropOptions);
     }
-    
+
     public void OnBalanceClick()
     {
         Clear();
@@ -84,8 +82,8 @@ public class ArmyCreatorUI : MonoBehaviour
     public void OnLoadArmy()
     {
         Clear();
-//        PlayerOwner = Player.Load(Player.mainPlayer);
-        foreach (var startShipPilotData in PlayerOwner.Army)
+        //        PlayerOwner = Player.Load(Player.mainPlayer);
+        foreach (var startShipPilotData in PlayerOwner.Army.Army)
         {
             var p = DataBaseController.GetItem(_prefabDebugShipInShop);
             AddShip(p, startShipPilotData.Ship.ShipType, startShipPilotData.Ship.ShipConfig, startShipPilotData.Ship, startShipPilotData.Pilot);
@@ -113,19 +111,19 @@ public class ArmyCreatorUI : MonoBehaviour
         return total;
     }
 
-    private void subCreateArmy(int min,int max)
+    private void subCreateArmy(int min, int max)
     {
         var h = _armyCreatorTypes[ArmyWeaponTypes.value];
         var d = _armyModesTypes[ArmyTypes.value];
         var config = _armyConfigs[ArmyConfigs.value];
         ArmyCreatorType aType = h;
-//        List<ShipConfig> configs=new List<ShipConfig>()
-//        {
-//            ShipConfig.mercenary,
-//            ShipConfig.federation,
-//        };
-//        ShipConfig config = configs.RandomElement();
-        ArmyCreatorData data = new ArmyCreatorData(config,true);
+        //        List<ShipConfig> configs=new List<ShipConfig>()
+        //        {
+        //            ShipConfig.mercenary,
+        //            ShipConfig.federation,
+        //        };
+        //        ShipConfig config = configs.RandomElement();
+        ArmyCreatorData data = new ArmyCreatorData(config, true);
         switch (aType)
         {
             case ArmyCreatorType.rocket:
@@ -142,12 +140,12 @@ public class ArmyCreatorUI : MonoBehaviour
                 break;
         }
 
-        var army = ArmyCreator.CreateArmy(SliderPointsCount.value, d, min, max, data,true, PlayerOwner);
+        var army = ArmyCreator.CreateArmy(SliderPointsCount.value, d, min, max, data, true, PlayerOwner);
         foreach (var ship in army)
         {
-//            _prefabDebugShipInShop.SetConfig(config);
+            //            _prefabDebugShipInShop.SetConfig(config);
             var p = DataBaseController.GetItem(_prefabDebugShipInShop);
-            AddShip(p, ship.Ship.ShipType, config,p._shipInv, ship.Pilot);
+            AddShip(p, ship.Ship.ShipType, config, p._shipInv, ship.Pilot);
             foreach (var simple in ship.Ship.Moduls.SimpleModuls)
             {
                 p.TryAddSimpleModul(simple);
@@ -185,7 +183,7 @@ public class ArmyCreatorUI : MonoBehaviour
 
     public void OnCreatClick()
     {
-        CreateShip(ShipType.Middle,ShipConfig.mercenary);
+        CreateShip(ShipType.Middle, ShipConfig.mercenary);
     }
 
     private void SliderAddOption(Dropdown dd, List<string> options)
@@ -200,9 +198,9 @@ public class ArmyCreatorUI : MonoBehaviour
         AddShip(p, st, confi);
     }
 
-    private void AddShip(DebugShipInShop p, ShipType st,ShipConfig config, ShipInventory ship = null, IPilotParameters pilot = null)
+    private void AddShip(DebugShipInShop p, ShipType st, ShipConfig config, ShipInventory ship = null, IPilotParameters pilot = null)
     {
-        p.Init(PlayerOwner,ship, pilot);
+        p.Init(PlayerOwner, ship, pilot);
         p.SetCallbacks(shop =>
         {
             CurrentArmy.Remove(p);

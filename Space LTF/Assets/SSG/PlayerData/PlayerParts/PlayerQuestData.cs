@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 [Serializable]
@@ -17,23 +13,24 @@ public class PlayerQuestData
 
     public PlayerQuestData(int targetElements)
     {
-        MaxMainElements = targetElements;
+        mainElementsFound = 1;
+        MaxMainElements = targetElements + 1;
     }
 
-//    public bool CheckIfOver()
-//    {
-//        if (Completed())
-//        {
-//            MainController.Instance.BattleData.EndGameWin();
-//            return true;
-//        }
-//        return false;
-//    }
+    //    public bool CheckIfOver()
+    //    {
+    //        if (Completed())
+    //        {
+    //            MainController.Instance.BattleData.EndGameWin();
+    //            return true;
+    //        }
+    //        return false;
+    //    }
 
     public void ComeToLastPoint()
     {
         LastBattleData = new FinalBattleData();
-//        LastBattleData.Init();
+        //        LastBattleData.Init();
     }
 
     public void AddElement()

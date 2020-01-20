@@ -12,10 +12,10 @@ public class EndGlobalCell : ArmyGlobalMapCell
 {
     private FinalBattleData _data;
 
-    public EndGlobalCell(int power, int id, int intX, int intZ, SectorData secto) 
-        : base(power,ShipConfig.droid,id, ArmyCreatorType.destroy, intX, intZ, secto)
+    public EndGlobalCell(int power, int id, int intX, int intZ, SectorData sector) 
+        : base(power,ShipConfig.droid,id, ArmyCreatorType.destroy, intX, intZ, sector)
     {
-        _power = SectorData.CalcCellPower(0, power, power);
+        _power = SectorData.CalcCellPower(0, sector.Size, power, _additionalPower);
         InfoOpen = true;
         Scouted();
     }
@@ -36,13 +36,13 @@ public class EndGlobalCell : ArmyGlobalMapCell
         return false;
     }
 
-    public override MessageDialogData GetLeavedActionInner()
+    protected override MessageDialogData GetLeavedActionInner()
     {
         var getDialog = _data.GetAfterBattleDialog();
         return getDialog;
     }
 
-    public override MessageDialogData GetDialog()
+    protected override MessageDialogData GetDialog()
     {
         if (_data == null)
         {
@@ -62,6 +62,7 @@ public class EndGlobalCell : ArmyGlobalMapCell
 
     public override void ComeTo()
     {
+        _power = SectorData.CalcCellPower(0, _sector.Size, _power, _additionalPower);
         if (_data == null)
         {
             var questData = MainController.Instance.MainPlayer.QuestData;

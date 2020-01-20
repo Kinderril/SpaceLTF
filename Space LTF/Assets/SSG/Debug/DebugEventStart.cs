@@ -13,9 +13,9 @@ public class DebugEventStart
         var windwoMap = WindowManager.Instance.CurrentWindow as MapWindow;
         if (windwoMap != null)
         {
-            var sector = new SectorData(1, 1, 1, null, ShipConfig.federation, 1, 1);
+            var sector = new SectorData(1, 1, 1, null, ShipConfig.federation, 1, 1,0f);
             var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), 1,1, sector,20,ShipConfig.mercenary);
-            windwoMap.DebugActivateCellDialog(cellEvent);
+            windwoMap.ActivateCellDialog(cellEvent);
         }
         else
         {

@@ -2,15 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
 public class BattlefieldMapEvent : BaseGlobalMapEvent
 {
-    public BattlefieldMapEvent(int power,ShipConfig config)   
-        :base(config)
+    public BattlefieldMapEvent(int power, ShipConfig config)
+        : base(config)
     {
         _power = power;
     }
@@ -18,14 +16,14 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     {
         return "Old battlefield";
     }
-    
+
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(         String.Format("Hide and provocate them",ScoutsLevel),null,provacation));
+        mianAnswers.Add(new AnswerDialogData(String.Format("Hide and provocate them", ScoutsLevel), null, provacation));
         mianAnswers.Add(new AnswerDialogData($"Try to reconcile all sides", null, reconcile));
-        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
-        
+        mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
+
 
         var mesData = new MessageDialogData("You see some ships stands against each other.", mianAnswers);
         return mesData;
@@ -37,7 +35,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
         if (isRep)
         {
             var mianAnswers = new List<AnswerDialogData>();
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.mercenary,Library.REPUTATION_SCIENS_LAB_ADD);
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.mercenary, Library.REPUTATION_SCIENS_LAB_ADD);
             mianAnswers.Add(new AnswerDialogData("Thanks!", () => GetItemsAfterBattle(false), null));
             var mesData = new MessageDialogData("Your diplomacy skills are perfect. They will not fight and send you a gift for helping. Reputation add {Library.REPUTATION_RELEASE_PEACEFULL_ADD}.", mianAnswers);
             return mesData;
@@ -56,7 +54,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     private MessageDialogData shootNear()
     {
         MessageDialogData mesData;
-var mianAnswers = new List<AnswerDialogData>();
+        var mianAnswers = new List<AnswerDialogData>();
         if (MyExtensions.IsTrueEqual())
         {
             mianAnswers.Add(new AnswerDialogData("Shit.", Fight, null));
@@ -64,7 +62,7 @@ var mianAnswers = new List<AnswerDialogData>();
         }
         else
         {
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios,Library.REPUTATION_SCIENS_LAB_ADD); 
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios, Library.REPUTATION_SCIENS_LAB_ADD);
             mianAnswers.Add(new AnswerDialogData("Ufff... Great.", null, null));
             mesData = new MessageDialogData($"This stop trying attack anybody. Maybe this is not bad. Reputation add {Library.REPUTATION_SCIENS_LAB_ADD}.", mianAnswers);
 
@@ -84,7 +82,7 @@ var mianAnswers = new List<AnswerDialogData>();
     {
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData($"Catch moment and fire with artillery", null, artillery));
-        mianAnswers.Add(new AnswerDialogData("Wait", null,endBattle));
+        mianAnswers.Add(new AnswerDialogData("Wait", null, endBattle));
         var mesData = new MessageDialogData("They starts battle.", mianAnswers);
         return mesData;
     }
@@ -113,12 +111,12 @@ var mianAnswers = new List<AnswerDialogData>();
     private MessageDialogData artillery()
     {
         var player = MainController.Instance.MainPlayer;
-        var rockectWeapons = player.Army.Where(x =>
+        var rockectWeapons = player.Army.Army.Where(x =>
             x.Ship.WeaponsModuls.FirstOrDefault(y => y != null && (y.WeaponType == WeaponType.rocket || y.WeaponType == WeaponType.casset)) != null);
         if (rockectWeapons.Any() && MyExtensions.IsTrue01(.8f))
         {
             var mianAnswers = new List<AnswerDialogData>();
-            mianAnswers.Add(new AnswerDialogData("Good",()=> GetItemsAfterBattle(true), null));
+            mianAnswers.Add(new AnswerDialogData("Good", () => GetItemsAfterBattle(true), null));
             var mesData = new MessageDialogData("Good shoot. You destroy all of them. After battle you find some items", mianAnswers);
             return mesData;
         }

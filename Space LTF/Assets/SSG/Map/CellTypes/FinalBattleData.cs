@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [Serializable]
@@ -58,17 +56,17 @@ public class FinalBattleData
             }
             else
             {
-                var shipsYouCanScriface = player.Army.Where(x => x.Ship.ShipType != ShipType.Base).ToList();
+                var shipsYouCanScriface = player.Army.Army.Where(x => x.Ship.ShipType != ShipType.Base).ToList();
                 foreach (var data in shipsYouCanScriface)
                 {
                     StartShipPilotData shipToDel = data;
                     void Sacrifice()
                     {
-                        player.RemoveShip(shipToDel);
+                        player.Army.RemoveShip(shipToDel);
                         player.QuestData.AddElement();
                     }
                     list.Add(new AnswerDialogData(String.Format(Namings.Sacrifice, shipToDel.Ship.Name,
-                        Namings.ShipType(shipToDel.Ship.ShipType), Namings.ShipConfig(shipToDel.Ship.ShipConfig)), null, ()=>
+                        Namings.ShipType(shipToDel.Ship.ShipType), Namings.ShipConfig(shipToDel.Ship.ShipConfig)), null, () =>
                     {
                         Sacrifice();
                         return GetDialog();
@@ -95,7 +93,7 @@ public class FinalBattleData
         var mesData = new MessageDialogData("But somebody don't want let you go and attacks you", list);
         return mesData;
     }
-       
+
     /*
     private MessageDialogData FirstDialogEnds()
     {
@@ -157,8 +155,8 @@ public class FinalBattleData
         var player = new Player("Final boss");
         var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize, 5, 7, ArmyCreatorData.GetRandom(ShipConfig.federation),
             true, player);
-        player.Army = army;
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer,player,true,false);
+        player.Army.SetArmy(army);
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, player, true, false);
     }
     public MessageDialogData GetAfterBattleDialog()
     {

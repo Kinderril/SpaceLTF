@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -14,9 +13,9 @@ public class MapWindow : BaseWindow
 
     private bool isArmyActive;
 
-    private Vector3 _stablePos; 
+    private Vector3 _stablePos;
     private bool _stablePosCached = false;
-//    public GameObject ModifInfoContainer;
+    //    public GameObject ModifInfoContainer;
 
     public MapConsoleUI MapConsoleUI;
     public InventoryUI InventoryUI;
@@ -34,7 +33,7 @@ public class MapWindow : BaseWindow
     private PlayerArmyUI playerArmyUI;
     public WindowModif modifWindowUI;
     public GlobalMapController GlobalMap;
-//    public CataclysmUI Cataclysm;
+    //    public CataclysmUI Cataclysm;
     public PlayerByStepUI PlayerByStepUI;
     private GlobalMapCell _lastClosest = null;
     public GameObject StartInfo;
@@ -43,7 +42,7 @@ public class MapWindow : BaseWindow
     private bool _sideShipsInited = false;
     private List<SideShipGlobalMapInfo> _sideInfos = new List<SideShipGlobalMapInfo>();
     public event Action OnStartInfoClose;
-    public MapSettingsWindow WindowSettings;
+    //    public MapSettingsWindow WindowSettings;
     public QuestOnStartControllerUI QuestsOnStartController;
 
     public event Action<bool> OnOpenInventory;
@@ -58,22 +57,22 @@ public class MapWindow : BaseWindow
         //        ShipRepairedObject.gameObject.SetActive(false);
         DialogWindow.Dispose();
         GlobalMap.gameObject.SetActive(true);
-        WindowSettings.gameObject.SetActive(false);
+        //        WindowSettings.gameObject.SetActive(false);
         ReputationMapUI.gameObject.SetActive(false);
         CamerasController.Instance.StartGlobalMap();
         GlobalMap.UnBlock();
-//        ArmyInfoContainer.gameObject.SetActive(false);
+        //        ArmyInfoContainer.gameObject.SetActive(false);
         player = MainController.Instance.MainPlayer;
         player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
-//        Cataclysm.Init(player.MapData);
+        //        Cataclysm.Init(player.MapData);
         bool showFirstInfo = player.MapData.Step == 0;
         StartInfo.gameObject.SetActive(showFirstInfo);
         if (showFirstInfo)
         {
             var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
-            field.text = Namings.StartInfo;
+            field.text = Namings.Tag("StartInfo");
         }
-//        ReputationMapUI.Init();
+        //        ReputationMapUI.Init();
         PlayerByStepUI.Init(player.ByStepDamage);
         //        player.MapData.OnCellChanged += OnCellChanged;
         //        player.MapData.OnSectorChanged += OnSectorChanged;
@@ -81,15 +80,15 @@ public class MapWindow : BaseWindow
         MoneyField.Init(player.MoneyData.MoneyCount);
         player.MoneyData.OnMoneyChange += OnMoneyChange;
         player.MapData.OnCellChanged += OnCellChanged;
-        player.OnAddShip += OnAddShip;
+        player.Army.OnAddShip += OnAddShip;
         // player.ReputationData.OnReputationNationChange += OnReputationChange;
         CellsOfSector();
         InitMyArmy();
-        GlobalMap.SingleInit(player.MapData.GalaxyData,this,MouseNearObject);
+        GlobalMap.SingleInit(player.MapData.GalaxyData, this, MouseNearObject);
         GlobalMap.Open();
         List<GlobalMapCell> connectedCells = player.MapData.ConnectedCellsToCurrent();
         GlobalMap.SingleReset(player.MapData.CurrentCell, connectedCells);
-        InventoryUI.Init(player.Inventory,null);
+        InventoryUI.Init(player.Inventory, null);
         GlobalMap.UnBlock();
         player.QuestData.OnElementFound += OnElementFound;
 
@@ -112,10 +111,10 @@ public class MapWindow : BaseWindow
         }
         else if (!player.MapData.CurrentCell.LeavedDialogComplete)
         {
-            var leavedDialog = player.MapData.CurrentCell.GetLeavedActionInner();
+            var leavedDialog = player.MapData.CurrentCell.GetLeavedActionInnerMain();
             if (leavedDialog != null)
             {
-                StartDialog(leavedDialog, (val) =>
+                StartDialog(leavedDialog, (val, val2) =>
                 {
                     player.MapData.CurrentCell.LeavedDialogComplete = true;
                     CanvasGroup.interactable = true;
@@ -129,10 +128,11 @@ public class MapWindow : BaseWindow
     private void ReturnToLastCell()
     {
         var lastCell = player.MapData.LastCell;
-        if (player.MapData.GoToTarget(lastCell, GlobalMap, () => {}))
+        player.MapData.GoToTarget(lastCell, GlobalMap, (comeToTarget) =>
         {
-
-        }
+            GlobalMap.SingleReset(comeToTarget, player.MapData.ConnectedCellsToCurrent());
+            GlobalMap.UnBlock();
+        });
     }
 
     private void InitSideShip()
@@ -140,7 +140,7 @@ public class MapWindow : BaseWindow
         if (!_sideShipsInited)
         {
             _sideShipsInited = true;
-            foreach (var pilotData in MainController.Instance.MainPlayer.Army)
+            foreach (var pilotData in MainController.Instance.MainPlayer.Army.Army)
             {
                 OnAddShip(pilotData, true);
             }
@@ -176,16 +176,9 @@ public class MapWindow : BaseWindow
             {
                 Debug.LogError($"OnAddShip. Delete error {pilotData}");
             }
-            
+
         }
     }
-
-
-    // private void OnReputationChange(ShipConfig config, int curVal, int delta)
-    // {
-    //     UpdateReputation();
-    // }
-
 
     public void OnClickReputation()
     {
@@ -209,13 +202,13 @@ public class MapWindow : BaseWindow
     private void UpdateMainQuestelements()
     {
         var player = MainController.Instance.MainPlayer.QuestData;
-        MainQuestELelemntField.text = $"{Namings.MainElements}:{player.mainElementsFound}/{player.MaxMainElements}";
-//        NavigationList.UpdateInfo();
+        MainQuestELelemntField.text = $"{Namings.Tag("MainElements")}:{player.mainElementsFound}/{player.MaxMainElements}";
+        //        NavigationList.UpdateInfo();
     }
 
     private void OnSomeShipRepaired()
     {
-        player.MessagesToConsole.AddMsg("Ships repaired");
+        player.MessagesToConsole.AddMsg(Namings.Tag("ShipsRepaired"));
     }
 
     // private void UpdateReputation()
@@ -249,7 +242,7 @@ public class MapWindow : BaseWindow
             CellIinfoObject.Disable();
         }
 
-        
+
     }
 
     private void OnMoneyChange(int obj)
@@ -260,7 +253,7 @@ public class MapWindow : BaseWindow
 
     private void CellsOfSector()
     {
-//        UpdateDayField();
+        //        UpdateDayField();
         MapCellsLayout.ClearTransform();
     }
 
@@ -271,13 +264,13 @@ public class MapWindow : BaseWindow
 
     private void OnCellChanged(GlobalMapCell cell)
     {
-//        UpdateDayField();
+        //        UpdateDayField();
         player.MessagesToConsole.AddMsg("Relocate to:" + cell.Desc());
-//        GlobalMap.CellChange();
-//        foreach (var mapCellElement in cellsElements)
-//        {
-//            mapCellElement.Refresh(mapCellElement.Id == player.MapData.CurrentCell);
-//        }
+        //        GlobalMap.CellChange();
+        //        foreach (var mapCellElement in cellsElements)
+        //        {
+        //            mapCellElement.Refresh(mapCellElement.Id == player.MapData.CurrentCell);
+        //        }
     }
 
     public void OnClickHome()
@@ -291,53 +284,45 @@ public class MapWindow : BaseWindow
         {
             if (player.MapData.CanGoTo(obj))
             {
-                InitsMainCellDialog(obj);
+                TryInitsMainCellDialog(obj);
             }
             else
             {
                 GlobalMap.Block();
                 string txt;
-                if (obj.IsDestroyed)
-                {
-                    txt = "All destroyed. Nothing to do there.";
-                }
-                else
-                {
-                    txt = "Target is too far.";
-
-                }
+                txt = obj.IsDestroyed ? "All destroyed. Nothing to do there." : Namings.Tag("targteFar");
                 WindowManager.Instance.InfoWindow.Init(GlobalMap.UnBlock, txt);
             }
         }
         else
         {
-            InitsMainCellDialog(obj);
+            TryInitsMainCellDialog(obj);
         }
     }
 
-    private void InitsMainCellDialog(GlobalMapCell obj)
+    private void TryInitsMainCellDialog(GlobalMapCell obj)
     {
         void ActivateDialog()
         {
-            var dialog = obj.GetDialog();
+            var dialog = obj.GetDialogMain();
             if (dialog != null)
-            {                  
-                if (obj.Completed && obj.OneTimeUsed())
+            {
+                if (!(obj.Completed && obj.OneTimeUsed()))
                 {
-                    // WindowManager.Instance.InfoWindow.Init(OnMainDialogEnds, Namings.BeenBefore);
+                    StartDialog(dialog, OnMainDialogEnds);
                 }
                 else
                 {
-                    StartDialog(dialog, OnMainDialogEnds);
+                    OnMainDialogEnds(true, false);
                 }
             }
             else
             {
-                OnMainDialogEnds(true);
+                OnMainDialogEnds(true, false);
             }
         }
 
-        if (player.MapData.GoToTarget(obj, GlobalMap, () =>
+        if (player.MapData.GoToTarget(obj, GlobalMap, (target) =>
         {
             ActivateDialog();
         }))
@@ -358,7 +343,7 @@ public class MapWindow : BaseWindow
                 .FirstOrDefault(x => x is EndGlobalCell) as EndGlobalCell;
         if (endCell != null)
         {
-            StartDialog(endCell.GetDialog(), OnMainDialogEnds);
+            ActivateCellDialog(endCell);
         }
         else
         {
@@ -366,12 +351,13 @@ public class MapWindow : BaseWindow
         }
     }
 
-    public void DebugActivateCellDialog(GlobalMapCell cell)
+    public void ActivateCellDialog(GlobalMapCell cell)
     {
-         StartDialog(cell.GetDialog(), OnMainDialogEnds);
+        var dialog = cell.GetDialogMain();
+        StartDialog(dialog, OnMainDialogEnds);
     }
 
-    private void OnMainDialogEnds(bool shallCompleteCell)
+    private void OnMainDialogEnds(bool shallCompleteCell, bool shallReturnToLastCell)
     {
         if (shallCompleteCell)
         {
@@ -380,7 +366,7 @@ public class MapWindow : BaseWindow
         GlobalMap.SingleReset(player.MapData.CurrentCell, player.MapData.ConnectedCellsToCurrent());
         GlobalMap.UnBlock();
         CanvasGroup.interactable = true;
-        if (!shallCompleteCell)
+        if (shallReturnToLastCell)
         {
             ReturnToLastCell();
         }
@@ -389,7 +375,7 @@ public class MapWindow : BaseWindow
     private void InitMyArmy()
     {
         playerArmyUI = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.PlayerArmyUIPrefab);
-        playerArmyUI.Init(player, PlayerContainer,true,new ConnectInventory(player.Inventory));
+        playerArmyUI.Init(player, PlayerContainer, true, new ConnectInventory(player.Inventory));
     }
 
     public void OnArmyShowClick()
@@ -426,6 +412,7 @@ public class MapWindow : BaseWindow
     {
         if (val)
         {
+            WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.WindowOpen);
             ArmyInfoContainer.transform.position = _stablePos;
         }
         else
@@ -435,7 +422,7 @@ public class MapWindow : BaseWindow
                 _stablePosCached = true;
                 _stablePos = ArmyInfoContainer.transform.position;
             }
-            var v = new Vector3(5000,0,0);
+            var v = new Vector3(5000, 0, 0);
             ArmyInfoContainer.transform.position = v;
         }
         if (OnOpenInventory != null)
@@ -478,12 +465,7 @@ public class MapWindow : BaseWindow
     }
     public void OnClickSettings()
     {
-        CanvasGroup.interactable = false;
-        WindowSettings.Init();
-        WindowSettings.Open(() =>
-        {
-            CanvasGroup.interactable = true;
-        });
+        WindowManager.Instance.OpenSettingsSettings(true);
     }
 
     private void StartDialog(MessageDialogData dialog, DialogEndsCallback callbackOnEnd)
@@ -504,7 +486,7 @@ public class MapWindow : BaseWindow
         player.RepairData.OnSomeShipRepaired -= OnSomeShipRepaired;
         player.MoneyData.OnMoneyChange -= OnMoneyChange;
         player.MapData.OnCellChanged -= OnCellChanged;
-        player.OnAddShip -= OnAddShip;
+        player.Army.OnAddShip -= OnAddShip;
         // player.ReputationData.OnReputationNationChange -= OnReputationChange;
         //        player.MapData.OnSectorChanged -= OnSectorChanged;
         //        player.MapData.OnCellChanged -= OnCellChanged;
@@ -513,14 +495,14 @@ public class MapWindow : BaseWindow
         DialogWindow.Dispose();
         playerArmyUI.Dispose();
         ReputationMapUI.Dispose();
-//        Cataclysm.Dispose();
+        //        Cataclysm.Dispose();
         GameObject.Destroy(playerArmyUI.gameObject);
     }
 
     public void ClearAll()
     {
         _sideShipsInited = false;
-//        _stablePosCached = true;
+        //        _stablePosCached = true;
         NavigationList.ClearAll();
         LayoutSideShips.ClearTransform();
         _sideInfos.Clear();

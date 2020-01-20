@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class ModifGlobalMapCell : GlobalMapCell
 {
-    public ModifGlobalMapCell(int id, int intX, int intZ, SectorData secto) : base(id, intX, intZ, secto)
+    public ModifGlobalMapCell(int id, int intX, int intZ, SectorData secto, ShipConfig config) : base(id, intX, intZ, secto, config)
     {
     }
 
@@ -16,10 +16,10 @@ public class ModifGlobalMapCell : GlobalMapCell
 
     public override void Take()
     {
-//        WindowManager.Instance.OpenWindow(MainState.modif);
+        //        WindowManager.Instance.OpenWindow(MainState.modif);
     }
 
-    public override MessageDialogData GetDialog()
+    protected override MessageDialogData GetDialog()
     {
         var mesData = new MessageDialogData("This is modification base. You can try to modificate something.",
             new List<AnswerDialogData>
@@ -32,7 +32,7 @@ public class ModifGlobalMapCell : GlobalMapCell
 
     public override Color Color()
     {
-        return new Color(153f/255f, 204f/255f, 255f/255f);
+        return new Color(153f / 255f, 204f / 255f, 255f / 255f);
     }
 
     public override bool OneTimeUsed()

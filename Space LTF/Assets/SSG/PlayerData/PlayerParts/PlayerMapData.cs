@@ -41,7 +41,7 @@ public class PlayerMapData
         Step = 0;
         var sectorIndex = MyExtensions.Random(10 * data.SectorSize, 100 * data.SectorSize);
         var sector = new GalaxyData("Sector " + sectorIndex.ToString());
-        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount,data.StepsBeforeDeath, data.shipConfig);
+        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount,data.StepsBeforeDeath, data.shipConfig,data.PowerPerTurn);
         GalaxyData = sector;
         CurrentCell = startCell;
         OpenAllNear();
@@ -70,25 +70,26 @@ public class PlayerMapData
         ScoutAllAround(CurrentCell);
     }
 
-    public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap,Action callback)
+    public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap,Action<GlobalMapCell> callback)
     {
         if (CanGoTo(target))
         {
             if (target != CurrentCell)
             {
+                WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.ShipGlobalMapMove);
                 globalMap.MoveToCell(target,() =>
                 {
-                    callback();
-                    target.OpenInfo();
+                    callback(target);
                     GoNextAfterDialog(target);
-                    target.VisitCell(this);
+                    target.OpenInfo();
+                    target.VisitCell(this,Step);
                     target.ComeTo();
                     ScoutAllAround(target);
                 });
             }
             else
             {
-                callback();
+                callback(target);
             }
 
             return true;
@@ -128,6 +129,17 @@ public class PlayerMapData
 
     public bool CanGoTo(GlobalMapCell target)
     {
+#if Demo
+        if (VisitedSectors > 2 || Step > 25)
+        {
+            WindowManager.Instance.InfoWindow.Init(()=>
+            {
+                WindowManager.Instance.OpenWindow(MainState.start);
+            },String.Format(Namings.Tag("Demo"),2,25));
+            return false;
+        }
+#endif
+
         if (target is GlobalMapNothing)
         {
             return false;

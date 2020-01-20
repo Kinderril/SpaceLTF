@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class ArmyCreatorDebug
 {
@@ -22,7 +21,7 @@ public static class ArmyCreatorDebug
         if (special != null)
         {
             MainController.Instance.PreBattle(p, special);
-//            BattleController.Instance.PreLaunchGame(p, special);
+            //            BattleController.Instance.PreLaunchGame(p, special);
         }
         else
         {
@@ -31,7 +30,7 @@ public static class ArmyCreatorDebug
     }
 
 
-    static Player GetArmy(float power,ShipConfig _config)
+    static Player GetArmy(float power, ShipConfig _config)
     {
         List<Func<float, List<StartShipPilotData>>> posibleArmies = new List<Func<float, List<StartShipPilotData>>>();
         switch (_config)
@@ -66,7 +65,7 @@ public static class ArmyCreatorDebug
             var rnd = posibleArmies.RandomElement();
             var army = rnd(power);
             var player = new Player("boss");
-            player.Army = army;
+            player.Army.SetArmy(army);
             return player;
         }
 

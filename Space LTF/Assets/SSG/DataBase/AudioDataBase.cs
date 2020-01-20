@@ -1,8 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Experimental.AI;
 
 public class AudioDataBase : MonoBehaviour
 {
@@ -38,6 +35,15 @@ public class AudioDataBase : MonoBehaviour
     // public AudioClip WeaponDamage;
     public AudioClip ShieldDamage;
     public AudioClip FireDamage;
+    public AudioClip ClickDialog;
+    public AudioClip StartDialog;
+    public AudioClip WindowOpen;
+    public AudioClip BuySell;
+    public AudioClip InventoryMove;
+    public AudioClip ShipGlobalMapMove;
+    public AudioClip Upgrade;
+    public AudioClip ButtonClick;
+    public AudioClip SliderChange;
 
     public void Init()
     {

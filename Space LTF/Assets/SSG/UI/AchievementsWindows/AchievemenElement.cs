@@ -21,7 +21,7 @@ public class AchievemenElement : UIElementWithTooltip
 
     protected override string TextToTooltip()
     {
-        return $"{_achievementT.m_strName}\n{_achievementT.m_strDescription}";
+        return $"{_achievementT.ShortName}\n{_achievementT.m_strDescription}";
     }
 }
 

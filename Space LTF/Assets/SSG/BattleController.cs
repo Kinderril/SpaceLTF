@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public enum BattleState
@@ -28,7 +26,7 @@ public enum EndBattleType
     runAway
 }
 
-public class BattleController :Singleton<BattleController>
+public class BattleController : Singleton<BattleController>
 {
     public const float START_SAFE_RADIUS = 5;
     private List<ShipBase> SideGreen = new List<ShipBase>();
@@ -48,11 +46,11 @@ public class BattleController :Singleton<BattleController>
     public InputManager InputManager;
     public Light MainLight;
     public List<Color> ColorLight = new List<Color>();
-    
+
     public event Action<ShipBase, bool> OnShipAdd;
     public bool CanFastEnd = false;
     public BattleState State;
-//    private float _lastTimeDelta = 1f;
+    //    private float _lastTimeDelta = 1f;
 
     public List<Bullet> ActiveBullet = new List<Bullet>();
     public List<BulletKiller> ActiveBulletKillers = new List<BulletKiller>();
@@ -64,9 +62,10 @@ public class BattleController :Singleton<BattleController>
     public PauseData PauseData = new PauseData();
     private EndBattleType LastWinner;
     private bool _canRetire;
+    public BattleEndCallback OnBattleEndCallback;
 
 
-    public void LaunchGame(Player greenSide, Player redSide,bool canRetire, BattlefildEventType? eventType)
+    public void LaunchGame(Player greenSide, Player redSide, bool canRetire, BattlefildEventType? eventType)
     {
         _canRetire = canRetire;
         ActiveBullet.Clear();
@@ -124,11 +123,11 @@ public class BattleController :Singleton<BattleController>
 
 #endif
 
-        GreenCommander = new Commander(TeamIndex.green, Battlefield, greenSide,this);
+        GreenCommander = new Commander(TeamIndex.green, Battlefield, greenSide, this);
         RedCommander = new Commander(TeamIndex.red, Battlefield, redSide, this);
 
         var d = CellController.Data;
-        GroundParticles.Init(CellController.Data.CenterZone,10);
+        GroundParticles.Init(CellController.Data.CenterZone, 10);
         var posTeam1 = d.StartPosition1;
         var posTeam2 = d.StartPosition2;
 
@@ -170,7 +169,7 @@ public class BattleController :Singleton<BattleController>
         GreenCommander.LaunchAll(ShipInited, CommanderDeath);
         RedCommander.LaunchAll(ShipInited, CommanderDeath);
 
-//        Time.timeScale = 1f;
+        //        Time.timeScale = 1f;
         State = BattleState.process;
 
         await Task.Yield();
@@ -188,20 +187,20 @@ public class BattleController :Singleton<BattleController>
     {
         MainLight.color = ColorLight.RandomElement();
         float d = 0.7f;
-        MainLight.transform.rotation = new Quaternion(0, MyExtensions.Random(-d,d), 0, 1f);
+        MainLight.transform.rotation = new Quaternion(0, MyExtensions.Random(-d, d), 0, 1f);
     }
 
     private void ShipAdd(ShipBase obj)
     {
         CellController.AddShip(obj);
-        var commanderEnemy = new CommanderShipEnemy(obj.PriorityObject,obj.FakePriorityObject);
+        var commanderEnemy = new CommanderShipEnemy(obj.PriorityObject, obj.FakePriorityObject);
         if (obj.Commander.TeamIndex == TeamIndex.green)
         {
             SideGreen.Add(obj);
             RedCommander.AddEnemy(obj, commanderEnemy);
             foreach (var shipBase in SideRed)
             {
-                obj.AddEnemy(shipBase,true, commanderEnemy);
+                obj.AddEnemy(shipBase, true, commanderEnemy);
             }
         }
         else
@@ -213,19 +212,19 @@ public class BattleController :Singleton<BattleController>
                 obj.AddEnemy(shipBase, true, commanderEnemy);
             }
         }
-//        ShipInited(obj);
+        //        ShipInited(obj);
     }
 
-//    private IEnumerator Loading(List<StartShipPilotData> greenSide, List<StartShipPilotData> redSide)
-//    {
-////        WindowManager.Instance.OpenWindow(MainState.play);
-//    } 
+    //    private IEnumerator Loading(List<StartShipPilotData> greenSide, List<StartShipPilotData> redSide)
+    //    {
+    ////        WindowManager.Instance.OpenWindow(MainState.play);
+    //    } 
 
 
     private void CommanderDeath(Commander commander)
     {
         BattleController.Instance.WaitEndBattle();
-//        EndPart1Battle();
+        //        EndPart1Battle();
     }
 
     private void OnShipDestroy(ShipBase ship)
@@ -259,11 +258,11 @@ public class BattleController :Singleton<BattleController>
 
         if (SideGreen.Count == 0 || SideRed.Count == 0)
         {
-            LastWinner = (SideGreen.Count >= 1) ? EndBattleType.win  : EndBattleType.lose;
+            LastWinner = (SideGreen.Count >= 1) ? EndBattleType.win : EndBattleType.lose;
             WaitEndBattle();
             return;
         }
-}
+    }
 
     private void IsWin()
     {
@@ -429,17 +428,19 @@ public class BattleController :Singleton<BattleController>
         State = BattleState.end;
         MainController.Instance.BattleTimerManager.StopAll();
         CamerasController.Instance.EndGame();
+        var battleData = MainController.Instance.BattleData;
         _eventController.Dispose();
+        OnBattleEndCallback?.Invoke(GreenCommander.Player, RedCommander.Player, LastWinner);
         switch (LastWinner)
         {
             case EndBattleType.win:
-                MainController.Instance.BattleData.EndGameWin();
+                battleData.EndGameWin();
                 break;
             case EndBattleType.lose:
-                MainController.Instance.BattleData.EndGameLose();
+                battleData.EndGameLose();
                 break;
             case EndBattleType.runAway:
-                MainController.Instance.BattleData.EndGameRunAway();
+                battleData.EndGameRunAway();
                 break;
         }
     }
@@ -451,6 +452,7 @@ public class BattleController :Singleton<BattleController>
         OnShipAdd = null;
         GreenCommander.Dispose();
         RedCommander.Dispose();
+        AICommander.Dispose();
         GroundParticles.Disable();
     }
 
@@ -475,7 +477,7 @@ public class BattleController :Singleton<BattleController>
     public List<ShipBase> GetAllShipsInRadius(Vector3 position, TeamIndex idnex, float rad)
     {
         List<ShipBase> ships = new List<ShipBase>();
-        var sRad = rad*rad;
+        var sRad = rad * rad;
         foreach (var ship in idnex == TeamIndex.green ? SideGreen : SideRed)
         {
             var sDist = (ship.Position - position).sqrMagnitude;
@@ -491,7 +493,7 @@ public class BattleController :Singleton<BattleController>
     {
         if (!ActiveBullet.Contains(bullet))
         {
-//            bullet.transform.SetParent(BulletContainer,true);
+            //            bullet.transform.SetParent(BulletContainer,true);
             ActiveBullet.Add(bullet);
         }
     }
@@ -521,7 +523,7 @@ public class BattleController :Singleton<BattleController>
             var b = shipsToTest[i];
             var xx = p.x - b.Position.x;
             var zz = p.z - b.Position.z;
-            var d = xx*xx + zz*zz;
+            var d = xx * xx + zz * zz;
             if (d < sDist)
             {
                 sDist = d;
@@ -548,13 +550,13 @@ public class BattleController :Singleton<BattleController>
             var b = ActiveBullet[i];
             if (b.Weapon.TeamIndex == index)
             {
-//                Debug.LogError($"Check bullet {b} IsAcive:{b.IsAcive} Id:{b.ID_Pool} {b.IsUsing} {b.DamageType} targetType:{dmgType}.");
+                //                Debug.LogError($"Check bullet {b} IsAcive:{b.IsAcive} Id:{b.ID_Pool} {b.IsUsing} {b.DamageType} targetType:{dmgType}.");
                 //                var r = (flags & b.WeaponType) != 0;
                 if (b.gameObject.activeSelf && b.IsUsing && b.DamageType == dmgType)
                 {
                     var xx = p.x - b.Position.x;
                     var zz = p.z - b.Position.z;
-                    var d = xx*xx + zz*zz;
+                    var d = xx * xx + zz * zz;
                     if (d < dist)
                     {
                         dist = d;
@@ -563,7 +565,7 @@ public class BattleController :Singleton<BattleController>
                 }
             }
         }
-//        Debug.LogError($"ClosestBulletToPos {bullet}.");
+        //        Debug.LogError($"ClosestBulletToPos {bullet}.");
         return bullet;
     }
 

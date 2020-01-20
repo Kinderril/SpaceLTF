@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
 public class PlayerRepairData
 {
-    private List<StartShipPilotData> army;
+    private PlayerArmy army;
     private PlayerParameters repairParam;
 
     [field: NonSerialized]
     public event Action OnSomeShipRepaired;
-        
+
     public PlayerRepairData()
     {
-        
+
     }
-    
-    internal void Init(List<StartShipPilotData> army, PlayerMapData mapData,PlayerParameters repairParam)
+
+    internal void Init(PlayerArmy army, PlayerMapData mapData, PlayerParameters repairParam)
     {
         this.army = army;
         this.repairParam = repairParam;
@@ -34,7 +30,7 @@ public class PlayerRepairData
     public void RepairAllShips()
     {
         bool someRepaierd = false;
-        foreach (var shipPilotData in army)
+        foreach (var shipPilotData in army.Army)
         {
             var repaired = RepairShip(shipPilotData.Ship);
             if (repaired)

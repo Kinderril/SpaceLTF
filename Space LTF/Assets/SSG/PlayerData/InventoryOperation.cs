@@ -160,6 +160,7 @@ public  static  class  InventoryOperation
                         var sellValue = (int)(sellPrice);
                         item.CurrentInventory.Owner.MoneyData.AddMoney(sellValue);
                     }
+                    WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.BuySell);
                     CallbackSuccsess();
                 }
                 , failCallback, msg);
@@ -196,6 +197,7 @@ public  static  class  InventoryOperation
                     {
                         to.Owner.MoneyData.RemoveMoney(buyPrice);
                     }
+                    WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.BuySell);
                     CallbackSuccsess();
                 }
                 , failCallback, msg);

@@ -6,15 +6,27 @@ using Toggle = UnityEngine.UI.Toggle;
 public class MapSettingsWindow : MonoBehaviour
 {
     public Toggle SoundToggle;
+    public Toggle FXAAToggle;
     private Action _closeCallback;
+    public GameObject ButtonHolder;
+    public WindowKeys Keys;
+
     public void OnSound()
     {
         CamerasController.Instance.MainListenerSwitch();
     }
 
-    public void Init()
+    public void OnFXAA()
     {
+        CamerasController.Instance.FXAASwitch();
+    }
+
+    public void Init(bool withButtons)
+    {
+        ButtonHolder.SetActive(withButtons);
+        Keys.gameObject.SetActive(false);
         SoundToggle.isOn = (CamerasController.Instance.IsAudioEnable);
+        FXAAToggle.isOn = (CamerasController.Instance.FxaaEnable);
     }
 
     public void Open(Action closeCallback)
@@ -32,17 +44,17 @@ public class MapSettingsWindow : MonoBehaviour
 
     public void OnClickExit()
     {
-        WindowManager.Instance.ConfirmWindow.Init(OnConfigrmClick,null,Namings.MapExit);
+        WindowManager.Instance.ConfirmWindow.Init(OnConfigrmClick, null, Namings.MapExit);
     }
 
     private void OnConfigrmClick()
     {
-         WindowManager.Instance.OpenWindow(MainState.start);
-         var mapWindow = WindowManager.Instance.windows.FirstOrDefault(x => x.window is MapWindow);
-         if (mapWindow.window != null)
-         {
-             var mp = mapWindow.window as MapWindow;
-             mp.ClearAll();
-         }
+        WindowManager.Instance.OpenWindow(MainState.start);
+        var mapWindow = WindowManager.Instance.windows.FirstOrDefault(x => x.window is MapWindow);
+        if (mapWindow.window != null)
+        {
+            var mp = mapWindow.window as MapWindow;
+            mp.ClearAll();
+        }
     }
 }

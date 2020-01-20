@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
 
 
 public class CameraController : MonoBehaviour
@@ -26,6 +21,7 @@ public class CameraController : MonoBehaviour
     private bool _isEnable = true;
     public AudioSource SourceAmbient;
     public CameraEffects Effects;
+    public FXAA FxaaEffect;
 
     public void InitBorders(Vector3 min, Vector3 max)
     {
@@ -106,7 +102,7 @@ public class CameraController : MonoBehaviour
         var mouseScroll = Input.mouseScrollDelta;
         if (Math.Abs(mouseScroll.y) > 0.1f)
         {
-           MoveMainCamUp(mouseScroll.y);
+            MoveMainCamUp(mouseScroll.y);
         }
     }
 
@@ -140,6 +136,14 @@ public class CameraController : MonoBehaviour
             Effects.StartBloom(period);
         }
 
+    }
+
+    public void CheckAntiAlysing(bool fxaaEnable)
+    {
+        if (FxaaEffect != null)
+        {
+            FxaaEffect.enabled = fxaaEnable;
+        }
     }
 }
 

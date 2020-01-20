@@ -76,7 +76,7 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
             var mesData = new MessageDialogData($"This ship wants to trade with you. {tradeData}", mianAnswers);
             return mesData;
         }
-        mianAnswers.Add(new AnswerDialogData(Namings.leave, null, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null, null));
         var mesData2 = new MessageDialogData($"You have nothing to trade", mianAnswers);
         return mesData2;
     }

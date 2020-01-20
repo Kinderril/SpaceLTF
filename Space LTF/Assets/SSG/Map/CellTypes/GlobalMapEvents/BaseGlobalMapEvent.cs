@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
@@ -46,15 +43,15 @@ public abstract class BaseGlobalMapEvent
         WDictionary<ShipConfig> configs = new WDictionary<ShipConfig>(configsD);
         var type = types.Random();
         var cng = configs.Random();
-        return HireAction(itemsCount,cng,type,1);
+        return HireAction(itemsCount, cng, type, 1);
     }
 
-    protected StartShipPilotData HireAction(int itemsCount,ShipConfig congif,ShipType shipType,int level)
+    protected StartShipPilotData HireAction(int itemsCount, ShipConfig congif, ShipType shipType, int level)
     {
         var type = shipType;
         var cng = congif;
         var pilot = Library.CreateDebugPilot();
-        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer,pilot);
+        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
         WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}",
             Namings.ShipConfig(cng), Namings.ShipType(type)));
         var data = new StartShipPilotData(pilot, ship);
@@ -76,7 +73,7 @@ public abstract class BaseGlobalMapEvent
                 data.Pilot.UpgradeLevelByType(upgs.RandomElement(), false);
             }
         }
-        MainController.Instance.MainPlayer.TryHireShip(data);
+        MainController.Instance.MainPlayer.Army.TryHireShip(data);
         return data;
     }
 
@@ -90,7 +87,7 @@ public abstract class BaseGlobalMapEvent
         return wd.Random();
     }
 
-    protected Player GetArmy(ShipConfig config, ArmyCreatorType creatorType,int power)
+    protected Player GetArmy(ShipConfig config, ArmyCreatorType creatorType, int power)
     {
         ArmyCreatorData data = new ArmyCreatorData(config, true);
         switch (creatorType)
@@ -125,7 +122,7 @@ public abstract class BaseGlobalMapEvent
         }
         bool withCore = MyExtensions.IsTrue01(coreShipChance);
         var army = ArmyCreator.CreateArmy(power, ArmyCreationMode.equalize, 1, 3, data, withCore, player);
-        player.Army = army;
+        player.Army.SetArmy(army);
         return player;
     }
     protected MessageDialogData moneyResult(int min, int max)

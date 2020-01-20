@@ -32,7 +32,7 @@ public class InGameMainUI : BaseWindow
     public CreditControllerUI CreditController;
     public SpellModulsContainer SpellModulsContainer;
     public event Action<SpellInGame> OnSelectSpell;
-    public WindowKeys WindowKeys;
+//    public WindowKeys WindowKeys;
 //    public GameObject RetireButtonObject;
     //    public CommanderPriorityUI CommanderPriority;    
     public RetirreButton RetireButton;
@@ -96,6 +96,7 @@ public class InGameMainUI : BaseWindow
         //        {
         //            WindowKeys = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.WindowKeys);
         //            WindowKeys.transform.SetParent(transform);
+
         //            WindowKeys.transform.localPosition = Vector3.zero;
         //            WindowKeys.Init();
         //            WindowKeys.transform.SetAsLastSibling();
@@ -119,7 +120,7 @@ public class InGameMainUI : BaseWindow
         GreenTeamInfoContainer.Init(battle.GreenCommander, ActionShipSelected);
         RedTeamInfoContainer.Init(battle.RedCommander, ActionShipSelected);
         int weaponsIndex = 0;
-        WindowKeys.gameObject.SetActive(false);
+//        WindowKeys.gameObject.SetActive(false);
         TimeScaleBattle.Init(_battle);
         var mainShip = MyCommander.MainShip;
         if (mainShip != null)
@@ -187,14 +188,8 @@ public class InGameMainUI : BaseWindow
 
     public void OnClickSettings()
     {
-        CanvasGroup.interactable = false;
         OnPause();
-        WindowKeys.Init();
-        WindowKeys.Open(() =>
-        {
-            CanvasGroup.interactable = true;
-            OnPause();
-        });
+        WindowManager.Instance.OpenSettingsSettings(true, OnPause);
     }
     
     public void ActionShipSelected(ShipBase obj)
@@ -429,7 +424,7 @@ public class InGameMainUI : BaseWindow
         {
             _spellSelected.EndShowCast();
         }
-        WindowKeys.gameObject.SetActive(false);
+//        WindowKeys.gameObject.SetActive(false);
         FlyingNumbersController.Dispose();
         UnselectSpell();
         CreditController.Dispose();

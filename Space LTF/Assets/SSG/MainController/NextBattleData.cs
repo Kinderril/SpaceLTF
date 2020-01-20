@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Linq;
-using JetBrains.Annotations;
+﻿using System.Linq;
+
+public delegate void BattleEndCallback(Player human, Player ai, EndBattleType win);
 
 public class NextBattleData
 {
@@ -16,7 +15,7 @@ public class NextBattleData
         Statistics = statistics;
     }
 
-    public void PreBattle(Player player1, Player player2, bool isFinalBattle, bool canRetire, BattlefildEventType? battleEvent )
+    public void PreBattle(Player player1, Player player2, bool isFinalBattle, bool canRetire, BattlefildEventType? battleEvent)
     {
         _isFinalBattle = isFinalBattle;
         _canRetire = canRetire;
@@ -53,7 +52,7 @@ public class NextBattleData
         else
         {
             Statistics.EndBattle(EndBattleType.lose);
-//            MainPlayer.EndGame();
+            //            MainPlayer.EndGame();
             MainController.Instance.BattleData.EndGame(false);
         }
 

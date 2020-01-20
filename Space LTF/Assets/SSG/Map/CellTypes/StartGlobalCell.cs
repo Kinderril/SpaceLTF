@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
 [System.Serializable]
 public class StartGlobalCell : GlobalMapCell
 {
-    public StartGlobalCell(int id, int intX, int intZ, SectorData secto) : base( id, intX, intZ, secto)
+    public StartGlobalCell(int id, int intX, int intZ, SectorData secto, ShipConfig config) : base(id, intX, intZ, secto, config)
     {
         InfoOpen = true;
     }
-    
+
 
     public override string Desc()
     {
@@ -30,7 +26,7 @@ public class StartGlobalCell : GlobalMapCell
         return true;
     }
 
-    public override MessageDialogData GetDialog()
+    protected override MessageDialogData GetDialog()
     {
         var mesData = new MessageDialogData("Nothing here.", new List<AnswerDialogData>()
         {
@@ -41,7 +37,7 @@ public class StartGlobalCell : GlobalMapCell
 
     public override Color Color()
     {
-        return new Color(51f / 255f, 102f / 255f, 153f/255f);
+        return new Color(51f / 255f, 102f / 255f, 153f / 255f);
     }
 
     public override bool OneTimeUsed()

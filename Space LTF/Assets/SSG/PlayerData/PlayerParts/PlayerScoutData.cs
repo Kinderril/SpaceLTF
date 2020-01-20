@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public enum EShipScoutType
@@ -21,7 +19,7 @@ public class ShipScoutData
     public int PilotLevel;
     public List<SimpleModulType> Moduls = new List<SimpleModulType>();
     public List<SpellType> Spells = new List<SpellType>();
-//    public WDictionary<EShipScoutType> Chances;
+    //    public WDictionary<EShipScoutType> Chances;
     private Dictionary<EShipScoutType, float> innerData;
     public List<EShipScoutType> InfoTypeGetToShow;
 
@@ -42,19 +40,19 @@ public class ShipScoutData
         {
             if (modul != null)
                 Moduls.Add(modul.Type);
-        }                        
+        }
         foreach (var modul in data.Ship.SpellsModuls)
         {
             if (modul != null)
                 Spells.Add(modul.SpellType);
         }
 
-        dInfo.Add(EShipScoutType.shipType,3);
-        dInfo.Add(EShipScoutType.level,1);
+        dInfo.Add(EShipScoutType.shipType, 3);
+        dInfo.Add(EShipScoutType.level, 1);
         if (Spells.Count > 0)
-            dInfo.Add(EShipScoutType.spells,2);
+            dInfo.Add(EShipScoutType.spells, 2);
         if (Moduls.Count > 0)
-            dInfo.Add(EShipScoutType.moduls,1);
+            dInfo.Add(EShipScoutType.moduls, 1);
         innerData = dInfo;
     }
 
@@ -62,10 +60,10 @@ public class ShipScoutData
     {
         int maxScoutsLevel = MoneyConsts.MAX_PASSIVE_LEVEL;
         int scoutsTypes = 5;
-        float percentToShow = (float) level / (float)maxScoutsLevel;
+        float percentToShow = (float)level / (float)maxScoutsLevel;
         var itemsToShow = (int)((scoutsTypes - 1) * percentToShow);
-        var infosGet = Mathf.Min(itemsToShow,innerData.Count);
-        List< EShipScoutType > infoTypeGet = new List<EShipScoutType>();
+        var infosGet = Mathf.Min(itemsToShow, innerData.Count);
+        List<EShipScoutType> infoTypeGet = new List<EShipScoutType>();
         Dictionary<EShipScoutType, float> copyInner = CopyData(innerData);
         for (int i = 0; i < infosGet; i++)
         {
@@ -86,7 +84,7 @@ public class ShipScoutData
         Dictionary<EShipScoutType, float> d = new Dictionary<EShipScoutType, float>();
         foreach (var f in dictionary)
         {
-            d.Add(f.Key,f.Value);
+            d.Add(f.Key, f.Value);
         }
         return d;
     }
@@ -95,7 +93,7 @@ public class ShipScoutData
 public class PlayerScoutData
 {
 
-    
+
     public Player _player;
 
     public PlayerScoutData(Player player)
@@ -106,7 +104,7 @@ public class PlayerScoutData
     public List<ShipScoutData> GetShipScouts(int level)
     {
         List<ShipScoutData> ShipScouts = new List<ShipScoutData>();
-        foreach (var data in _player.Army)
+        foreach (var data in _player.Army.Army)
         {
             var info = new ShipScoutData(data);
             info.ModifByLevel(level);
@@ -122,11 +120,11 @@ public class PlayerScoutData
 
         var armyCount = _player.Army.Count;
         WeaponType firstWeaponType = WeaponType.laser;
-        bool haveBase = _player.Army.Any(startShipPilotData => startShipPilotData.Ship.ShipType == ShipType.Base);
+        bool haveBase = _player.Army.Army.Any(startShipPilotData => startShipPilotData.Ship.ShipType == ShipType.Base);
         int weaponsCount = 0;
         int modulsCount = 0;
         HashSet<WeaponType> allTypes = new HashSet<WeaponType>();
-        foreach (var startShipPilotData in _player.Army)
+        foreach (var startShipPilotData in _player.Army.Army)
         {
             foreach (var weaponsModul in startShipPilotData.Ship.WeaponsModuls)
             {
@@ -178,6 +176,6 @@ public class PlayerScoutData
         }
 
         return data;
-    } 
+    }
 }
 

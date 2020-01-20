@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -12,7 +11,6 @@ public delegate void ItemTransfer(IInventory from, IInventory to, IItemInv item)
 [System.Serializable]
 public class Player
 {
-    public const int MAX_ARMY = 5;
     public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
     //    public int CoinsCount = 7;
     public PlayerInventory Inventory;
@@ -28,35 +26,33 @@ public class Player
     public PlayerMapData MapData;
     public PlayerByStepDamage ByStepDamage;
     public PlayerMessagesToConsole MessagesToConsole;
-    public List<StartShipPilotData> Army = new List<StartShipPilotData>();
+    public PlayerArmy Army { get; private set; }
     public StartShipPilotData MainShip;
     public QuestsOnStartController QuestsOnStartController;
 
-    [field: NonSerialized]
-    public event Action<StartShipPilotData, bool> OnAddShip; 
     public string Name;
 
     [System.NonSerialized]
     public LastReward LastReward;
-    
+
     public void PlayNewGame(StartNewGameData data)
     {
         MessagesToConsole = new PlayerMessagesToConsole();
-        QuestData  = new PlayerQuestData(data.CoreElementsCount);
+        QuestData = new PlayerQuestData(data.CoreElementsCount);
         ByStepDamage = new PlayerByStepDamage();
-        ByStepDamage.Init(data.StepsBeforeDeath,this);
+        ByStepDamage.Init(data.StepsBeforeDeath, this);
         MapData = new PlayerMapData();
-        MapData.Init(data,ByStepDamage);
-        Army = CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell);
-        RepairData.Init(Army, MapData,Parameters);
+        MapData.Init(data, ByStepDamage);
+        Army.SetArmy(CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell));
+        RepairData.Init(Army, MapData, Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
-        ReputationData.AddReputation(data.shipConfig,Library.START_REPUTATION);
+        ReputationData.AddReputation(data.shipConfig, Library.START_REPUTATION);
         var mid1 = (Library.MIN_GLOBAL_SECTOR_SIZE + Library.MAX_GLOBAL_SECTOR_SIZE) * .5f;
         var mid2 = (Library.MIN_GLOBAL_MAP_SECTOR_COUNT + Library.MAX_GLOBAL_MAP_SECTOR_COUNT) * .5f;
 
         var midSize = mid1 * mid2;
 
-        var size = ((float)(MapData.GalaxyData.SizeOfSector * MapData.GalaxyData.AllSectors.Count/3f));
+        var size = ((float)(MapData.GalaxyData.SizeOfSector * MapData.GalaxyData.AllSectors.Count / 3f));
         var coef = size / midSize;
         QuestsOnStartController = new QuestsOnStartController(coef);
         QuestsOnStartController.InitQuests();
@@ -65,22 +61,22 @@ public class Player
 
     private void AddModuls()
     {
-//        int index;
-//        if (Inventory.GetFreeSimpleSlot(out index))
-//        {
-//            var modul = Library.CreatSimpleModul(SimpleModulType.fireMines,1);
-//            Inventory.TryAddSimpleModul(modul,index);
-//        }
-//        if (Inventory.GetFreeSimpleSlot(out index))
-//        {
-//            var modul = Library.CreatSimpleModul(SimpleModulType.frontShield,1);
-//            Inventory.TryAddSimpleModul(modul,index);
-//        } 
-//        if (Inventory.GetFreeSimpleSlot(out index))
-//        {
-//            var modul = Library.CreatSimpleModul(SimpleModulType.armor,1);
-//            Inventory.TryAddSimpleModul(modul,index);
-//        }
+        //        int index;
+        //        if (Inventory.GetFreeSimpleSlot(out index))
+        //        {
+        //            var modul = Library.CreatSimpleModul(SimpleModulType.fireMines,1);
+        //            Inventory.TryAddSimpleModul(modul,index);
+        //        }
+        //        if (Inventory.GetFreeSimpleSlot(out index))
+        //        {
+        //            var modul = Library.CreatSimpleModul(SimpleModulType.frontShield,1);
+        //            Inventory.TryAddSimpleModul(modul,index);
+        //        } 
+        //        if (Inventory.GetFreeSimpleSlot(out index))
+        //        {
+        //            var modul = Library.CreatSimpleModul(SimpleModulType.armor,1);
+        //            Inventory.TryAddSimpleModul(modul,index);
+        //        }
 
         //        for (int i = 0; i < count; i++)
         //        {
@@ -107,7 +103,7 @@ public class Player
         if (DebugParamsController.AllModuls)
         {
 
-            var allVals = (SimpleModulType[]) Enum.GetValues(typeof(SimpleModulType));
+            var allVals = (SimpleModulType[])Enum.GetValues(typeof(SimpleModulType));
             foreach (var type in allVals)
             {
                 if (Inventory.GetFreeSimpleSlot(out var index1))
@@ -118,19 +114,19 @@ public class Player
 
             }
 
-//            for (int i = 0; i < 3; i++)
-//            {
-//                if (Inventory.GetFreeWeaponSlot(out var index2))
-//                {
-//                    var modul1 = Library.CreateWeapon(WeaponType.beam);
-//                    Inventory.TryAddWeaponModul(modul1, index2);
-//                }
-//            }
+            //            for (int i = 0; i < 3; i++)
+            //            {
+            //                if (Inventory.GetFreeWeaponSlot(out var index2))
+            //                {
+            //                    var modul1 = Library.CreateWeapon(WeaponType.beam);
+            //                    Inventory.TryAddWeaponModul(modul1, index2);
+            //                }
+            //            }
 
-            var allSpellType = (SpellType[]) Enum.GetValues(typeof(SpellType));
+            var allSpellType = (SpellType[])Enum.GetValues(typeof(SpellType));
             foreach (var type in allSpellType)
             {
-                if (type  != SpellType.BaitPriorityTarget && type != SpellType.priorityTarget &&  Inventory.GetFreeSpellSlot(out var index1))
+                if (type != SpellType.BaitPriorityTarget && type != SpellType.priorityTarget && Inventory.GetFreeSpellSlot(out var index1))
                 {
                     var modul = Library.CreateSpell(type);
                     Inventory.TryAddSpellModul(modul, index1);
@@ -152,7 +148,7 @@ public class Player
         var ship1 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), config, this, logs);
         r += Library.BASE_SHIP_VALUE;
         var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), config, this, logs);
-        
+
         int simpleIndex;
         foreach (var spellType in posibleSpell)
         {
@@ -164,9 +160,9 @@ public class Player
         }
         AddWeaponsToShips(ref r, ship1, posibleStartWeapons);
         AddWeaponsToShips(ref r, ship2, posibleStartWeapons);
-        
-        ship1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1,2), 0);
-        ship2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1,2), 0);
+
+        ship1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
+        ship2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
 
         List<StartShipPilotData> army = new List<StartShipPilotData>();
         army.Add(bShip);
@@ -176,18 +172,19 @@ public class Player
         return army;
     }
 
-    private void AddWeaponsToShips(ref float r,StartShipPilotData ship,List<WeaponType> list)
+    private void AddWeaponsToShips(ref float r, StartShipPilotData ship, List<WeaponType> list)
     {
         var ship2Weapon = list.RandomElement();
         int count = MyExtensions.Random(2, 4);
         for (int i = 0; i < count; i++)
         {
-            ArmyCreator.TryAddWeapon(new ArmyRemainPoints(r), ship.Ship, ship2Weapon, true,new ArmyCreatorLogs());
+            ArmyCreator.TryAddWeapon(new ArmyRemainPoints(r), ship.Ship, ship2Weapon, true, new ArmyCreatorLogs());
         }
     }
 
-    public Player(string name,  Dictionary<PlayerParameterType, int> startData = null)
+    public Player(string name, Dictionary<PlayerParameterType, int> startData = null)
     {
+        Army = new PlayerArmy();
         MoneyData = new PlayerMoneyData();
         ScoutData = new PlayerScoutData(this);
         Parameters = new PlayerParameters(this, startData);
@@ -201,30 +198,13 @@ public class Player
     }
 
 
-    public bool CanAddShip()
-    {
-        return Army.Count < MAX_ARMY;
-    }
 
-    public bool TryHireShip(StartShipPilotData ship)
-    {
-        if (CanAddShip())
-        {
-            Army.Add(ship);
-            if (OnAddShip != null)
-            {
-                OnAddShip(ship, true);
-            }
-            return true;
-        }
-        return false;
-    }
 
     public void SaveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + mainPlayer); 
-//        MoneyData.Dispose();
+        FileStream file = File.Create(Application.persistentDataPath + mainPlayer);
+        //        MoneyData.Dispose();
         bf.Serialize(file, this);
         file.Close();
         Debug.Log("Game Saved");
@@ -250,20 +230,6 @@ public class Player
 
 
 
-    public List<StartShipPilotData> GetShipsToBattle()
-    {
-        List<StartShipPilotData> list = new List<StartShipPilotData>();
-        foreach (var data in Army)
-        {
-//            if (!data.Ship.Destroyed)
-//            {
-                list.Add(data);
-//            }
-        }
-
-        return list;
-
-    }
 
 
     public void WinBattleReward(Commander enemyCommander)
@@ -280,7 +246,7 @@ public class Player
         var reward = rewardRnd.Random();
         int slotIndex;
         float moneyCoef = 1f;
-        Debug.Log("Player end battle. Reward setted.  reward:"+ reward.ToString());
+        Debug.Log("Player end battle. Reward setted.  reward:" + reward.ToString());
         LastReward = new LastReward();
         switch (reward)
         {
@@ -324,7 +290,7 @@ public class Player
                 }
                 break;
         }
-        int moneyToReward = (int) (moneyCoef*power*Library.BATTLE_REWARD_WIN_MONEY_COEF);
+        int moneyToReward = (int)(moneyCoef * power * Library.BATTLE_REWARD_WIN_MONEY_COEF);
         LastReward.Money = moneyToReward;
         MoneyData.AddMoney(moneyToReward);
     }
@@ -342,29 +308,6 @@ public class Player
         {
             QuestsOnStartController.DisposeQuests();
         }
-    }
-
-    public void RemoveShip(ShipInventory shipInventory)
-    {
-        var shipTo = Army.FirstOrDefault(x => x.Ship == shipInventory);
-        if (shipTo == null)
-        {
-            Debug.LogError("can't find ship to destroy");
-            return;
-        }
-
-        RemoveShip(shipTo);
-    }
-
-    public void RemoveShip(StartShipPilotData shipToDel)
-    {
-
-        Army.Remove(shipToDel);
-        if (OnAddShip != null)
-        {
-            OnAddShip(shipToDel, false);
-        }
-
     }
 }
 

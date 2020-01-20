@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-public delegate void DialogEndsCallback(bool shallCompleteCell);
+public delegate void DialogEndsCallback(bool shallCompleteCell, bool shallReturnToLastCell);
 
 public class DialogWindow : MonoBehaviour
 {
@@ -18,6 +13,7 @@ public class DialogWindow : MonoBehaviour
 
     public void Init(MessageDialogData dialog, DialogEndsCallback endCallback)
     {
+        WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.StartDialog);
         Utils.ClearTransform(Layout);
         gameObject.SetActive(true);
         MessageField.text = dialog.Message;
@@ -39,7 +35,7 @@ public class DialogWindow : MonoBehaviour
     {
         if (data.NextDialog == null)
         {
-            _endCallback(data.ShallCompleteCell);
+            _endCallback(data.ShallCompleteCell, data.ShallReturnToLastCell);
             Dispose();
         }
         else

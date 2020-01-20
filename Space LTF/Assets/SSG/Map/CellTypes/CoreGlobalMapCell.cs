@@ -14,7 +14,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
 {
     public GlobalCellType CellType;
     private bool _afterFightActivated = false;
-//    public bool HaveInfo = false;
+    //    public bool HaveInfo = false;
     public bool Taken = false;
 
     private Player _cachedArmy = null;
@@ -22,11 +22,11 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     private PlayerQuestData Quest => MainController.Instance.MainPlayer.QuestData;
 
 
-    public CoreGlobalMapCell(int power, int id, int intX, int intZ,SectorData  secto) 
-        : base( power,ShipConfig.mercenary, id, ArmyCreatorType.destroy, intX, intZ, secto)
+    public CoreGlobalMapCell(int power, int id, int intX, int intZ, SectorData sector)
+        : base(power, ShipConfig.mercenary, id, ArmyCreatorType.destroy, intX, intZ, sector)
     {
         _power = power;
-//        Debug.LogError($"CoreGlobalMapCell:{intX}  {intZ}");
+        //        Debug.LogError($"CoreGlobalMapCell:{intX}  {intZ}");
         WDictionary<GlobalCellType> chances = new WDictionary<GlobalCellType>(new Dictionary<GlobalCellType, float>()
         {
             { GlobalCellType.simple, 2},
@@ -47,7 +47,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     public override void OpenInfo()
     {
         base.OpenInfo();
-//        HaveInfo = true;
+        //        HaveInfo = true;
     }
 
     public override string Desc()
@@ -64,7 +64,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
 
     }
 
-    public override MessageDialogData GetDialog()
+    protected override MessageDialogData GetDialog()
     {
         switch (CellType)
         {
@@ -95,7 +95,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
 
     private int MoneyToBuy()
     {
-        return _power*3;
+        return Power * 3;
     }
 
     private MessageDialogData GetTalkDialog()
@@ -113,18 +113,18 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
 
         answerDialog.Add(new AnswerDialogData("Attack.", Fight));
         if (player.MoneyData.HaveMoney(MoneyToBuy()))
-            answerDialog.Add(new AnswerDialogData(String.Format("Buy for {0} credits.", MoneyToBuy()), null,Buy));
-        if (player.ReputationData.ReputationFaction[_config] > 50)
-            answerDialog.Add(new AnswerDialogData(String.Format("Use diplomacy."),null, Diplomaty));
-//        if (player.Parameters.Scouts.Level >= 1)
-        answerDialog.Add(new AnswerDialogData(String.Format("Send scouts to steal."), null,Steal));
+            answerDialog.Add(new AnswerDialogData(String.Format("Buy for {0} credits.", MoneyToBuy()), null, Buy));
+        if (player.ReputationData.ReputationFaction[ConfigOwner] > 50)
+            answerDialog.Add(new AnswerDialogData(String.Format("Use diplomacy."), null, Diplomaty));
+        //        if (player.Parameters.Scouts.Level >= 1)
+        answerDialog.Add(new AnswerDialogData(String.Format("Send scouts to steal."), null, Steal));
         var mesData = new MessageDialogData($"Some other fleet already have your target. \n {scoutsField}", answerDialog);
         return mesData;
     }
 
     private MessageDialogData Buy()
     {
-        
+
         MainController.Instance.MainPlayer.MoneyData.RemoveMoney(MoneyToBuy());
         SetTake();
         MainController.Instance.MainPlayer.QuestData.AddElement();
@@ -168,7 +168,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         }
         else
         {
-            _power = (int)(_power * 1.26f);
+            _power = (int)(Power * 1.26f);
             List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
             answerDialog.Add(new AnswerDialogData("Very bad. Fight.", Fight));
             var mesData = new MessageDialogData("Fail. While you were trying to steal an item, reinforcements came to them, and now you can't runaway.", answerDialog);
@@ -176,7 +176,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         }
     }
 
-    public override MessageDialogData GetLeavedActionInner()
+    protected override MessageDialogData GetLeavedActionInner()
     {
         if (_afterFightActivated)
         {
@@ -195,7 +195,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     private void Fight()
     {
         _afterFightActivated = true;
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(),false);
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(), false);
     }
 
     protected override Player GetArmy()
@@ -205,8 +205,8 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
             return _cachedArmy;
         }
 
-        List<Func<float ,List<StartShipPilotData>> > posibleArmies = new List<Func<float, List<StartShipPilotData>>>();
-        switch (_config)
+        List<Func<float, List<StartShipPilotData>>> posibleArmies = new List<Func<float, List<StartShipPilotData>>>();
+        switch (ConfigOwner)
         {
             case ShipConfig.raiders:
                 posibleArmies.Add(ArmyCreatorSpecial.CreateBossBeamDistRaiders);
@@ -236,10 +236,10 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         if (posibleArmies.Count > 0)
         {
             var rnd = posibleArmies.RandomElement();
-            var army = rnd(_power);
+            var army = rnd(Power);
             var player = new Player("boss");
-            player.Army = army;
-            _cachedArmy =  player;
+            player.Army.SetArmy(army);
+            _cachedArmy = player;
         }
 
         _cachedArmy = base.GetArmy();
@@ -248,7 +248,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
 
     public override Color Color()
     {
-        return new Color(204f/255f, 255f/255f, 153f/255f);
+        return new Color(204f / 255f, 255f / 255f, 153f / 255f);
     }
 
     public override bool OneTimeUsed()

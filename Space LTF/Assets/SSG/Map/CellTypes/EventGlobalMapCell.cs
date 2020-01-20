@@ -32,8 +32,8 @@ public class EventGlobalMapCell : GlobalMapCell
     private GlobalMapEventType _eventType;
     private BaseGlobalMapEvent _mapEvent;
 
-    public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ, SectorData secto,int power,ShipConfig config) 
-        : base( id, intX, intZ, secto)
+    public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ, SectorData sector,int power,ShipConfig config) 
+        : base( id, intX, intZ, sector, config)
     {
         _eventType = eventType;
         switch (_eventType)
@@ -118,12 +118,12 @@ public class EventGlobalMapCell : GlobalMapCell
 
     }
 
-    public override MessageDialogData GetDialog()
+    protected override MessageDialogData GetDialog()
     {
         return _mapEvent.GetDialog();
     }
 
-    public override MessageDialogData GetLeavedActionInner()
+    protected override MessageDialogData GetLeavedActionInner()
     {
         return _mapEvent.GetLeavedActionInner();
     }

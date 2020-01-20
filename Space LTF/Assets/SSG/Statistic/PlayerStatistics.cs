@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 //[Serializable]
@@ -22,7 +20,7 @@ public class WeaponsPair
 
     public List<WeaponType> GetAsList()
     {
-        return new List<WeaponType>() { Part1 , Part2};
+        return new List<WeaponType>() { Part1, Part2 };
 
     }
 }
@@ -47,26 +45,9 @@ public class PlayerStatistics
     public const int POINTS_TO_OPEN = 125;
     private static string mainPlayer = $"/stats_{MainController.VERSION}.stat";
 
-    [field: NonSerialized]
-    public List<OpenShipConfig> OpenShipsTypes = new List<OpenShipConfig>()
-        {
-            new OpenShipConfig(ShipConfig.mercenary),
-            new OpenShipConfig(ShipConfig.raiders),
-            new OpenShipConfig(ShipConfig.federation),
-            new OpenShipConfig(ShipConfig.ocrons),
-            new OpenShipConfig(ShipConfig.krios),
-        };
+    [field: NonSerialized] public List<OpenShipConfig> OpenShipsTypes;
 
-    [field: NonSerialized]
-    public List<WeaponsPair> WeaponsPairs = new List<WeaponsPair>()
-    {
-        new WeaponsPair(WeaponType.laser, WeaponType.impulse),
-        new WeaponsPair(WeaponType.laser, WeaponType.rocket),
-        new WeaponsPair(WeaponType.rocket, WeaponType.eimRocket),
-        new WeaponsPair(WeaponType.impulse, WeaponType.casset),
-        new WeaponsPair(WeaponType.casset, WeaponType.beam),
-        new WeaponsPair(WeaponType.eimRocket, WeaponType.beam),
-    };
+    [field: NonSerialized] public List<WeaponsPair> WeaponsPairs;
 
     private int _openedWeapons = 0;
     private int _openedConfigs = 0;
@@ -75,7 +56,9 @@ public class PlayerStatistics
     public EndGameStatistics EndGameStatistics = new EndGameStatistics();
     private int _lastDifficulty;
 
+    [field: NonSerialized]
     public WeaponsPair LastWeaponsPairOpen = null;
+    [field: NonSerialized]
     public OpenShipConfig LastOpenShipConfig = null;
     public int Wins { get; private set; }
     public int MaxLevelWeapons { get; private set; }
@@ -86,13 +69,30 @@ public class PlayerStatistics
     public int CollectMaxLevelShip { get; private set; }
     public bool TeamFive { get; private set; }
     public bool WinNoweapons { get; private set; }
-    
+
 
     public void Init()
     {
-        if (EndGameStatistics==null)
+        OpenShipsTypes = new List<OpenShipConfig>()
         {
-            EndGameStatistics=new EndGameStatistics();
+            new OpenShipConfig(ShipConfig.mercenary),
+            new OpenShipConfig(ShipConfig.raiders),
+            new OpenShipConfig(ShipConfig.federation),
+            new OpenShipConfig(ShipConfig.ocrons),
+            new OpenShipConfig(ShipConfig.krios),
+        };
+        WeaponsPairs = new List<WeaponsPair>()
+        {
+            new WeaponsPair(WeaponType.laser, WeaponType.impulse),
+            new WeaponsPair(WeaponType.laser, WeaponType.rocket),
+            new WeaponsPair(WeaponType.rocket, WeaponType.eimRocket),
+            new WeaponsPair(WeaponType.impulse, WeaponType.casset),
+            new WeaponsPair(WeaponType.casset, WeaponType.beam),
+            new WeaponsPair(WeaponType.eimRocket, WeaponType.beam),
+        };
+        if (EndGameStatistics == null)
+        {
+            EndGameStatistics = new EndGameStatistics();
         }
         EndGameStatistics.Init();
         RefreshOpened();
@@ -194,8 +194,10 @@ public class PlayerStatistics
     public static bool LoadGame(out PlayerStatistics stats)
     {
         var path = Application.persistentDataPath + mainPlayer;
+
         if (File.Exists(path))
         {
+            Debug.Log($"TRY Game Loaded {path}");
 
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(path, FileMode.Open);
@@ -210,15 +212,15 @@ public class PlayerStatistics
         return false;
     }
 
-    public void EndGameAll(bool win,Player player)
+    public void EndGameAll(bool win, Player player)
     {
         if (win)
         {
             CollectedPoints += _lastDifficulty;
-        }               
-        var mainShip = player.Army.First(x => x.Ship.ShipType == ShipType.Base);
+        }
+        var mainShip = player.Army.Army.First(x => x.Ship.ShipType == ShipType.Base);
         var finalPower = ArmyCreator.CalcArmyPower(player.Army);
-        EndGameResult res = new EndGameResult(win,_lastDifficulty, mainShip.Ship.ShipConfig, player.MapData.GalaxyData.Size, DateTime.Now, finalPower);
+        EndGameResult res = new EndGameResult(win, _lastDifficulty, mainShip.Ship.ShipConfig, player.MapData.GalaxyData.Size, DateTime.Now, finalPower);
         EndGameStatistics.AddResult(res);
         SaveGame();
     }
@@ -258,32 +260,34 @@ public class PlayerStatistics
         {
             LastOpenShipConfig = null;
         }
+        SaveGame();
     }
 
     public void PlayNewGame(StartNewGameData data)
     {
-        _lastDifficulty = (int)data.CalcDifficulty();
+        var d = data.CalcDifficulty();
+        _lastDifficulty = (int)(d * 100);
     }
 
     public void AddWin()
     {
         Wins++;
-    }  
+    }
     public void AddMaxLevelWeapons()
     {
         MaxLevelWeapons++;
-    }  
+    }
     public void AddShipsDestroyed()
     {
         ShipsDestroyed++;
-    }  
+    }
     public void AddMaxLevelSpells()
     {
         MaxLevelSpells++;
-    }  
+    }
     public void AddDamage(int dmg)
     {
-        Damage+=dmg;
+        Damage += dmg;
     }
 
     public void AddCollectMaxMoney(int money)
@@ -294,14 +298,14 @@ public class PlayerStatistics
             if (CollectMaxMoney > 1000)
             {
                 SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.COLLECT_MONEY_1000);
-            }  
+            }
             if (CollectMaxMoney > 10000)
             {
                 SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.COLLECT_MONEY_10000);
             }
         }
 
-    }  
+    }
     public void AddCollectMaxLevelShip(int lvl)
     {
         if (lvl > CollectMaxLevelShip)

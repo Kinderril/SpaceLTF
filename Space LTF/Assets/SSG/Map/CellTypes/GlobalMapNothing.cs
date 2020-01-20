@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
 [System.Serializable]
 public class GlobalMapNothing : GlobalMapCell
 {
-    public GlobalMapNothing(int id, int iX, int iZ, SectorData secto) : base( id, iX, iZ, secto)
+    public GlobalMapNothing(int id, int iX, int iZ, SectorData secto, ShipConfig config) : base(id, iX, iZ, secto, config)
     {
 
     }
@@ -24,7 +20,7 @@ public class GlobalMapNothing : GlobalMapCell
 
     }
 
-    public override MessageDialogData GetDialog()
+    protected override MessageDialogData GetDialog()
     {
         var mesData = new MessageDialogData("Nothing is here.", new List<AnswerDialogData>()
         {

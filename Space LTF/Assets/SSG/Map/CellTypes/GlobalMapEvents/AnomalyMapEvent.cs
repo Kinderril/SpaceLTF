@@ -1,16 +1,11 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 public enum AnomalyTypeUnlock
 {
-     freezing,
-     explosive,
-     fire,
-     impulse
+    freezing,
+    explosive,
+    fire,
+    impulse
 }
 
 [System.Serializable]
@@ -44,8 +39,8 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
 
         var mianAnswers = new List<AnswerDialogData>();
 
-        mianAnswers.Add(new AnswerDialogData($"Send scouts and try to get some info.", null,scouts));
-        mianAnswers.Add(new AnswerDialogData($"I believe at myself. Come close to it.",null,comeClose));
+        mianAnswers.Add(new AnswerDialogData($"Send scouts and try to get some info.", null, scouts));
+        mianAnswers.Add(new AnswerDialogData($"I believe at myself. Come close to it.", null, comeClose));
         mianAnswers.Add(new AnswerDialogData("No. Go away.", null));
 
         var mesData = new MessageDialogData("You find a strange anomaly. Do you want to investigate it?", mianAnswers);
@@ -71,8 +66,8 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData($"Use freezing gun", null, freezing));
         mianAnswers.Add(new AnswerDialogData($"Use explosive", null, explosive));
-        mianAnswers.Add(new AnswerDialogData("Use impulse", null,impulse));
-        mianAnswers.Add(new AnswerDialogData("Use fire", null,fire));
+        mianAnswers.Add(new AnswerDialogData("Use impulse", null, impulse));
+        mianAnswers.Add(new AnswerDialogData("Use fire", null, fire));
         string move = "";
         if (_withInfo)
         {
@@ -121,7 +116,7 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
             _lastPlus = 1;
             _curPoints += _lastPlus;
         }
-        else  if (good2 == option)
+        else if (good2 == option)
         {
             _lastPlus = 2;
             _curPoints += _lastPlus;
@@ -143,12 +138,12 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
         {
             var mianAnswers = new List<AnswerDialogData>();
             int improved = 0;
-            foreach (var shipPilotData in MainController.Instance.MainPlayer.Army)
+            foreach (var shipPilotData in MainController.Instance.MainPlayer.Army.Army)
             {
                 if (shipPilotData.Ship.ShipType != ShipType.Base)
                 {
                     improved++;
-                    shipPilotData.Pilot.UpgradeRandomLevel(false,true);
+                    shipPilotData.Pilot.UpgradeRandomLevel(false, true);
                 }
             }
             mianAnswers.Add(new AnswerDialogData($"Yes.", null, null));
@@ -216,7 +211,7 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
         }
     }
 
-    public AnomalyMapEvent(ShipConfig config) 
+    public AnomalyMapEvent(ShipConfig config)
         : base(config)
     {
     }

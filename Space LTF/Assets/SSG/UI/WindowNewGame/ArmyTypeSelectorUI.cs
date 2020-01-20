@@ -67,7 +67,8 @@ public class ArmyTypeSelectorUI : MonoBehaviour
         foreach (var sc in MainController.Instance.Statistics.OpenShipsTypes)
         {
             var element = _toggleElements.First(x => x.Config == sc.Config);
-            element.Toggle.isOn = true;
+            var interactable = sc.IsOpen;
+            element.Init(sc.Config, OnClickSelect, interactable);
         }
     }
 }

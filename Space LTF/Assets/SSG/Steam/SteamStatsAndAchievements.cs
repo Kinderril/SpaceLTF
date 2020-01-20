@@ -289,6 +289,7 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
     {
         public Achievement m_eAchievementID;
         public string m_strName;
+        public string ShortName;
         public string m_strDescription;
         public bool m_bAchieved;
 
@@ -302,7 +303,8 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
         {
             m_eAchievementID = achievementID;
             m_strName = name;
-            m_strDescription = desc;
+            m_strDescription = Namings.Tag($"desc{name}");
+            ShortName = Namings.Tag($"name{name}");
             m_bAchieved = false;
         }
     }

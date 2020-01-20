@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Linq;
 
 [System.Serializable]
@@ -18,7 +16,7 @@ public class PlayerByStepDamage
     {
     }
 
-    public void Init(int baseSteps,Player player)
+    public void Init(int baseSteps, Player player)
     {
         _player = player;
         BaseSteps = baseSteps;
@@ -40,13 +38,13 @@ public class PlayerByStepDamage
                 if (_curRemainSteps >= -3)
                 {
                     BrokeShipWithRandom();
-//                    WindowManager.Instance.InfoWindow.Init(null, Namings.UnstableCore1);
+                    //                    WindowManager.Instance.InfoWindow.Init(null, Namings.UnstableCore1);
                 }
                 else if (_curRemainSteps >= -9)
                 {
                     BrokeShipWithRandom();
                     BrokeRandomItem();
-//                    WindowManager.Instance.InfoWindow.Init(null, Namings.UnstableCore2);
+                    //                    WindowManager.Instance.InfoWindow.Init(null, Namings.UnstableCore2);
 
                 }
                 else
@@ -62,7 +60,7 @@ public class PlayerByStepDamage
     private void BrokeRandomItem()
     {
         var player = MainController.Instance.MainPlayer;
-        foreach (var data in player.Army.Suffle())
+        foreach (var data in player.Army.Army.Suffle())
         {
             var items = data.Ship.GetAllItems().Where(x => x != null).ToList();
             if (items.Count > 0)
@@ -73,16 +71,16 @@ public class PlayerByStepDamage
                     case ItemType.weapon:
                         var item = itemToDel as WeaponInv;
                         data.Ship.RemoveWeaponModul(item);
-                        player.MessagesToConsole.AddMsg(String.Format(Namings.BrokenItem,Namings.Weapon(item.WeaponType)));
+                        player.MessagesToConsole.AddMsg(String.Format(Namings.Tag("BrokenItem"), Namings.Weapon(item.WeaponType)));
                         break;
                     case ItemType.modul:
                         var item1 = itemToDel as BaseModulInv;
-                        player.MessagesToConsole.AddMsg(String.Format(Namings.BrokenItem, (item1.Name)));
+                        player.MessagesToConsole.AddMsg(String.Format(Namings.Tag("BrokenItem"), (item1.Name)));
                         data.Ship.RemoveSimpleModul(item1);
                         break;
                     case ItemType.spell:
                         var item2 = itemToDel as BaseSpellModulInv;
-                        player.MessagesToConsole.AddMsg(String.Format(Namings.BrokenItem, item2.Name));
+                        player.MessagesToConsole.AddMsg(String.Format(Namings.Tag("BrokenItem"), item2.Name));
                         data.Ship.RemoveSpellModul(item2);
                         break;
                 }
@@ -94,7 +92,7 @@ public class PlayerByStepDamage
     private void BrokeShipWithRandom()
     {
         var player = MainController.Instance.MainPlayer;
-        foreach (var data in player.Army)
+        foreach (var data in player.Army.Army)
         {
             if (MyExtensions.IsTrueEqual())
             {

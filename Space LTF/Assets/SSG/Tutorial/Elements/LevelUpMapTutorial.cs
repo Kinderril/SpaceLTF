@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class LevelUpMapTutorial : TutorialElement
+﻿public class LevelUpMapTutorial : TutorialElement
 {
     public override void Init()
     {
@@ -16,7 +13,7 @@ public class LevelUpMapTutorial : TutorialElement
         if (obj is MapWindow)
         {
             var player = MainController.Instance.MainPlayer;
-            var army = player.Army;
+            var army = player.Army.Army;
             foreach (var data in army)
             {
                 if (data.Pilot.CanUpgradeAnyParameter(0))

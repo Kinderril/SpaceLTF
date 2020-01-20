@@ -144,12 +144,12 @@ public class PilotInventoryUI : MonoBehaviour
             }
         }
 
-        var shiledInfo = LevelInfo(Namings.Shield, _pilot.ShieldLevel, Info(pilotParams.MaxShield, _pilot.ShieldLevel));
-        var speedInfo = LevelInfo(Namings.Speed, _pilot.SpeedLevel, Info(pilotParams.MaxSpeed, _pilot.SpeedLevel));
-        var turnInfo = LevelInfo(Namings.TurnSpeed, _pilot.TurnSpeedLevel, Info(pilotParams.TurnSpeed, _pilot.TurnSpeedLevel));
+        var shiledInfo = LevelInfo(Namings.Tag("Shield"), _pilot.ShieldLevel, Info(pilotParams.MaxShield, _pilot.ShieldLevel));
+        var speedInfo = LevelInfo(Namings.Tag("Speed"), _pilot.SpeedLevel, Info(pilotParams.MaxSpeed, _pilot.SpeedLevel));
+        var turnInfo = LevelInfo(Namings.Tag("TurnSpeed"), _pilot.TurnSpeedLevel, Info(pilotParams.TurnSpeed, _pilot.TurnSpeedLevel));
         var curHp = pilotParams.MaxHealth * _ship.HealthPercent;
         var hpTxt = String.Format("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel));
-        var txt = LevelInfo(Namings.Health, _pilot.HealthLevel, hpTxt);
+        var txt = LevelInfo(Namings.Tag("Health"), _pilot.HealthLevel, hpTxt);
 
         ShieldField.SetData(shiledInfo, _pilot.ShieldLevel,_pilot,LibraryPilotUpgradeType.shield);
         SpeedField.SetData(speedInfo,_pilot.SpeedLevel,_pilot,LibraryPilotUpgradeType.speed);

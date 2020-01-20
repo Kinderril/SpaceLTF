@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 public enum BattleRewardType
@@ -15,33 +14,33 @@ public enum BattleRewardType
 
 public class Commander
 {
-    public Dictionary<int,ShipBase> Ships = new Dictionary<int, ShipBase>();
+    public Dictionary<int, ShipBase> Ships = new Dictionary<int, ShipBase>();
     public List<ShipInventory> _destroyedShips = new List<ShipInventory>();
     private List<ShipBase> _shipsToRemove = new List<ShipBase>();
     private Dictionary<int, CommanderShipEnemy> _enemies = new Dictionary<int, CommanderShipEnemy>();
     public ShipBase MainShip;
     public CommanderCoinController CoinController;
-//    public CommanderRewardController RewardController;
+    //    public CommanderRewardController RewardController;
     public CommanderSpells SpellController;
     public CommaderBattleStats BattleStats;
     public bool HavePerairPlace { get; private set; }
     private TeamIndex _teamIndex;
     public Battlefield Battlefield { get; private set; }
-//    public List<ShipBornPosition> BornPositions { get; private set; }
+    //    public List<ShipBornPosition> BornPositions { get; private set; }
     public Vector3 StartMyPosition { get; private set; }
     public CommanderPriority Priority { get; private set; }
     public event Action<ShipBase> OnShipDestroy;
     public event Action<ShipBase> OnShipAdd;
     private Action<Commander> OnCommanderDeathCallback;
-    private Action<Commander,ShipBase> OnShipInited;
+    private Action<Commander, ShipBase> OnShipInited;
     private Action<ShipBase> OnShipLauched;
-//    private List<StartShipPilotData> _delayedShips = new List<StartShipPilotData>();
+    //    private List<StartShipPilotData> _delayedShips = new List<StartShipPilotData>();
     private int index = 0;
     private CommanderShipEnemy LastPriorityTarget;
-//    private bool isRunawayComplete = false;
+    //    private bool isRunawayComplete = false;
     public float StartPower { get; private set; }
     private Vector3 _enemyCell;
-    private Player _player;
+    public Player Player { get; private set; }
 
     public TeamIndex TeamIndex
     {
@@ -52,32 +51,32 @@ public class Commander
     private BattleController _battleController;
     public ShipConfig FirstShipConfig { get; private set; }
 
-    public Commander(TeamIndex teamIndex,Battlefield battlefield,Player player, BattleController battleController)
+    public Commander(TeamIndex teamIndex, Battlefield battlefield, Player player, BattleController battleController)
     {
         _battleController = battleController;
         BattleStats = new CommaderBattleStats();
         StartPower = 0f;
-        foreach (var startShipPilotData in player.Army)
+        foreach (var startShipPilotData in player.Army.Army)
         {
             var p1 = Library.CalcPower(startShipPilotData);
             FirstShipConfig = startShipPilotData.Ship.ShipConfig;
             StartPower += p1;
         }
-        _player = player;
-        _paramsOfShips = player.GetShipsToBattle();
+        Player = player;
+        _paramsOfShips = player.Army.GetShipsToBattle();
         Battlefield = battlefield;
         _teamIndex = teamIndex;
-        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(),player.Parameters.ChargesSpeed.Level);
-//        RewardController= new CommanderRewardController(this);
+        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(), player.Parameters.ChargesSpeed.Level);
+        //        RewardController= new CommanderRewardController(this);
         SpellController = new CommanderSpells(this);
         Priority = new CommanderPriority(this);
     }
 
-    public Dictionary<int, ShipBase> InitShips(Vector3 startPosition, Vector3 enemyCenterCell,List<Vector3> positionsToClear)
+    public Dictionary<int, ShipBase> InitShips(Vector3 startPosition, Vector3 enemyCenterCell, List<Vector3> positionsToClear)
     {
         _enemyCell = enemyCenterCell;
         HavePerairPlace = false;
-//        var closestCell = Battlefield.CellController.Data.FindClosestCellByType(startPosition, CellType.Free);
+        //        var closestCell = Battlefield.CellController.Data.FindClosestCellByType(startPosition, CellType.Free);
         StartMyPosition = startPosition;
         var dirToEnemy = Utils.NormalizeFastSelf(_enemyCell - startPosition);
         var count = _paramsOfShips.Count;
@@ -121,14 +120,14 @@ public class Commander
         return Ships;
     }
 
-    private void InitShip(StartShipPilotData v,Vector3 position, Vector3 direction)
+    private void InitShip(StartShipPilotData v, Vector3 position, Vector3 direction)
     {
         var shipPrefab = DataBaseController.Instance.GetShip(v.Ship.ShipType, v.Ship.ShipConfig);
         //            var freeCell = closestCells[index];
 #if UNITY_EDITOR
         if (shipPrefab == null)
         {
-            Debug.LogError("can find ship orefab by:" + v.Ship.ShipType.ToString() + "    "  + v.Ship.ShipConfig.ToString());
+            Debug.LogError("can find ship orefab by:" + v.Ship.ShipType.ToString() + "    " + v.Ship.ShipConfig.ToString());
         }
         CheckModuls(shipPrefab, v);
 #endif
@@ -191,13 +190,13 @@ public class Commander
     {
         foreach (var enemy in enemies)
         {
-            var commanderEnemy = new CommanderShipEnemy(enemy.Value.PriorityObject,enemy.Value.FakePriorityObject);
+            var commanderEnemy = new CommanderShipEnemy(enemy.Value.PriorityObject, enemy.Value.FakePriorityObject);
             _enemies.Add(enemy.Key, commanderEnemy);
             AddEnemy(enemy.Value, commanderEnemy);
         }
     }
 
-    public void LaunchAll(Action<ShipBase> OnShipLauched,Action<Commander> OnCommanderDeath)
+    public void LaunchAll(Action<ShipBase> OnShipLauched, Action<Commander> OnCommanderDeath)
     {
         this.OnShipLauched = OnShipLauched;
         OnCommanderDeathCallback = OnCommanderDeath;
@@ -218,10 +217,10 @@ public class Commander
         }
     }
 
-//    public void ChangeShieldControlCenter()
-//    {
-//        CoinController.ChangeRegenEnable();
-//    }
+    //    public void ChangeShieldControlCenter()
+    //    {
+    //        CoinController.ChangeRegenEnable();
+    //    }
 
     public void UpdateManual()
     {
@@ -230,7 +229,7 @@ public class Commander
             return;
         }
 
-//        SpellController.ManualUpdate();
+        //        SpellController.ManualUpdate();
         if (_shipsToRemove.Count > 0)
         {
             foreach (var shipBase in _shipsToRemove)
@@ -249,7 +248,7 @@ public class Commander
         }
     }
 
-    public void SetPriorityTarget(ShipBase target,bool isBait)
+    public void SetPriorityTarget(ShipBase target, bool isBait)
     {
         if (LastPriorityTarget != null)
         {
@@ -266,7 +265,7 @@ public class Commander
         {
             var dir1 = (mainShip.Position - ship.Position);
             var nDir1 = Utils.NormalizeFastSelf(dir1);
-            var pos1 = mainShip.Position + nDir1*0.5f;
+            var pos1 = mainShip.Position + nDir1 * 0.5f;
             return pos1;
         }
         else
@@ -274,7 +273,7 @@ public class Commander
             return ship.Position;
         }
     }
-                 
+
     public ShipBase GetNextShip(ShipBase selectedShip)
     {
         if (Ships.ContainsValue(selectedShip))
@@ -298,13 +297,13 @@ public class Commander
     public void WinEndBattle(Commander enemyCommander)
     {
         ApplyBattleDamage();
-       _player.WinBattleReward(enemyCommander);
+        Player.WinBattleReward(enemyCommander);
     }
 
     private void ApplyBattleDamage()
     {
 
-        var baseRepairPercent = _player.Parameters.RepairPercentPerStep();
+        var baseRepairPercent = Player.Parameters.RepairPercentPerStep();
         float percent = 0f;
         foreach (var shipBase in Ships)
         {
@@ -322,7 +321,7 @@ public class Commander
             else
             {
                 Debug.LogError($"IMPOSIBLE! this ship is dead");
-            }    
+            }
         }
         foreach (var destroyedShip in _destroyedShips)
         {
@@ -340,23 +339,23 @@ public class Commander
         var percent = Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT;
         if (CoinController.CanUseCoins(c))
         {
-            CoinController.UseCoins(c,delay);
+            CoinController.UseCoins(c, delay);
             var maxShield = ship.ShipParameters.ShieldParameters.MaxShield;
-            var countToHeal = maxShield*percent;
+            var countToHeal = maxShield * percent;
             ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
             ship.ShipParameters.ShieldParameters.HealShield(countToHeal);
             return true;
         }
         return false;
-    }     
-    
+    }
+
     public bool TryWave(ShipBase ship)
     {
         var c = Library.COINS_TO_WAVE_SHIP;
         var delay = Library.COINS_TO_WAVE_SHIP_DELAY;
         if (CoinController.CanUseCoins(c))
         {
-            CoinController.UseCoins(c,delay);
+            CoinController.UseCoins(c, delay);
             ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.WaveStrikeShip);
             ship.WeaponsController.StrikeWave();
             return true;
@@ -370,7 +369,7 @@ public class Commander
         var delay = Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY;
         if (CoinController.CanUseCoins(c))
         {
-            CoinController.UseCoins(c,delay);
+            CoinController.UseCoins(c, delay);
             ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.ChargePowerWeapons);
             ship.WeaponsController.ChargePowerToAllWeapons();
             return true;
@@ -381,10 +380,10 @@ public class Commander
     {
         var c = Library.COINS_TO_CHARGE_SHIP_SHIELD;
         var delay = Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY;
-//        var percent = Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT;
+        //        var percent = Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT;
         if (CoinController.CanUseCoins(c))
         {
-            CoinController.UseCoins(c,delay);
+            CoinController.UseCoins(c, delay);
             ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.BufffShip);
             ship.BuffData.Apply();
             //ship.WeaponsController.TryWeaponReload();
@@ -395,7 +394,7 @@ public class Commander
 
     public void ExtraCharge()
     {
-        var cointToReCharge =(int) (MainShip.ShipParameters.ShieldParameters.CurShiled/Library.SHIELD_COEF_EXTRA_CHARGE);
+        var cointToReCharge = (int)(MainShip.ShipParameters.ShieldParameters.CurShiled / Library.SHIELD_COEF_EXTRA_CHARGE);
         if (cointToReCharge > 0)
         {
             int notCharged = CoinController.NotChargedCoins();
@@ -416,10 +415,10 @@ public class Commander
 
     public void ShipRunAway(ShipBase owner)
     {
-//        if (isRunawayComplete)
-//        {
-//            return;
-//        }
+        //        if (isRunawayComplete)
+        //        {
+        //            return;
+        //        }
         owner.ShipRunAway();
         _battleController.ShipRunAway(owner);
         var shipsREmain = Ships.Values.ToList();

@@ -34,7 +34,10 @@ public class WindowsAchievements : BaseWindow
         }
         base.Init();
     }
-
+    public virtual void OnToStart()
+    {
+        WindowManager.Instance.OpenWindow(MainState.start);
+    }
     public override void Dispose()
     {
         base.Dispose();

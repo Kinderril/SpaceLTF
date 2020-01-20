@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -44,7 +42,7 @@ public class WindowManager : Singleton<WindowManager>
     public Camera SubCamera;
     public ConfirmWindow ConfirmWindow;
     public WaitingWindow WaitingWindow;
-//    public WindowSellWithCount ConfirmWindowWithCount;
+    //    public WindowSellWithCount ConfirmWindowWithCount;
     public InfoWindow InfoWindow;
     public InfoWindowWithShop InfoWindowWithShop;
     public ItemInfosController ItemInfosController;
@@ -58,18 +56,18 @@ public class WindowManager : Singleton<WindowManager>
 
     public CanvasGroup WindowMainCanvas;
     public CanvasGroup WindowSubCanvas;
-//    public ItemWindow ItemWindow;
+    //    public ItemWindow ItemWindow;
 
     public Transform UIPool;
     public Transform TopPanel;
+    public MapSettingsWindow WindowSettings;
+    public AudioSource UiAudioSource;
 
-    public BaseWindow CurrentWindow
-    {
-        get { return currentWindow; }
-    }
+    public BaseWindow CurrentWindow => currentWindow;
 
     public void Init()
     {
+        WindowSettings.gameObject.SetActive(false);
         LoadingScreen.gameObject.SetActive(false);
         foreach (var window in windows)
         {
@@ -94,7 +92,17 @@ public class WindowManager : Singleton<WindowManager>
         OpenWindow<object>(state, null);
     }
 
-
+    public void OpenSettingsSettings(bool withCloseButtons, Action closeCallback = null)
+    {
+        WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.WindowOpen);
+        CurrentWindow.CanvasGroup.interactable = false;
+        WindowSettings.Init(withCloseButtons);
+        WindowSettings.Open(() =>
+        {
+            closeCallback?.Invoke();
+            CurrentWindow.CanvasGroup.interactable = true;
+        });
+    }
     private void MakeScreenShot()
     {
         var cam = MainCamera;
@@ -144,6 +152,8 @@ public class WindowManager : Singleton<WindowManager>
         {
             Destroy(planeX.gameObject);
         }
+        UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.WindowOpen);
+        WindowSettings.gameObject.SetActive(false);
         Debug.Log("OpenWindow " + state);
         var isInGame = state == MainState.play;
         MainCamera.enabled = isInGame;
@@ -165,7 +175,7 @@ public class WindowManager : Singleton<WindowManager>
         catch (Exception ex)
         {
             var t = nextWindow.name + " error " + ex;
-//            DebugController.Instance.SetInfo2(t);
+            //            DebugController.Instance.SetInfo2(t);
             Debug.LogError(ex);
         }
     }
@@ -175,7 +185,7 @@ public class WindowManager : Singleton<WindowManager>
         await OpenWindowTask(obj, windowToLoad);
     }
 
-    private async Task OpenWindowTask<T>(T obj,BaseWindow windowToLoad)
+    private async Task OpenWindowTask<T>(T obj, BaseWindow windowToLoad)
     {
         bool withLOadWindow = windowToLoad.WithLoadWindow;
         if (withLOadWindow)
@@ -196,14 +206,14 @@ public class WindowManager : Singleton<WindowManager>
             {
                 CurrentWindow.Close();
             }
-//            Debug.LogError($"CurrentWindow.gameObject.SetActive(false) {CurrentWindow.name}");
+            //            Debug.LogError($"CurrentWindow.gameObject.SetActive(false) {CurrentWindow.name}");
             CurrentWindow.gameObject.SetActive(false);
             //            var sIndex = currentWindow.transform.GetSiblingIndex();
             //            nextWindow.transform.SetSiblingIndex(sIndex + 1);
 
             //            TopPanel.transform.SetAsLastSibling();
         }
-//        Debug.LogError($"$Window to load {windowToLoad.name}");
+        //        Debug.LogError($"$Window to load {windowToLoad.name}");
         if (obj != null)
         {
             windowToLoad.Init<T>(obj);
@@ -220,7 +230,7 @@ public class WindowManager : Singleton<WindowManager>
         }
 
         currentWindow = windowToLoad;
-//        Debug.LogError($"set currentWindow {currentWindow.name}");
+        //        Debug.LogError($"set currentWindow {currentWindow.name}");
         if (OnWindowSetted != null)
         {
             OnWindowSetted(currentWindow);

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +11,8 @@ public class SliderWithTextMeshPro : MonoBehaviour
     public TextMeshProUGUI NameField;
     private bool _inited;
     private Action _changeCallback;
+    private AudioSource source;
+    private AudioClip clip;
 
     void Awake()
     {
@@ -23,6 +21,7 @@ public class SliderWithTextMeshPro : MonoBehaviour
             _inited = true;
             Slider.onValueChanged.AddListener(arg0 =>
             {
+                source.PlayOneShot(clip);
                 UpdateFiled();
             });
         }
@@ -32,7 +31,8 @@ public class SliderWithTextMeshPro : MonoBehaviour
 
     protected virtual void subInit()
     {
-        
+        source = WindowManager.Instance.UiAudioSource;
+        clip = DataBaseController.Instance.AudioDataBase.SliderChange;
     }
 
     public void InitName(string name)

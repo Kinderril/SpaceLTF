@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class DebugStartBattleWindow : BaseWindow
 {
     [HideInInspector]
-//    public List<DebugShipInShop> redList = new List<DebugShipInShop>();
+    //    public List<DebugShipInShop> redList = new List<DebugShipInShop>();
     public DebugShipInShop SelectedShip { get; set; }
     private TeamIndex _selectedShipIndex;
     public DebugShipInShop PrefabDebugShipInShop;
     public DebugShopCatcher DebugShopCatcher;
     public ArmyCreatorUI GreenArmy;
     public ArmyCreatorUI RedArmy;
-    
-    
+
+
     public override void Init()
     {
 
@@ -25,15 +21,15 @@ public class DebugStartBattleWindow : BaseWindow
         if (RedArmy == null)
         {
             RedArmy = DataBaseController.GetItem(GreenArmy);
-            RedArmy.transform.SetParent(GreenArmy.transform.parent,false);
+            RedArmy.transform.SetParent(GreenArmy.transform.parent, false);
         }
         GreenArmy.Clear();
-        GreenArmy.Init(RedArmy,TeamIndex.green, PrefabDebugShipInShop, UnSelectIfNeed, OnSelect);
+        GreenArmy.Init(RedArmy, TeamIndex.green, PrefabDebugShipInShop, UnSelectIfNeed, OnSelect);
         RedArmy.Clear();
-        RedArmy.Init(GreenArmy,TeamIndex.red, PrefabDebugShipInShop, UnSelectIfNeed, OnSelect);
+        RedArmy.Init(GreenArmy, TeamIndex.red, PrefabDebugShipInShop, UnSelectIfNeed, OnSelect);
         base.Init();
     }
-    
+
     public void OnDeleteSelectedShip()
     {
         if (SelectedShip != null)
@@ -106,13 +102,13 @@ public class DebugStartBattleWindow : BaseWindow
             return;
         }
         var greenPLayer = new Player("Me");
-        greenPLayer.Army = greenSide;
+        greenPLayer.Army.SetArmy(greenSide);
         var redPlayer = new Player("Bot_" + Utils.GetId());
-        redPlayer.Army = redSide;
-        MainController.Instance.PreBattle(greenPLayer,redPlayer);
+        redPlayer.Army.SetArmy(redSide);
+        MainController.Instance.PreBattle(greenPLayer, redPlayer);
     }
 
-    public void SetBodyType(ShipType shipType,ShipConfig config)
+    public void SetBodyType(ShipType shipType, ShipConfig config)
     {
         if (SelectedShip != null)
         {

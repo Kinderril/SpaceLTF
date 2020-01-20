@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
@@ -45,7 +43,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             new AnswerDialogData("Start search at other side", null,  bothSearch),
             new AnswerDialogData("Come closer.", null,   comeClose),
             new AnswerDialogData("Try attack.", null,   tryAttack),
-            new AnswerDialogData(Namings.leave, null,   null),
+            new AnswerDialogData(Namings.Tag("leave"), null,   null),
         };
         return ans;
     }
@@ -55,7 +53,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         MessageDialogData mesData;
         List<AnswerDialogData> ans;
         var army = MainController.Instance.MainPlayer.Army;
-        var speeddShip = army.FirstOrDefault(x => ShipParameters.ParamUpdate(x.Ship.MaxSpeed, x.Pilot.SpeedLevel, ShipParameters.MaxSpeedCoef) > speedToWin);
+        var speeddShip = army.Army.FirstOrDefault(x => ShipParameters.ParamUpdate(x.Ship.MaxSpeed, x.Pilot.SpeedLevel, ShipParameters.MaxSpeedCoef) > speedToWin);
         if (speeddShip != null)
         {
             ans = new List<AnswerDialogData>()
@@ -63,9 +61,9 @@ public class ExcavationsEvent : BaseGlobalMapEvent
                 new AnswerDialogData(Namings.Ok, null,  null),
             };
             string names = "";
-            for (int i = 0; i < MyExtensions.Random(1,2); i++)
+            for (int i = 0; i < MyExtensions.Random(1, 2); i++)
             {
-                var m = Library.CreatSimpleModul(MyExtensions.Random(1, 2),3);
+                var m = Library.CreatSimpleModul(MyExtensions.Random(1, 2), 3);
                 var itemName = Namings.SimpleModulName(m.Type);
                 var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);
                 if (canAdd)
@@ -81,7 +79,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         {
             ans = new List<AnswerDialogData>()
             {
-                new AnswerDialogData(Namings.leave, null,  null),
+                new AnswerDialogData(Namings.Tag("leave"), null,  null),
             };
             mesData = new MessageDialogData(String.Format("They blow up all and run away.", moneyTotal), ans);
             return mesData;
@@ -96,7 +94,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         {
             new AnswerDialogData("Threaten", null,  Threaten),
             new AnswerDialogData("Offer assistance", null,  assistance),
-            new AnswerDialogData(Namings.leave, null,  null),
+            new AnswerDialogData(Namings.Tag("leave"), null,  null),
         };
         mesData = new MessageDialogData(String.Format("They are searching for something", moneyTotal), ans);
         return mesData;
@@ -112,7 +110,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         };
         BrokeShipWithRandom();
         mesData = new MessageDialogData(String.Format("They have nothing. And simply blow up everything. Some of your ships damaged.", moneyTotal), ans);
-        return mesData;     
+        return mesData;
     }
 
     private MessageDialogData assistance()
@@ -123,7 +121,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         {
             new AnswerDialogData(Namings.Ok, null,  assistanceFine),
             new AnswerDialogData("No", null,  comeClose),
-            new AnswerDialogData(Namings.leave, null,  null),
+            new AnswerDialogData(Namings.Tag("leave"), null,  null),
         };
         mesData = new MessageDialogData(String.Format("Ok, lets go 50/50", moneyTotal), ans);
         return mesData;
@@ -131,7 +129,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
     private void BrokeShipWithRandom()
     {
         var player = MainController.Instance.MainPlayer;
-        foreach (var data in player.Army)
+        foreach (var data in player.Army.Army)
         {
             if (MyExtensions.IsTrueEqual())
             {
@@ -169,7 +167,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         List<AnswerDialogData> ans;
         WDictionary<int> testResult = new WDictionary<int>(new Dictionary<int, float>()
         {
-            { 0,ScoutsLevel},   
+            { 0,ScoutsLevel},
               {1,Nothing},
               {2,excvScounts},
         });
@@ -183,7 +181,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
                 };
                 mesData = new MessageDialogData(String.Format("You found a lot of credits {0}", moneyTotal), ans);
                 return mesData;
-            
+
             case 2:   //Они вин     
                 ans = new List<AnswerDialogData>()
                 {

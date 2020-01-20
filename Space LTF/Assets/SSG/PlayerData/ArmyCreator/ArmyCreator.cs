@@ -1,8 +1,7 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class ArmyRemainPoints
@@ -18,6 +17,10 @@ public class ArmyRemainPoints
 public static class ArmyCreator
 {
 
+    public static float CalcArmyPower(PlayerArmy ships)
+    {
+        return CalcArmyPower(ships.Army);
+    }
     public static float CalcArmyPower(List<StartShipPilotData> ships)
     {
         var f = 0f;
@@ -29,10 +32,10 @@ public static class ArmyCreator
         return f;
     }
 
-//    public static List<StartShipPilotData> CreateArmy(float points, ArmyCreationMode mode, ArmyCreatorData data, bool withBase, Player player)
-//    {
-//        return CreateArmy(points,)
-//    }
+    //    public static List<StartShipPilotData> CreateArmy(float points, ArmyCreationMode mode, ArmyCreatorData data, bool withBase, Player player)
+    //    {
+    //        return CreateArmy(points,)
+    //    }
 
     public static List<StartShipPilotData> CreateSimpleEnemyArmyDroid(float remainPoints, ArmyCreatorData data,
         Player player)
@@ -45,7 +48,7 @@ public static class ArmyCreator
         return army;
     }
 
-    public static List<StartShipPilotData> CreateSimpleEnemyArmy(float remainPoints, ArmyCreatorData data,  Player player)
+    public static List<StartShipPilotData> CreateSimpleEnemyArmy(float remainPoints, ArmyCreatorData data, Player player)
     {
         Debug.Log($"Start create army {remainPoints} . {data}  {player.Name}");
         if (data.ArmyConfig == ShipConfig.droid)
@@ -69,7 +72,7 @@ public static class ArmyCreator
             TryAddCastModul(points, baseShip.Ship, data.GetSpellsList(), logger);
         }
 
-        var army = CreateShips(points, data, player, pointsOnStart,0.5f, logger);
+        var army = CreateShips(points, data, player, pointsOnStart, 0.5f, logger);
         if (baseShip != null)
             army.Add(baseShip);
 
@@ -82,16 +85,16 @@ public static class ArmyCreator
         }
         while (upgradeIterations > 0 && remainPoints > 0)
         {
+            if (index >= army.Count)
+            {
+                index = 0;
+            }
             upgradeIterations--;
             var ship = army[index];
             index++;
             if (ship.Ship.ShipType == ShipType.Base)
             {
                 continue;
-            }
-            if (index >= army.Count)
-            {
-                index = 0;
             }
             WDictionary<LibraryShipUpgradeType> upgrades = new WDictionary<LibraryShipUpgradeType>(
              new Dictionary<LibraryShipUpgradeType, float>()
@@ -110,8 +113,8 @@ public static class ArmyCreator
         return army;
     }
 
-    private static List<StartShipPilotData> CreateShips(ArmyRemainPoints remainPoints, ArmyCreatorData data, 
-        Player player,float pointsOnStart,float percentsToEnd, ArmyCreatorLogs logs)
+    private static List<StartShipPilotData> CreateShips(ArmyRemainPoints remainPoints, ArmyCreatorData data,
+        Player player, float pointsOnStart, float percentsToEnd, ArmyCreatorLogs logs)
     {
         List<StartShipPilotData> army = new List<StartShipPilotData>();
         int maxRemainShips = 5;
@@ -131,7 +134,7 @@ public static class ArmyCreator
                 Debug.LogWarning("can't create ship. Not enought points " + data.ToString());
             }
             var remainPercent = remainPoints.Points / pointsOnStart;
-//            Debug.Log($"Ship for army created remainPercents {remainPercent}.  {remainPoints}/{pointsOnStart}");
+            //            Debug.Log($"Ship for army created remainPercents {remainPercent}.  {remainPoints}/{pointsOnStart}");
             if (remainPercent < percentsToEnd)
             {
                 shallUpgrade = true;
@@ -141,7 +144,7 @@ public static class ArmyCreator
         return army;
     }
 
-    public static List<StartShipPilotData> CreateArmy(float pointsStart, ArmyCreationMode mode, int countMin, int countMax,ArmyCreatorData data,bool withBase,Player player)
+    public static List<StartShipPilotData> CreateArmy(float pointsStart, ArmyCreationMode mode, int countMin, int countMax, ArmyCreatorData data, bool withBase, Player player)
     {
         ArmyCreatorLogs logs = new ArmyCreatorLogs();
         float pointsOnStart = pointsStart;
@@ -170,20 +173,20 @@ public static class ArmyCreator
         }
         switch (mode)
         {
-//            case ArmyCreationMode.allToOne:
-//                Debug.LogError("DO not realize");
-//                break;
+            //            case ArmyCreationMode.allToOne:
+            //                Debug.LogError("DO not realize");
+            //                break;
             case ArmyCreationMode.equalize:
                 var pointPerShip = pointsArmy.Points / armyCount;
                 if (pointPerShip < Library.MIN_WORKING_SHIP)
                 {
-//                    Debug.LogError("bad count of points recalculation");
+                    //                    Debug.LogError("bad count of points recalculation");
                     var dd = pointsArmy.Points / Library.MIN_WORKING_SHIP;
                     if (dd < 1f)
                     {
                         pointsArmy.Points = Library.MIN_WORKING_SHIP + 1;
-//                        Debug.LogError("WRONG ARMY ALERT!!!! can't create create stub army");
-//                        return army;
+                        //                        Debug.LogError("WRONG ARMY ALERT!!!! can't create create stub army");
+                        //                        return army;
                     }
                     armyCount = (int)dd;
                     pointPerShip = pointsArmy.Points / armyCount;
@@ -199,7 +202,7 @@ public static class ArmyCreator
                     {
                         army.Add(s1);
                         pointsArmy.Points -= Library.CalcPower(s1);
-//                        points -= pointPerShip;
+                        //                        points -= pointPerShip;
                     }
                     else
                     {
@@ -222,7 +225,7 @@ public static class ArmyCreator
                         return army;
                     }
                     armyCount = (int)dd;
-//                    pointPerShip = points / armyCount;
+                    //                    pointPerShip = points / armyCount;
                 }
 
                 List<float> values = new List<float>();
@@ -239,7 +242,7 @@ public static class ArmyCreator
                 }
                 foreach (var value in values)
                 {
-//                    var v = value;
+                    //                    var v = value;
                     var s1 = CreateShipByValue(new ArmyRemainPoints(value), data, player, logs);
                     if (s1 != null)
                     {
@@ -253,12 +256,12 @@ public static class ArmyCreator
                 }
 
                 if (pointsArmy.Points > Library.MIN_WORKING_SHIP)
-                {                     
+                {
                     var s1 = CreateShipByValue(pointsArmy, data, player, logs);
                     if (s1 != null)
                     {
                         army.Add(s1);
-//                        pointsArmy.Points -= Library.CalcPower(s1);
+                        //                        pointsArmy.Points -= Library.CalcPower(s1);
                     }
                     else
                     {
@@ -270,8 +273,8 @@ public static class ArmyCreator
 #if UNITY_EDITOR
         var realPower = CalcArmyPower(army);
         Debug.Log("ARMY CREATE pointsOnStart:" + pointsOnStart + "   Remain:" + pointsArmy.Points
-                  + "    CalculatedPower:" 
-                  + realPower + "   armyCount:"  + army.Count + "   mode:" + mode.ToString()) ;
+                  + "    CalculatedPower:"
+                  + realPower + "   armyCount:" + army.Count + "   mode:" + mode.ToString());
         logs.LogToConsole();
         if (pointsArmy.Points > Library.MIN_WORKING_SHIP * 1.1f && armyCount <= countMax)
         {
@@ -282,10 +285,10 @@ public static class ArmyCreator
         return army;
     }
 
-    public static StartShipPilotData CreateBaseShip(ArmyRemainPoints v,ShipConfig config,Player player)
+    public static StartShipPilotData CreateBaseShip(ArmyRemainPoints v, ShipConfig config, Player player)
     {
         var pilot = Library.CreateDebugPilot();
-        var ship = Library.CreateShip(ShipType.Base, config, player,pilot);
+        var ship = Library.CreateShip(ShipType.Base, config, player, pilot);
         return new StartShipPilotData(pilot, ship);
     }
 
@@ -299,9 +302,9 @@ public static class ArmyCreator
         }
         var listTyper = new List<ShipType>() { ShipType.Light, ShipType.Heavy, ShipType.Middle };
         var pilot = Library.CreateDebugPilot();
-        var ship = Library.CreateShip(listTyper.RandomElement(), config, player,pilot);
+        var ship = Library.CreateShip(listTyper.RandomElement(), config, player, pilot);
         v.Points -= Library.BASE_SHIP_VALUE;
-        logs.AddLog(v.Points,"create ship");
+        logs.AddLog(v.Points, "create ship");
         var startData = new StartShipPilotData(pilot, ship);
         return startData;
     }
@@ -318,12 +321,12 @@ public static class ArmyCreator
         var shipWithWeapons = CreateShipByConfig(remainPoints, data.ArmyConfig, player, logs);
         if (shipWithWeapons == null)
         {
-            Debug.LogWarning($"Can't create ship by config {data.ArmyConfig} " );
+            Debug.LogWarning($"Can't create ship by config {data.ArmyConfig} ");
             return null;
         }
         var rndWeapon = data.GetWeaponType();
         var weaponSlots = shipWithWeapons.Ship.WeaponsModuls.Length;
-        var moreHalf = 1 + (int) (weaponSlots / 2f);
+        var moreHalf = 1 + (int)(weaponSlots / 2f);
         moreHalf = Mathf.Clamp(moreHalf, 1, weaponSlots);
         bool weaponCreated = false;
         for (int i = 0; i < moreHalf; i++)
@@ -341,7 +344,7 @@ public static class ArmyCreator
         return shipWithWeapons;
     }
     [CanBeNull]
-    public static StartShipPilotData CreateShipByValue(ArmyRemainPoints v,ArmyCreatorData data, Player player, ArmyCreatorLogs logs)
+    public static StartShipPilotData CreateShipByValue(ArmyRemainPoints v, ArmyCreatorData data, Player player, ArmyCreatorLogs logs)
     {
         if (v.Points < Library.MIN_WORKING_SHIP)
         {
@@ -380,7 +383,7 @@ public static class ArmyCreator
             if (startData.Ship.Moduls.SimpleModuls.Any(x => x != null))
             {
                 chancesInner.Add(LibraryShipUpgradeType.upgradeModul, 2f);
-            }   
+            }
             chances = new WDictionary<LibraryShipUpgradeType>(chancesInner);
             //                isWorks = false;
             shipUpgradeType = chances.Random();
@@ -390,8 +393,8 @@ public static class ArmyCreator
         return startData;
     }
 
-    public static bool UpgradeShip(ArmyRemainPoints v,LibraryShipUpgradeType shipUpgradeType, StartShipPilotData startData,
-        WDictionary<LibraryShipUpgradeType> chances,ArmyCreatorData data, ArmyCreatorLogs logs)
+    public static bool UpgradeShip(ArmyRemainPoints v, LibraryShipUpgradeType shipUpgradeType, StartShipPilotData startData,
+        WDictionary<LibraryShipUpgradeType> chances, ArmyCreatorData data, ArmyCreatorLogs logs)
     {
         bool isWorks = false;
         switch (shipUpgradeType)
@@ -438,7 +441,7 @@ public static class ArmyCreator
                 }
                 break;
             case LibraryShipUpgradeType.upgradeModul:
-                isWorks = TryUpgradeModul(v, startData.Ship,logs);
+                isWorks = TryUpgradeModul(v, startData.Ship, logs);
                 if (!isWorks)
                 {
                     if (chances != null)
@@ -491,7 +494,7 @@ public static class ArmyCreator
 
     public static bool TryUpgradePilot(ArmyRemainPoints v, IPilotParameters pilot, ArmyCreatorLogs logs)
     {
-        var d = Library.PILOT_LEVEL_COEF ; //Cost of point
+        var d = Library.PILOT_LEVEL_COEF; //Cost of point
         if (v.Points >= d)
         {
             List<LibraryPilotUpgradeType> list = PosiblePilotUpgrades(pilot);
@@ -500,9 +503,9 @@ public static class ArmyCreator
                 return false;
             }
             v.Points -= d;
-            logs.AddLog(v.Points,"upgrade pilot");
+            logs.AddLog(v.Points, "upgrade pilot");
             var rnd = list.RandomElement();
-            pilot.UpgradeLevelByType(rnd,false);
+            pilot.UpgradeLevelByType(rnd, false);
             return true;
         }
         return false;
@@ -517,7 +520,7 @@ public static class ArmyCreator
             if (rndWeapons.Count > 0)
             {
                 v.Points -= val;
-                logs.AddLog(v.Points,"upgrade weapon");
+                logs.AddLog(v.Points, "upgrade weapon");
                 var rndWeapon = rndWeapons.RandomElement();
                 rndWeapon.Upgrade(false);
                 return true;
@@ -537,31 +540,31 @@ public static class ArmyCreator
                 v.Points -= val;
                 var rndModul = rndModuls.RandomElement();
                 rndModul.Upgrade();
-                logs.AddLog(v.Points,"upgrade modul");
+                logs.AddLog(v.Points, "upgrade modul");
                 return true;
             }
         }
         return false;
     }
 
-//    private static bool TryUpgradeSimple(ref float v, ShipInventory ship)
-//    {
-//        var val = Library.MODUL_LEVEL_COEF * Library.ShipCoef(ship.ShipType);
-//        if (v >= val)
-//        {
-//            var rndSimples = ship.SimpleModuls.Where(x => x != null && x.Level < MAX_WEAPON_LVL).ToList();
-//            if (rndSimples.Count > 0)
-//            {
-//                v -= val;
-//                var rnd = rndSimples.RandomElement();
-//                rnd.Upgrade();
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    //    private static bool TryUpgradeSimple(ref float v, ShipInventory ship)
+    //    {
+    //        var val = Library.MODUL_LEVEL_COEF * Library.ShipCoef(ship.ShipType);
+    //        if (v >= val)
+    //        {
+    //            var rndSimples = ship.SimpleModuls.Where(x => x != null && x.Level < MAX_WEAPON_LVL).ToList();
+    //            if (rndSimples.Count > 0)
+    //            {
+    //                v -= val;
+    //                var rnd = rndSimples.RandomElement();
+    //                rnd.Upgrade();
+    //                return true;
+    //            }
+    //        }
+    //        return false;
+    //    }
 
-    public static bool TryAddWeapon(ArmyRemainPoints v, ShipInventory ship, WeaponType weapon,bool anyway, ArmyCreatorLogs logs)
+    public static bool TryAddWeapon(ArmyRemainPoints v, ShipInventory ship, WeaponType weapon, bool anyway, ArmyCreatorLogs logs)
     {
         int weaponIndex;
         var val = Library.BASE_WEAPON_VALUE;// * Library.ShipPowerCoef(ship.ShipType);
@@ -572,21 +575,21 @@ public static class ArmyCreator
                 WeaponInv a1 = Library.CreateWeapon(weapon);
                 ship.TryAddWeaponModul(a1, weaponIndex);
                 v.Points -= val;
-                logs.AddLog(v.Points,"add weapon");
+                logs.AddLog(v.Points, "add weapon");
                 return true;
             }
         }
         return false;
     }
 
-    public static bool TryAddModul(ArmyRemainPoints v, ShipInventory ship,ArmyCreatorData listSimple, ArmyCreatorLogs logs)
+    public static bool TryAddModul(ArmyRemainPoints v, ShipInventory ship, ArmyCreatorData listSimple, ArmyCreatorLogs logs)
     {
         var lvl = 1;
         var val = Library.BASE_SIMPLE_MODUL_VALUE;// * Library.ShipPowerCoef(ship.ShipType);
         if (v.Points >= val && ship.GetFreeSimpleSlot(out var simpleIndex))
         {
             v.Points -= val;
-            logs.AddLog(v.Points,$"add modul. {lvl}");
+            logs.AddLog(v.Points, $"add modul. {lvl}");
             var e = listSimple.GetSimpleType();
             listSimple.RemoveSimple(e);
 
@@ -604,7 +607,7 @@ public static class ArmyCreator
         if (v.Points >= val && ship.GetFreeSpellSlot(out simpleIndex) && spellModuls.Count > 0)
         {
             v.Points -= val;
-            logs.AddLog(v.Points,"add cast modul");
+            logs.AddLog(v.Points, "add cast modul");
             var e = spellModuls.RandomElement();
             spellModuls.Remove(e);
             var m1 = Library.CreateSpell(e);

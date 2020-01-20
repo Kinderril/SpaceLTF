@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Schema;
 using UnityEngine;
 
 public enum GlobalMapCellType
@@ -10,7 +7,7 @@ public enum GlobalMapCellType
     army,
     eventMap,
     shop,
-//    modif,
+    //    modif,
     repair,
     nothing,
 }
@@ -21,17 +18,21 @@ public enum GlobalMapCellType
 public class GalaxyData
 {
     private CellsInGalaxy cells;
-    public int Size { get;private set;}
-    public int SizeOfSector { get;private set;}
-    public int StartDeathStep { get;private set;}
-    public int CellsDestroyed { get;private set;}
+    public int Size { get; private set; }
+    public int SizeOfSector { get; private set; }
+    public int StartDeathStep { get; private set; }
+    public int CellsDestroyed { get; private set; }
+    public GalaxyEnemiesArmyController GalaxyEnemiesArmyController { get; private set; }
     public string Name;
-//    public int startIndexX { get; private set; }
-//    public int startIndexZ { get; private set; }
-    private  const int zoneCount = 5;
-    public  const int VERTICAL_COUNT = 3;
+    //    public int startIndexX { get; private set; }
+    //    public int startIndexZ { get; private set; }
+    private const int zoneCount = 5;
+    public const int VERTICAL_COUNT = 3;
     private bool _prevStepDestroy = false;
+    private float _powerPerTurn = 0f;
     public List<SectorData> AllSectors = new List<SectorData>();
+
+
 
     Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
 
@@ -47,11 +48,13 @@ public class GalaxyData
         {GlobalMapEventType.secretDeal, 2},
     };
 
-    public GlobalMapCell Init2(int sectorCount, int sizeSector,int startPower, int coreCells, int startDeathStep,ShipConfig playerShipConfig)
+    public GlobalMapCell Init2(int sectorCount, int sizeSector, int startPower, int coreCells, int startDeathStep, ShipConfig playerShipConfig, int powerPerTurn)
     {
+
+        _powerPerTurn = ConfigurePowerPerTurn(powerPerTurn);
         StartDeathStep = startDeathStep;
-        var allSubSectors =new List<SectorData>();
-        var unPopulatedSectors =new List<SectorData>();
+        var allSubSectors = new List<SectorData>();
+        var unPopulatedSectors = new List<SectorData>();
         var step = (sizeSector + 1);
         SizeOfSector = step;
         var sectorsCount = sectorCount;
@@ -66,8 +69,8 @@ public class GalaxyData
                 var xx = i * step;
                 var zz = j * step;
                 var distToStart = i + j;
-                ShipConfig shipConfig = GetConfig(i,j, sectorsCount);
-                var subSector = new SectorData(xx, zz, sizeSector,_eventsCount,  shipConfig,id,i);
+                ShipConfig shipConfig = GetConfig(i, j, sectorsCount);
+                var subSector = new SectorData(xx, zz, sizeSector, _eventsCount, shipConfig, id, i, _powerPerTurn);
                 id++;
                 allSubSectors.Add(subSector);
                 unPopulatedSectors.Add(subSector);
@@ -79,52 +82,43 @@ public class GalaxyData
             }
         }
 
-        
+
         //Create start sector
         var startSector = allSubSectors.Where(x => x.StartX == 0).ToList().RandomElement();
         startSector.ChangeSectorOwner(playerShipConfig);
-        //        var rndX = RndIndex(sizeSector - 2);
-        //        var rndZ = RndIndex(sizeSector - 2);
-        //        var xCell = startSector.StartX + 1 + rndX;
-        //        var zCell = startSector.StartZ + 1 + rndZ;
-        //        Debug.Log($"Create start sector X: {xCell} min:{startSector.StartX}  max:{startSector.StartX + sizeSector - 2}   SizeSector:{sizeSector}  rndX:{rndX}");
-        //        Debug.Log($"Create start sector Z: {zCell} min:{startSector.StartZ}  max:{startSector.StartZ + sizeSector - 2}   SizeSector:{sizeSector}  rndZ:{rndZ}");
-        //        xCell = Mathf.Clamp(xCell, startSector.StartX, startSector.StartX + sizeSector - 1);
-        //        zCell = Mathf.Clamp(zCell, startSector.StartZ, startSector.StartZ + sizeSector - 1);
-
         var xCell = startSector.StartX + sizeSector / 2;
         var zCell = startSector.StartZ + sizeSector / 2;
-        var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell, startSector);
-        startSector.SetCell(startCell,id);
-        unPopulatedSectors.Remove(startSector);                                                          
+        var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell, startSector, playerShipConfig);
+        startSector.SetCell(startCell, id);
+        unPopulatedSectors.Remove(startSector);
         startSector.Populate(startPower, startSector);
         startSector.MarkAsVisited();
 
         //CreateEndSector   
         var endSector = sectors[sectorsCount - 1, RndIndex(VERTICAL_COUNT)];
-        
+
 
         xCell = endSector.StartX + 1 + RndIndex(sizeSector - 1);
-        zCell = endSector.StartZ  + RndIndex(sizeSector);
-        var endCell = new EndGlobalCell(startPower,Utils.GetId(), xCell, zCell, endSector);
-        endSector.SetCell(endCell,id);
+        zCell = endSector.StartZ + RndIndex(sizeSector);
+        var endCell = new EndGlobalCell(startPower, Utils.GetId(), xCell, zCell, endSector);
+        endSector.SetCell(endCell, id);
         unPopulatedSectors.Remove(endSector);
-        endSector.Populate(startPower,startSector);
+        endSector.Populate(startPower, startSector);
         Debug.Log($"CreateEndSector : {xCell} {zCell}");
 
         //Create core sectors
         var randomInts = new List<int>();
-        for (int i = 2; i < sectorCount-1; i++)
+        for (int i = 2; i < sectorCount - 1; i++)
         {
             randomInts.Add(i);
         }
 
-//        var takeThisIndex = 1;
+        //        var takeThisIndex = 1;
 
-        var xIndexs = randomInts.RandomElement(coreCells-1);
+        var xIndexs = randomInts.RandomElement(coreCells - 1);
         xIndexs.Add(1);
         var goodCorePositions = xIndexs.Count;
-//        var goodCorePositions = Mathf.Clamp(coreCells, 0, sectorsCount - 2);
+        //        var goodCorePositions = Mathf.Clamp(coreCells, 0, sectorsCount - 2);
         for (int i = 0; i < xIndexs.Count; i++)
         {
             var secrosDist = xIndexs[i];
@@ -142,7 +136,7 @@ public class GalaxyData
         var notGoodCores = coreCells - goodCorePositions;
         for (int i = 0; i < notGoodCores; i++)
         {
-            var coreSector = allSubSectors.Where(x =>!x.IsPopulated && x.StartX != 0).ToList().RandomElement();
+            var coreSector = allSubSectors.Where(x => !x.IsPopulated && x.StartX != 0).ToList().RandomElement();
             CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
         }
 
@@ -158,7 +152,7 @@ public class GalaxyData
             sectorData.CacheWays();
         }
 
-        AddPortals(sectorsCount,sectors);
+        AddPortals(sectorsCount, sectors);
         InplementSectorToGalaxy(sectors, sizeSector, sectorsCount);
 
 
@@ -171,11 +165,18 @@ public class GalaxyData
             Debug.LogError($"Wrong count of core cells {cores.Count}/{coreCells}. goodCorePositions:{goodCorePositions}. notGoodCores:{notGoodCores}");
         }
 #endif
+        GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController(GetAllList());
         return startCell;
     }
 
-    private void CreateCoreSector(SectorData coreSector,SectorData startSector,int id,List<SectorData> unPopulatedSectors,
-        int startPower,int sizeSector)
+    private float ConfigurePowerPerTurn(int powerPerTurn)
+    {
+        var d = ((float)powerPerTurn) * 0.03f;
+        return d;
+    }
+
+    private void CreateCoreSector(SectorData coreSector, SectorData startSector, int id, List<SectorData> unPopulatedSectors,
+        int startPower, int sizeSector)
     {
         var xCell = coreSector.StartX + RndIndex(sizeSector);
         var zCell = coreSector.StartZ + RndIndex(sizeSector);
@@ -195,7 +196,7 @@ public class GalaxyData
 
     private int RndIndex(int upsizeZoneSector)
     {
-        return MyExtensions.Random(0, upsizeZoneSector-1);
+        return MyExtensions.Random(0, upsizeZoneSector - 1);
     }
 
     private void AddPortals(int sectorsCount, SectorData[,] sectors)
@@ -257,13 +258,13 @@ public class GalaxyData
         }
 
 
-        ConnectedCellsListsFirst(rightCells, leftCells,"RL");
+        ConnectedCellsListsFirst(rightCells, leftCells, "RL");
 
     }
 
     private void ConnectSectorTop(SectorData bot, SectorData top)
     {
-        HashSet< GlobalMapCell > botCells = new HashSet<GlobalMapCell>();
+        HashSet<GlobalMapCell> botCells = new HashSet<GlobalMapCell>();
         int moveIndex = 1;
         while (botCells.Count < 2 && bot.Size - moveIndex > 0)
         {
@@ -293,12 +294,12 @@ public class GalaxyData
 
             moveIndex++;
         }
-        
+
         ConnectedCellsListsFirst(topCells, botCells, "TB");
 
     }
 
-    private void ConnectedCellsListsFirst(HashSet<GlobalMapCell> rightCells, HashSet<GlobalMapCell> leftCells,string info)
+    private void ConnectedCellsListsFirst(HashSet<GlobalMapCell> rightCells, HashSet<GlobalMapCell> leftCells, string info)
     {
         if (leftCells.Count < 2)
         {
@@ -307,7 +308,7 @@ public class GalaxyData
         }
         if (rightCells.Count < 2)
         {
-            Debug.LogError("ConnectSectorsRight right cell less < 2...." );
+            Debug.LogError("ConnectSectorsRight right cell less < 2....");
             return;
         }
 
@@ -317,19 +318,19 @@ public class GalaxyData
         }
         else
         {
-            ConnectedCellsListsSecond(rightCells, leftCells,info);
+            ConnectedCellsListsSecond(rightCells, leftCells, info);
         }
     }
 
 
     private void ConnectedCellsListsSecond(HashSet<GlobalMapCell> rightCells, HashSet<GlobalMapCell> leftCells, string info)
     {
-//        Debug.Log($"ConnectedCellsListsSecond rightCells:{rightCells.Count}. leftCells:{leftCells.Count}. {info}");
+        //        Debug.Log($"ConnectedCellsListsSecond rightCells:{rightCells.Count}. leftCells:{leftCells.Count}. {info}");
         if (rightCells.Count < 2 || rightCells.Count < 2)
         {
             var cellL = leftCells.ToList().RandomElement();
             var cellR = rightCells.ToList().RandomElement();
-            ConnectCells(cellL, cellR,info);
+            ConnectCells(cellL, cellR, info);
         }
         else
         {
@@ -349,14 +350,14 @@ public class GalaxyData
 
     private void ConnectCells(GlobalMapCell cellL, GlobalMapCell cellR, string info)
     {
-//        Debug.Log($"Connect cell ({cellL.indX};{cellL.indZ})<->({cellR.indX};{cellR.indZ}) __ info:{info}");
+        //        Debug.Log($"Connect cell ({cellL.indX};{cellL.indZ})<->({cellR.indX};{cellR.indZ}) __ info:{info}");
         cellL.AddWay(cellR);
         cellR.AddWay(cellL);
     }
 
-    private void InplementSectorToGalaxy(SectorData[,] sectors, int sizeZoneSector,int sectorsCount)
+    private void InplementSectorToGalaxy(SectorData[,] sectors, int sizeZoneSector, int sectorsCount)
     {
-//        Debug.Log(String.Format("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}", sizeSector, sectorsCount) );
+        //        Debug.Log(String.Format("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}", sizeSector, sectorsCount) );
         Size = sectorsCount * (sizeZoneSector + 1) - 1;
         cells = new CellsInGalaxy(Size);
         for (int i = 0; i < sectorsCount; i++)
@@ -364,7 +365,7 @@ public class GalaxyData
             for (int j = 0; j < VERTICAL_COUNT; j++)
             {
                 var subSector = sectors[i, j];
-                SetNullsTo(cells,subSector, sizeZoneSector);
+                SetNullsTo(cells, subSector, sizeZoneSector);
                 subSector.ApplyPointsTo(cells);
             }
         }
@@ -378,15 +379,15 @@ public class GalaxyData
         {
             for (int i = 0; i < sizeZoneSector + 1; i++)
             {
-                var xx = verticalNullsStartX ;
+                var xx = verticalNullsStartX;
                 if (xx < cellsInGalaxy.Size)
                 {
                     var zz = sector.StartZ + i;
                     if (zz < cellsInGalaxy.Size)
                     {
-                        var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz,sector);
+                        var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz, sector, sector.ShipConfig);
                         cellsInGalaxy.SetCell(nothing);
-//                        Debug.Log(String.Format("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
+                        //                        Debug.Log(String.Format("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
                     }
                 }
             }
@@ -404,9 +405,9 @@ public class GalaxyData
                     if (xx < cellsInGalaxy.Size)
                     {
 
-                        var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz,sector);
+                        var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz, sector, sector.ShipConfig);
                         cellsInGalaxy.SetCell(nothing);
-//                        Debug.Log(String.Format("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
+                        //                        Debug.Log(String.Format("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
                     }
                 }
             }
@@ -418,14 +419,14 @@ public class GalaxyData
         Dictionary<ShipConfig, float> d;
         if (i == 0)
         {
-//            configs = new WDictionary<ShipConfig>();
-            d = new Dictionary<ShipConfig, float>() { {ShipConfig.mercenary,1},{ShipConfig.raiders,2},};
+            //            configs = new WDictionary<ShipConfig>();
+            d = new Dictionary<ShipConfig, float>() { { ShipConfig.mercenary, 1 }, { ShipConfig.raiders, 2 }, };
         }
         else
         {
             if (i == subZoneCount - 1)
             {
-                d = new Dictionary<ShipConfig, float>() { { ShipConfig.federation, 3 }, { ShipConfig.krios, 1 },{ ShipConfig.ocrons, 1 }, };
+                d = new Dictionary<ShipConfig, float>() { { ShipConfig.federation, 3 }, { ShipConfig.krios, 1 }, { ShipConfig.ocrons, 1 }, };
             }
             else
             {
@@ -445,10 +446,10 @@ public class GalaxyData
         var configs = new WDictionary<ShipConfig>(d);
         return configs.Random();
     }
-//    private void SubscribeCell(GlobalMapCell cell)
-//    {
-//        cell.OnScouted += OnCellScouted;
-//    }
+    //    private void SubscribeCell(GlobalMapCell cell)
+    //    {
+    //        cell.OnScouted += OnCellScouted;
+    //    }
 
     private void OnCellScouted(GlobalMapCell obj)
     {
@@ -463,10 +464,10 @@ public class GalaxyData
                     if (cell != null)
                     {
                         var shallUnconect = cell.ConnectedGates == idToUnconnect;
-//                        Debug.LogErrorFormat(" cells: {0} {1} " , cell.ConnectedGates , obj.ConnectedGates);
+                        //                        Debug.LogErrorFormat(" cells: {0} {1} " , cell.ConnectedGates , obj.ConnectedGates);
                         if (shallUnconect)
                         {
-//                            Debug.LogError("UNCONNECTED!!!");
+                            //                            Debug.LogError("UNCONNECTED!!!");
                             cell.UnconnectAll();
                         }
                     }
@@ -487,7 +488,7 @@ public class GalaxyData
     {
         if (_maxCount.ContainsKey(eventType))
         {
-            return  _eventsCount[eventType] < _maxCount[eventType];
+            return _eventsCount[eventType] < _maxCount[eventType];
         }
         else
         {
@@ -495,17 +496,17 @@ public class GalaxyData
         }
     }
 
-    private int CalcPowerOfCell(int startPower,int distToStart,int mapSize)
+    private int CalcPowerOfCell(int startPower, int distToStart, int mapSize)
     {
         var deltaPerCell = (Library.MAX_ARMY_POWER_MAP - startPower) / mapSize;
-        return startPower + (int) (distToStart * deltaPerCell);
+        return startPower + (int)(distToStart * deltaPerCell);
     }
 
     public GlobalMapCell GetRandomConnectedCell()
     {
         return cells.GetRandomConnectedCell();
-    } 
- 
+    }
+
     public GalaxyData(string name)
     {
         Name = name;
@@ -513,16 +514,10 @@ public class GalaxyData
 
     public void StepComplete(int step, GlobalMapCell curCell)
     {
-//        if (step > StartDeathStep)
-//        {
-//            if (_prevStepDestroy)
-//            {
-//                TryDestroyCell(curCell);
-//            }
-//
-//            _prevStepDestroy = !_prevStepDestroy;
-//        }
+        GalaxyEnemiesArmyController.CheckEnemiesMovingArmies(step, curCell);
     }
+
+
 
     public GlobalMapCell GetRandomCell()
     {
@@ -532,7 +527,7 @@ public class GalaxyData
 
     private void TryDestroyCell(GlobalMapCell curCell)
     {
-        var rnds = cells.GetAllList().Where(x=>x.SectorId == curCell.SectorId && x.CanCellDestroy()).ToList();
+        var rnds = cells.GetAllList().Where(x => x.SectorId == curCell.SectorId && x.CanCellDestroy()).ToList();
         if (rnds.Count > 0)
         {
             var rnd = rnds.RandomElement();
@@ -544,18 +539,18 @@ public class GalaxyData
                 globalMapCell.RemoveWayTo(rnd);
             }
             MainController.Instance.MainPlayer.MessagesToConsole.AddMsg("Cell destroyed");
-            
-           
+
+
         }
     }
 
 
-//    public List<GlobalMapCell> ConnectedCellsToCurrent(GlobalMapCell CurrentCell)
-//    {
-//        var XINdex = CurrentCell.indX;
-//        var ZINdex = CurrentCell.indZ;
-//        return ConnectedCellsToCurrent(XINdex, ZINdex);
-//    }
+    //    public List<GlobalMapCell> ConnectedCellsToCurrent(GlobalMapCell CurrentCell)
+    //    {
+    //        var XINdex = CurrentCell.indX;
+    //        var ZINdex = CurrentCell.indZ;
+    //        return ConnectedCellsToCurrent(XINdex, ZINdex);
+    //    }
 
 
     public GlobalMapCell[,] AllCells()

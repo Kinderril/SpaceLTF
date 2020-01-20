@@ -9,7 +9,8 @@ public class ImageWithTooltip : UIElementWithTooltip
     public void Init(Sprite sprite,string data)
     {
         _data = data;
-        Image.sprite = sprite;
+        if (sprite != null)
+            Image.sprite = sprite;
     }
 
     protected override string TextToTooltip()

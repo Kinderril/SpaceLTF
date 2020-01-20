@@ -32,7 +32,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
             new AnswerDialogData("Fight",null,Figth),
 //            new AnswerDialogData("Send fail message",null,FailMessage),
             new AnswerDialogData("Steal",null,Steal),
-            new AnswerDialogData(Namings.leave,null),
+            new AnswerDialogData(Namings.Tag("leave"),null),
         });
         return mesData;
     }
@@ -49,7 +49,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
         {
             var mesData = new MessageDialogData(String.Format("{0} credits are yours.", _credits), new List<AnswerDialogData>()
             {
-                new AnswerDialogData(Namings.Take,() =>
+                new AnswerDialogData(Namings.Tag("Take"),() =>
                     MainController.Instance.MainPlayer.MoneyData.AddMoney(_credits)
                 ),
             });
@@ -85,7 +85,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
             _doFight = false;
             var mesData = new MessageDialogData(String.Format( "{0} credits are yours.", _credits), new List<AnswerDialogData>()
             {
-                new AnswerDialogData(Namings.Take,() =>
+                new AnswerDialogData(Namings.Tag("Take"),() =>
                     MainController.Instance.MainPlayer.MoneyData.AddMoney(_credits)
                 ),
             });

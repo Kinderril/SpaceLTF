@@ -24,7 +24,7 @@ public class SecretDeal : BaseGlobalMapEvent
     {
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData($"Send scouts", null, scoutsSend));
-        mianAnswers.Add(new AnswerDialogData(Namings.leave, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
         var mesData =
             new MessageDialogData("A lot of space garbage and other useless thing here. Do you want to investigate?",
                 mianAnswers);
