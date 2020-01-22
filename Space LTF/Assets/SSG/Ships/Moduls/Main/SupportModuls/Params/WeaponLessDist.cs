@@ -1,19 +1,15 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponLessDist : BaseSupportModul
 {
     private const float spd_inc = 0.7f;
     private const float dmg_inc = 1.0f;
-    public WeaponLessDist( int level) 
+    public WeaponLessDist(int level)
         : base(SimpleModulType.WeaponLessDist, level)
     {
 
     }
 
-    private float DmgLevel => dmg_inc + Level * 0.3f;
+    private float DmgLevel => dmg_inc + Level * 0.15f;
 
     public override void ChangeParams(IAffectParameters weapon)
     {

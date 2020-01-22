@@ -130,7 +130,9 @@ public class PlayerMapData
     public bool CanGoTo(GlobalMapCell target)
     {
 #if Demo
-        if (VisitedSectors > 2 || Step > 25)
+        int step = Step * 200;
+        int check = 5000;
+        if (VisitedSectors > 2 || step > check)
         {
             WindowManager.Instance.InfoWindow.Init(()=>
             {

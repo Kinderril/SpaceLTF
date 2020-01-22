@@ -46,7 +46,7 @@ public enum SimpleModulType
     WeaponAOE = 27,
     WeaponSector = 28,
     WeaponLessDist = 29,
-    WeaponChain = 30,
+    WeaponMultiTarget = 30,
 
     WeaponShieldIgnore = 31,
     WeaponSelfDamage = 32,

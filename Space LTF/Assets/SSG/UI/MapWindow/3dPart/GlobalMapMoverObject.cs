@@ -28,8 +28,8 @@ public class GlobalMapMoverObject : MonoBehaviour
     }
     public float MoveTo(GlobalMapCellObject target, Action callback)
     {
-        if (!_isActive)
-        {
+//        if (!_isActive)
+//        {
             _startPos = transform.position;
             _endPos = target.Container.position;
             _callback = callback;
@@ -39,9 +39,9 @@ public class GlobalMapMoverObject : MonoBehaviour
             _endTimeToMove = Time.time + _timeToMove;
             _isActive = true;
             return _timeToMove;
-        }
-
-        return -1f;
+//        }
+//
+//        return -1f;
     }
 
     void Update()

@@ -114,8 +114,13 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
 
     protected void TryUse(Vector3 v)
     {
-        Cast(v);
-        Debug.LogError($"_spell.TryCast {this}");
+        if (CanCast())
+        {
+
+            Cast(v);
+            _commander.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
+            Debug.LogError($"_spell.TryCast {this}");
+        }
     }
 
     private Vector3 _modulPos()

@@ -1,19 +1,18 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public static class LibraryModuls
 {
     private static List<SimpleModulType> ExistModuls;
     private static WDictionary<SimpleModulType> ExistModulsDictionary;
-//    private static List<SimpleModulType> RareModuls;
+    //    private static List<SimpleModulType> RareModuls;
     private static List<SimpleModulType> NotExistModuls;
 
     private static List<SimpleModulType> NonSupportList;
-    private static List<SimpleModulType> SupportList;  
-    
+    private static List<SimpleModulType> SupportList;
+
     private static HashSet<SimpleModulType> NonSupportHashSet;
     private static HashSet<SimpleModulType> SupportHashSet;
 
@@ -32,12 +31,12 @@ public static class LibraryModuls
 
 
         ExistModuls = GetExisList().ToList();
-//        RareModuls = RareList().ToList();
-Dictionary< SimpleModulType ,float> typesDictionary = new Dictionary<SimpleModulType, float>();
+        //        RareModuls = RareList().ToList();
+        Dictionary<SimpleModulType, float> typesDictionary = new Dictionary<SimpleModulType, float>();
         foreach (var simpleModulType in ExistModuls)
         {
             var coef = BaseModulInv.GetBaseReuire(simpleModulType);
-            typesDictionary.Add(simpleModulType,10f - coef);
+            typesDictionary.Add(simpleModulType, 10f - coef);
 
         }
         ExistModulsDictionary = new WDictionary<SimpleModulType>(typesDictionary);
@@ -53,28 +52,28 @@ Dictionary< SimpleModulType ,float> typesDictionary = new Dictionary<SimpleModul
     {
         return SupportHashSet.Contains(type);
     }
-//    public static bool IsRare(SimpleModulType type)
-//    {
-//        return RareModuls.Contains(type);
-//    }
+    //    public static bool IsRare(SimpleModulType type)
+    //    {
+    //        return RareModuls.Contains(type);
+    //    }
 
     public static List<SimpleModulType> GetExistsCacheList()
     {
         return ExistModuls;
-    }  
+    }
     public static WDictionary<SimpleModulType> GetExistsCacheDictionary()
     {
 
         return ExistModulsDictionary;
-    }   
-//    public static List<SimpleModulType> GetUpgradesList()
-//    {
-//        return UpgradesModuls;
-//    }  
-//    public static List<SimpleModulType> GetRareList()
-//    {
-//        return RareModuls;
-//    }
+    }
+    //    public static List<SimpleModulType> GetUpgradesList()
+    //    {
+    //        return UpgradesModuls;
+    //    }  
+    //    public static List<SimpleModulType> GetRareList()
+    //    {
+    //        return RareModuls;
+    //    }
 
 
     private static HashSet<SimpleModulType> All()
@@ -117,7 +116,7 @@ Dictionary< SimpleModulType ,float> typesDictionary = new Dictionary<SimpleModul
             SimpleModulType.WeaponAOE,
             SimpleModulType.WeaponSector,
             SimpleModulType.WeaponLessDist,
-            SimpleModulType.WeaponChain,
+            SimpleModulType.WeaponMultiTarget,
             SimpleModulType.WeaponShieldIgnore,
             SimpleModulType.WeaponSelfDamage,
             SimpleModulType.WeaponShieldPerHit,
@@ -144,13 +143,13 @@ Dictionary< SimpleModulType ,float> typesDictionary = new Dictionary<SimpleModul
         return typesToRnd;
     }
 
-//    private static HashSet<SimpleModulType> RareList()
-//    {
-//        var typesToRnd = new HashSet<SimpleModulType>()
-//        {
-//        };
-//        return typesToRnd;
-//    }
+    //    private static HashSet<SimpleModulType> RareList()
+    //    {
+    //        var typesToRnd = new HashSet<SimpleModulType>()
+    //        {
+    //        };
+    //        return typesToRnd;
+    //    }
 
     private static HashSet<SimpleModulType> GetExisList()
     {
@@ -166,7 +165,7 @@ Dictionary< SimpleModulType ,float> typesDictionary = new Dictionary<SimpleModul
             SimpleModulType.WeaponCrit,
             SimpleModulType.WeaponAOE,
             SimpleModulType.WeaponShieldIgnore,
-            SimpleModulType.WeaponChain,
+            SimpleModulType.WeaponMultiTarget,
             SimpleModulType.WeaponNoBulletDeath,
             SimpleModulType.WeaponFireNear,
             SimpleModulType.ShieldDouble,
@@ -243,7 +242,7 @@ Dictionary< SimpleModulType ,float> typesDictionary = new Dictionary<SimpleModul
             SimpleModulType.WeaponAOE,
             SimpleModulType.WeaponSector,
             SimpleModulType.WeaponLessDist,
-            SimpleModulType.WeaponChain,
+            SimpleModulType.WeaponMultiTarget,
 
             SimpleModulType.WeaponShieldIgnore,
             SimpleModulType.WeaponSelfDamage,

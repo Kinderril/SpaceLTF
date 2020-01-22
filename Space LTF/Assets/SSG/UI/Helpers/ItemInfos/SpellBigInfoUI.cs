@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +17,7 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
     public TextMeshProUGUI WeaponLevelField;
     public MoneySlotUI UpgradeCost;
     private BaseSpellModulInv _spell;
-    public void Init(BaseSpellModulInv spell,Action callback, bool canChange)
+    public void Init(BaseSpellModulInv spell, Action callback, bool canChange)
     {
         base.Init(callback);
         _spell = spell;
@@ -52,12 +48,12 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         WeaponLevelField.text = _spell.Level.ToString();
         if (!canUpgrade)
         {
-            WeaponLevelField.text = Namings.SpellMaxLevel;
+            WeaponLevelField.text = String.Format(Namings.Tag("SpellMaxLevel"), _spell.Level.ToString());
         }
         else
         {
 
-            WeaponLevelField.text =  String.Format(Namings.Level) + ":" + _spell.Level.ToString();
+            WeaponLevelField.text = String.Format(Namings.Tag("Level")) + ":" + _spell.Level.ToString();
         }
     }
 

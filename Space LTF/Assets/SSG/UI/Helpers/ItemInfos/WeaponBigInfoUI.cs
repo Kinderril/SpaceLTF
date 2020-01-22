@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +9,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     public RectTransform MainLayout;
     public TextMeshProUGUI Name;
     public TextMeshProUGUI WeaponLevelField;
-//    public TextMeshProUGUI DamageField;
+    //    public TextMeshProUGUI DamageField;
     public TextMeshProUGUI PrefabText;
     private WeaponInv _weapon;
 
@@ -21,8 +17,8 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     public SliderWithTextMeshPro DamageShield;
     public SliderWithTextMeshPro RadiuesField;
     public SliderWithTextMeshPro AngField;
-    public SliderWithTextMeshPro ReloadField;       
-    public SliderWithTextMeshPro BulletSpeedField;       
+    public SliderWithTextMeshPro ReloadField;
+    public SliderWithTextMeshPro BulletSpeedField;
     public SliderWithTextMeshPro ShootPerTime;
 
     public Transform Layout;
@@ -36,7 +32,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     private bool _withModul;
 
 
-    public void Init(WeaponInv inv, Action callback,bool canClick,bool withModul)
+    public void Init(WeaponInv inv, Action callback, bool canClick, bool withModul)
     {
         base.Init(callback);
         _withModul = withModul;
@@ -45,7 +41,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
         _weapon = inv;
         Name.text = inv.Name;
-//        ShipName.text = onwer != null ? onwer.Name : "Inventory";
+        //        ShipName.text = onwer != null ? onwer.Name : "Inventory";
         CheckCanUpg();
         _weapon.OnUpgrade += OnUpgrade;
         DrawModuls();
@@ -85,7 +81,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
             var cost = MoneyConsts.WeaponUpgrade[_weapon.Level];
             UpgradeCost.Init(cost);
         }
-        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild,_weapon.RequireLevel());
+        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild, _weapon.RequireLevel());
     }
 
     public void OnClickUpgrade()
@@ -95,8 +91,8 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
     private void DrawCurrentUpgrades(IAffectParameters modif)
     {
-//        var dataMain = new WeaponUIParams(_weapon.CurrentDamage, _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed);
-//        DamageField.text = $"Damage. Shield:{modif.CurrentDamage.ShieldDamage}  Body:{modif.CurrentDamage.BodyDamage}";
+        //        var dataMain = new WeaponUIParams(_weapon.CurrentDamage, _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed);
+        //        DamageField.text = $"Damage. Shield:{modif.CurrentDamage.ShieldDamage}  Body:{modif.CurrentDamage.BodyDamage}";
         RadiuesField.Slider.value = modif.AimRadius;
         AngField.Slider.value = modif.SetorAngle;
         ReloadField.Slider.value = modif.ReloadSec;
@@ -109,7 +105,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     private void DrawModuls()
     {
         dataModif = new WeaponUIParams(_weapon.CurrentDamage,
-            _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed, _weapon.ReloadSec,_weapon.ShootPerTime);
+            _weapon.AimRadius, _weapon.SetorAngle, _weapon.BulletSpeed, _weapon.ReloadSec, _weapon.ShootPerTime);
         Layout.ClearTransform();
         if (!_withModul)
         {
@@ -153,10 +149,10 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         }
         else
         {
-            WeaponLevelField.text = Namings.Level + ":" + _weapon.Level.ToString();
+            WeaponLevelField.text = Namings.Tag("Level") + ":" + _weapon.Level.ToString();
         }
         var canUpgrade = MoneyConsts.WeaponUpgrade.ContainsKey(_weapon.Level);
-//        WeaponLevelField.gameObject.SetActive(!canUpgrade);
+        //        WeaponLevelField.gameObject.SetActive(!canUpgrade);
 
         if (canUpgrade)
         {
@@ -178,7 +174,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
     void OnDestroy()
     {
-//        Unsubscibe();
+        //        Unsubscibe();
     }
 
 }

@@ -48,7 +48,7 @@ public class GlobalMapController : MonoBehaviour
     private float _mapPressedDownTime;
     private List<SectorGlobalMapInfo> _allSectros = new List<SectorGlobalMapInfo>();
     private SectorGlobalMapInfo _lastSelectedSector;
-    private Dictionary<GlobalMapCell,GlobalMapCellObject> _logicToVisualObjects = new Dictionary<GlobalMapCell, GlobalMapCellObject>();
+    private Dictionary<GlobalMapCell, GlobalMapCellObject> _logicToVisualObjects = new Dictionary<GlobalMapCell, GlobalMapCellObject>();
     private List<EnemyGlobalMapMoverObjet> _enemiesObjects = new List<EnemyGlobalMapMoverObjet>();
 
 
@@ -93,6 +93,7 @@ public class GlobalMapController : MonoBehaviour
             _enemiesObjects.Add(army);
             var start = GetCellObjectByCell(arg1.CurCell);
             army.Init(this, start, arg1);
+            CamerasController.Instance.SetCameraTo(start.ModifiedPosition);
         }
         else
         {
@@ -169,7 +170,7 @@ public class GlobalMapController : MonoBehaviour
                     cellObj.transform.SetParent(PointsContainer, true);
                     cellObj.transform.position = v;
                     cellObj.Init(cell, OffsetCell);
-                    _logicToVisualObjects.Add(cell,cellObj);
+                    _logicToVisualObjects.Add(cell, cellObj);
                     cellObj.Cell.OnDestoyedCell += OnDestoyedCell;
                     _allCells[i, j] = cellObj;
                 }
@@ -547,7 +548,7 @@ public class GlobalMapController : MonoBehaviour
         {
             return cellObj;
         }
-                    Debug.LogError($"Can't find cell {cell}");
+        Debug.LogError($"Can't find cell {cell}");
         return null;
     }
 
@@ -613,7 +614,7 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-    private void MoveEnemies(Action callback, GlobalMapCell playersCell,float timeToMove)
+    private void MoveEnemies(Action callback, GlobalMapCell playersCell, float timeToMove)
     {
         int completed = 0;
         int targetCallbacks = 0;
@@ -632,21 +633,21 @@ public class GlobalMapController : MonoBehaviour
             }
         }
 
-        Dictionary<GlobalMapCell,EnemyGlobalMapMoverObjet> objectsCels= new Dictionary<GlobalMapCell, EnemyGlobalMapMoverObjet>();
+        Dictionary<GlobalMapCell, EnemyGlobalMapMoverObjet> objectsCels = new Dictionary<GlobalMapCell, EnemyGlobalMapMoverObjet>();
         foreach (var globalMapMoverObject in _enemiesObjects)
         {
             var place = globalMapMoverObject.FindPlace(playersCell);
             if (place != null && !objectsCels.ContainsKey(place))
-                objectsCels.Add(place,globalMapMoverObject);
+                objectsCels.Add(place, globalMapMoverObject);
         }
 
         foreach (var obj in objectsCels)
         {
-            if (FindAndGo(timeToMove,obj.Value, obj.Key, () =>
-            {
-                completed++;
-                CheckIsAllComplete();
-            }))
+            if (FindAndGo(timeToMove, obj.Value, obj.Key, () =>
+             {
+                 completed++;
+                 CheckIsAllComplete();
+             }))
             {
                 targetCallbacks++;
             }
@@ -660,7 +661,7 @@ public class GlobalMapController : MonoBehaviour
 
     }
 
-    private bool FindAndGo(float timeToMove,EnemyGlobalMapMoverObjet obj ,GlobalMapCell cell, Action callback)
+    private bool FindAndGo(float timeToMove, EnemyGlobalMapMoverObjet obj, GlobalMapCell cell, Action callback)
     {
         if (obj.AndGo(callback, cell, timeToMove))
         {

@@ -169,7 +169,7 @@ public static class Namings
             case SimpleModulType.WeaponLessDist:
                 Name = "Close strike";
                 break;
-            case SimpleModulType.WeaponChain:
+            case SimpleModulType.WeaponMultiTarget:
                 Name = "Chain strike";
                 break;
             case SimpleModulType.WeaponNoBulletDeath:
@@ -581,9 +581,7 @@ public static class Namings
 
     public static string WANT_UPGRADE_WEAPON = "Do you want to upgrade {0}?";
     public static string WeaponMaxLevel = "Weapon have max level";
-    public static string SpellMaxLevel = "Spell have max level";
     public static string Processing = "Processing...";
-    public static string Level = "Level";
     public static string Win = "Win!";
     public static string Lose = "Lose";
     public static string RunAwayComplete = "Run away complete";
@@ -786,7 +784,6 @@ public static class Namings
                   "As a result of special operations, you had to steal the command ship and the energy\n" +
                   " element on it. Now you have to find the rest of the elements to open the galaxy gates," +
                   "\n and deliver the data to your command"},
-        {"Level", "Level"},
         {"Yes", "Yes"},
         {"No", "No"},
         {"Ok", "Ok"},
@@ -821,8 +818,12 @@ public static class Namings
         {"Attack", "Attack"},
         {"AttackHalfLoop", "Trick attack"},
         {"Evade", "Evade"},
+        {"Level", "Level"},
         {"reloadBoost", "Trick reload time:{0}"},
         {"PointsToOpen", "Points to unlock start options:"},
+        {"SpellMaxLevel", "Max level reached: {0}"},
+
+
         {"descWinner", "--"},
         {"descCaptain", "--"},
         {"descMayor", "--"},
@@ -905,6 +906,11 @@ public static class Namings
         {"scout_spells", "No big guns info"},
         {"targteFar", "Target is too far"},
 
+        {"ChainModulDesc", "Shoot to all targets in radius. Decrease damage on {0}%"},
+        {"FireNearModulDesc", "Can fire nearby enemies for {0} sec when shoot."},
+        {"SprayModulDesc", "Shoot with {0} bullets instead on one. Increase reload time by {1}%."},
+        {"WeaponSpeedModulDesc", "Increase bullet speed by {0}% per level"},
+
         {"rep_adv_friend", "You are friends. Maybe they can help you."},
         {"rep_adv_neutral", "Fleets will fight, but you can trade with them."},
         {"rep_adv_negative", "You still can trade with them, but prices will be bad"},
@@ -913,6 +919,7 @@ public static class Namings
         {"rep_neutral", "Neutral"},
         {"rep_negative", "Negative"},
         {"rep_enemy", "Enemy"},
+        {"DemoStart", "This is not final version on game, something can change later.\nYou will have only 25 turns. And some mechanics will be blocked."},
 
         {"dialog_MovingArmyStart", "You have been occupied by special force. You have no chanse to run."},
         {"dialog_MovingArmyFight", "Fight"},

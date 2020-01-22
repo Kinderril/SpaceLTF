@@ -441,8 +441,8 @@ public static class Library
                 return new WeaponSectorModul(level);
             case SimpleModulType.WeaponLessDist:
                 return new WeaponLessDist(level);
-            case SimpleModulType.WeaponChain:
-                return new WeaponChainModul(level);
+            case SimpleModulType.WeaponMultiTarget:
+                return new WeaponMultiTargetModul(level);
             case SimpleModulType.WeaponShieldIgnore:
                 return new WeaponShieldIgnore(level);
             case SimpleModulType.WeaponSelfDamage:

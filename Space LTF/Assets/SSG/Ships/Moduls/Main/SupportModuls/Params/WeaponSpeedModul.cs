@@ -1,12 +1,10 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 
 [System.Serializable]
 public class WeaponSpeedModul : BaseSupportModul
 {
-    private const float spd_inc = 0.3f;
-    public WeaponSpeedModul( int level) 
+    private const float spd_inc = 0.5f;
+    public WeaponSpeedModul(int level)
         : base(SimpleModulType.WeaponSpeed, level)
     {
 
@@ -14,7 +12,7 @@ public class WeaponSpeedModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return $"Increase bullet speed by {Utils.FloatToChance(spd_inc)}% per level";
+        return String.Format(Namings.Tag("WeaponSpeedModulDesc"), Utils.FloatToChance(spd_inc));
     }
 
     public override void ChangeParams(IAffectParameters weapon)

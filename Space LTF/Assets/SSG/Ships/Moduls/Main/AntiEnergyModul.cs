@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
-
-
-public class AntiEnergyModul : AntiWeaponModul
+﻿public class AntiEnergyModul : AntiWeaponModul
 {
 
     private const float DELAY_BASE = 13;
     private const float DELAY_DELTA = 3;
-    public AntiEnergyModul(BaseModulInv b) 
+    public AntiEnergyModul(BaseModulInv b)
         : base(b)
     {
         _damageType = BulletDamageType.energy;
     }
-
 
     protected override float Delay()
     {

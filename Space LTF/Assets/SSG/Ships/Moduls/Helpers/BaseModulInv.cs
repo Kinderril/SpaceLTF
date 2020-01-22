@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class BaseModulInv : IItemInv
 {
     public SimpleModulType Type;
@@ -15,9 +8,9 @@ public class BaseModulInv : IItemInv
 
     public virtual bool IsSupport => false;
 #if UNITY_EDITOR
-     public int UnityEditorID = 10;
+    public int UnityEditorID = 10;
 #endif
-    public BaseModulInv(SimpleModulType type,int level)
+    public BaseModulInv(SimpleModulType type, int level)
     {
 #if UNITY_EDITOR
         UnityEditorID = 1000 + Utils.GetId();
@@ -47,14 +40,13 @@ public class BaseModulInv : IItemInv
             case SimpleModulType.closeStrike:
             case SimpleModulType.shieldRegen:
             case SimpleModulType.WeaponShield:
-            // case SimpleModulType.WeaponWeapon:
+                // case SimpleModulType.WeaponWeapon:
                 return 2;
             case SimpleModulType.WeaponAOE:
             case SimpleModulType.WeaponNoBulletDeath:
             case SimpleModulType.WeaponFireNear:
             case SimpleModulType.frontShield:
             case SimpleModulType.ResistDamages:
-            case SimpleModulType.WeaponChain:
             case SimpleModulType.autoShieldRepair:
             case SimpleModulType.WeaponPush:
                 return 3;
@@ -75,6 +67,7 @@ public class BaseModulInv : IItemInv
             case SimpleModulType.WeaponShootPerTime:
             case SimpleModulType.WeaponShieldIgnore:
             case SimpleModulType.autoRepair:
+            case SimpleModulType.WeaponMultiTarget:
                 return 5;
             case SimpleModulType.laserUpgrade:
             case SimpleModulType.rocketUpgrade:
@@ -107,14 +100,14 @@ public class BaseModulInv : IItemInv
         }
     }
 
-    public int RequireLevel(int posibleLevel =-1)
+    public int RequireLevel(int posibleLevel = -1)
     {
         if (posibleLevel <= 0)
         {
             posibleLevel = Level;
         }
         return 1 + (posibleLevel - 1) * Library.MODUL_REQUIRE_LEVEL_COEF + _baseRequreLevel;
-    } 
+    }
 
     public string GetInfo()
     {

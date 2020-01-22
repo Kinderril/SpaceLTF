@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TMPro;
 using UnityEngine;
 
 
 public class WindowStart : BaseWindow
 {
     public StatisticsController Statistics;
+    public TextMeshProUGUI DemoField;
     public override void Init()
     {
         Statistics.Init();
+#if Demo      
+        DemoField.gameObject.SetActive(true);
+#else   
+        DemoField.gameObject.SetActive(false);
+#endif
+        DemoField.text = Namings.Tag("DemoStart");
         base.Init();
     }
 
     public void OnClickNewGame()
     {
         StartNewGame();
-    }  
+    }
     public void OnClickAchievements()
     {
         WindowManager.Instance.OpenWindow(MainState.achievements);
@@ -29,7 +32,7 @@ public class WindowStart : BaseWindow
     }
     private void StartNewGame()
     {
-//        MainController.Instance.CreateNewPlayer();
+        //        MainController.Instance.CreateNewPlayer();
         WindowManager.Instance.OpenWindow(MainState.startNewGame);
     }
 
@@ -41,7 +44,7 @@ public class WindowStart : BaseWindow
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null,Namings.NoSafeGame);
+            WindowManager.Instance.InfoWindow.Init(null, Namings.NoSafeGame);
         }
     }
 
