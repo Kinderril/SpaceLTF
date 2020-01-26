@@ -64,6 +64,45 @@ public class PlayerArmy
         RemoveShip(shipTo);
     }
 
+    public static string PowerDesc(SectorData cellSector, float armyPower, int additionalPower)
+    {
+        var player = MainController.Instance.MainPlayer;
+        var playersPower = ArmyCreator.CalcArmyPower(player.Army);
+
+        var isSameSecto = cellSector.Id == player.MapData.CurrentCell.SectorId;
+        float powerToCompare;
+        if (isSameSecto)
+        {
+            powerToCompare = armyPower;
+            //            Debug.LogError($"power2  :{powerToCompare} ");
+        }
+        else
+        {
+            powerToCompare = SectorData.CalcCellPower(player.MapData.VisitedSectors + 1, cellSector.Size,
+                cellSector.StartPowerGalaxy, additionalPower);
+            //            Debug.LogError($"power1  :{powerToCompare}");
+        }
+
+        return ComparePowers(playersPower, powerToCompare);
+    }
+
+    public static string ComparePowers(float playersPower, float powerToCompare)
+    {
+
+        var delta = playersPower / powerToCompare;
+        if (delta < 0.95f)
+        {
+            return Namings.Tag("Risky");
+        }
+
+        if (delta > 1.15f)
+        {
+            return Namings.Tag("Easily");
+        }
+
+        return Namings.Tag("Comparable");
+    }
+
     public void RemoveShip(StartShipPilotData shipToDel)
     {
 
@@ -80,6 +119,11 @@ public class PlayerArmy
         var first = createStartArmy[0];
         BaseShipConfig = first.Ship.ShipConfig;
         Army = createStartArmy;
+    }
+
+    public float GetPower()
+    {
+        return ArmyCreator.CalcArmyPower(Army);
     }
 }
 

@@ -11,7 +11,7 @@ public class ModifGlobalMapCell : GlobalMapCell
 
     public override string Desc()
     {
-        return "Modification station";
+        return Namings.Tag("modifCellName");
     }
 
     public override void Take()
@@ -21,11 +21,11 @@ public class ModifGlobalMapCell : GlobalMapCell
 
     protected override MessageDialogData GetDialog()
     {
-        var mesData = new MessageDialogData("This is modification base. You can try to modificate something.",
+        var mesData = new MessageDialogData(Namings.Tag("modifBaseStart"),
             new List<AnswerDialogData>
             {
-                new AnswerDialogData("Yes", Take),
-                new AnswerDialogData("No", null)
+                new AnswerDialogData(Namings.Tag("Yes"), Take),
+                new AnswerDialogData(Namings.Tag("No"), null)
             });
         return mesData;
     }

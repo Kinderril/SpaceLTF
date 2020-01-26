@@ -48,7 +48,8 @@ public class GalaxyData
         {GlobalMapEventType.secretDeal, 2},
     };
 
-    public GlobalMapCell Init2(int sectorCount, int sizeSector, int startPower, int coreCells, int startDeathStep, ShipConfig playerShipConfig, int powerPerTurn)
+    public GlobalMapCell Init2(int sectorCount, int sizeSector, int startPower, int coreCells, 
+        int startDeathStep, ShipConfig playerShipConfig, int powerPerTurn)
     {
 
         _powerPerTurn = ConfigurePowerPerTurn(powerPerTurn);
@@ -426,7 +427,7 @@ public class GalaxyData
         {
             if (i == subZoneCount - 1)
             {
-                d = new Dictionary<ShipConfig, float>() { { ShipConfig.federation, 3 }, { ShipConfig.krios, 1 }, { ShipConfig.ocrons, 1 }, };
+                d = new Dictionary<ShipConfig, float>() { { ShipConfig.federation, 3 }, { ShipConfig.krios, 3 }, { ShipConfig.ocrons, 3 }, };
             }
             else
             {
@@ -517,6 +518,10 @@ public class GalaxyData
         GalaxyEnemiesArmyController.CheckEnemiesMovingArmies(step, curCell);
     }
 
+    public void StepStart(int step, GlobalMapCell curCell)
+    {
+    }
+
 
 
     public GlobalMapCell GetRandomCell()
@@ -556,6 +561,11 @@ public class GalaxyData
     public GlobalMapCell[,] AllCells()
     {
         return cells.GetAllCells();
+    }
+
+    public void Dispose()
+    {
+        GalaxyEnemiesArmyController.Dispose();
     }
 }
 

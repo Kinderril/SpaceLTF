@@ -71,12 +71,28 @@ public class MercenaryHideout : BaseGlobalMapEvent
             GenerateMercs();
         }
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData("Pay", null, TryPay));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("hireAttack"), TryAttack, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("hirePay"), null, TryPay));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null, null));
 
-        MessageDialogData mesData = new MessageDialogData($"Space base inside big asteroid. Have impressive protection. \nEnter not free. Pay {creditsToEnter} to enter", mianAnswers);
+        var msg = String.Format(Namings.DialogTag("hireEnter"), creditsToEnter
+            );
+        MessageDialogData mesData = new MessageDialogData(msg, mianAnswers);
         return mesData;
     }
+
+    private void TryAttack()
+    {
+        int repToRemove = 5;
+        var player = MainController.Instance.MainPlayer;
+        player.ReputationData.RemoveReputation(ShipConfig.mercenary, repToRemove);
+        player.ReputationData.RemoveReputation(ShipConfig.raiders, repToRemove);
+        player.ReputationData.AddReputation(ShipConfig.federation, repToRemove);
+        player.ReputationData.AddReputation(ShipConfig.krios, repToRemove);
+        var power = player.Army.GetPower();
+        MainController.Instance.PreBattle(player, GetArmy(ShipConfig.mercenary, ArmyCreatorType.rnd, power), false);
+    }
+
 
     private void GenerateMercs()
     {
@@ -141,13 +157,13 @@ public class MercenaryHideout : BaseGlobalMapEvent
                 mianAnswers.Add(new AnswerDialogData(str, null, HireShip));
             }
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave")));
-            var mesData = new MessageDialogData("You can try to hire somebody here.", mianAnswers);
+            var mesData = new MessageDialogData(Namings.DialogTag("hireSomebody"), mianAnswers);
             return mesData;
         }
         else
         {
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave")));
-            var mesData = new MessageDialogData("You have maximum size of fleet.", mianAnswers);
+            var mesData = new MessageDialogData(Namings.DialogTag("hireMax"), mianAnswers);
             return mesData;
 
         }
@@ -162,7 +178,7 @@ public class MercenaryHideout : BaseGlobalMapEvent
             MainController.Instance.MainPlayer.MoneyData.RemoveMoney(ship.Cost);
             HireAction(1, ship.Congif, ship.Type, ship.PilotLevel);
             _mercsConfigs.Remove(ship);
-            MessageDialogData mesData = new MessageDialogData("Hire complete", mianAnswers);
+            MessageDialogData mesData = new MessageDialogData(Namings.DialogTag("hireComplete"), mianAnswers);
             return mesData;
         }
         else

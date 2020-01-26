@@ -267,6 +267,12 @@ public class GlobalMapController : MonoBehaviour
         _enemiesObjects.Clear();
     }
 
+    public void SingleReset()
+    {
+        var player = MainController.Instance.MainPlayer;
+        SingleReset(player.MapData.CurrentCell, player.MapData.ConnectedCellsToCurrent());
+    }
+
     public void SingleReset(GlobalMapCell currentCell, List<GlobalMapCell> posibleWays)
     {
         if (_data == null)
@@ -584,7 +590,7 @@ public class GlobalMapController : MonoBehaviour
             {
                 return;
             }
-            if (isMainReady && isEnemiesReady)
+            if (isMainReady)
             {
                 isCallback = true;
                 callback();
@@ -599,11 +605,12 @@ public class GlobalMapController : MonoBehaviour
                 AfterAction(shallChange, shallChange2);
                 isMainReady = true;
                 CheckIsAllReady();
+                SingleReset();
             });
             MoveEnemies(() =>
             {
                 isEnemiesReady = true;
-                CheckIsAllReady();
+                //                CheckIsAllReady();
             }, target, timeToMove);
 
         }

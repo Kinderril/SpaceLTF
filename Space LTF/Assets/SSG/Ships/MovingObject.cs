@@ -36,9 +36,9 @@ public abstract class MovingObject : PoolElement
     public EngineStop EngineStop { get;protected set; }
     //    public ExternalForce ExternalForce { get; protected set; }
     //    public EngineStop EngineStop { get; protected set; }
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
     public DebugMovingData DebugMovingData  = new  DebugMovingData();
-#endif
+//#endif
     public Transform RotatableObject;
     private float _curBank = 0f;
     protected virtual float BankMax => BANK_MAX;

@@ -9,7 +9,7 @@ public static class LocalizationTutorial
     {
 
         _locKeys.Add("battleSpells", $"Commander ship special options. There you can choose what you want to use. Any option will use X count of charges for Y seconds.");
-        _locKeys.Add("battleStart", $"Battle starts.\nAll your ships will choose target and attack by self.\nYou can control your main ship. Use mouse to select and move it");
+        _locKeys.Add("battleStart", $"Battle starts.\nAll your ships will choose target and attack by self.\nYou can control your main ship. Click right mouse button to move it");
         _locKeys.Add("battleEnemy", "Enemies fleet");
         _locKeys.Add("battleYour", "Your fleet");
 //        _locKeys.Add("battleMainShip", "You can control commander ship. Use mouse to select and move it");

@@ -30,6 +30,7 @@ public class MainController : Singleton<MainController>
         Statistics = PlayerStatistics.Load();
         WindowManager.Instance.Init();
         DataBase.DataStructPrefabs.CheckShipsWeaponsPosition();
+        SteamStatsAndAchievements.Instance.RequestStats();
     }
 
     void Start()
@@ -99,6 +100,10 @@ public class MainController : Singleton<MainController>
     {
 #if Demo
         VERSION = VERSION + "demo";
+#endif     
+#if Develop 
+          
+        VERSION = VERSION + "dev";
 #endif
     }
 }

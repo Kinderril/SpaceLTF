@@ -108,11 +108,6 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 _eventType = chance.Random();
             }
         }
-        //#if UNITY_EDITOR
-        //        _eventType = BattlefildEventType.asteroids;
-        //#endif
-
-        //        Debug.LogError($"ArmyGlobalMapCell:{Xind}  {Zind}");
     }
 
     public override void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
@@ -120,14 +115,14 @@ public class ArmyGlobalMapCell : GlobalMapCell
         _additionalPower = additionalPower;
         var nextPower = SectorData.CalcCellPower(visitedSectors + 1, _sector.Size, startPower, _additionalPower);
         _player = null;
-        Debug.Log($"Army power sector updated prev:{_power}. next:{nextPower}");
+        // Debug.Log($"Army power sector updated prev:{_power}. next:{nextPower}");
         _power = nextPower;
     }
 
     protected override MessageDialogData GetDialog()
     {
         var myPlaer = MainController.Instance.MainPlayer;
-        bool isSameSide = myPlaer.ReputationData.ReputationFaction[ConfigOwner] > Library.PEACE_REPUTATION;
+        bool isFriends = myPlaer.ReputationData.IsFriend(ConfigOwner);
         string masinMsg;
 
         var ans = new List<AnswerDialogData>();
@@ -136,7 +131,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         string scoutsField;
         if (_eventType.HasValue)
         {
-            scoutsField = $"Sector event:{Namings.BattleEvent(_eventType.Value)}\n";
+            scoutsField = String.Format(Namings.DialogTag("armySectorEvent"), Namings.BattleEvent(_eventType.Value)); ;
         }
         else
         {
@@ -148,56 +143,55 @@ public class ArmyGlobalMapCell : GlobalMapCell
             scoutsField = $"{scoutsField}\n{info}\n";
         }
 
-        if (isSameSide && rep > 40)
+        if (isFriends && rep > 40)
         {
-            masinMsg = $"This fleet looks friendly.\n {scoutsField}";
-            ans.Add(new AnswerDialogData($"Ask for help. [Reputation:{rep}]", null, DimlomatyOption));
+            masinMsg = String.Format(Namings.DialogTag("armyFrendly"), scoutsField); ;
+            ans.Add(new AnswerDialogData(String.Format(Namings.DialogTag("armyAskHelp"), rep), null, DimlomatyOption));
         }
         else
         {
             int buyoutCost = Power;
             var playersPower = ArmyCreator.CalcArmyPower(myPlaer.Army);
 
+            if (myPlaer.MoneyData.HaveMoney(buyoutCost) && (ConfigOwner == ShipConfig.mercenary || ConfigOwner == ShipConfig.raiders))
+            {
+                ans.Add(new AnswerDialogData(String.Format(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
+                    () => BuyOutOption(buyoutCost)));
+            }
             if (playersPower < Power)
             {
-                if (myPlaer.MoneyData.HaveMoney(buyoutCost))
-                {
-                    ans.Add(new AnswerDialogData($"Try to buy out. [Cost :{buyoutCost}]", null,
-                        () => BuyOutOption(buyoutCost)));
-                }
-
-                masinMsg = $"You see enemies. They look stronger than you. Shall we fight? \n {scoutsField}";
+                masinMsg = String.Format(Namings.DialogTag("armyStronger"), scoutsField);
             }
             else
             {
-                masinMsg = $"You see enemies. Shall we fight? \n {scoutsField}";
+                masinMsg = String.Format(Namings.DialogTag("armyShallFight"), scoutsField);
             }
         }
 
         ans.Add(new AnswerDialogData("Fight", Take));
 
-        if (isSameSide)
+        if (isFriends)
         {
-            ans.Add(new AnswerDialogData("Leave.", null));
+            ans.Add(new AnswerDialogData(Namings.Tag("leave"), null));
         }
         else
         {
             ans.Add(new AnswerDialogData(
-                String.Format("Try Run. [Scouts:{0}]", ScoutsLevel),
+                String.Format(Namings.DialogTag("armyRun"), scoutsField),
                 () =>
                 {
-                    bool doRun = MyExtensions.IsTrue01((float)ScoutsLevel / 4f);
-#if UNITY_EDITOR
-                    doRun = true;
-#endif
-                    if (doRun)
-                    {
-                        WindowManager.Instance.InfoWindow.Init(null, "Running away complete.");
-                    }
-                    else
-                    {
-                        WindowManager.Instance.InfoWindow.Init(Take, "Fail! Now you must fight.");
-                    }
+                    // bool doRun = MyExtensions.IsTrue01((float)ScoutsLevel / 4f);
+                    // #if UNITY_EDITOR
+                    //                    var doRun = true;
+                    //                    // #endif
+                    //                    if (doRun)
+                    //                    {
+                    //                        WindowManager.Instance.InfoWindow.Init(null, Namings.DialogTag("armyRunComplete"));
+                    //                    }
+                    //                    else
+                    //                    {
+                    //                        WindowManager.Instance.InfoWindow.Init(Take, Namings.DialogTag("armyRunFail"));
+                    //                    }
                 }, null, false, true));
         }
 
@@ -206,52 +200,22 @@ public class ArmyGlobalMapCell : GlobalMapCell
     }
 
 
-    public string PowerDesc()
-    {
-        var player = MainController.Instance.MainPlayer;
-        var playersPower = ArmyCreator.CalcArmyPower(player.Army);
 
-        var isSameSecto = _sector.Id == player.MapData.CurrentCell.SectorId;
-        float powerToCompare;
-        if (isSameSecto)
-        {
-            powerToCompare = Power;
-            //            Debug.LogError($"power2  :{powerToCompare} ");
-        }
-        else
-        {
-            powerToCompare = SectorData.CalcCellPower(player.MapData.VisitedSectors + 1, _sector.Size,
-                _sector.StartPowerGalaxy, _additionalPower);
-            //            Debug.LogError($"power1  :{powerToCompare}");
-        }
-        var delta = playersPower / powerToCompare;
-        if (delta < 0.95f)
-        {
-            return "Risky";
-        }
-
-        if (delta > 1.15f)
-        {
-            return "Easily";
-        }
-
-        return "Comparable";
-    }
 
     private MessageDialogData BuyOutOption(int buyoutCost)
     {
         var player = MainController.Instance.MainPlayer;
         var ans = new List<AnswerDialogData>();
         player.MoneyData.RemoveMoney(buyoutCost);
-        ans.Add(new AnswerDialogData("Ok"));
-        var mesData = new MessageDialogData($"Buyout complete. You lose {buyoutCost} credits.", ans);
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("armyBuyoutComplete"), buyoutCost), ans);
         return mesData;
     }
 
     private MessageDialogData DimlomatyOption()
     {
         var ans = new List<AnswerDialogData>();
-        ans.Add(new AnswerDialogData("Ok"));
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[ConfigOwner];
         bool doDip = MyExtensions.IsTrue01((float)rep / PlayerReputationData.MAX_REP);
         if (doDip)
@@ -364,5 +328,10 @@ public class ArmyGlobalMapCell : GlobalMapCell
     public ShipConfig GetConfig()
     {
         return ConfigOwner;
+    }
+
+    public string PowerDesc()
+    {
+        return PlayerArmy.PowerDesc(_sector, Power, _additionalPower);
     }
 }

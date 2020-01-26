@@ -36,7 +36,7 @@ public class FinalBattleData
         if (isFull)
         {
             list.Add(new AnswerDialogData(Namings.Ok, null, ReadyToGo));
-            mesData = new MessageDialogData(String.Format("This is your main goal. You have {0}/{1} parts to open gates.\n You are ready to go in.",
+            mesData = new MessageDialogData(String.Format(Namings.DialogTag("finalStartReady"),
                 current, need), list);
         }
         else
@@ -47,11 +47,7 @@ public class FinalBattleData
             if (delta > armyCount - 1)
             {
                 list.Add(new AnswerDialogData(Namings.Ok, LoseGame, null));
-                mesData = new MessageDialogData(String.Format("This is your main goal. You have {0}/{1} parts to open gates.\n" +
-                            " Now you should acquire all others." +
-                            "\n Only one way to do it send one of your ships to block energy on gates. " +
-                            "\n But you don't have enought ship" +
-                            "\n Your are dead.",
+                mesData = new MessageDialogData(String.Format(Namings.DialogTag("finalStartNotReady"),
                     current, need), list);
             }
             else
@@ -72,9 +68,7 @@ public class FinalBattleData
                         return GetDialog();
                     }));
                 }
-                mesData = new MessageDialogData(String.Format("This is your main goal. You have {0}/{1} parts to open gates.\n" +
-                        " Now you should acquire all others." +
-                        "\n Only one way to do it send one of your ships to block energy on gates. ",
+                mesData = new MessageDialogData(String.Format(Namings.DialogTag("finalProcess"),
                     current, need), list);
             }
         }
@@ -90,7 +84,7 @@ public class FinalBattleData
     {
         var list = new List<AnswerDialogData>();
         list.Add(new AnswerDialogData(Namings.Fight, Fight, null));
-        var mesData = new MessageDialogData("But somebody don't want let you go and attacks you", list);
+        var mesData = new MessageDialogData(Namings.DialogTag("finalStartFight"), list);
         return mesData;
     }
 
@@ -151,9 +145,11 @@ public class FinalBattleData
      */
     private void Fight()
     {
+        var rep = MainController.Instance.MainPlayer;
+        ShipConfig config = rep.ReputationData.WorstFaction(rep.Army.BaseShipConfig);
         _lastFight = true;
         var player = new Player("Final boss");
-        var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize, 5, 7, ArmyCreatorData.GetRandom(ShipConfig.federation),
+        var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize, 5, 7, ArmyCreatorData.GetRandom(config),
             true, player);
         player.Army.SetArmy(army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer, player, true, false);
@@ -162,7 +158,7 @@ public class FinalBattleData
     {
         var list = new List<AnswerDialogData>();
         list.Add(new AnswerDialogData(Namings.Ok, EndGameWin, null));
-        var mesData = new MessageDialogData("Now way is free and you can go whatever you want.", list);
+        var mesData = new MessageDialogData(Namings.DialogTag("finalEnd"), list);
         return mesData;
     }
 

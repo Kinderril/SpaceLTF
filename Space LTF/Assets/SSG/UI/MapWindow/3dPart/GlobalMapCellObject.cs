@@ -145,10 +145,18 @@ public class GlobalMapCellObject : MonoBehaviour
         Unknown.gameObject.SetActive(!_isArmy);
         if (_isArmy)
         {
-            Fleet.gameObject.SetActive(true);
-            ObjectPainted = Fleet;
             ActiveRenderer = Fleet.GetComponent<Renderer>();
-            //            ObjectPainted = Fleet;
+            if (Cell is EndGlobalCell)
+            {
+                Unknown.gameObject.gameObject.SetActive(false);
+                ExitObject.gameObject.gameObject.SetActive(true);
+                ObjectPainted = ExitObject;
+            }
+            else
+            {
+                Fleet.gameObject.SetActive(true);
+                ObjectPainted = Fleet;
+            }
         }
         else
         {
@@ -175,13 +183,7 @@ public class GlobalMapCellObject : MonoBehaviour
 
             if (checkOnEnd)
             {
-                if (Cell is EndGlobalCell)
-                {
-                    Unknown.gameObject.gameObject.SetActive(false);
-                    ExitObject.gameObject.gameObject.SetActive(true);
-//                ObjectPainted = ExitObject;
-                }
-                else if (Cell is StartGlobalCell)
+                if (Cell is StartGlobalCell)
                 {
                     Unknown.gameObject.gameObject.SetActive(false);
                     StartObject.gameObject.gameObject.SetActive(true);

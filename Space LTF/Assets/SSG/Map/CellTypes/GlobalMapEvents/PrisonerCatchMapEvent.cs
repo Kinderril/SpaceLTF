@@ -1,9 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
@@ -13,23 +10,23 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
 
     public override string Desc()
     {
-        return "Prisoner";
+        return Namings.Tag("Prisoner");
     }
 
     private int Reputation =>
-        MainController.Instance.MainPlayer.ReputationData.ReputationFaction[ShipConfig.federation];
+        MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config];
 
     public override MessageDialogData GetDialog()
     {
         _itemCost = 20;
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(String.Format("Buy stolen item. [Cost:{0}]", _itemCost),BuyStolen));
-        mianAnswers.Add(new AnswerDialogData(String.Format("Catch and return to police."),ReternToPolice));
-        mianAnswers.Add(new AnswerDialogData(String.Format("Hire him"),HireHim));
-        mianAnswers.Add(new AnswerDialogData(String.Format("Hide him from police. [Reputation:{0}]", Reputation), HideHim));
+        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerBuy"), _itemCost), null, BuyStolen));
+        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerCatch")), null, ReternToPolice));
+        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerHire")), HireHim));
+        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerHide"), Reputation), null, HideHim));
 
 
-        var mesData = new MessageDialogData("Criminal try to escapes from the federation police. But your fleet can catch him", mianAnswers);
+        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("prisonerStart"), Namings.ShipConfig(_config)), mianAnswers);
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
         return mesData;
     }
@@ -37,23 +34,24 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
     private void HireHim()
     {
         var rep = Library.REPUTATION_HIRE_CRIMINAL_REMOVED;
-        var info = String.Format("Criminal hired. Reputation removed {0}", rep);
-        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.federation,rep);
+        var info = String.Format(Namings.DialogTag("prisonerHired"), rep);
+        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, rep);
         WindowManager.Instance.InfoWindow.Init(() =>
         {
             HireAction(2);
-        }, info );
+        }, info);
 
     }
 
     public void Fight()
     {
+        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, Library.REPUTATION_HIRE_CRIMINAL_REMOVED);
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, 
-            GetArmy(ShipConfig.federation, ArmyCreatorType.laser, (int)myArmyPower));
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
+            GetArmy(_config, ArmyCreatorType.laser, (int)myArmyPower));
     }
 
-    private void BuyStolen()
+    private MessageDialogData BuyStolen()
     {
         if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_itemCost))
         {
@@ -66,53 +64,62 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
             if (canAdd)
             {
                 MainController.Instance.MainPlayer.Inventory.TryAddSimpleModul(m, slot);
-                d = String.Format("Your item: {0}", itemName);
+                d = String.Format(Namings.DialogTag("prisonerYourItem"), itemName);
             }
             else
             {
-                d = "Not free space for item";
+                d = Namings.DialogTag("prisonerNoSpace");
             }
 
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.federation,Library.REPUTATION_FIND_WAY_ADD);
-            WindowManager.Instance.InfoWindow.Init(null,
-                String.Format("Complete. {0}", d));
+            MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, Library.REPUTATION_FIND_WAY_ADD);
+
+
+
+            var mianAnswers = new List<AnswerDialogData>();
+            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("prisonerComplete"), d), mianAnswers);
+            return mesData;
         }
         else
         {
-            ShowFail();
+            return ShowFail(Namings.DialogTag("prisonerBuyFail"));
         }
     }
 
-    private void HideHim()
+    private MessageDialogData HideHim()
     {
         if (SkillWork(60, Reputation))
         {
-            var money = GlobalMapCell.AddMoney(24, 47);
-            WindowManager.Instance.InfoWindow.Init(null, 
-                String.Format("You successfully hide criminals ship. Credits add {0}", money));
+            var coef = (float)_power * Library.MONEY_QUEST_COEF;
+            var money = (int)(MyExtensions.Random(14, 30) * coef);
+            MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
+            var mianAnswers = new List<AnswerDialogData>();
+            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
+            var msg = String.Format(Namings.DialogTag("prisonerHideOk"), money);
+            var mesData = new MessageDialogData(msg, mianAnswers);
+            return mesData;
         }
         else
         {
-            if (SkillWork(40, Reputation))
-            {
-                ShowFail();
-            }
-            else
-            {
-                MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.federation,Library.REPUTATION_HIRE_CRIMINAL_REMOVED);
-                WindowManager.Instance.InfoWindow.Init(Fight,
-                    String.Format("Fail! Now you will fight with police."));
-            }
+            var mianAnswers = new List<AnswerDialogData>();
+            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
+            var msg = String.Format(Namings.DialogTag("prisonerFailFight"));
+            var mesData = new MessageDialogData(msg, mianAnswers);
+            return mesData;
         }
     }
-    
 
-    private void ReternToPolice()
+
+    private MessageDialogData ReternToPolice()
     {
         var rep = Library.REPUTATION_FIND_WAY_ADD;
-        WindowManager.Instance.InfoWindow.Init(null, 
-            String.Format("You successfully catch him. Reputation added {0}", rep));
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.federation,rep);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, rep);
+
+        var mianAnswers = new List<AnswerDialogData>();
+        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
+        var msg = String.Format(Namings.DialogTag("prisonerCatchOk"), rep);
+        var mesData = new MessageDialogData(msg, mianAnswers);
+        return mesData;
     }
 
     public PrisonerCatchMapEvent(ShipConfig config) : base(config)

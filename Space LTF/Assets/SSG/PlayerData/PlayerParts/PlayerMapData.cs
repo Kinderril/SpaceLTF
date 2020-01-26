@@ -158,6 +158,9 @@ public class PlayerMapData
             isConnected = true;
         }
 #endif
+#if Develop    
+        isConnected = true;
+#endif
         return isConnected;
     }
 
@@ -182,5 +185,10 @@ public class PlayerMapData
             }
         }
 
+    }
+
+    public void Dispose()
+    {
+        GalaxyData.Dispose();
     }
 }

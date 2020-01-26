@@ -65,11 +65,11 @@ public class SpellInGame : IWeapon
     public string Name { get; private set; }
     public string Desc { get; private set; }
     public SpellType SpellType { get;private set; }
-    float ShowCircleRadius { get; }
+//    float ShowCircleRadius { get; }
     bool ShowLine { get; }
     private float _maxDist;
-    public bool ShowCircle => ShowCircleRadius > 0;
-    private DistCounter _distCounter;
+    public bool ShowCircle { get;private set; }
+private DistCounter _distCounter;
 
     public SpellInGame(ISpellToGame spellData,Func<Vector3> modulPos,
         TeamIndex teamIndex,ShipBase owner,int level,string name,int period,
@@ -84,7 +84,7 @@ public class SpellInGame : IWeapon
 
 Desc = desc;
         _maxDist = maxDist;
-        ShowCircleRadius = spellData.ShowCircle;
+//        ShowCircleRadius = spellData.ShowCircle;
         ShowLine = spellData.ShowLine;
         Level = level;
         SpellType = spellType;
@@ -102,6 +102,7 @@ Desc = desc;
         SubUpdateShowCast = spellData.SubUpdateShowCast;
         CanCastAtPoint = spellData.CanCastAtPoint;
         CreateBulletAction = spellData.CreateBulletAction;
+        ShowCircle = _spellDamageData.IsAOE;
     }
     public bool CanCast(CommanderCoinController coinController)
     {
@@ -118,6 +119,10 @@ Desc = desc;
         if (ShowCircle)
         {
             CircleObjectToShow.transform.position = pos;
+            if (SubUpdateShowCast != null)
+            {
+                SubUpdateShowCast(pos, TeamIndex, CircleObjectToShow.gameObject);
+            }
         }
 
         if (ShowLine)
@@ -126,10 +131,6 @@ Desc = desc;
             LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir, _maxDist);
         }
 
-        if (SubUpdateShowCast != null)
-        {
-            SubUpdateShowCast(pos,TeamIndex, CircleObjectToShow.gameObject);
-        }
     }
 
     public void StartShowCast()
@@ -153,7 +154,7 @@ Desc = desc;
                 CircleObjectToShow =
                     DataBaseController.GetItem(DataBaseController.Instance.SpellDataBase.SpellZoneCircle);
                 CircleObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
-                CircleObjectToShow.SetSize(ShowCircleRadius);
+                CircleObjectToShow.SetSize(_spellDamageData.AOERad*4);
             }
 
             CircleObjectToShow.gameObject.SetActive(true);
@@ -199,9 +200,23 @@ Desc = desc;
         CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos(), _bulletStartParams);
     }
 
-    public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase applyied)
+    public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
-
+//        GlobalEventDispatcher.ShipDamage(Owner, healthdelta, shielddelta, _weaponType);
+        Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta);
+        if (damageAppliyer != null)
+        {
+#if UNITY_EDITOR
+            if (damageAppliyer.IsDead == Owner)
+                Debug.LogError(
+                    $"Strange things. I wanna kill my self??? {Owner.Id}_{Owner.name}  side:{Owner.TeamIndex}  spell:{Name}");
+#endif
+            if (damageAppliyer.IsDead)
+            {
+                GlobalEventDispatcher.ShipDeath(damageAppliyer, Owner);
+                Owner.ShipInventory.LastBattleData.AddKill();
+            }
+        }
     }
 
     public void BulletDestroyed(Vector3 position, Bullet bullet)

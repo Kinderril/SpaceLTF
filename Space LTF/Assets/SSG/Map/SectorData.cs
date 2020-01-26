@@ -10,6 +10,7 @@ public class SectorData
     public int StartZ;
     public int Size { get; private set; }
     public bool IsCore { get; private set; }
+    public bool IsFinal { get; private set; }
     public string Name { get; private set; }
     public int XIndex { get; private set; }
     public int Id { get; private set; }
@@ -73,6 +74,10 @@ public class SectorData
         }
 #endif
         Cells[x, z].SetData(cell);
+        if (cell is EndGlobalCell)
+        {
+            IsFinal = true;
+        }
     }
 
     public static int CalcCellPower(int visited, int Size, int startPowerGalaxy, int additionalPower)

@@ -11,7 +11,7 @@ public  class EngineLockSpell : BaseSpellModulInv
     public const float DIST_SHOT = 18f;
     public const float LOCK_PERIOD = 4;
     public const float LOCK_LEVEL = 2f;
-    private const float rad = 8f;
+    private const float rad = 2.5f;
     [NonSerialized]
     private SpellZoneVisualCircle ObjectToShow;
 
@@ -42,7 +42,7 @@ public  class EngineLockSpell : BaseSpellModulInv
 //        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
         var startPos = shootpos;
         var dir = target.Position - startPos;
-        bullestartparameters.distanceShoot = dir.magnitude;
+        bullestartparameters.distanceShoot = Mathf.Clamp(dir.magnitude,1, DIST_SHOT);
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
 
     }

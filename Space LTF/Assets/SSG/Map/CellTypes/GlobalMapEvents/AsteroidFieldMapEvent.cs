@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -14,7 +15,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-        var mesData = new MessageDialogData("Big asteroid field. You need somehow get to other side.", StandartOptions());
+        var mesData = new MessageDialogData(Namings.DialogTag("asteroid_start"), StandartOptions());
         return mesData;
     }
 
@@ -22,8 +23,8 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
     {
         var ans = new List<AnswerDialogData>()
         {
-            new AnswerDialogData("Fire from all weapons", null,  weaponsFire),
-            new AnswerDialogData("Slow go through field.", null,   throughtField),
+            new AnswerDialogData(Namings.DialogTag("asteroid_fireAll") , null,  weaponsFire),
+            new AnswerDialogData(Namings.DialogTag("asteroid_slow") , null,   throughtField),
         };
         return ans;
     }
@@ -39,12 +40,12 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
             MessageDialogData mesData;
             if (SkillWork(2, ScoutsLevel))
             {
-                mesData = new MessageDialogData("Nothing happens. You successfully complete way", ans);
+                mesData = new MessageDialogData(Namings.DialogTag("asteroid_nothingComplete"), ans);
             }
             else
             {
                 BrokeShipWithRandom();
-                mesData = new MessageDialogData("Nothing happens, but some ships need to be repaired. You successfully complete way", ans);
+                mesData = new MessageDialogData(Namings.DialogTag("asteroid_nothingCompleteRepair"), ans);
 
             }
             return mesData;
@@ -53,10 +54,10 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
         {
             var ans = new List<AnswerDialogData>()
             {
-                new     AnswerDialogData($"Try to repair it [Repair:{RepairLevel}].",null,repairResult),
-                new     AnswerDialogData($"Try to decompile it for money.",null,()=> moneyResult(10,20))
+                new     AnswerDialogData(String.Format(Namings.DialogTag("asteroid_brokenShipRepair"),RepairLevel) ,null,repairResult),
+                new     AnswerDialogData(Namings.DialogTag("asteroid_brokenShipdecompile"),null,()=> moneyResult(10,20))
             };
-            var mesData = new MessageDialogData("You see broken ship.", ans);
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("asteroid_brokenShip"), Namings.ShipConfig(_config)), ans);
             return mesData;
         }
     }
@@ -65,20 +66,21 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
     {
         if (SkillWork(4, RepairLevel))
         {
+            _reputation.AddReputation(_config, 10);
             var ans = new List<AnswerDialogData>()
             {
-                new AnswerDialogData("Ok.")
+                new AnswerDialogData(Namings.Tag("Ok"))
             };
             MessageDialogData mesData;
             if (MainController.Instance.MainPlayer.Inventory.GetFreeWeaponSlot(out var slot))
             {
                 var modul = Library.CreateWeapon(false);
-                mesData = new MessageDialogData($"This ship can't be fully repaired but now you can use some parts. {Namings.Weapon(modul.WeaponType)}", ans);
+                mesData = new MessageDialogData(String.Format(Namings.DialogTag("repairResultFull"), Namings.Weapon(modul.WeaponType)), ans);
                 MainController.Instance.MainPlayer.Inventory.TryAddWeaponModul(modul, slot);
             }
             else
             {
-                mesData = new MessageDialogData($"This ship can't be fully repaired but you have no place for items.", ans);
+                mesData = new MessageDialogData(Namings.DialogTag("repairResultCant"), ans);
             }
             return mesData;
         }
@@ -101,7 +103,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
             {
                 new     AnswerDialogData(Namings.Ok)
             };
-            var mesData = new MessageDialogData("Explosive weapons easily destroy enough asteroid. Now you have a way.", ans);
+            var mesData = new MessageDialogData(Namings.DialogTag("asteroid_weaponsFire"), ans);
             return mesData;
         }
         else
@@ -114,12 +116,12 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
                 {
                     new     AnswerDialogData(Namings.Ok)
                 };
-                mesData = new MessageDialogData("Finally you have a way! But some of your ships get damage", ans);
+                mesData = new MessageDialogData(Namings.DialogTag("asteroid_haveWay"), ans);
             }
             else
             {
 
-                mesData = new MessageDialogData("Your weapons are have not much power to create a way throug. And some of your ships get damage", StandartOptions());
+                mesData = new MessageDialogData(Namings.DialogTag("asteroid_weaponsFail"), StandartOptions());
             }
             return mesData;
 

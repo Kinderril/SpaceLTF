@@ -10,7 +10,7 @@ public class ShieldOffSpell : BaseSpellModulInv
 {
     public const float PERIOD = 13f;
     private const float SHIELD_DAMAGE = 3f;
-    private const float rad = 3f;
+    private const float rad = 3.5f;
     private const float DIST_SHOT = 25f;
     public CurWeaponDamage CurrentDamage { get; }
 
@@ -43,7 +43,11 @@ public class ShieldOffSpell : BaseSpellModulInv
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition,
+        var dir = target.Position - weapon.CurPosition;
+        var dist = Mathf.Clamp(dir.magnitude,1, DIST_SHOT);
+        bullestartparameters.distanceShoot = dist;
+        bullestartparameters.radiusShoot = dist;
+        var b = Bullet.Create(origin, weapon, dir,
             weapon.CurPosition, null, bullestartparameters);
     }
       

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-public class RetirreButton   : MonoBehaviour
+public class RetirreButton : MonoBehaviour
 {
     public Image CooldownImage;
     private float _secCooldown;
@@ -16,24 +12,24 @@ public class RetirreButton   : MonoBehaviour
     private InGameMainUI _mainUI;
     private bool _canRetire;
 
-    public void Init(InGameMainUI mainUI, float initDelta ,bool canRetire)
+    public void Init(InGameMainUI mainUI, float initDelta, bool canRetire)
     {
         _mainUI = mainUI;
         _canRetire = canRetire;
         _secCooldown = initDelta;
         if (_canRetire)
         {
-            StartCooldown();
-        }   
+            StartCooldown(_secCooldown);
+        }
         else
         {
             gameObject.SetActive(false);
         }
     }
 
-    protected void StartCooldown()
+    protected void StartCooldown(float cd)
     {
-        _curReadyTime = Time.time + _secCooldown;
+        _curReadyTime = Time.time + cd;
         CooldownImage.gameObject.SetActive(true);
     }
 
@@ -62,7 +58,13 @@ public class RetirreButton   : MonoBehaviour
         _mainUI.OnPause();
         WindowManager.Instance.ConfirmWindow.Init(() =>
         {
-                StartCooldown();
+            StartCooldown(2f);
+            if (_mainUI.MyCommander.Ships.Count == 1)
+            {
+                BattleController.Instance.RunAway();
+            }
+            else
+            {
                 foreach (var ship in _mainUI.MyCommander.Ships)
                 {
                     if (ship.Value.ShipParameters.StartParams.ShipType != ShipType.Base)
@@ -70,8 +72,10 @@ public class RetirreButton   : MonoBehaviour
                         ship.Value.RunAwayAction();
                     }
                 }
-                _mainUI.OnPause();
-            }, _mainUI.OnPause,
+            }
+
+            _mainUI.OnPause();
+        }, _mainUI.OnPause,
             String.Format(Namings.DoWantRetire));
     }
 }

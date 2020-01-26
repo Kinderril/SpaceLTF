@@ -9,7 +9,7 @@ public interface ISpellToGame
     CastActionSpell CastSpell { get;}
     SpellDamageData RadiusAOE();
     Bullet GetBulletPrefab();
-    float ShowCircle { get; }
+//    float ShowCircle { get; }
     bool ShowLine { get; }
     SubUpdateShowCast SubUpdateShowCast { get; }
     CanCastAtPoint CanCastAtPoint { get; }

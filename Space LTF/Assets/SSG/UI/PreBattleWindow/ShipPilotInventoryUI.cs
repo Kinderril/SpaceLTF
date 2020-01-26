@@ -15,9 +15,11 @@ public class ShipPilotInventoryUI : MonoBehaviour
 
     private Action ontoggleSwitched;
     public Toggle ToggleElement;
+    public StartShipPilotData ShipData { get; private set; }
 
     public void Init(StartShipPilotData data,bool usable, ConnectInventory connectedInventory,Action ontoggleSwitched)
     {
+        ShipData = data;
         this.ontoggleSwitched = ontoggleSwitched;
         ShipInventory.Init(data, usable, connectedInventory);
         var openInfoPilot = true;

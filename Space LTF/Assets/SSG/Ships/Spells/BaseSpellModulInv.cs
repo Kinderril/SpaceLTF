@@ -9,13 +9,13 @@ public enum SpellType
     lineShot = 3,
     throwAround = 4,
 
-//    allToBase = 5,
-//    invisibility =6,//DO NOT USE!
+    //    allToBase = 5,
+    //    invisibility =6,//DO NOT USE!
 
     mineField = 7,
     randomDamage = 8,
 
-//    spaceWall = 9,//DO NOT USE!
+    //    spaceWall = 9,//DO NOT USE!
     distShot = 10,
     priorityTarget = 11,
 
@@ -56,6 +56,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
     public int CostTime { get; protected set; }
     public int Level { get; protected set; }
     public bool IsHoming { get; protected set; }
+    public bool HaveSpecial { get; protected set; }
     public SpellType SpellType { get; private set; }
     protected CreateBulletDelegate CreateBullet { get; private set; }
     public string Name => Namings.SpellName(SpellType);
@@ -111,7 +112,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
         get { return pos => true; }
     }
 
-//    protected abstract void CastAction(Vector3 v);
+    //    protected abstract void CastAction(Vector3 v);
 
     public BulleStartParameters BulleStartParameters { get; private set; }
     public CastActionSpell CastSpell { get; private set; }
@@ -122,7 +123,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
     }
 
     [field: NonSerialized] public event Action<BaseSpellModulInv> OnUpgrade;
-    
+
     protected abstract void CastAction(Vector3 pos);
 
     public abstract string Desc();
@@ -167,9 +168,29 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
         if (CanUpgrade())
         {
             Level++;
-            if (Level == Library.MAX_SPELL_LVL) MainController.Instance.Statistics.AddMaxLevelSpells();
-            if (OnUpgrade != null) OnUpgrade(this);
+            if (Level == Library.MAX_SPELL_LVL)
+                MainController.Instance.Statistics.AddMaxLevelSpells();
+
+            if (Level == 1 + Library.MAX_SPELL_LVL / 2)
+            {
+                AddSpecial();
+            }
+
+            if (OnUpgrade != null)
+                OnUpgrade(this);
         }
+    }
+
+    private void AddSpecial()
+    {
+        CostCount++;
+        HaveSpecial = true;
+        AddSpecialAction();
+    }
+
+    protected virtual void AddSpecialAction()
+    {
+
     }
 
     public virtual Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)

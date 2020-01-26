@@ -177,46 +177,54 @@ public class ShopInventory : PlayerInventory
 
     public void FillItems(float power,ShipConfig config)
     {
-//        int totalItems = (int)((power + 5) / 2);
-//        totalItems = Mathf.Clamp(totalItems, MIN_ITEMS, MAX_ITEMS);
-        var weaponsCount = MyExtensions.Random(MIN_WEAPONS, MAX_WEAPONS);
-        var countModuls = MyExtensions.Random(MIN_MODULS, Max_MODULS);
-        var spells = MyExtensions.Random(MIN_SPELLS, Max_SPELLS);
+        try
+        {
 
-        bool goodPower = power > 22;
-        for (var i = 0; i < weaponsCount; i++)
-        {
-            var w = Library.CreateWeapon(goodPower);
-            w.CurrentInventory = this;
-            Weapons.Add(w);
-        }
-        
-        WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
-        {
-            {1,5f},
-            {2,4f},
-            {3, 3f},
-            {4, 2f},
-            {5, 2f},
-        });
-        for (var i = 0; i < countModuls; i++)
-        {
-            var m = Library.CreatSimpleModul(levels.Random());
-            m.CurrentInventory = this;
-            Moduls.Add(m);
-        }
+            //        int totalItems = (int)((power + 5) / 2);
+            //        totalItems = Mathf.Clamp(totalItems, MIN_ITEMS, MAX_ITEMS);
+            var weaponsCount = MyExtensions.Random(MIN_WEAPONS, MAX_WEAPONS);
+            var countModuls = MyExtensions.Random(MIN_MODULS, Max_MODULS);
+            var spells = MyExtensions.Random(MIN_SPELLS, Max_SPELLS);
 
-        for (int i = 0; i < spells; i++)
-        {
-            var s = Library.CreateSpell();
-            s.CurrentInventory = this;
-            Spells.Add(s);
-        }
+            bool goodPower = power > 22;
+            for (var i = 0; i < weaponsCount; i++)
+            {
+                var w = Library.CreateWeapon(goodPower);
+                w.CurrentInventory = this;
+                Weapons.Add(w);
+            }
 
-        _valuableTypesWeapon = ShopInventory.ValuableTypesWeapon(config);
-        _notValuableTypesWeapon = ShopInventory.NotValuableTypesWeapon(config);
-        _valuableTypesModuls = ValuableTypesModuls(config);
-        _notValuableTypesModuls = NotValuableTypesModuls(config);
+            WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
+            {
+                {1,5f},
+                {2,4f},
+                {3, 3f},
+                {4, 2f},
+                {5, 2f},
+            });
+            for (var i = 0; i < countModuls; i++)
+            {
+                var m = Library.CreatSimpleModul(levels.Random());
+                m.CurrentInventory = this;
+                Moduls.Add(m);
+            }
+
+            for (int i = 0; i < spells; i++)
+            {
+                var s = Library.CreateSpell();
+                s.CurrentInventory = this;
+                Spells.Add(s);
+            }
+
+            _valuableTypesWeapon = ShopInventory.ValuableTypesWeapon(config);
+            _notValuableTypesWeapon = ShopInventory.NotValuableTypesWeapon(config);
+            _valuableTypesModuls = ValuableTypesModuls(config);
+            _notValuableTypesModuls = NotValuableTypesModuls(config);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Fill itesm error: {e}");
+        }
     }
 
 

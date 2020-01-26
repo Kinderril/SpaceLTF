@@ -2,9 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -18,7 +15,7 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
 
     public override string Desc()
     {
-        return "Trader";
+        return Namings.Tag("Trader");
     }
 
     public ChangeItemMapEvent(ShipConfig config)
@@ -60,7 +57,7 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
                     break;
                 case ItemType.modul:
                     var list = new List<int>() { 1, 2 };
-                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(),2);
+                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(), 2);
                     break;
                 case ItemType.spell:
                     _itemsToTrade = Library.CreateSpell();
@@ -70,14 +67,14 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
             }
             _itemsToTrade.CurrentInventory = _traderInventory;
 
-            var tradeData = $"\nThey want to change your {_itemsToTrade.GetInfo()} to {_itemsToTrade.GetInfo()}";
-            mianAnswers.Add(new AnswerDialogData($"Ok. Lets change.", DoTrade, null));
-            mianAnswers.Add(new AnswerDialogData("No, thanks.", null));
-            var mesData = new MessageDialogData($"This ship wants to trade with you. {tradeData}", mianAnswers);
+            var tradeData = String.Format(Namings.DialogTag("changeitem_tradeData"), _myItemsToTrade.GetInfo(), _itemsToTrade.GetInfo());
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("changeitem_ok"), DoTrade, null));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("changeitem_no"), null));
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("changeitem_start"), tradeData), mianAnswers);
             return mesData;
         }
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null, null));
-        var mesData2 = new MessageDialogData($"You have nothing to trade", mianAnswers);
+        var mesData2 = new MessageDialogData(Namings.DialogTag("changeitem_nothing"), mianAnswers);
         return mesData2;
     }
 

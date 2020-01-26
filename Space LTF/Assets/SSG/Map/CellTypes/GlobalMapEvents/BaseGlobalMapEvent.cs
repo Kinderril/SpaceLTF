@@ -10,10 +10,12 @@ public abstract class BaseGlobalMapEvent
     public abstract MessageDialogData GetDialog();
 
     protected ShipConfig _config;
+    protected PlayerReputationData _reputation;
 
     protected BaseGlobalMapEvent(ShipConfig config)
     {
         _config = config;
+        _reputation = MainController.Instance.MainPlayer.ReputationData;
     }
 
     public virtual void Init()
@@ -87,11 +89,14 @@ public abstract class BaseGlobalMapEvent
         return wd.Random();
     }
 
-    protected Player GetArmy(ShipConfig config, ArmyCreatorType creatorType, int power)
+    protected Player GetArmy(ShipConfig config, ArmyCreatorType creatorType, float power)
     {
         ArmyCreatorData data = new ArmyCreatorData(config, true);
         switch (creatorType)
         {
+            case ArmyCreatorType.rnd:
+                data = new ArmyCreatorRnd(config, true);
+                break;
             case ArmyCreatorType.rocket:
                 data = new ArmyCreatorRocket(config, true);
                 break;
@@ -143,14 +148,18 @@ public abstract class BaseGlobalMapEvent
         {
             new     AnswerDialogData(Namings.Ok)
         };
+        _reputation.AddReputation(_config, 1);
         var mesData = new MessageDialogData("Action fail.", ans);
         return mesData;
     }
 
 
-    protected void ShowFail(Action callback = null)
+    protected MessageDialogData ShowFail(string msg, Action callback = null)
     {
-        WindowManager.Instance.InfoWindow.Init(callback, "Fail.");
+        var mianAnswers = new List<AnswerDialogData>();
+        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
+        var mesData = new MessageDialogData(msg, mianAnswers);
+        return mesData;
     }
 
     // protected int ReputationLevel { get { return MainController.Instance.MainPlayer.ReputationData.Reputation; } }

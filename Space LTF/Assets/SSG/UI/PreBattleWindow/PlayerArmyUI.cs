@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -95,6 +96,15 @@ public class PlayerArmyUI : MonoBehaviour
         if (arg2)
         {
             AddShip(arg1, true);
+        }
+        else
+        {
+            var objToDel = playerInfoList.FirstOrDefault(x => x.ShipData == arg1);
+            if (objToDel != null)
+            {
+                playerInfoList.Remove(objToDel);
+                GameObject.Destroy(objToDel.gameObject);
+            }
         }
     }
 

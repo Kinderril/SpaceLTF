@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Steamworks;
 using TMPro;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ public class WindowsAchievements : BaseWindow
     public override void Init()
     {
         var steam = SteamStatsAndAchievements.Instance;
+        var isInited = SteamManager.Initialized;
+        bool bSuccess = SteamUserStats.RequestCurrentStats();
         Layout.ClearTransform();
         if (steam.RequestedStats)
         {

@@ -49,7 +49,8 @@ public class SectorGlobalMapInfo : MonoBehaviour
         {
             UseLines = true;
         }
-        var color = sector.IsCore ? TargetColor : SimpleColor;
+        var color = _sector.IsFinal ? TargetColor : _sector.IsCore ? TargetColor : SimpleColor;
+//        var color = sector.IsCore ? TargetColor : SimpleColor;
         Utils.CopyMaterials(BackgroundRenderer, color, "_TintColor");
         color.a = 1f;
         Field.color = color;
@@ -66,7 +67,7 @@ public class SectorGlobalMapInfo : MonoBehaviour
     private void UpdateField()
     {
         var sectorCells = _data.GetAllList().Where(x =>!(x is GlobalMapNothing) && x.SectorId == _sector.Id).ToList();
-        string ss = _sector.IsCore ? Namings.CoreSector : Namings.NotCoreSector;
+        string ss = _sector.IsFinal?Namings.Tag("FinalSector")  :_sector.IsCore ? Namings.CoreSector : Namings.NotCoreSector;
         var completedCount = sectorCells.Count(x => x.Completed);
         var totalCount = sectorCells.Count;
         var txt = $"{ss}\n{Namings.Completed}:{completedCount}/{totalCount} \n {_sector.Name}";

@@ -2,9 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public enum TradeType
@@ -34,7 +31,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-       
+
         var inventory = MainController.Instance.MainPlayer.Inventory;
 
         if ((inventory.Moduls.Count > 0) || (inventory.Weapons.Count > 0))
@@ -43,7 +40,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
         }
         else
         {
-            _TradeType =  TradeType.traderSell;
+            _TradeType = TradeType.traderSell;
         }
 
         if (_TradeType == TradeType.traderSell)
@@ -56,7 +53,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
                     break;
                 case ItemType.modul:
                     var list = new List<int>() { 1, 2 };
-                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(),3);
+                    _itemsToTrade = Library.CreatSimpleModul(list.RandomElement(), 3);
                     break;
                 case ItemType.spell:
                     _itemsToTrade = Library.CreateSpell();
@@ -68,15 +65,15 @@ public class TradeMapEvent : BaseGlobalMapEvent
         }
         else
         {
-           
+
 
         }
         string tradeData;
         switch (_TradeType)
         {
             case TradeType.traderSell:
-                _cost = (int)(_itemsToTrade.CostValue * 0.8f);
-                tradeData = $"He want to sell {_itemsToTrade.GetInfo()} for {_cost} credits.";
+                _cost = (int)(_itemsToTrade.CostValue * 0.7f);
+                tradeData = string.Format("He want to sell {0} for {1} credits.", _itemsToTrade.GetInfo(), _cost);
                 break;
             case TradeType.traderBuy:
                 if (inventory.Moduls.Count > 0)
@@ -87,11 +84,12 @@ public class TradeMapEvent : BaseGlobalMapEvent
                 {
                     _itemsToTrade = inventory.Weapons.RandomElement();
                 }
-                _cost = (int)(_itemsToTrade.CostValue * 1.2f);
-                tradeData = $"He want to buy your item {_itemsToTrade.GetInfo()} for {_cost} credits.";
+                _cost = (int)(_itemsToTrade.CostValue * 1f);
+                tradeData = string.Format("He want to buy your item {0} for {1} credits.", _itemsToTrade.GetInfo(),
+                    _cost);
                 break;
             default:
-                _cost = (int)(_itemsToTrade.CostValue );
+                _cost = (int)(_itemsToTrade.CostValue);
                 tradeData = "error";
                 break;
         }
@@ -105,7 +103,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
             mianAnswers.Add(new AnswerDialogData($"Ok. Lets trade.", DoTrade, null));
         }
         mianAnswers.Add(new AnswerDialogData("No, thanks.", null));
-        var mesData = new MessageDialogData($"This ship wants to trade with you. {tradeData}", mianAnswers);
+        var mesData = new MessageDialogData(string.Format("This ship wants to trade with you. {0}", tradeData), mianAnswers);
         return mesData;
     }
 

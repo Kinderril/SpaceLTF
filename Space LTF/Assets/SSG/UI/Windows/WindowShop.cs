@@ -40,29 +40,38 @@ public class WindowShop : BaseWindow
     {
         ValuableLayout.ClearTransform();
         NotValuableLayout.ClearTransform();
-        foreach (var weaponType in _shopInventory.ValuableTypesWeaponList)
+        try
         {
-            var valItem = DataBaseController.GetItem(ValuableIteMeshProPrefab);
-            valItem.Field.text = Namings.Weapon(weaponType);
-            valItem.transform.SetParent(ValuableLayout);
-        }  
-        foreach (var modulType in _shopInventory.ValuableTypesModulsList)
-        {
-            var valItem = DataBaseController.GetItem(ValuableIteMeshProPrefab);
-            valItem.Field.text = Namings.SimpleModulName(modulType);
-            valItem.transform.SetParent(ValuableLayout);
+
+            foreach (var weaponType in _shopInventory.ValuableTypesWeaponList)
+            {
+                var valItem = DataBaseController.GetItem(ValuableIteMeshProPrefab);
+                valItem.Field.text = Namings.Weapon(weaponType);
+                valItem.transform.SetParent(ValuableLayout);
+            }
+            foreach (var modulType in _shopInventory.ValuableTypesModulsList)
+            {
+                var valItem = DataBaseController.GetItem(ValuableIteMeshProPrefab);
+                valItem.Field.text = Namings.SimpleModulName(modulType);
+                valItem.transform.SetParent(ValuableLayout);
+            }
+            foreach (var weaponType in _shopInventory.NotValuableTypesWeaponList)
+            {
+                var valItem = DataBaseController.GetItem(NotValuableIteMeshProPrefab);
+                valItem.Field.text = Namings.Weapon(weaponType);
+                valItem.transform.SetParent(NotValuableLayout);
+            }
+            foreach (var modulType in _shopInventory.NotValuableTypesModulsList)
+            {
+                var valItem = DataBaseController.GetItem(NotValuableIteMeshProPrefab);
+                valItem.Field.text = Namings.SimpleModulName(modulType);
+                valItem.transform.SetParent(NotValuableLayout);
+            }
         }
-        foreach (var weaponType in _shopInventory.NotValuableTypesWeaponList)
+        catch (Exception e)
         {
-            var valItem = DataBaseController.GetItem(NotValuableIteMeshProPrefab);
-            valItem.Field.text = Namings.Weapon(weaponType);
-            valItem.transform.SetParent(NotValuableLayout);
-        }
-        foreach (var modulType in _shopInventory.NotValuableTypesModulsList)
-        {
-            var valItem = DataBaseController.GetItem(NotValuableIteMeshProPrefab);
-            valItem.Field.text = Namings.SimpleModulName(modulType);
-            valItem.transform.SetParent(NotValuableLayout);
+            
+            Debug.LogError($"Error SHOP UI \n {e}");
         }
 
     }

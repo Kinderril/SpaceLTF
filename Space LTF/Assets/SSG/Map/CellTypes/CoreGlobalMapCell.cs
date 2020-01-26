@@ -16,6 +16,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     private bool _afterFightActivated = false;
     //    public bool HaveInfo = false;
     public bool Taken = false;
+    public bool _diplomacyFail = false;
 
     private Player _cachedArmy = null;
 
@@ -80,16 +81,16 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     private MessageDialogData GetArmyDialog()
     {
         List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
-        answerDialog.Add(new AnswerDialogData("Attack.", Fight));
-        var mesData = new MessageDialogData("Target is under protection.", answerDialog);
+        answerDialog.Add(new AnswerDialogData(Namings.DialogTag("coreAttack"), Fight));
+        var mesData = new MessageDialogData(Namings.DialogTag("coreTargetProtect"), answerDialog);
         return mesData;
     }
 
     private MessageDialogData GetSimlpleDialog()
     {
         List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
-        answerDialog.Add(new AnswerDialogData("Attack.", Fight));
-        var mesData = new MessageDialogData("Target is under protection.", answerDialog);
+        answerDialog.Add(new AnswerDialogData(Namings.DialogTag("coreAttack"), Fight));
+        var mesData = new MessageDialogData(Namings.DialogTag("coreTargetProtect"), answerDialog);
         return mesData;
     }
 
@@ -112,13 +113,20 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         }
 
         answerDialog.Add(new AnswerDialogData("Attack.", Fight));
-        if (player.MoneyData.HaveMoney(MoneyToBuy()))
-            answerDialog.Add(new AnswerDialogData(String.Format("Buy for {0} credits.", MoneyToBuy()), null, Buy));
-        if (player.ReputationData.ReputationFaction[ConfigOwner] > 50)
-            answerDialog.Add(new AnswerDialogData(String.Format("Use diplomacy."), null, Diplomaty));
+        var isFriend = player.ReputationData.IsFriend(ConfigOwner);
+        if (isFriend)
+        {
+            if (!_diplomacyFail)
+                answerDialog.Add(new AnswerDialogData(String.Format(Namings.DialogTag("coreUseDiplomacy")), null, Diplomaty));
+            if (player.MoneyData.HaveMoney(MoneyToBuy()))
+                answerDialog.Add(new AnswerDialogData(String.Format(Namings.DialogTag("coreBuy"), MoneyToBuy()), null, Buy));
+        }
         //        if (player.Parameters.Scouts.Level >= 1)
-        answerDialog.Add(new AnswerDialogData(String.Format("Send scouts to steal."), null, Steal));
-        var mesData = new MessageDialogData($"Some other fleet already have your target. \n {scoutsField}", answerDialog);
+        answerDialog.Add(new AnswerDialogData(String.Format(Namings.DialogTag("coreSendScouts")), null, Steal));
+        var msg = isFriend
+            ? String.Format(Namings.DialogTag("coreFleetHaveFriend"), scoutsField)
+            : String.Format(Namings.DialogTag("coreFleetHave"), scoutsField);
+        var mesData = new MessageDialogData(msg, answerDialog);
         return mesData;
     }
 
@@ -128,20 +136,33 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         MainController.Instance.MainPlayer.MoneyData.RemoveMoney(MoneyToBuy());
         SetTake();
         MainController.Instance.MainPlayer.QuestData.AddElement();
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ConfigOwner, 10);
         List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
-        answerDialog.Add(new AnswerDialogData("Ok."));
-        var mesData = new MessageDialogData(String.Format("Element was purchased. {0}/{1}", Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+        answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok")));
+        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("coreWasPurchase"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
         return mesData;
     }
 
     private MessageDialogData Diplomaty()
     {
-        SetTake();
-        MainController.Instance.MainPlayer.QuestData.AddElement();
         List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
-        answerDialog.Add(new AnswerDialogData("Ok."));
-        var mesData = new MessageDialogData(String.Format("Element is yours. {0}/{1}", Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
-        return mesData;
+        var player = MainController.Instance.MainPlayer;
+        var val = player.ReputationData.ReputationFaction[ConfigOwner];
+        if (SkillWork(100 - val, val))
+        {
+            _diplomacyFail = true;
+            answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, GetTalkDialog));
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("coreDiplomacyFail")), answerDialog);
+            return mesData;
+        }
+        else
+        {
+            SetTake();
+            MainController.Instance.MainPlayer.QuestData.AddElement();
+            answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok")));
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("coreElementYour"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+            return mesData;
+        }
     }
 
     private void SetTake()
@@ -160,19 +181,34 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         {
 
             SetTake();
+            RemoveDimplomacyByForce();
             MainController.Instance.MainPlayer.QuestData.AddElement();
             List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
-            answerDialog.Add(new AnswerDialogData("Ok."));
-            var mesData = new MessageDialogData(String.Format("Element is yours. {0}/{1}", Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+            answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok")));
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("coreElementYour"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
             return mesData;
         }
         else
         {
             _power = (int)(Power * 1.26f);
             List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
-            answerDialog.Add(new AnswerDialogData("Very bad. Fight.", Fight));
-            var mesData = new MessageDialogData("Fail. While you were trying to steal an item, reinforcements came to them, and now you can't runaway.", answerDialog);
+            answerDialog.Add(new AnswerDialogData(Namings.DialogTag("coreFight"), Fight));
+            var mesData = new MessageDialogData(Namings.DialogTag("coreFailSteal"), answerDialog);
             return mesData;
+        }
+    }
+
+    private void RemoveDimplomacyByForce()
+    {
+        var rep = MainController.Instance.MainPlayer.ReputationData;
+        var isFriend = rep.IsFriend(ConfigOwner);
+        if (isFriend)
+        {
+            rep.RemoveReputation(ConfigOwner, 15);
+        }
+        else
+        {
+            rep.RemoveReputation(ConfigOwner, 7);
         }
     }
 
@@ -182,8 +218,8 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         {
             MainController.Instance.MainPlayer.QuestData.AddElement();
             List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
-            answerDialog.Add(new AnswerDialogData("Ok.", null, null));
-            var mesData = new MessageDialogData("This part is yours now.", answerDialog);
+            answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, null));
+            var mesData = new MessageDialogData(Namings.DialogTag("corePartYours"), answerDialog);
             return mesData;
         }
         else
@@ -195,6 +231,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     private void Fight()
     {
         _afterFightActivated = true;
+        RemoveDimplomacyByForce();
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(), false);
     }
 

@@ -51,6 +51,11 @@ public class PlayerReputationData
         Enemies.Add(ShipConfig.droid, new List<ShipConfig>());
     }
 
+    public bool IsFriend(ShipConfig config)
+    {
+        return ReputationFaction[config] > Library.PEACE_REPUTATION;
+    }
+
     public EReputationStatus GetStatus(ShipConfig config)
     {
         var val = ReputationFaction[config];
@@ -141,6 +146,32 @@ public class PlayerReputationData
                 AddReputation(repToAdd, (int)(Library.BATTLE_REPUTATION_AFTER_FIGHT * 2 * coef));
             }
         }
+    }
+
+    public ShipConfig WorstFaction(ShipConfig exculde)
+    {
+        ShipConfig worstConfig = exculde;
+        List<ShipConfig> configs = new List<ShipConfig>()
+        {
+                 ShipConfig.federation,
+                 ShipConfig.ocrons,
+                 ShipConfig.mercenary,
+                 ShipConfig.raiders,
+                 ShipConfig.krios,
+        };
+        configs.Remove(exculde);
+        int worst = Int32.MaxValue;
+        foreach (var shipConfig in configs)
+        {
+            var rep = ReputationFaction[shipConfig];
+            if (rep < worst)
+            {
+                worst = rep;
+                worstConfig = shipConfig;
+            }
+        }
+
+        return worstConfig;
     }
 }
 

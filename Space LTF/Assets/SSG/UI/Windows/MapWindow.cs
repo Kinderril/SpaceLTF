@@ -44,6 +44,7 @@ public class MapWindow : BaseWindow
     public event Action OnStartInfoClose;
     //    public MapSettingsWindow WindowSettings;
     public QuestOnStartControllerUI QuestsOnStartController;
+    public MovingArmyUIController MovingArmyUIController;
 
     public event Action<bool> OnOpenInventory;
 
@@ -99,6 +100,7 @@ public class MapWindow : BaseWindow
         InitSideShip();
         QuestsOnStartController.Init(player.QuestsOnStartController);
         CheckLeaveDialog();
+        MovingArmyUIController.Init(MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController, GlobalMap);
     }
 
     private void CheckLeaveDialog()
@@ -501,6 +503,7 @@ public class MapWindow : BaseWindow
 
     public void ClearAll()
     {
+        MovingArmyUIController.ClearAll();
         _sideShipsInited = false;
         //        _stablePosCached = true;
         NavigationList.ClearAll();

@@ -11,7 +11,7 @@ public class DebugInGame : MonoBehaviour
 
     void Update()
     {
-//#if UNITY_EDITOR
+#if UNITY_EDITOR || Develop
         if (Input.GetKeyDown(KeyCode.F1))
         {
             OnDebugChangeSound();
@@ -34,7 +34,7 @@ public class DebugInGame : MonoBehaviour
         {
             DebugParamsController.NoDamage = !DebugParamsController.NoDamage;
         }
-//#endif
+#endif
     }
 
     private void OnDebugChangeSound()

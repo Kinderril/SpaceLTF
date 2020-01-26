@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 public enum ArmyCreatorType
 {
@@ -9,15 +8,17 @@ public enum ArmyCreatorType
     rocket,
     laser,
     mine,
+    rnd,
     destroy
 }
 
 public class ArmyCreatorData
 {
     protected List<WeaponType> weapons = new List<WeaponType>();
-    protected List<SimpleModulType> simlplModuls = new List<SimpleModulType>(); 
+    protected List<SimpleModulType> simlplModuls = new List<SimpleModulType>();
     protected List<SpellType> spellModuls = new List<SpellType>();
-    public ShipConfig ArmyConfig;
+    public virtual ShipConfig ArmyConfig => _armyConfig;
+    private ShipConfig _armyConfig;
     private bool _isAi;
 
     public List<SpellType> GetSpellsList()
@@ -25,12 +26,12 @@ public class ArmyCreatorData
         return spellModuls;
     }
 
-    public ArmyCreatorData(ShipConfig config,bool isAi)
+    public ArmyCreatorData(ShipConfig config, bool isAi)
     {
         _isAi = isAi;
-        ArmyConfig = config;
+        _armyConfig = config;
         simlplModuls = LibraryModuls.GetExistsCacheList();
-        spellModuls =  GetSpellToUse();
+        spellModuls = GetSpellToUse();
         weapons = AllWeaponModuls();
     }
 
@@ -39,7 +40,7 @@ public class ArmyCreatorData
         return new List<WeaponType>() { WeaponType.impulse, WeaponType.laser, WeaponType.rocket, WeaponType.casset, WeaponType.eimRocket };
     }
 
-    
+
     protected virtual List<SpellType> GetSpellToUse()
     {
         if (_isAi)
@@ -81,7 +82,7 @@ public class ArmyCreatorData
 
     public static ArmyCreatorData GetRandom(ShipConfig config)
     {
-        var all = (ArmyCreatorType[]) Enum.GetValues(typeof (ArmyCreatorType));
+        var all = (ArmyCreatorType[])Enum.GetValues(typeof(ArmyCreatorType));
 
         ArmyCreatorData data = new ArmyCreatorData(config, true);
         switch (all.ToList().RandomElement())

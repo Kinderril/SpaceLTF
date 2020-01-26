@@ -104,11 +104,9 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
             CompleteAchievement(findAcheiv);
         }
     }
-    public void CompleteAchievement(Achievement_t achievementType)
-    {
-        if (!SteamManager.Initialized)
-            return;
 
+    public void RequestStats()
+    {
         if (!m_bRequestedStats)
         {
             // Is Steam Loaded? if no, can't get stats, done
@@ -125,6 +123,14 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
             // But handle it being false again anyway, just ask again later.
             m_bRequestedStats = bSuccess;
         }
+    }
+
+    public void CompleteAchievement(Achievement_t achievementType)
+    {
+        if (!SteamManager.Initialized)
+            return;
+
+        RequestStats();
 
         if (!m_bStatsValid)
             return;
@@ -181,7 +187,8 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
                 // load achievements
                 foreach (Achievement_t ach in Achievements)
                 {
-                    bool ret = SteamUserStats.GetAchievement(ach.m_eAchievementID.ToString(), out ach.m_bAchieved);
+                    var achievementToString = ach.m_eAchievementID.ToString();
+                    bool ret = SteamUserStats.GetAchievement(achievementToString, out ach.m_bAchieved);
                     if (ret)
                     {
                         ach.m_strName = SteamUserStats.GetAchievementDisplayAttribute(ach.m_eAchievementID.ToString(), "name");

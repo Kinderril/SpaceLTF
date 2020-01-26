@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class BaseAISpell 
+public abstract class BaseAISpell
 {
     private float _delay = 1f;
     private float _nextCheck = 1f;
 
     protected BaseAISpell()
     {
-        _delay = MyExtensions.Random(1f, 1.2f);
+        _delay = MyExtensions.Random(1f, 4f);
     }
 
     public virtual void Init()
@@ -28,7 +23,7 @@ public abstract class BaseAISpell
     {
         if (_nextCheck < Time.time)
         {
-            _nextCheck = Time.time + _delay;
+            _nextCheck = Time.time + MyExtensions.GreateRandom(_delay);
             PeriodInnerUpdate();
         }
     }
@@ -44,7 +39,7 @@ public abstract class BaseAISpell
     }
 }
 
-public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv 
+public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
 {
     protected Commander _commander;
     protected T _spell;
@@ -56,7 +51,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
     private Bullet _bulletOrigin;
     private SpellInGame _spellData;
 
-    protected BaseAISpell(SpellInGame spellData, T spell,Commander commander)
+    protected BaseAISpell(SpellInGame spellData, T spell, Commander commander)
     {
         _spellData = spellData;
         _spell = spell;

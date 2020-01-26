@@ -10,7 +10,7 @@ public class ThrowAroundSpell : BaseSpellModulInv
 {
     private const float DIST_SHOT = 8;
     private const float DAMAGE_BODY = 3;
-    private const float rad = 3f;
+    private const float rad = 4f;
 
     public ThrowAroundSpell(int costCount, int costTime)
         : base(SpellType.throwAround, costCount, costTime,
@@ -43,7 +43,7 @@ public class ThrowAroundSpell : BaseSpellModulInv
 //        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
         var startPos = shootpos;
         var dir = target.Position - startPos;
-        bullestartparameters.distanceShoot = dir.magnitude;
+        bullestartparameters.distanceShoot = Mathf.Clamp(dir.magnitude,1, DIST_SHOT);
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
 //        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition, weapon.CurPosition, null, bullestartparameters);
     }

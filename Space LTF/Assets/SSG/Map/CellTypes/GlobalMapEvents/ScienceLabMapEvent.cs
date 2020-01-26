@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -15,31 +16,31 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     }
     public override string Desc()
     {
-        return "Science laboratory";
+        return Namings.Tag("ScienceLaboratory");
     }
 
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData("Attack immediately", () => AttackNow(true)));
-        mianAnswers.Add(new AnswerDialogData("Contact with fleet commander", null, contacWithCommander));
-        mianAnswers.Add(new AnswerDialogData("Snd scouts to laboratory", null, sendScouts));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabAttackNow"), () => AttackNow(true)));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabContact"), null, contacWithCommander));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabSedScouts"), null, sendScouts));
 
 
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
         _moneyToBuy = (int)(MyExtensions.Random(10, 30) * coef);
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
-        var mesData = new MessageDialogData("You are close to krios science laboratory. But this one is under siege.", mianAnswers);
+        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("scLabStart"), Namings.ShipConfig(_config)), mianAnswers);
         return mesData;
     }
 
     private MessageDialogData sendScouts()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Try to frighten them.", null, frighten));
-        mianAnswers.Add(new AnswerDialogData("No, better I contact with them.", null, contacWithCommander));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabFrighten"), null, frighten));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabBetterContact"), null, contacWithCommander));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
-        var mesData = new MessageDialogData("This isn't regular army. We can try to frighten them.", mianAnswers);
+        var mesData = new MessageDialogData(Namings.DialogTag("scLabNotRegular"), mianAnswers);
         return mesData;
     }
 
@@ -48,16 +49,15 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         if (SkillWork(3, ScoutsLevel))
         {
-
-            mianAnswers.Add(new AnswerDialogData("Go to station.", null, ImproveDialog));
-            var mesData = new MessageDialogData("They running away!.", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabGoStation"), null, ImproveDialog));
+            var mesData = new MessageDialogData(Namings.DialogTag("scLabTheyRun"), mianAnswers);
             return mesData;
         }
         else
         {
 
-            mianAnswers.Add(new AnswerDialogData("Fight", () => AttackNow(true)));
-            var mesData = new MessageDialogData("Fail! They just launch rockets to laboratory and now wants to kill you.", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabFight"), () => AttackNow(true)));
+            var mesData = new MessageDialogData(Namings.DialogTag("scLabTotalFail"), mianAnswers);
             return mesData;
         }
     }
@@ -66,9 +66,10 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     private MessageDialogData contacWithCommander()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Maybe if just give you some credits and you will leave [Credits:{_moneyToBuy}]", null, moneyGive));
+        mianAnswers.Add(new AnswerDialogData(
+            string.Format(Namings.DialogTag("scLabGiveCredits"), _moneyToBuy), null, moneyGive));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
-        var mesData = new MessageDialogData("They look like simple thief.", mianAnswers);
+        var mesData = new MessageDialogData(Namings.DialogTag("scLabSimpleThiefs"), mianAnswers);
         return mesData;
     }
 
@@ -78,14 +79,14 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_moneyToBuy))
         {
             MainController.Instance.MainPlayer.MoneyData.RemoveMoney(_moneyToBuy);
-            mianAnswers.Add(new AnswerDialogData("Go to station.", null, ImproveDialog));
-            var mesData = new MessageDialogData("They leaving.", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabGoStation"), null, ImproveDialog));
+            var mesData = new MessageDialogData(Namings.DialogTag("scLabTheLeave"), mianAnswers);
             return mesData;
         }
         else
         {
-            mianAnswers.Add(new AnswerDialogData("Fight.", () => AttackNow(false), null));
-            var mesData = new MessageDialogData("Bad joke! [Not enough credits]", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabFight"), () => AttackNow(false), null));
+            var mesData = new MessageDialogData(Namings.DialogTag("scLabBadJoke"), mianAnswers);
             return mesData;
         }
     }
@@ -95,6 +96,8 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         _scienceKilled = shallKillSciens;
         _fightStarts = true;
 
+        if (_scienceKilled)
+            _reputation.RemoveReputation(_config, 5);
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
             GetArmy(ShipConfig.ocrons, ArmyCreatorType.destroy, (int)myArmyPower));
@@ -109,7 +112,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
             {
                 var mianAnswers = new List<AnswerDialogData>();
                 mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
-                var mesData = new MessageDialogData("All scientists were killed.", mianAnswers);
+                var mesData = new MessageDialogData(Namings.DialogTag("scLabAllKilled"), mianAnswers);
                 return mesData;
             }
             else
@@ -127,11 +130,11 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     private MessageDialogData ImproveDialog()
     {
 
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios, Library.REPUTATION_SCIENS_LAB_ADD);
+        _reputation.AddReputation(_config, Library.REPUTATION_SCIENS_LAB_ADD);
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData("Improve main ship.", null, improveMainShip));
-        mianAnswers.Add(new AnswerDialogData("Improve battle ships.", null, improveBattleShips));
-        var mesData = new MessageDialogData("Scientists are alive. And they can improve your army", mianAnswers);
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabImproveMain"), null, improveMainShip));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabImproveBattle"), null, improveBattleShips));
+        var mesData = new MessageDialogData(Namings.DialogTag("scLabScientsChoose"), mianAnswers);
         return mesData;
     }
 
@@ -144,11 +147,12 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         {
             var rnd = army.RandomElement();
             var parameter = rnd.Pilot.UpgradeRandomLevel(false, true);
-            return new MessageDialogData($"{Namings.ParameterName(parameter)} upgrade at ship {rnd.Ship.Name} Upgraded.", mianAnswers);
+            return new MessageDialogData(
+                string.Format(Namings.DialogTag("scLabShipUpgraded"), Namings.ParameterName(parameter), rnd.Ship.Name), mianAnswers);
         }
         else
         {
-            return new MessageDialogData("All your ships have max level.", mianAnswers);
+            return new MessageDialogData(Namings.DialogTag("scLabAllMax"), mianAnswers);
         }
     }
 
@@ -178,12 +182,12 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         if (allParams.Count > 0)
         {
             var rnd = allParams.RandomElement();
-            return new MessageDialogData($"{rnd.Name} Upgraded", mianAnswers);
+            return new MessageDialogData(string.Format(Namings.DialogTag("scParamUpgraded"), rnd.Name), mianAnswers);
         }
         else
         {
 
-            return new MessageDialogData("Nothing to improve.", mianAnswers);
+            return new MessageDialogData(Namings.DialogTag("scLabNotingUpgrade"), mianAnswers);
         }
     }
 

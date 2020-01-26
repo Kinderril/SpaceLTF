@@ -32,7 +32,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-        var mesData = new MessageDialogData("You see excavations. Small fleet searching something at this place.\nBut every piece of this place is mined. You should be very careful.", Serach());
+        var mesData = new MessageDialogData(String.Format("You see excavations. Small fleet searching something at this place.\nBut every piece of this place is mined. You should be very careful."), Serach());
         return mesData;
     }
 
@@ -109,6 +109,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             new AnswerDialogData(Namings.Ok, null,  Threaten),
         };
         BrokeShipWithRandom();
+        _reputation.RemoveReputation(_config, 5);
         mesData = new MessageDialogData(String.Format("They have nothing. And simply blow up everything. Some of your ships damaged.", moneyTotal), ans);
         return mesData;
     }
@@ -150,6 +151,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         if (SkillWork(Nothing, excvScounts + ScoutsLevel))
         {
             var m = moneyTotal / 2;
+            _reputation.AddReputation(_config, 5);
             mesData = new MessageDialogData(String.Format("All fine, you found some credits. Your part:{0}.", m), ans);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(m);
         }

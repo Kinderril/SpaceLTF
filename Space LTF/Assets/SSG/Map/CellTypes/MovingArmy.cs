@@ -136,10 +136,19 @@ public class MovingArmy
         BattleController.Instance.OnBattleEndCallback -= OnBattleEndCallback;
     }
 
+    public string Name()
+    {
+        return String.Format(Namings.Tag("MovingArmyName"), Namings.ShipConfig(_player.Army.BaseShipConfig));
+    }
+
     public string ShortDesc()
     {
+        var playersPower = MainController.Instance.MainPlayer.Army.GetPower();
+        var thisPower = _player.Army.GetPower();
+        var desc = PlayerArmy.ComparePowers(playersPower, thisPower);
         var status = MainController.Instance.MainPlayer.ReputationData.GetStatus(_player.Army.BaseShipConfig);
-        return String.Format(Namings.Tag("MovingArmy"), _player.Name, Namings.ShipConfig(_player.Army.BaseShipConfig), Namings.Tag($"rep_{status.ToString()}"));
+        var txt = String.Format(Namings.Tag("MovingArmy"), _player.Name, Namings.ShipConfig(_player.Army.BaseShipConfig), Namings.Tag($"rep_{status.ToString()}"), desc);
+        return txt;
     }
 }
 

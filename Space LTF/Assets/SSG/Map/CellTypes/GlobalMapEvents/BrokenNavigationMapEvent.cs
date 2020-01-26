@@ -15,20 +15,20 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
     }
     public override void Init()
     {
-        _isTrap = MyExtensions.IsTrueEqual();
+        _isTrap = MyExtensions.IsTrue01(0.2f);
     }
 
     public override string Desc()
     {
-        return "Broken navigation";
+        return Namings.Tag("BrokenNavigation");
     }
 
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData("Come closer", null, comeCloser));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("navigation_closer"), null, comeCloser));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
-        var mesData = new MessageDialogData("You have a distress signal", mianAnswers);
+        var mesData = new MessageDialogData(Namings.DialogTag("navigation_start"), mianAnswers);
         return mesData;
     }
 
@@ -38,15 +38,15 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
         if (_isTrap)
         {
 
-            var mesData = new MessageDialogData("It's a trap!", mianAnswers);
-            mianAnswers.Add(new AnswerDialogData("Fight", Fight, null));
+            var mesData = new MessageDialogData(Namings.DialogTag("navigation_trap"), mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("navigation_fight"), Fight, null));
             return mesData;
         }
         else
         {
-            var mesData = new MessageDialogData("You see a ocrons ship with broken navigation system. He asking for help", mianAnswers);
-            mianAnswers.Add(new AnswerDialogData(String.Format("Send scout to deliver him to closest shelter. [Scouts: {0}]", ScoutsLevel), null, tryFindWay));
-            mianAnswers.Add(new AnswerDialogData(String.Format("Try repair navigation system. [Repair {0}]", RepairLevel), null, tryRepair));
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("navigation_askHelp"), Namings.ShipConfig(_config)), mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("navigation_shelter"), ScoutsLevel), null, tryFindWay));
+            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("navigation_repair"), RepairLevel), null, tryRepair));
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
             return mesData;
         }
@@ -65,7 +65,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
         {
             string d = "";
 
-            if (MyExtensions.IsTrueEqual())
+            if (MyExtensions.IsTrue01(.8f))
             {
                 var m = Library.CreatSimpleModul(2);
                 var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);
@@ -73,23 +73,24 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
                 {
                     MainController.Instance.MainPlayer.Inventory.TryAddSimpleModul(m, slot);
                     var itemName = Namings.SimpleModulName(m.Type);
-                    d = $"Your gift: {itemName}";
+                    d = String.Format(Namings.DialogTag("navigation_gift"), itemName);
                 }
                 else
                 {
-                    d = "Not free space for gift";
+                    d = Namings.DialogTag("navigation_noFree");
                 }
             }
             else
             {
                 var cellsToScout = MainController.Instance.MainPlayer.MapData.ScoutedCells(3, 5);
-                d = $"{cellsToScout} points on global map scouted.";
+                d = String.Format(Namings.DialogTag("navigation_scouted"), cellsToScout); ;
             }
 
 
             var mianAnswers = new List<AnswerDialogData>();
-            var mesData = new MessageDialogData($"You successfully find way to shelter. {d}.", mianAnswers);
-            mianAnswers.Add(new AnswerDialogData("Ok", null, null));
+            _reputation.AddReputation(_config, 8);
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("navigation_shelterOk"), d), mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
             return mesData;
 
         }
@@ -103,13 +104,11 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
     {
         if (SkillWork(2, RepairLevel))
         {
-
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.ocrons, Library.REPUTATION_FIND_WAY_ADD);
-
+            _reputation.AddReputation(_config, 6);
             var mianAnswers = new List<AnswerDialogData>();
-            var mesData = new MessageDialogData($"You successfully repair ship. Reputation add {Library.REPUTATION_FIND_WAY_ADD}.", mianAnswers);
-            mianAnswers.Add(new AnswerDialogData("Try hire", null, tryHire));
-            mianAnswers.Add(new AnswerDialogData("Take money", TakeMoney, null));
+            var mesData = new MessageDialogData(Namings.DialogTag("navigation_repairOk"), mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("navigation_tryHire"), null, tryHire));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("navigation_takeMoney"), TakeMoney, null));
             return mesData;
 
         }
@@ -132,15 +131,15 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
         {
             var mianAnswers = new List<AnswerDialogData>();
             var ship = HireAction(1);
-            mianAnswers.Add(new AnswerDialogData("Ok", null, null));
-            var mesData = new MessageDialogData($"Ship hired {Namings.ShipConfig(ship.Ship.ShipConfig)}.", null);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, null));
+            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("navigation_hired"), Namings.ShipConfig(ship.Ship.ShipConfig)), null);
             return mesData;
         }
         else
         {
             var mianAnswers = new List<AnswerDialogData>();
-            var mesData = new MessageDialogData($"Not enough space.", null);
-            mianAnswers.Add(new AnswerDialogData("Ok", null));
+            var mesData = new MessageDialogData(Namings.DialogTag("navigation_noFree"), null);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null));
             return mesData;
         }
     }

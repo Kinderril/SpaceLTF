@@ -24,7 +24,12 @@ public class QuestsOnStartController
             BaseQuestOnStart quest = BaseQuestOnStart.Create(eQuestOnStart, coef);
             ActiveQuests.Add(quest);
         }
-//#endif
+        //#endif
+#if UNITY_EDITOR
+
+        BaseQuestOnStart quest1 = BaseQuestOnStart.Create(EQuestOnStart.mainShipKills, coef);
+        ActiveQuests.Add(quest1);
+#endif
 
     }
 

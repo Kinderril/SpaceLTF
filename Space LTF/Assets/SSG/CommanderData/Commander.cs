@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum BattleRewardType
-{
-    money,
-    weapon,
-    modul,
-}
+//public enum BattleRewardType
+//{
+//    money,
+//    weapon,
+//    modul,
+//}
 
 
 
@@ -104,13 +104,22 @@ public class Commander
         if (MainShip != null)
         {
             var weaponsIndex = 0;
+            var zeroPosition = MainShip.WeaponPosition[0].transform;
             foreach (var baseSpellModul in MainShip.ShipParameters.Spells)
             {
                 if (baseSpellModul != null)
                 {
-                    var modulPos = MainShip.WeaponPosition[weaponsIndex].transform;
-                    weaponsIndex++;
-                    SpellController.AddSpell(baseSpellModul, modulPos);
+                    Transform shootPos;
+                    if (MainShip.WeaponPosition.Count > weaponsIndex)
+                    {
+                        shootPos = MainShip.WeaponPosition[weaponsIndex].transform;
+                        weaponsIndex++;
+                    }
+                    else
+                    {
+                        shootPos = zeroPosition;
+                    }
+                    SpellController.AddSpell(baseSpellModul, shootPos);
                 }
             }
             CoinController.Init(MainShip);
@@ -415,10 +424,6 @@ public class Commander
 
     public void ShipRunAway(ShipBase owner)
     {
-        //        if (isRunawayComplete)
-        //        {
-        //            return;
-        //        }
         owner.ShipRunAway();
         _battleController.ShipRunAway(owner);
         var shipsREmain = Ships.Values.ToList();
@@ -427,13 +432,11 @@ public class Commander
         Debug.Log($"ShipRunAway complete {owner.Id}  remainCount:{shipsREmain.Count}");
         if (shipsREmain.Count == 1 && shipsREmain[0].ShipParameters.StartParams.ShipType == ShipType.Base)
         {
-            //                isRunawayComplete = true;
             BattleController.Instance.RunAway();
         }
 
         if (shipsREmain.Count == 1 || shipsREmain.Count == 0)
         {
-            //                isRunawayComplete = true;
             Debug.LogError($"WRONG RUN AWAY Ships.Count {Ships.Count}");
             BattleController.Instance.RunAway();
         }

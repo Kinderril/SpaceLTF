@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
 
 [System.Serializable]
@@ -10,10 +8,23 @@ public class SecretDeal : BaseGlobalMapEvent
 {
     private float fullCoef = 1.4f;
     private float halfCoef = 0.7f;
-    public SecretDeal(int power, ShipConfig config) 
-        :base(config)
+
+    private ShipConfig _secondSide;
+    public SecretDeal(int power, ShipConfig config)
+        : base(config)
     {
         _power = power;
+        List<ShipConfig> secondConfigs = new List<ShipConfig>()
+        {
+            ShipConfig.federation,
+            ShipConfig.ocrons,
+            ShipConfig.mercenary,
+            ShipConfig.raiders,
+            ShipConfig.krios,
+        };
+        secondConfigs.Remove(config);
+        _secondSide = config;
+
     }
     public override string Desc()
     {
@@ -23,10 +34,10 @@ public class SecretDeal : BaseGlobalMapEvent
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Send scouts", null, scoutsSend));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretSendScouts"), null, scoutsSend));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
         var mesData =
-            new MessageDialogData("A lot of space garbage and other useless thing here. Do you want to investigate?",
+            new MessageDialogData(Namings.DialogTag("secretStart"),
                 mianAnswers);
         return mesData;
     }
@@ -36,21 +47,23 @@ public class SecretDeal : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         if (SkillWork(3, ScoutsLevel))
         {
-            mianAnswers.Add(new AnswerDialogData($"Hide and wait", null, hideNadWait));
-            mianAnswers.Add(new AnswerDialogData($"Send fake signal", null, fakeSignal));
-            mianAnswers.Add(new AnswerDialogData($"Attack!", () => Fight(fullCoef)));
-            mianAnswers.Add(new AnswerDialogData($"Connect with commander.", null, connectWithCommander));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretHideWait"), null, hideAndWait));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretSendFake"), null, fakeSignal));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretAttack"), () => Fight(fullCoef, true)));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretConnectWith"), null, connectWithCommander));
             var mesData =
-                new MessageDialogData($"Scouts find a huge fleet, waiting for something. [Scouts:{ScoutsLevel}]",
+                new MessageDialogData(
+                    string.Format(Namings.DialogTag("secretScoutResult"), ScoutsLevel),
                     mianAnswers);
             return mesData;
         }
         else
         {
-            mianAnswers.Add(new AnswerDialogData($"Try to prevent conflict", null, preventConflict));
-            mianAnswers.Add(new AnswerDialogData($"Run", null, tryRun));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretTryPrevent"), null, preventConflict));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretRun"), null, tryRun));
             var mesData =
-                new MessageDialogData($"Suddenly you see a huge army. And they are ready! [Scouts:{ScoutsLevel}]",
+                new MessageDialogData(
+                    string.Format(Namings.DialogTag("secretSeeHugeArmy"), ScoutsLevel),
                     mianAnswers);
             return mesData;
         }
@@ -62,7 +75,7 @@ public class SecretDeal : BaseGlobalMapEvent
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
         var money = (int)(MyExtensions.Random(24, 47) * coef);
         MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
-        var m = Library.CreatSimpleModul(2,4);
+        var m = Library.CreatSimpleModul(2, 4);
         var itemName = Namings.SimpleModulName(m.Type);
         var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);
         if (canAdd)
@@ -70,7 +83,7 @@ public class SecretDeal : BaseGlobalMapEvent
             MainController.Instance.MainPlayer.Inventory.TryAddSimpleModul(m, slot);
         }
 
-        return tryRunWithCoef(-1, $"And now you have [credits{money} and {itemName}]");
+        return tryRunWithCoef(-1, string.Format(Namings.DialogTag("secretHaveCredits"), money, itemName));
     }
 
     private MessageDialogData tryRun()
@@ -81,17 +94,23 @@ public class SecretDeal : BaseGlobalMapEvent
     private MessageDialogData tryRunWithCoef(int coef, string add)
     {
         var mianAnswers = new List<AnswerDialogData>();
+        var absCoef = Mathf.Abs(coef);
+        if (absCoef > 0)
+        {
+            _reputation.RemoveReputation(_config, 10 * absCoef);
+            _reputation.RemoveReputation(_secondSide, 10 * absCoef);
+        }
+
         if (SkillWork(2, ScoutsLevel + coef))
         {
-            ;
             mianAnswers.Add(new AnswerDialogData(Namings.Ok, null, null));
-            var mesData = new MessageDialogData($"You run away. {add} [Scouts:{ScoutsLevel}]", mianAnswers);
+            var mesData = new MessageDialogData(string.Format(Namings.DialogTag("secretYouRun"), add, ScoutsLevel), mianAnswers);
             return mesData;
         }
         else
         {
-            mianAnswers.Add(new AnswerDialogData($"Fight", () => Fight(fullCoef), null));
-            var mesData = new MessageDialogData($"Running away failed! [Scouts:{ScoutsLevel}]", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretFight"), () => Fight(fullCoef, false), null));
+            var mesData = new MessageDialogData(string.Format(Namings.DialogTag("secretRunFail"), ScoutsLevel), mianAnswers);
             return mesData;
         }
     }
@@ -104,21 +123,21 @@ public class SecretDeal : BaseGlobalMapEvent
     private MessageDialogData TalkTToCommander(int coef)
     {
         var mianAnswers = new List<AnswerDialogData>();
-        if (SkillWork(2, MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config] * coef))
+        if (SkillWork(20, MainController.Instance.MainPlayer.ReputationData.ReputationFaction[_config] * coef))
         {
-            mianAnswers.Add(new AnswerDialogData($"Apply deal", null, applyDeal));
-            mianAnswers.Add(new AnswerDialogData($"Run", null, tryRun));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretApplyDeal"), null, applyDeal));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretLeave"), null, tryRun));
             var mesData =
-                new MessageDialogData($"They send you a message with trade options.",
+                new MessageDialogData(Namings.DialogTag("secretTheyMessage"),
                     mianAnswers);
             return mesData;
         }
         else
         {
-            mianAnswers.Add(new AnswerDialogData($"Fight", () => Fight(fullCoef), null));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretFight"), () => Fight(fullCoef, true), null));
             var mesData =
                 new MessageDialogData(
-                    $"Now they going to kill. Diplomacy is not your good side.",
+                    Namings.DialogTag("secretTheyGoKill"),
                     mianAnswers);
             return mesData;
         }
@@ -132,18 +151,18 @@ public class SecretDeal : BaseGlobalMapEvent
     private MessageDialogData fakeSignal()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Attack.", () => Fight(halfCoef), null));
-        mianAnswers.Add(new AnswerDialogData($"Connect with commander.", null, connectWithCommander));
-        var mesData = new MessageDialogData("Part of fleet going to chekc signal.", mianAnswers);
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretAttack"), () => Fight(halfCoef, true), null));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretConnectWith"), null, connectWithCommander));
+        var mesData = new MessageDialogData(Namings.DialogTag("secretPartGo"), mianAnswers);
         return mesData;
     }
 
-    private MessageDialogData hideNadWait()
+    private MessageDialogData hideAndWait()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Do provocation.", null, provacation));
-        mianAnswers.Add(new AnswerDialogData($"Wait.", null, waitDeal));
-        var mesData = new MessageDialogData("Second army coming.", mianAnswers);
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretDoProvocation"), null, provacation));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretWait"), null, waitDeal));
+        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("secretSecondCome"), Namings.ShipConfig(_secondSide)), mianAnswers);
         return mesData;
     }
 
@@ -152,23 +171,24 @@ public class SecretDeal : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         if (MyExtensions.IsTrue01(.2f))
         {
-            mianAnswers.Add(new AnswerDialogData($"Search all place.", null,searchResult));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretSearchPlace"), null, searchResult));
         }
         else
         {
             mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
         }
-        var mesData = new MessageDialogData("They complete trade, and ready to jump.", mianAnswers);
+        var mesData = new MessageDialogData(Namings.DialogTag("secretTheyEnd"), mianAnswers);
         return mesData;
     }
 
     private MessageDialogData searchResult()
     {
-        var money = GlobalMapCell.AddMoney(5, 9);
+        var coef = (float)_power * Library.MONEY_QUEST_COEF;
+        var money = (int)(MyExtensions.Random(5, 9) * coef);
         MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Take. [Credits:{money}]"));
-        var mesData = new MessageDialogData("Looks like they forgot some credits.", mianAnswers);
+        mianAnswers.Add(new AnswerDialogData(string.Format(Namings.DialogTag("secretTake"), money)));
+        var mesData = new MessageDialogData(Namings.DialogTag("secretForgotCredits"), mianAnswers);
         return mesData;
 
     }
@@ -176,9 +196,9 @@ public class SecretDeal : BaseGlobalMapEvent
     private MessageDialogData applyDeal()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Take all and run.", null, tryRunWithAll));
-        mianAnswers.Add(new AnswerDialogData($"Run.", null, tryRun));
-        var mesData = new MessageDialogData("While trading, appears another fleet.", mianAnswers);
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretTakeAll"), null, tryRunWithAll));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretRun"), null, tryRun));
+        var mesData = new MessageDialogData(Namings.DialogTag("secretAppearSecond"), mianAnswers);
         return mesData;
     }
 
@@ -188,27 +208,39 @@ public class SecretDeal : BaseGlobalMapEvent
         if (MyExtensions.IsTrueEqual())
         {
             var mianAnswers = new List<AnswerDialogData>();
-            var money = GlobalMapCell.AddMoney(24, 47);
-            mianAnswers.Add(new AnswerDialogData($"Ok.", null, null));
-            var mesData = new MessageDialogData($"After massive battle you find some goods. [Credits:{money}]",
+            var coef = (float)_power * Library.MONEY_QUEST_COEF;
+            var _moneyToBuy = (int)(MyExtensions.Random(24, 47) * coef);
+            MainController.Instance.MainPlayer.MoneyData.AddMoney(_moneyToBuy);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, null));
+            var mesData = new MessageDialogData(
+                string.Format(Namings.DialogTag("secretFindGoods"), _moneyToBuy),
                 mianAnswers);
             return mesData;
         }
         else
         {
             var mianAnswers = new List<AnswerDialogData>();
-            mianAnswers.Add(new AnswerDialogData($"Fight.", null, null));
-            var mesData = new MessageDialogData("Your provocation failed. Now fight.", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretFight"), null, null));
+            var mesData = new MessageDialogData(Namings.DialogTag("secretProvoceFail"), mianAnswers);
             return mesData;
         }
     }
 
 
-    private void Fight(float coef)
+    private void Fight(float coef, bool onlyStartFleet)
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * coef;
+        ArmyCreatorType _type;
+        if (onlyStartFleet)
+        {
+            _type = ArmyCreatorType.laser;
+        }
+        else
+        {
+            _type = ArmyCreatorType.rnd;
+        }
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(ShipConfig.raiders, ArmyCreatorType.laser, (int) myArmyPower));
+            GetArmy(_config, _type, (int)myArmyPower));
     }
 
 }

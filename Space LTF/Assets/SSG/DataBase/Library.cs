@@ -8,7 +8,7 @@ public enum ArmyCreationMode
     equalize,
 
     random
-//    allToOne,
+    //    allToOne,
 }
 
 public enum LibraryShipUpgradeType
@@ -18,7 +18,7 @@ public enum LibraryShipUpgradeType
     upgradeWeapon,
     upgradeModul,
 
-//    upgradeSimple,
+    //    upgradeSimple,
     levelUpPilot
 }
 
@@ -73,13 +73,14 @@ public static class Library
     private const float EMI_SPEED = 12f;
 
     public const float BASE_WEAPON_VALUE = 1.2f;
-    public const float BASE_SPELL_VALUE = 0.5f;
+    public const float BASE_SPELL_VALUE = 1.1f;
+    public const float BASE_SPELL_VALUE_LEVEL = 0.5f;
     public const float BASE_SIMPLE_MODUL_VALUE = 0.8f;
     public const float BASE_SIMPLE_MODUL_VALUE_UPGRADE = 0.6f;
     public const float MIN_POINTS_TO_CREATE_ARMY_WITH_BASESHIP = 20f;
     public const float BASE_SHIP_VALUE = 2f;
     public const float WEAPON_LEVEL_COEF = 0.8f;
-    public const float PILOT_LEVEL_COEF = 0.35f;
+    public const float PILOT_LEVEL_COEF = 0.15f;
     public const float PILOT_RANK_COEF = 0f; //0.7f;
     public const int MAX_PILOT_PARAMETER_LEVEL = 80;
 
@@ -114,7 +115,7 @@ public static class Library
     {
         _lvlUps = new int[MAX_PILOT_PARAMETER_LEVEL];
         for (var i = 0; i < MAX_PILOT_PARAMETER_LEVEL; i++)
-            _lvlUps[i] = (int) (i * MONEY_PILOT_LEVEL_UP_COST_COEF + MONEY_PILOT_LEVEL_UP_COST_BASE);
+            _lvlUps[i] = (int)(i * MONEY_PILOT_LEVEL_UP_COST_COEF + MONEY_PILOT_LEVEL_UP_COST_BASE);
         LibraryModuls.Init();
 
         PosibleTricks = new Dictionary<PilotRank, List<EPilotTricks>>
@@ -155,14 +156,14 @@ public static class Library
             case WeaponType.beam:
                 parametes = new WeaponInventoryParameters(1, 4, BEAM_ANG, BEAM_DELAY, 0.4f, 1, BEAM_SPEED, 2.5f);
                 return new BeamWeaponInventory(parametes, 1);
-            //            case WeaponType.beam://NO USABLE
-            //                return new WeaponInv(2,7, MINE_ANG, BEAM_DELAY, 0.5f, 1, BEAM_SPEED,4, weapon, 1);
-            //            case WeaponType.artillery:
-            //                parametes = new WeaponInventoryParameters(1, 4, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9);
-            //                return new WeaponInv(0,1, ARTILLERY_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 21, weapon, 1);
-            //            case WeaponType.spread:
-            //                parametes = new WeaponInventoryParameters(1, 4, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9);
-            //                return new WeaponInv(1,1, SPREAD_ANG, SPREAD_DELAY, 0.5f, 1, SPREAD_SPEED, 9, weapon, 1);
+                //            case WeaponType.beam://NO USABLE
+                //                return new WeaponInv(2,7, MINE_ANG, BEAM_DELAY, 0.5f, 1, BEAM_SPEED,4, weapon, 1);
+                //            case WeaponType.artillery:
+                //                parametes = new WeaponInventoryParameters(1, 4, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9);
+                //                return new WeaponInv(0,1, ARTILLERY_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 21, weapon, 1);
+                //            case WeaponType.spread:
+                //                parametes = new WeaponInventoryParameters(1, 4, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9);
+                //                return new WeaponInv(1,1, SPREAD_ANG, SPREAD_DELAY, 0.5f, 1, SPREAD_SPEED, 9, weapon, 1);
         }
 
         return null;
@@ -206,16 +207,16 @@ public static class Library
                 {
                     case ShipType.Light:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 15, 5, 3.2f, 89, 1, 0, 0, 1, 0.0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 15, 5, 3.2f, 89, 1, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 18, 7, 2.8f, 71, 1, 0, 0, 1, 0.0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 18, 7, 2.8f, 71, 1, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 22, 8, 2.1f, 69, 2, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
                     case ShipType.Base:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 33, 10, 0.51f, 40, 0, 0, 6, 1, 0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 33, 10, 0.51f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
                 }
 
                 break;
@@ -224,22 +225,22 @@ public static class Library
                 {
                     case ShipType.Light:
                         var ship = new ShipInventory(
-                            new StartShipParams(shipType, config, 21, 17, 4.3f, 78, 1, 3, 0, 1, 0.0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 21, 17, 4.3f, 78, 1, 3, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
                         ship.ShiledArmor = 1;
                         return ship;
                     case ShipType.Middle:
                         var ship1 = new ShipInventory(
-                            new StartShipParams(shipType, config, 28, 19, 3.8f, 70, 1, 4, 0, 1, 0.05f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 28, 19, 3.8f, 70, 1, 4, 0, 1, 0.05f, 1f, reloadTime), player, pilot);
                         ship1.ShiledArmor = 1;
                         return ship1;
                     case ShipType.Heavy:
                         var ship2 = new ShipInventory(
-                            new StartShipParams(shipType, config, 32, 21, 3.5f, 68, 2, 4, 0, 1, 0.1f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 32, 21, 3.5f, 68, 2, 4, 0, 1, 0.1f, 1f, reloadTime), player, pilot);
                         ship2.ShiledArmor = 1;
                         return ship2;
                     case ShipType.Base:
                         var ship3 = new ShipInventory(
-                            new StartShipParams(shipType, config, 46, 28, 1.5f, 40, 0, 0, 6, 1, 0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 46, 28, 1.5f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
                         ship3.ShiledArmor = 1;
                         return ship3;
                 }
@@ -250,16 +251,16 @@ public static class Library
                 {
                     case ShipType.Light:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 22, 11, 3.8f, 72, 2, 2, 0, 1, 0.1f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 22, 11, 3.8f, 72, 2, 2, 0, 1, 0.1f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 26, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 26, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f, 1f, reloadTime), player, pilot);
                     case ShipType.Base:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 41, 28, 0.81f, 40, 0, 0, 5, 1, 0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 41, 28, 0.81f, 40, 0, 0, 5, 1, 0f, 1f, reloadTime), player, pilot);
                 }
 
                 break;
@@ -268,16 +269,16 @@ public static class Library
                 {
                     case ShipType.Light:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 20, 16, 3.4f, 70, 2, 1, 0, 1, 0.2f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 20, 16, 3.4f, 70, 2, 1, 0, 1, 0.2f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 25, 21, 2.7f, 59, 3, 2, 0, 1, 0.25f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 25, 21, 2.7f, 59, 3, 2, 0, 1, 0.25f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
                     case ShipType.Base:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 35, 35, 0.71f, 40, 0, 0, 6, 1, 0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 35, 35, 0.71f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
                 }
 
                 break;
@@ -285,19 +286,19 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 52, 0, 3.6f, 75, 2, 3, 0, 1, 0f,1f, reloadTime),
+                        return new ShipInventory(new StartShipParams(shipType, config, 52, 0, 3.6f, 75, 2, 3, 0, 1, 0f, 1f, reloadTime),
                             player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 62, 0, 3.2f, 62, 2, 3, 0, 1, 0f,1f, reloadTime),
+                        return new ShipInventory(new StartShipParams(shipType, config, 62, 0, 3.2f, 62, 2, 3, 0, 1, 0f, 1f, reloadTime),
                             player, pilot);
                     case ShipType.Heavy:
                         var ship3 = new ShipInventory(
-                            new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f, 1f, reloadTime), player, pilot);
                         ship3.ShiledArmor = 1;
                         return ship3;
                     case ShipType.Base:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 66, 10, 0.75f, 40, 0, 0, 4, 1, 0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 66, 10, 0.75f, 40, 0, 0, 4, 1, 0f, 1f, reloadTime), player, pilot);
                 }
 
                 break;
@@ -306,18 +307,18 @@ public static class Library
                 {
                     case ShipType.Light:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 14, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 14, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 18, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 18, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         var ship = new ShipInventory(
-                            new StartShipParams(shipType, config, 20, 44, 2.2f, 53, 2, 3, 0, 1, 0.4f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 20, 44, 2.2f, 53, 2, 3, 0, 1, 0.4f, 1f, reloadTime), player, pilot);
                         ship.BodyArmor = 2;
                         return ship;
                     case ShipType.Base:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 16, 55, 0.6f, 40, 0, 0, 6, 1, 0f,1f,reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 16, 55, 0.6f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
                 }
 
                 break;
@@ -332,7 +333,7 @@ public static class Library
     {
         var allSpells = ArmyCreatorData.AllSpellsStatic();
         var spell = CreateSpell(allSpells.RandomElement());
-        for (int i = 0; i < level-1; i++)
+        for (int i = 0; i < level - 1; i++)
         {
             spell.Upgrade();
         }
@@ -345,11 +346,11 @@ public static class Library
         {
             case SpellType.mineField:
                 return new MineFieldSpell(2, 40);
-//            case SpellType.invisibility:
-//                return new InvisibleSpell(3, 20);
-//            case SpellType.allToBase:
-//                return new AllToBaseSpell(2, 90);
-//            case SpellType.shildDamage:
+            //            case SpellType.invisibility:
+            //                return new InvisibleSpell(3, 20);
+            //            case SpellType.allToBase:
+            //                return new AllToBaseSpell(2, 90);
+            //            case SpellType.shildDamage:
             case SpellType.randomDamage:
                 return new RandomDamageSpell(3, 20);
             case SpellType.lineShot:
@@ -358,8 +359,8 @@ public static class Library
                 return new ThrowAroundSpell(2, 18);
             case SpellType.engineLock:
                 return new EngineLockSpell(2, 22);
-//            case SpellType.spaceWall:
-//                return new ShieldWallSpell(2, 35);
+            //            case SpellType.spaceWall:
+            //                return new ShieldWallSpell(2, 35);
             case SpellType.distShot:
                 return new DistShotSpell(3, 17);
             case SpellType.shildDamage:
@@ -533,10 +534,12 @@ public static class Library
     {
         var sum = ship.WeaponsModuls.Where(weaponsModul => weaponsModul != null).Sum(weaponsModul =>
                       BASE_WEAPON_VALUE + (weaponsModul.Level - 1) * WEAPON_LEVEL_COEF) +
-                  ship.Moduls.SimpleModuls.Where(simple => simple != null).Sum(simple => BASE_SIMPLE_MODUL_VALUE) +
-                  ship.SpellsModuls.Where(spell => spell != null).Sum(spell => BASE_SPELL_VALUE);
-//        float shipCoef = ShipPowerCoef(ship.ShipType);
-//        var t = sum*shipCoef + BASE_SHIP_VALUE;
+                  ship.Moduls.SimpleModuls.Where(simple => simple != null).Sum(simple =>
+                      BASE_SIMPLE_MODUL_VALUE + (simple.Level - 1) * BASE_SIMPLE_MODUL_VALUE_UPGRADE) +
+                  ship.SpellsModuls.Where(spell => spell != null)
+                      .Sum(spell => BASE_SPELL_VALUE + +(spell.Level - 1) * BASE_SPELL_VALUE_LEVEL);
+        //        float shipCoef = ShipPowerCoef(ship.ShipType);
+        //        var t = sum*shipCoef + BASE_SHIP_VALUE;
         var t = sum + BASE_SHIP_VALUE;
         return t;
     }
@@ -566,7 +569,7 @@ public static class Library
     public static float CalcPilotPower(IPilotParameters pilot)
     {
         var sumLevel = pilot.HealthLevel + pilot.ShieldLevel + pilot.SpeedLevel + pilot.TurnSpeedLevel;
-        var ranAsInt = (int) pilot.Stats.CurRank;
+        var ranAsInt = (int)pilot.Stats.CurRank;
         return (sumLevel - 4) * PILOT_LEVEL_COEF + ranAsInt * PILOT_RANK_COEF;
     }
 
@@ -584,15 +587,15 @@ public static class Library
     public const float MIN_GLOBAL_MAP_DEATHSTART = 1;
     public const float MAX_GLOBAL_MAP_DEATHSTART = 10;
     public const float MIN_GLOBAL_MAP_CORES = 2;
-    public const float MAX_GLOBAL_MAP_CORES = 5;   
+    public const float MAX_GLOBAL_MAP_CORES = 5;
     public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 0;
     public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 10;
 
-    public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 6;
-    public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 7;
-    public const int MIN_GLOBAL_MAP_NORMAL_BASE_POWER = 8;
-    public const int MIN_GLOBAL_MAP_HARD_BASE_POWER = 9;
-    public const int MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER = 10;
+    public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 8;
+    public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 9;
+    public const int MIN_GLOBAL_MAP_NORMAL_BASE_POWER = 10;
+    public const int MIN_GLOBAL_MAP_HARD_BASE_POWER = 11;
+    public const int MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER = 12;
 
 
     public const int MIN_GLOBAL_MAP_SECTOR_COUNT = 3;
@@ -604,7 +607,7 @@ public static class Library
     #region REPUTATION
 
     public static int REPUTATION_REPAIR_ADD = 12;
-    public static int REPUTATION_SCIENS_LAB_ADD = 7;
+    public static int REPUTATION_SCIENS_LAB_ADD = 12;
     public static int REPUTATION_FIND_WAY_ADD = 8;
     public static float CHARGE_SPEED_COEF_PER_LEVEL = 0.12f;
     public static float REPURARTION_TO_DIPLOMATY_COEF = .05f;

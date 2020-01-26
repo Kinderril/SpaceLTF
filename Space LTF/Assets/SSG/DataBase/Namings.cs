@@ -559,8 +559,6 @@ public static class Namings
     public static string ArtillerySpell =
         "Starts fire at selected zone. Total bullets {0}. Damage of each bullet:{1}/{1}.";
 
-    public static string DistShotSpell =
-        "Single bullet. Base damage {0}. Additional damage dependence on distance. If target have no shield destroy engine for {1} sec.";
 
     public static string EnerguLockSpell = "Destroy engines at all enemies ships in radius {1} for {0} sec.";
 
@@ -611,7 +609,7 @@ public static class Namings
     public static string NoSafeGame = "No save game";
     public static string MaxLevel = "Max";
     public static string And = "And";
-    public static string SupportModul = "Support module";
+    public static string SupportModul = "Support module. Affect on weapons.";
     public static string ActionModul = "Action module";
     public static string CataclysmProcess = "{0} cells destroyed";
     public static string RemainCataclysm = "Days remain:{0}";
@@ -815,10 +813,12 @@ public static class Namings
         {"Captain", "Captain"},
         {"Major", "Major"},
         {"OpenNew", "Unlock"},
+        {"FinalSector", "Galaxy gates"},
         {"Attack", "Attack"},
         {"AttackHalfLoop", "Trick attack"},
         {"Evade", "Evade"},
         {"Level", "Level"},
+        {"NotEnoughtBattries", "Battries are not ready!"},
         {"reloadBoost", "Trick reload time:{0}"},
         {"PointsToOpen", "Points to unlock start options:"},
         {"SpellMaxLevel", "Max level reached: {0}"},
@@ -889,15 +889,26 @@ public static class Namings
         {"Swarm", "Swarm"},
         {"EMI", "EMI"},
         {"Beam", "Beam"},
-        {"MovingArmy", "Special forces of {1}\nStatus:{2}"},
+        {"MovingArmy", "Special forces of {1}\nStatus:{2}. Power:{3}"},
         {"MovingArmyBorn", "Special forces of {0} appear. Coordinates:{1}"},
         {"AdditionalPower", "Enemies upgrades"},
+
+        {"Comparable", "Comparable"},
+        {"Risky", "Risky"},
+        {"Easily", "Easily"},
+        {"confirmDismiss", "You really want to dismiss ship {0}?"},
+        {"MovingArmyName", "SpecOps {0}"},
 
         {"Demo", "This is demo version. We are not ready to show more. Maximum visited sectors:{0}. Maximum turns:{1}"},
 
         {"RecievePoints", "You will get points to unlock after winning. Amount depends on difficulty."},
         {"AA_FXAA", "Anti aliasing"},
         {"Sound", "Sound"},
+        {"battlefield", "Battlefield"},
+        {"Trader","Trader"},
+        {"BrokenNavigation", "Broken navigation"},
+        {"modifBaseStart", "This is modification base. You can try to modificate something."},
+        {"modifCellName", "Modification station"},
 
         {"scout_shipType", "No ship type info"},
         {"scout_weapons", "No weapons info"},
@@ -910,6 +921,10 @@ public static class Namings
         {"FireNearModulDesc", "Can fire nearby enemies for {0} sec when shoot."},
         {"SprayModulDesc", "Shoot with {0} bullets instead on one. Increase reload time by {1}%."},
         {"WeaponSpeedModulDesc", "Increase bullet speed by {0}% per level"},
+        {"DescWeaponDistModul", "Increase aim radius by {0}% per level"},
+
+        {"DistShotSpell", "Single bullet. Base damage {0}. Additional damage dependence on distance."},
+        {"DistShotSpellSpecial", "Single bullet. Base damage {0}. Additional damage dependence on distance. If target have no shield destroy engine for {1} sec."},
 
         {"rep_adv_friend", "You are friends. Maybe they can help you."},
         {"rep_adv_neutral", "Fleets will fight, but you can trade with them."},
@@ -934,6 +949,179 @@ public static class Namings
         {"dialog_repairAll", "Yes repair all.{0} credits" },
         {"dialog_repairNotEnought", "I don't have enough credits" },
 
+        //DILOGS ASTEROIDS
+        {"dialog_asteroid_nothingComplete", "Nothing happens. You successfully complete way" },
+        {"dialog_asteroid_nothingCompleteRepair","Nothing happens, but some ships need to be repaired. You successfully complete way" },
+        {"dialog_asteroid_start", "Big asteroid field. You need somehow get to other side." },
+        {"dialog_asteroid_fireAll","Fire from all weapons" },
+        {"dialog_asteroid_slow","Slow go through field." },
+        {"dialog_asteroid_brokenShip","You see {0} broken ship." },
+        {"dialog_asteroid_brokenShipRepair", "Try to repair it [Repair:{0}]."},
+        {"dialog_asteroid_brokenShipdecompile","Try to decompile it for money." },
+        {"dialog_repairResultFull", "This ship can't be fully repaired but now you can use some parts. {0}"},
+        {"dialog_repairResultCant", "This ship can't be fully repaired but you have no place for items."},
+        {"dialog_asteroid_weaponsFire","Explosive weapons easily destroy enough asteroid. Now you have a way." },
+        {"dialog_asteroid_weaponsFail", "Your weapons are have not much power to create a way throug. And some of your ships get damage"},
+        {"dialog_asteroid_haveWay", "Finally you have a way! But some of your ships get damage"},
+              
+        //DILOGS BATTLEFIELD
+        {"dialog_battlefield_start","You see some {0} ships stands against each other." },
+        {"dialog_battlefield_provocate", "Hide and provocate them"},
+        {"dialog_battlefield_reconcile","Try to reconcile all sides" },
+        {"dialog_battlefield_thanks","Thanks!" },
+        {"dialog_battlefield_diplomacyWin", "Your diplomacy skills are perfect. They will not fight and send you a gift for helping. Reputation add {Library.REPUTATION_RELEASE_PEACEFULL_ADD}."},
+        {"dialog_battlefield_run","Run!" },
+        {"dialog_battlefield_shoot","Shoot near!" },
+        {"dialog_battlefield_diplomacyFail","Your diplomacy skills is awful. But now they want to kill you instead of each other." },
+        {"dialog_battlefield_shit", "Shit."},
+        {"dialog_battlefield_theyAttack","This is not your day. They attacking you!" },
+        {"dialog_battlefield_ufff", "Ufff... Great."},
+        {"dialog_battlefield_stopAttack","They stop trying attack anybody and run away. Maybe this is not bad. At least you save some lives" },
+        {"dialog_battlefield_youRun", "You run away"},
+        {"dialog_battlefield_artillery","Catch moment and fire with artillery" },
+        {"dialog_battlefield_wait","Wait" },
+        {"dialog_battlefield_theyBattle","They starts battle." },
+        {"dialog_battlefield_killEachOther", "Battle ends. They kill each other. And you find some credits {0}."},
+        {"dialog_battlefield_isee", "I see"},
+        {"dialog_battlefield_battleHaveWinner", "Battle ends. Win side take trophies and go away. You can do nothing"},
+        {"dialog_battlefield_good","Good" },
+        {"dialog_battlefield_goodSHot", "Good shoot. You destroy all of them. After battle you find some items"},
+        {"dialog_battlefield_fight","Fight" },
+        {"dialog_battlefield_killYou","Now they want to destroy you." },
+
+        //DIALOG_BROKEN_NAVIGATION
+        {"dialog_navigation_start","You have a distress signal" },
+        {"dialog_navigation_closer","Come closer" },
+        {"dialog_navigation_trap", "It's a trap!"},
+        {"dialog_navigation_fight", "Fight"},
+        {"dialog_navigation_askHelp","You see a {0} ship with broken navigation system. He asking for help" },
+        {"dialog_navigation_shelter","Send scout to deliver him to closest shelter. [Scouts: {0}]" },
+        {"dialog_navigation_repair","Try repair navigation system. [Repair {0}]" },
+        {"dialog_navigation_gift", "Your gift: {0}"},
+        {"dialog_navigation_noFree", "Not free space for gift"},
+        {"dialog_navigation_scouted", "{0} cells on global map scouted."},
+        {"dialog_navigation_shelterOk","You successfully find way to shelter. {0}." },
+        {"dialog_navigation_repairOk","You successfully repair ship. Reputation add." },
+        {"dialog_navigation_tryHire", "Try hire"},
+        {"dialog_navigation_takeMoney","Take money" },
+        {"dialog_navigation_hired","Ship hired {0}." },
+                            
+        //DIALOG_CHANGE_ITEM
+        {"dialog_changeitem_start","This ship wants to trade with you. {0}" },
+        {"dialog_changeitem_tradeData","\nThey want to change your {0} to {1}" },
+        {"dialog_changeitem_ok","Ok. Lets change." },
+        {"dialog_changeitem_no","No, thanks." },
+        {"dialog_changeitem_nothing","You have nothing to trade" },
+
+        {"dialog_armySectorEvent","Sector event:{0}\n" },
+        {"dialog_armyFrendly", "This fleet looks friendly.\n {0}"},
+        {"dialog_armyBuyOut","Try to buy out. [Cost :{0}]" },
+        {"dialog_armyStronger", "You see enemies. They look stronger than you. Shall we fight? \n {0}"},
+        {"dialog_armyShallFight","You see enemies. Shall we fight? \n {0}" },
+        {"dialog_armyAskHelp",  "Ask for help. [Reputation:{0}]"},
+        {"dialog_armyRun","Runaway" },
+        {"dialog_armyRunComplete","Running away complete." },
+        {"dialog_armyRunFail", "Fail! Now you must fight."},
+        {"dialog_armyBuyoutComplete","Buyout complete. You lose {0} credits." },
+
+        {"dialog_coreAttack","Attack." },
+        {"dialog_coreTargetProtect","Target is under protection." },
+        {"dialog_coreBuy","Buy for {0} credits." },
+        {"dialog_coreUseDiplomacy","Use diplomacy." },
+        {"dialog_coreSendScouts","Send scouts to steal." },
+        {"dialog_coreFleetHave","Some other fleet already have your target. \n {scoutsField}" },
+        {"dialog_coreFleetHaveFriend","Friendly fleet already find your target. You can try to use diplomacy. Or simply buy it.\n {scoutsField}" },
+        {"dialog_coreWasPurchase","Element was purchased. {0}/{1}" },
+        {"dialog_coreElementYour","Element is yours. {0}/{1}" },
+        {"dialog_coreFight","Very bad. Fight." },
+        {"dialog_coreFailSteal","Fail. While you were trying to steal an item, reinforcements came to them, and now you can't runaway." },
+        {"dialog_corePartYours", "This part is yours now."},
+        {"dialog_coreDiplomacyFail", "They don't want to give you this part"},
+
+        {"dialog_hirePay", "Pay"},
+        {"dialog_hireAttack", "You won't pay. Instead of it, you will just want to kill them all."},
+        {"dialog_hireEnter","Space base inside big asteroid. Have impressive protection. \nEnter not free. Pay {0} to enter" },
+        {"dialog_hireSomebody","You can try to hire somebody here." },
+        {"dialog_hireMax","You have maximum size of fleet." },
+        {"dialog_hireComplete","Hire complete" },
+
+        {"Prisoner","Prisoner"},
+        {"dialog_prisonerStart","Criminal try to escapes from the {0} police. But your fleet can catch him"},
+        {"dialog_prisonerBuy","Buy stolen item. [Cost:{0}]"},
+        {"dialog_prisonerCatch","Catch and return to police."},
+        {"dialog_prisonerHire","Hire him"},
+        {"dialog_prisonerHide","Hide him from police. [Reputation:{0}]"},
+        {"dialog_prisonerHired","Criminal hired. Reputation removed {0}"},
+        {"dialog_prisonerYourItem","Your item: {0}"},
+        {"dialog_prisonerNoSpace","Not free space for item"},
+        {"dialog_prisonerComplete","Complete. {0}"},
+        {"dialog_prisonerHideOk","You successfully hide criminals ship. Credits add {0}"},
+        {"dialog_prisonerFailFight","Fail! Now you will fight with police."},
+        {"dialog_prisonerCatchOk","You successfully catch him. Reputation added"},
+        {"dialog_prisonerBuyFail","You don't have enough money. Criminal just fly away"},
+
+        {"ScienceLaboratory","Science laboratory"},
+        {"dialog_scLabStart","You are close to {0} science laboratory. But this one is under siege."},
+        {"dialog_scLabAttackNow","Attack immediately"},
+        {"dialog_scLabContact","Contact with fleet commander"},
+        {"dialog_scLabSedScouts","Send scouts to laboratory"},
+        {"dialog_scLabFrighten","Try to frighten them."},
+        {"dialog_scLabBetterContact","No, better I contact with them."},
+        {"dialog_scLabNotRegular","This isn't regular army. We can try to frighten them."},
+        {"dialog_scLabGoStation","Go to station."},
+        {"dialog_scLabTheyRun","They running away!."},
+        {"dialog_scLabFight","Fight"},
+        {"dialog_scLabTotalFail","Fail! They just launch rockets to laboratory and now wants to kill you."},
+        {"dialog_scLabGiveCredits","Maybe if just give you some credits and you will leave [Credits:{0}]"},
+        {"dialog_scLabSimpleThiefs","They look like simple thiefs."},
+        {"dialog_scLabTheLeave","They leaving."},
+        {"dialog_scLabBadJoke","Bad joke! [Not enough credits]"},
+        {"dialog_scLabAllKilled","All scientists were killed."},
+        {"dialog_scLabImproveMain","Improve main ship."},
+        {"dialog_scLabImproveBattle","Improve battle ships."},
+        {"dialog_scLabScientsChoose","Scientists are alive. And they can improve your army"},
+        {"dialog_scLabShipUpgraded","{0} upgrade at ship {1} Upgraded."},
+        {"dialog_scLabAllMax","All your ships have max level."},
+        {"dialog_scParamUpgraded","{0} Upgraded"},
+        {"dialog_scLabNotingUpgrade","Nothing to improve."},
+
+        {"dialog_secretStart","A lot of space garbage and other useless thing here. Do you want to investigate?"},
+        {"dialog_secretSendScouts","Send scouts"},
+        {"dialog_secretHideWait","Hide and wait"},
+        {"dialog_secretSendFake","Send fake signal"},
+        {"dialog_secretAttack","Attack!"},
+        {"dialog_secretConnectWith","Connect with commander."},
+        {"dialog_secretScoutResult","Scouts find a huge fleet, waiting for something. [Scouts:{0}]"},
+        {"dialog_secretTryPrevent","Try to prevent conflict"},
+        {"dialog_secretRun","Run"},
+        {"dialog_secretSeeHugeArmy","Suddenly you see a huge army. And they are ready! [Scouts:{0}]"},
+        {"dialog_secretHaveCredits","And now you have [credits{0} and {1}]"},
+        {"dialog_secretYouRun","You run away. {0} [Scouts:{1}]"},
+        {"dialog_secretFight","Fight"},
+        {"dialog_secretRunFail","Running away failed! [Scouts:{0}]"},
+        {"dialog_secretApplyDeal","Apply deal"},
+        {"dialog_secretLeave","Leave"},
+        {"dialog_secretTheyMessage","They send you a message with trade options."},
+        {"dialog_secretTheyGoKill","Now they going to kill. Diplomacy is not your good side."},
+        {"dialog_secretPartGo","Part of fleet going to check signal."},
+        {"dialog_secretDoProvocation","Do provocation."},
+        {"dialog_secretWait","Wait."},
+        {"dialog_secretSecondCome","{0}s army coming."},
+        {"dialog_secretSearchPlace","Search place."},
+        {"dialog_secretTheyEnd","They complete trade, and ready to jump."},
+        {"dialog_secretTake","Take. [Credits:{0}]"},
+        {"dialog_secretForgotCredits","Looks like they forgot some credits."},
+        {"dialog_secretTakeAll","Take all and run."},
+        {"dialog_secretAppearSecond","While trading, appears another fleet."},
+        {"dialog_secretFindGoods","After massive battle you find some goods. [Credits:{0}]"},
+        {"dialog_secretProvoceFail","Your provocation failed. Now fight."},
+
+        {"dialog_finalStartReady","This is your main goal. You have {0}/{1} parts to open gates.\n You are ready to go in."},
+        {"dialog_finalStartNotReady","This is your main goal. You have {0}/{1} parts to open gates.\nNow you should acquire all others.\n Only one way to do it send one of your ships to block energy on gates. \n But you don't have enought ship \n Your are dead."},
+        {"dialog_finalProcess","This is your main goal. You have {0}/{1} parts to open gates.\n Now you should acquire all others.\n Only one way to do it send one of your ships to block energy on gates. "},
+        {"dialog_finalStartFight","But somebody don't want let you go and attacks you"},
+        {"dialog_finalEnd","Now way is free and you can go whatever you want."},
+
 
     };
 
@@ -952,5 +1140,5 @@ public static class Namings
 
     public static string WaveStrikeSpell = "Strikes a bullets to each close enemy. Damage:{0}/{1}";
     public static string RechargeSheildSpell = "Recharge shield on {0}%";
-    public static string ArmorField = "Armor:{0}/{0}";
+    public static string ArmorField = "Armor:{0}/{1}";
 }

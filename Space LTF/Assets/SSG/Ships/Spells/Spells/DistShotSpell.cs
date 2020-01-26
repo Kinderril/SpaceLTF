@@ -1,9 +1,5 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 using UnityEngine;
 
 
@@ -28,9 +24,9 @@ public class DistShotSpell : BaseSpellModulInv
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 28f;
     public DistShotSpell(int costCount, int costTime)
-        : base(SpellType.distShot, costCount, costTime  , new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT),false)
+        : base(SpellType.distShot, costCount, costTime, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
     {
-        CurWeaponDamage = new CurWeaponDamage(0,12);
+        CurWeaponDamage = new CurWeaponDamage(0, 12);
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
@@ -52,8 +48,9 @@ public class DistShotSpell : BaseSpellModulInv
         int damage = BASE_damage + Mathf.Clamp((int)(DIST_BASE_DAMAGE / c), 0, DIST_BASE_DAMAGE);
         //        int baseSpDamage = (int)(BASE_DAMAGE / c);
 
-        target.ShipParameters.Damage(0, damage, bullet1.Weapon.DamageDoneCallback,target);
-        target.DamageData.ApplyEffect(ShipDamageType.engine,5);
+        target.ShipParameters.Damage(0, damage, bullet1.Weapon.DamageDoneCallback, target);
+        if (HaveSpecial)
+            target.DamageData.ApplyEffect(ShipDamageType.engine, Engine_Off);
     }
 
 
@@ -76,8 +73,15 @@ public class DistShotSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return String.Format(Namings.DistShotSpell, BASE_damage, Engine_Off.ToString("0.0"));
-//            $"Single bullet. Base damage {BASE_damage}. Additional damage dependence on distance."; 
+        if (HaveSpecial)
+        {
+            return String.Format(Namings.Tag("DistShotSpellSpecial"), BASE_damage, Engine_Off.ToString("0.0"));
+        }
+        else
+        {
+            return String.Format(Namings.Tag("DistShotSpell"), BASE_damage, Engine_Off.ToString("0.0"));
+        }
+        //            $"Single bullet. Base damage {BASE_damage}. Additional damage dependence on distance."; 
     }
 
 }

@@ -148,6 +148,7 @@ public class InGameMainUI : BaseWindow
         }
         else
         {
+            SpellModulsContainer.CastFail();
             Debug.Log("Can't cast spell " + spellToCast.Name + "   " + spellToCast.CostCount);
         }
     }
@@ -359,25 +360,11 @@ public class InGameMainUI : BaseWindow
             }
             else
             {
-//#if UNITY_EDITOR
-//                Debug.LogError("ONLY EDITOR FUCTION! DEBUG!");
-//                if (SelectedShip != null)
-//                {
-//                    var ray = GetPointByClick(pos);
-//                    if (ray.HasValue)
-//                    {
-//                        SelectedShip.GoToPointAction(ray.Value);
-//                    }
-//                }
-//#endif
-                if (SelectedShip != null && SelectedShip.ShipParameters.StartParams.ShipType == ShipType.Base &&
-                    SelectedShip.TeamIndex == MyCommander.TeamIndex)
+                var myMainShip = MyCommander.MainShip;
+                var ray = GetPointByClick(pos);
+                if (ray.HasValue)
                 {
-                    var ray = GetPointByClick(pos);
-                    if (ray.HasValue)
-                    {
-                        SelectedShip.GoToPointAction(ray.Value,true);
-                    }
+                    myMainShip.GoToPointAction(ray.Value, true);
                 }
             }
 

@@ -9,7 +9,7 @@ using UnityEngine;
 public class RechargeShieldSpell : BaseSpellModulInv 
 {
     public const float MINES_DIST = 7f;
-    private const float rad = 3.5f;
+    private const float rad = 1f;
 
     private const float _sDistToShoot = 4*4;
     private bool _lastCheckIsOk = false;
@@ -90,6 +90,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
             objectToShow.gameObject.SetActive(true);
             objectToShow.transform.position = closestsShip.Position;
             _lastClosest = closestsShip;
+//            Debug.LogError($"Set last close {_lastClosest}");
         }
         else
         {
@@ -103,7 +104,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
 
     public override SpellDamageData RadiusAOE()
     {
-        return new SpellDamageData();
+        return new SpellDamageData(rad);
     }
     public override string Desc()
     {

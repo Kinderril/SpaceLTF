@@ -11,7 +11,8 @@ public class DebugAtGlobalMap : MonoBehaviour
 
     void Update()
     {
-//#if UNITY_EDITOR
+
+#if Develop || UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.F1))
         {
             OnDebugChangeSound();
@@ -28,7 +29,7 @@ public class DebugAtGlobalMap : MonoBehaviour
         {
             OnDebugScoutedAll();
         }
-//#endif
+#endif
     }
 
     private void OnDebugChangeSound()

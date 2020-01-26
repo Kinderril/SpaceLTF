@@ -43,6 +43,7 @@ public class Player
         ByStepDamage.Init(data.StepsBeforeDeath, this);
         MapData = new PlayerMapData();
         MapData.Init(data, ByStepDamage);
+        MapData.GalaxyData.GalaxyEnemiesArmyController.InitQuests(QuestData);
         Army.SetArmy(CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell));
         RepairData.Init(Army, MapData, Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
@@ -234,71 +235,14 @@ public class Player
 
     public void WinBattleReward(Commander enemyCommander)
     {
-        var power = enemyCommander.StartPower;
-        var scoutsLevel = Parameters.Scouts.Level;
-        WDictionary<BattleRewardType> rewardRnd =
-            new WDictionary<BattleRewardType>(new Dictionary<BattleRewardType, float>()
-            {
-                {BattleRewardType.weapon, scoutsLevel},
-                {BattleRewardType.modul, scoutsLevel},
-                {BattleRewardType.money, 4 + scoutsLevel/4},
-            });
-        var reward = rewardRnd.Random();
-        int slotIndex;
-        float moneyCoef = 1f;
-        Debug.Log("Player end battle. Reward setted.  reward:" + reward.ToString());
-        LastReward = new LastReward();
-        switch (reward)
-        {
-            case BattleRewardType.money:
-                moneyCoef = 1;
-                break;
-            case BattleRewardType.weapon:
-                var coef2 = power * 0.1f;
-                moneyCoef = 0.7f;
-                WDictionary<int> levels2 = new WDictionary<int>(new Dictionary<int, float>()
-                {
-                    {1,4f+coef2},
-                    {2,3.7f+coef2},
-                    {3,1.7f+coef2},
-                    {4,1f+coef2},
-                    {5,0f+coef2},
-                });
-                var w = Library.CreateWeapon(levels2.Random());
-                if (Inventory.GetFreeWeaponSlot(out slotIndex))
-                {
-                    Inventory.TryAddWeaponModul(w, slotIndex);
-                    LastReward.Weapons.Add(w);
-                }
-                break;
-            case BattleRewardType.modul:
-                // var isWeak = power < 45;
-                var coef = power * 0.1f;
-                moneyCoef = 0.7f;
-                WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
-                {
-                    {1,4f+coef},
-                    {2,3.7f+coef},
-                    {3,1.7f+coef},
-                });
-
-                var m = Library.CreatSimpleModul(levels.Random());
-                if (Inventory.GetFreeSpellSlot(out slotIndex))
-                {
-                    LastReward.Moduls.Add(m);
-                    Inventory.TryAddSimpleModul(m, slotIndex);
-                }
-                break;
-        }
-        int moneyToReward = (int)(moneyCoef * power * Library.BATTLE_REWARD_WIN_MONEY_COEF);
-        LastReward.Money = moneyToReward;
-        MoneyData.AddMoney(moneyToReward);
+        LastReward = new LastReward(enemyCommander,this);
     }
 
 
     public void EndGame()
     {
         var path = Application.persistentDataPath + mainPlayer;
+        MapData.Dispose();
         if (File.Exists(path))
         {
             File.Delete(path);

@@ -105,9 +105,9 @@ public class CellIinfoObjectUI : MonoBehaviour
                         {
                             desc = Namings.Fleet;
                         }
-#if UNITY_EDITOR
+                        // #if UNITY_EDITOR
                         desc += $"({isArmy.PowerDesc()})";
-#endif
+                        // #endif
                         if (cell.IsScouted)
                         {
                             desc += $"({Namings.ShipConfig(isArmy.GetConfig())})";
