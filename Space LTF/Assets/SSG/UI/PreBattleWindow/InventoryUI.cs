@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Experimental.UIElements;
+using UnityEngine.UI;
 
 
 public class InventoryUI : DragZone
@@ -34,11 +35,18 @@ public class InventoryUI : DragZone
         InitFreeSlots();
 //        InitMoney();
         base.Init(player, true, _allSLots, connectedInventory);
-        //        Enable();
-        //        SlotsController = new InventorySlots(player,_allSLots);
-        //Layout.localPosition = new Vector3(0, 9999, 0);
+        RefreshPosition();
 
     }
+
+    public void RefreshPosition()
+    {
+        var rect = Layout.GetComponent<RectTransform>();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+        Layout.gameObject.transform.localPosition = new Vector3(0, -1000, 0);
+//        Debug.LogError($"RefreshPosition:{ Layout.gameObject.transform.localPosition}");
+    }
+    
 
 
     private void InitCurrentItems()

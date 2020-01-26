@@ -203,9 +203,16 @@ public class DataStructPrefabs : MonoBehaviour
             var ss = singl.Achievements.FirstOrDefault(x => x.m_eAchievementID == achievement);
             if (ss != null)
             {
-                var str = String.Format("Icons/achievements/{0}", ss.m_strName);
+                var name = ss.m_eAchievementID.ToString();
+                var str = String.Format("Icons/Achievements/{0}", name);
                 var obj = Resources.Load<Sprite>(str);
-                SpritesByName.Add(ss.m_strName, obj);
+                if (obj != null)
+                    SpritesByName.Add(name, obj);
+                else
+                {
+
+                    Debug.LogError($"No ICON path:{str}");
+                }
             }
             else
             {

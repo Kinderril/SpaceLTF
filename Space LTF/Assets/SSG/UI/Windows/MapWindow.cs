@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -416,6 +417,7 @@ public class MapWindow : BaseWindow
         {
             WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.WindowOpen);
             ArmyInfoContainer.transform.position = _stablePos;
+            InventoryUI.RefreshPosition();
         }
         else
         {
@@ -433,7 +435,6 @@ public class MapWindow : BaseWindow
         }
         isArmyActive = val;
     }
-
 
 
     private void EnableModif(bool val)

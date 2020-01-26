@@ -17,7 +17,7 @@ public class AchievemenElement : UIElementWithTooltip
     public void Init(SteamStatsAndAchievements.Achievement_t achievementT)
     {
         _achievementT = achievementT;
-        Sprite spr = DataBaseController.Instance.DataStructPrefabs.GetAchiewementIcon(achievementT.m_strName);
+        Sprite spr = DataBaseController.Instance.DataStructPrefabs.GetAchiewementIcon(achievementT.m_eAchievementID.ToString());
         Icon.sprite = spr;
         FieldName.text = achievementT.ShortName;
         FieldDesc.text = achievementT.m_strDescription;

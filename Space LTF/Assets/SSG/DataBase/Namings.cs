@@ -274,6 +274,9 @@ public static class Namings
                 break;
             case SimpleModulType.bombUpgrade:
                 Name = "Increase power of all bomb weapons for +1/+1 per level.";
+                break;   
+            case SimpleModulType.WeaponSpeed:
+                Name = "Increase speed of all bullets.";
                 break;
             //            case SimpleModulType.ShipSpeed:
             //                Name = String.Format("Increase ship max speed for {0}% per level.", ShipTurnModul.PER_LEVEL);
@@ -846,27 +849,27 @@ public static class Namings
         {"descFull pack", "--"},
         {"descFull ammo", "--"},
 
-        {"nameWinner", "--"},
-        {"nameCaptain", "--"},
-        {"nameMayor", "--"},
-        {"nameBig guns", "--"},
-        {"nameImprover", "--"},
-        {"nameTeam five", "--"},
-        {"nameFriend", "--"},
-        {"nameBoss", "--"},
-        {"nameMaster", "--"},
-        {"nameFighter", "--"},
-        {"nameDestroyer", "--"},
-        {"nameAnnihilator", "--"},
-        {"nameShooter", "--"},
-        {"nameSniper", "--"},
-        {"nameGunner", "--"},
-        {"nameBanker", "--"},
-        {"nameCroesus", "--"},
-        {"nameUnusual", "--"},
-        {"nameNo crash", "--"},
-        {"nameFull pack", "--"},
-        {"nameFull ammo", "--"},
+        {"nameWinner", "Winner"},
+        {"nameCaptain", "Captain"},
+        {"nameMayor", "Mayor"},
+        {"nameBig guns", "Big guns"},
+        {"nameImprover", "Improver"},
+        {"nameTeam five", "Team five"},
+        {"nameFriend", "Friend"},
+        {"nameBoss", "Boss"},
+        {"nameMaster", "Master"},
+        {"nameFighter", "Fighter"},
+        {"nameDestroyer", "Destroyer"},
+        {"nameAnnihilator", "Annihilator"},
+        {"nameShooter", "Shooter"},
+        {"nameSniper", "Sniper"},
+        {"nameGunner", "Gunner"},
+        {"nameBanker", "Banker"},
+        {"nameCroesus", "Croesus"},
+        {"nameUnusual", "Unusual"},
+        {"nameNo crash", "No crash"},
+        {"nameFull pack", "Full pack"},
+        {"nameFull ammo", "Full ammo"},
 
         {"MercGlobal", "Mercenary hideout"},
         {"NotEnoughtMoney", "Not enough money"},

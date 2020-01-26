@@ -92,9 +92,14 @@ namespace Steamworks {
 		/// <para> returns the appID of the current process</para>
 		/// </summary>
 		public static AppId_t GetAppID() {
+//            return new AppId_t(1199180);
+
 			InteropHelp.TestIfAvailableClient();
-			return (AppId_t)NativeMethods.ISteamUtils_GetAppID(CSteamAPIContext.GetSteamUtils());
-		}
+            var utils = CSteamAPIContext.GetSteamUtils();
+            var appId = (AppId_t)NativeMethods.ISteamUtils_GetAppID(utils);
+            return appId;
+
+        }
 
 		/// <summary>
 		/// <para> Sets the position where the overlay instance for the currently calling game should show notifications.</para>

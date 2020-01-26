@@ -21,6 +21,9 @@ public class MainController : Singleton<MainController>
 
     void Awake()
     {
+        LogHandler.Instance.Init();
+        SteamManager.Instance.Init();
+
         LocalizationManager.Instance.Init();
         CamerasController.Instance.StartCheck();
         Library.Init();

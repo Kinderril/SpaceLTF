@@ -91,8 +91,10 @@ namespace Steamworks {
 		/// <summary>
 		/// <para> returns the appID of the current process</para>
 		/// </summary>
-		public static AppId_t GetAppID() {
-			InteropHelp.TestIfAvailableGameServer();
+		public static AppId_t GetAppID()
+        {
+//            return new AppId_t(1199180);
+            InteropHelp.TestIfAvailableGameServer();
 			return (AppId_t)NativeMethods.ISteamUtils_GetAppID(CSteamGameServerAPIContext.GetSteamUtils());
 		}
 

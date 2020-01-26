@@ -3,6 +3,106 @@ guid: 39549e93f30fbf5439183c1bf78d1c5c
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
+    100000: //RootNode
+    100002: CockpitDamage
+    100004: FrontGuardDamage
+    100006: Lt_Canard
+    100008: Lt_CanardDamage
+    100010: Lt_Gun_Aim
+    100012: Lt_Gun_Pitch
+    100014: Lt_Gun_SupportArm
+    100016: Lt_Gun_SupportJoint
+    100018: Lt_Gun_Yaw
+    100020: Lt_Rotor
+    100022: Lt_Rotor_Pitch
+    100024: Lt_Rotor_Roll
+    100026: Lt_RotorDamage
+    100028: Lt_Thruster
+    100030: Lt_ThrusterA
+    100032: Lt_ThrusterB
+    100034: Lt_Vent
+    100036: Main
+    100038: MainTurret_ArmLow
+    100040: MainTurret_ArmUp
+    100042: MainTurret_Lt_Btm_Barrel
+    100044: MainTurret_Lt_Top_Barrel
+    100046: MainTurret_PistonAim
+    100048: MainTurret_PistonLow
+    100050: MainTurret_PistonUp
+    100052: MainTurret_Pitch
+    100054: MainTurret_Rt_Btm_Barrel
+    100056: MainTurret_Rt_Top_Barrel
+    100058: MainTurret_Yaw
+    100060: Rt_Canard
+    100062: Rt_CanardDamage
+    100064: Rt_Gun_Aim
+    100066: Rt_Gun_Pitch
+    100068: Rt_Gun_SupportArm
+    100070: Rt_Gun_SupportJoint
+    100072: Rt_Gun_Yaw
+    100074: Rt_Rotor
+    100076: Rt_Rotor_Pitch
+    100078: Rt_Rotor_Roll
+    100080: Rt_RotorDamage
+    100082: Rt_Thruster
+    100084: Rt_ThrusterA
+    100086: Rt_ThrusterB
+    100088: Rt_Vent
+    100090: Rudder
+    100092: RudderDamage
+    100094: SK_VH_Cicada
+    400000: //RootNode
+    400002: CockpitDamage
+    400004: FrontGuardDamage
+    400006: Lt_Canard
+    400008: Lt_CanardDamage
+    400010: Lt_Gun_Aim
+    400012: Lt_Gun_Pitch
+    400014: Lt_Gun_SupportArm
+    400016: Lt_Gun_SupportJoint
+    400018: Lt_Gun_Yaw
+    400020: Lt_Rotor
+    400022: Lt_Rotor_Pitch
+    400024: Lt_Rotor_Roll
+    400026: Lt_RotorDamage
+    400028: Lt_Thruster
+    400030: Lt_ThrusterA
+    400032: Lt_ThrusterB
+    400034: Lt_Vent
+    400036: Main
+    400038: MainTurret_ArmLow
+    400040: MainTurret_ArmUp
+    400042: MainTurret_Lt_Btm_Barrel
+    400044: MainTurret_Lt_Top_Barrel
+    400046: MainTurret_PistonAim
+    400048: MainTurret_PistonLow
+    400050: MainTurret_PistonUp
+    400052: MainTurret_Pitch
+    400054: MainTurret_Rt_Btm_Barrel
+    400056: MainTurret_Rt_Top_Barrel
+    400058: MainTurret_Yaw
+    400060: Rt_Canard
+    400062: Rt_CanardDamage
+    400064: Rt_Gun_Aim
+    400066: Rt_Gun_Pitch
+    400068: Rt_Gun_SupportArm
+    400070: Rt_Gun_SupportJoint
+    400072: Rt_Gun_Yaw
+    400074: Rt_Rotor
+    400076: Rt_Rotor_Pitch
+    400078: Rt_Rotor_Roll
+    400080: Rt_RotorDamage
+    400082: Rt_Thruster
+    400084: Rt_ThrusterA
+    400086: Rt_ThrusterB
+    400088: Rt_Vent
+    400090: Rudder
+    400092: RudderDamage
+    400094: SK_VH_Cicada
+    2100000: 'Material #117'
+    4300000: SK_VH_Cicada
+    9500000: //RootNode
+    13700000: SK_VH_Cicada
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
@@ -57,7 +157,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0

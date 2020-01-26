@@ -3,7 +3,22 @@ guid: 360af16f4d1a49b4dab4357fd6276b6c
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
+    100000: Camera01
+    100002: Camera01.Target
+    100004: //RootNode
+    100006: SF_Imperial-Corvette-F3
+    400000: Camera01
+    400002: Camera01.Target
+    400004: //RootNode
+    400006: SF_Imperial-Corvette-F3
+    2000000: Camera01
+    2100000: SF_Corvette-F3
+    2300000: SF_Imperial-Corvette-F3
+    3300000: SF_Imperial-Corvette-F3
+    4300000: SF_Imperial-Corvette-F3
+    9500000: //RootNode
     2186277476908879412: ImportLogs
+    6000828045688606266: Camera01
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -57,7 +72,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0

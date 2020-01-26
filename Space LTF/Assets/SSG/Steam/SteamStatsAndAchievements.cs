@@ -85,7 +85,10 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
             return;
 
         // Cache the GameID for use in the Callbacks
-        m_GameID = new CGameID(SteamUtils.GetAppID());
+        var GameID = SteamUtils.GetAppID();
+        Debug.Log($"STEAM GAME ID:{GameID}");
+
+        m_GameID = new CGameID(GameID);
 
         m_UserStatsReceived = Callback<UserStatsReceived_t>.Create(OnUserStatsReceived);
         m_UserStatsStored = Callback<UserStatsStored_t>.Create(OnUserStatsStored);

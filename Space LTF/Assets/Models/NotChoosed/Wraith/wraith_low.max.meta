@@ -3,6 +3,357 @@ guid: 606265098b366fb47b904e240e00df97
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
+    100000: Big Canon
+    100002: Big canon
+    100004: Big canon01
+    100006: Big canon02
+    100008: Body
+    100010: Capsule02
+    100012: Capsule03
+    100014: Cone01
+    100016: Cone02
+    100018: Cone03
+    100020: Cone04
+    100022: Cone05
+    100024: Cone06
+    100026: Cone07
+    100028: Cylinder01
+    100030: Cylinder21
+    100032: Cylinder41
+    100034: Cylinder42
+    100036: Cylinder43
+    100038: Cylinder44
+    100040: Cylinder45
+    100042: Cylinder46
+    100044: Cylinder47
+    100046: Cylinder48
+    100048: Cylinder49
+    100050: Cylinder50
+    100052: Cylinder51
+    100054: Cylinder52
+    100056: Cylinder53
+    100058: Cylinder54
+    100060: Cylinder55
+    100062: Cylinder56
+    100064: Cylinder57
+    100066: Cylinder58
+    100068: Cylinder59
+    100070: Down
+    100072: MidCanon01
+    100074: MidCanon02
+    100076: Small c
+    100078: Sphere01
+    100080: Sphere02
+    100082: Sphere03
+    100084: Sphere05
+    100086: Sphere06
+    100088: Sphere07
+    100090: Sphere08
+    100092: Sphere10
+    100094: Sphere11
+    100096: Tail L
+    100098: Tail R
+    100100: Tailbar L
+    100102: Tailbar R
+    100104: Torus02
+    100106: Torus03
+    100108: Torus04
+    100110: Torus05
+    100112: Torus06
+    100114: Torus17
+    100116: Torus18
+    100118: Torus19
+    100120: Torus20
+    100122: Torus21
+    100124: Torus22
+    100126: Torus23
+    100128: Torus24
+    100130: Torus25
+    100132: Torus26
+    100134: Twing L
+    100136: Twing R
+    100138: Wing L
+    100140: Wing R
+    100142: //RootNode
+    400000: Big Canon
+    400002: Big canon
+    400004: Big canon01
+    400006: Big canon02
+    400008: Body
+    400010: Capsule02
+    400012: Capsule03
+    400014: Cone01
+    400016: Cone02
+    400018: Cone03
+    400020: Cone04
+    400022: Cone05
+    400024: Cone06
+    400026: Cone07
+    400028: Cylinder01
+    400030: Cylinder21
+    400032: Cylinder41
+    400034: Cylinder42
+    400036: Cylinder43
+    400038: Cylinder44
+    400040: Cylinder45
+    400042: Cylinder46
+    400044: Cylinder47
+    400046: Cylinder48
+    400048: Cylinder49
+    400050: Cylinder50
+    400052: Cylinder51
+    400054: Cylinder52
+    400056: Cylinder53
+    400058: Cylinder54
+    400060: Cylinder55
+    400062: Cylinder56
+    400064: Cylinder57
+    400066: Cylinder58
+    400068: Cylinder59
+    400070: Down
+    400072: MidCanon01
+    400074: MidCanon02
+    400076: Small c
+    400078: Sphere01
+    400080: Sphere02
+    400082: Sphere03
+    400084: Sphere05
+    400086: Sphere06
+    400088: Sphere07
+    400090: Sphere08
+    400092: Sphere10
+    400094: Sphere11
+    400096: Tail L
+    400098: Tail R
+    400100: Tailbar L
+    400102: Tailbar R
+    400104: Torus02
+    400106: Torus03
+    400108: Torus04
+    400110: Torus05
+    400112: Torus06
+    400114: Torus17
+    400116: Torus18
+    400118: Torus19
+    400120: Torus20
+    400122: Torus21
+    400124: Torus22
+    400126: Torus23
+    400128: Torus24
+    400130: Torus25
+    400132: Torus26
+    400134: Twing L
+    400136: Twing R
+    400138: Wing L
+    400140: Wing R
+    400142: //RootNode
+    2100000: 8 - Default
+    2300000: Big canon
+    2300002: Big canon01
+    2300004: Big canon02
+    2300006: Body
+    2300008: Capsule02
+    2300010: Capsule03
+    2300012: Cone01
+    2300014: Cone02
+    2300016: Cone03
+    2300018: Cone04
+    2300020: Cone05
+    2300022: Cone06
+    2300024: Cone07
+    2300026: Cylinder01
+    2300028: Cylinder21
+    2300030: Cylinder41
+    2300032: Cylinder42
+    2300034: Cylinder43
+    2300036: Cylinder44
+    2300038: Cylinder45
+    2300040: Cylinder46
+    2300042: Cylinder47
+    2300044: Cylinder48
+    2300046: Cylinder49
+    2300048: Cylinder50
+    2300050: Cylinder51
+    2300052: Cylinder52
+    2300054: Cylinder53
+    2300056: Cylinder54
+    2300058: Cylinder55
+    2300060: Cylinder56
+    2300062: Cylinder57
+    2300064: Cylinder58
+    2300066: Cylinder59
+    2300068: Down
+    2300070: Small c
+    2300072: Sphere01
+    2300074: Sphere02
+    2300076: Sphere03
+    2300078: Sphere05
+    2300080: Sphere06
+    2300082: Sphere07
+    2300084: Sphere08
+    2300086: Sphere10
+    2300088: Sphere11
+    2300090: Tail L
+    2300092: Tail R
+    2300094: Tailbar L
+    2300096: Tailbar R
+    2300098: Torus02
+    2300100: Torus03
+    2300102: Torus04
+    2300104: Torus05
+    2300106: Torus06
+    2300108: Torus17
+    2300110: Torus18
+    2300112: Torus19
+    2300114: Torus20
+    2300116: Torus21
+    2300118: Torus22
+    2300120: Torus23
+    2300122: Torus24
+    2300124: Torus25
+    2300126: Torus26
+    2300128: Twing L
+    2300130: Twing R
+    2300132: Wing L
+    2300134: Wing R
+    3300000: Big canon
+    3300002: Big canon01
+    3300004: Big canon02
+    3300006: Body
+    3300008: Capsule02
+    3300010: Capsule03
+    3300012: Cone01
+    3300014: Cone02
+    3300016: Cone03
+    3300018: Cone04
+    3300020: Cone05
+    3300022: Cone06
+    3300024: Cone07
+    3300026: Cylinder01
+    3300028: Cylinder21
+    3300030: Cylinder41
+    3300032: Cylinder42
+    3300034: Cylinder43
+    3300036: Cylinder44
+    3300038: Cylinder45
+    3300040: Cylinder46
+    3300042: Cylinder47
+    3300044: Cylinder48
+    3300046: Cylinder49
+    3300048: Cylinder50
+    3300050: Cylinder51
+    3300052: Cylinder52
+    3300054: Cylinder53
+    3300056: Cylinder54
+    3300058: Cylinder55
+    3300060: Cylinder56
+    3300062: Cylinder57
+    3300064: Cylinder58
+    3300066: Cylinder59
+    3300068: Down
+    3300070: Small c
+    3300072: Sphere01
+    3300074: Sphere02
+    3300076: Sphere03
+    3300078: Sphere05
+    3300080: Sphere06
+    3300082: Sphere07
+    3300084: Sphere08
+    3300086: Sphere10
+    3300088: Sphere11
+    3300090: Tail L
+    3300092: Tail R
+    3300094: Tailbar L
+    3300096: Tailbar R
+    3300098: Torus02
+    3300100: Torus03
+    3300102: Torus04
+    3300104: Torus05
+    3300106: Torus06
+    3300108: Torus17
+    3300110: Torus18
+    3300112: Torus19
+    3300114: Torus20
+    3300116: Torus21
+    3300118: Torus22
+    3300120: Torus23
+    3300122: Torus24
+    3300124: Torus25
+    3300126: Torus26
+    3300128: Twing L
+    3300130: Twing R
+    3300132: Wing L
+    3300134: Wing R
+    4300000: Twing R
+    4300002: Twing L
+    4300004: Sphere01
+    4300006: Wing R
+    4300008: Sphere02
+    4300010: Sphere03
+    4300012: Wing L
+    4300014: Sphere05
+    4300016: Sphere07
+    4300018: Sphere08
+    4300020: Down
+    4300022: Body
+    4300024: Tail L
+    4300026: Tailbar L
+    4300028: Tailbar R
+    4300030: Tail R
+    4300032: Torus04
+    4300034: Cylinder45
+    4300036: Cylinder21
+    4300038: Torus02
+    4300040: Torus03
+    4300042: Torus06
+    4300044: Torus05
+    4300046: Cylinder44
+    4300048: Cylinder42
+    4300050: Cylinder01
+    4300052: Cylinder43
+    4300054: Cylinder41
+    4300056: Big canon
+    4300058: Small c
+    4300060: Big canon01
+    4300062: Torus17
+    4300064: Cylinder46
+    4300066: Cylinder47
+    4300068: Torus18
+    4300070: Torus19
+    4300072: Torus20
+    4300074: Torus21
+    4300076: Cylinder48
+    4300078: Cylinder49
+    4300080: Cylinder50
+    4300082: Cylinder51
+    4300084: Cylinder52
+    4300086: Capsule02
+    4300088: Cylinder53
+    4300090: Big canon02
+    4300092: Torus22
+    4300094: Cylinder54
+    4300096: Cylinder55
+    4300098: Torus23
+    4300100: Torus24
+    4300102: Torus25
+    4300104: Torus26
+    4300106: Cylinder56
+    4300108: Cylinder57
+    4300110: Cylinder58
+    4300112: Cylinder59
+    4300114: Capsule03
+    4300116: Sphere06
+    4300118: Sphere10
+    4300120: Sphere11
+    4300122: Cone01
+    4300124: Cone02
+    4300126: Cone03
+    4300128: Cone04
+    4300130: Cone05
+    4300132: Cone06
+    4300134: Cone07
+    7400000: Take 001
+    9500000: //RootNode
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
@@ -57,7 +408,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0

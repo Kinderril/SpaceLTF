@@ -18,16 +18,19 @@ public class WindowsAchievements : BaseWindow
     {
         var steam = SteamStatsAndAchievements.Instance;
         var isInited = SteamManager.Initialized;
-        bool bSuccess = SteamUserStats.RequestCurrentStats();
-        Layout.ClearTransform();
-        if (steam.RequestedStats)
+        
+        if (isInited)
         {
-            UnloadedSteam.gameObject.SetActive(false);
-            foreach (var achievement in steam.Achievements)
+            bool bSuccess = SteamUserStats.RequestCurrentStats();
+            Layout.ClearTransform();
+            if (steam.RequestedStats)
             {
-                var pref = DataBaseController.GetItem(AchievemenElementPrefab);
-                pref.transform.SetParent(Layout);
-                pref.Init(achievement);
+                ShowAllAchievements();
+            }
+            else
+            {
+
+                UnloadedSteam.gameObject.SetActive(true);
             }
         }
         else
@@ -35,7 +38,24 @@ public class WindowsAchievements : BaseWindow
 
             UnloadedSteam.gameObject.SetActive(true);
         }
+#if UNITY_EDITOR
+        Layout.ClearTransform();
+        ShowAllAchievements();
+#endif
         base.Init();
+    }
+
+    private void ShowAllAchievements()
+    {
+        UnloadedSteam.gameObject.SetActive(false);
+        var steam = SteamStatsAndAchievements.Instance;
+        foreach (var achievement in steam.Achievements)
+        {
+            var pref = DataBaseController.GetItem(AchievemenElementPrefab);
+            pref.transform.SetParent(Layout);
+            pref.Init(achievement);
+        }
+        Layout.localPosition = Vector3.up * -10000;
     }
     public virtual void OnToStart()
     {

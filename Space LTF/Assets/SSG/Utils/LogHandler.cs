@@ -3,10 +3,10 @@ using UnityEngine;
 using System.Collections;
 using System.IO;
 
-public class LogHandler : MonoBehaviour
+public class LogHandler : Singleton<LogHandler>
 {
     private StreamWriter _writer;
-    void Awake()
+    public void Init()
     {
 //        var way = $"Log {DateTime.Now.Date.ToShortDateString()} {DateTime.Now.ToLongDateString()}.txt";
         var way = $"Log {DateTime.Now.ToString("MM/dd/yyyy H-mm")}.log";
