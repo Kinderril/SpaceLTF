@@ -22,7 +22,8 @@ public class MovingArmy
         CurCell = startCell;
         _player = new Player($"{ Namings.Tag("Destroyed")}:{MyExtensions.Random(3, 9999)}");
         var armyPower = humanPower * 1.5f;
-        var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, new ArmyCreatorLaser(startCell.ConfigOwner, true), _player);
+        var armyData = ArmyCreatorLibrary.GetArmy(startCell.ConfigOwner);
+        var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, armyData, _player);
         _player.Army.SetArmy(army);
         startCell.CurMovingArmy = this;
         BattleController.Instance.OnBattleEndCallback += OnBattleEndCallback;

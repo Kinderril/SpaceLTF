@@ -1,9 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
@@ -17,8 +14,8 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
         return "Energy storage.";
     }
 
-    public RetranslaitorMapEvent(ShipConfig _shipConfig) 
-        :base(_shipConfig)
+    public RetranslaitorMapEvent(ShipConfig _shipConfig)
+        : base(_shipConfig)
     {
         // this._shipConfig = _shipConfig;
     }
@@ -27,7 +24,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * 1.9f;
         _credits = (int)MyExtensions.GreateRandom(myArmyPower);
-         var mesData = new MessageDialogData(String.Format("Power fleet of {0} protect storage of energy.",Namings.ShipConfig(_config)), new List<AnswerDialogData>()
+        var mesData = new MessageDialogData(String.Format("Power fleet of {0} protect storage of energy.", Namings.ShipConfig(_config)), new List<AnswerDialogData>()
         {
             new AnswerDialogData("Fight",null,Figth),
 //            new AnswerDialogData("Send fail message",null,FailMessage),
@@ -37,11 +34,11 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
         return mesData;
     }
 
-//    private MessageDialogData FailMessage()
-//    {
-//        
-//
-//    }
+    //    private MessageDialogData FailMessage()
+    //    {
+    //        
+    //
+    //    }
 
     private MessageDialogData Steal()
     {
@@ -83,7 +80,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
         if (_doFight)
         {
             _doFight = false;
-            var mesData = new MessageDialogData(String.Format( "{0} credits are yours.", _credits), new List<AnswerDialogData>()
+            var mesData = new MessageDialogData(String.Format("{0} credits are yours.", _credits), new List<AnswerDialogData>()
             {
                 new AnswerDialogData(Namings.Tag("Take"),() =>
                     MainController.Instance.MainPlayer.MoneyData.AddMoney(_credits)
@@ -101,7 +98,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * 0.8f;
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(_config, ArmyCreatorType.laser, (int)(powerCoef * myArmyPower)));
+            GetArmy(_config, (int)(powerCoef * myArmyPower)));
     }
 }
 

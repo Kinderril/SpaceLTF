@@ -89,41 +89,42 @@ public abstract class BaseGlobalMapEvent
         return wd.Random();
     }
 
-    protected Player GetArmy(ShipConfig config, ArmyCreatorType creatorType, float power)
+    protected Player GetArmy(ShipConfig config, ShipConfig config2, float power)
     {
-        ArmyCreatorData data = new ArmyCreatorData(config, true);
-        switch (creatorType)
-        {
-            case ArmyCreatorType.rnd:
-                data = new ArmyCreatorRnd(config, true);
-                break;
-            case ArmyCreatorType.rocket:
-                data = new ArmyCreatorRocket(config, true);
-                break;
-            case ArmyCreatorType.laser:
-                data = new ArmyCreatorLaser(config, true);
-                break;
-            case ArmyCreatorType.mine:
-                data = new ArmyCreatorAOE(config, true);
-                break;
-            case ArmyCreatorType.destroy:
-                data = new ArmyCreatorDestroy(config, true);
-                break;
-        }
-        //        var data = new ArmyCreatorRocket(ShipConfig.mercenary);
+        ArmyCreatorData data = ArmyCreatorLibrary.GetArmy(config, config2);
+        return GetArmy(data, power);
+    }
+    protected Player GetArmy(ShipConfig config, float power)
+    {
+        ArmyCreatorData data = ArmyCreatorLibrary.GetArmy(config);
+        return GetArmy(data, power);
+    }
+
+    private Player GetArmy(ArmyCreatorData data, float power)
+    {
+
         var player = new Player("Army");
         float coreShipChance = 0;
-        switch (config)
+        if (power > 15)
         {
-            case ShipConfig.raiders:
-                coreShipChance = 0.1f;
-                break;
-            case ShipConfig.federation:
-                coreShipChance = 0.9f;
-                break;
-            case ShipConfig.mercenary:
-                coreShipChance = 0.5f;
-                break;
+            switch (data.ArmyConfig)
+            {
+                case ShipConfig.raiders:
+                    coreShipChance = 0.3f;
+                    break;
+                case ShipConfig.federation:
+                    coreShipChance = 0.5f;
+                    break;
+                case ShipConfig.mercenary:
+                    coreShipChance = 0.5f;
+                    break;
+                case ShipConfig.ocrons:
+                    coreShipChance = 0.5f;
+                    break;
+                case ShipConfig.krios:
+                    coreShipChance = 0.5f;
+                    break;
+            }
         }
         bool withCore = MyExtensions.IsTrue01(coreShipChance);
         var army = ArmyCreator.CreateArmy(power, ArmyCreationMode.equalize, 1, 3, data, withCore, player);

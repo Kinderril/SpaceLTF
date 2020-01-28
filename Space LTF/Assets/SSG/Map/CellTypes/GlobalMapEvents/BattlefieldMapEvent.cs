@@ -144,7 +144,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(ShipConfig.federation, ArmyCreatorType.rocket, (int)myArmyPower));
+            GetArmy(_config, (int)myArmyPower));
     }
 }
 

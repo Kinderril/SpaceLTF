@@ -48,7 +48,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, Library.REPUTATION_HIRE_CRIMINAL_REMOVED);
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(_config, ArmyCreatorType.laser, (int)myArmyPower));
+            GetArmy(_config, (int)myArmyPower));
     }
 
     private MessageDialogData BuyStolen()

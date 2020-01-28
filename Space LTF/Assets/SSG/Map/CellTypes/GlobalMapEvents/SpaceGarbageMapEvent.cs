@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 
 [System.Serializable]
@@ -16,9 +12,9 @@ public class SpaceGarbageMapEvent : BaseGlobalMapEvent
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
-      
-        mianAnswers.Add(new AnswerDialogData($"Dive deep. [Scouts:{ScoutsLevel}]",null, HalfGood));
-        mianAnswers.Add(new AnswerDialogData($"Search on border. [Scouts:{ScoutsLevel}].",null, DiveDeep));
+
+        mianAnswers.Add(new AnswerDialogData($"Dive deep. [Scouts:{ScoutsLevel}]", null, HalfGood));
+        mianAnswers.Add(new AnswerDialogData($"Search on border. [Scouts:{ScoutsLevel}].", null, DiveDeep));
         mianAnswers.Add(new AnswerDialogData("I don't want to dig in the trash.", null));
         var mesData = new MessageDialogData("In front of you a huge count of garbage.", mianAnswers);
         return mesData;
@@ -58,7 +54,7 @@ public class SpaceGarbageMapEvent : BaseGlobalMapEvent
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(ShipConfig.raiders, ArmyCreatorType.mine, (int)myArmyPower));
+            GetArmy(_config, (int)myArmyPower));
     }
     private MessageDialogData HalfGood()
     {

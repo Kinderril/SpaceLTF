@@ -113,6 +113,7 @@ public static class Library
 
     public static void Init()
     {
+        ArmyCreatorLibrary.Init();
         _lvlUps = new int[MAX_PILOT_PARAMETER_LEVEL];
         for (var i = 0; i < MAX_PILOT_PARAMETER_LEVEL; i++)
             _lvlUps[i] = (int)(i * MONEY_PILOT_LEVEL_UP_COST_COEF + MONEY_PILOT_LEVEL_UP_COST_BASE);
@@ -225,8 +226,9 @@ public static class Library
                 {
                     case ShipType.Light:
                         var ship = new ShipInventory(
-                            new StartShipParams(shipType, config, 21, 17, 4.3f, 78, 1, 3, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 21, 17, 4.6f, 78, 1, 3, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
                         ship.ShiledArmor = 1;
+                        ship.BodyArmor = 1;
                         return ship;
                     case ShipType.Middle:
                         var ship1 = new ShipInventory(
@@ -251,13 +253,13 @@ public static class Library
                 {
                     case ShipType.Light:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 22, 11, 3.8f, 72, 2, 2, 0, 1, 0.1f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 30, 11, 4.0f, 72, 2, 2, 0, 1, 0.1f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 26, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 36, 12, 3.2f, 60, 2, 3, 0, 1, 0.15f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 33, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 42, 17, 2.6f, 49, 3, 3, 0, 1, 0.2f, 1f, reloadTime), player, pilot);
                     case ShipType.Base:
                         return new ShipInventory(
                             new StartShipParams(shipType, config, 41, 28, 0.81f, 40, 0, 0, 5, 1, 0f, 1f, reloadTime), player, pilot);
@@ -269,13 +271,13 @@ public static class Library
                 {
                     case ShipType.Light:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 20, 16, 3.4f, 70, 2, 1, 0, 1, 0.2f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 20, 16, 3.7f, 70, 3, 1, 0, 1, 0.2f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
                             new StartShipParams(shipType, config, 25, 21, 2.7f, 59, 3, 2, 0, 1, 0.25f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 33, 28, 1.9f, 48, 4, 2, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 33, 24, 1.6f, 48, 4, 2, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
                     case ShipType.Base:
                         return new ShipInventory(
                             new StartShipParams(shipType, config, 35, 35, 0.71f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
@@ -286,15 +288,14 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 52, 0, 3.6f, 75, 2, 3, 0, 1, 0f, 1f, reloadTime),
+                        return new ShipInventory(new StartShipParams(shipType, config, 45, 0, 3.4f, 70, 2, 2, 0, 1, 0f, 1f, reloadTime),
                             player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 62, 0, 3.2f, 62, 2, 3, 0, 1, 0f, 1f, reloadTime),
+                        return new ShipInventory(new StartShipParams(shipType, config, 50, 0, 3.0f, 53, 3, 2, 0, 1, 0f, 1f, reloadTime),
                             player, pilot);
                     case ShipType.Heavy:
-                        var ship3 = new ShipInventory(
-                            new StartShipParams(shipType, config, 74, 0, 3.0f, 50, 3, 4, 0, 1, 0f, 1f, reloadTime), player, pilot);
-                        ship3.ShiledArmor = 1;
+                        var ship3 = new ShipInventory(new StartShipParams(shipType, config, 68, 0, 2.8f, 45, 3, 3, 0, 1, 0f, 1f, reloadTime), player, pilot);
+                        ship3.BodyArmor = 1;
                         return ship3;
                     case ShipType.Base:
                         return new ShipInventory(
@@ -307,13 +308,13 @@ public static class Library
                 {
                     case ShipType.Light:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 14, 22, 3.6f, 77, 2, 2, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 14, 22, 3.7f, 87, 2, 2, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 18, 34, 3.0f, 65, 2, 2, 0, 1, 0.35f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 18, 36, 3.4f, 75, 2, 2, 0, 1, 0.35f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         var ship = new ShipInventory(
-                            new StartShipParams(shipType, config, 20, 44, 2.2f, 53, 2, 3, 0, 1, 0.4f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 20, 46, 2.2f, 63, 2, 3, 0, 1, 0.4f, 1f, reloadTime), player, pilot);
                         ship.BodyArmor = 2;
                         return ship;
                     case ShipType.Base:

@@ -90,7 +90,7 @@ public class MercenaryHideout : BaseGlobalMapEvent
         player.ReputationData.AddReputation(ShipConfig.federation, repToRemove);
         player.ReputationData.AddReputation(ShipConfig.krios, repToRemove);
         var power = player.Army.GetPower();
-        MainController.Instance.PreBattle(player, GetArmy(ShipConfig.mercenary, ArmyCreatorType.rnd, power), false);
+        MainController.Instance.PreBattle(player, GetArmy(ShipConfig.mercenary, ShipConfig.raiders, power), false);
     }
 
 

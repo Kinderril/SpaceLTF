@@ -34,42 +34,8 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     private void CacheArmy()
     {
-        ArmyCreatorData data = new ArmyCreatorData(ConfigOwner, true);
-        switch (_armyType)
-        {
-            case ArmyCreatorType.rocket:
-                data = new ArmyCreatorRocket(ConfigOwner, true);
-                break;
-            case ArmyCreatorType.laser:
-                data = new ArmyCreatorLaser(ConfigOwner, true);
-                break;
-            case ArmyCreatorType.mine:
-                data = new ArmyCreatorAOE(ConfigOwner, true);
-                break;
-            case ArmyCreatorType.destroy:
-                data = new ArmyCreatorDestroy(ConfigOwner, true);
-                break;
-        }
-
-        //        var data = new ArmyCreatorRocket(ShipConfig.mercenary);
+        ArmyCreatorData data = ArmyCreatorLibrary.GetArmy(ConfigOwner);
         var player = new Player(name);
-        //        float coreShipChance = 0;
-        //        switch (_config)
-        //        {
-        //            case ShipConfig.droid:
-        //                coreShipChance = 0f;
-        //                break;
-        //            case ShipConfig.raiders:
-        //                coreShipChance = 0.1f;
-        //                break;
-        //            case ShipConfig.federation:
-        //                coreShipChance = 0.9f;
-        //                break;
-        //            case ShipConfig.mercenary:
-        //                coreShipChance = 0.5f;
-        //                break;
-        //        }
-        //        bool withCore = MyExtensions.IsTrue01(coreShipChance);
         var army = ArmyCreator.CreateSimpleEnemyArmy(Power, data, player);
         player.Army.SetArmy(army);
         switch (ConfigOwner)

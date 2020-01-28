@@ -100,7 +100,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
             _reputation.RemoveReputation(_config, 5);
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(ShipConfig.ocrons, ArmyCreatorType.destroy, (int)myArmyPower));
+            GetArmy(_config, (int)myArmyPower));
 
     }
 

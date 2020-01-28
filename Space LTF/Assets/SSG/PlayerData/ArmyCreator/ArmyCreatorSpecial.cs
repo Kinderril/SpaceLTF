@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,27 +17,27 @@ public static class ArmyCreatorSpecial
     public static List<StartShipPilotData> CreateBossLightMinesRaiders(float points)
     {
         return CreateBoss(points, ShipConfig.raiders, LightMines);
-    }   
+    }
     public static List<StartShipPilotData> CreateBossImpulseCritsFed(float points)
     {
         return CreateBoss(points, ShipConfig.federation, ImpulseCrits);
-    }  
+    }
     public static List<StartShipPilotData> CreateBossIgnoreShieldKrios(float points)
     {
         return CreateBoss(points, ShipConfig.krios, IgnoreShield);
-    } 
+    }
     public static List<StartShipPilotData> CreateBossRocketTurnDistKrios(float points)
     {
         return CreateBoss(points, ShipConfig.krios, RocketTurnDist);
-    } 
+    }
     public static List<StartShipPilotData> CreateBossHeavyWithSpeedOcrons(float points)
     {
         return CreateBoss(points, ShipConfig.ocrons, HeavyWithSpeed);
-    } 
+    }
     public static List<StartShipPilotData> CreateBossBeamDistRaiders(float points)
     {
         return CreateBoss(points, ShipConfig.raiders, BeamDist);
-    } 
+    }
     public static List<StartShipPilotData> CreateBossManyEMIMerc(float points)
     {
         return CreateBoss(points, ShipConfig.mercenary, ManyEMI);
@@ -52,21 +50,21 @@ public static class ArmyCreatorSpecial
     {
         return CreateBoss(points, ShipConfig.ocrons, MaxSelfDamage);
     }
-                                                             
+
 
     private static List<StartShipPilotData> FireEMI(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.WeaponFire}, WeaponType.eimRocket,
-            new List<ShipType>() {ShipType.Middle, ShipType.Light}, 3, player, points);
+            new List<SimpleModulType>() { SimpleModulType.WeaponFire }, WeaponType.eimRocket,
+            new List<ShipType>() { ShipType.Middle, ShipType.Light }, 3, player, points);
         return subArmy;
     }
 
     private static List<StartShipPilotData> CassetSpray(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.WeaponSpray}, WeaponType.casset,
-            new List<ShipType>() {ShipType.Middle, ShipType.Heavy}, 3, player, points);
+            new List<SimpleModulType>() { SimpleModulType.WeaponSpray }, WeaponType.casset,
+            new List<ShipType>() { ShipType.Middle, ShipType.Heavy }, 3, player, points);
         return subArmy;
     }
 
@@ -76,67 +74,67 @@ public static class ArmyCreatorSpecial
             new List<SimpleModulType>()
                 {SimpleModulType.fireMines, SimpleModulType.damageMines, SimpleModulType.systemMines},
             WeaponType.impulse,
-            new List<ShipType>() {ShipType.Light}, 4, player, points);
+            new List<ShipType>() { ShipType.Light }, 4, player, points);
         return subArmy;
     }
 
     private static List<StartShipPilotData> ImpulseCrits(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.WeaponCrit}, WeaponType.impulse,
-            new List<ShipType>() {ShipType.Light, ShipType.Middle, ShipType.Heavy}, 3, player, points);
+            new List<SimpleModulType>() { SimpleModulType.WeaponCrit }, WeaponType.impulse,
+            new List<ShipType>() { ShipType.Light, ShipType.Middle, ShipType.Heavy }, 3, player, points);
         return subArmy;
     }
 
     private static List<StartShipPilotData> IgnoreShield(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.WeaponShieldIgnore}, WeaponType.rocket,
-            new List<ShipType>() {ShipType.Light, ShipType.Middle, ShipType.Heavy}, 5, player, points);
+            new List<SimpleModulType>() { SimpleModulType.WeaponShieldIgnore }, WeaponType.rocket,
+            new List<ShipType>() { ShipType.Light, ShipType.Middle, ShipType.Heavy }, 5, player, points);
         return subArmy;
     }
 
     private static List<StartShipPilotData> RocketTurnDist(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.WeaponDist, SimpleModulType.WeaponSpeed}, WeaponType.rocket,
-            new List<ShipType>() {ShipType.Middle, ShipType.Heavy}, 4, player, points);
+            new List<SimpleModulType>() { SimpleModulType.WeaponDist, SimpleModulType.WeaponSpeed }, WeaponType.rocket,
+            new List<ShipType>() { ShipType.Middle, ShipType.Heavy }, 4, player, points);
         return subArmy;
     }
 
     private static List<StartShipPilotData> HeavyWithSpeed(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.ShipSpeed, SimpleModulType.ShipTurnSpeed}, WeaponType.laser,
-            new List<ShipType>() {ShipType.Heavy}, 2, player, points);
+            new List<SimpleModulType>() { SimpleModulType.ShipSpeed, SimpleModulType.ShipTurnSpeed }, WeaponType.laser,
+            new List<ShipType>() { ShipType.Heavy }, 2, player, points);
         return subArmy;
     }
     private static List<StartShipPilotData> BeamDist(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.WeaponDist}, WeaponType.beam,
-            new List<ShipType>() {ShipType.Middle}, 3, player, points);
+            new List<SimpleModulType>() { SimpleModulType.WeaponDist }, WeaponType.beam,
+            new List<ShipType>() { ShipType.Middle }, 3, player, points);
         return subArmy;
-    }  
+    }
     private static List<StartShipPilotData> ManyEMI(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.WeaponShootPerTime}, WeaponType.eimRocket,
-            new List<ShipType>() { ShipType.Heavy,ShipType.Middle}, 6, player, points);
+            new List<SimpleModulType>() { SimpleModulType.WeaponShootPerTime }, WeaponType.eimRocket,
+            new List<ShipType>() { ShipType.Heavy, ShipType.Middle }, 6, player, points);
         return subArmy;
-    }    
+    }
     private static List<StartShipPilotData> EngineLockers(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.engineLocker}, WeaponType.casset,
-            new List<ShipType>() { ShipType.Heavy,ShipType.Middle}, 4, player, points);
+            new List<SimpleModulType>() { SimpleModulType.engineLocker }, WeaponType.casset,
+            new List<ShipType>() { ShipType.Heavy, ShipType.Middle }, 4, player, points);
         return subArmy;
-    }  
+    }
     private static List<StartShipPilotData> MaxSelfDamage(ShipConfig config, Player player, float points)
     {
         var subArmy = CreateArmy(config,
-            new List<SimpleModulType>() {SimpleModulType.WeaponSelfDamage,SimpleModulType.WeaponPowerShot}, WeaponType.laser,
-            new List<ShipType>() { ShipType.Heavy,ShipType.Middle}, 2, player, points);
+            new List<SimpleModulType>() { SimpleModulType.WeaponSelfDamage, SimpleModulType.WeaponPowerShot }, WeaponType.laser,
+            new List<ShipType>() { ShipType.Heavy, ShipType.Middle }, 2, player, points);
         return subArmy;
     }
 
@@ -155,8 +153,11 @@ public static class ArmyCreatorSpecial
         var shipMain = Library.CreateShip(ShipType.Base, config, player, pilot);
 
         var listOfSpells = ArmyCreatorData.AllSpellsStatic();
-        ArmyCreator.TryAddCastModul(new ArmyRemainPoints(points), shipMain, listOfSpells, bossLogger);
-        ArmyCreator.TryAddCastModul(new ArmyRemainPoints(points), shipMain, listOfSpells, bossLogger);
+        var rnd2 = listOfSpells.RandomElement(2);
+        foreach (var spellType in rnd2)
+        {
+            ArmyCreator.TryAddCastModul(new ArmyRemainPoints(points), shipMain, spellType, bossLogger);
+        }
         var shipMainStartData = new StartShipPilotData(pilot, shipMain);
         list.Add(shipMainStartData);
 
@@ -210,7 +211,7 @@ public static class ArmyCreatorSpecial
 
     private static void UpgradeArmy(List<StartShipPilotData> army, float remainPoints)
     {
-        var armyData = new ArmyCreatorData(army[0].Ship.ShipConfig, true);
+        var armyData = ArmyCreatorLibrary.GetArmy(army[0].Ship.ShipConfig);
         List<StartShipPilotData> armyCopy = army.ToList();
         var upgrades = new Dictionary<StartShipPilotData, WDictionary<LibraryShipUpgradeType>>();
         foreach (var startShipPilotData in army)

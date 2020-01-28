@@ -230,17 +230,19 @@ public class SecretDeal : BaseGlobalMapEvent
     private void Fight(float coef, bool onlyStartFleet)
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * coef;
-        ArmyCreatorType _type;
+        Player opponent;
         if (onlyStartFleet)
         {
-            _type = ArmyCreatorType.laser;
+            opponent = GetArmy(_config, (int)myArmyPower);
         }
         else
         {
-            _type = ArmyCreatorType.rnd;
+            var cngs = new List<ShipConfig>() { ShipConfig.federation, ShipConfig.ocrons, ShipConfig.krios };
+            cngs.Remove(_config);
+            ShipConfig sc = cngs.RandomElement();
+            opponent = GetArmy(_config, sc, (int)myArmyPower);
         }
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(_config, _type, (int)myArmyPower));
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, opponent);
     }
 
 }

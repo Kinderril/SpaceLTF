@@ -18,6 +18,8 @@ public class InventoryUI : DragZone
     public Transform Layout;
     private Player _player;                                           
     private List<DragableItemSlot> _allSLots = new List<DragableItemSlot>();
+
+    public bool ShallRefreshPos = true;
 //    public ScrollView Scroll;
 //    private InventorySlots SlotsController;
 
@@ -41,6 +43,10 @@ public class InventoryUI : DragZone
 
     public void RefreshPosition()
     {
+        if (!ShallRefreshPos)
+        {
+            return;
+        }
         var rect = Layout.GetComponent<RectTransform>();
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
         Layout.gameObject.transform.localPosition = new Vector3(0, -1000, 0);

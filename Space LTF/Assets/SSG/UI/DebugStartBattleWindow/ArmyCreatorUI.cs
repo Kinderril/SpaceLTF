@@ -116,30 +116,7 @@ public class ArmyCreatorUI : MonoBehaviour
         var h = _armyCreatorTypes[ArmyWeaponTypes.value];
         var d = _armyModesTypes[ArmyTypes.value];
         var config = _armyConfigs[ArmyConfigs.value];
-        ArmyCreatorType aType = h;
-        //        List<ShipConfig> configs=new List<ShipConfig>()
-        //        {
-        //            ShipConfig.mercenary,
-        //            ShipConfig.federation,
-        //        };
-        //        ShipConfig config = configs.RandomElement();
-        ArmyCreatorData data = new ArmyCreatorData(config, true);
-        switch (aType)
-        {
-            case ArmyCreatorType.rocket:
-                data = new ArmyCreatorRocket(config, true);
-                break;
-            case ArmyCreatorType.laser:
-                data = new ArmyCreatorLaser(config, true);
-                break;
-            case ArmyCreatorType.mine:
-                data = new ArmyCreatorAOE(config, true);
-                break;
-            case ArmyCreatorType.destroy:
-                data = new ArmyCreatorDestroy(config, true);
-                break;
-        }
-
+        ArmyCreatorData data = ArmyCreatorLibrary.GetArmy(config);
         var army = ArmyCreator.CreateArmy(SliderPointsCount.value, d, min, max, data, true, PlayerOwner);
         foreach (var ship in army)
         {

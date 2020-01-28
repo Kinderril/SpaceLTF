@@ -56,7 +56,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
-            GetArmy(ShipConfig.mercenary, ArmyCreatorType.simple, (int)myArmyPower));
+            GetArmy(_config, (int)myArmyPower));
     }
 
     private MessageDialogData tryFindWay()

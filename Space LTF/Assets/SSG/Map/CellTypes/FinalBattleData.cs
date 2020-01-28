@@ -149,7 +149,8 @@ public class FinalBattleData
         ShipConfig config = rep.ReputationData.WorstFaction(rep.Army.BaseShipConfig);
         _lastFight = true;
         var player = new Player("Final boss");
-        var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize, 5, 7, ArmyCreatorData.GetRandom(config),
+        var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize,
+            5, 7, ArmyCreatorLibrary.GetArmy(config),
             true, player);
         player.Army.SetArmy(army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer, player, true, false);
