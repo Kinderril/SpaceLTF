@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
-using UnityEngine;
 
 
 public class ModulBigInfoUI : AbstractBaseInfoUI
@@ -19,7 +14,7 @@ public class ModulBigInfoUI : AbstractBaseInfoUI
     {
         base.Init(callback);
         NameField.text = Namings.SimpleModulName(modul.Type);
-//        string desc;
+        //        string desc;
         var supprt = modul as BaseSupportModul;
         if (supprt != null)
         {
@@ -29,11 +24,11 @@ public class ModulBigInfoUI : AbstractBaseInfoUI
         else
         {
             SupportField.text = Namings.ActionModul;
-            DescField.text = Namings.DescSimpleModul(modul.Type);
+            DescField.text = modul.GetDesc();
         }
-        LevelField.text =(modul.Level.ToString("0"));
+        LevelField.text = (modul.Level.ToString("0"));
         ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild, modul.RequireLevel());
     }
-    
+
 }
 

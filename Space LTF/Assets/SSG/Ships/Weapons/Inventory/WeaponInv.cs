@@ -23,6 +23,8 @@ public class WeaponInventoryParameters
 {
     public float shieldDamage;
     public float bodyDamage;
+    public float shieldPreLevelDamage;
+    public float bodyPreLevelDamage;
     public float sectorAngle;
     public float turnSpeed;
     public float reloadSec;
@@ -32,10 +34,12 @@ public class WeaponInventoryParameters
     public float AimRadius;
 
 
-    public WeaponInventoryParameters(int shieldDamage, int bodyDamage, float sectorAngle, float reloadSec,
+    public WeaponInventoryParameters(int shieldDamage, int bodyDamage, float shieldPreLevelDamage, float bodyPreLevelDamage, float sectorAngle, float reloadSec,
         float delayBetweenShootsSec,
         int shootPerTime, float _bulletSpeed, float AimRadius, float turnSpeed = 0f)
     {
+        this.shieldPreLevelDamage = shieldPreLevelDamage;
+        this.bodyPreLevelDamage = bodyPreLevelDamage;
         this.AimRadius = AimRadius;
         this._bulletSpeed = _bulletSpeed;
         this.turnSpeed = turnSpeed;
@@ -61,6 +65,8 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     private const float MAX_DELTA = .2f;
     public float _bulletTurnSpeed = 36f;
 
+    private float _shieldPreLevelDamage = 0f;
+    private float _bodyPreLevelDamage = 0f;
     private float _shieldDamage = 0f;
     private float _bodyDamage = 0f;
 
@@ -70,12 +76,12 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     public float _radiusShoot;
     public float sectorAngle;
     public float delayBetweenShootsSec;
-//    public int shootPerTime;
+    //    public int shootPerTime;
     public WeaponType WeaponType;
     public bool isRoundAng;
     public readonly float fixedDelta;
-    private CurWeaponDamage _currentDamage;
-    private CurWeaponDamage _currentDamage1;
+    // private CurWeaponDamage _currentDamage;
+    // private CurWeaponDamage _currentDamage1;
     public string Name { get; set; }
 
     public float SetorAngle { get; set; }
@@ -97,15 +103,9 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
 
     //protected Dictionary<int, Dictionary<WeaponUpdageType, WeaponUpgradeData>> _levelUpDependences;
 
-    private float ShieldDamage
-    {
-        get { return _shieldDamage + Level - 1; }
-    }
+    private float ShieldDamage => _shieldDamage + (Level - 1) * _shieldPreLevelDamage;
 
-    private float BodyDamage
-    {
-        get { return _bodyDamage + Level - 1; }
-    }
+    private float BodyDamage => _bodyDamage + (Level - 1) * _bodyPreLevelDamage;
 
     public ItemType ItemType
     {
@@ -117,7 +117,9 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     public WeaponInv(WeaponInventoryParameters parameters,
         WeaponType WeaponType, int Level)
     {
+        _shieldPreLevelDamage = parameters.shieldPreLevelDamage;
         _shieldDamage = parameters.shieldDamage;
+        _bodyPreLevelDamage = parameters.bodyPreLevelDamage;
         _bodyDamage = parameters.bodyDamage;
         this.ShootPerTime = parameters.shootPerTime;
         this._bulletSpeed = parameters._bulletSpeed;
@@ -125,18 +127,18 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         this.ReloadSec = parameters.reloadSec;
         this.delayBetweenShootsSec = parameters.delayBetweenShootsSec;
         this._aimRadius = parameters.AimRadius;
-//        if (WeaponType == WeaponType.beam)
-//        {
-//            this.RadiusShoot = AimRadius;
-//        }
-//        else
-//        {
-//            this.RadiusShoot = AimRadius * 1.6f;
-//        }
+        //        if (WeaponType == WeaponType.beam)
+        //        {
+        //            this.RadiusShoot = AimRadius;
+        //        }
+        //        else
+        //        {
+        //            this.RadiusShoot = AimRadius * 1.6f;
+        //        }
         this._radiusShoot = _aimRadius * 1.6f;
         this.sectorAngle = parameters.sectorAngle;
-//        this.MaxCharges = MaxCharges;
-//        this.RemainCharges = RemainCharges;
+        //        this.MaxCharges = MaxCharges;
+        //        this.RemainCharges = RemainCharges;
         this.WeaponType = WeaponType;
         this.Level = Level;
         isRoundAng = sectorAngle >= 360;
@@ -191,7 +193,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
 
     private int RequireLevelByLevel(int lvl)
     {
-          return 1 + (lvl - 1) * Library.WEAPON_REQUIRE_LEVEL_COEF;
+        return 1 + (lvl - 1) * Library.WEAPON_REQUIRE_LEVEL_COEF;
     }
 
     public string WideInfo()
@@ -200,9 +202,9 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         return info;
     }
 
-//    CurWeaponDamage IAffectParameters.CurrentDamage => _currentDamage;
+    //    CurWeaponDamage IAffectParameters.CurrentDamage => _currentDamage;
 
-//    float IAffectParameters.AimRadius { get; set; }
+    //    float IAffectParameters.AimRadius { get; set; }
 
 
     public float AimRadius
@@ -215,17 +217,17 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         BulleStartParameters bulleStartParameters)
     {
         //        var dirToShoot = Owner.LookDirection;
-        
-        var dirToShoot = target.IsDir ?target.Position : target.Position - shootPos;
+
+        var dirToShoot = target.IsDir ? target.Position : target.Position - shootPos;
         var b = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, bulleStartParameters);
     }
 
 
-//    public virtual void Affect(ShipParameters shipParameters, ShipBase target, Bullet bullet, DamageDoneDelegate callback, WeaponAffectionAdditionalParams additional)
-//    {
-////        var damage = CurrentDamage();
-//        shipParameters.Damage(damage.ShieldDamage, damage.BodyDamage, callback);
-//    }
+    //    public virtual void Affect(ShipParameters shipParameters, ShipBase target, Bullet bullet, DamageDoneDelegate callback, WeaponAffectionAdditionalParams additional)
+    //    {
+    ////        var damage = CurrentDamage();
+    //        shipParameters.Damage(damage.ShieldDamage, damage.BodyDamage, callback);
+    //    }
     public abstract WeaponInGame CreateForBattle();
 
     public virtual void BulletDestroyed(IWeapon weapon, Vector3 position, Bullet bullet)
@@ -241,7 +243,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         var owner = CurrentInventory.Owner;
         if (CanUpgrade())
         {
-            if (CurrentInventory.CanMoveToByLevel(this,Level + 1))
+            if (CurrentInventory.CanMoveToByLevel(this, Level + 1))
             {
                 if (MoneyConsts.WeaponUpgrade.ContainsKey(Level))
                 {
@@ -273,7 +275,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                 if (CurrentInventory is ShipInventory shipInv)
                 {
                     int pilotLevel = shipInv.PilotParameters.CurLevel;
-                    int targetLevel = this.RequireLevel(Level+1);
+                    int targetLevel = this.RequireLevel(Level + 1);
                     WindowManager.Instance.InfoWindow.Init(null, String.Format(Namings.CanCauseNoLevel, pilotLevel, targetLevel));
                 }
             }
@@ -281,7 +283,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null,  Namings.WeaponMaxLevel);
+            WindowManager.Instance.InfoWindow.Init(null, Namings.WeaponMaxLevel);
         }
     }
 

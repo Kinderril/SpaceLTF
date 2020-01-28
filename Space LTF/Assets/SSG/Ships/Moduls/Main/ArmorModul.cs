@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
-using UnityEngine;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class ArmorModul : BaseModul
-{  
-    public ArmorModul(BaseModulInv baseModulInv) 
+{
+    public ArmorModul(BaseModulInv baseModulInv)
         : base(baseModulInv)
     {
 
@@ -17,8 +9,8 @@ public class ArmorModul : BaseModul
 
     public override void Apply(ShipParameters Parameters, ShipBase owner)
     {
-        base.Apply(Parameters,owner);
-        Parameters.BodyArmor += ModulData.Level;
+        base.Apply(Parameters, owner);
+        Parameters.BodyArmor += ModulData.Level * 2;
         // Parameters.ShieldArmor += ModulData.Level;
     }
 

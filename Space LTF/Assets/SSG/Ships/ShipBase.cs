@@ -436,7 +436,6 @@ public class ShipBase : MovingObject
             }
         }
         return base.ApplyRotation(dir, exactlyPoint);
-        
     }
 
     public void MoveByWay(Vector3 target)

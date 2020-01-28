@@ -1,22 +1,18 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class ShipDecreaseSpeedModul : BaseSupportModul
 {
-//    private const float spd_inc = 0.3f;
+    //    private const float spd_inc = 0.3f;
     public const float SPEED_LEVEL = 0.5f;
     public const float PER_LEVEL = 0.1f;
     private const float dmg_inc = 0.6f;
 
 
-    public ShipDecreaseSpeedModul( int level) 
+    public ShipDecreaseSpeedModul(int level)
         : base(SimpleModulType.ShipDecreaseSpeed, level)
     {
 
     }
-    private float DmgLevel => dmg_inc + Level * 0.3f;
+    private float DmgLevel => dmg_inc + Level * 0.2f;
     private float SpeedDecrease => SPEED_LEVEL + Level * PER_LEVEL;
 
     public override string DescSupport()

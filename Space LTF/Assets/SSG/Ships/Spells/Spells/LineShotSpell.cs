@@ -1,14 +1,11 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
 [System.Serializable]
-public class LineShotSpell : BaseSpellModulInv 
-{                                 
+public class LineShotSpell : BaseSpellModulInv
+{
     private const float BULLET_SPEED = 10f;
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 38f;
@@ -23,7 +20,7 @@ public class LineShotSpell : BaseSpellModulInv
         : base(SpellType.lineShot, costCount, costTime,
              new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
     {
-        CurrentDamage = new CurWeaponDamage(1,2);
+        CurrentDamage = new CurWeaponDamage(2, 4);
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
@@ -45,7 +42,7 @@ public class LineShotSpell : BaseSpellModulInv
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        shipparameters.Damage(CurrentDamage.ShieldDamage, CurrentDamage.BodyDamage, damagedone,target);
+        shipparameters.Damage(CurrentDamage.ShieldDamage, CurrentDamage.BodyDamage, damagedone, target);
         target.DamageData.ApplyEffect(ShipDamageType.fire, FirePeriod);
     }
 
@@ -70,13 +67,13 @@ public class LineShotSpell : BaseSpellModulInv
 
     protected override void CastAction(Vector3 pos)
     {
-        
+
     }
 
     public override string Desc()
     {
-        return      String.Format(Namings.LineSHotSpell, CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod);
-//            $"Triple shot by selected direction. Base damage: {CurrentDamage.BodyDamage}/{CurrentDamage.ShieldDamage}. And starts fire for {FirePeriod} sec.";
+        return String.Format(Namings.LineSHotSpell, CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod);
+        //            $"Triple shot by selected direction. Base damage: {CurrentDamage.BodyDamage}/{CurrentDamage.ShieldDamage}. And starts fire for {FirePeriod} sec.";
     }
 }
 

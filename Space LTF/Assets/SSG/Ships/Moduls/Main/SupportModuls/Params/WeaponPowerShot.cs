@@ -1,7 +1,7 @@
 ﻿[System.Serializable]
 public class WeaponPowerShot : BaseSupportModul
 {
-    private const float spd_inc = 2.0f;
+    private const float relocad_inc = 2.0f;
     private const float dmg_inc = 1.0f;
     public WeaponPowerShot(int level)
         : base(SimpleModulType.WeaponPowerShot, level)
@@ -16,11 +16,11 @@ public class WeaponPowerShot : BaseSupportModul
     {
         weapon.CurrentDamage.BodyDamage *= DmgLevel;
         weapon.CurrentDamage.ShieldDamage *= DmgLevel;
-        weapon.ReloadSec = weapon.ReloadSec * spd_inc;
+        weapon.ReloadSec = weapon.ReloadSec * relocad_inc;
     }
     public override string DescSupport()
     {
-        return $"Increase reload time by {Utils.FloatToChance(spd_inc)}%. Increase damage by {Utils.FloatToChance(DmgLevel)}%.";
+        return $"Increase reload time by {Utils.FloatToChance(relocad_inc)}%. Increase damage by {Utils.FloatToChance(DmgLevel)}%.";
     }
 
 }

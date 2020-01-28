@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
@@ -11,20 +9,20 @@ public class ShipPathController2
 
     private float RadiusToBeSafe = 1.25f;
 
-//    private bool _lastFrameBlocks;
-//    private SideTurn turnSideTurn = SideTurn.left;
-//    public Vector3 Target { get; private set; }
+    //    private bool _lastFrameBlocks;
+    //    private SideTurn turnSideTurn = SideTurn.left;
+    //    public Vector3 Target { get; private set; }
     private ShipBase _owner;
-//    private Vector3 _lastTarget;
+    //    private Vector3 _lastTarget;
 
-//    private Vector3? blockPosition = null;
-//    private Vector3? targetCorner = null;
-//    private PathDebugData _debugData;
+    //    private Vector3? blockPosition = null;
+    //    private Vector3? targetCorner = null;
+    //    private PathDebugData _debugData;
 
-//#if DEBUG
-//    private SideTurn _lastSideTurn = SideTurn.left;
-//    private int _switchTimes = 0;
-//#endif
+    //#if DEBUG
+    //    private SideTurn _lastSideTurn = SideTurn.left;
+    //    private int _switchTimes = 0;
+    //#endif
 
     public ShipPathController2(ShipBase owner, float distCoef)
     {
@@ -33,24 +31,35 @@ public class ShipPathController2
         //        Dist = dist;
         //        _maskLayer = 1 << LayerMask.NameToLayer("Border");
         _owner = owner;
-//        _debugData = new PathDebugData();
+        //        _debugData = new PathDebugData();
     }
 
     public void Activate()
     {
-              
+
         RadiusToBeSafe = _owner.CellController.Data.InsideRadius;
     }
     public Vector3 Target { get; private set; }
+    private float _timeSpends = 0;
+    private const float _maxTimeSpends = 0.25f;
+    private Vector3 _lastDirection;
 
-    public Vector3 GetCurentDirection(ShipBase vector3, out bool exactlyPoint, out bool goodDir, out float speed)
+    public Vector3 GetCurentDirection(ShipBase target, out bool exactlyPoint, out bool goodDir, out float speed)
     {
-        var targetDirection = GetCurentDirection(vector3.Position, out exactlyPoint, out goodDir, out speed);
+        var isInBlack = _owner.Enemies[target].IsInBack();
+        var targetDirection = GetCurentDirection(target.Position, out exactlyPoint, out goodDir, out speed);
         targetDirection = Utils.NormalizeFastSelf(targetDirection);
-//        var updatedDir = _owner.Cell.UpdatePosibleDirection(targetDirection, _owner.EulerY);
-//        speed = _owner.Cell.CheckWantSlow(_owner.LookDirection, _owner.Position, _owner.EulerY);
-
-        return targetDirection;
+        if (_timeSpends < _maxTimeSpends && isInBlack)
+        {
+            _timeSpends += Time.deltaTime;
+            return _lastDirection;
+        }
+        else
+        {
+            _timeSpends = 0f;
+            _lastDirection = targetDirection;
+            return targetDirection;
+        }
     }
 
     public Vector3 GetCurentDirection(Vector3 vector3, out bool exactlyPoint, out bool goodDir, out float speed)
@@ -92,14 +101,14 @@ public class ShipPathController2
         //        Vector3 dirToAsteroid;
 
 
-//#if UNITY_EDITOR
-//
-//        foreach (var point in asteroids)
-//        {
-//            DrawUtils.DebugCircle(point.Position, Vector3.up, Color.white, point.Rad);
-//        }
-//#endif
-//        DrawUtils.DebugCircle(_owner.Position, Vector3.up, Color.green, _owner.CurTurnRadius);
+        //#if UNITY_EDITOR
+        //
+        //        foreach (var point in asteroids)
+        //        {
+        //            DrawUtils.DebugCircle(point.Position, Vector3.up, Color.white, point.Rad);
+        //        }
+        //#endif
+        //        DrawUtils.DebugCircle(_owner.Position, Vector3.up, Color.green, _owner.CurTurnRadius);
 
         //        var isFront = Vector3.Dot(LookDirection, dirToTarget) > 0;
         var asteroidFindPointStart = _owner.Position - _owner.LookDirection * 3f;
@@ -203,7 +212,7 @@ public class ShipPathController2
                     asteroid.DistToShip = distToAsteroid;
                     closestAsteroids.Add(asteroid);
                 }
-                Debug.DrawRay(asteroid.Position, Vector3.up * 10, isInRadius?Color.magenta:Color.yellow);
+                Debug.DrawRay(asteroid.Position, Vector3.up * 10, isInRadius ? Color.magenta : Color.yellow);
             }
         }
 

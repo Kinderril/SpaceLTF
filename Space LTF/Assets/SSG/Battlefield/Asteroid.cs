@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class Asteroid : MonoBehaviour
@@ -17,8 +12,8 @@ public class Asteroid : MonoBehaviour
 
     private float _rad;
     public Vector3 Position { get; set; }
-    protected virtual float BodyDamage => 3f; 
-    protected virtual float ShieldDamage => 1f; 
+    protected virtual float BodyDamage => 6f;
+    protected virtual float ShieldDamage => 3f;
 
     public float Rad
     {
@@ -38,15 +33,15 @@ public class Asteroid : MonoBehaviour
         var xx = MyExtensions.Random(0f, 1f);
         var yy = MyExtensions.Random(0f, 1f);
         var zz = MyExtensions.Random(0f, 1f);
-        _rotateDir = new Vector3(xx,yy,zz);
+        _rotateDir = new Vector3(xx, yy, zz);
     }
 
     void OnTriggerEnter(Collider other)
     {
-//        Debug.LogError($"Asteroid DEAD {gameObject.name}. {transform.position}. {other.gameObject.name}");
+        //        Debug.LogError($"Asteroid DEAD {gameObject.name}. {transform.position}. {other.gameObject.name}");
         OnBulletHit(other);
     }
-    
+
     private void OnBulletHit(Collider other)
     {
         if (other.CompareTag(TagController.OBJECT_MOVER_TAG))
@@ -55,7 +50,7 @@ public class Asteroid : MonoBehaviour
 
             if (ship != null)
             {
-                ship.ShipBase.ShipParameters.Damage(ShieldDamage, BodyDamage, null,null);
+                ship.ShipBase.ShipParameters.Damage(ShieldDamage, BodyDamage, null, null);
                 Death(true);
             }
         }
@@ -114,14 +109,14 @@ public class Asteroid : MonoBehaviour
 
     public void InitRad()
     {
-         var midVal = (transform.localScale.x + transform.localScale.z);
-         Rad = midVal;
+        var midVal = (transform.localScale.x + transform.localScale.z);
+        Rad = midVal;
     }
 
     public void Init(AIAsteroidPredata aiAsteroidPredata)
     {
         _aiAsteroidPredata = aiAsteroidPredata;
-       Rad = aiAsteroidPredata.Rad / AIAsteroidPredata.SHIP_SIZE_COEF;
+        Rad = aiAsteroidPredata.Rad / AIAsteroidPredata.SHIP_SIZE_COEF;
 
     }
 }

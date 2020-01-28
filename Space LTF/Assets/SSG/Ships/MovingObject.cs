@@ -123,19 +123,20 @@ public abstract class MovingObject : PoolElement
             return 1f;
         }
 
-        var quatern = ApplyRotationXZ(dir, LookDirection, LookLeft, TurnSpeed, DebugMovingData,Position);
+        var quatern = ApplyRotationXZ(dir, LookDirection, LookLeft, TurnSpeed, DebugMovingData,Position,out var steps);
+        BankingData.SetNewData(dir, steps);
         Rotation = quatern;
         return 1f;
     }
 
     public static Quaternion ApplyRotationXZ(Vector3 targetDir, Vector3 lookDir, Vector3 lookLeft,
-        Func<float> TurnSpeed, DebugMovingData debugData,Vector3 position)
+        Func<float> TurnSpeed, DebugMovingData debugData,Vector3 position,out float steps)
     {
         Quaternion Rotation;
         var ang = Vector3.Angle(targetDir, lookDir);
         var turnSpeed = TurnSpeed();
         var angPerFrameTurn = (turnSpeed * Time.deltaTime);
-        var steps = ang / angPerFrameTurn;
+        steps = ang / angPerFrameTurn;
         if (steps <= 1f) // && exactlyPoint)
         {
 #if UNITY_EDITOR
@@ -158,7 +159,7 @@ public abstract class MovingObject : PoolElement
 #if UNITY_EDITOR
         if (debugData != null)
             debugData.AddDir(lookDir, true, lookDir, position);
-#endif
+#endif                 
         var qRotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
         return qRotation;
     }

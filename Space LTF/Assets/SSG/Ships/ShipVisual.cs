@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
 public class ShipVisual : MonoBehaviour
 {
     public EngineEffect EngineEffect;
-//    public List<MeshRenderer> SideEffects = new List<MeshRenderer>(); 
+    public List<Renderer> SignalFlares = new List<Renderer>();
 
     public void Init(ShipBase shipBase)
     {
         if (EngineEffect != null)
             EngineEffect.Init(shipBase);
-
-//        foreach (var meshRenderer in SideEffects)
-//        {
-//             var materialCopy = Material.Instantiate(meshRenderer.material);
-//             meshRenderer.material = materialCopy;
-//             var lColor = shipBase.TeamIndex == TeamIndex.green ? Color.green : Color.red;
-//            meshRenderer.material.SetColor("_SpecColor", lColor);
-//        }
+        var data = DataBaseController.Instance.DataStructPrefabs;
+        foreach (var flare in SignalFlares)
+        {
+            var material = shipBase.TeamIndex == TeamIndex.green ? data.GreenFlare : data.RedFlare;
+            flare.material = material;
+        }
     }
 }
 

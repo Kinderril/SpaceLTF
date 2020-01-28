@@ -1,17 +1,15 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public enum ShipDamageType
 {
     engine = 0,
-//    turnEngine = 1,
+    //    turnEngine = 1,
     // weapon = 2,
     shiled = 3,
-//    moduls,
+    //    moduls,
     fire = 4
 }
 
@@ -19,17 +17,17 @@ public class ShipDamageData : ShipData
 {
     private EngineStop _engineStop;
     private WeaponsController _weaponsController;
-    private Dictionary<ShipDamageType,bool> damagedDetails = new Dictionary<ShipDamageType, bool>();
-    public event Action<ShipBase,ShipDamageType, bool> OnDamageDone;
+    private Dictionary<ShipDamageType, bool> damagedDetails = new Dictionary<ShipDamageType, bool>();
+    public event Action<ShipBase, ShipDamageType, bool> OnDamageDone;
     public bool IsReflecOn = false;
 
-    public ShipDamageData([NotNull] ShipBase owner) 
+    public ShipDamageData([NotNull] ShipBase owner)
         : base(owner)
     {
         var values3 = Enum.GetValues(typeof(ShipDamageType));
         foreach (ShipDamageType v in values3)
         {
-            damagedDetails.Add(v,false);
+            damagedDetails.Add(v, false);
         }
     }
 
@@ -69,8 +67,8 @@ public class ShipDamageData : ShipData
                 FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
                 _engineStop.Stop(time);
                 break;
-//            case ShipDamageType.turnEngine:
-//                break;
+            //            case ShipDamageType.turnEngine:
+            //                break;
             // case ShipDamageType.weapon:
             //     FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
             //     _weaponsController.CrashAllWeapons(true);
@@ -80,18 +78,18 @@ public class ShipDamageData : ShipData
                 _owner.ShipParameters.ShieldParameters.Crash(time);
                 break;
             case ShipDamageType.fire:
-                var remainTime = _owner.PeriodDamage.Start((int)time);
+                var remainTime = _owner.PeriodDamage.Start((int)time, 1f);
                 info = Namings.Damage(damageType, remainTime);
                 FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
                 break;
         }
         if (OnDamageDone != null)
         {
-            OnDamageDone(_owner,damageType, true);
+            OnDamageDone(_owner, damageType, true);
         }
         if (time > 0)
         {
-            
+
         }
     }
 
@@ -114,11 +112,11 @@ public class ShipDamageData : ShipData
             case ShipDamageType.engine:
                 _engineStop.Start();
                 break;
-//            case ShipDamageType.turnEngine:
-//                //TODO
-//                break;
-            // case ShipDamageType.weapon:
-            //     _weaponsController.CrashAllWeapons(false);
+                //            case ShipDamageType.turnEngine:
+                //                //TODO
+                //                break;
+                // case ShipDamageType.weapon:
+                //     _weaponsController.CrashAllWeapons(false);
                 break;
             case ShipDamageType.shiled:
                 _owner.ShipParameters.ShieldParameters.Repair();

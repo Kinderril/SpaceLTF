@@ -252,7 +252,7 @@ public static class Namings
                 Name = "If bullet bullet hit at front reflects it.";
                 break;
             case SimpleModulType.armor:
-                Name = "Decrease damage on ships body";
+                Name = "Decrease damage on ships hull";
                 break;
             case SimpleModulType.fireMines:
                 Name = $"Put damage mines, witch can fire enemies for {MineFireModul.PERIOD_DAMAGE} sec.";
@@ -274,7 +274,7 @@ public static class Namings
                 break;
             case SimpleModulType.bombUpgrade:
                 Name = "Increase power of all bomb weapons for +1/+1 per level.";
-                break;   
+                break;
             case SimpleModulType.WeaponSpeed:
                 Name = "Increase speed of all bullets.";
                 break;

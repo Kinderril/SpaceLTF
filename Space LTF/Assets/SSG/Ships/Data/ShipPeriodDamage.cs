@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using UnityEngine;
 
 
-public class ShipPeriodDamage :ShipData
+public class ShipPeriodDamage : ShipData
 {
+    private const float DAMAGE_IGNORE_SHIELD = 2f;
     private bool _using = false;
     private float _endTime;
     private float _nextDamageTime;
+    private float _coef = 1f;
     private int _ticksRemain;
 
-    public ShipPeriodDamage([NotNull] ShipBase owner) 
+    public ShipPeriodDamage([NotNull] ShipBase owner)
         : base(owner)
     {
 
@@ -38,18 +35,23 @@ public class ShipPeriodDamage :ShipData
 
     private void Damage()
     {
-//        Debug.LogError("Damage period :" + 1f + "/" + 1f + "_nextDamageTime:"+ _nextDamageTime);
+        //        Debug.LogError("Damage period :" + 1f + "/" + 1f + "_nextDamageTime:"+ _nextDamageTime);
         _nextDamageTime = Time.time + 1f;
-        _ticksRemain--;           
-        _owner.ShipParameters.DamageIgnoreShield(1f,null);
+        _ticksRemain--;
+        var damage = DAMAGE_IGNORE_SHIELD * _coef;
+        _owner.ShipParameters.DamageIgnoreShield(damage, null);
     }
 
-    public int Start(int ticks)
+    public int Start(int ticks, float coef)
     {
-//        Debug.LogError("Start period damage period:" + period);
+        if (coef > _coef)
+        {
+            _coef = coef;
+        }
+        //        Debug.LogError("Start period damage period:" + period);
         if (_using)
         {
-            var nextTicks = _ticksRemain +  ticks / 2;
+            var nextTicks = _ticksRemain + ticks / 2;
             _ticksRemain = Mathf.Max(nextTicks, ticks);
         }
         else
@@ -66,7 +68,8 @@ public class ShipPeriodDamage :ShipData
 
     public void Stop()
     {
-//        Debug.LogError("Stop period damage");
+        _coef = 1f;
+        //        Debug.LogError("Stop period damage");
         if (_owner.PeriodDamageEffect != null)
             _owner.PeriodDamageEffect.Stop();
         _using = false;

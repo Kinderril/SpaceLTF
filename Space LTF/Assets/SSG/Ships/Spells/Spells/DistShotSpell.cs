@@ -8,9 +8,9 @@ public class DistShotSpell : BaseSpellModulInv
 {
     //    private const float dist = 28f;
 
-    private const int DIST_BASE_DAMAGE = 4;
-    private const int BASE_DAMAGE = 5;
-    private const int LEVEL_DAMAGE = 4;
+    private const int DIST_BASE_DAMAGE = 8;
+    private const int BASE_DAMAGE = 10;
+    private const int LEVEL_DAMAGE = 8;
     private const float DIST_COEF = .065f;
     private const float ENGINE_OFF_DELTA = 3f;
     private const float ENGINE_OFF_LEVEL = 1f;

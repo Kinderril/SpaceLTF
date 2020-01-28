@@ -115,6 +115,8 @@ public class DataStructPrefabs : MonoBehaviour
     public QuestOnStartElement QuestOnStartElement;
     public EnemyGlobalMapMoverObjet MovingArmyObject;
     public ImageWithTooltip NoScoutData;
+    public Material GreenFlare;
+    public Material RedFlare;
 
 
     public void Init()

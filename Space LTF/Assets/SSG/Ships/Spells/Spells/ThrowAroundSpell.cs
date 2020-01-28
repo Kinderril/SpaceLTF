@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
@@ -9,7 +6,7 @@ using UnityEngine;
 public class ThrowAroundSpell : BaseSpellModulInv
 {
     private const float DIST_SHOT = 8;
-    private const float DAMAGE_BODY = 3;
+    private const float DAMAGE_BODY = 10;
     private const float rad = 4f;
 
     public ThrowAroundSpell(int costCount, int costTime)
@@ -40,12 +37,12 @@ public class ThrowAroundSpell : BaseSpellModulInv
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-//        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
+        //        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
         var startPos = shootpos;
         var dir = target.Position - startPos;
-        bullestartparameters.distanceShoot = Mathf.Clamp(dir.magnitude,1, DIST_SHOT);
+        bullestartparameters.distanceShoot = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
-//        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition, weapon.CurPosition, null, bullestartparameters);
+        //        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition, weapon.CurPosition, null, bullestartparameters);
     }
 
     public override Bullet GetBulletPrefab()
@@ -57,32 +54,32 @@ public class ThrowAroundSpell : BaseSpellModulInv
 
     protected override void CastAction(Vector3 pos)
     {
-//        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.green, rad);
-//        var c2 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.red, rad);
-//        foreach (var shipBase in c1)
-//        {
-//            ActionShip(shipBase, pos);
-//        }
-//        foreach (var shipBase in c2)
-//        {
-//            ActionShip(shipBase, pos);
-//        }
+        //        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.green, rad);
+        //        var c2 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.red, rad);
+        //        foreach (var shipBase in c1)
+        //        {
+        //            ActionShip(shipBase, pos);
+        //        }
+        //        foreach (var shipBase in c2)
+        //        {
+        //            ActionShip(shipBase, pos);
+        //        }
     }
 
-    private float bodyDamage => DAMAGE_BODY + Level;
+    private float bodyDamage => DAMAGE_BODY + Level * 2;
     private float powerThrow => 7 + Level * 2;
 
-    private void ActionShip(ShipBase shipBase,Vector3 fromPos,DamageDoneDelegate damageDoneCallback)
+    private void ActionShip(ShipBase shipBase, Vector3 fromPos, DamageDoneDelegate damageDoneCallback)
     {
-        shipBase.ShipParameters.Damage(0, bodyDamage, damageDoneCallback,shipBase);
+        shipBase.ShipParameters.Damage(0, bodyDamage, damageDoneCallback, shipBase);
         var dir = Utils.NormalizeFastSelf(shipBase.Position - fromPos);
-        shipBase.ExternalForce.Init(powerThrow, 1f,dir);
+        shipBase.ExternalForce.Init(powerThrow, 1f, dir);
 
     }
     public override string Desc()
     {
         return String.Format(Namings.TrowAroundSpell, powerThrow, bodyDamage);
-//            $"Create a shockwave witch throw around all ships in radius with power {powerThrow}. And body damage {bodyDamage}.";
+        //            $"Create a shockwave witch throw around all ships in radius with power {powerThrow}. And body damage {bodyDamage}.";
     }
 }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class FlyingAsteroid : Asteroid
@@ -13,7 +12,7 @@ public class FlyingAsteroid : Asteroid
     private float _sDistToDestroy;
 
 
-    public void Init(Action<FlyingAsteroid> callbackDeath,Vector3 center,Vector3 rad,float distToDestroy)
+    public void Init(Action<FlyingAsteroid> callbackDeath, Vector3 center, Vector3 rad, float distToDestroy)
     {
         _sDistToDestroy = distToDestroy * distToDestroy;
         _callbackDeath = callbackDeath;
@@ -23,8 +22,8 @@ public class FlyingAsteroid : Asteroid
         _startPoint = center;
     }
 
-    protected override float BodyDamage => 2f;
-    protected override float ShieldDamage => 2f;
+    protected override float BodyDamage => 4f;
+    protected override float ShieldDamage => 3f;
 
     void Update()
     {

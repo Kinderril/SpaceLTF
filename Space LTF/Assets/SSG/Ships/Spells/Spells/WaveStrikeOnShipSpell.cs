@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
 [System.Serializable]
-public class WaveStrikeOnShipSpell : BaseSpellModulInv 
+public class WaveStrikeOnShipSpell : BaseSpellModulInv
 {
     public const float BULLET_SHOOT_DIST = 14f;
-    private const float _sDistToShoot = 4*4;
-    private const float BASE_DAMAGE = 2;
+    private const float _sDistToShoot = 4 * 4;
+    private const float BASE_DAMAGE = 4;
     private bool _lastCheckIsOk = false;
 
     [field: NonSerialized]
     private ShipBase _lastClosest;
 
-    public float Damage => BASE_DAMAGE + Level;
+    public float Damage => BASE_DAMAGE + Level * 2;
 
     public WaveStrikeOnShipSpell(int costCount, int costTime)
         : base(SpellType.roundWave, costCount, costTime,
@@ -30,12 +27,12 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
-//        var closestsShip = BattleController.Instance.ClosestShipToPos(shootPos, weapon.TeamIndex, out float sDist);
+        //        var closestsShip = BattleController.Instance.ClosestShipToPos(shootPos, weapon.TeamIndex, out float sDist);
         if (_lastClosest != null)
         {
             var indToSearch = BattleController.OppositeIndex(weapon.TeamIndex);
             var nearShips = BattleController.Instance.GetAllShipsInRadius(_lastClosest.Position, indToSearch, BULLET_SHOOT_DIST);
-//            Debug.LogError($"WaveStrikeOnShipSpell ships in raius {nearShips.Count} ,  {BULLET_SHOOT_DIST}  indToSearch:{indToSearch.ToString()}");
+            //            Debug.LogError($"WaveStrikeOnShipSpell ships in raius {nearShips.Count} ,  {BULLET_SHOOT_DIST}  indToSearch:{indToSearch.ToString()}");
             foreach (var nearShip in nearShips)
             {
                 MainCreateBullet(new BulletTarget(nearShip), origin, weapon, _lastClosest.Position, bullestartparameters);
@@ -82,9 +79,9 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
         get { return pos => _lastCheckIsOk; }
     }
 
-    protected void ShowOnShip(Vector3 pos,TeamIndex teamIndex,GameObject objectToShow)
+    protected void ShowOnShip(Vector3 pos, TeamIndex teamIndex, GameObject objectToShow)
     {
-        var lastClosest = BattleController.Instance.ClosestShipToPos(pos, teamIndex,out float sDist);
+        var lastClosest = BattleController.Instance.ClosestShipToPos(pos, teamIndex, out float sDist);
         if (sDist < _sDistToShoot && lastClosest != null)
         {
             _lastCheckIsOk = true;
@@ -108,7 +105,7 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return    String.Format(Namings.WaveStrikeSpell, Damage, Damage);
+        return String.Format(Namings.WaveStrikeSpell, Damage, Damage);
     }
 }
 

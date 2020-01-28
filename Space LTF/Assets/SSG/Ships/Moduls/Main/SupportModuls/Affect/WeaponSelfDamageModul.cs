@@ -1,20 +1,18 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 
 [System.Serializable]
 public class WeaponSelfDamageModul : BaseSupportModul
 {
 
-    private const int Damage = 2;
-    private int Self => _self + Level;
+    private const int Damage = 4;
+    private int Self => _self + Level * 2;
     private const int _self = 1;
     public WeaponSelfDamageModul(int level)
         : base(SimpleModulType.WeaponSelfDamage, level)
     {
     }
 
-    private int Dmg => Damage + Level;
+    private int Dmg => Damage + Level * 2;
 
     public override void ChangeParams(IAffectParameters weapon)
     {
@@ -28,7 +26,7 @@ public class WeaponSelfDamageModul : BaseSupportModul
     {
         CreateBulletDelegate delegat1 = (target, origin, weapon, pos, parameters) =>
             {
-                weapon.Owner.ShipParameters.Damage(Self,Self, (delta, shieldDelta, attacker) => {},null);
+                weapon.Owner.ShipParameters.Damage(Self, Self, (delta, shieldDelta, attacker) => { }, null);
                 standartDelegate(target, origin, weapon, pos, parameters);
             };
 

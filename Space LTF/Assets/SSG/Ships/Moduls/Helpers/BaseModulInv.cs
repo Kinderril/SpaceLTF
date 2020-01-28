@@ -116,7 +116,12 @@ public class BaseModulInv : IItemInv
 
     public string WideInfo()
     {
-        return GetInfo() + "\n" + Namings.DescSimpleModul(Type);
+        return GetInfo() + "\n" + GetDesc();
+    }
+
+    public string GetDesc()
+    {
+        return Namings.DescSimpleModul(Type);
     }
 
     public ItemType ItemType
