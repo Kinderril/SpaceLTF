@@ -11,16 +11,14 @@ public class MineFieldSpell : BaseSpellModulInv
     private const float rad = 3.5f;
     private const float damageBody = 7f;
     private const float damageShield = 3f;
-    private float _distToShoot;
 
     private int MINES_COUNT => BASE_MINES_COUNT + Level;
     public float DAMAGE_BODY => damageBody + Level;
     public float DAMAGE_SHIELD => damageShield + Level;
 
-    private float dist;//Костыльный параметр
-    public MineFieldSpell(int costCount, int costTime)
-        : base(SpellType.mineField, costCount, costTime,
-             new BulleStartParameters(9.7f, 36f, MINES_DIST, MINES_DIST), false)
+    public MineFieldSpell()
+        : base(SpellType.mineField, 2, 15,
+             new BulleStartParameters(8f, 36f, MINES_DIST, MINES_DIST), false)
     {
 
     }

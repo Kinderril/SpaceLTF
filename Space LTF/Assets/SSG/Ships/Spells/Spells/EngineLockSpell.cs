@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
 [System.Serializable]
-public  class EngineLockSpell : BaseSpellModulInv
+public class EngineLockSpell : BaseSpellModulInv
 {
-    public const float DIST_SHOT = 18f;
+    public const float DIST_SHOT = 22f;
     public const float LOCK_PERIOD = 4;
     public const float LOCK_LEVEL = 2f;
     private const float rad = 2.5f;
@@ -17,8 +14,8 @@ public  class EngineLockSpell : BaseSpellModulInv
 
     public float CurLockPeriod => LOCK_PERIOD + LOCK_LEVEL * Level;
 
-    public EngineLockSpell(int costCount, int costTime)
-        : base(SpellType.engineLock, costCount, costTime, new BulleStartParameters(15, 36f, DIST_SHOT, DIST_SHOT), false)
+    public EngineLockSpell()
+        : base(SpellType.engineLock, 3, 15, new BulleStartParameters(15, 36f, DIST_SHOT, DIST_SHOT), false)
     {
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
@@ -39,10 +36,10 @@ public  class EngineLockSpell : BaseSpellModulInv
 
     private void EngineCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-//        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
+        //        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
         var startPos = shootpos;
         var dir = target.Position - startPos;
-        bullestartparameters.distanceShoot = Mathf.Clamp(dir.magnitude,1, DIST_SHOT);
+        bullestartparameters.distanceShoot = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
 
     }
@@ -52,29 +49,29 @@ public  class EngineLockSpell : BaseSpellModulInv
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 
-    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, 
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet,
         DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         if (target != null)
             ActionShip(target);
-//        var pos = bullet.Position;
-//        var oppositeIndex = BattleController.OppositeIndex(bullet.Weapon.TeamIndex);
-//        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE,pos, CurLockPeriod);
-//        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, oppositeIndex, rad);
-//        foreach (var shipBase in c1)
-//        {
-//            ActionShip(shipBase);
-//        }
+        //        var pos = bullet.Position;
+        //        var oppositeIndex = BattleController.OppositeIndex(bullet.Weapon.TeamIndex);
+        //        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE,pos, CurLockPeriod);
+        //        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, oppositeIndex, rad);
+        //        foreach (var shipBase in c1)
+        //        {
+        //            ActionShip(shipBase);
+        //        }
         //        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.green, rad);
         //        var c2 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.red, rad);
-//        foreach (var shipBase in c1)
-//        {
-//            ActionShip(shipBase);
-//        }
-//        foreach (var shipBase in c2)
-//        {
-//            ActionShip(shipBase);
-//        }
+        //        foreach (var shipBase in c1)
+        //        {
+        //            ActionShip(shipBase);
+        //        }
+        //        foreach (var shipBase in c2)
+        //        {
+        //            ActionShip(shipBase);
+        //        }
     }
 
 
@@ -98,8 +95,8 @@ public  class EngineLockSpell : BaseSpellModulInv
 
     public override string Desc()
     {
-        return String.Format(Namings.EnerguLockSpell, CurLockPeriod.ToString("0"),rad.ToString("0"));
-//            $"Destroy engines for {CurLockPeriod.ToString("0")} sec.";
+        return String.Format(Namings.EnerguLockSpell, CurLockPeriod.ToString("0"), rad.ToString("0"));
+        //            $"Destroy engines for {CurLockPeriod.ToString("0")} sec.";
     }
 }
 

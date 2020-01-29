@@ -7,7 +7,7 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
 {
     public const float BULLET_SHOOT_DIST = 14f;
     private const float _sDistToShoot = 4 * 4;
-    private const float BASE_DAMAGE = 4;
+    private const float BASE_DAMAGE = 5;
     private bool _lastCheckIsOk = false;
 
     [field: NonSerialized]
@@ -15,8 +15,8 @@ public class WaveStrikeOnShipSpell : BaseSpellModulInv
 
     public float Damage => BASE_DAMAGE + Level * 2;
 
-    public WaveStrikeOnShipSpell(int costCount, int costTime)
-        : base(SpellType.roundWave, costCount, costTime,
+    public WaveStrikeOnShipSpell()
+        : base(SpellType.roundWave, 2, 10,
              new BulleStartParameters(15f, 46f, BULLET_SHOOT_DIST, BULLET_SHOOT_DIST), false)
     {
 

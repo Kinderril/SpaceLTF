@@ -9,12 +9,17 @@ public class WindowStart : BaseWindow
     public override void Init()
     {
         Statistics.Init();
-#if Demo      
         DemoField.gameObject.SetActive(true);
-#else   
-        DemoField.gameObject.SetActive(false);
+      var mainTxt = Namings.Tag("DemoStart");
+
+#if Demo
+        DemoField.gameObject.SetActive(true);  
+      mainTxt = $"{mainTxt}{Namings.Tag("DemoStart2")}";
+#else
+//        DemoField.gameObject.SetActive(false);
 #endif
-        DemoField.text = Namings.Tag("DemoStart");
+
+        DemoField.text = mainTxt;
         base.Init();
     }
 

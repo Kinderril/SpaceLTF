@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.Rendering.PostProcessing;
 using UnityStandardAssets.ImageEffects;
+using Bloom = UnityEngine.Rendering.PostProcessing.Bloom;
+
+//using UnityStandardAssets.ImageEffects;
 
 public class CameraEffects : MonoBehaviour
 {
-//    public Camera Camera;
+    //    public Camera Camera;
 
-    public BloomOptimized Bloom;
+    // public BloomOptimized Bloom;
+    public Bloom Bloom;
+    public PostProcessVolume ProcessVolume;
     private float _endBloomTime;
     private bool _isBloom;
     private bool _bloomRevers;
@@ -16,20 +21,21 @@ public class CameraEffects : MonoBehaviour
 
     void Awake()
     {
-        bloomStart = Bloom.threshold;
+        Bloom = ProcessVolume.profile.GetSetting<Bloom>();
+        
+//        bloomStart = Bloom.bloomThreshold;
+        // bloomStart = Bloom.threshold;
     }
 
     public void StartBloom(float period)
     {
         if (period > 0 && Bloom != null)
         {
-//            Bloom.enabled = true;
             _isBloom = true;
             _bloomRevers = false;
-             bloomPeriod = period/2f;
+            bloomPeriod = period / 2f;
             _endBloomTime = Time.time + bloomPeriod;
         }
-
     }
 
     void Update()
@@ -37,11 +43,11 @@ public class CameraEffects : MonoBehaviour
         if (_isBloom)
         {
             var subPer = (_endBloomTime - Time.time) / bloomPeriod;
-            
-            var per = _bloomRevers? subPer : 1f - subPer;
-//            var val = Easing.EaseInOutQuad(bloomStart, bloomMax, per);
+
+            var per = _bloomRevers ? subPer : 1f - subPer;
             var val = Easing.EaseInBounce(bloomStart, bloomMax, per);
-            Bloom.threshold = val;
+//            Bloom.threshold.se val;
+            Bloom.threshold.value = val;
             if (subPer < 0f)
             {
                 if (_bloomRevers)
@@ -64,7 +70,7 @@ public class CameraEffects : MonoBehaviour
 
     private void EndBloom()
     {
-        Bloom.threshold = bloomStart;
+        Bloom.threshold.value = bloomStart;
         _isBloom = false;
     }
 }

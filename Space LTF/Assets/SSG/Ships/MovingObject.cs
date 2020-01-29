@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
@@ -11,7 +8,7 @@ public abstract class MovingObject : PoolElement
     const float MAX_ACCELERATION = 1.5f;
     const float ACCELERATION_POWER = 2f;
     public const float BANK_MAX = 0.7f;
-    public const float BANK_SPEED = 0.9f;
+    public const float BANK_SPEED = 0.45f;
     public float EulerY = 0f;
     public bool EngineWork = true;
     public Vector3 LookDirection = Vector3.forward;
@@ -33,12 +30,12 @@ public abstract class MovingObject : PoolElement
 
     public ExternalSideForce ExternalSideForce { get; protected set; }
     public ExternalForce ExternalForce { get; protected set; }
-    public EngineStop EngineStop { get;protected set; }
+    public EngineStop EngineStop { get; protected set; }
     //    public ExternalForce ExternalForce { get; protected set; }
     //    public EngineStop EngineStop { get; protected set; }
-//#if UNITY_EDITOR
-    public DebugMovingData DebugMovingData  = new  DebugMovingData();
-//#endif
+    //#if UNITY_EDITOR
+    public DebugMovingData DebugMovingData = new DebugMovingData();
+    //#endif
     public Transform RotatableObject;
     private float _curBank = 0f;
     protected virtual float BankMax => BANK_MAX;
@@ -95,7 +92,7 @@ public abstract class MovingObject : PoolElement
         var dir = target - Position;
         ApplyRotation(dir, true);
     }
-    
+
     public virtual float ApplyRotation(Vector3 dir, bool exactlyPoint)
     {
         if (EngineStop.IsCrash())
@@ -123,14 +120,14 @@ public abstract class MovingObject : PoolElement
             return 1f;
         }
 
-        var quatern = ApplyRotationXZ(dir, LookDirection, LookLeft, TurnSpeed, DebugMovingData,Position,out var steps);
+        var quatern = ApplyRotationXZ(dir, LookDirection, LookLeft, TurnSpeed, DebugMovingData, Position, out var steps);
         BankingData.SetNewData(dir, steps);
         Rotation = quatern;
         return 1f;
     }
 
     public static Quaternion ApplyRotationXZ(Vector3 targetDir, Vector3 lookDir, Vector3 lookLeft,
-        Func<float> TurnSpeed, DebugMovingData debugData,Vector3 position,out float steps)
+        Func<float> TurnSpeed, DebugMovingData debugData, Vector3 position, out float steps)
     {
         Quaternion Rotation;
         var ang = Vector3.Angle(targetDir, lookDir);
@@ -181,7 +178,7 @@ public abstract class MovingObject : PoolElement
     }
 
 
-     private void Banking()
+    private void Banking()
     {
 #if UNITY_EDITOR
         if (DebugParamsController.EngineOff && this is ShipBase)
@@ -239,7 +236,7 @@ public abstract class MovingObject : PoolElement
         RotatableObject.localRotation = bankRotation;
     }
 
-    private float BankingToZero(float cur,float bSpeed)
+    private float BankingToZero(float cur, float bSpeed)
     {
         if (cur > 0)
         {
@@ -279,7 +276,7 @@ public abstract class MovingObject : PoolElement
         }
         else
         {
-            if (CurSpeed < trgSpeed && Mathf.Abs(trgSpeed-CurSpeed) > 0.03f)
+            if (CurSpeed < trgSpeed && Mathf.Abs(trgSpeed - CurSpeed) > 0.03f)
             {
                 _acceleraion = ACCELERATION_POWER * d;
             }
@@ -293,7 +290,7 @@ public abstract class MovingObject : PoolElement
 
     public void SetTargetSpeed(float percent)
     {
-        _targetPercentSpeed = Mathf.Clamp(percent,-1f,1f);
+        _targetPercentSpeed = Mathf.Clamp(percent, -1f, 1f);
     }
 
     void OnDestroy()
@@ -313,11 +310,11 @@ public abstract class MovingObject : PoolElement
 
     protected virtual void DrawGizmosSelected()
     {
-        
+
     }
     protected virtual void DrawGizmos()
     {
-        
+
     }
 
     void OnDrawGizmos()
@@ -325,7 +322,7 @@ public abstract class MovingObject : PoolElement
         DrawGizmos();
     }
 
-    protected void ApplyMove(Vector3 additionalMove,bool useAdditive)
+    protected void ApplyMove(Vector3 additionalMove, bool useAdditive)
     {
 #if UNITY_EDITOR
         if (DebugParamsController.EngineOff && this is ShipBase)
@@ -347,11 +344,11 @@ public abstract class MovingObject : PoolElement
 
 
         }
-    }  
+    }
     protected void ApplyMove()
     {
-        ApplyMove(Vector3.zero,false);
+        ApplyMove(Vector3.zero, false);
     }
-    
+
 }
 

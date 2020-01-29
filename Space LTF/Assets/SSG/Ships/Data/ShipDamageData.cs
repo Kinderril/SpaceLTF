@@ -49,7 +49,7 @@ public class ShipDamageData : ShipData
         return false;
     }
 
-    public void ApplyEffect(ShipDamageType damageType, float time = -1)
+    public void ApplyEffect(ShipDamageType damageType, float time = -1, float coef = 1f)
     {
         if (IsReflecOn)
         {
@@ -67,18 +67,12 @@ public class ShipDamageData : ShipData
                 FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
                 _engineStop.Stop(time);
                 break;
-            //            case ShipDamageType.turnEngine:
-            //                break;
-            // case ShipDamageType.weapon:
-            //     FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
-            //     _weaponsController.CrashAllWeapons(true);
-            //     break;
             case ShipDamageType.shiled:
                 FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
                 _owner.ShipParameters.ShieldParameters.Crash(time);
                 break;
             case ShipDamageType.fire:
-                var remainTime = _owner.PeriodDamage.Start((int)time, 1f);
+                var remainTime = _owner.PeriodDamage.Start((int)time, coef);
                 info = Namings.Damage(damageType, remainTime);
                 FlyNumberWithDependence.Create(_owner.transform, info, Color.red, FlyNumerDirection.right);
                 break;

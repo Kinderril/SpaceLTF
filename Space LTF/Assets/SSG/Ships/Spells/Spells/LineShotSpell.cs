@@ -10,17 +10,19 @@ public class LineShotSpell : BaseSpellModulInv
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 38f;
 
-    private const int FIRE_PERIOD = 4;
+    private const int FIRE_PERIOD = 6;
+    private float FireCoef => Level;
 
-    private int FirePeriod => FIRE_PERIOD + Level * 2;
+    private int FirePeriod => FIRE_PERIOD + Level * 3;
+    private int Damage => 5 + Level;
 
     private static CurWeaponDamage CurrentDamage { get; set; }
 
-    public LineShotSpell(int costCount, int costTime)
-        : base(SpellType.lineShot, costCount, costTime,
+    public LineShotSpell()
+        : base(SpellType.lineShot, 4, 15,
              new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
     {
-        CurrentDamage = new CurWeaponDamage(2, 4);
+        CurrentDamage = new CurWeaponDamage(Damage, Damage);
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
@@ -43,7 +45,7 @@ public class LineShotSpell : BaseSpellModulInv
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         shipparameters.Damage(CurrentDamage.ShieldDamage, CurrentDamage.BodyDamage, damagedone, target);
-        target.DamageData.ApplyEffect(ShipDamageType.fire, FirePeriod);
+        target.DamageData.ApplyEffect(ShipDamageType.fire, FirePeriod, FireCoef);
     }
 
     public override bool ShowLine => true;
@@ -72,8 +74,9 @@ public class LineShotSpell : BaseSpellModulInv
 
     public override string Desc()
     {
-        return String.Format(Namings.LineSHotSpell, CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod);
-        //            $"Triple shot by selected direction. Base damage: {CurrentDamage.BodyDamage}/{CurrentDamage.ShieldDamage}. And starts fire for {FirePeriod} sec.";
+        var totalFireDamage = FirePeriod * FireCoef;
+        var damageStr = totalFireDamage.ToString("0");
+        return String.Format(Namings.LineSHotSpell, CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod, damageStr);
     }
 }
 

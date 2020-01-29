@@ -6,15 +6,16 @@ using UnityEngine;
 public class ArtillerySpell : BaseSpellModulInv
 {
     private const float DIST_SHOT = 40f;
-    private const float baseDamage = 4;
+    // private const float baseDamage = 4;
     private const float rad = 6f;
 
 
-    private float DAMAGE => baseDamage + Level;
+    private float DmgHull => 3 + Level;
+    private float DmgShield => 2 + Level;
     public int BulletsCount => Level * 3 + 11;
 
-    public ArtillerySpell(int costCount, int costTime)
-        : base(SpellType.artilleryPeriod, costCount, costTime, new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
+    public ArtillerySpell()
+        : base(SpellType.artilleryPeriod, 4, 25, new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
     }
 
@@ -47,7 +48,7 @@ public class ArtillerySpell : BaseSpellModulInv
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        ActionShip(target, DAMAGE, DAMAGE, damagedone);
+        ActionShip(target, DmgHull, DmgShield, damagedone);
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
@@ -90,7 +91,7 @@ public class ArtillerySpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return String.Format(Namings.ArtillerySpell, BulletsCount, DAMAGE);
+        return String.Format(Namings.ArtillerySpell, BulletsCount, DmgHull, DmgShield);
     }
 }
 

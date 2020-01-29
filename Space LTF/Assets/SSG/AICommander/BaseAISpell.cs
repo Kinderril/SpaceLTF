@@ -4,12 +4,32 @@ public abstract class BaseAISpell
 {
     private float _delay = 1f;
     private float _nextCheck = 1f;
+    protected Commander _commander;
+    protected SpellInGame _spellData;
+    protected ShipBase _owner;
+    protected BulleStartParameters _bulletStartParams;
+    protected Bullet _bulletOrigin;
+    protected float ShootDistSqrt;
+    protected float _maxDist;
 
-    protected BaseAISpell()
+    protected BaseAISpell(Commander commander, SpellInGame spellData)
     {
+        _spellData = spellData;
+        _owner = commander.MainShip;
+        _commander = commander;
         _delay = MyExtensions.Random(1f, 4f);
+        _owner = commander.MainShip;
+    }
+    protected bool CanCast()
+    {
+        return _commander.CoinController.CanUseCoins(_spellData.CostCount);
     }
 
+    protected Vector3 _modulPos()
+    {
+        return _owner.Position;
+    }
+    protected abstract bool IsEnemyClose(out Vector3 trg);
     public virtual void Init()
     {
 
@@ -41,25 +61,16 @@ public abstract class BaseAISpell
 
 public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
 {
-    protected Commander _commander;
     protected T _spell;
-    protected float ShootDistSqrt;
-    private TeamIndex oIndex;
-    private ShipBase _owner;
-    private float _maxDist;
-    private BulleStartParameters _bulletStartParams;
-    private Bullet _bulletOrigin;
-    private SpellInGame _spellData;
+    protected TeamIndex oIndex;
 
     protected BaseAISpell(SpellInGame spellData, T spell, Commander commander)
+        : base(commander, spellData)
     {
-        _spellData = spellData;
+        oIndex = BattleController.OppositeIndex(_commander.TeamIndex);
         _spell = spell;
-        _owner = commander.MainShip;
-        _commander = commander;
         _bulletOrigin = spell.GetBulletPrefab();
         _bulletStartParams = _spell.BulleStartParameters;
-        oIndex = BattleController.OppositeIndex(_commander.TeamIndex);
         var spellRad = spell.BulleStartParameters.radiusShoot;
         _maxDist = spellRad;
         ShootDistSqrt = spellRad * spellRad;
@@ -90,7 +101,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         }
     }
 
-    private bool IsEnemyClose(out Vector3 trg)
+    protected override bool IsEnemyClose(out Vector3 trg)
     {
         var ship = BattleController.Instance.ClosestShipToPos(_commander.MainShip.Position, oIndex, out var sDist);
         Debug.LogError($"IsEnemyClose  dist {Mathf.Sqrt(sDist)} <  {Mathf.Sqrt(ShootDistSqrt)}");
@@ -102,25 +113,15 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         trg = Vector3.zero;
         return false;
     }
-    protected bool CanCast()
-    {
-        return _commander.CoinController.CanUseCoins(_spell.CostCount);
-    }
 
     protected void TryUse(Vector3 v)
     {
         if (CanCast())
         {
-
             Cast(v);
             _commander.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
             Debug.LogError($"_spell.TryCast {this}");
         }
-    }
-
-    private Vector3 _modulPos()
-    {
-        return _owner.Position;
     }
 
     public void Cast(Vector3 target)
@@ -134,9 +135,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
             var maxDistPos = startPos + dir * _maxDist;
             target = maxDistPos;
         }
-
         _spell.CastSpell(new BulletTarget(target), _bulletOrigin, _spellData, startPos, _bulletStartParams);
-        //        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
     }
 
 }

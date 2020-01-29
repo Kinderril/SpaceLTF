@@ -311,8 +311,8 @@ public static class Namings
             //                return "Invisibility";
             case SpellType.mineField:
                 return "Mine Field";
-            case SpellType.randomDamage:
-                return "Inner Damage";
+            // case SpellType.randomDamage:
+            //     return "Inner Damage";
             //            case SpellType.spaceWall:
             //                return "Power wall";
             case SpellType.distShot:
@@ -560,13 +560,13 @@ public static class Namings
     public static string SpellModulChargers = "Charges require: {0} with delay {1} sec.";
 
     public static string ArtillerySpell =
-        "Starts fire at selected zone. Total bullets {0}. Damage of each bullet:{1}/{1}.";
+        "Starts fire at selected zone. Total bullets {0}. Damage of each bullet:{2}/{1}.";
 
 
     public static string EnerguLockSpell = "Destroy engines at all enemies ships in radius {1} for {0} sec.";
 
     public static string LineSHotSpell =
-        "Triple shot by selected direction. Base damage: {0}/{1}. And starts fire for {2} sec.";
+        "Triple shot by selected direction. Base damage: {0}/{1}. And starts fire for {2} sec. Total fire damage:{3}";
 
     public static string MinesSpell =
         "Set {0} mines for {1} sec to selected location. Each mine damage {2}/{3}";
@@ -578,7 +578,7 @@ public static class Namings
         "Disable shields of ships in radius for {0} sec. And damages shield for {1}.";
 
     public static string TrowAroundSpell =
-        "Create a shockwave witch throw around all ships in radius with power {0}. And body damage {1}.";
+        "Create a shockwave witch throw around all ships in radius with power {0}. And shield damage {1}.";
 
     public static string WANT_UPGRADE_WEAPON = "Do you want to upgrade {0}?";
     public static string WeaponMaxLevel = "Weapon have max level";
@@ -937,7 +937,8 @@ public static class Namings
         {"rep_neutral", "Neutral"},
         {"rep_negative", "Negative"},
         {"rep_enemy", "Enemy"},
-        {"DemoStart", "This is not final version on game, something can change later.\nYou will have only 25 turns. And some mechanics will be blocked."},
+        {"DemoStart", "This is not final version on game, something can change later."},
+        {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
 
         {"dialog_MovingArmyStart", "You have been occupied by special force. You have no chanse to run."},
         {"dialog_MovingArmyFight", "Fight"},

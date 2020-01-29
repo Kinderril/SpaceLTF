@@ -1,8 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -75,11 +72,16 @@ public class AICommander
                 return new DistShotSpellAI(baseSpellModul as DistShotSpell, commander, spellInGame);
             case SpellType.mineField:
                 return new MineFieldSpellAI(baseSpellModul as MineFieldSpell, commander, spellInGame);
-            case SpellType.randomDamage:
-                return new RandomDamageSpellAI(baseSpellModul as RandomDamageSpell, commander, spellInGame);
+            // case SpellType.randomDamage:
+            //     return new RandomDamageSpellAI(baseSpellModul as RandomDamageSpell, commander, spellInGame);
             case SpellType.artilleryPeriod:
                 return new ArtilleryAI(baseSpellModul as ArtillerySpell, commander, spellInGame);
             case SpellType.repairDrones:
+                return new RepairDropneAI(baseSpellModul as RepairDronesSpell, commander, spellInGame);
+            case SpellType.rechargeShield:
+                return new RechargeShieldAI(baseSpellModul as RechargeShieldSpell, commander, spellInGame);
+            case SpellType.roundWave:
+
                 break;
             case SpellType.throwAround:
                 return new ThrowAroundAI(baseSpellModul as ThrowAroundSpell, commander, spellInGame);

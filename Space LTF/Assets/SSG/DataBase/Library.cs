@@ -347,34 +347,34 @@ public static class Library
         switch (spellType)
         {
             case SpellType.mineField:
-                return new MineFieldSpell(2, 40);
+                return new MineFieldSpell();
             //            case SpellType.invisibility:
             //                return new InvisibleSpell(3, 20);
             //            case SpellType.allToBase:
             //                return new AllToBaseSpell(2, 90);
             //            case SpellType.shildDamage:
-            case SpellType.randomDamage:
-                return new RandomDamageSpell(3, 20);
+            // case SpellType.randomDamage:
+            //     return new RandomDamageSpell(3, 20);
             case SpellType.lineShot:
-                return new LineShotSpell(5, 14);
+                return new LineShotSpell();
             case SpellType.throwAround:
-                return new ThrowAroundSpell(2, 18);
+                return new ThrowAroundSpell();
             case SpellType.engineLock:
-                return new EngineLockSpell(2, 22);
+                return new EngineLockSpell();
             //            case SpellType.spaceWall:
             //                return new ShieldWallSpell(2, 35);
             case SpellType.distShot:
-                return new DistShotSpell(3, 17);
+                return new DistShotSpell();
             case SpellType.shildDamage:
-                return new ShieldOffSpell(3, 17);
+                return new ShieldOffSpell();
             case SpellType.artilleryPeriod:
-                return new ArtillerySpell(4, 10);
+                return new ArtillerySpell();
             case SpellType.repairDrones:
-                return new RepairDronesSpell(4, 30);
+                return new RepairDronesSpell();
             case SpellType.rechargeShield:
-                return new RechargeShieldSpell(1, 30);
+                return new RechargeShieldSpell();
             case SpellType.roundWave:
-                return new WaveStrikeOnShipSpell(2, 20);
+                return new WaveStrikeOnShipSpell();
 
             default:
                 Debug.LogError("spellType not implemented " + spellType);

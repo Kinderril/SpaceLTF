@@ -5,12 +5,14 @@ using UnityEngine;
 [System.Serializable]
 public class ThrowAroundSpell : BaseSpellModulInv
 {
-    private const float DIST_SHOT = 8;
-    private const float DAMAGE_BODY = 10;
+    private const float DIST_SHOT = 18;
+    private const float DAMAGE_BASE = 12;
     private const float rad = 4f;
+    private float shieldDmg => DAMAGE_BASE + Level * 4;
+    private float powerThrow => 7 + Level * 2;
 
-    public ThrowAroundSpell(int costCount, int costTime)
-        : base(SpellType.throwAround, costCount, costTime,
+    public ThrowAroundSpell()
+        : base(SpellType.throwAround, 2, 15,
              new BulleStartParameters(19.7f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
 
@@ -54,31 +56,19 @@ public class ThrowAroundSpell : BaseSpellModulInv
 
     protected override void CastAction(Vector3 pos)
     {
-        //        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.green, rad);
-        //        var c2 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.red, rad);
-        //        foreach (var shipBase in c1)
-        //        {
-        //            ActionShip(shipBase, pos);
-        //        }
-        //        foreach (var shipBase in c2)
-        //        {
-        //            ActionShip(shipBase, pos);
-        //        }
     }
 
-    private float bodyDamage => DAMAGE_BODY + Level * 2;
-    private float powerThrow => 7 + Level * 2;
 
     private void ActionShip(ShipBase shipBase, Vector3 fromPos, DamageDoneDelegate damageDoneCallback)
     {
-        shipBase.ShipParameters.Damage(0, bodyDamage, damageDoneCallback, shipBase);
+        shipBase.ShipParameters.Damage(shieldDmg, 0, damageDoneCallback, shipBase);
         var dir = Utils.NormalizeFastSelf(shipBase.Position - fromPos);
         shipBase.ExternalForce.Init(powerThrow, 1f, dir);
 
     }
     public override string Desc()
     {
-        return String.Format(Namings.TrowAroundSpell, powerThrow, bodyDamage);
+        return String.Format(Namings.TrowAroundSpell, powerThrow, shieldDmg);
         //            $"Create a shockwave witch throw around all ships in radius with power {powerThrow}. And body damage {bodyDamage}.";
     }
 }

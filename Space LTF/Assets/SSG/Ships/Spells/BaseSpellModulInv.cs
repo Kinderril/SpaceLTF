@@ -13,7 +13,7 @@ public enum SpellType
     //    invisibility =6,//DO NOT USE!
 
     mineField = 7,
-    randomDamage = 8,
+    // randomDamage = 8,
 
     //    spaceWall = 9,//DO NOT USE!
     distShot = 10,
