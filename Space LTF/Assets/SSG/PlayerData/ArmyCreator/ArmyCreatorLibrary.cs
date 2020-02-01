@@ -12,12 +12,12 @@ public static class ArmyCreatorLibrary
             new List<WeaponType>() { WeaponType.laser },
             new List<SimpleModulType>() { SimpleModulType.ShipTurnSpeed, SimpleModulType.antiPhysical, SimpleModulType.antiEnergy, SimpleModulType.WeaponPush },
             new List<SimpleModulType>() { SimpleModulType.ResistDamages, SimpleModulType.WeaponPowerShot },
-            new List<SpellType>() { SpellType.roundWave, SpellType.throwAround });
+            new List<SpellType>() { SpellType.machineGun, SpellType.throwAround });
         var merc2 = new ArmyCreatorData(new List<ShipConfig>() { ShipConfig.mercenary },
             new List<WeaponType>() { WeaponType.rocket },
             new List<SimpleModulType>() { SimpleModulType.ShipTurnSpeed, SimpleModulType.antiPhysical, SimpleModulType.antiEnergy, SimpleModulType.WeaponPush },
             new List<SimpleModulType>() { SimpleModulType.ResistDamages, SimpleModulType.WeaponPowerShot },
-            new List<SpellType>() { SpellType.roundWave, SpellType.throwAround });
+            new List<SpellType>() { SpellType.machineGun, SpellType.throwAround });
 
         var raidFireRockets = new ArmyCreatorData(new List<ShipConfig>() { ShipConfig.raiders },
             new List<WeaponType>() { WeaponType.rocket },

@@ -1,13 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class AsteroidEvent : BattleFieldEvent
 {
     public List<FlyingAsteroid> _asteroids = new List<FlyingAsteroid>();
     private List<TimerManager.ITimer> _battleTimers = new List<TimerManager.ITimer>();
     List<FlyingAsteroid> _allAsteroidsPrefabs;
-    private const int maximumAsteroids = 30;
+    private const int maximumAsteroids = 14;
     private const int timers = 5;
     private Vector3 _baseDir;
 
@@ -25,12 +24,12 @@ public class AsteroidEvent : BattleFieldEvent
         var dir = Utils.NormalizeFastSelf(new Vector3(rndX, 0, rndZ));
         _baseDir = dir;
         _battle.AsteroidContainer.gameObject.SetActive(true);
-var preBattleTimer = MainController.Instance.BattleTimerManager.MakeTimer(0,0.1f, true);
+        var preBattleTimer = MainController.Instance.BattleTimerManager.MakeTimer(0, 0.1f, true);
         preBattleTimer.OnTimer += PreOnTimer;
 
         for (int i = 0; i < timers; i++)
         {
-            var battleTimer = MainController.Instance.BattleTimerManager.MakeTimer(MyExtensions.Random(0.7f,1.5f), true);
+            var battleTimer = MainController.Instance.BattleTimerManager.MakeTimer(MyExtensions.Random(0.7f, 1.5f), true);
             battleTimer.OnTimer += OnTimer;
             _battleTimers.Add(battleTimer);
         }
@@ -46,7 +45,7 @@ var preBattleTimer = MainController.Instance.BattleTimerManager.MakeTimer(0,0.1f
     {
         for (int i = 0; i < 10; i++)
         {
-            CreateAsteroid(MyExtensions.Random(1f,2f));
+            CreateAsteroid(MyExtensions.Random(1f, 2f));
         }
     }
 
@@ -73,12 +72,12 @@ var preBattleTimer = MainController.Instance.BattleTimerManager.MakeTimer(0,0.1f
             }
 
             float subDirOffset = 50f;
-            var dir = Utils.RotateOnAngUp(_baseDir,MyExtensions.Random(-15f,15f));
+            var dir = Utils.RotateOnAngUp(_baseDir, MyExtensions.Random(-15f, 15f));
             var startPoint = center + rad * dir + subDir * MyExtensions.Random(-subDirOffset, subDirOffset);
             var asteroid = DataBaseController.GetItem(rnd);
             asteroid.Init(callbackDeath, startPoint, -dir, rad * coef);
             _asteroids.Add(asteroid);
-            asteroid.transform.SetParent(_battle.AsteroidContainer,true);
+            asteroid.transform.SetParent(_battle.AsteroidContainer, true);
         }
     }
 

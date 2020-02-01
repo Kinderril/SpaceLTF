@@ -72,7 +72,7 @@ public class ReputationElement : UIElementWithTooltip
     private string Info(ShipConfig mercenary)
     {
         var rep = MainController.Instance.MainPlayer.ReputationData;
-        return String.Format(Namings.Reputation, Namings.ShipConfig(mercenary), rep.ReputationFaction[mercenary]);
+        return String.Format(Namings.Tag("ReputationData"), Namings.ShipConfig(mercenary), rep.ReputationFaction[mercenary]);
     }
 }
 

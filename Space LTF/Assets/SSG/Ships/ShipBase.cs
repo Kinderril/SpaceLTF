@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
 //using UnityEditor;
 using UnityEngine;
 
@@ -61,17 +58,19 @@ public class ShipBase : MovingObject
     public BaseEffectAbsorber ShipEngineStop;
     public BaseEffectAbsorber RepairEffect;
     public BaseEffectAbsorber PeriodDamageEffect;
+
+    private BaseEffectAbsorber _lastMoveEffect;
     // public BaseEffectAbsorber WeaponCrashEffect;
 
     private ArrowTarget Arrow;
     public ShipParameters ShipParameters { get; private set; }
     public ShipModuls ShipModuls { get; private set; }
-//    public AimingBox AimingBox;
+    //    public AimingBox AimingBox;
     public ShipPersonalInfo Target;
     public TeamIndex TeamIndex;
     public AICell Cell;
     public SelfCamera SelfCamera;
-    
+
     public List<WeaponPlace> WeaponPosition;
     public IShipDesicion DesicionData { get; protected set; }
 
@@ -85,7 +84,7 @@ public class ShipBase : MovingObject
             }
             else
             {
-                 return base.BankMax;
+                return base.BankMax;
             }
         }
     }
@@ -100,7 +99,7 @@ public class ShipBase : MovingObject
     public ShipInventory ShipInventory;
     public WeaponsController WeaponsController { get; private set; }
     public Commander Commander { get; private set; }
-    
+
     public event Action<ShipBase> OnDeath;
     public event Action<ShipBase, BaseAction> OnActionChange;
     public event Action<ShipBase, IShipDesicion> OnShipDesicionChange;
@@ -109,19 +108,19 @@ public class ShipBase : MovingObject
     private DebugTurnData DebugTurnData;
 
     public float MaxTurnRadius => Mathf.Rad2Deg * (ShipParameters.MaxSpeed / ShipParameters.TurnSpeed);
-  
+
     public void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos,
         IPilotParameters pilotParams, Commander commander, Action<ShipBase> dealthCallback)
     {
-//        gameObject.SetActive(false);
+        //        gameObject.SetActive(false);
         SelfCamera = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.SelfCameraPrefab);
-        SelfCamera.transform.SetParent(ShipVisual.transform,false);
+        SelfCamera.transform.SetParent(ShipVisual.transform, false);
         SelfCamera.transform.localPosition = Vector3.zero;
         shipInventory.LastBattleData = new ShipBattleData();
         ShipInventory = shipInventory;
         CellController = commander.Battlefield.CellController;
         AttackersData = new ShipAttackersData(this);
-  var selectedElementPrefab = DataBaseController.Instance.SelectedElement;
+        var selectedElementPrefab = DataBaseController.Instance.SelectedElement;
         SelectedElement = DataBaseController.GetItem<SelectedElement>(selectedElementPrefab);
         SelectedElement.Init(shipInventory.ShipType);
         SelectedElement.transform.SetParent(ShipVisual.transform, false);
@@ -130,19 +129,19 @@ public class ShipBase : MovingObject
 
         DamageData = new ShipDamageData(this);
         HitData = new ShipHitData();
-        HitData.Init(ShipVisual.transform,Easing.EaseType.easeInOutElastic);
+        HitData.Init(ShipVisual.transform, Easing.EaseType.easeInOutElastic);
         EngineStop = new EngineStop(this, ShipEngineStop);
         ExternalForce = new ExternalForce();
         ExternalSideForce = new ExternalSideForce();
         VisibilityData = new ShipVisibilityData(this);
-//        AsteroidDamage = new ShipAsteroidDamage(this);
+        //        AsteroidDamage = new ShipAsteroidDamage(this);
         PeriodDamage = new ShipPeriodDamage(this);
         Locator = new ShipLocator(this);
         Id = DataBaseController.Instance.GetNewIndex();
         PilotParameters = pilotParams;
         Commander = commander;
         TeamIndex = teamIndex;
-//        AimingBox.Init(this);
+        //        AimingBox.Init(this);
         transform.position = pos.position;
         transform.rotation = Quaternion.FromToRotation(Vector3.forward, pos.direction);
         if (ShieldCollider == null)
@@ -152,7 +151,7 @@ public class ShipBase : MovingObject
         SelectedElement.gameObject.transform.position = ShieldCollider.gameObject.transform.position;
         ShipParameters = new ShipParameters(shipInventory, shipInventory.SpellsModuls,
             Death, Id, this, ShieldCollider, pilotParams);
-        WeaponsController = new WeaponsController(WeaponPosition, this, 
+        WeaponsController = new WeaponsController(WeaponPosition, this,
             shipInventory.WeaponsModuls, shipInventory.Moduls.SimpleModuls);
         ShipModuls = new ShipModuls(this, shipInventory.Moduls.SimpleModuls);
         ShipModuls.InitModuls();
@@ -171,9 +170,9 @@ public class ShipBase : MovingObject
             PeriodDamageEffect.Stop();
         // if (WeaponCrashEffect != null)
         //     WeaponCrashEffect.Stop();
-        PathController = new ShipPathController2(this,  1.25f);
+        PathController = new ShipPathController2(this, 1.25f);
         BuffData = new ShipBuffData(this);
-        Boost = new ShipBoost(this, ShipParameters.StartParams.BoostChargeTime,Commander.TeamIndex == TeamIndex.green);
+        Boost = new ShipBoost(this, ShipParameters.StartParams.BoostChargeTime, Commander.TeamIndex == TeamIndex.green);
         DamageData.Activate();
         PathController.Activate();
         if (TeamIndex == TeamIndex.green)
@@ -190,7 +189,7 @@ public class ShipBase : MovingObject
         var priorityTarget = DataBaseController.Instance.PriorityTarget;
         PriorityObject = DataBaseController.GetItem(priorityTarget);
         PriorityObject.transform.SetParent(ShipVisual.transform, false);
-        PriorityObject.gameObject.SetActive(false); 
+        PriorityObject.gameObject.SetActive(false);
 
         var selectedObject = DataBaseController.Instance.DataStructPrefabs.ShipSelectedObject;
         SelectedObject = DataBaseController.GetItem(selectedObject);
@@ -218,7 +217,7 @@ public class ShipBase : MovingObject
 
     protected virtual void DesicionDataInit()
     {
-        SetDesision(ShipDesicionDataBase.Create(this,PilotParameters.Tactic));
+        SetDesision(ShipDesicionDataBase.Create(this, PilotParameters.Tactic));
     }
 
     public void SetDesision(IShipDesicion nData)
@@ -226,17 +225,17 @@ public class ShipBase : MovingObject
         DesicionData = nData;
         if (OnShipDesicionChange != null)
         {
-            OnShipDesicionChange(this,DesicionData);
+            OnShipDesicionChange(this, DesicionData);
         }
     }
 
     public void Launch(Action<ShipBase> OnShipLauched)
     {
         IsInited = true;
-//        gameObject.SetActive(true);
+        //        gameObject.SetActive(true);
         OnShipLauched(this);
     }
-    
+
     private void Death()
     {
         if (TeamIndex == TeamIndex.red && MyExtensions.IsTrueEqual())
@@ -249,7 +248,7 @@ public class ShipBase : MovingObject
             Debug.LogError("Can't be dead twise");
             return;
         }
-        
+
         ShipVisual.gameObject.SetActive(false);
         IsDead = true;
         _dealthCallback(this);
@@ -279,7 +278,7 @@ public class ShipBase : MovingObject
         ShipParameters.Dispose();
         ShipModuls.Dispose();
         OnActionChange = null;
-//        OnAttackRewardChange = null;
+        //        OnAttackRewardChange = null;
         OnDeath = null;
         OnDispose = null;
         gameObject.SetActive(false);
@@ -287,7 +286,7 @@ public class ShipBase : MovingObject
 
     private void EndWayCallback()
     {
-//        _moveWay = null;
+        //        _moveWay = null;
     }
 
     private void InitRotation()
@@ -309,13 +308,13 @@ public class ShipBase : MovingObject
         Boost.ManualUpdate();
         HitData.Update();
         PeriodDamage.ManualUpdate();
-//        AsteroidDamage.Update();
+        //        AsteroidDamage.Update();
         UpdateAction();
         BuffData.ManualUpdate();
         DesicionData.DrawUpdate();
         VisibilityData.Update();
     }
-    
+
     protected virtual void UpdateAction()
     {
         if (CurAction != null)
@@ -347,46 +346,46 @@ public class ShipBase : MovingObject
 
         UpdateShieldRegen();
 
-//        SetTargetSpeed(Boost.BoostTurn.TargetBoosSpeed);
+        //        SetTargetSpeed(Boost.BoostTurn.TargetBoosSpeed);
         EngineUpdate();
         MoveByY(YMoveRotation.YMoveCoef);
-        ApplyMove(Boost.LastTurnAddtionalMove,Boost.IsActive);
+        ApplyMove(Boost.LastTurnAddtionalMove, Boost.IsActive);
         Locator.ManualUpdate();
         // CheckYEnemies();
         _predictionPos = LookDirection * PREDICTION_DIST + Position;
         _predictionPosAim = LookDirection * PREDICTION_DIST_AIM + Position;
         // _backPredictionPos = -LookDirection * PREDICTION_DIST + Position;
     }
-        
-//     private void CheckYEnemies()
-//     {
-// //        return;
-//         if (_curSpeed <= 0f)
-//         {
-//             return;
-//         }
-//
-//         bool isGreen = (TeamIndex == TeamIndex.green);
-//         if (_evadeNextFrame)
-//         {
-//             _evadeNextFrame = false;
-//             int dir = isGreen ? 1 : -1;
-//             MoveByY(dir, isGreen);
-//             return;
-//         }
-//
-//         if ((isGreen && yMove > 0) || (!isGreen && yMove < 0))
-//         {
-//             int dirInner = isGreen ? -1 : 1;
-//             MoveByY(dirInner, isGreen);
-//         }
-//         else
-//         {
-//             yMove = 0;
-//             var p = ShipVisual.transform.position;
-//             ShipVisual.transform.position = new Vector3(p.x, yMove, p.z);
-//         }
-//     }
+
+    //     private void CheckYEnemies()
+    //     {
+    // //        return;
+    //         if (_curSpeed <= 0f)
+    //         {
+    //             return;
+    //         }
+    //
+    //         bool isGreen = (TeamIndex == TeamIndex.green);
+    //         if (_evadeNextFrame)
+    //         {
+    //             _evadeNextFrame = false;
+    //             int dir = isGreen ? 1 : -1;
+    //             MoveByY(dir, isGreen);
+    //             return;
+    //         }
+    //
+    //         if ((isGreen && yMove > 0) || (!isGreen && yMove < 0))
+    //         {
+    //             int dirInner = isGreen ? -1 : 1;
+    //             MoveByY(dirInner, isGreen);
+    //         }
+    //         else
+    //         {
+    //             yMove = 0;
+    //             var p = ShipVisual.transform.position;
+    //             ShipVisual.transform.position = new Vector3(p.x, yMove, p.z);
+    //         }
+    //     }
 
     private void MoveByY(float resultY)
     {
@@ -458,7 +457,7 @@ public class ShipBase : MovingObject
     public void MoveByWay(ShipBase target)
     {
         DebugTurnData = null;
-        var direction4 = PathController.GetCurentDirection(target, out var exactlyPoint, out var goodDir,out var speedRecommended);
+        var direction4 = PathController.GetCurentDirection(target, out var exactlyPoint, out var goodDir, out var speedRecommended);
         if (!goodDir)
         {
             var speed = ApplyRotation(direction4, exactlyPoint);
@@ -474,7 +473,7 @@ public class ShipBase : MovingObject
     private bool GetClosestBorderPoint(Vector3 dirWanted, Vector3 target)
     {
         DebugTurnData = new DebugTurnData();
-        
+
         var leftDor = Vector3.Dot(dirWanted, LookLeft) > 0;
         Vector3 offsetSied;
         if (leftDor)
@@ -487,31 +486,31 @@ public class ShipBase : MovingObject
         }
         var offsideVector = offsetSied * MaxTurnRadius;
         var centerTurnPoint = Position + offsideVector;
-//        var centerDir = target - centerTurnPoint;
+        //        var centerDir = target - centerTurnPoint;
         DebugTurnData.ShipPoint = Position;
         DebugTurnData.TurnCenter = centerTurnPoint;
         DebugTurnData.TrunRaius = MaxTurnRadius;
         DebugTurnData.Target = target;
-//        var distFromCentToTarget = Vector3.Magnitude(centerTurnPoint - target);
-//        var arcCosTo = MaxTurnRadius / distFromCentToTarget;
-//        var radius = Mathf.Acos(arcCosTo);
-//        Vector3 normalizedDirToEndPoit;
-//        Vector3 test1;
-//        Vector3 test2;
-//
-//        var rotated = Utils.RotateOnAngUp(centerDir, Mathf.Rad2Deg * radius);
-//        normalizedDirToEndPoit = Utils.NormalizeFastSelf(rotated);
-//        var dirTest1 = normalizedDirToEndPoit * MaxTurnRadius;
-//        test1 = centerTurnPoint + dirTest1;
-//
-//        var rotatedOther = Utils.RotateOnAngUp(centerDir, -Mathf.Rad2Deg * radius);
-//        normalizedDirToEndPoit = Utils.NormalizeFastSelf(rotatedOther);
-//        var dirTest2 = normalizedDirToEndPoit * MaxTurnRadius;
-//        test2 = centerTurnPoint + dirTest2;
+        //        var distFromCentToTarget = Vector3.Magnitude(centerTurnPoint - target);
+        //        var arcCosTo = MaxTurnRadius / distFromCentToTarget;
+        //        var radius = Mathf.Acos(arcCosTo);
+        //        Vector3 normalizedDirToEndPoit;
+        //        Vector3 test1;
+        //        Vector3 test2;
+        //
+        //        var rotated = Utils.RotateOnAngUp(centerDir, Mathf.Rad2Deg * radius);
+        //        normalizedDirToEndPoit = Utils.NormalizeFastSelf(rotated);
+        //        var dirTest1 = normalizedDirToEndPoit * MaxTurnRadius;
+        //        test1 = centerTurnPoint + dirTest1;
+        //
+        //        var rotatedOther = Utils.RotateOnAngUp(centerDir, -Mathf.Rad2Deg * radius);
+        //        normalizedDirToEndPoit = Utils.NormalizeFastSelf(rotatedOther);
+        //        var dirTest2 = normalizedDirToEndPoit * MaxTurnRadius;
+        //        test2 = centerTurnPoint + dirTest2;
 
-        var resuolDir = AIUtility.RotateByTraectory(Position, target, centerTurnPoint, LookDirection,MaxTurnRadius);
+        var resuolDir = AIUtility.RotateByTraectory(Position, target, centerTurnPoint, LookDirection, MaxTurnRadius);
 
-//
+        //
         DebugTurnData.PointEndTurn2 = resuolDir.Wrong;
         DebugTurnData.PointEndTurn = resuolDir.Right;
         var rightVector = resuolDir.Right - centerTurnPoint;
@@ -530,15 +529,15 @@ public class ShipBase : MovingObject
 
         //        return false;
         var middleVectorSize = Utils.NormalizeFastSelf(middleVector) * MaxTurnRadius;
-//        var test1 = centerTurnPoint + resuolDir.Right;
+        //        var test1 = centerTurnPoint + resuolDir.Right;
         Vector3 checkForCenter = centerTurnPoint + middleVectorSize;
         DebugTurnData.CheckForCenter = checkForCenter;
         SegmentPoints s1 = new SegmentPoints(checkForCenter, resuolDir.Right);
-        SegmentPoints s2= new SegmentPoints(checkForCenter,Position);
+        SegmentPoints s2 = new SegmentPoints(checkForCenter, Position);
         return CheckOnCrossTurn(s1, s2);
     }
 
-    private bool CheckOnCrossTurn(SegmentPoints test1,SegmentPoints test2)
+    private bool CheckOnCrossTurn(SegmentPoints test1, SegmentPoints test2)
     {
         bool isgood;
         isgood = HaveCroosWithBadCell(test1, Cell.Border1);
@@ -610,7 +609,7 @@ public class ShipBase : MovingObject
 
     public bool IsInFromt(Vector3 target)
     {
-//        return false;
+        //        return false;
         var dirToTrg = target - Position;
         var isAng = Utils.IsAngLessNormazied(LookDirection, Utils.NormalizeFastSelf(dirToTrg), UtilsCos.COS_90_RAD);
         return isAng;
@@ -627,7 +626,7 @@ public class ShipBase : MovingObject
         //        _moveWay = null;
     }
 
-    public void GoToPointAction(Vector3 pos,bool withEffect)
+    public void GoToPointAction(Vector3 pos, bool withEffect)
     {
         var battle = BattleController.Instance;
         var center = battle.CellController.Data.CenterZone;
@@ -638,29 +637,39 @@ public class ShipBase : MovingObject
             var a = new GoToCurrentPointAction(this, pos);
             SetAction(a);
             if (withEffect)
-                EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceOk,pos,2);
+            {
+                if (_lastMoveEffect != null)
+                {
+                    _lastMoveEffect.Stop();
+                }
+                var effect = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceOk, pos, 2);
+                _lastMoveEffect = effect;
+            }
+
         }
         else
         {
             if (withEffect)
-                EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceFail, pos, 2);
+            {
+                if (_lastMoveEffect != null)
+                {
+                    _lastMoveEffect.Stop();
+                }
+                var effect = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.GoPlaceFail, pos, 2);
+                _lastMoveEffect = effect;
+            }
         }
     }
 
     public void RunAwayAction()
     {
-        var a = new GoToBaseAction(this,Commander.MainShip,true);
+        var a = new GoToBaseAction(this, Commander.MainShip, true);
         SetAction(a);
     }
 
-    // public void SetEvadeEnemy()
-    // {
-    //     _evadeNextFrame = true;
-    // }
-
     public void AddEnemy(ShipBase enemy, bool isEnemy, CommanderShipEnemy commanderShipEnemy)
     {
-        var enemyInfo = new ShipPersonalInfo(this,enemy,commanderShipEnemy);
+        var enemyInfo = new ShipPersonalInfo(this, enemy, commanderShipEnemy);
         var dir = enemy.Position - Position;
         enemyInfo.SetParams(dir, dir.magnitude);
         if (isEnemy)
@@ -677,7 +686,7 @@ public class ShipBase : MovingObject
     private void OnEnemyVisibilityChange(ShipBase arg1, bool arg2)
     {
         var dir = arg1.Position - Position;
-        if (dir.sqrMagnitude < 5*5)
+        if (dir.sqrMagnitude < 5 * 5)
         {
             if (CurAction != null)
             {
@@ -685,7 +694,6 @@ public class ShipBase : MovingObject
             }
         }
     }
-
     public virtual Vector3 PredictionPos()
     {
         return _predictionPos;
@@ -710,13 +718,13 @@ public class ShipBase : MovingObject
     {
         var hitClip = DataBaseController.Instance.AudioDataBase.GetHit();
         Audio.PlayOneShot(hitClip);
-//        Debug.LogError($"playt hit {hitClip.name}");
+        //        Debug.LogError($"playt hit {hitClip.name}");
         if (ShipParameters.ShieldParameters.ShiledIsActive)
         {
             var effect = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShieldHitEffect, transform, 3f);
             effect.transform.position = bullet.Position;
             var posToLookAt = bullet.Position - bullet.LookDirection * 3;
-            Debug.DrawLine(posToLookAt, effect.transform.position,Color.red,10);
+            Debug.DrawLine(posToLookAt, effect.transform.position, Color.red, 10);
             effect.transform.LookAt(posToLookAt, Vector3.up);
         }
         weapon.ApplyToShip(ShipParameters, this, bullet);
@@ -746,18 +754,6 @@ public class ShipBase : MovingObject
     {
         SetAction(null);
     }
-
-//    public void EnterBattleField()
-//    {
-//        InBattlefield = true;
-////        EndAction();
-//    }
-//
-//    public void ExitBattleField()
-//    {
-//        InBattlefield = false;
-//        EndAction();
-//    }
 
     public void RemoveShip(ShipBase p0, bool isEnemy)
     {
@@ -793,20 +789,9 @@ public class ShipBase : MovingObject
         }
 
         var s = Cell.Side;
-        Gizmos.DrawWireCube(Cell.Center, new Vector3(s,0.1f,s));
+        Gizmos.DrawWireCube(Cell.Center, new Vector3(s, 0.1f, s));
         var asteroids = Cell.GetAsteroidsForShip(this);
-//        if (asteroids != null)
-//        {
-//            foreach (var shipAsteroidPoint in asteroids)
-//            {
-//                DrawUtils.DrawCircle(shipAsteroidPoint.Position, Vector3.up, Color.white, shipAsteroidPoint.Rad);
-//            }
-//        }
-
-        DrawUtils.DrawCircle(transform.position, Vector3.up, InBattlefield?Color.green:Color.yellow, MaxTurnRadius);
-//        DrawUtils.GizmosArrow(transform.position, LookDirection*2, Color.red);
-//        DrawUtils.GizmosArrow(transform.position, LookLeft*1.3f, Color.yellow);
-//        DrawUtils.GizmosArrow(transform.position, LookRight*1.3f, Color.green);
+        DrawUtils.DrawCircle(transform.position, Vector3.up, InBattlefield ? Color.green : Color.yellow, MaxTurnRadius);
         Gizmos.color = Color.white;
         switch (TeamIndex)
         {
@@ -824,11 +809,6 @@ public class ShipBase : MovingObject
         }
         PathController.OnDrawGizmosSelected();
         Gizmos.DrawWireSphere(transform.position, 0.6f);
-
-//        if (WeaponsController != null)
-//        {
-//            WeaponsController.DrawActiveWeapons();
-//        }
     }
 
     public void ShipRunAway()
@@ -846,14 +826,14 @@ public class ShipBase : MovingObject
             var inClouds = (nextCell.CellType == CellType.Clouds);
             VisibilityData.SetInClouds(inClouds);
             Cell = nextCell;
-//            InBattlefield = !nextCell.OutOfField;
+            //            InBattlefield = !nextCell.OutOfField;
             if (nextCell.CellType == CellType.DeepSpace)
             {
-                ShipParameters.Damage(999,999,null,null);
+                ShipParameters.Damage(999, 999, null, null);
             }
         }
     }
-    
+
     protected override void DrawGizmos()
     {
         if (s_Styles == null)
@@ -866,16 +846,12 @@ public class ShipBase : MovingObject
 
     private void DrawOutOfBattle()
     {
-//        if (!InBattlefield)
-//        {
-//            Gizmos.color = Color.red;
-//            Gizmos.DrawSphere(transform.position + Vector3.up * .2f, 0.2f);
-//        }
+
     }
 
     private void DrawHpLable()
     {
-        var p = transform.position + Vector3.up*0.85f;
+        var p = transform.position + Vector3.up * 0.85f;
         if (ShipParameters != null)
         {
             var s = "hp:" + ShipParameters.CurHealth.ToString("0") + "/" + ShipParameters.MaxHealth.ToString("0");
@@ -888,14 +864,14 @@ public class ShipBase : MovingObject
         if (ShipParameters != null)
         {
             var s = "s:" + ShipParameters.CurShiled.ToString("0") + "/" + ShipParameters.MaxShield.ToString("0");
-            var p = transform.position + Vector3.up*0.58f;
+            var p = transform.position + Vector3.up * 0.58f;
             SubDraw(s, p);
         }
     }
 
     private void DrawActionLable()
     {
-        var p = transform.position + Vector3.up*0.2f;
+        var p = transform.position + Vector3.up * 0.2f;
         var content = "";
 
         if (CurAction == null)
@@ -931,10 +907,10 @@ public class ShipBase : MovingObject
         var nameContent = new GUIContent(content);
         var size = s_Styles.enabledStateName.CalcSize(nameContent);
         var screenPoint = currentCamera.WorldToScreenPoint(p);
-        var position = currentCamera.ScreenToWorldPoint(new Vector3(screenPoint.x - size.x*.5f, screenPoint.y, -screenPoint.z));
+        var position = currentCamera.ScreenToWorldPoint(new Vector3(screenPoint.x - size.x * .5f, screenPoint.y, -screenPoint.z));
 
         // Draw enabled states name
-//        Handles.Label(position, nameContent, s_Styles.enabledStateName);
+        //        Handles.Label(position, nameContent, s_Styles.enabledStateName);
     }
 
 }

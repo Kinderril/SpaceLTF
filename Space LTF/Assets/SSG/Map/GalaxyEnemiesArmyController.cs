@@ -10,24 +10,25 @@ public class GalaxyEnemiesArmyController
     [field: NonSerialized]
     public event Action<MovingArmy, bool> OnAddMovingArmy;
 
+    private const int MAX_ARMIES = 6;
 
     private List<MovingArmy> _armies = new List<MovingArmy>();
     private List<GlobalMapCell> _cells;
     private HashSet<int> stepsToBorn = new HashSet<int>();
-    private int _lastStep=1;
-    private int _lastAddedStep=1;
-    private int _totalBornArmies=0;
+    private int _lastStep = 1;
+    // private int _lastAddedStep = 1;
+    private int _totalBornArmies = 0;
     private PlayerQuestData _questData;
 
-    private const int DELTA_STEP = 9;
+    private const float DELTA_STEP = 3.4f;
 
     public GalaxyEnemiesArmyController(List<GlobalMapCell> cells, int armiesToMove = 3)
     {
         _cells = cells;
         if (armiesToMove > 0)
         {
-            int startStep = MyExtensions.Random(4, 10);
-            _lastAddedStep = startStep;
+            int startStep = MyExtensions.Random(4, 8);
+            // _lastAddedStep = startStep;
             stepsToBorn.Add(startStep);
         }
     }
@@ -44,22 +45,40 @@ public class GalaxyEnemiesArmyController
         {
             if (step == i)
             {
-                var posibleCell = _cells.FirstOrDefault(x =>
-                    !x.Completed && !(x is GlobalMapNothing) && Mathf.Abs(x.indX - curCell.indX) > 4 && Mathf.Abs(x.indZ - curCell.indZ) > 4);
-
-                if (posibleCell != null)
-                {
-                    var movingArmy = new MovingArmy(posibleCell, DestroyCallback);
-                    _armies.Add(movingArmy);
-                    OnAddMovingArmy?.Invoke(movingArmy, true);
-                    _totalBornArmies++;
-                    var coordinates = $"{movingArmy.CurCell.indX},{movingArmy.CurCell.indZ}";
-                    WindowManager.Instance.InfoWindow.Init(null,
-                        String.Format(Namings.Tag("MovingArmyBorn"),
-                            Namings.ShipConfig(movingArmy._player.Army.BaseShipConfig), coordinates));
-                }
+                TryBornArmy(curCell);
                 stepsToBorn.Remove(i);
                 break;
+            }
+        }
+    }
+
+    public void DebugTryBornArmy()
+    {
+        TryBornArmy(MainController.Instance.MainPlayer.MapData.CurrentCell);
+    }
+
+    private void TryBornArmy(GlobalMapCell curPlayersCell)
+    {
+        var posibleCells = _cells.Where(x =>
+            !x.Completed && x.CurMovingArmy == null && !(x is GlobalMapNothing) && Mathf.Abs(x.indX - curPlayersCell.indX) > 4 && Mathf.Abs(x.indZ - curPlayersCell.indZ) > 4);
+
+        var posibleCell = posibleCells.FirstOrDefault();
+        if (posibleCell != null)
+        {
+            if (_armies.Count < MAX_ARMIES)
+            {
+                var movingArmy = new MovingArmy(posibleCell, DestroyCallback);
+                _armies.Add(movingArmy);
+                OnAddMovingArmy?.Invoke(movingArmy, true);
+                _totalBornArmies++;
+                var coordinates = $"{movingArmy.CurCell.indX},{movingArmy.CurCell.indZ}";
+                WindowManager.Instance.InfoWindow.Init(null,
+                    String.Format(Namings.Tag("MovingArmyBorn"),
+                        Namings.ShipConfig(movingArmy._player.Army.BaseShipConfig), coordinates));
+            }
+            else
+            {
+                stepsToBorn.Add(_lastStep + MyExtensions.Random(4, 10));
             }
         }
     }
@@ -67,14 +86,18 @@ public class GalaxyEnemiesArmyController
     private void DestroyCallback(MovingArmy movingArmy)
     {
         AddNewStepToBorn();
+        if (MyExtensions.IsTrue01(0.75f))
+        {
+            AddNewStepToBorn();
+        }
         OnAddMovingArmy?.Invoke(movingArmy, false);
+        _armies.Remove(movingArmy);
     }
 
     private void AddNewStepToBorn()
     {
-        var stepToBorn = _lastStep + _totalBornArmies * DELTA_STEP;
+        var stepToBorn = _lastStep + (int)MyExtensions.GreateRandom(_totalBornArmies * DELTA_STEP);
         stepsToBorn.Add(stepToBorn);
-
     }
 
     public void InitQuests(PlayerQuestData questData)
@@ -85,7 +108,7 @@ public class GalaxyEnemiesArmyController
 
     private void OnElementFound()
     {
-        var stepToBorn = _lastStep + Mathf.Clamp((int)MyExtensions.GreateRandom(_totalBornArmies),2,10) ;
+        var stepToBorn = _lastStep + Mathf.Clamp((int)MyExtensions.GreateRandom(_totalBornArmies), 1, 4);
         stepsToBorn.Add(stepToBorn);
     }
 

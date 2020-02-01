@@ -8,9 +8,10 @@ public class CamerasController : Singleton<CamerasController>
     public CameraController GameCamera;
     public BackgroundCamera BackgroundCamera;
     public CameraController GlobalMapCamera;
-    public AudioListener BattleListerer;
-    public AudioListener MenuListerer;
+    // public AudioListener BattleListerer;
+    // public AudioListener MenuListerer;
     private bool _isAudioEnabled = true;
+    public AudioSourceMusicControl MusicControl;
     public Camera UICamera;
 
     public Vector3 keybordDir;
@@ -37,7 +38,20 @@ public class CamerasController : Singleton<CamerasController>
     public void MainListenerSwitch()
     {
         _isAudioEnabled = !_isAudioEnabled;
+        PlayerPrefs.SetInt(KEY, _isAudioEnabled ? 1 : 0);
         CheckListaner();
+    }
+
+    public void SetAudioMainListener(bool val)
+    {
+        if (_isAudioEnabled == val)
+        {
+            return;
+        }
+        _isAudioEnabled = val;
+        PlayerPrefs.SetInt(KEY, _isAudioEnabled ? 1 : 0);
+        CheckListaner();
+
     }
 
     private void CheckListaner()
@@ -199,19 +213,25 @@ public class CamerasController : Singleton<CamerasController>
 
     public void OpenGlobalCamera()
     {
+        MusicControl.StopMenuAudio();
+        MusicControl.StartGlobalAudio();
         CloseGameCamera();
         GlobalMapCamera.gameObject.SetActive(true);
         _activeCamera = GlobalMapCamera;
         UICamera.gameObject.SetActive(false);
     }
 
+
+
     public void OpenGameCamera()
     {
+        MusicControl.StopGlobalAudio();
         CloseGlobalCamera();
         GameCamera.gameObject.SetActive(true);
         _activeCamera = GameCamera;
         UICamera.gameObject.SetActive(false);
     }
+
 
     public void CloseGameCamera()
     {
@@ -219,17 +239,20 @@ public class CamerasController : Singleton<CamerasController>
         _activeCamera = null;
     }
 
+
+
     public void CloseGlobalCamera()
     {
         _activeCamera = null;
         GlobalMapCamera.gameObject.SetActive(false);
     }
 
-    public void SetCameraTo(Vector3 position)
+    public void SetCameraTo(Vector3 p, float period = 1f)
     {
         if (_activeCamera != null)
         {
-            _activeCamera.SetCameraTo(position);
+            var position = new Vector3(p.x, p.y, p.z);
+            _activeCamera.SetCameraTo(position, period);
         }
     }
 

@@ -78,11 +78,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public void SetCameraTo(Vector3 v, float coef = 1f)
+    public void SetCameraTo(Vector3 v, float period)
     {
         startMoveTime = Time.time;
         _targetPos = v;
-        _period = coef * 1f;
+        _period = period;
     }
 
     public void MoveMainCamToDir(Vector3 keybordDir)

@@ -82,7 +82,7 @@ public abstract class GlobalMapCell
     private void FightMovingArmy()
     {
         _leaverDialogData = MoverArmyLeaverEnd();
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, CurMovingArmy._player, false, false);
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, CurMovingArmy._player, false, true);
     }
 
     private MessageDialogData MoverArmyLeaverEnd()

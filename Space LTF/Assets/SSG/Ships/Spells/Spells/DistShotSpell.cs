@@ -15,8 +15,8 @@ public class DistShotSpell : BaseSpellModulInv
     private const float ENGINE_OFF_DELTA = 3f;
     private const float ENGINE_OFF_LEVEL = 1f;
 
-    [NonSerialized]
-    private CurWeaponDamage CurWeaponDamage;
+    // [NonSerialized]
+    // private CurWeaponDamage CurWeaponDamage;
 
     private const float BULLET_SPEED = 13f;
     private const float BULLET_TURN_SPEED = .2f;
@@ -24,7 +24,7 @@ public class DistShotSpell : BaseSpellModulInv
     public DistShotSpell()
         : base(SpellType.distShot, 5, 20, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
     {
-        CurWeaponDamage = new CurWeaponDamage(0, 12);
+        // CurWeaponDamage = new CurWeaponDamage(0, 12);
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {

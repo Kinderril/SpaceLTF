@@ -83,6 +83,7 @@ public abstract class Bullet : MovingObject
     public WeaponType WeaponType;
     public BaseEffectAbsorber HitEffect;
     public BaseEffectAbsorber TrailEffect;
+    public bool _traileChecked;
 
     protected override float TurnSpeed()
     {
@@ -391,6 +392,7 @@ public abstract class Bullet : MovingObject
 
     public virtual void Death()
     {
+        _traileChecked = false;
         float delay = 1.7f;
         if (TrailEffect != null)
         {

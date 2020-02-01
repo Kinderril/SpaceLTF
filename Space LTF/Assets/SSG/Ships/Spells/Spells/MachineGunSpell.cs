@@ -3,26 +3,25 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class ArtillerySpell : BaseSpellModulInv
+public class MachineGunSpell : BaseSpellModulInv
 {
-    private const float DIST_SHOT = 40f;
+    private const float DIST_SHOT = 25f;
     // private const float baseDamage = 4;
-    private const float rad = 17f;
+    private const float rad = 1f;
 
 
-    private float DmgHull => 3 + Level;
-    private float DmgShield => 2 + Level;
-    public int BulletsCount => Level * 3 + 11;
+    private float DmgHull => 3 + Level * 2;
+    private float DmgShield => 1 + (int)(Level * 1.5f);
+    public int BulletsCount => 4;
 
-    public ArtillerySpell()
-        : base(SpellType.artilleryPeriod, 4, 25, new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
+    public MachineGunSpell()
+        : base(SpellType.machineGun, 1, 45, new BulleStartParameters(14f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
-
     }
 
     public override SpellDamageData RadiusAOE()
     {
-        return new SpellDamageData(rad/2f,false);
+        return new SpellDamageData();
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
@@ -32,7 +31,7 @@ public class ArtillerySpell : BaseSpellModulInv
         for (int i = 0; i < BulletsCount; i++)
         {
             var timer =
-                MainController.Instance.BattleTimerManager.MakeTimer(i * 0.145f);
+                MainController.Instance.BattleTimerManager.MakeTimer(i * 0.15f);
             timer.OnTimer += () =>
             {
                 if (battle.State == BattleState.process)
@@ -54,6 +53,7 @@ public class ArtillerySpell : BaseSpellModulInv
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
+
         var startPos = weapon.CurPosition;
         var dir = Utils.NormalizeFastSelf(target.Position - startPos);
         Bullet.Create(origin, weapon, dir, startPos,
@@ -66,7 +66,7 @@ public class ArtillerySpell : BaseSpellModulInv
 
     public override Bullet GetBulletPrefab()
     {
-        var bullet = DataBaseController.Instance.GetBullet(WeaponType.artilleryBullet);
+        var bullet = DataBaseController.Instance.GetBullet(WeaponType.machineGun);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
     }
@@ -86,7 +86,7 @@ public class ArtillerySpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return String.Format(Namings.ArtillerySpell, BulletsCount, DmgHull, DmgShield);
+        return String.Format(Namings.Tag("MachineGunSpellDesc"), BulletsCount, DmgShield, DmgHull);
     }
 }
 

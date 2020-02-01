@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,15 +23,15 @@ public class PreFinishWindow : MonoBehaviour
         {
             case EndBattleType.win:
                 color = Color.green;
-                Field.text = Namings.Win;
+                Field.text = Namings.Tag("Win");
                 break;
             case EndBattleType.lose:
-                Field.text = Namings.Lose;
+                Field.text = Namings.Tag("Lose");
                 color = Color.red;
                 break;
             case EndBattleType.runAway:
-                Field.text = Namings.RunAwayComplete; 
-                color = new Color(255f/255f, 153f / 255f, 51f / 255f,1f);
+                Field.text = Namings.Tag("RunAwayComplete");
+                color = new Color(255f / 255f, 153f / 255f, 51f / 255f, 1f);
                 break;
         }
 

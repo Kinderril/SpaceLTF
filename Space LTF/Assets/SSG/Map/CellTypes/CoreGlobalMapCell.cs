@@ -218,7 +218,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         {
             MainController.Instance.MainPlayer.QuestData.AddElement();
             List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
-            answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, null));
+            answerDialog.Add(new AnswerDialogData(Namings.DialogTag("ok"), null, null));
             var mesData = new MessageDialogData(Namings.DialogTag("corePartYours"), answerDialog);
             return mesData;
         }

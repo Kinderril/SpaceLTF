@@ -250,7 +250,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                     var cost = MoneyConsts.WeaponUpgrade[Level];
                     if (owner.MoneyData.HaveMoney(cost))
                     {
-                        var txt = String.Format(Namings.WANT_UPGRADE_WEAPON, Namings.Weapon(WeaponType));
+                        var txt = String.Format(Namings.Tag("WANT_UPGRADE_WEAPON"), Namings.Weapon(WeaponType));
                         WindowManager.Instance.ConfirmWindow.Init(() =>
                         {
                             WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.Upgrade);
@@ -283,7 +283,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null, Namings.WeaponMaxLevel);
+            WindowManager.Instance.InfoWindow.Init(null, Namings.Tag("WeaponMaxLevel"));
         }
     }
 

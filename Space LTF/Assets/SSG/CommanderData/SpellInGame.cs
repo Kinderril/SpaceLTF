@@ -24,12 +24,13 @@ public class SpellDamageData
     public SpellDamageData()
     {
         IsAOE = false;
-    }    
-    public SpellDamageData(float rad)
+    }
+
+    public SpellDamageData(float rad, bool isAOE = true)
     {
         AOERad = rad;
-        IsAOE = true;
-    }
+        IsAOE = isAOE;
+    }  
 
 }
 
@@ -102,7 +103,7 @@ Desc = desc;
         SubUpdateShowCast = spellData.SubUpdateShowCast;
         CanCastAtPoint = spellData.CanCastAtPoint;
         CreateBulletAction = spellData.CreateBulletAction;
-        ShowCircle = _spellDamageData.IsAOE;
+        ShowCircle = _spellDamageData.AOERad > 0;
     }
     public bool CanCast(CommanderCoinController coinController)
     {

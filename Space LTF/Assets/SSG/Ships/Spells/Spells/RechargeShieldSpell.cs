@@ -35,21 +35,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        //        var dir = (target.Position - weapon.CurPosition);
-        //        Commander commnder;
-        //        if (weapon.TeamIndex == TeamIndex.green)
-        //        {
-        //            commnder = BattleController.Instance.GreenCommander;
-        //        }
-        //        else
-        //        {
-        //            commnder = BattleController.Instance.RedCommander;
-        //        }
-        //
-        //        ShipBase closestShip = commnder.GetClosestShip(target.Position,false);
-        //
-        //
-        //        Bullet.Create(origin, weapon, dir, weapon.CurPosition, closestShip,  BulleStartParameters);
+
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
@@ -87,7 +73,6 @@ public class RechargeShieldSpell : BaseSpellModulInv
             objectToShow.gameObject.SetActive(true);
             objectToShow.transform.position = closestsShip.Position;
             _lastClosest = closestsShip;
-            //            Debug.LogError($"Set last close {_lastClosest}");
         }
         else
         {

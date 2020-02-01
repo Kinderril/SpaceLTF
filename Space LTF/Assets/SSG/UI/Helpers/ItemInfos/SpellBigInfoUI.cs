@@ -25,8 +25,8 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         OnUpgrade(spell);
         _spell.OnUpgrade += OnUpgrade;
         ButtonUpgrade.interactable = canChange;
-        CostCountField.text = String.Format(Namings.ChargesCount, spell.CostCount);
-        CostDelayField.text = String.Format(Namings.ChargesDelay, spell.CostTime);
+        CostCountField.text = String.Format(Namings.Tag("ChargesCount"), spell.CostCount);
+        CostDelayField.text = String.Format(Namings.Tag("ChargesDelay"), spell.CostTime);
     }
 
     private void OnUpgrade(BaseSpellModulInv obj)

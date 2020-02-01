@@ -104,7 +104,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
     protected override bool IsEnemyClose(out Vector3 trg)
     {
         var ship = BattleController.Instance.ClosestShipToPos(_commander.MainShip.Position, oIndex, out var sDist);
-        Debug.LogError($"IsEnemyClose  dist {Mathf.Sqrt(sDist)} <  {Mathf.Sqrt(ShootDistSqrt)}");
+//        Debug.LogError($"IsEnemyClose  dist {Mathf.Sqrt(sDist)} <  {Mathf.Sqrt(ShootDistSqrt)}");
         if (sDist < ShootDistSqrt)
         {
             trg = ship.Position;
@@ -120,7 +120,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         {
             Cast(v);
             _commander.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
-            Debug.LogError($"_spell.TryCast {this}");
+//            Debug.LogError($"_spell.TryCast {this}");
         }
     }
 

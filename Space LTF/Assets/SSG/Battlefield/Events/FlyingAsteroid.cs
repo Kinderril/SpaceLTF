@@ -6,8 +6,8 @@ public class FlyingAsteroid : Asteroid
 {
     private Vector3 _dir;
     private Vector3 _startPoint;
-    public float MinSpeed;
-    public float MaxSpeed;
+    private float MinSpeed = 1f;
+    private float MaxSpeed = 3f;
     private Action<FlyingAsteroid> _callbackDeath;
     private float _sDistToDestroy;
 
@@ -47,7 +47,7 @@ public class FlyingAsteroid : Asteroid
 
     private void MoveAsteroid()
     {
-        transform.position = transform.position + _dir * Time.time;
+        transform.position = transform.position + _dir * Time.deltaTime;
     }
 
     protected override void Death(bool withSound)

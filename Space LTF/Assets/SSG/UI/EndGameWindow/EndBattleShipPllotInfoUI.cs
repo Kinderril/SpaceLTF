@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,14 +26,14 @@ public class EndBattleShipPllotInfoUI : MonoBehaviour
         IconConfig.text = info.Ship.ShipConfig.ToString();
         FieldCurrentMoney.text = info.Pilot.Money.ToString();
         FieldName.text = info.Ship.Name;
-        FieldAddMoney.Init(0  );
-        FieldDamageHealth.text = Namings.DamageBody + ":" +info.Ship.LastBattleData.HealthDamage.ToString("0");
-        FieldDamageShield.text = Namings.DamageShield + ":" + info.Ship.LastBattleData.ShieldhDamage.ToString("0");
+        FieldAddMoney.Init(0);
+        FieldDamageHealth.text = Namings.Tag("DamageBody") + ":" + info.Ship.LastBattleData.HealthDamage.ToString("0");
+        FieldDamageShield.text = Namings.Tag("DamageShield") + ":" + info.Ship.LastBattleData.ShieldhDamage.ToString("0");
         var MaxHealth = ShipParameters.ParamUpdate(info.Ship.MaxHealth, info.Pilot.HealthLevel, ShipParameters.MaxHealthCoef);
         var hp = MaxHealth;
         MoneyToAdd = 0;
-        var cur = info.Ship.HealthPercent*MaxHealth;
-        HealedHpField.text =  Namings.Tag("Health") + ":" + cur +  "(:+" + info.Ship.LastBattleData.SelfDamage.ToString("0") + ")/"+ hp.ToString("0");
+        var cur = info.Ship.HealthPercent * MaxHealth;
+        HealedHpField.text = Namings.Tag("Health") + ":" + cur + "(:+" + info.Ship.LastBattleData.SelfDamage.ToString("0") + ")/" + hp.ToString("0");
     }
 
     public void SetMoneyAdd(int addMoney)

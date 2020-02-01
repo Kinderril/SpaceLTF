@@ -88,7 +88,8 @@ public class ArmyGlobalMapCell : GlobalMapCell
     protected override MessageDialogData GetDialog()
     {
         var myPlaer = MainController.Instance.MainPlayer;
-        bool isFriends = myPlaer.ReputationData.IsFriend(ConfigOwner);
+        var status = myPlaer.ReputationData.GetStatus(ConfigOwner);
+        bool isFriends = status == EReputationStatus.friend;
         string masinMsg;
 
         var ans = new List<AnswerDialogData>();
@@ -109,7 +110,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
             scoutsField = $"{scoutsField}\n{info}\n";
         }
 
-        if (isFriends && rep > 40)
+        if (isFriends)
         {
             masinMsg = String.Format(Namings.DialogTag("armyFrendly"), scoutsField); ;
             ans.Add(new AnswerDialogData(String.Format(Namings.DialogTag("armyAskHelp"), rep), null, DimlomatyOption));
@@ -124,19 +125,26 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 ans.Add(new AnswerDialogData(String.Format(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
                     () => BuyOutOption(buyoutCost)));
             }
-            if (playersPower < Power)
+            if (status == EReputationStatus.neutral)
             {
-                masinMsg = String.Format(Namings.DialogTag("armyStronger"), scoutsField);
+                masinMsg = String.Format(Namings.DialogTag("armyNeutral"), scoutsField);
             }
             else
             {
-                masinMsg = String.Format(Namings.DialogTag("armyShallFight"), scoutsField);
+                if (playersPower < Power)
+                {
+                    masinMsg = String.Format(Namings.DialogTag("armyStronger"), scoutsField);
+                }
+                else
+                {
+                    masinMsg = String.Format(Namings.DialogTag("armyShallFight"), scoutsField);
+                }
             }
         }
 
-        ans.Add(new AnswerDialogData("Fight", Take));
+        ans.Add(new AnswerDialogData(Namings.DialogTag("Attack"), Take));
 
-        if (isFriends)
+        if (isFriends || status == EReputationStatus.neutral)
         {
             ans.Add(new AnswerDialogData(Namings.Tag("leave"), null));
         }
@@ -268,7 +276,15 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     public override string Desc()
     {
-        return $"Amry:{Namings.ShipConfig(ConfigOwner)} \n Zone:{Namings.BattleEvent(_eventType)}";
+        var army = Namings.Tag("Amry");
+        if (_eventType.HasValue)
+        {
+            return $"{army}:{Namings.ShipConfig(ConfigOwner)}\nZone:{Namings.BattleEvent(_eventType.Value)}";
+        }
+        else
+        {
+            return $"{army}:{Namings.ShipConfig(ConfigOwner)}";
+        }
     }
 
     public override void Take()

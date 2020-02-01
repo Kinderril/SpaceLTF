@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -251,7 +250,7 @@ public class MapWindow : BaseWindow
     private void OnMoneyChange(int obj)
     {
         MoneyField.Init(player.MoneyData.MoneyCount);
-        player.MessagesToConsole.AddMsg(String.Format("Add credits {0}", obj));
+        player.MessagesToConsole.AddMsg(String.Format(Namings.Tag("AddCredits"), obj));
     }
 
     private void CellsOfSector()
@@ -268,7 +267,7 @@ public class MapWindow : BaseWindow
     private void OnCellChanged(GlobalMapCell cell)
     {
         //        UpdateDayField();
-        player.MessagesToConsole.AddMsg("Relocate to:" + cell.Desc());
+        player.MessagesToConsole.AddMsg(String.Format(Namings.Tag("RelocateTo"), cell.Desc()));
         //        GlobalMap.CellChange();
         //        foreach (var mapCellElement in cellsElements)
         //        {
@@ -386,27 +385,11 @@ public class MapWindow : BaseWindow
         if (isArmyActive)
         {
             EnableArmy(false);
-            GlobalMap.UnBlock();
         }
         else
         {
-            EnableModif(false);
+            // EnableModif(false);
             EnableArmy(true);
-            GlobalMap.Block();
-        }
-    }
-
-    public void OnModifShowClick()
-    {
-        if (modifWindowUI.gameObject.activeSelf)
-        {
-            EnableModif(false);
-            GlobalMap.UnBlock();
-        }
-        else
-        {
-            EnableArmy(false);
-            EnableModif(true);
             GlobalMap.Block();
         }
     }
@@ -428,6 +411,7 @@ public class MapWindow : BaseWindow
             }
             var v = new Vector3(5000, 0, 0);
             ArmyInfoContainer.transform.position = v;
+            GlobalMap.UnBlock();
         }
         if (OnOpenInventory != null)
         {
@@ -453,11 +437,11 @@ public class MapWindow : BaseWindow
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (modifWindowUI.gameObject.activeSelf)
-            {
-                EnableModif(false);
-                return;
-            }
+            // if (modifWindowUI.gameObject.activeSelf)
+            // {
+            //     EnableModif(false);
+            //     return;
+            // }
 
             if (isArmyActive)
             {

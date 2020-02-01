@@ -113,9 +113,13 @@ public class DebugPanelWindow : EditorWindow
             {
                 GoToEnd();
             } 
-            if (GUILayout.Button("Anomaly"))
+//            if (GUILayout.Button("Anomaly"))
+//            {
+//                DebugEventStart.AcitvateDialog(GlobalMapEventType.anomaly);
+//            }
+            if (GUILayout.Button("MovArmy"))
             {
-                DebugEventStart.AcitvateDialog(GlobalMapEventType.anomaly);
+                BornMovingArmy();
             }
             if (GUILayout.Button("Add core"))
             {
@@ -168,6 +172,11 @@ public class DebugPanelWindow : EditorWindow
         var army = MainController.Instance.MainPlayer.Army;
         var power = ArmyCreator.CalcArmyPower(army);
         Debug.Log($"YOU ARMY POWER:{power}".Green());
+    }  
+
+    private void BornMovingArmy()
+    {                                 
+        MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController.DebugTryBornArmy();
     }
 
     private void FightDebug()

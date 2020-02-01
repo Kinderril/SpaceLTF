@@ -48,7 +48,7 @@ public class GalaxyData
         {GlobalMapEventType.secretDeal, 2},
     };
 
-    public GlobalMapCell Init2(int sectorCount, int sizeSector, int startPower, int coreCells, 
+    public GlobalMapCell Init2(int sectorCount, int sizeSector, int startPower, int coreCells,
         int startDeathStep, ShipConfig playerShipConfig, int powerPerTurn)
     {
 
@@ -417,40 +417,41 @@ public class GalaxyData
 
     private ShipConfig GetConfig(int i, int j, int subZoneCount)
     {
-        Dictionary<ShipConfig, float> d;
-        if (i == 0)
-        {
-            //            configs = new WDictionary<ShipConfig>();
-            d = new Dictionary<ShipConfig, float>() { { ShipConfig.mercenary, 1 }, { ShipConfig.raiders, 2 }, };
-        }
-        else
-        {
-            if (i == subZoneCount - 1)
-            {
-                d = new Dictionary<ShipConfig, float>() { { ShipConfig.federation, 3 }, { ShipConfig.krios, 3 }, { ShipConfig.ocrons, 3 }, };
-            }
-            else
-            {
-                if (i < subZoneCount / 2)
-                {
 
-                    d = new Dictionary<ShipConfig, float>() { { ShipConfig.mercenary, 2 }, { ShipConfig.krios, 1 }, { ShipConfig.ocrons, 1 }, { ShipConfig.federation, 1 }, };
-                }
-                else
-                {
-                    d = new Dictionary<ShipConfig, float>() { { ShipConfig.federation, 3 }, { ShipConfig.krios, 3 }, { ShipConfig.ocrons, 3 }, };
+        var configsList = new List<ShipConfig>(){ ShipConfig.mercenary,
+            ShipConfig.raiders, ShipConfig.krios, ShipConfig.ocrons, ShipConfig.federation,};
 
-                }
-            }
-
-        }
-        var configs = new WDictionary<ShipConfig>(d);
-        return configs.Random();
+        return configsList.RandomElement();
+        //
+        // Dictionary<ShipConfig, float> d;
+        // if (i == 0)
+        // {
+        //     d = new Dictionary<ShipConfig, float>() { { ShipConfig.mercenary, 1 }, { ShipConfig.raiders, 2 }, };
+        // }
+        // else
+        // {
+        //     if (i == subZoneCount - 1)
+        //     {
+        //         d = new Dictionary<ShipConfig, float>() { { ShipConfig.federation, 3 }, { ShipConfig.krios, 3 }, { ShipConfig.ocrons, 3 }, };
+        //     }
+        //     else
+        //     {
+        //         if (i < subZoneCount / 2)
+        //         {
+        //
+        //             d = new Dictionary<ShipConfig, float>() { { ShipConfig.mercenary, 2 }, { ShipConfig.krios, 1 }, { ShipConfig.ocrons, 1 }, { ShipConfig.federation, 1 }, };
+        //         }
+        //         else
+        //         {
+        //             d = new Dictionary<ShipConfig, float>() { { ShipConfig.federation, 3 }, { ShipConfig.krios, 3 }, { ShipConfig.ocrons, 3 }, };
+        //
+        //         }
+        //     }
+        //
+        // }
+        // var configs = new WDictionary<ShipConfig>(d);
+        // return configs.Random();
     }
-    //    private void SubscribeCell(GlobalMapCell cell)
-    //    {
-    //        cell.OnScouted += OnCellScouted;
-    //    }
 
     private void OnCellScouted(GlobalMapCell obj)
     {

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class CameraShake : MonoBehaviour
 {
@@ -24,7 +23,7 @@ public class CameraShake : MonoBehaviour
             camTransform = GetComponent(typeof(Transform)) as Transform;
         }
     }
-    
+
     public void Init(float duration)
     {
         originalPos = camTransform.localPosition;
@@ -36,16 +35,19 @@ public class CameraShake : MonoBehaviour
     {
         if (isShake)
         {
-            if (shakeDuration > 0)
+            if (Time.deltaTime > 0)
             {
-                camTransform.localPosition = originalPos + Random.insideUnitSphere*shakeAmount;
-                shakeDuration -= Time.deltaTime*decreaseFactor;
-            }
-            else
-            {
-                shakeDuration = 0f;
-                camTransform.localPosition = originalPos;
-                isShake = false;
+                if (shakeDuration > 0)
+                {
+                    camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
+                    shakeDuration -= Time.deltaTime * decreaseFactor;
+                }
+                else
+                {
+                    shakeDuration = 0f;
+                    camTransform.localPosition = originalPos;
+                    isShake = false;
+                }
             }
         }
     }

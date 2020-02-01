@@ -29,7 +29,7 @@ public class Asteroid : MonoBehaviour
     {
         EffectOnHit.gameObject.SetActive(false);
         _wannaRotate = true;
-        _rotateSpeed = MyExtensions.Random(0.1f, 0.6f);
+        _rotateSpeed = MyExtensions.Random(0.05f, 0.2f);
         var xx = MyExtensions.Random(0f, 1f);
         var yy = MyExtensions.Random(0f, 1f);
         var zz = MyExtensions.Random(0f, 1f);

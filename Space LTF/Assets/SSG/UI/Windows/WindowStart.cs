@@ -1,22 +1,31 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class WindowStart : BaseWindow
 {
     public StatisticsController Statistics;
+    public Button AchievementsButton;
     public TextMeshProUGUI DemoField;
     public override void Init()
     {
         Statistics.Init();
         DemoField.gameObject.SetActive(true);
-      var mainTxt = Namings.Tag("DemoStart");
+        CamerasController.Instance.MusicControl.StartMenuAudio();
+        var mainTxt = Namings.Tag("DemoStart");
 
+#if UNITY_EDITOR || Develop
+        AchievementsButton.interactable = (true);
+#else                                                     
+        AchievementsButton.interactable = (false);
+
+#endif
 #if Demo
         DemoField.gameObject.SetActive(true);  
       mainTxt = $"{mainTxt}{Namings.Tag("DemoStart2")}";
 #else
-//        DemoField.gameObject.SetActive(false);
+        //        DemoField.gameObject.SetActive(false);
 #endif
 
         DemoField.text = mainTxt;

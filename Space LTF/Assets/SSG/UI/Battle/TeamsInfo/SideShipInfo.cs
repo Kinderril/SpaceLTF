@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -13,7 +9,7 @@ public class SideShipInfo : MonoBehaviour
     public const string PREFS_KEY = "SideShipInfo{0}";
 
     public ShipSlidersInfo ShipSlidersInfo;
-//    public Image ActionIcon;
+    //    public Image ActionIcon;
     public Image ShipTypeIcon;
 
     public Transform FullInfoContainer;
@@ -44,7 +40,7 @@ public class SideShipInfo : MonoBehaviour
     public bool IsOpen => FullInfoContainer.gameObject.activeInHierarchy;
     public int Id => _ship.Id;
 
-    public void Init(ShipBase ship, Action<ShipBase> shipSelectedAction, Action<SideShipInfo> toggleCallback,bool shallOpen)
+    public void Init(ShipBase ship, Action<ShipBase> shipSelectedAction, Action<SideShipInfo> toggleCallback, bool shallOpen)
     {
         FireDamage.gameObject.SetActive(false);
         ShiedDamage.gameObject.SetActive(false);
@@ -59,10 +55,10 @@ public class SideShipInfo : MonoBehaviour
         _ship.DamageData.OnDamageDone += OnDamageDone;
         OnShipDesicionChange(ship, ship.DesicionData);
         ShipSlidersInfo.Init(ship);
-//        TryWaveButton.Init(_ship,5);
-//        TryChargeButton.Init(_ship,5);
-//        TryWeaponsShipButton.Init(_ship);
-//        TryReloadButton.Init(_ship);
+        //        TryWaveButton.Init(_ship,5);
+        //        TryChargeButton.Init(_ship,5);
+        //        TryWeaponsShipButton.Init(_ship);
+        //        TryReloadButton.Init(_ship);
         InitWeapons();
         ShipTypeIcon.sprite =
             DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(ship.ShipParameters.StartParams.ShipType);
@@ -100,7 +96,7 @@ public class SideShipInfo : MonoBehaviour
                 break;
             // case ShipDamageType.weapon:
             //     WeaponsDamage.gameObject.SetActive(val);
-                // break;
+            // break;
             case ShipDamageType.shiled:
                 ShiedDamage.gameObject.SetActive(val);
                 break;
@@ -130,20 +126,20 @@ public class SideShipInfo : MonoBehaviour
 
     private void OnStatChanged(ShipBattleData obj)
     {
-        DamageDoneField.text = String.Format(Namings.DamageInfoUI,obj.ShieldhDamage.ToString("0"),obj.HealthDamage.ToString("0"));
-        KillsField.text = String.Format(Namings.KillsInfoUI,obj.Kills.ToString("0"));
+        DamageDoneField.text = String.Format(Namings.Tag("DamageInfoUI"), obj.ShieldhDamage.ToString("0"), obj.HealthDamage.ToString("0"));
+        KillsField.text = String.Format(Namings.Tag("KillsInfoUI"), obj.Kills.ToString("0"));
     }
 
     public void OnToggleClick()
     {
-//        if (ToggleOpen.isOn != FullInfoContainer.gameObject.activeSelf)
-//        {
-//            Debug.Log($"OnToggleClick {ToggleOpen.isOn}  {_ship.Id}");
-            var showFull = ToggleOpen.isOn;
-            UpdateToggle(showFull);
-            PlayerPrefs.SetInt(String.Format(PREFS_KEY, _ship.Id), (showFull ? 1 : 0));
-            _toggleCallback(this);
-//        }
+        //        if (ToggleOpen.isOn != FullInfoContainer.gameObject.activeSelf)
+        //        {
+        //            Debug.Log($"OnToggleClick {ToggleOpen.isOn}  {_ship.Id}");
+        var showFull = ToggleOpen.isOn;
+        UpdateToggle(showFull);
+        PlayerPrefs.SetInt(String.Format(PREFS_KEY, _ship.Id), (showFull ? 1 : 0));
+        _toggleCallback(this);
+        //        }
 
     }
 
@@ -163,9 +159,9 @@ public class SideShipInfo : MonoBehaviour
         {
             //FullOpenHolder.gameObject.SetActive(true);
             //ControlBlockHolder.SetParent(FullOpenHolder, false);
-            _ship.SelfCamera.Init(RawImage,_ship);
-//            if (BackRawImage.texture == null)
-//                BackRawImage.texture = DataBaseController.Instance.DataStructPrefabs.BackgroundRenderTexture;
+            _ship.SelfCamera.Init(RawImage, _ship);
+            //            if (BackRawImage.texture == null)
+            //                BackRawImage.texture = DataBaseController.Instance.DataStructPrefabs.BackgroundRenderTexture;
         }
         else
         {
@@ -174,7 +170,7 @@ public class SideShipInfo : MonoBehaviour
             _ship.SelfCamera.Dispose();
         }
     }
-    
+
 
     private void OnShipDesicionChange(ShipBase arg1, IShipDesicion arg2)
     {
@@ -192,16 +188,16 @@ public class SideShipInfo : MonoBehaviour
         _ship.ShipInventory.LastBattleData.OnStatChanged -= OnStatChanged;
         _ship.OnShipDesicionChange -= OnShipDesicionChange;
         ShipSlidersInfo.Dispose();
-//        TryChargeButton.Dispose();
-//        TryWeaponsShipButton.Dispose();
+        //        TryChargeButton.Dispose();
+        //        TryWeaponsShipButton.Dispose();
     }
 
-//    void Update()
-//    {
-//        if (Input.GetMouseButtonUp(0))// && !EventSystem.current.IsPointerOverGameObject())
-//        {
-//            TacticIcons.gameObject.SetActive(false);
-//        }
-//    }
+    //    void Update()
+    //    {
+    //        if (Input.GetMouseButtonUp(0))// && !EventSystem.current.IsPointerOverGameObject())
+    //        {
+    //            TacticIcons.gameObject.SetActive(false);
+    //        }
+    //    }
 }
 

@@ -83,6 +83,8 @@ public class AICommander
             case SpellType.roundWave:
 
                 break;
+            case SpellType.machineGun:
+                return new MachineGunSpellAI(baseSpellModul as MachineGunSpell, commander, spellInGame);
             case SpellType.throwAround:
                 return new ThrowAroundAI(baseSpellModul as ThrowAroundSpell, commander, spellInGame);
         }

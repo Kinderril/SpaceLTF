@@ -56,12 +56,12 @@ public class CellIinfoObjectUI : MonoBehaviour
             string ending;
             if (cell.IsDestroyed)
             {
-                ending = "\n (" + Namings.Destroyed + ")";
+                ending = "\n (" + Namings.Tag("Destroyed") + ")";
             }
             else
             if (cell.Completed)
             {
-                ending = "\n (" + Namings.Completed + ")";
+                ending = "\n (" + Namings.Tag("Completed") + ")";
             }
             else
             {

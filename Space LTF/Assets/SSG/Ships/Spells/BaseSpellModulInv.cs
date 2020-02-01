@@ -24,7 +24,8 @@ public enum SpellType
     repairDrones = 14,
 
     rechargeShield = 15,
-    roundWave = 16
+    roundWave = 16,
+    machineGun = 17,
 }
 
 

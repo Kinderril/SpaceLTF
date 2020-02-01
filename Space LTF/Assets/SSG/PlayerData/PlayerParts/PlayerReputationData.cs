@@ -55,6 +55,10 @@ public class PlayerReputationData
     {
         return ReputationFaction[config] > Library.PEACE_REPUTATION;
     }
+    public bool IsNeutral(ShipConfig config)
+    {
+        return ReputationFaction[config] > 0;
+    }
 
     public EReputationStatus GetStatus(ShipConfig config)
     {
@@ -85,7 +89,7 @@ public class PlayerReputationData
         var delta = Mathf.Abs(sum - old);
         if (delta > 0)
         {
-            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format(Namings.ReputationChanges, old, clampedVal, Namings.ShipConfig(config)));
+            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format(Namings.Tag("ReputationChanges"), old, clampedVal, Namings.ShipConfig(config)));
             if (OnReputationNationChange != null)
             {
                 OnReputationNationChange(config, val, delta);
@@ -103,7 +107,7 @@ public class PlayerReputationData
         var delta = Mathf.Abs(sum - old);
         if (delta > 0)
         {
-            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format(Namings.ReputationChanges, old, clampedVal, Namings.ShipConfig(config)));
+            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format(Namings.Tag("ReputationChanges"), old, clampedVal, Namings.ShipConfig(config)));
             if (OnReputationNationChange != null)
             {
                 OnReputationNationChange(config, val, delta);

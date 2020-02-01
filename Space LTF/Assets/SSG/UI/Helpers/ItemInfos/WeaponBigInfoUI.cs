@@ -65,8 +65,8 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         AngField.InitName(Namings.Sector);
         ReloadField.InitName(Namings.Reload);
         BulletSpeedField.InitName(Namings.Tag("Speed"));
-        DamageHP.InitName(Namings.DamageBody);
-        DamageShield.InitName(Namings.DamageShield);
+        DamageHP.InitName(Namings.Tag("DamageBody"));
+        DamageShield.InitName(Namings.Tag("DamageShield"));
         ShootPerTime.InitName(Namings.ShootPerTime);
         DrawCurrentUpgrades(modif);
     }
@@ -145,7 +145,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         WeaponLevelField.text = _weapon.Level.ToString();
         if (!canUpg)
         {
-            WeaponLevelField.text = Namings.WeaponMaxLevel;
+            WeaponLevelField.text = Namings.Tag("WeaponMaxLevel");
         }
         else
         {

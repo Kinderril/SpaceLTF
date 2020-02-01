@@ -39,7 +39,7 @@ public class MovingArmy
             switch (itemType)
             {
                 case ItemType.weapon:
-                    var weaponLvl = armyPower * 0.2f;
+                    var weaponLvl = armyPower * 0.1f;
                     deltaMin = Mathf.Clamp((int)(weaponLvl - 1), 2, 5);
                     deltaMax = Mathf.Clamp((int)(weaponLvl + 1), 2, 6);
                     var item = Library.CreateWeapon(MyExtensions.Random(deltaMin, deltaMax));
@@ -48,16 +48,16 @@ public class MovingArmy
                     _getRewardsItems.Add(item);
                     break;
                 case ItemType.modul:
-                    var modulLvl = armyPower * 0.3f;
-                    deltaMin = Mathf.Clamp((int)(modulLvl - 1), 1, 3);
-                    deltaMax = Mathf.Clamp((int)(modulLvl + 1), 1, 4);
+                    var modulLvl = armyPower * 0.06f;
+                    deltaMin = Mathf.Clamp((int)(modulLvl - 1), 1, 2);
+                    deltaMax = Mathf.Clamp((int)(modulLvl + 1), 1, 3);
                     var ite1m2 = Library.CreatSimpleModul(MyExtensions.Random(deltaMin, deltaMax));
                     ite1m2.CurrentInventory = _player.Inventory;
                     Debug.Log($"moving army weapon reward modulLvl:{modulLvl}  armyPower:{armyPower}");
                     _getRewardsItems.Add(ite1m2);
                     break;
                 case ItemType.spell:
-                    var spellLvl = armyPower * 0.3f;
+                    var spellLvl = armyPower * 0.08f;
                     deltaMin = Mathf.Clamp((int)(spellLvl - 1), 2, 4);
                     deltaMax = Mathf.Clamp((int)(spellLvl + 1), 2, 5);
                     var ite1m = Library.CreateSpell(MyExtensions.Random(deltaMin, deltaMax));

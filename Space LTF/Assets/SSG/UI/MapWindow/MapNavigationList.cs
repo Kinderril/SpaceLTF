@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class MapNavigationList : MonoBehaviour
@@ -19,7 +14,7 @@ public class MapNavigationList : MonoBehaviour
     public void Init(GlobalMapController globalMap)
     {
         GlobalMap = globalMap;
-//        subInit();
+        //        subInit();
         InitHome();
     }
 
@@ -43,9 +38,9 @@ public class MapNavigationList : MonoBehaviour
     private void InitScoutsButton()
     {
         _lastSoutButton = InitScout();
-        _lastSoutButton.Field.text = Namings.Scouted;
+        _lastSoutButton.Field.text = Namings.Tag("Scouted");
         _lastSoutButton.gameObject.SetActive(false);
-     
+
     }
 
     public void NewGameDrop()
@@ -83,9 +78,9 @@ public class MapNavigationList : MonoBehaviour
                     if (exitCell != null)
                     {
                         navigButton = InitCellButton(exitCell);
-                        navigButton.Field.text = Namings.Gate;
+                        navigButton.Field.text = Namings.Tag("Gate");
                     }
-                    
+
                 }
 
                 if (navigButton != null)
@@ -97,16 +92,16 @@ public class MapNavigationList : MonoBehaviour
         _lastSoutButton.gameObject.SetActive(player.LastScoutsData.HaveScouted);
     }
 
-    private void SetTextCoreCell(NavigationButton navigButton, CoreGlobalMapCell cell,int c)
+    private void SetTextCoreCell(NavigationButton navigButton, CoreGlobalMapCell cell, int c)
     {
         string txt;
         if (cell.Taken)
         {
-            txt = String.Format(Namings.Complete, c);
+            txt = String.Format(Namings.Tag("Complete"), c);
         }
         else
         {
-            txt = String.Format(Namings.Target, c);
+            txt = String.Format(Namings.Tag("Target"), c);
 
         }
         navigButton.Field.text = txt;
@@ -124,7 +119,7 @@ public class MapNavigationList : MonoBehaviour
         {
             GlobalMap.SetCameraHome();
         });
-        homeBtn.Field.text = Namings.Home;
+        homeBtn.Field.text = Namings.Tag("Home");
         _isHomeInited = true;
     }
 

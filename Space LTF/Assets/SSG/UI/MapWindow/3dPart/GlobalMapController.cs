@@ -93,7 +93,7 @@ public class GlobalMapController : MonoBehaviour
             _enemiesObjects.Add(army);
             var start = GetCellObjectByCell(arg1.CurCell);
             army.Init(this, start, arg1);
-            CamerasController.Instance.SetCameraTo(start.ModifiedPosition);
+            // CamerasController.Instance.SetCameraTo(start.ModifiedPosition);
         }
         else
         {
@@ -606,7 +606,7 @@ public class GlobalMapController : MonoBehaviour
                 isMainReady = true;
                 CheckIsAllReady();
                 SingleReset();
-            });
+            }, MainObjectMoveTo);
             MoveEnemies(() =>
             {
                 isEnemiesReady = true;
@@ -619,6 +619,11 @@ public class GlobalMapController : MonoBehaviour
             Debug.LogError("can't find object cell by target cell");
             AfterAction(shallChange, shallChange2);
         }
+    }
+
+    private void MainObjectMoveTo(Vector3 obj)
+    {
+        CamerasController.Instance.SetCameraTo(obj);
     }
 
     private void MoveEnemies(Action callback, GlobalMapCell playersCell, float timeToMove)

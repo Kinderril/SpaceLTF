@@ -13,7 +13,8 @@ public class MapSettingsWindow : MonoBehaviour
 
     public void OnSound()
     {
-        CamerasController.Instance.MainListenerSwitch();
+
+        CamerasController.Instance.SetAudioMainListener(SoundToggle.isOn);
     }
 
     public void OnFXAA()

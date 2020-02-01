@@ -79,7 +79,7 @@ public class MineFieldSpell : BaseSpellModulInv
 
     public override SpellDamageData RadiusAOE()
     {
-        return new SpellDamageData();
+        return new SpellDamageData(rad, false);
     }
     public override string Desc()
     {

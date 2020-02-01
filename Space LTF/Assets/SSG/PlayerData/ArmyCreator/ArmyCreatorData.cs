@@ -113,7 +113,8 @@ public class ArmyCreatorData
             SpellType.shildDamage,
             SpellType.throwAround,
             SpellType.mineField,
-            SpellType.roundWave,
+            // SpellType.roundWave,
+            SpellType.machineGun,
 //            SpellType.randomDamage,
             SpellType.distShot
         };

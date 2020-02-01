@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using TMPro;
+using UnityEngine;
 
 public class SectorGlobalMapInfo : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class SectorGlobalMapInfo : MonoBehaviour
     public GameObject HorizontalLine;
     private bool _sideMove = false;
     private Vector3 _minHorizontal;
-    private Vector3 _maxHorizontal; 
+    private Vector3 _maxHorizontal;
     private Vector3 _minVertical;
     private Vector3 _maxVertical;
     private float EndTimeMove;
@@ -26,7 +25,7 @@ public class SectorGlobalMapInfo : MonoBehaviour
     public Color TargetColor = Color.red;
     public Color SimpleColor = Color.green;
 
-    public void Init(SectorData sector, GalaxyData data,float offset)
+    public void Init(SectorData sector, GalaxyData data, float offset)
     {
         EndTimeMove = MyExtensions.Random(0, DeltaMove);
         _sideMove = MyExtensions.IsTrueEqual();
@@ -35,22 +34,22 @@ public class SectorGlobalMapInfo : MonoBehaviour
         _data = data;
         var sectorSize = sector.Size * offset;
         var scl = sectorSize * 0.11f;
-//        var sclVect = new Vector3(scl, 0, scl);
+        //        var sclVect = new Vector3(scl, 0, scl);
         ScaledHolder.localScale = new Vector3(scl, 0, scl);
         HorizontalLine.transform.localScale = new Vector3(HorizontalLine.transform.localScale.x, 0, scl);
         VerticalLine.transform.localScale = new Vector3(VerticalLine.transform.localScale.x, 0, scl);
-        var halfOffse = new Vector3(offset/2f,0, offset / 2f);
+        var halfOffse = new Vector3(offset / 2f, 0, offset / 2f);
         var min = new Vector3(sector.StartX * offset, 0, sector.StartZ * offset);
         var max = new Vector3(sector.StartX * offset + sectorSize, 0, sector.StartZ * offset + sectorSize);
         var center = (max + min) / 2f - halfOffse;
-        Field.transform.localPosition = new Vector3(0,4, sector.Size * 4);
+        Field.transform.localPosition = new Vector3(0, 4, sector.Size * 4);
         transform.localPosition = center;
         if (sector.IsCore)
         {
             UseLines = true;
         }
         var color = _sector.IsFinal ? TargetColor : _sector.IsCore ? TargetColor : SimpleColor;
-//        var color = sector.IsCore ? TargetColor : SimpleColor;
+        //        var color = sector.IsCore ? TargetColor : SimpleColor;
         Utils.CopyMaterials(BackgroundRenderer, color, "_TintColor");
         color.a = 1f;
         Field.color = color;
@@ -60,17 +59,17 @@ public class SectorGlobalMapInfo : MonoBehaviour
         _minHorizontal = center - new Vector3(sectorSize / 2f, 0, 0);
         _maxHorizontal = center + new Vector3(sectorSize / 2f, 0, 0);
 
-        _minVertical = center - new Vector3( 0, 0, sectorSize / 2f);
-        _maxVertical = center + new Vector3( 0, 0, sectorSize / 2f);
+        _minVertical = center - new Vector3(0, 0, sectorSize / 2f);
+        _maxVertical = center + new Vector3(0, 0, sectorSize / 2f);
     }
 
     private void UpdateField()
     {
-        var sectorCells = _data.GetAllList().Where(x =>!(x is GlobalMapNothing) && x.SectorId == _sector.Id).ToList();
-        string ss = _sector.IsFinal?Namings.Tag("FinalSector")  :_sector.IsCore ? Namings.CoreSector : Namings.NotCoreSector;
+        var sectorCells = _data.GetAllList().Where(x => !(x is GlobalMapNothing) && x.SectorId == _sector.Id).ToList();
+        string ss = _sector.IsFinal ? Namings.Tag("FinalSector") : _sector.IsCore ? Namings.CoreSector : Namings.NotCoreSector;
         var completedCount = sectorCells.Count(x => x.Completed);
         var totalCount = sectorCells.Count;
-        var txt = $"{ss}\n{Namings.Completed}:{completedCount}/{totalCount} \n {_sector.Name}";
+        var txt = $"{ss}\n{Namings.Tag("Completed")}:{completedCount}/{totalCount} \n {_sector.Name}";
         Field.text = txt;
     }
     public void Select()
@@ -101,10 +100,10 @@ public class SectorGlobalMapInfo : MonoBehaviour
 
     private void UpdateLines()
     {
-//        if (!UseLines)
-//        {
-//            return;
-//        }
+        //        if (!UseLines)
+        //        {
+        //            return;
+        //        }
 
         var remain = EndTimeMove - Time.time;
         if (remain < 0)

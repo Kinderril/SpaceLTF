@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 
@@ -36,7 +31,7 @@ public class QuestOnStartElement : MonoBehaviour
         CountField.gameObject.SetActive(!_quest.IsCompleted);
         if (_quest.IsCompleted)
         {
-            CountField.text = Namings.Completed;
+            CountField.text = Namings.Tag("Completed");
         }
         else
         {

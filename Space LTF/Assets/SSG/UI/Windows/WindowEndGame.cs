@@ -29,7 +29,7 @@ public class WindowEndGame : BaseWindow
         
         StepsField.text = String.Format(Namings.EndGameDays, player.MapData.Step);
         var result = stat.EndGameStatistics.LastResult;
-        DifficultyField.text = String.Format(Namings.StatisticDifficulty, Utils.FloatToChance(result.Difficulty));
+        DifficultyField.text = String.Format(Namings.StatisticDifficulty, result.Difficulty);
         ConfigField.text = String.Format(Namings.StatisticConfig, result.Config);
         MapSizeField.text = String.Format(Namings.StatisticMapSize, result.MapSize);
         FinalArmyPowerField.text = String.Format(Namings.StatisticFinalArmyPower, result.FinalArmyPower);

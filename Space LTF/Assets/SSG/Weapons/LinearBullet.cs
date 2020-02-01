@@ -14,6 +14,7 @@ public class LinearBullet : Bullet
     public override void LateInit()
     {
         base.Init();
+        _traileChecked = false;
         if (TrailEffect != null)
         {
             TrailEffect.Play();
@@ -51,11 +52,31 @@ public class LinearBullet : Bullet
     {
 
         _curTime += Time.deltaTime;
+        
         var p = _curTime / _moveLifeTime;
+        if (!_traileChecked && p > 0.1f)
+        {
+            RecheckTrail();
+        }
         DoVisual(p);
         if (p > DestroyPeriod)
         {
             Death();
+        }
+    }
+
+    private void RecheckTrail()
+    {
+        if (!_traileChecked)
+        {
+            _traileChecked = true;
+            if (TrailEffect != null)
+            {
+                if (!TrailEffect.gameObject.activeSelf)
+                {
+                    TrailEffect.Play();
+                }
+            }
         }
     }
 }

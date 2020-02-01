@@ -29,12 +29,12 @@ public class WindowNewGame : BaseWindow
         ArmyTypeSelectorUI.Init();
         StartGameWeaponsChooseUI.Init();
         DifficultyNewGame.Init();
-        SectorSize.InitName(Namings.StartNewGameFieldSize);
+        SectorSize.InitName(Namings.Tag("StartNewGameFieldSize"));
         // StartDeathTime.InitName(Namings.StartNewGameStartDeathTime);
-        CoresCount.InitName(Namings.StartNewGameCoresCount);
+        CoresCount.InitName(Namings.Tag("StartNewGameCoresCount"));
         AdditionalPower.InitName(Namings.Tag("AdditionalPower"));
         //        BasePower.InitName(Namings.StartNewGameBasePower);
-        SectorsCount.InitName(Namings.StartNewGameSectorsCount);
+        SectorsCount.InitName(Namings.Tag("StartNewGameSectorsCount"));
         SectorSize.InitBorders(Library.MIN_GLOBAL_SECTOR_SIZE, Library.MAX_GLOBAL_SECTOR_SIZE, true);
         // StartDeathTime.InitBorders(Library.MIN_GLOBAL_MAP_DEATHSTART, Library.MAX_GLOBAL_MAP_DEATHSTART, true);
         AdditionalPower.InitBorders(Library.MIN_GLOBAL_MAP_ADDITIONAL_POWER, Library.MAX_GLOBAL_MAP_ADDITIONAL_POWER, true);

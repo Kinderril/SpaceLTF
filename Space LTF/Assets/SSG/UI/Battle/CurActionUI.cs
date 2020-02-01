@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class CurActionUI : MonoBehaviour
 {
     public TextMeshProUGUI ActionText;
     // public TextMeshProUGUI TacticText;
-//    public Image ActionImage;
+    //    public Image ActionImage;
     private ShipBase _ship;
 
     public void Init(ShipBase ship)
@@ -33,7 +28,7 @@ public class CurActionUI : MonoBehaviour
     {
         if (arg2 == null)
         {
-            ActionText.text = Namings.Processing; 
+            ActionText.text = Namings.Tag("Processing");
         }
         else
         {

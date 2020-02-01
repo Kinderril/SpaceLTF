@@ -74,7 +74,7 @@ public class SliderWithTextMeshPro : MonoBehaviour
 
     protected virtual void UpdateFiled()
     {
-        Field.text = Slider.value.ToString("0");
+        Field.text = ((int)Slider.value).ToString("0");
         if (_changeCallback != null)
         {
             _changeCallback();

@@ -11,6 +11,7 @@ public class GlobalMapMoverObject : MonoBehaviour
     private Action _callback;
     private Vector3 _startPos;
     private Vector3 _endPos;
+    private Action<Vector3> _moveToPosition = null;
 
     public void Init(GlobalMapCellObject startCell)
     {
@@ -19,29 +20,25 @@ public class GlobalMapMoverObject : MonoBehaviour
         transform.position = startCell.Container.position;
     }
 
-    public float MoveTo(float calculatedTime,GlobalMapCellObject target, Action callback)
+    public float MoveTo(float calculatedTime, GlobalMapCellObject target, Action callback)
     {
         MoveTo(target, callback);
         _timeToMove = calculatedTime - 1f;
         _endTimeToMove = Time.time + _timeToMove;
         return _timeToMove;
     }
-    public float MoveTo(GlobalMapCellObject target, Action callback)
+    public float MoveTo(GlobalMapCellObject target, Action callback, Action<Vector3> moveToPosition = null)
     {
-//        if (!_isActive)
-//        {
-            _startPos = transform.position;
-            _endPos = target.Container.position;
-            _callback = callback;
-            var dir = target.Container.position - _curCell.Container.position;
-            var dist = dir.magnitude;
-            _timeToMove = dist / Speed;
-            _endTimeToMove = Time.time + _timeToMove;
-            _isActive = true;
-            return _timeToMove;
-//        }
-//
-//        return -1f;
+        _moveToPosition = moveToPosition;
+        _startPos = transform.position;
+        _endPos = target.Container.position;
+        _callback = callback;
+        var dir = target.Container.position - _curCell.Container.position;
+        var dist = dir.magnitude;
+        _timeToMove = dist / Speed;
+        _endTimeToMove = Time.time + _timeToMove;
+        _isActive = true;
+        return _timeToMove;
     }
 
     void Update()
@@ -54,6 +51,7 @@ public class GlobalMapMoverObject : MonoBehaviour
         var p = 1 - (_endTimeToMove - Time.time) / _timeToMove;
         if (p >= 1f)
         {
+            _moveToPosition = null;
             p = 1f;
             _isActive = false;
             _callback();
@@ -62,6 +60,8 @@ public class GlobalMapMoverObject : MonoBehaviour
         {
             transform.LookAt(_endPos);
         }
-        transform.position = Vector3.Lerp(_startPos, _endPos, p);
+        var pos = Vector3.Lerp(_startPos, _endPos, p);
+        transform.position = pos;
+        _moveToPosition?.Invoke(pos);
     }
 }

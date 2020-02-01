@@ -375,6 +375,8 @@ public static class Library
                 return new RechargeShieldSpell();
             case SpellType.roundWave:
                 return new WaveStrikeOnShipSpell();
+            case SpellType.machineGun:
+                return new MachineGunSpell();
 
             default:
                 Debug.LogError("spellType not implemented " + spellType);
