@@ -91,7 +91,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
     protected override void PeriodInnerUpdate()
     {
         Vector3 trg;
-        Debug.LogError($"Cast spell 1 {this}");
+//        Debug.LogError($"Cast spell 1 {this}");
         if (CanCast())
         {
             if (IsEnemyClose(out trg))

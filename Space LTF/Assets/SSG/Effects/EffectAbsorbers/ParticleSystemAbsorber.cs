@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 
 
@@ -25,7 +26,15 @@ public class ParticleSystemAbsorber : BaseEffectAbsorber {
 
     public override void Stop()
     {
-        gameObject.SetActive(false);
+        try
+        {
+            gameObject.SetActive(false);
+        }
+        catch (Exception e)
+        {
+            
+             Debug.LogError($"Try to stop particle systmes {e}");
+        }
         base.Stop();
     }
 

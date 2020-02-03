@@ -22,7 +22,8 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerBuy"), _itemCost), null, BuyStolen));
         mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerCatch")), null, ReternToPolice));
-        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerHire")), HireHim));
+        if (MainController.Instance.MainPlayer.Army.CanAddShip())
+            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerHire")), HireHim));
         mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerHide"), Reputation), null, HideHim));
 
 

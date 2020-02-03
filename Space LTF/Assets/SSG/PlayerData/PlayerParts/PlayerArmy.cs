@@ -7,7 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerArmy
 {
-    public const int MAX_ARMY = 5;
+    public const int MAX_ARMY = 6;
     public List<StartShipPilotData> Army = new List<StartShipPilotData>();
     [field: NonSerialized]
     public event Action<StartShipPilotData, bool> OnAddShip;

@@ -41,13 +41,13 @@ public static class MoneyConsts
 
     public static Dictionary<int, int> SpellUpgrade = new Dictionary<int, int>()
     {
-        {1, 13},
-        {2, 24},
-        {3, 28},
-        {4, 32},
-        {5, 36},
-        {6, 40},
-        {7, 45},
+        {1, 18},
+        {2, 28},
+        {3, 39},
+        {4, 45},
+        {5, 50},
+        {6, 60},
+        {7,70},
     };
                                        
 

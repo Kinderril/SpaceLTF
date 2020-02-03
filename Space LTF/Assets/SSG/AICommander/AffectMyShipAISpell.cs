@@ -19,7 +19,7 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
     protected override void PeriodInnerUpdate()
     {
         Vector3 trg;
-        Debug.LogError($"Cast spell 1 {this}");
+//        Debug.LogError($"Cast spell 1 {this}");
         if (CanCast())
         {
             if (IsEnemyClose(out trg))
@@ -47,7 +47,7 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         {
             Cast(v);
             _commander.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
-            Debug.LogError($"_spell.TryCast {this}");
+//            Debug.LogError($"_spell.TryCast {this}");
         }
     }
 
@@ -56,7 +56,12 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
     {
         _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetCastSpell(_spell.SpellType));
         var startPos = _modulPos();
-        var dir = Utils.NormalizeFastSelf(target - startPos);
+        var dir2 = (target - startPos);
+        if (dir2.sqrMagnitude < 0.0001f)
+        {
+            dir2 = _owner.LookDirection;
+        }
+        var dir = Utils.NormalizeFastSelf(dir2);
         var distToTarget = (startPos - target).magnitude;
         if (distToTarget > _maxDist)
         {

@@ -107,7 +107,8 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
             _reputation.AddReputation(_config, 6);
             var mianAnswers = new List<AnswerDialogData>();
             var mesData = new MessageDialogData(Namings.DialogTag("navigation_repairOk"), mianAnswers);
-            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("navigation_tryHire"), null, tryHire));
+            if (MainController.Instance.MainPlayer.Army.CanAddShip())
+                mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("navigation_tryHire"), null, tryHire));
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("navigation_takeMoney"), TakeMoney, null));
             return mesData;
 
