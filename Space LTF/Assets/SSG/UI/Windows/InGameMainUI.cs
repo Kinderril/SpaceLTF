@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,7 +9,7 @@ public class InGameMainUI : BaseWindow
 {
     public DebugUIControl DebugUiControl;
     public ShipModulsUI ShipModulsUI;
-//    public HoldClearCoinUI HoldClearCoinUI;
+    //    public HoldClearCoinUI HoldClearCoinUI;
     public BattleCoinUI BattleCoinUI;
     private ShipBase _selectedShip;
     private bool _paused = false;
@@ -28,12 +26,12 @@ public class InGameMainUI : BaseWindow
     public PreFinishWindow PreFinish;
     public TeamInfoContainer GreenTeamInfoContainer;
     public TeamInfoContainer RedTeamInfoContainer;
-    private Dictionary<int,ShipUIOnMap> ShipsUIs = new Dictionary<int, ShipUIOnMap>();
+    private Dictionary<int, ShipUIOnMap> ShipsUIs = new Dictionary<int, ShipUIOnMap>();
     public CreditControllerUI CreditController;
     public SpellModulsContainer SpellModulsContainer;
     public event Action<SpellInGame> OnSelectSpell;
-//    public WindowKeys WindowKeys;
-//    public GameObject RetireButtonObject;
+    //    public WindowKeys WindowKeys;
+    //    public GameObject RetireButtonObject;
     //    public CommanderPriorityUI CommanderPriority;    
     public RetirreButton RetireButton;
 
@@ -84,7 +82,7 @@ public class InGameMainUI : BaseWindow
     // {
     //     FastEndButton.gameObject.SetActive(true);
     // }
-    
+
     public void Init(BattleController battle)
     {
         //#if UNITY_EDITOR
@@ -102,7 +100,7 @@ public class InGameMainUI : BaseWindow
         //            WindowKeys.transform.SetAsLastSibling();
         //            WindowKeys.gameObject.SetActive(false);
         //        }
-//        CommanderPriority.Init(MyCommander);
+        //        CommanderPriority.Init(MyCommander);
         FlyingNumbersController.Init(FlyingInfosContainer);
         PreFinish.Init();
         // FastEndButton.gameObject.SetActive(false);
@@ -112,15 +110,15 @@ public class InGameMainUI : BaseWindow
         MyCommander = battle.GreenCommander;
         BattleCoinUI.Init(MyCommander.CoinController);
         battle.OnShipAdd += OnShipAdd;
-        RetireButton.Init( this,15f,battle.CanRetire);
+        RetireButton.Init(this, 15f, battle.CanRetire);
         DebugUiControl.Init();
-//        HoldClearCoinUI.Init(HoldComplete);
+        //        HoldClearCoinUI.Init(HoldComplete);
         CreditController.Init(MyCommander);
         MainCamera = CamerasController.Instance.GameCamera.Camera;
         GreenTeamInfoContainer.Init(battle.GreenCommander, ActionShipSelected);
         RedTeamInfoContainer.Init(battle.RedCommander, ActionShipSelected);
         int weaponsIndex = 0;
-//        WindowKeys.gameObject.SetActive(false);
+        //        WindowKeys.gameObject.SetActive(false);
         TimeScaleBattle.Init(_battle);
         var mainShip = MyCommander.MainShip;
         if (mainShip != null)
@@ -192,7 +190,7 @@ public class InGameMainUI : BaseWindow
         OnPause();
         WindowManager.Instance.OpenSettingsSettings(true, OnPause);
     }
-    
+
     public void ActionShipSelected(ShipBase obj)
     {
         if (obj == SelectedShip)
@@ -220,7 +218,7 @@ public class InGameMainUI : BaseWindow
 
     private void OnShipAdd(ShipBase ship, bool val)
     {
-//        Debug.Log("OnShipAdd " + ship.Id + "   val:" + val);
+        //        Debug.Log("OnShipAdd " + ship.Id + "   val:" + val);
         if (val)
         {
             FlyingNumbersController.AddShip(ship);
@@ -235,53 +233,53 @@ public class InGameMainUI : BaseWindow
                 info = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.ShipUIOnMapMini);
             }
             info.Init(ship, fullSize);
-//            ship.DamageData.OnDamageDone += OnDamageDone;
-//            ship.ShipParameters.OnHealthChanged += OnHealthChanged;
-//            ship.ShipParameters.ShieldParameters.OnShildChanged += OnShildChanged;
-            ShipsUIs.Add(ship.Id,info);
+            //            ship.DamageData.OnDamageDone += OnDamageDone;
+            //            ship.ShipParameters.OnHealthChanged += OnHealthChanged;
+            //            ship.ShipParameters.ShieldParameters.OnShildChanged += OnShildChanged;
+            ShipsUIs.Add(ship.Id, info);
             info.transform.SetParent(ShipsInfoContainer);
             if (ship.ShipParameters.StartParams.ShipType == ShipType.Base)
             {
-//                foreach (var spell in ship.ShipParameters.Spells)
-//                {
-//                    
-//                }
+                //                foreach (var spell in ship.ShipParameters.Spells)
+                //                {
+                //                    
+                //                }
             }
         }
         else
         {
             FlyingNumbersController.RemoveShip(ship);
-//            ship.DamageData.OnDamageDone -= OnDamageDone;
-//            ship.ShipParameters.OnHealthChanged -= OnHealthChanged;
-//            ship.ShipParameters.ShieldParameters.OnShildChanged -= OnShildChanged;
+            //            ship.DamageData.OnDamageDone -= OnDamageDone;
+            //            ship.ShipParameters.OnHealthChanged -= OnHealthChanged;
+            //            ship.ShipParameters.ShieldParameters.OnShildChanged -= OnShildChanged;
             var d = ShipsUIs[ship.Id];
             GameObject.Destroy(d.gameObject);
             ShipsUIs.Remove(ship.Id);
         }
     }
 
-    private void OnDamageDone(ShipBase shipOwner,ShipDamageType arg1, bool arg2)
+    private void OnDamageDone(ShipBase shipOwner, ShipDamageType arg1, bool arg2)
     {
         string info = "";
         switch (arg1)
         {
             case ShipDamageType.engine:
-                info = Namings.EngineDest;
+                info = Namings.Tag("EngineDest");
                 break;
-//            case ShipDamageType.turnEngine:
-//                info = "Turn engine destroyed";
-//                break;
+            //            case ShipDamageType.turnEngine:
+            //                info = "Turn engine destroyed";
+            //                break;
             // case ShipDamageType.weapon:
             //     info = Namings.WeaponDest; 
             //     break;
             case ShipDamageType.shiled:
-                info = Namings.ShieldDest; 
+                info = Namings.Tag("ShieldDest");
                 break;
-//            case ShipDamageType.moduls:
-//                info = "Modul destroyed";
-//                break;
+            //            case ShipDamageType.moduls:
+            //                info = "Modul destroyed";
+            //                break;
             case ShipDamageType.fire:
-                info = Namings.FireDest; 
+                info = Namings.Tag("FireDest");
                 break;
         }
         Debug.LogError($"add {arg1}");
@@ -295,12 +293,12 @@ public class InGameMainUI : BaseWindow
 
     public void Hold(Vector3 pos, bool left, float delta)
     {
-//        Debug.Log("hold...");
-//        var pt = GetShipByPoint(pos);
-//        if (pt != null)
-//        {
-//            HoldClearCoinUI.Hold(pt,left,delta);
-//        }
+        //        Debug.Log("hold...");
+        //        var pt = GetShipByPoint(pos);
+        //        if (pt != null)
+        //        {
+        //            HoldClearCoinUI.Hold(pt,left,delta);
+        //        }
     }
 
     public void OnClickFastFinish()
@@ -323,7 +321,7 @@ public class InGameMainUI : BaseWindow
                 if (left)
                 {
                     var ray = GetPointByClick(pos);
-//                    Debug.LogError($"Try cast CLICK!   {ray.HasValue}");
+                    //                    Debug.LogError($"Try cast CLICK!   {ray.HasValue}");
                     if (ray.HasValue)
                     {
                         if (MyCommander.SpellController.TryCastspell(_spellSelected, ray.Value))
@@ -354,7 +352,7 @@ public class InGameMainUI : BaseWindow
                         if (left)
                         {
                             SelectedShip = pt;
-                        }   
+                        }
                     }
                 }
             }
@@ -411,7 +409,7 @@ public class InGameMainUI : BaseWindow
         {
             _spellSelected.EndShowCast();
         }
-//        WindowKeys.gameObject.SetActive(false);
+        //        WindowKeys.gameObject.SetActive(false);
         FlyingNumbersController.Dispose();
         UnselectSpell();
         CreditController.Dispose();
@@ -431,7 +429,7 @@ public class InGameMainUI : BaseWindow
     {
         _paused = !_paused;
         Time.timeScale = _paused ? 0f : 1f;
-//        MyCommander.GetNextShip(SelectedShip);
+        //        MyCommander.GetNextShip(SelectedShip);
     }
 
 

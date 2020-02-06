@@ -63,7 +63,7 @@ public class EndGameWindow : BaseWindow
         TotalMoneyRewardField.Init(_totalMoney);
         var showScotsFind = lastReward.Moduls.Count > 0 || lastReward.Weapons.Count > 0;
         ScoutsFindField.gameObject.SetActive(showScotsFind);
-        ScoutsFindField.text = String.Format("Scouts (Level{0}) find something!", player.Parameters.Scouts.Level);
+        ScoutsFindField.text = Namings.TryFormat("Scouts (Level{0}) find something!", player.Parameters.Scouts.Level);
         foreach (var moduls in lastReward.Moduls)
         {
             var itemSlot = InventoryOperation.GetDragableItemSlot();

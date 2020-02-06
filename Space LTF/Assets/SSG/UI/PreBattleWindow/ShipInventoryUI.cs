@@ -94,12 +94,12 @@ public class ShipInventoryUI : DragZone
             }
         }
 
-        ArmorField.text = String.Format(Namings.ArmorField, bArmor, sArmor);
+        ArmorField.text = Namings.TryFormat(Namings.Tag("ArmorField"), bArmor, sArmor);
     }
 
     public void OnClickDismiss()
     {
-        WindowManager.Instance.ConfirmWindow.Init(DismissOk, null, String.Format(Namings.Tag("confirmDismiss"), _shipInventory.Name));
+        WindowManager.Instance.ConfirmWindow.Init(DismissOk, null, Namings.TryFormat(Namings.Tag("confirmDismiss"), _shipInventory.Name));
     }
 
     private void DismissOk()

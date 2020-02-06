@@ -47,7 +47,7 @@ public class DragableSpellItem : DragableItem
     public void OnTryUpgradeClick()
     {
         if (Usable)
-            Spell.TryUpgrade();
+            Spell.TryUpgrade(ESpellUpgradeType.None);
     }
     private void OnUpgrade(BaseSpellModulInv obj)
     {

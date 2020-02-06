@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -37,7 +33,7 @@ public class TryWeaponsShip : TryApplyToShip
     }
     protected override string TextToTooltip()
     {
-        return String.Format(Namings.PowerWeaponButton, Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD, Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY);
+        return Namings.TryFormat(Namings.Tag("PowerWeaponButton"), Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD, Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY);
     }
 }
 

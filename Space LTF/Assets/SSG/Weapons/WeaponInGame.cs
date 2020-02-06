@@ -30,8 +30,9 @@ public enum WeaponType
     artilleryBullet = 19,
     fireDamageMine = 20,
     spellRerairDrone = 21,
-    beamWaveStrike = 22     ,
-    machineGun = 23     ,
+    beamWaveStrike = 22,
+    machineGun = 23,
+    vacuumdSpell = 24,
 }
 
 public class WeaponAffectionAdditionalParams
@@ -62,8 +63,8 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
 
     //Params
     public Bullet bulletOrigin;
-    private readonly AudioClip Clip; 
-    
+    private readonly AudioClip Clip;
+
 
     private readonly DebugAimingData DebugAimingData = null;
     private readonly Action<WeaponInGame, Vector3, Bullet> DestroyAction;
@@ -133,7 +134,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     {
         if (target == null)
         {
-            CreateBulletWithModif(dir,true);
+            CreateBulletWithModif(dir, true);
         }
         else
         {
@@ -192,28 +193,28 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
 
     public void CrashReload(bool val)
     {
-//        if (val)
-//        {
-////            _reloadCoef = 2f;
-//        }
-//        else
-//        {
-////            _reloadCoef = 1f;
-//        }
+        //        if (val)
+        //        {
+        ////            _reloadCoef = 2f;
+        //        }
+        //        else
+        //        {
+        ////            _reloadCoef = 1f;
+        //        }
         IsCrahed = val;
-//        if (OnCrashed != null)
-//        {
-//            OnCrashed(this, val);
-//        }
+        //        if (OnCrashed != null)
+        //        {
+        //            OnCrashed(this, val);
+        //        }
     }
 
     public void AffectDamage(ShipParameters shipParameters, ShipBase target, Bullet bullet,
         DamageDoneDelegate callback, WeaponAffectionAdditionalParams additional)
     {
-//        target.BulletHitModification()
+        //        target.BulletHitModification()
 
-//        float shield = CurrentDamage.ShieldDamage;
-//        float body = CurrentDamage.BodyDamage;    
+        //        float shield = CurrentDamage.ShieldDamage;
+        //        float body = CurrentDamage.BodyDamage;    
         if (_nextShootMorePower)
         {
             _nextShootMorePower = false;
@@ -240,7 +241,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         var offsetCoef = TargetSpeed * distCoef;
 
         _testTargetPosition.TestTarget(targInfo.ShipLink.Position, targInfo.ShipLink.LookDirection, targInfo.ShipLink.LookRight,
-            shootPos, Owner.LookDirection,distShoot, offsetCoef);
+            shootPos, Owner.LookDirection, distShoot, offsetCoef);
 
         return _testTargetPosition.ShallShoot;
     }
@@ -280,7 +281,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
                     Debug.LogError("can't aim not in sector IsAimedStraightBaseOnCrossPoint");
 #endif
                 return IsInSector(target.DirNorm);
-//                return IsInSector(dirNorm);
+                //                return IsInSector(dirNorm);
             }
 
             return false;
@@ -302,8 +303,8 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
 
     protected void Shoot(ShipBase target)
     {
-//        Debug.Log("Shoot! " + Time.time);
-//        var pos = target.Position;
+        //        Debug.Log("Shoot! " + Time.time);
+        //        var pos = target.Position;
         _curPeriodShoots = 0;
         if (OnShootStart != null)
             OnShootStart(this);
@@ -344,7 +345,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         if (_curPeriodShoots >= ShootPerTime)
         {
             ShootDoneAction(Owner);
-            _nextShootTime = Time.time + ReloadSec;
+            Unload();
             _inProcess = false;
             if (OnShootEnd != null)
                 OnShootEnd(this);
@@ -362,7 +363,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
             new BulleStartParameters(BulletSpeed, _bulletTurnSpeed, _radiusShoot, _radiusShoot));
     }
 
-    protected void CreateBulletWithModif(Vector3 direction,bool isDir)
+    protected void CreateBulletWithModif(Vector3 direction, bool isDir)
     {
         Vector3 trg;
         if (isDir)
@@ -381,7 +382,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     public bool IsInRadius(float dist)
     {
         var isInRadius = dist < AimRadius;
-//        Debug.Log("isInRadius:" + isInRadius + "   curDist:" + dist);
+        //        Debug.Log("isInRadius:" + isInRadius + "   curDist:" + dist);
         return isInRadius;
     }
 
@@ -390,7 +391,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         if (_isRoundAng) return true;
 
         var isInSector = Utils.IsAngLessNormazied(dir, Owner.LookDirection, _sectorCos);
-//        Debug.Log("isInSector:" + isInSector);
+        //        Debug.Log("isInSector:" + isInSector);
         return isInSector;
     }
 
@@ -474,5 +475,12 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     {
         OnShootEnd = null;
         OnShootStart = null;
+    }
+
+    public void Unload()
+    {
+
+
+        _nextShootTime = Time.time + ReloadSec;
     }
 }

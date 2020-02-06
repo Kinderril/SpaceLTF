@@ -58,8 +58,8 @@ public class AttackSideAction : AttackAction
 
     public static Vector3 FindControlPoint(Vector3 start, Vector3 end, Battlefield battlefield)
     {
-        var sCell = battlefield.CellController.FindCell(start);
-        var eCell = battlefield.CellController.FindCell(end);
+        var sCell = battlefield.CellController.GetCell(start);
+        var eCell = battlefield.CellController.GetCell(end);
         int xI;
         int zI;
         if (MyExtensions.IsTrue01(.5f))

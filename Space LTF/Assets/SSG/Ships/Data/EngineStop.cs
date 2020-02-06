@@ -53,7 +53,7 @@ public class EngineStop
 
     public void Stop(float delay)
     {
-//        Debug.Log(String.Format("Engine crahed for {0}",delay.ToString("0.0")).Red());
+//        Debug.Log(Namings.TryFormat("Engine crahed for {0}",delay.ToString("0.0")).Red());
         Stop();
         Period = delay;
         RepairEndTime = Time.time + delay;

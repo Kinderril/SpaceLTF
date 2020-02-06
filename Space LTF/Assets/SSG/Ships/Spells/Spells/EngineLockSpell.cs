@@ -5,18 +5,48 @@ using UnityEngine;
 [System.Serializable]
 public class EngineLockSpell : BaseSpellModulInv
 {
+    //A1 - more rad
+    //B2 - less timer
+
     public const float DIST_SHOT = 22f;
     public const float LOCK_PERIOD = 4;
     public const float LOCK_LEVEL = 2f;
-    private const float rad = 2.5f;
-    [NonSerialized]
-    private SpellZoneVisualCircle ObjectToShow;
+
+    private float rad
+    {
+        get
+        {
+            if (UpgradeType == ESpellUpgradeType.A1)
+            {
+                return 4;
+            }
+            return 2.5f;
+        }
+    }
+    // [NonSerialized]
+    // private SpellZoneVisualCircle ObjectToShow;
+
+    public override int CostTime
+    {
+        get
+        {
+            if (UpgradeType == ESpellUpgradeType.B2)
+            {
+                return _B2_costTime;
+            }
+            return _baseCostTime;
+        }
+    }
+
+    private const int _baseCostTime = 15;
+    private const int _B2_costTime = 10;
 
     public float CurLockPeriod => LOCK_PERIOD + LOCK_LEVEL * Level;
 
     public EngineLockSpell()
-        : base(SpellType.engineLock, 3, 15, new BulleStartParameters(15, 36f, DIST_SHOT, DIST_SHOT), false)
+        : base(SpellType.engineLock, 3, _baseCostTime, new BulleStartParameters(15, 36f, DIST_SHOT, DIST_SHOT), false)
     {
+
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
@@ -95,8 +125,24 @@ public class EngineLockSpell : BaseSpellModulInv
 
     public override string Desc()
     {
-        return String.Format(Namings.EnerguLockSpell, CurLockPeriod.ToString("0"), rad.ToString("0"));
+        return Namings.TryFormat(Namings.Tag("EnerguLockSpell"), CurLockPeriod.ToString("0"), rad.ToString("0"));
         //            $"Destroy engines for {CurLockPeriod.ToString("0")} sec.";
+    }
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("EngineLockNameA1");
+        }
+        return Namings.Tag("EngineLockNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("EngineLockDescA1");
+        }
+        return Namings.Tag("EngineLockDescB2");
     }
 }
 

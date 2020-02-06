@@ -97,11 +97,11 @@ public class MapNavigationList : MonoBehaviour
         string txt;
         if (cell.Taken)
         {
-            txt = String.Format(Namings.Tag("Complete"), c);
+            txt = Namings.TryFormat(Namings.Tag("Complete"), c);
         }
         else
         {
-            txt = String.Format(Namings.Tag("Target"), c);
+            txt = Namings.TryFormat(Namings.Tag("Target"), c);
 
         }
         navigButton.Field.text = txt;

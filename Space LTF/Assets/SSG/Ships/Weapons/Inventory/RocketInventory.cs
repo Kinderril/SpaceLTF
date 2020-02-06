@@ -79,7 +79,7 @@ public class RocketInventory : WeaponInv
 //        de.Add(3, new Dictionary<WeaponUpdageType, WeaponUpgradeData>()
 //        {
 //            {WeaponUpdageType.a1, new WeaponUpgradeData( ()=> { SlowEnemy = true; },$"Slow enemy for {SlowDelay} sec"  ,"Slower") },
-//            {WeaponUpdageType.b1, new WeaponUpgradeData( ()=> { NextChargeBuff = true; } ,String.Format("Every next hit have +1/+1 damage"),"Charger") },
+//            {WeaponUpdageType.b1, new WeaponUpgradeData( ()=> { NextChargeBuff = true; } ,Namings.TryFormat("Every next hit have +1/+1 damage"),"Charger") },
 //        });
 //        return de;
 //    }

@@ -53,7 +53,7 @@ public class ShipDamageData : ShipData
     {
         if (IsReflecOn)
         {
-            FlyNumberWithDependence.Create(_owner.transform, Namings.Reflected, Color.red, FlyNumerDirection.right);
+            FlyNumberWithDependence.Create(_owner.transform, Namings.Tag("Reflected"), Color.red, FlyNumerDirection.right);
             return;
         }
 
@@ -119,5 +119,16 @@ public class ShipDamageData : ShipData
                 _owner.PeriodDamage.Stop();
                 break;
         }
+    }
+
+    public void TurnOnReflectFor(float period)
+    {
+        IsReflecOn = true;
+        var timer = MainController.Instance.BattleTimerManager.MakeTimer(period);
+        timer.OnTimer += () =>
+        {
+            IsReflecOn = false;
+        };
+
     }
 }

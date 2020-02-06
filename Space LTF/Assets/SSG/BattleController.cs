@@ -318,11 +318,11 @@ public class BattleController : Singleton<BattleController>
     {
         foreach (var a in SideGreen)
         {
-            a.SetCell(CellController.FindCell(a.Position));
+            a.SetCell(CellController.GetCell(a.Position));
         }
         foreach (var a in SideRed)
         {
-            a.SetCell(CellController.FindCell(a.Position));
+            a.SetCell(CellController.GetCell(a.Position));
         }
     }
 

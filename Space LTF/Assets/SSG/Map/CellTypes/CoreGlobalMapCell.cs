@@ -117,15 +117,15 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         if (isFriend)
         {
             if (!_diplomacyFail)
-                answerDialog.Add(new AnswerDialogData(String.Format(Namings.DialogTag("coreUseDiplomacy")), null, Diplomaty));
+                answerDialog.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("coreUseDiplomacy")), null, Diplomaty));
             if (player.MoneyData.HaveMoney(MoneyToBuy()))
-                answerDialog.Add(new AnswerDialogData(String.Format(Namings.DialogTag("coreBuy"), MoneyToBuy()), null, Buy));
+                answerDialog.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("coreBuy"), MoneyToBuy()), null, Buy));
         }
         //        if (player.Parameters.Scouts.Level >= 1)
-        answerDialog.Add(new AnswerDialogData(String.Format(Namings.DialogTag("coreSendScouts")), null, Steal));
+        answerDialog.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("coreSendScouts")), null, Steal));
         var msg = isFriend
-            ? String.Format(Namings.DialogTag("coreFleetHaveFriend"), scoutsField)
-            : String.Format(Namings.DialogTag("coreFleetHave"), scoutsField);
+            ? Namings.TryFormat(Namings.DialogTag("coreFleetHaveFriend"), scoutsField)
+            : Namings.TryFormat(Namings.DialogTag("coreFleetHave"), scoutsField);
         var mesData = new MessageDialogData(msg, answerDialog);
         return mesData;
     }
@@ -139,7 +139,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         MainController.Instance.MainPlayer.ReputationData.AddReputation(ConfigOwner, 10);
         List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
         answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok")));
-        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("coreWasPurchase"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("coreWasPurchase"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
         return mesData;
     }
 
@@ -152,7 +152,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         {
             _diplomacyFail = true;
             answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, GetTalkDialog));
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("coreDiplomacyFail")), answerDialog);
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("coreDiplomacyFail")), answerDialog);
             return mesData;
         }
         else
@@ -160,7 +160,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
             SetTake();
             MainController.Instance.MainPlayer.QuestData.AddElement();
             answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok")));
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("coreElementYour"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("coreElementYour"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
             return mesData;
         }
     }
@@ -185,7 +185,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
             MainController.Instance.MainPlayer.QuestData.AddElement();
             List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
             answerDialog.Add(new AnswerDialogData(Namings.DialogTag("Ok")));
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("coreElementYour"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("coreElementYour"), Quest.mainElementsFound, Quest.MaxMainElements), answerDialog);
             return mesData;
         }
         else

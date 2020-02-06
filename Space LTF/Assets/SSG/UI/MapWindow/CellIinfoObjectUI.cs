@@ -103,7 +103,7 @@ public class CellIinfoObjectUI : MonoBehaviour
                         }
                         else
                         {
-                            desc = Namings.Fleet;
+                            desc = Namings.Tag("Fleet");
                         }
                         // #if UNITY_EDITOR
                         desc += $"({isArmy.PowerDesc()})";
@@ -114,7 +114,7 @@ public class CellIinfoObjectUI : MonoBehaviour
                             if (isArmy.EventType.HasValue)
                             {
                                 var nameEvent = Namings.BattleEvent(isArmy.EventType.Value);
-                                desc = $"{desc}\n{Namings.Event}:{nameEvent}";
+                                desc = $"{desc}\n{Namings.Tag("Event")}:{nameEvent}";
                             }
                         }
                     }

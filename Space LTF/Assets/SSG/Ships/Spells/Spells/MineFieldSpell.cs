@@ -5,12 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class MineFieldSpell : BaseSpellModulInv
 {
+    //A1 - Fire
+    //B2 - Engine
+
     public const int BASE_MINES_COUNT = 3;
     public const float MINES_PERIOD = 20f;
     public const float MINES_DIST = 15f;
     private const float rad = 3.5f;
     private const float damageBody = 7f;
     private const float damageShield = 3f;
+
+    private const float effectPeriod = 5f;
 
     private int MINES_COUNT => BASE_MINES_COUNT + Level;
     public float DAMAGE_BODY => damageBody + Level;
@@ -60,6 +65,15 @@ public class MineFieldSpell : BaseSpellModulInv
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
+        switch (UpgradeType)
+        {
+            case ESpellUpgradeType.A1:
+                target.DamageData.ApplyEffect(ShipDamageType.fire, effectPeriod, 1f);
+                break;
+            case ESpellUpgradeType.B2:
+                target.DamageData.ApplyEffect(ShipDamageType.engine, effectPeriod, 1f);
+                break;
+        }
         shipparameters.Damage(DAMAGE_SHIELD, DAMAGE_BODY, damagedone, target);
     }
     public override bool ShowLine => false;
@@ -83,8 +97,24 @@ public class MineFieldSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return String.Format(Namings.MinesSpell, MINES_COUNT, MineFieldSpell.MINES_PERIOD.ToString("0"), DAMAGE_SHIELD, DAMAGE_BODY);
+        return Namings.TryFormat(Namings.Tag("MinesSpell"), MINES_COUNT, MineFieldSpell.MINES_PERIOD.ToString("0"), DAMAGE_SHIELD, DAMAGE_BODY);
         //            $"Set {MinesCount} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location. Each mine damage {damageShield}/{damageBody}";
+    }
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("MinesSpellNameA1");
+        }
+        return Namings.Tag("MinesSpellNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("MinesSpellDescA1");
+        }
+        return Namings.Tag("MinesSpellDescB2");
     }
 }
 

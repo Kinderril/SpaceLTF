@@ -36,6 +36,7 @@ public static class Library
 
     public const int MAX_WEAPON_LVL = 5;
     public const int MAX_SPELL_LVL = 4;
+    public const int SPECIAL_SPELL_LVL = 4;
     public const int MAX_MOUDL_LEVEL = 3;
 
     public const float MIN_WORKING_SHIP = 6;
@@ -68,9 +69,9 @@ public static class Library
 
     private const float ARTILLERY_ANG = 10f;
 
-    private const float EMI_ANG = 100f;
-    private const float EMI_DELAY = 6f;
-    private const float EMI_SPEED = 12f;
+    private const float EMI_ANG = 50f;
+    private const float EMI_DELAY = 7f;
+    private const float EMI_SPEED = 15f;
 
     public const float BASE_WEAPON_VALUE = 1.2f;
     public const float BASE_SPELL_VALUE = 1.1f;
@@ -152,7 +153,7 @@ public static class Library
                 parametes = new WeaponInventoryParameters(4, 8, 1, 2, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9, 70f);
                 return new BombInventoryWeapon(parametes, 1);
             case WeaponType.eimRocket:
-                parametes = new WeaponInventoryParameters(4, 4, 2, 1, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 7);
+                parametes = new WeaponInventoryParameters(4, 4, 2, 1, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 11);
                 return new EMIRocketInventory(parametes, 1);
             case WeaponType.beam:
                 parametes = new WeaponInventoryParameters(2, 8, 1, 3, BEAM_ANG, BEAM_DELAY, 0.4f, 1, BEAM_SPEED, 2.5f);
@@ -337,7 +338,7 @@ public static class Library
         var spell = CreateSpell(allSpells.RandomElement());
         for (int i = 0; i < level - 1; i++)
         {
-            spell.Upgrade();
+            spell.Upgrade(ESpellUpgradeType.None);
         }
         return spell;
     }
@@ -373,10 +374,12 @@ public static class Library
                 return new RepairDronesSpell();
             case SpellType.rechargeShield:
                 return new RechargeShieldSpell();
-            case SpellType.roundWave:
-                return new WaveStrikeOnShipSpell();
+            // case SpellType.roundWave:
+            //     return new WaveStrikeOnShipSpell();
             case SpellType.machineGun:
                 return new MachineGunSpell();
+            case SpellType.vacuum:
+                return new VacuumSpell();
 
             default:
                 Debug.LogError("spellType not implemented " + spellType);

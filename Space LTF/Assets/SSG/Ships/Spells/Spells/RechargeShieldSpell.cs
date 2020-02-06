@@ -5,8 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class RechargeShieldSpell : BaseSpellModulInv
 {
+    //A1 - AOE 
+    //B2 - Resist X sec
+
     public const float MINES_DIST = 7f;
     private const float rad = 1f;
+    private const float AOE_rad = 4f;
 
     private const float _sDistToShoot = 4 * 4;
     private bool _lastCheckIsOk = false;
@@ -26,10 +30,22 @@ public class RechargeShieldSpell : BaseSpellModulInv
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
-        if (_lastClosest != null)
+        if (UpgradeType == ESpellUpgradeType.A1)
         {
-            MainAffect(_lastClosest.ShipParameters, _lastClosest, null, null, null);
+            var closestsShips = BattleController.Instance.GetAllShipsInRadius(origin.Position, weapon.TeamIndex, ShowCircle);
+            foreach (var ship in closestsShips)
+            {
+                MainAffect(ship.ShipParameters, ship, null, null, null);
+            }
         }
+        else
+        {
+            if (_lastClosest != null)
+            {
+                MainAffect(_lastClosest.ShipParameters, _lastClosest, null, null, null);
+            }
+        }
+
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
@@ -45,9 +61,27 @@ public class RechargeShieldSpell : BaseSpellModulInv
         var countToHeal = maxShield * HealPercent;
         ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
         ship.ShipParameters.ShieldParameters.HealShield(countToHeal);
+        if (UpgradeType == ESpellUpgradeType.B2)
+        {
+            if (!ship.DamageData.IsReflecOn)
+            {
+                ship.DamageData.TurnOnReflectFor(20);
+            }
+        }
     }
     public override bool ShowLine => false;
-    public override float ShowCircle => rad;
+
+    public override float ShowCircle
+    {
+        get
+        {
+            if (UpgradeType == ESpellUpgradeType.A1)
+            {
+                return AOE_rad;
+            }
+            return rad;
+        }
+    }
     public override Bullet GetBulletPrefab()
     {
         return null;
@@ -90,7 +124,23 @@ public class RechargeShieldSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return String.Format(Namings.RechargeSheildSpell, Utils.FloatToChance(HealPercent));
+        return Namings.TryFormat(Namings.Tag("RechargeSheildSpell"), Utils.FloatToChance(HealPercent));
+    }
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("RechargeSheildNameA1");
+        }
+        return Namings.Tag("RechargeSheildNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("RechargeSheildDescA1");
+        }
+        return Namings.Tag("RechargeSheildDescB2");
     }
 }
 

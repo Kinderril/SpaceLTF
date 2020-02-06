@@ -18,16 +18,16 @@ public class ModulBigInfoUI : AbstractBaseInfoUI
         var supprt = modul as BaseSupportModul;
         if (supprt != null)
         {
-            SupportField.text = Namings.SupportModul;
+            SupportField.text = Namings.Tag("SupportModul");
             DescField.text = supprt.DescSupport();
         }
         else
         {
-            SupportField.text = Namings.ActionModul;
+            SupportField.text = Namings.Tag("ActionModul");
             DescField.text = modul.GetDesc();
         }
         LevelField.text = (modul.Level.ToString("0"));
-        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild, modul.RequireLevel());
+        ReqireLevelFeild.text = Namings.TryFormat(Namings.Tag("ReqireLevelFeild"), modul.RequireLevel());
     }
 
 }

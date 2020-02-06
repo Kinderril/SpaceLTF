@@ -394,7 +394,7 @@ public class Commander
         {
             CoinController.UseCoins(c, delay);
             ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.BufffShip);
-            ship.BuffData.Apply();
+            ship.BuffData.Apply(15f);
             //ship.WeaponsController.TryWeaponReload();
             return true;
         }

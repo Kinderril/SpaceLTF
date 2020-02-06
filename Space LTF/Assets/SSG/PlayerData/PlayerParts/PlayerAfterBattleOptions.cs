@@ -1,101 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-//public enum AfterbattleType
-//{
-//
-//}
 
 [System.Serializable]
 public class PlayerAfterBattleOptions
 {
-    //    private   List<AfterbattleType> _lastUsed = new List<AfterbattleType>();
-    private List<Func<float, MessageDialogData>> _posibleOptionsList = new List<Func<float, MessageDialogData>>();
-    private List<Func<float, MessageDialogData>> _posibleOptionsListTmp = new List<Func<float, MessageDialogData>>();
-
-    //    private Dictionary<Func<float,MessageDialogData>,float> _posibleOptions = new Dictionary<Func<float, MessageDialogData>, float>();
-    //    private Dictionary<Func<float,MessageDialogData>,float> _posibleOptionsTmp = new Dictionary<Func<float, MessageDialogData>, float>();
     private int _lastStepGetDialog;
     private const int DialogFrequancy = 3;
 
 
     public PlayerAfterBattleOptions()
     {
-        _posibleOptionsList.Add(Federation);
-        _posibleOptionsList.Add(Krions);
-        _posibleOptionsList.Add(Raides);
-        _posibleOptionsList.Add(Mercenaries);
-        _posibleOptionsList.Add(Ocrons);
-        RefreshPosibleList();
-        //        _posibleOptions.Add(Federation,0f);
-        //        _posibleOptions.Add(Krions,0);
-        //        _posibleOptions.Add(Raides,0f);
-        //        _posibleOptions.Add(Mercenaries,0f);
-        //        _posibleOptions.Add(Ocrons,0f);
+
     }
 
-
-    private void RefreshPosibleList()
-    {
-        _posibleOptionsListTmp.Clear();
-        foreach (var posibleOption in _posibleOptionsList)
-        {
-            _posibleOptionsListTmp.Add(posibleOption);
-        }
-    }
-
-    public MessageDialogData GetDialog(int step, float cellPower)
+    public MessageDialogData GetDialog(int step, float cellPower, ShipConfig config)
     {
         var delta = step - _lastStepGetDialog;
         if (SkillWork(DialogFrequancy, delta))
         {
-            if (_posibleOptionsListTmp.Count == 0)
-            {
-                RefreshPosibleList();
-            }
-
-            var option = _posibleOptionsListTmp.RandomElement();
-            _posibleOptionsListTmp.Remove(option);
             _lastStepGetDialog = step;
-            return option(cellPower);
-
-            //               WDictionary<Func<float, MessageDialogData>> _wdic = new WDictionary<Func<float, MessageDialogData>>(_posibleOptions);
-            //               var option = _wdic.Random();
-            //               var curVal = _posibleOptions[option];
-            //               _posibleOptions[option] = curVal - 1f;
-            //               return option(cellPower);
+            var ans = InitPosibleAnswers(cellPower, config);
+            ans.Add(new AnswerDialogData(Namings.DialogTag("Leave")));
+            var msg = Namings.TryFormat(Namings.DialogTag("afterBattleStart"));
+            var dialog = new MessageDialogData(msg, ans);
+            return dialog;
         }
-
         return null;
-
     }
 
-    private MessageDialogData Raides(float power)
+    private List<AnswerDialogData> InitPosibleAnswers(float power, ShipConfig config)
     {
-        var player = MainController.Instance.MainPlayer;
-        if (!MyExtensions.IsTrue01(0.4f))
-        {
-            var masinMsg = "Coordinates of some fleets open";
-            var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByRaiders));
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-        else
-        {
-            OpenCellsByRaiders();
-            var masinMsg = "After battle you find a prisoner. With a broken ship.";
-            var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Leave him.", LeavehimAction));
-            ans.Add(new AnswerDialogData(String.Format("Try to repair his ship and leave him. [Repair:{0}]", player.Parameters.Repair.Level), LeavehimActionRepair));
-            if (MainController.Instance.MainPlayer.Army.CanAddShip())
-            {
-                ans.Add(new AnswerDialogData("Hire him.", () => HireAction()));
-            }
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
+        var list = new List<AnswerDialogData>();
+        list.Add(new AnswerDialogData(Namings.DialogTag("afterBattleBuyout"), null, () => Buyout(power, config)));
+        list.Add(new AnswerDialogData(Namings.DialogTag("afterBattleTeachPilots"), null, () => TeachPilots()));
+        list.Add(new AnswerDialogData(Namings.DialogTag("afterBattleUpgradeSpell"), null, () => UpgradeSpell()));
+        list.Add(new AnswerDialogData(Namings.DialogTag("afterBattleOpenCells"), null, () => OpenCells()));
+        list.Add(new AnswerDialogData(Namings.DialogTag("afterBattleHireAction"), null, () => HireAction(config)));
+        list.Add(new AnswerDialogData(Namings.DialogTag("afterBattleSearchFor"), null, () => SearchFor(power, config)));
+        list.Add(new AnswerDialogData(Namings.DialogTag("afterBattleKillAction"), null, () => KillAction(power, config)));
+        list.Add(new AnswerDialogData(Namings.DialogTag("afterBattleRepairAction"), null, () => RepairAction(power, config)));
+        var answers = list.RandomElement(3); ;
+        return answers;
     }
+
     protected bool SkillWork(int baseVal, int skillVal)
     {
         WDictionary<bool> wd = new WDictionary<bool>(new Dictionary<bool, float>()
@@ -106,295 +55,169 @@ public class PlayerAfterBattleOptions
         return wd.Random();
     }
 
-    private void LeavehimActionRepair()
+
+    #region RandomActions       
+    private MessageDialogData TeachPilots()
     {
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
         var player = MainController.Instance.MainPlayer;
-        if (SkillWork(2, player.Parameters.Repair.Level))
+        var c = player.Army.Army.Count;
+        var pilotsToTeach = player.Army.Army.RandomElement(MyExtensions.Random(1, c));
+        foreach (var shipPilotData in pilotsToTeach)
         {
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.raiders, Library.REPUTATION_REPAIR_ADD);
-            WindowManager.Instance.InfoWindow.Init(null, "Completed!");
-        }
-        else
-        {
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.raiders, Library.REPUTATION_REPAIR_REMOVE);
-            WindowManager.Instance.InfoWindow.Init(null, "His ship broken totaly. You lose reputation.");
-        }
-    }
-
-    private MessageDialogData Mercenaries(float power)
-    {
-        if (!MyExtensions.IsTrue01(0.4f))
-        {
-            var masinMsg = "Coordinates of some fleets open";
-            var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByMercenaries));
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-        else
-        {
-            OpenCellsByMercenaries();
-            var masinMsg = "After battle you find one of opponents army. With a ship.";
-            var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Leave him.", LeavehimAction));
-            ans.Add(new AnswerDialogData("Kill him.",
-                () =>
-                {
-                    KillAction(power);
-                }
-            )
-            );
-            int hireMoney = 20;
-            if (MainController.Instance.MainPlayer.Army.CanAddShip())
+            if (shipPilotData.Ship.ShipType != ShipType.Base)
             {
-                ans.Add(new AnswerDialogData(String.Format("Hire him. {0} credits", hireMoney), () => HireAction(null, hireMoney)));
-            }
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-    }
-
-    private void LeavehimAction()
-    {
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios, Library.REPUTATION_SCIENS_LAB_ADD);
-    }
-
-    private MessageDialogData Ocrons(float power)
-    {
-        if (!MyExtensions.IsTrue01(0.15f))
-        {
-            var masinMsg = "Coordinates of some fleets open";
-            var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByOcrons));
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-        else
-        {
-            OpenCellsByOcrons();
-            var masinMsg = "After battle you find one of opponents army.";
-            var ans = new List<AnswerDialogData>();
-            //        var myPower = _power;
-            int teachMoney = (int)MyExtensions.Random(power / 3, power);
-            ans.Add(new AnswerDialogData($"Ask to teach pilots. [Credits:{teachMoney}]", () =>
-            {
-                TeachPilots(teachMoney);
-            }));
-            ans.Add(new AnswerDialogData("Search for credits.", () => SearchFor(ShipConfig.ocrons)));
-            ans.Add(new AnswerDialogData("Leave him.", LeavehimAction));
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-    }
-
-    private MessageDialogData Krions(float power)
-    {
-        if (!MyExtensions.IsTrue01(0.15f))
-        {
-            var masinMsg = "Coordinates of some fleets open";
-            var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByKrions));
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-        else
-        {
-            OpenCellsByKrions();
-            var masinMsg = "After battle you find one of opponents army.";
-            var ans = new List<AnswerDialogData>();
-            var myPower = power / 2f;
-            int moneyCost = (int)MyExtensions.Random(myPower / 3, myPower);
-            ans.Add(new AnswerDialogData($"Ask for galaxy maps. [Credits:{moneyCost}]", () =>
-            {
-                OpenGloalMap(moneyCost);
-            }));
-            ans.Add(new AnswerDialogData("Search for credits.", () => SearchFor(ShipConfig.krios)));
-            ans.Add(new AnswerDialogData("Leave him.", LeavehimAction));
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-    }
-
-    private void OpenGloalMap(int moneyCost)
-    {
-        var player = MainController.Instance.MainPlayer;
-        if (player.MoneyData.HaveMoney(moneyCost))
-        {
-            int planentToOpen = MyExtensions.Random(3, 6);
-            var sector = player.MapData.GalaxyData;
-            for (int i = 0; i < planentToOpen; i++)
-            {
-                var rnd = sector.GetRandomCell();
-                rnd.OpenInfo();
+                shipPilotData.Pilot.UpgradeRandomLevel(false, true);
             }
         }
-        else
-        {
-            WindowManager.Instance.NotEnoughtMoney(moneyCost);
-        }
-    }
 
-    private void TeachPilots(int moneyCost)
+        msg = Namings.TryFormat(Namings.DialogTag("afterBattleTeachOk"), pilotsToTeach);
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
+    }
+    private MessageDialogData UpgradeSpell()
     {
-        var player = MainController.Instance.MainPlayer;
-        if (player.MoneyData.HaveMoney(moneyCost))
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
+        var ship =
+            MainController.Instance.MainPlayer.Army.Army.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
+        if (ship != null)
         {
-            foreach (var shipPilotData in player.Army.Army)
+            var spell = ship.Ship.SpellsModuls.Where(x => x != null).ToList().RandomElement();
+            if (spell.Upgrade(ESpellUpgradeType.None))
             {
-                if (shipPilotData.Ship.ShipType != ShipType.Base)
+                msg = Namings.TryFormat(Namings.DialogTag("afterBattleUpgradeSpellOk"), spell.Name);
+                return new MessageDialogData(msg, ans);
+            }
+        }
+
+        msg = Namings.TryFormat(Namings.DialogTag("afterBattleUpgradeSpellFail"));
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
+    }
+    private MessageDialogData OpenCells()
+    {
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
+        var player = MainController.Instance.MainPlayer;
+        var sectorID = player.MapData.CurrentCell.SectorId;
+        var sctor = player.MapData.GalaxyData.AllSectors.FirstOrDefault(x => x.Id == sectorID);
+        if (sctor != null)
+        {
+            for (int i = 0; i < sctor.Size; i++)
+            {
+                for (int j = 0; j < sctor.Size; j++)
                 {
-                    shipPilotData.Pilot.UpgradeRandomLevel(false, true);
+                    var cell = sctor.Cells[i, j];
+                    if (cell.Data != null)
+                    {
+                        cell.Data.Scouted();
+                    }
                 }
             }
         }
-        else
-        {
-            WindowManager.Instance.NotEnoughtMoney(moneyCost);
-        }
+        msg = Namings.DialogTag("afterBattleCellOpen");
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
     }
-
-
-    private MessageDialogData Federation(float power)
+    private MessageDialogData Buyout(float power, ShipConfig config)
     {
-        if (!MyExtensions.IsTrue01(0.15f))
-        {
-            var masinMsg = Namings.OpenCoordinates;
-            var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData(Namings.Ok, OpenCellsByFederation));
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-        else
-        {
-            OpenCellsByFederation();
-            var masinMsg = "After battle you find one of opponents army.";
-            var ans = new List<AnswerDialogData>();
-            ans.Add(new AnswerDialogData("Ask buyout.", () => Buyout(ShipConfig.federation)));
-            ans.Add(new AnswerDialogData("Search for hidden things.", () => SearchFor(ShipConfig.federation)));
-            int hireMoney = 100;
-            if (MainController.Instance.MainPlayer.Army.CanAddShip())
-            {
-                ans.Add(new AnswerDialogData(String.Format("Hire him. {0} credits", hireMoney), () => HireAction(null, hireMoney)));
-            }
-            ans.Add(new AnswerDialogData("Leave him.", LeavehimAction));
-            var mesData = new MessageDialogData(masinMsg, ans);
-            return mesData;
-        }
-    }
-
-    #region OpenCells
-    private void OpenCellsByRaiders()
-    {
-        var player = MainController.Instance.MainPlayer;
-        ShipConfig config = MyExtensions.IsTrue01(.5f) ? ShipConfig.federation : ShipConfig.mercenary;
-        GlobalMapCell cell = player.MapData.GalaxyData.GetRandomClosestCellWithNoData(config, player.MapData.CurrentCell.indX, player.MapData.CurrentCell.indZ);
-        if (cell != null)
-            cell.Scouted();
-    }
-    private void OpenCellsByMercenaries()
-    {
-        var player = MainController.Instance.MainPlayer;
-        ShipConfig config = MyExtensions.IsTrue01(.5f) ? ShipConfig.federation : ShipConfig.raiders;
-        GlobalMapCell cell = player.MapData.GalaxyData.GetRandomClosestCellWithNoData(config, player.MapData.CurrentCell.indX, player.MapData.CurrentCell.indZ);
-        if (cell != null)
-            cell.Scouted();
-    }
-    private void OpenCellsByKrions()
-    {
-        var player = MainController.Instance.MainPlayer;
-        ShipConfig config = MyExtensions.IsTrue01(.5f) ? ShipConfig.federation : ShipConfig.ocrons;
-        GlobalMapCell cell = player.MapData.GalaxyData.GetRandomClosestCellWithNoData(config, player.MapData.CurrentCell.indX, player.MapData.CurrentCell.indZ);
-        if (cell != null)
-            cell.Scouted();
-    }
-    private void OpenCellsByOcrons()
-    {
-        var player = MainController.Instance.MainPlayer;
-        GlobalMapCell cell;
-        if (MyExtensions.IsTrue01(.5f))
-        {
-            cell = player.MapData.GalaxyData.GetRandomClosestCellWithNoData(ShipConfig.krios, player.MapData.CurrentCell.indX, player.MapData.CurrentCell.indZ);
-        }
-        else
-        {
-            cell = player.MapData.GalaxyData.GetRandomConnectedCell();
-        }
-        if (cell != null)
-            cell.Scouted();
-    }
-    private void OpenCellsByFederation()
-    {
-        var player = MainController.Instance.MainPlayer;
-        GlobalMapCell cell;
-
-        if (MyExtensions.IsTrue01(.5f))
-        {
-            cell = player.MapData.GalaxyData.GetRandomClosestCellWithNoData(ShipConfig.krios, player.MapData.CurrentCell.indX, player.MapData.CurrentCell.indZ);
-        }
-        else
-        {
-            cell = player.MapData.GalaxyData.GetRandomConnectedCell();
-        }
-        if (cell != null)
-            cell.Scouted();
-    }
-
-
-    #endregion
-
-
-    #region RandomActions
-    private void Buyout(ShipConfig config)
-    {
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
         var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[config];
-        if (rep > 40)
+        if (SkillWork(15, rep))
         {
             var scouts = MainController.Instance.MainPlayer.Parameters.Scouts.Level;
             var delta = MoneyConsts.MAX_PASSIVE_LEVEL - scouts;
-            int monet = MyExtensions.Random(delta * 3, delta * 5);
+            var coef = (float)power * Library.MONEY_QUEST_COEF;
+            int monet = (int)(MyExtensions.Random(delta * 3, delta * 5) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
-            WindowManager.Instance.InfoWindow.Init(null, String.Format("Buyout confirm. {0}", monet));
+
+            msg = Namings.TryFormat(Namings.DialogTag("afterBattleBuyoutConfirm"), monet);
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null, String.Format("Buyout fail."));
+            msg = Namings.TryFormat(Namings.DialogTag("afterBattleBuyoutFail"));
         }
+
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
     }
-    private void SearchFor(ShipConfig config)
+    private MessageDialogData SearchFor(float power, ShipConfig config)
     {
         WDictionary<bool> ws = new WDictionary<bool>(new Dictionary<bool, float>()
         {
             {true, MainController.Instance.MainPlayer.Parameters.Scouts.Level}, {false, 2},
         });
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
         if (ws.Random())
         {
             var scouts = MainController.Instance.MainPlayer.Parameters.Scouts.Level;
-            int monet = MyExtensions.Random(scouts * 3, scouts * 5);
+            var coef = (float)power * Library.MONEY_QUEST_COEF;
+            int monet = (int)(MyExtensions.Random(scouts * 3, scouts * 5) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
-            WindowManager.Instance.InfoWindow.Init(null, String.Format("Credits add: {0}.", monet));
+            msg = Namings.TryFormat(Namings.DialogTag("afterBattleSearchOk"), monet);        //"Credits add: {0}."
             MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, Library.REPUTATION_STEAL_REMOVE);
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null, String.Format("Nothing."));
+            msg = Namings.TryFormat(Namings.DialogTag("afterBattleSearchFail"));//
         }
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
     }
-    private void KillAction(float power)
+    private MessageDialogData KillAction(float power, ShipConfig config)
     {
-        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(ShipConfig.mercenary, Library.REPUTATION_ATTACK_PEACEFULL_REMOVE);
-        if (MyExtensions.IsTrue01(MainController.Instance.MainPlayer.Parameters.Scouts.Level / 4f))
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
+        var shallWork = SkillWork(3, MainController.Instance.MainPlayer.Parameters.Scouts.Level);
+        if (shallWork)
         {
-            int monet = (int)MyExtensions.Random(power / 5f, power * 1.5f);
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 6);
+            var coef = (float)power * Library.MONEY_QUEST_COEF;
+            int monet = (int)(MyExtensions.Random(15, 25) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
-            WindowManager.Instance.InfoWindow.Init(null, String.Format("Money doesn't smell. {0}", monet));
+            msg = Namings.TryFormat(Namings.DialogTag("afterBattleKillOk"), monet);//
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null, "He running away.");
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 16);
+            msg = Namings.DialogTag("afterBattleKillFail");//
         }
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
     }
-    private void HireAction(ShipConfig? config = null, int moneyCost = 0)
+    private MessageDialogData RepairAction(float power, ShipConfig config)
     {
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
+        var shallWork = SkillWork(2, MainController.Instance.MainPlayer.Parameters.Repair.Level);
+        if (shallWork)
+        {
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 15);
+            msg = Namings.TryFormat(Namings.DialogTag("afterBattleRepairOk"));
+        }
+        else
+        {
+            msg = Namings.DialogTag("afterBattleRepairFail");
+        }
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
+    }
+    private MessageDialogData HireAction(ShipConfig? config = null)
+    {
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
         var pilot = Library.CreateDebugPilot();
         WDictionary<ShipType> types = new WDictionary<ShipType>(new Dictionary<ShipType, float>()
         {
@@ -429,28 +252,24 @@ public class PlayerAfterBattleOptions
 
         WDictionary<ShipConfig> configs = new WDictionary<ShipConfig>(configsD);
 
-        if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(moneyCost))
+        var type = types.Random();
+        var cng = config.HasValue ? config.Value : configs.Random();
+        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
+        var hireMsg = Namings.DialogTag("afterBattleHireOk");//
+        msg = Namings.TryFormat(hireMsg, Namings.ShipConfig(cng), Namings.ShipType(type));
+        int itemsCount = MyExtensions.Random(1, 2);
+        for (int i = 0; i < itemsCount; i++)
         {
-            MainController.Instance.MainPlayer.MoneyData.RemoveMoney(moneyCost);
-            var type = types.Random();
-            var cng = config.HasValue ? config.Value : configs.Random();
-            var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
-            WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}", Namings.ShipConfig(cng), Namings.ShipType(type)));
-            int itemsCount = MyExtensions.Random(1, 2);
-            for (int i = 0; i < itemsCount; i++)
+            if (ship.GetFreeWeaponSlot(out var inex))
             {
-                if (ship.GetFreeWeaponSlot(out var inex))
-                {
-                    var weapon = Library.CreateWeapon(true);
-                    ship.TryAddWeaponModul(weapon, inex);
-                }
+                var weapon = Library.CreateWeapon(true);
+                ship.TryAddWeaponModul(weapon, inex);
             }
-            MainController.Instance.MainPlayer.Army.TryHireShip(new StartShipPilotData(pilot, ship));
         }
-        else
-        {
-            WindowManager.Instance.NotEnoughtMoney(moneyCost);
-        }
+        MainController.Instance.MainPlayer.Army.TryHireShip(new StartShipPilotData(pilot, ship));
+
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
     }
 
     #endregion

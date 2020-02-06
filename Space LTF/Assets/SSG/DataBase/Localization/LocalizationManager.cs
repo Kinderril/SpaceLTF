@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using UnityEngine;
 
 public class LocalizationManager : Singleton<LocalizationManager>
 {
@@ -15,6 +14,7 @@ public class LocalizationManager : Singleton<LocalizationManager>
 
     public void Init()
     {
+        Namings.Init();
         // instance = this;
         DontDestroyOnLoad(this);
         // This will read  each XML file from the languageFiles list<> and populate the languages list with the data

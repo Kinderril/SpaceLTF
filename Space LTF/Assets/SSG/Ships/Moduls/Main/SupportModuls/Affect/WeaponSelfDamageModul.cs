@@ -35,7 +35,7 @@ public class WeaponSelfDamageModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return String.Format("Add a +{0}/+{0} Damage. But hit own ship when strikes on {1}/{1}", Dmg, Self);
+        return Namings.TryFormat("Add a +{0}/+{0} Damage. But hit own ship when strikes on {1}/{1}", Dmg, Self);
     }
 
 

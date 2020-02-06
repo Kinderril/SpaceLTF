@@ -43,6 +43,6 @@ public class StartNewGameData
         // var deltaDeath = (Library.MAX_GLOBAL_MAP_DEATHSTART - StepsBeforeDeath) * 0.08f;
         var powerPerTurn = (PowerPerTurn - Library.MIN_GLOBAL_MAP_ADDITIONAL_POWER) * 0.1f;
 
-        return deltaCore + deltaSize + deltaPower + powerPerTurn - 0.01f;
+        return deltaCore + deltaSize + deltaPower + powerPerTurn;
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
-using TMPro;
-using UnityEngine.UI;
 
 public class DifficultyNewGame : MonoBehaviour
 {
@@ -18,11 +15,11 @@ public class DifficultyNewGame : MonoBehaviour
     {
         Easy.Toggle.isOn = true;
         CurDifficulty = Library.MIN_GLOBAL_MAP_EASY_BASE_POWER;
-        VeryEasy.Field.text = Namings.VeryEasy;
-        Easy.Field.text = Namings.Easy;
-        Normal.Field.text = Namings.Normal;
-        Hard.Field.text = Namings.Hard;
-        Imposilbe.Field.text = Namings.Imposilbe;
+        VeryEasy.Field.text = Namings.Tag("VeryEasy");
+        Easy.Field.text = Namings.Tag("Easy");
+        Normal.Field.text = Namings.Tag("Normal");
+        Hard.Field.text = Namings.Tag("Hard");
+        Imposilbe.Field.text = Namings.Tag("Imposilbe");
     }
 
     public void ONVeryWasyClick()
@@ -49,7 +46,7 @@ public class DifficultyNewGame : MonoBehaviour
         {
             _callback();
         }
-    } 
+    }
     public void ONHradClick()
     {
 
@@ -58,7 +55,7 @@ public class DifficultyNewGame : MonoBehaviour
         {
             _callback();
         }
-    } 
+    }
     public void ONImposilbeyClick()
     {
 

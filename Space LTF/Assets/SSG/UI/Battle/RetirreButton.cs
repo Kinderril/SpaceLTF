@@ -76,7 +76,7 @@ public class RetirreButton : MonoBehaviour
 
             _mainUI.OnPause();
         }, _mainUI.OnPause,
-            String.Format(Namings.DoWantRetire));
+            Namings.TryFormat(Namings.Tag("DoWantRetire")));
     }
 }
 

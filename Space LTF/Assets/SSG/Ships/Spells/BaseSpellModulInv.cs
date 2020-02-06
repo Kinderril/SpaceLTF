@@ -24,8 +24,16 @@ public enum SpellType
     repairDrones = 14,
 
     rechargeShield = 15,
-    roundWave = 16,
+    // roundWave = 16,
     machineGun = 17,
+    vacuum = 18,
+}
+
+public enum ESpellUpgradeType
+{
+    None = 0,
+    A1 = 1,
+    B2 = 2,
 }
 
 
@@ -53,12 +61,12 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
         ShootPerTime = 1;
     }
 
-    public int CostCount { get; protected set; }
-    public int CostTime { get; protected set; }
+    public virtual int CostCount { get; protected set; }
+    public virtual int CostTime { get; protected set; }
     public int Level { get; protected set; }
     public bool IsHoming { get; protected set; }
-    public bool HaveSpecial { get; protected set; }
     public SpellType SpellType { get; private set; }
+    public ESpellUpgradeType UpgradeType { get; private set; }
     protected CreateBulletDelegate CreateBullet { get; private set; }
     public string Name => Namings.SpellName(SpellType);
 
@@ -67,6 +75,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
     protected abstract AffectTargetDelegate affectAction { get; }
     public WeaponInventoryAffectTarget AffectAction { get; private set; }
     public CreateBulletDelegate CreateBulletAction => CreateBullet;
+    public virtual BulletDestroyDelegate BulletDestroyDelegate => null;
 
     public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
     {
@@ -98,9 +107,9 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
 
     public string WideInfo()
     {
-        var cost = string.Format(Namings.SpellModulChargers, CostCount, CostTime);
+        var cost = Namings.TryFormat(Namings.Tag("SpellModulChargers"), CostCount, CostTime);
         return GetInfo() + "\n" + cost
-               + "\n" + Desc();
+               + "\n" + DescFull();
     }
 
     public abstract Bullet GetBulletPrefab();
@@ -127,9 +136,25 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
 
     protected abstract void CastAction(Vector3 pos);
 
+    public string DescFull()
+    {
+        switch (UpgradeType)
+        {
+            default:
+            case ESpellUpgradeType.None:
+                return Desc();
+            case ESpellUpgradeType.A1:
+            case ESpellUpgradeType.B2:
+                var desc = Desc();
+                var upgrade = GetUpgradeDesc(UpgradeType);
+                return $"{desc}\n{upgrade}";
+        }
+
+    }
+
     public abstract string Desc();
 
-    public void TryUpgrade()
+    public void TryUpgrade(ESpellUpgradeType upgradeType)
     {
         var owner = CurrentInventory.Owner;
         if (CanUpgrade())
@@ -139,11 +164,11 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
                 var cost = MoneyConsts.SpellUpgrade[Level];
                 if (owner.MoneyData.HaveMoney(cost))
                 {
-                    var txt = string.Format("You want to upgrade {0}", Namings.SpellName(SpellType));
+                    var txt = Namings.TryFormat("You want to upgrade {0}", Namings.SpellName(SpellType));
                     WindowManager.Instance.ConfirmWindow.Init(() =>
                     {
                         owner.MoneyData.RemoveMoney(cost);
-                        Upgrade();
+                        Upgrade(upgradeType);
                     }, null, txt);
                 }
                 else
@@ -164,38 +189,54 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
     }
 
 
-    public void Upgrade()
+    public bool Upgrade(ESpellUpgradeType upgradeType)
     {
         if (CanUpgrade())
         {
+            var isNextSpecial = ShallAddSpecialNextLevel();
             Level++;
             if (Level == Library.MAX_SPELL_LVL)
                 MainController.Instance.Statistics.AddMaxLevelSpells();
 
-            if (Level == 1 + Library.MAX_SPELL_LVL / 2)
+            if (isNextSpecial)
             {
-                AddSpecial();
+                if (upgradeType == ESpellUpgradeType.None)
+                {
+                    upgradeType = MyExtensions.IsTrueEqual() ? ESpellUpgradeType.A1 : ESpellUpgradeType.B2;
+                }
+                AddSpecial(upgradeType);
             }
 
             if (OnUpgrade != null)
                 OnUpgrade(this);
+            return true;
         }
+
+        return false;
     }
 
-    private void AddSpecial()
+    public bool ShallAddSpecialNextLevel()
     {
-        CostCount++;
-        HaveSpecial = true;
-        AddSpecialAction();
+        return Level + 1 == Library.SPECIAL_SPELL_LVL;
     }
 
-    protected virtual void AddSpecialAction()
+    private void AddSpecial(ESpellUpgradeType upgradeType)
     {
+        // CostCount++;
+        AddSpecialAction(upgradeType);
+    }
 
+    protected void AddSpecialAction(ESpellUpgradeType upgradeType)
+    {
+        UpgradeType = upgradeType;
     }
 
     public virtual Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {
         return maxdistpos;
     }
+
+    public abstract string GetUpgradeName(ESpellUpgradeType type);
+
+    public abstract string GetUpgradeDesc(ESpellUpgradeType type);
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
@@ -47,11 +43,11 @@ public class PlayerParameter
                 {
                     OnUpgrade(this);
                 }
-            },null,String.Format(Namings.UpgParams,Name, cost));
+            }, null, Namings.TryFormat(Namings.Tag("UpgParams"), Name, cost));
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null,Namings.cantUpgrade);
+            WindowManager.Instance.InfoWindow.Init(null, Namings.Tag("cantUpgrade"));
         }
     }
 

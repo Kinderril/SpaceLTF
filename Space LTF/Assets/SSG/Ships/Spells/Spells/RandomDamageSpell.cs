@@ -62,7 +62,7 @@
 //     float timeDelay => 9f + Level * 3f;
 //     public override string Desc()
 //     {    
-//         return       String.Format(Namings.RandomDamageSpell,timeDelay);
+//         return       Namings.TryFormat(Namings.RandomDamageSpell,timeDelay);
 // //            $"Random damage to all inner moduls of ship. Do not work through shield for {timeDelay} sec.";
 //     }
 //

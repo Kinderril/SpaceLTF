@@ -137,7 +137,7 @@ public class PlayerMapData
             WindowManager.Instance.InfoWindow.Init(()=>
             {
                 WindowManager.Instance.OpenWindow(MainState.start);
-            },String.Format(Namings.Tag("Demo"),2,25));
+            },Namings.TryFormat(Namings.Tag("Demo"),2,25));
             return false;
         }
 #endif

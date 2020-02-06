@@ -215,7 +215,7 @@ public class MapWindow : BaseWindow
 
     // private void UpdateReputation()
     // {
-    //     ReputationField.text = String.Format(Namings.Reputation,player.ReputationData.Reputation);
+    //     ReputationField.text = Namings.TryFormat(Namings.Reputation,player.ReputationData.Reputation);
     // }
 
 
@@ -250,7 +250,7 @@ public class MapWindow : BaseWindow
     private void OnMoneyChange(int obj)
     {
         MoneyField.Init(player.MoneyData.MoneyCount);
-        player.MessagesToConsole.AddMsg(String.Format(Namings.Tag("AddCredits"), obj));
+        player.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("AddCredits"), obj));
     }
 
     private void CellsOfSector()
@@ -267,7 +267,7 @@ public class MapWindow : BaseWindow
     private void OnCellChanged(GlobalMapCell cell)
     {
         //        UpdateDayField();
-        player.MessagesToConsole.AddMsg(String.Format(Namings.Tag("RelocateTo"), cell.Desc()));
+        player.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("RelocateTo"), cell.Desc()));
         //        GlobalMap.CellChange();
         //        foreach (var mapCellElement in cellsElements)
         //        {

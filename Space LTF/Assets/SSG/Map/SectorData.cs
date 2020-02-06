@@ -41,7 +41,7 @@ public class SectorData
         StartX = startX;
         StartZ = startZ;
         Size = size;
-        //        Debug.Log(String.Format("Sub Sector X:{0} Z:{1}.     Congif:{2}", startX, startZ, shipConfig.ToString()));
+        //        Debug.Log(Namings.TryFormat("Sub Sector X:{0} Z:{1}.     Congif:{2}", startX, startZ, shipConfig.ToString()));
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -373,7 +373,7 @@ public class SectorData
 
     public void ApplyPointsTo(CellsInGalaxy cellInGalaxy)
     {
-        //        Debug.Log(String.Format("Start populate Sector Start:{0}_{1}",StartX,StartZ));
+        //        Debug.Log(Namings.TryFormat("Start populate Sector Start:{0}_{1}",StartX,StartZ));
         for (int i = 0; i < Size; i++)
         {
             for (int j = 0; j < Size; j++)

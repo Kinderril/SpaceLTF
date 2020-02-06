@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Profiling;
 using Random = System.Random;
 
 public class WDictionary<T> : Dictionary<float, T>
@@ -89,7 +88,7 @@ public static class Utils
 
     public static string FloatToChance(float f)
     {
-        return (f*100).ToString("0.0");
+        return (f * 100).ToString("0.0");
     }
 
     public static void Init(Terrain terrain)
@@ -97,7 +96,7 @@ public static class Utils
         Utils.groundLayerIndex = 1 << terrain.gameObject.layer;
         Utils.LAYER_STATIC_OBJ = LayerMask.NameToLayer("StaticObjects");
     }
-    
+
     public static T RandomElement<T>(this List<T> list)
     {
         if (list.Count == 0)
@@ -107,7 +106,7 @@ public static class Utils
 
     public static float magnitude2d(this Vector3 v)
     {
-        return Mathf.Sqrt(v.x*v.x + v.z*v.z);
+        return Mathf.Sqrt(v.x * v.x + v.z * v.z);
     }
 
     public static T RandomElement<T>(this T[] array)
@@ -117,7 +116,7 @@ public static class Utils
         return array[UnityEngine.Random.Range(0, array.Length)];
     }
 
-    public static List<T> RandomElement<T>(this List<T> list,int count)
+    public static List<T> RandomElement<T>(this List<T> list, int count)
     {
         var listOut = new List<T>();
         if (list.Count == 0)
@@ -135,31 +134,31 @@ public static class Utils
         return listOut;
 
 
-//        var toDel = list.Count - count;
-//        for (int i = 0; i < toDel; i++)
-//        {
-//            var rnd = nList.RandomElement();
-//            nList.Remove(rnd);
-//        }
-//
-//        return nList;
+        //        var toDel = list.Count - count;
+        //        for (int i = 0; i < toDel; i++)
+        //        {
+        //            var rnd = nList.RandomElement();
+        //            nList.Remove(rnd);
+        //        }
+        //
+        //        return nList;
 
 
-//        if (list.Count <= count)
-//        {
-//            foreach (var v in list)
-//            {
-//                listOut.Add(v);
-//            }
-//            return listOut;
-//        }
-        
+        //        if (list.Count <= count)
+        //        {
+        //            foreach (var v in list)
+        //            {
+        //                listOut.Add(v);
+        //            }
+        //            return listOut;
+        //        }
+
         for (int i = 0; i < count; i++)
         {
-            var a = (list.Count/count);
-            var index = UnityEngine.Random.Range(i*a + 1, (i + 1)*a);
-            var e = list[Mathf.Clamp(index,0,list.Count)];
-                listOut.Add(e);
+            var a = (list.Count / count);
+            var index = UnityEngine.Random.Range(i * a + 1, (i + 1) * a);
+            var e = list[Mathf.Clamp(index, 0, list.Count)];
+            listOut.Add(e);
         }
 
         return listOut;
@@ -179,7 +178,12 @@ public static class Utils
         renderer.materials = materialsInside.ToArray();
     }
 
-    public static void DeactivateIfNedd(GameObject go,bool val)
+    public static Material CopyMaterial(Material renderer)
+    {
+        return GameObject.Instantiate(renderer) as Material;
+    }
+
+    public static void DeactivateIfNedd(GameObject go, bool val)
     {
         if (!go.activeSelf && val)
         {
@@ -243,7 +247,7 @@ public static class Utils
         {
             Debug.LogError("Cosinus can't be more than 1!!!");
         }
-    #endif
+#endif
         var aa = a.x * b.x + a.y * b.y + a.z * b.z;
         return aa > cos;
     }
@@ -296,12 +300,12 @@ public static class Utils
     {
         transform.rotation = Quaternion.Euler(0, UnityEngine.Random.Range(-180, 180), 0);
     }
-    public static void SetRandomOffset(Transform transform,float offset = 5f)
+    public static void SetRandomOffset(Transform transform, float offset = 5f)
     {
         var lp = transform.localPosition;
         var xx = lp.x + UnityEngine.Random.Range(-offset, offset);
         var zz = lp.z + UnityEngine.Random.Range(-offset, offset);
-        transform.localPosition = new Vector3(xx,lp.y,zz);
+        transform.localPosition = new Vector3(xx, lp.y, zz);
     }
 
     public static void GroundTransform(Transform transform, float checkDist = 9999f)
@@ -309,19 +313,19 @@ public static class Utils
         RaycastHit hitInfo;
         var p = new Vector3(transform.position.x, 100, transform.position.z);
         Ray ray = new Ray(p, Vector3.down);
-//        Debug.DrawRay(p, Vector3.down * 100, Color.yellow, 20);
+        //        Debug.DrawRay(p, Vector3.down * 100, Color.yellow, 20);
 
-        
 
-        if (Physics.Raycast(ray, out hitInfo, checkDist,groundLayerIndex))
+
+        if (Physics.Raycast(ray, out hitInfo, checkDist, groundLayerIndex))
         {
             var t = transform.position;
-//            var groundOffset = hitInfo.distance;
+            //            var groundOffset = hitInfo.distance;
             transform.position = new Vector3(t.x, hitInfo.point.y, t.z);
         }
     }
 
-    public static Material[] CopyMaterials(Renderer renderer,Color? color = null)
+    public static Material[] CopyMaterials(Renderer renderer, Color? color = null)
     {
         List<Material> materialsInside = new List<Material>();
         var mat = renderer.materials;
@@ -336,7 +340,7 @@ public static class Utils
         return renderer.materials;
     }
 
-    public static void LoadTexture(string icon,out Sprite IconSprite)
+    public static void LoadTexture(string icon, out Sprite IconSprite)
     {
         if (File.Exists(icon))
         {
@@ -357,7 +361,7 @@ public static class Utils
     {
         var deviations = 3.5;
         double r;
-        while ((r = BoxMuller(min + (max - min)/2.0, (max - min)/2.0/deviations)) > max || r < min)
+        while ((r = BoxMuller(min + (max - min) / 2.0, (max - min) / 2.0 / deviations)) > max || r < min)
         {
         }
 
@@ -366,7 +370,7 @@ public static class Utils
 
     public static double BoxMuller(double mean, double standard_deviation)
     {
-        return mean + BoxMuller()*standard_deviation;
+        return mean + BoxMuller() * standard_deviation;
     }
 
     public static double BoxMuller()
@@ -379,16 +383,16 @@ public static class Utils
         double v1, v2, s;
         do
         {
-            v1 = 2.0*random.NextDouble() - 1.0;
-            v2 = 2.0*random.NextDouble() - 1.0;
-            s = v1*v1 + v2*v2;
+            v1 = 2.0 * random.NextDouble() - 1.0;
+            v2 = 2.0 * random.NextDouble() - 1.0;
+            s = v1 * v1 + v2 * v2;
         } while (s >= 1.0 || s == 0);
 
-        s = Math.Sqrt((-2.0*Math.Log(s))/s);
+        s = Math.Sqrt((-2.0 * Math.Log(s)) / s);
 
-        next_gaussian = v2*s;
+        next_gaussian = v2 * s;
         uselast = true;
-        return v1*s;
+        return v1 * s;
     }
 
     public static void ClearTransform(Transform t)
@@ -429,7 +433,7 @@ public static class Utils
 
     public static float VectorMultY(Vector3 a, Vector3 b)
     {
-        return a.z*b.x - a.x*b.z;
+        return a.z * b.x - a.x * b.z;
     }
 
     public static float GreateRandom(float ang)

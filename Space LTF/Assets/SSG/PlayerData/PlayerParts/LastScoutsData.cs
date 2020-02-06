@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -24,7 +20,7 @@ public class LastScoutsData
         HaveScouted = true;
         intX = cell.indX;
         intZ = cell.indZ;
-        MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(String.Format(Namings.CellScouted,intX,intZ));
+        MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("CellScouted"), intX, intZ));
         if (OnLastScouts != null)
         {
             OnLastScouts();

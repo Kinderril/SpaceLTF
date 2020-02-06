@@ -44,9 +44,9 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
         }
         else
         {
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("navigation_askHelp"), Namings.ShipConfig(_config)), mianAnswers);
-            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("navigation_shelter"), ScoutsLevel), null, tryFindWay));
-            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("navigation_repair"), RepairLevel), null, tryRepair));
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("navigation_askHelp"), Namings.ShipConfig(_config)), mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("navigation_shelter"), ScoutsLevel), null, tryFindWay));
+            mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("navigation_repair"), RepairLevel), null, tryRepair));
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
             return mesData;
         }
@@ -73,7 +73,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
                 {
                     MainController.Instance.MainPlayer.Inventory.TryAddSimpleModul(m, slot);
                     var itemName = Namings.SimpleModulName(m.Type);
-                    d = String.Format(Namings.DialogTag("navigation_gift"), itemName);
+                    d = Namings.TryFormat(Namings.DialogTag("navigation_gift"), itemName);
                 }
                 else
                 {
@@ -83,13 +83,13 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
             else
             {
                 var cellsToScout = MainController.Instance.MainPlayer.MapData.ScoutedCells(3, 5);
-                d = String.Format(Namings.DialogTag("navigation_scouted"), cellsToScout); ;
+                d = Namings.TryFormat(Namings.DialogTag("navigation_scouted"), cellsToScout); ;
             }
 
 
             var mianAnswers = new List<AnswerDialogData>();
             _reputation.AddReputation(_config, 8);
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("navigation_shelterOk"), d), mianAnswers);
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("navigation_shelterOk"), d), mianAnswers);
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
             return mesData;
 
@@ -133,7 +133,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
             var mianAnswers = new List<AnswerDialogData>();
             var ship = HireAction(1);
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, null));
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("navigation_hired"), Namings.ShipConfig(ship.Ship.ShipConfig)), null);
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("navigation_hired"), Namings.ShipConfig(ship.Ship.ShipConfig)), null);
             return mesData;
         }
         else

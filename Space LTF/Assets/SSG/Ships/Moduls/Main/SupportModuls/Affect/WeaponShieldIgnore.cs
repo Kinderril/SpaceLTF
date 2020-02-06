@@ -27,7 +27,7 @@ public class WeaponShieldIgnore : BaseSupportModul
         }
         else
         {
-            return String.Format("Ignore shield");
+            return Namings.TryFormat("Ignore shield");
         }
     }
 

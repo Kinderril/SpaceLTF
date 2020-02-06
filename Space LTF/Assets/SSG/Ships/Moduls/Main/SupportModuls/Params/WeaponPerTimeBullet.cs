@@ -17,7 +17,7 @@ public class WeaponPerTimeBullet : BaseSupportModul
 
     public override string DescSupport()
     {
-        return String.Format("Add 1 bullet per shoot. Decrease damage by {0}& ", Utils.FloatToChance(dmgRes));
+        return Namings.TryFormat("Add 1 bullet per shoot. Decrease damage by {0}& ", Utils.FloatToChance(dmgRes));
     }
 
     public override void ChangeParams(IAffectParameters weapon)

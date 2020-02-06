@@ -358,7 +358,7 @@ public class GalaxyData
 
     private void InplementSectorToGalaxy(SectorData[,] sectors, int sizeZoneSector, int sectorsCount)
     {
-        //        Debug.Log(String.Format("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}", sizeSector, sectorsCount) );
+        //        Debug.Log(Namings.TryFormat("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}", sizeSector, sectorsCount) );
         Size = sectorsCount * (sizeZoneSector + 1) - 1;
         cells = new CellsInGalaxy(Size);
         for (int i = 0; i < sectorsCount; i++)
@@ -388,7 +388,7 @@ public class GalaxyData
                     {
                         var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz, sector, sector.ShipConfig);
                         cellsInGalaxy.SetCell(nothing);
-                        //                        Debug.Log(String.Format("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
+                        //                        Debug.Log(Namings.TryFormat("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
                     }
                 }
             }
@@ -408,7 +408,7 @@ public class GalaxyData
 
                         var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz, sector, sector.ShipConfig);
                         cellsInGalaxy.SetCell(nothing);
-                        //                        Debug.Log(String.Format("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
+                        //                        Debug.Log(Namings.TryFormat("Set nothing to {0}  {1}", nothing.indX, nothing.indZ));
                     }
                 }
             }

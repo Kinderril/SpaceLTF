@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -12,32 +8,32 @@ public class FrontShieldModul : BaseModul
     private bool _isActivated;
     private float _activationTimeEnd;
 
-    public FrontShieldModul(BaseModulInv baseModulInv) 
+    public FrontShieldModul(BaseModulInv baseModulInv)
         : base(baseModulInv)
     {
         Period = 40 - ModulData.Level * 5;
     }
 
 
-//    protected override float Delay()
-//    {
-//        return Period;
-//    }
-//
-//    protected override void TimerAction()
-//    {
-//
-//    }
+    //    protected override float Delay()
+    //    {
+    //        return Period;
+    //    }
+    //
+    //    protected override void TimerAction()
+    //    {
+    //
+    //    }
 
     public override void Apply(ShipParameters Parameters, ShipBase owner)
     {
-        base.Apply(Parameters,owner);
+        base.Apply(Parameters, owner);
         if (Parameters.BulletHitModificators == null)
         {
             Parameters.BulletHitModificators = new List<BulletDamageModif>();
         }
         Parameters.BulletHitModificators.Add(HitModification);
-//        Parameters.ShieldModifications.Add();
+        //        Parameters.ShieldModifications.Add();
     }
 
     private CurWeaponDamage HitModification(CurWeaponDamage damage, Bullet bullet, ShipBase target)
@@ -48,9 +44,9 @@ public class FrontShieldModul : BaseModul
         {
             if (IsReady())
             {
-                
+
                 _isActivated = true;
-                FlyNumberWithDependence.Create(_owner.transform, Namings.FrontShieldActivate, Color.red, FlyNumerDirection.right);
+                FlyNumberWithDependence.Create(_owner.transform, Namings.Tag("FrontShieldActivate"), Color.red, FlyNumerDirection.right);
                 _activationTimeEnd = Time.time + 1f;
             }
         }

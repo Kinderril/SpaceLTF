@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TutorialElement : MonoBehaviour
@@ -18,14 +17,14 @@ public class TutorialElement : MonoBehaviour
         gameObject.SetActive(false);
         _isCompleted = PlayerPrefs.GetInt(Id, 0) == 1;
         Field.text = LocalizationTutorial.GetKey(Id);
-        ShallCloseForever.text = Namings.TutorCloseForever;
+        ShallCloseForever.text = Namings.Tag("TutorCloseForever");
     }
 
     protected void OpenIfNotCompleted()
     {
         if (!_isCompleted)
         {
-//            Debug.LogError($"Open tutor:{gameObject.name}  _isCompleted:{_isCompleted}");
+            //            Debug.LogError($"Open tutor:{gameObject.name}  _isCompleted:{_isCompleted}");
             //            WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
             gameObject.SetActive(true);
             foreach (var element in elements)
@@ -33,15 +32,15 @@ public class TutorialElement : MonoBehaviour
                 element.gameObject.SetActive(true);
             }
         }
-    } 
+    }
     public void OnClose()
     {
-//        Debug.LogError($"Close tutor:{gameObject.name}");
+        //        Debug.LogError($"Close tutor:{gameObject.name}");
         //        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
         gameObject.SetActive(false);
         if (DontShowNoreToggle.isOn)
         {
-            PlayerPrefs.SetInt(Id,1);
+            PlayerPrefs.SetInt(Id, 1);
             foreach (var element in elements)
             {
                 element.gameObject.SetActive(false);
@@ -53,6 +52,6 @@ public class TutorialElement : MonoBehaviour
 
     public virtual void Dispose()
     {
-//        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
+        //        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
     }
 }

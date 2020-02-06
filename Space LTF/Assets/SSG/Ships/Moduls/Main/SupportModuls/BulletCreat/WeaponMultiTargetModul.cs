@@ -43,7 +43,7 @@ public class WeaponMultiTargetModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return String.Format(Namings.Tag("ChainModulDesc"), Utils.FloatToChance(Decrase));
+        return Namings.TryFormat(Namings.Tag("ChainModulDesc"), Utils.FloatToChance(Decrase));
         // return ($"After hit can reflect to another target. Decrease damage by {Utils.FloatToChance(Decrase)}.");
     }
 

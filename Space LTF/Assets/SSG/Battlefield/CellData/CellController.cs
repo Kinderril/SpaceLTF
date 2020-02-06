@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CellController : MonoBehaviour
@@ -12,6 +9,8 @@ public class CellController : MonoBehaviour
     public float cellSize = 11f;
     public Transform CellsContainer;
     public List<Asteroid> AsteroidsPrefabs;
+    // public GameObject PrefabBorder;
+    public BattleBorderWall BattleBorderWall;
 
     public Vector3 Min
     {
@@ -26,10 +25,41 @@ public class CellController : MonoBehaviour
     {
         gameObject.SetActive(true);
         var size = 2 + MyExtensions.Random(5 + coef / 2, 7 + coef);
-//        var sizeX = MyExtensions.Random(7 + coef/2, 8 + coef);
-//        var sizeZ = MyExtensions.Random(7 + coef/2, 8 + coef);
+        //        var sizeX = MyExtensions.Random(7 + coef/2, 8 + coef);
+        //        var sizeZ = MyExtensions.Random(7 + coef/2, 8 + coef);
         Data.Init(transform.position, size, cellSize);
         InstantiatePrefabs();
+        InstantiateBorders(Data.CenterZone);
+    }
+
+    private void InstantiateBorders(Vector3 center)
+    {
+        Vector3 dir = new Vector3(0, 0, 1);
+        List<Vector3> poitns = new List<Vector3>();
+        for (int i = 0; i < 8; i++)
+        {
+            dir = Utils.Rotate45(dir, SideTurn.left);
+            var pos = center + dir * Data.Radius;
+            poitns.Add(pos);
+        }
+
+        var p01 = poitns[7];
+        var p02 = poitns[0];
+        CreateBordeElement(p01, p02, center);
+        for (int i = 0; i < 8 - 1; i++)
+        {
+            var p1 = poitns[i];
+            var p2 = poitns[i + 1];
+            CreateBordeElement(p1, p2, center);
+        }
+
+    }
+
+    private void CreateBordeElement(Vector3 p1, Vector3 p2, Vector3 worldCenter)
+    {
+        var go = DataBaseController.GetItem(BattleBorderWall);
+        var camera = CamerasController.Instance.GameCamera;
+        go.Init(worldCenter,p1, p2, CellsContainer, camera);
     }
 
     private void InstantiatePrefabs()
@@ -41,14 +71,14 @@ public class CellController : MonoBehaviour
         {
             index++;
             var pref = AsteroidsPrefabs.RandomElement();
-            var astreroid = DataBaseController.GetItem(pref,aiAsteroidPredata.Position);
+            var astreroid = DataBaseController.GetItem(pref, aiAsteroidPredata.Position);
             astreroid.Init(aiAsteroidPredata);
             astreroid.name = $"Asteroids I:{index}  ";
             astreroid.transform.SetParent(CellsContainer);
         }
     }
 
-    public AICell FindCell(Vector3 pos)
+    public AICell GetCell(Vector3 pos)
     {
         var xIndex = IndexByFloat(pos.x, Data.StartX);
         var zIndex = IndexByFloat(pos.z, Data.StartZ);
@@ -60,7 +90,7 @@ public class CellController : MonoBehaviour
     private int IndexByFloat(float f, float startCoef)
     {
         var delta = f - startCoef;
-        int indexPre = (int) (delta/Data.CellSize);
+        int indexPre = (int)(delta / Data.CellSize);
         return indexPre;
     }
     public void AddShip(ShipBase shipBase)
@@ -74,7 +104,7 @@ public class CellController : MonoBehaviour
 
     public AICell GetCellByDir(AICell curCell, Vector3 dir)
     {
-        int xx,zz;
+        int xx, zz;
         if (Mathf.Abs(dir.x) > Mathf.Abs(dir.z))
         {
             zz = curCell.Zindex;
@@ -110,30 +140,16 @@ public class CellController : MonoBehaviour
         }
 
         var RadiusToBeSafe = Data.Radius - AICellDataRaound.SafeRadius;
-        DrawUtils.DrawCircle(Data.CenterZone,Vector3.up, Color.green, RadiusToBeSafe);
-        DrawUtils.DrawCircle(Data.CenterZone,Vector3.up, Color.red,Data.Radius);
-//        Gizmos.DrawWireCube(new Vector3(), );
-            
+        DrawUtils.DrawCircle(Data.CenterZone, Vector3.up, Color.green, RadiusToBeSafe);
+        DrawUtils.DrawCircle(Data.CenterZone, Vector3.up, Color.red, Data.Radius);
+        //        Gizmos.DrawWireCube(new Vector3(), );
+
         for (int i = 0; i < Data.MaxIx; i++)
         {
             for (int j = 0; j < Data.MaxIz; j++)
             {
-//                var p = new Vector3(Data.StartX + Data.CellSize * i, CellDrawLevel, Data.StartZ + Data.CellSize * j);
-
                 var cell = Data.List[i, j];
                 cell.DrawGizmosSelected();
-//                var p1 = p + new Vector3(Data.CellSize, 0, 0);
-//                var p2 = p + new Vector3(0, 0, Data.CellSize);
-//                var c = p + new Vector3(Data.CellSize / 2f, 0, Data.CellSize / 2f);
-//                Gizmos.color = Color.green;
-//                if (j != Data.MaxIz)
-//                {
-//                    Gizmos.DrawLine(p, p2);
-//                }
-//                if (i != Data.MaxIx)
-//                {
-//                    Gizmos.DrawLine(p, p1);
-//                }
             }
         }
     }

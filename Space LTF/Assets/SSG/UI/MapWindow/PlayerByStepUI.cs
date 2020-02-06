@@ -26,7 +26,7 @@ public class PlayerByStepUI : MonoBehaviour
 
     private void OnStep(int obj)
     {
-        Field.text = String.Format(Namings.Tag("StabilizaInfo"),_info._curRemainSteps);
+        Field.text = Namings.TryFormat(Namings.Tag("StabilizaInfo"),_info._curRemainSteps);
         var isGood = _info._curRemainSteps > 0;
         GoodObject.gameObject.SetActive(isGood);
         BadObject.gameObject.SetActive(!isGood);

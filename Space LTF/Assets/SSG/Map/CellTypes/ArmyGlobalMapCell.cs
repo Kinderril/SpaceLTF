@@ -98,7 +98,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         string scoutsField;
         if (_eventType.HasValue)
         {
-            scoutsField = String.Format(Namings.DialogTag("armySectorEvent"), Namings.BattleEvent(_eventType.Value)); ;
+            scoutsField = Namings.TryFormat(Namings.DialogTag("armySectorEvent"), Namings.BattleEvent(_eventType.Value)); ;
         }
         else
         {
@@ -112,8 +112,8 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
         if (isFriends)
         {
-            masinMsg = String.Format(Namings.DialogTag("armyFrendly"), scoutsField); ;
-            ans.Add(new AnswerDialogData(String.Format(Namings.DialogTag("armyAskHelp"), rep), null, DimlomatyOption));
+            masinMsg = Namings.TryFormat(Namings.DialogTag("armyFrendly"), scoutsField); ;
+            ans.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("armyAskHelp"), rep), null, DimlomatyOption));
         }
         else
         {
@@ -122,22 +122,22 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
             if (myPlaer.MoneyData.HaveMoney(buyoutCost) && (ConfigOwner == ShipConfig.mercenary || ConfigOwner == ShipConfig.raiders))
             {
-                ans.Add(new AnswerDialogData(String.Format(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
+                ans.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
                     () => BuyOutOption(buyoutCost)));
             }
             if (status == EReputationStatus.neutral)
             {
-                masinMsg = String.Format(Namings.DialogTag("armyNeutral"), scoutsField);
+                masinMsg = Namings.TryFormat(Namings.DialogTag("armyNeutral"), scoutsField);
             }
             else
             {
                 if (playersPower < Power)
                 {
-                    masinMsg = String.Format(Namings.DialogTag("armyStronger"), scoutsField);
+                    masinMsg = Namings.TryFormat(Namings.DialogTag("armyStronger"), scoutsField);
                 }
                 else
                 {
-                    masinMsg = String.Format(Namings.DialogTag("armyShallFight"), scoutsField);
+                    masinMsg = Namings.TryFormat(Namings.DialogTag("armyShallFight"), scoutsField);
                 }
             }
         }
@@ -151,7 +151,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         else
         {
             ans.Add(new AnswerDialogData(
-                String.Format(Namings.DialogTag("armyRun"), scoutsField),
+                Namings.TryFormat(Namings.DialogTag("armyRun"), scoutsField),
                 () =>
                 {
                     // bool doRun = MyExtensions.IsTrue01((float)ScoutsLevel / 4f);
@@ -173,16 +173,13 @@ public class ArmyGlobalMapCell : GlobalMapCell
         return mesData;
     }
 
-
-
-
     private MessageDialogData BuyOutOption(int buyoutCost)
     {
         var player = MainController.Instance.MainPlayer;
         var ans = new List<AnswerDialogData>();
         player.MoneyData.RemoveMoney(buyoutCost);
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
-        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("armyBuyoutComplete"), buyoutCost), ans);
+        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("armyBuyoutComplete"), buyoutCost), ans);
         return mesData;
     }
 
@@ -213,7 +210,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
             if (a == 0)
             {
                 var money = AddMoney(Power / 3, Power / 2);
-                helpInfo = String.Format("They give you some credits {0}", money);
+                helpInfo = Namings.TryFormat("They give you some credits {0}", money);
             }
             else
             {
@@ -245,7 +242,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
                 if (canAdd)
                 {
-                    helpInfo = String.Format("They give {0}.", itemName);
+                    helpInfo = Namings.TryFormat("They give {0}.", itemName);
                 }
                 else
                 {
@@ -298,7 +295,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         {
             var player = MainController.Instance.MainPlayer;
             player.ReputationData.WinBattleAgainst(ConfigOwner);
-            var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power);
+            var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power, ConfigOwner);
             return msg;
         }
         else

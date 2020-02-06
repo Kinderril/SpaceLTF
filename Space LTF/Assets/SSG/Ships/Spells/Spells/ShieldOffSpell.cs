@@ -5,11 +5,30 @@ using UnityEngine;
 [System.Serializable]
 public class ShieldOffSpell : BaseSpellModulInv
 {
+    //A1 - -1 battly
+    //B2 - fire on
+
     public const float PERIOD = 13f;
     private const float SHIELD_DAMAGE = 3f;
     private const float rad = 3.5f;
     private const float DIST_SHOT = 21f;
+    private const float FIRE_PERIOD = 5f;
+    private const int cost_base = 3;
+    private const int cost_A1 = 2;
     public CurWeaponDamage CurrentDamage { get; }
+
+
+    public override int CostCount
+    {
+        get
+        {
+            if (UpgradeType == ESpellUpgradeType.A1)
+            {
+                return cost_A1;
+            }
+            return cost_base;
+        }
+    }
 
     private float Period => PERIOD + Level * 3;
 
@@ -47,15 +66,12 @@ public class ShieldOffSpell : BaseSpellModulInv
         var b = Bullet.Create(origin, weapon, dir,
             weapon.CurPosition, null, bullestartparameters);
     }
-
-
     public override Bullet GetBulletPrefab()
     {
         var bullet = DataBaseController.Instance.GetBullet(WeaponType.shieldOFfSpell);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
     }
-
     public override SpellDamageData RadiusAOE()
     {
         return new SpellDamageData(rad);
@@ -63,49 +79,40 @@ public class ShieldOffSpell : BaseSpellModulInv
 
     protected override void CastAction(Vector3 pos)
     {
-        //        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShieldOffAOE, pos, 3f);
-        //        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.green, rad);
-        //        var c2 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.red, rad);
-        //        foreach (var shipBase in c1)
-        //        {
-        //            ActionShip(shipBase);
-        //        }
-        //        foreach (var shipBase in c2)
-        //        {
-        //            ActionShip(shipBase);
-        //        }
-        //        var dir = Utils.NormalizeFastSelf(pos - ModulPos.position);
-        //        Bullet.Create(bullet, this, dir, ModulPos.position, null, BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT);
 
     }
-
-
-
     private void ActionShip(ShipBase shipBase, DamageDoneDelegate damageDone)
     {
         shipBase.DamageData.ApplyEffect(ShipDamageType.shiled, Period);
         shipBase.ShipParameters.Damage(SHIELD_DAMAGE, 0, damageDone, shipBase);
+        if (UpgradeType == ESpellUpgradeType.B2)
+        {
+            shipBase.DamageData.ApplyEffect(ShipDamageType.fire, FIRE_PERIOD, 1f);
+        }
 
     }
     public override string Desc()
     {
-        return String.Format(Namings.ShieldOffSpell, Period.ToString("0"), SHIELD_DAMAGE);
+        return Namings.TryFormat(Namings.Tag("ShieldOffSpell"), Period.ToString("0"), SHIELD_DAMAGE);
         //            $"Disable shields of ships in radius for {Period.ToString("0")} sec. And damages shield for {SHIELD_DAMAGE}.";
     }
 
-    //    public void BulletDestroyed(Vector3 position, Bullet bullet)
-    //    {
-    //        var c1 = BattleController.Instance.GetAllShipsInRadius(position, TeamIndex.green, rad);
-    //        var c2 = BattleController.Instance.GetAllShipsInRadius(position, TeamIndex.red, rad);
-    //        foreach (var shipBase in c1)
-    //        {
-    //            ActionShip(shipBase);
-    //        }
-    //        foreach (var shipBase in c2)
-    //        {
-    //            ActionShip(shipBase);
-    //        }
-    //    }
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("ShieldOffNameA1");
+        }
+        return Namings.Tag("ShieldOffNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("ShieldOffDescA1");
+        }
+        return Namings.Tag("ShieldOffDescB2");
+    }
 
 }
 

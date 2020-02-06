@@ -5,14 +5,44 @@ using UnityEngine;
 [System.Serializable]
 public class MachineGunSpell : BaseSpellModulInv
 {
+    //A1 - shoot to all
+    //B2 - more bullets
+
     private const float DIST_SHOT = 25f;
+    private const float RAD_A1 = 15f;
     // private const float baseDamage = 4;
     private const float rad = 1f;
 
+    //3 + Level * 2;
+    private float DmgHull
+    {
+        get
+        {
+            var a = 3 + Level * 2;
+            if (UpgradeType == ESpellUpgradeType.A1)
+            {
+                a = a - 1;
+            }
+            return a;
+        }
+    }
 
-    private float DmgHull => 3 + Level * 2;
     private float DmgShield => 1 + (int)(Level * 1.5f);
-    public int BulletsCount => 4;
+
+    public int BulletsCount
+    {
+        get
+        {
+            switch (UpgradeType)
+            {
+                case ESpellUpgradeType.A1:
+                    return 6;
+                case ESpellUpgradeType.B2:
+                    return 3;
+            }
+            return 4;
+        }
+    }
 
     public MachineGunSpell()
         : base(SpellType.machineGun, 1, 45, new BulleStartParameters(14f, 36f, DIST_SHOT, DIST_SHOT), false)
@@ -28,22 +58,45 @@ public class MachineGunSpell : BaseSpellModulInv
     {
         var battle = BattleController.Instance;
         var offset = rad / 2;
-        for (int i = 0; i < BulletsCount; i++)
+        if (UpgradeType == ESpellUpgradeType.A1)
         {
-            var timer =
-                MainController.Instance.BattleTimerManager.MakeTimer(i * 0.15f);
-            timer.OnTimer += () =>
+            var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position,
+                BattleController.OppositeIndex(weapon.TeamIndex), RAD_A1);
+            foreach (var ship in closestsShips)
             {
-                if (battle.State == BattleState.process)
+                for (int i = 0; i < BulletsCount; i++)
                 {
-                    var xx = MyExtensions.Random(-offset, offset);
-                    var zz = MyExtensions.Random(-offset, offset);
-
-                    var nTargte = new BulletTarget(target.Position + new Vector3(xx, 0, zz));
-                    MainCreateBullet(nTargte, origin, weapon, weapon.CurPosition, bullestartparameters);
+                    ShootToTarget(battle, offset, i * .3f, ship.Position, origin, weapon, bullestartparameters);
                 }
-            };
+            }
         }
+        else
+        {
+            for (int i = 0; i < BulletsCount; i++)
+            {
+                ShootToTarget(battle, offset, i * .3f, target.Position, origin, weapon, bullestartparameters);
+            }
+
+        }
+
+    }
+
+    private void ShootToTarget(BattleController battle, float offset, float timerDelta, Vector3 pos
+    , Bullet origin, IWeapon weapon, BulleStartParameters bullestartparameters)
+    {
+        var timer =
+            MainController.Instance.BattleTimerManager.MakeTimer(timerDelta);
+        timer.OnTimer += () =>
+        {
+            if (battle.State == BattleState.process)
+            {
+                var xx = MyExtensions.Random(-offset, offset);
+                var zz = MyExtensions.Random(-offset, offset);
+
+                var nTargte = new BulletTarget(pos + new Vector3(xx, 0, zz));
+                MainCreateBullet(nTargte, origin, weapon, weapon.CurPosition, bullestartparameters);
+            }
+        };
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
@@ -86,7 +139,23 @@ public class MachineGunSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return String.Format(Namings.Tag("MachineGunSpellDesc"), BulletsCount, DmgShield, DmgHull);
+        return Namings.TryFormat(Namings.Tag("MachineGunSpellDesc"), BulletsCount, DmgShield, DmgHull);
+    }
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("MachineGunNameA1");
+        }
+        return Namings.Tag("MachineGunNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("MachineGunDescA1");
+        }
+        return Namings.Tag("MachineGunDescB2");
     }
 }
 

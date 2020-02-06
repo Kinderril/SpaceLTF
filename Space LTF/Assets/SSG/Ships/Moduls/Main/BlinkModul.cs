@@ -54,7 +54,7 @@ public class BlinkModul : TimerModul
             if (_owner.Locator.DangerEnemy != null)
             {
                 var trg = (_owner.Position + _owner.LookDirection * 5);
-                var c = _owner.CellController.FindCell(trg);
+                var c = _owner.CellController.GetCell(trg);
                 if (c.CellType == CellType.Free)
                 {
                     BlinkTo(trg, _owner.LookDirection);

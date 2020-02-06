@@ -20,11 +20,11 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("battlefield_provocate"), ScoutsLevel), null, provacation));
+        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("battlefield_provocate"), ScoutsLevel), null, provacation));
         mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_reconcile"), null, reconcile));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
 
-        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("battlefield_start"), Namings.ShipConfig(_config)), mianAnswers);
+        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("battlefield_start"), Namings.ShipConfig(_config)), mianAnswers);
         return mesData;
     }
 
@@ -64,7 +64,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
         {
             MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, 10);
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_ufff"), null, null));
-            mesData = new MessageDialogData(String.Format(Namings.DialogTag("battlefield_stopAttack")), mianAnswers);
+            mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("battlefield_stopAttack")), mianAnswers);
 
         }
         return mesData;
@@ -73,7 +73,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     private MessageDialogData runOpt()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(Namings.Ok, null, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
         var mesData = new MessageDialogData(Namings.DialogTag("battlefield_youRun"), mianAnswers);
         return mesData;
     }
@@ -95,8 +95,8 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
             var money = (int)(MyExtensions.Random(14, 30) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
             var mianAnswers = new List<AnswerDialogData>();
-            mianAnswers.Add(new AnswerDialogData(Namings.Ok, null, null));
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("battlefield_killEachOther"), money), mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("battlefield_killEachOther"), money), mianAnswers);
             return mesData;
         }
         else

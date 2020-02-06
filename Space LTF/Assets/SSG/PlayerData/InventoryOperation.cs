@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
-public  static  class  InventoryOperation
+public static class InventoryOperation
 {
-    
+
     public static DragableItemSlot GetDragableItemSlot()
     {
         return DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.DragableItemSlotPrefab);
@@ -24,12 +21,12 @@ public  static  class  InventoryOperation
     {
         if (item1.CurrentInventory != item2.CurrentInventory)
         {
-            
+
         }
         return false;
     }
 
-    public static void TryItemTransfered(IInventory to, IItemInv item,Action<bool> callback)
+    public static void TryItemTransfered(IInventory to, IItemInv item, Action<bool> callback)
     {
         IInventory from = item.CurrentInventory;
         int index;
@@ -134,7 +131,7 @@ public  static  class  InventoryOperation
         {
             //Selling item to shop
             var valuableCoef = to.ValuableItem(item);
-            var preSellPrice = (int) ((float)item.CostValue * Library.SELL_COEF * valuableCoef);
+            var preSellPrice = (int)((float)item.CostValue * Library.SELL_COEF * valuableCoef);
 #if UNITY_EDITOR
             if (preSellPrice <= 1)
             {
@@ -151,7 +148,7 @@ public  static  class  InventoryOperation
             {
                 sellPrice = Mathf.Clamp(preSellPrice, 1, 999999);
             }
-            var msg = String.Format("Do you want sell item for {0}?", sellPrice);
+            var msg = Namings.TryFormat("Do you want sell item for {0}?", sellPrice);
             WindowManager.Instance.ConfirmWindow.Init(
                 () =>
                 {
@@ -166,9 +163,9 @@ public  static  class  InventoryOperation
                 , failCallback, msg);
             return;
         }
-        if (!to.CanMoveToByLevel(item,-1))
+        if (!to.CanMoveToByLevel(item, -1))
         {
-            WindowManager.Instance.InfoWindow.Init(null, Namings.CantByLevel);
+            WindowManager.Instance.InfoWindow.Init(null, Namings.Tag("CantByLevel"));
             failCallback();
             return;
         }
@@ -189,7 +186,7 @@ public  static  class  InventoryOperation
             if (to.Owner.MoneyData.HaveMoney(buyPrice))
             {
                 //Buying item from shop
-                var msg = String.Format("Do you want buy item for {0}?", buyPrice);
+                var msg = Namings.TryFormat("Do you want buy item for {0}?", buyPrice);
                 WindowManager.Instance.ConfirmWindow.Init(
                 () =>
                 {

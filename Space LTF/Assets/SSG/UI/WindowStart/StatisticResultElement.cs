@@ -17,11 +17,11 @@ public class StatisticResultElement : MonoBehaviour
 
     public void Init(EndGameResult result)
     {
-        DifficultyField.text = String.Format(Namings.StatisticDifficulty, result.Difficulty.ToString("0"));
-        ConfigField.text = String.Format(Namings.StatisticConfig, result.Config);
-        MapSizeField.text = String.Format(Namings.StatisticMapSize, result.MapSize);
-        DateField.text = String.Format(Namings.StatisticDate, String.Format("{0:d/M/yyyy HH:mm:ss}", result.Date));
-        FinalArmyPowerField.text = String.Format(Namings.StatisticFinalArmyPower, result.FinalArmyPower);
+        DifficultyField.text = Namings.TryFormat(Namings.Tag("StatisticDifficulty"), result.Difficulty.ToString("0"));
+        ConfigField.text = Namings.TryFormat(Namings.Tag("StatisticConfig"), result.Config);
+        MapSizeField.text = Namings.TryFormat(Namings.Tag("StatisticMapSize"), result.MapSize);
+        DateField.text = Namings.TryFormat(Namings.Tag("StatisticDate"), Namings.TryFormat("{ 0:d/M/yyyy HH:mm:ss}", result.Date));
+        FinalArmyPowerField.text = Namings.TryFormat(Namings.Tag("StatisticFinalArmyPower"), result.FinalArmyPower);
         if (GoodBad != null)
         {
             GoodBad.color = result.Win ? winColor : loseColor;

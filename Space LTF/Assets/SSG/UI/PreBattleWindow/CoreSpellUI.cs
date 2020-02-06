@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class CoreSpellUI : UIElementWithTooltip
+﻿public class CoreSpellUI : UIElementWithTooltip
 {
     public int index = 0;
 
@@ -13,6 +10,6 @@ public class CoreSpellUI : UIElementWithTooltip
     protected override string TextToTooltip()
     {
         var isZero = index == 0;
-        return isZero ? Namings.PriorityTarget : Namings.BaitPriorityTarget;
+        return isZero ? Namings.Tag("PriorityTarget") : Namings.Tag("BaitPriorityTarget");
     }
 }

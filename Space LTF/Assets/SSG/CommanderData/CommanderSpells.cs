@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -22,18 +19,18 @@ public class CommanderSpells
     {
         ShipBase mainShip = _commander.MainShip;
         var priority = new CommanderSpellPriorityTarget();
-        var spellInGame = new SpellInGame(priority,()=> mainShip.Position, mainShip.TeamIndex, mainShip, 1,
-            Namings.PriorityTarget, Library.PriorityTargetCostTime, Library.PriorityTargetCostCount, SpellType.priorityTarget,9999,Namings.PriorityTargetDesc,(pos, distPos) => distPos);
+        var spellInGame = new SpellInGame(priority, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
+            Namings.Tag("PriorityTarget"), Library.PriorityTargetCostTime, Library.PriorityTargetCostCount, SpellType.priorityTarget, 9999, Namings.Tag("PriorityTargetDesc"), (pos, distPos) => distPos);
         AllSpells.Add(spellInGame);
 
         var priorityBait = new CommanderSpellPriorityBait();
         var baieSpell = new SpellInGame(priorityBait, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
-            Namings.BaitPriorityTarget, Library.BaitPriorityTargetCostTime, Library.BaitPriorityTargetCostCount, SpellType.BaitPriorityTarget,9999, Namings.BaitPriorityTargetDesc, (pos, distPos) => distPos);
+            Namings.Tag("BaitPriorityTarget"), Library.BaitPriorityTargetCostTime, Library.BaitPriorityTargetCostCount, SpellType.BaitPriorityTarget, 9999, Namings.Tag("BaitPriorityTargetDesc"), (pos, distPos) => distPos);
         AllSpells.Add(baieSpell);
     }
 
 
-    public bool TryCastspell(SpellInGame spell,Vector3 trg)
+    public bool TryCastspell(SpellInGame spell, Vector3 trg)
     {
         return spell.TryCast(_commander.CoinController, trg);
     }
@@ -42,8 +39,9 @@ public class CommanderSpells
     {
 
         ShipBase mainShip = _commander.MainShip;
-        var spellInGame= new SpellInGame(baseSpellModul, () => modulPos.position,mainShip.TeamIndex,mainShip,1,
-            baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount,baseSpellModul.SpellType, baseSpellModul.BulleStartParameters.distanceShoot,baseSpellModul.Desc(), baseSpellModul.DiscCounter);
+        var spellInGame = new SpellInGame(baseSpellModul, () => modulPos.position, mainShip.TeamIndex, mainShip, 1,
+            baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount, baseSpellModul.SpellType,
+            baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.DescFull(), baseSpellModul.DiscCounter);
         AllSpells.Add(spellInGame);
     }
 }

@@ -139,7 +139,7 @@ public class MovingArmy
 
     public string Name()
     {
-        return String.Format(Namings.Tag("MovingArmyName"), Namings.ShipConfig(_player.Army.BaseShipConfig));
+        return Namings.TryFormat(Namings.Tag("MovingArmyName"), Namings.ShipConfig(_player.Army.BaseShipConfig));
     }
 
     public string ShortDesc()
@@ -148,7 +148,7 @@ public class MovingArmy
         var thisPower = _player.Army.GetPower();
         var desc = PlayerArmy.ComparePowers(playersPower, thisPower);
         var status = MainController.Instance.MainPlayer.ReputationData.GetStatus(_player.Army.BaseShipConfig);
-        var txt = String.Format(Namings.Tag("MovingArmy"), _player.Name, Namings.ShipConfig(_player.Army.BaseShipConfig), Namings.Tag($"rep_{status.ToString()}"), desc);
+        var txt = Namings.TryFormat(Namings.Tag("MovingArmy"), _player.Name, Namings.ShipConfig(_player.Army.BaseShipConfig), Namings.Tag($"rep_{status.ToString()}"), desc);
         return txt;
     }
 }

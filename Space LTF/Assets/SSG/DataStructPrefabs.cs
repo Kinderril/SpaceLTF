@@ -206,7 +206,7 @@ public class DataStructPrefabs : MonoBehaviour
             if (ss != null)
             {
                 var name = ss.m_eAchievementID.ToString();
-                var str = String.Format("Icons/Achievements/{0}", name);
+                var str = Namings.TryFormat("Icons/Achievements/{0}", name);
                 var obj = Resources.Load<Sprite>(str);
                 if (obj != null)
                     SpritesByName.Add(name, obj);
@@ -232,7 +232,7 @@ public class DataStructPrefabs : MonoBehaviour
         var noIcon = new HashSet<SimpleModulType>();
         foreach (var v in values3)
         {
-            var obj = Resources.Load<Sprite>(String.Format("Icons/moduls/{0}", v.ToString()));
+            var obj = Resources.Load<Sprite>(Namings.TryFormat("Icons/moduls/{0}", v.ToString()));
             ModulsIconsDic.Add(v, obj);
             if (obj == null)
             {
@@ -253,7 +253,7 @@ public class DataStructPrefabs : MonoBehaviour
         var values3 = (PilotRank[])array;
         foreach (var v in values3)
         {
-            var obj = Resources.Load<Sprite>(String.Format("Icons/PilotRanks/{0}", v.ToString()));
+            var obj = Resources.Load<Sprite>(Namings.TryFormat("Icons/PilotRanks/{0}", v.ToString()));
             PilotRankIconsDic.Add(v, obj);
 
         }
@@ -268,7 +268,7 @@ public class DataStructPrefabs : MonoBehaviour
             var s = Library.CreateShip(shipStruct.ShipType, shipStruct.ShipConfig, p, Library.CreateDebugPilot());
             if (s.WeaponModulsCount != shipStruct.ShipBase.WeaponPosition.Count && shipStruct.ShipType != ShipType.Base)
             {
-                Debug.LogError(String.Format("wrong weapons postions count {0} and {1}.   target:{2}  onPrefab:{3}", shipStruct.ShipType,
+                Debug.LogError(Namings.TryFormat("wrong weapons postions count {0} and {1}.   target:{2}  onPrefab:{3}", shipStruct.ShipType,
                     shipStruct.ShipConfig, s.WeaponModulsCount, shipStruct.ShipBase.WeaponPosition.Count));
             }
         }

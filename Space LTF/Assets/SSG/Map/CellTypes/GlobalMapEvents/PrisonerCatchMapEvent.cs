@@ -20,14 +20,14 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
     {
         _itemCost = 20;
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerBuy"), _itemCost), null, BuyStolen));
-        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerCatch")), null, ReternToPolice));
+        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("prisonerBuy"), _itemCost), null, BuyStolen));
+        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("prisonerCatch")), null, ReternToPolice));
         if (MainController.Instance.MainPlayer.Army.CanAddShip())
-            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerHire")), HireHim));
-        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("prisonerHide"), Reputation), null, HideHim));
+            mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("prisonerHire")), HireHim));
+        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("prisonerHide"), Reputation), null, HideHim));
 
 
-        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("prisonerStart"), Namings.ShipConfig(_config)), mianAnswers);
+        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("prisonerStart"), Namings.ShipConfig(_config)), mianAnswers);
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
         return mesData;
     }
@@ -35,7 +35,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
     private void HireHim()
     {
         var rep = Library.REPUTATION_HIRE_CRIMINAL_REMOVED;
-        var info = String.Format(Namings.DialogTag("prisonerHired"), rep);
+        var info = Namings.TryFormat(Namings.DialogTag("prisonerHired"), rep);
         MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, rep);
         WindowManager.Instance.InfoWindow.Init(() =>
         {
@@ -65,7 +65,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
             if (canAdd)
             {
                 MainController.Instance.MainPlayer.Inventory.TryAddSimpleModul(m, slot);
-                d = String.Format(Namings.DialogTag("prisonerYourItem"), itemName);
+                d = Namings.TryFormat(Namings.DialogTag("prisonerYourItem"), itemName);
             }
             else
             {
@@ -77,8 +77,8 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
 
 
             var mianAnswers = new List<AnswerDialogData>();
-            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("prisonerComplete"), d), mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("Ok")), null));
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("prisonerComplete"), d), mianAnswers);
             return mesData;
         }
         else
@@ -95,16 +95,16 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
             var money = (int)(MyExtensions.Random(14, 30) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
             var mianAnswers = new List<AnswerDialogData>();
-            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
-            var msg = String.Format(Namings.DialogTag("prisonerHideOk"), money);
+            mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("Ok")), null));
+            var msg = Namings.TryFormat(Namings.DialogTag("prisonerHideOk"), money);
             var mesData = new MessageDialogData(msg, mianAnswers);
             return mesData;
         }
         else
         {
             var mianAnswers = new List<AnswerDialogData>();
-            mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
-            var msg = String.Format(Namings.DialogTag("prisonerFailFight"));
+            mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("Ok")), null));
+            var msg = Namings.TryFormat(Namings.DialogTag("prisonerFailFight"));
             var mesData = new MessageDialogData(msg, mianAnswers);
             return mesData;
         }
@@ -117,8 +117,8 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, rep);
 
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
-        var msg = String.Format(Namings.DialogTag("prisonerCatchOk"), rep);
+        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("Ok")), null));
+        var msg = Namings.TryFormat(Namings.DialogTag("prisonerCatchOk"), rep);
         var mesData = new MessageDialogData(msg, mianAnswers);
         return mesData;
     }

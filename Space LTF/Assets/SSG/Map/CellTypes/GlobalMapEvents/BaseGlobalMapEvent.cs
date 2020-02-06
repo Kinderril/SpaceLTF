@@ -54,7 +54,7 @@ public abstract class BaseGlobalMapEvent
         var cng = congif;
         var pilot = Library.CreateDebugPilot();
         var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
-        WindowManager.Instance.InfoWindow.Init(null, String.Format("You hired a new pilot. Type:{0}  Config:{1}",
+        WindowManager.Instance.InfoWindow.Init(null, Namings.TryFormat("You hired a new pilot. Type:{0}  Config:{1}",
             Namings.ShipConfig(cng), Namings.ShipType(type)));
         var data = new StartShipPilotData(pilot, ship);
         data.Ship.SetRepairPercent(0.1f);
@@ -135,7 +135,7 @@ public abstract class BaseGlobalMapEvent
     {
         var ans = new List<AnswerDialogData>()
         {
-            new     AnswerDialogData(Namings.Ok)
+            new     AnswerDialogData(Namings.Tag("Ok"))
         };
         int money = MyExtensions.Random(min, max);
         MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
@@ -147,7 +147,7 @@ public abstract class BaseGlobalMapEvent
     {
         var ans = new List<AnswerDialogData>()
         {
-            new     AnswerDialogData(Namings.Ok)
+            new     AnswerDialogData(Namings.Tag("Ok"))
         };
         _reputation.AddReputation(_config, 1);
         var mesData = new MessageDialogData("Action fail.", ans);
@@ -158,7 +158,7 @@ public abstract class BaseGlobalMapEvent
     protected MessageDialogData ShowFail(string msg, Action callback = null)
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("Ok")), null));
+        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("Ok")), null));
         var mesData = new MessageDialogData(msg, mianAnswers);
         return mesData;
     }

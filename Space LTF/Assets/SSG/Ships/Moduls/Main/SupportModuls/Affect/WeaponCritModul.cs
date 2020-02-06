@@ -33,7 +33,7 @@ public class WeaponCritModul : BaseSupportModul
     {
         if (MyExtensions.IsTrue01(ChanceLevel()))
         {
-            FlyNumberWithDependence.Create(ship.transform, String.Format(Namings.Crit, Damage), Color.red, FlyNumerDirection.right);
+            FlyNumberWithDependence.Create(ship.transform, Namings.TryFormat(Namings.Tag("Crit"), Damage), Color.red, FlyNumerDirection.right);
             paramsTargte.Damage(0, Damage, doneDelegate, ship);
         }
     }

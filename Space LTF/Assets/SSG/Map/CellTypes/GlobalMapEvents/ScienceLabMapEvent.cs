@@ -30,7 +30,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
         _moneyToBuy = (int)(MyExtensions.Random(10, 30) * coef);
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
-        var mesData = new MessageDialogData(String.Format(Namings.DialogTag("scLabStart"), Namings.ShipConfig(_config)), mianAnswers);
+        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("scLabStart"), Namings.ShipConfig(_config)), mianAnswers);
         return mesData;
     }
 
@@ -67,7 +67,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     {
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(
-            string.Format(Namings.DialogTag("scLabGiveCredits"), _moneyToBuy), null, moneyGive));
+            Namings.TryFormat(Namings.DialogTag("scLabGiveCredits"), _moneyToBuy), null, moneyGive));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
         var mesData = new MessageDialogData(Namings.DialogTag("scLabSimpleThiefs"), mianAnswers);
         return mesData;
@@ -111,7 +111,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
             if (_scienceKilled)
             {
                 var mianAnswers = new List<AnswerDialogData>();
-                mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
+                mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null));
                 var mesData = new MessageDialogData(Namings.DialogTag("scLabAllKilled"), mianAnswers);
                 return mesData;
             }
@@ -142,13 +142,13 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     {
         var army = MainController.Instance.MainPlayer.Army.Army.Where(x => x.Ship.ShipType != ShipType.Base && x.Pilot.CanUpgradeByLevel(9999)).ToList();
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null));
         if (army.Count > 0)
         {
             var rnd = army.RandomElement();
             var parameter = rnd.Pilot.UpgradeRandomLevel(false, true);
             return new MessageDialogData(
-                string.Format(Namings.DialogTag("scLabShipUpgraded"), Namings.ParameterName(parameter), rnd.Ship.Name), mianAnswers);
+                Namings.TryFormat(Namings.DialogTag("scLabShipUpgraded"), Namings.ParameterName(parameter), rnd.Ship.Name), mianAnswers);
         }
         else
         {
@@ -178,11 +178,11 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
             allParams.Add(playerParams.Scouts);
         }
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(Namings.Ok, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null));
         if (allParams.Count > 0)
         {
             var rnd = allParams.RandomElement();
-            return new MessageDialogData(string.Format(Namings.DialogTag("scParamUpgraded"), rnd.Name), mianAnswers);
+            return new MessageDialogData(Namings.TryFormat(Namings.DialogTag("scParamUpgraded"), rnd.Name), mianAnswers);
         }
         else
         {

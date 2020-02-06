@@ -57,7 +57,7 @@ public class AICommander
         var mainShip = commander.MainShip;
         var spellInGame = new SpellInGame(baseSpellModul, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
             baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount, baseSpellModul.SpellType,
-            baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.Desc(), baseSpellModul.DiscCounter);
+            baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.DescFull(), baseSpellModul.DiscCounter);
 
 
         switch (baseSpellModul.SpellType)
@@ -80,13 +80,15 @@ public class AICommander
                 return new RepairDropneAI(baseSpellModul as RepairDronesSpell, commander, spellInGame);
             case SpellType.rechargeShield:
                 return new RechargeShieldAI(baseSpellModul as RechargeShieldSpell, commander, spellInGame);
-            case SpellType.roundWave:
-
-                break;
+            // case SpellType.roundWave:
+            //
+            //     break;
             case SpellType.machineGun:
                 return new MachineGunSpellAI(baseSpellModul as MachineGunSpell, commander, spellInGame);
             case SpellType.throwAround:
                 return new ThrowAroundAI(baseSpellModul as ThrowAroundSpell, commander, spellInGame);
+            case SpellType.vacuum:
+                return new VacuumSpellAI(baseSpellModul as VacuumSpell, commander, spellInGame);
         }
 
         return null;

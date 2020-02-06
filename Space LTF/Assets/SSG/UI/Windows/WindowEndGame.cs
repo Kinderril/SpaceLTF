@@ -26,15 +26,15 @@ public class WindowEndGame : BaseWindow
     {
         var stat = MainController.Instance.Statistics;
         var player = MainController.Instance.MainPlayer;
-        
-        StepsField.text = String.Format(Namings.EndGameDays, player.MapData.Step);
+
+        StepsField.text = Namings.TryFormat(Namings.Tag("EndGameDays"), player.MapData.Step);
         var result = stat.EndGameStatistics.LastResult;
-        DifficultyField.text = String.Format(Namings.StatisticDifficulty, result.Difficulty);
-        ConfigField.text = String.Format(Namings.StatisticConfig, result.Config);
-        MapSizeField.text = String.Format(Namings.StatisticMapSize, result.MapSize);
-        FinalArmyPowerField.text = String.Format(Namings.StatisticFinalArmyPower, result.FinalArmyPower);
-        BattleWinsField.text = String.Format(Namings.BattleWinsStat, stat.Wins);
-        WinLoseField.text = result.Win ? Namings.WinEnd : Namings.LoseEnd;
+        DifficultyField.text = Namings.TryFormat(Namings.Tag("StatisticDifficulty"), result.Difficulty);
+        ConfigField.text = Namings.TryFormat(Namings.Tag("StatisticConfig"), result.Config);
+        MapSizeField.text = Namings.TryFormat(Namings.Tag("StatisticMapSize"), result.MapSize);
+        FinalArmyPowerField.text = Namings.TryFormat(Namings.Tag("StatisticFinalArmyPower"), result.FinalArmyPower);
+        BattleWinsField.text = Namings.TryFormat(Namings.Tag("BattleWinsStat"), stat.Wins);
+        WinLoseField.text = result.Win ? Namings.Tag("WinEnd") : Namings.Tag("LoseEnd");
         DrawOpens(stat);
         GooBad.color = result.Win ? WinColor : LoseColor;
 
@@ -49,12 +49,12 @@ public class WindowEndGame : BaseWindow
         if (stats.LastWeaponsPairOpen != null)
         {
             haveOne = true;
-            openWeapons = String.Format(Namings.OpenWeaponsEndGame, Namings.Weapon(stats.LastWeaponsPairOpen.Part1), Namings.Weapon(stats.LastWeaponsPairOpen.Part2));
-        }   
+            openWeapons = Namings.TryFormat(Namings.Tag("OpenWeaponsEndGame"), Namings.Weapon(stats.LastWeaponsPairOpen.Part1), Namings.Weapon(stats.LastWeaponsPairOpen.Part2));
+        }
         if (stats.LastOpenShipConfig != null)
         {
             haveOne = true;
-            openWeapons = String.Format(Namings.OpenConfigEndGame, Namings.ShipConfig(stats.LastOpenShipConfig.Config));
+            openWeapons = Namings.TryFormat(Namings.Tag("OpenConfigEndGame"), Namings.ShipConfig(stats.LastOpenShipConfig.Config));
         }
         OpenDataContainer.gameObject.SetActive(haveOne);
         if (haveOne)
@@ -74,6 +74,6 @@ public class WindowEndGame : BaseWindow
         WindowManager.Instance.OpenWindow(MainState.start);
     }
 
-    
+
 }
 

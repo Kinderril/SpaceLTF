@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
 
 public class CriticalDamageObject : UIElementWithTooltip
 {
     protected override string TextToTooltip()
     {
-        return Namings.CriticalDamage;
-     }
+        return Namings.TryFormat(Namings.Tag("CriticalDamage"), Library.CRITICAL_DAMAGES_TO_DEATH);
+    }
 }

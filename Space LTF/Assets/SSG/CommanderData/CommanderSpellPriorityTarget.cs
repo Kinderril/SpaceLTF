@@ -19,6 +19,8 @@ public class CommanderSpellPriorityTarget : ISpellToGame
         weapon.Owner.Commander.SetPriorityTarget(ship,false);
     };
 
+    public BulletDestroyDelegate BulletDestroyDelegate { get; }
+
     public CastActionSpell CastSpell => (target, origin, weapon, shootpos, bullestartparameters) =>
     {
         CreateBulletAction(target, origin, weapon, shootpos, bullestartparameters);

@@ -22,7 +22,7 @@ public class WeaponPushModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return String.Format("Push target when hit");
+        return Namings.TryFormat("Push target when hit");
     }
     protected override WeaponInventoryAffectTarget AffectTarget(WeaponInventoryAffectTarget affections)
     {

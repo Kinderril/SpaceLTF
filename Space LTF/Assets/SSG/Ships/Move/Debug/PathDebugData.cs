@@ -40,10 +40,10 @@ public  class PathDebugData
             Gizmos.color = Color.white;
             Gizmos.DrawWireCube(c0.Center, scale2);
 
-            Gizmos.DrawWireCube(c0.c1.Position, scale3);
-            Gizmos.DrawWireCube(c0.c2.Position, scale3);
-            Gizmos.DrawWireCube(c0.c3.Position, scale3);
-            Gizmos.DrawWireCube(c0.c4.Position, scale3);
+//            Gizmos.DrawWireCube(c0.c1.Position, scale3);
+//            Gizmos.DrawWireCube(c0.c2.Position, scale3);
+//            Gizmos.DrawWireCube(c0.c3.Position, scale3);
+//            Gizmos.DrawWireCube(c0.c4.Position, scale3);
         }
         if (c1 != null)
         {

@@ -106,6 +106,7 @@ public class WindowNewGame : BaseWindow
             SpellType.distShot,
             SpellType.artilleryPeriod,
             SpellType.repairDrones,
+            SpellType.vacuum,
 //            SpellType.spaceWall,
         };
         List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
@@ -121,7 +122,7 @@ public class WindowNewGame : BaseWindow
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), /*StartDeathTime.GetValueInt()*/999, CoresCount.GetValueInt(),
             DifficultyNewGame.CurDifficulty, posibleSpells, GetPowerPerTurn());
         var dif = Utils.FloatToChance(gameData.CalcDifficulty());
-        DifficultyFIeld.text = String.Format(Namings.StatisticDifficulty, dif);
+        DifficultyFIeld.text = Namings.TryFormat(Namings.Tag("StatisticDifficulty"), dif);
     }
 
     private int GetPowerPerTurn()

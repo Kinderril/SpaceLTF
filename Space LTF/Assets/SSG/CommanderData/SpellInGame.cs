@@ -1,16 +1,15 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 
 [System.Serializable]
 public delegate void CastActionSpell(BulletTarget target, Bullet origin, IWeapon weapon,
     Vector3 shootpos, BulleStartParameters bullestartparameters);
 
 [System.Serializable]
-public delegate Vector3 DistCounter(Vector3 maxDistPos,Vector3 targetDistPos);
+public delegate Vector3 DistCounter(Vector3 maxDistPos, Vector3 targetDistPos);
 
 [System.Serializable]
-public delegate void SubUpdateShowCast(Vector3 pos, TeamIndex teamIndex, GameObject objectToShow); 
+public delegate void SubUpdateShowCast(Vector3 pos, TeamIndex teamIndex, GameObject objectToShow);
 
 [System.Serializable]
 public delegate bool CanCastAtPoint(Vector3 pos);
@@ -30,12 +29,13 @@ public class SpellDamageData
     {
         AOERad = rad;
         IsAOE = isAOE;
-    }  
+    }
 
 }
 
 public class SpellInGame : IWeapon
 {
+    public BulletDestroyDelegate BulletDestroyAction;
     public CreateBulletDelegate CreateBulletAction;
     public WeaponInventoryAffectTarget AffectAction;
 
@@ -45,7 +45,7 @@ public class SpellInGame : IWeapon
     private SpellZoneVisualLine LineObjectToShow;
 
 
-//    private int RadiusCircle;
+    //    private int RadiusCircle;
     private Func<Vector3> _modulPos;
     private Bullet _bulletOrigin;
     private WeaponAffectionAdditionalParams _additionalParams = new WeaponAffectionAdditionalParams();
@@ -65,16 +65,16 @@ public class SpellInGame : IWeapon
     public CurWeaponDamage CurrentDamage => new CurWeaponDamage(0, 0);
     public string Name { get; private set; }
     public string Desc { get; private set; }
-    public SpellType SpellType { get;private set; }
-//    float ShowCircleRadius { get; }
+    public SpellType SpellType { get; private set; }
+    //    float ShowCircleRadius { get; }
     bool ShowLine { get; }
     private float _maxDist;
-    public bool ShowCircle { get;private set; }
-private DistCounter _distCounter;
+    public bool ShowCircle { get; private set; }
+    private DistCounter _distCounter;
 
-    public SpellInGame(ISpellToGame spellData,Func<Vector3> modulPos,
-        TeamIndex teamIndex,ShipBase owner,int level,string name,int period,
-        int count, SpellType spellType,float maxDist, string desc, DistCounter distCounter)
+    public SpellInGame(ISpellToGame spellData, Func<Vector3> modulPos,
+        TeamIndex teamIndex, ShipBase owner, int level, string name, int period,
+        int count, SpellType spellType, float maxDist, string desc, DistCounter distCounter)
     {
         if (maxDist < 1)
         {
@@ -83,9 +83,9 @@ private DistCounter _distCounter;
 
         _distCounter = distCounter;
 
-Desc = desc;
+        Desc = desc;
         _maxDist = maxDist;
-//        ShowCircleRadius = spellData.ShowCircle;
+        //        ShowCircleRadius = spellData.ShowCircle;
         ShowLine = spellData.ShowLine;
         Level = level;
         SpellType = spellType;
@@ -103,6 +103,7 @@ Desc = desc;
         SubUpdateShowCast = spellData.SubUpdateShowCast;
         CanCastAtPoint = spellData.CanCastAtPoint;
         CreateBulletAction = spellData.CreateBulletAction;
+        BulletDestroyAction = spellData.BulletDestroyDelegate;
         ShowCircle = _spellDamageData.AOERad > 0;
     }
     public bool CanCast(CommanderCoinController coinController)
@@ -147,7 +148,7 @@ Desc = desc;
             }
             LineObjectToShow.gameObject.SetActive(true);
         }
-   
+
         if (ShowCircle)
         {
             if (CircleObjectToShow == null)
@@ -155,7 +156,7 @@ Desc = desc;
                 CircleObjectToShow =
                     DataBaseController.GetItem(DataBaseController.Instance.SpellDataBase.SpellZoneCircle);
                 CircleObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
-                CircleObjectToShow.SetSize(_spellDamageData.AOERad*4);
+                CircleObjectToShow.SetSize(_spellDamageData.AOERad * 4);
             }
 
             CircleObjectToShow.gameObject.SetActive(true);
@@ -182,7 +183,7 @@ Desc = desc;
         var maxDistPos = startPos + dir * _maxDist;
         var distCal = _distCounter(maxDistPos, target);
         CastSpell(new BulletTarget(distCal), _bulletOrigin, this, startPos, _bulletStartParams);
-//        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
+        //        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
     }
 
 
@@ -203,7 +204,7 @@ Desc = desc;
 
     public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
-//        GlobalEventDispatcher.ShipDamage(Owner, healthdelta, shielddelta, _weaponType);
+        //        GlobalEventDispatcher.ShipDamage(Owner, healthdelta, shielddelta, _weaponType);
         Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta);
         if (damageAppliyer != null)
         {
@@ -227,12 +228,18 @@ Desc = desc;
             var shipsToHitIndex = BattleController.OppositeIndex(TeamIndex);
             var shipsInRad = BattleController.Instance.GetAllShipsInRadius(position, shipsToHitIndex, _spellDamageData.AOERad);
 #if UNITY_EDITOR
-            DrawUtils.DebugCircle(position,Vector3.up, Color.cyan, _spellDamageData.AOERad,3f);
+            DrawUtils.DebugCircle(position, Vector3.up, Color.cyan, _spellDamageData.AOERad, 3f);
 #endif
             foreach (var shipBase in shipsInRad)
             {
                 ApplyToShipSub(shipBase.ShipParameters, shipBase, bullet);
             }
+        }
+
+        if (BulletDestroyAction != null)
+        {
+            var cell = BattleController.Instance.CellController.GetCell(bullet.Position);
+            BulletDestroyAction(bullet, this, cell);
         }
     }
 

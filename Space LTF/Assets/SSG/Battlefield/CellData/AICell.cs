@@ -1,15 +1,13 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public enum CellType
 {
     Free,
-    Clouds,    
-    Asteroids,    
+    Clouds,
+    Asteroids,
     DeepSpace
 }
 
@@ -18,7 +16,7 @@ public class AICellSegment : SegmentPoints
     private CellPoint _aCell;
     private CellPoint _bCell;
 
-    public AICellSegment(CellPoint a, CellPoint b) 
+    public AICellSegment(CellPoint a, CellPoint b)
         : base(a.Position, b.Position)
     {
         _aCell = a;
@@ -60,7 +58,7 @@ public class CellDirection
 public class AICell
 {
     public const int SIDES_COUNT = 8;
-    public const float ONE_TO_SIDES = 45f/2f;
+    public const float ONE_TO_SIDES = 45f / 2f;
     const float ONE_TO_SQRT_TWO = 0.707106781186f;
 
     public CellType CellType = CellType.Free;
@@ -69,99 +67,33 @@ public class AICell
     public int Zindex;
     public Vector3 Center;
     public Vector3 Start;
-//    public CellPoint CellPointStart;
     public Vector3 End;
     public float Side;
-    //    public SegmentPoints Cross1;
-    //    public SegmentPoints Cross2;
     public bool Marked { get; set; }
 
-    public AICellSegment Border1;
-    public AICellSegment Border2;
-    public AICellSegment Border3;
-    public AICellSegment Border4;
-    public AICellSegment[] Borders = new AICellSegment[4];
+    public Dictionary<AICellSegment, AICell> CellsOnSides = new Dictionary<AICellSegment, AICell>();
+    public Dictionary<int, CellDirection> PosibleDirections = new Dictionary<int, CellDirection>();
 
-    public CellPoint c1;
-    public CellPoint c2;
-    public CellPoint c3;
-    public CellPoint c4;
-    public Dictionary<AICellSegment,AICell> CellsOnSides = new Dictionary<AICellSegment, AICell>();
-    public Dictionary<int, CellDirection> PosibleDirections = new Dictionary<int, CellDirection>(); 
- 
-    private CellPoint[] _arrayPoints;
-    private Dictionary<ShipBase,List<ShipAsteroidPoint>> _asteroids = new Dictionary<ShipBase, List<ShipAsteroidPoint>>();
-//    private Asteroid[] _cellAsteroids = null;
-    private List<AIAsteroidPredata> asteroidsPreData = new List<AIAsteroidPredata>();
+    private Dictionary<ShipBase, List<ShipAsteroidPoint>> _asteroids = new Dictionary<ShipBase, List<ShipAsteroidPoint>>();
+    private HashSet<AIAsteroidPredata> asteroidsPreData = new HashSet<AIAsteroidPredata>();
     public bool HaveAsteroids { get; private set; }
 
-  //  public Asteroid[] Asteroids => _cellAsteroids;
-
-    public AICell(CellType cell,CellPoint start,CellPoint left,CellPoint right,CellPoint end,float side)
+    public AICell(CellType cell, CellPoint start, CellPoint left, CellPoint right, CellPoint end, float side)
     {
         Side = side;
-//        CellPointStart = start;
+        //        CellPointStart = start;
         Start = start.Position;
         Xindex = start.indexX;
         Zindex = start.indexZ;
         CellType = cell;
         End = new Vector3(Start.x + side, Start.y, Start.z + side);
-//        Cross1 = new SegmentPoints(Start, End);
-        c1 = start;
-        c2 = left;
-        c3 = right;
-        c4 = end;
-//        Cross2 = new SegmentPoints(c4.Position, c2);
         Center = (Start + End) / 2f;
-        Border1 = new AICellSegment(start, left);
-        Border2 = new AICellSegment(left, end);
-        Border3 = new AICellSegment(end, right);
-        Border4 = new AICellSegment(right, start);
-        Borders[0] = Border1;
-        Borders[1] = Border2;
-        Borders[2] = Border3;
-        Borders[3] = Border4;
-        _arrayPoints = new CellPoint[]
-        {
-            c1,c2,c3,c4
-        };
-        //        _listPoints.Add(c1);
-        //        _listPoints.Add(c2);
-        //        _listPoints.Add(c3);
-        //        _listPoints.Add(c4);
+
     }
 
-
-    public void AddCellOfBorder(AICellSegment cBorder1, AICell getCell)
+    public HashSet<AIAsteroidPredata> GetAllAsteroids()
     {
-        CellsOnSides.Add(cBorder1,getCell);
-    }
-
-    public Vector3? GetHit(Vector3 from, Vector3 target)
-    {
-//        var dir = target - from;
-        var testedSegment = new SegmentPoints(target, from);
-        var c1 = AIUtility.GetCrossPoint(Border1, testedSegment);
-        if (c1.HasValue)
-        {
-            return c1;
-        }
-        var c2 = AIUtility.GetCrossPoint(Border2, testedSegment);
-        if (c2.HasValue)
-        {
-            return c2;
-        }
-        var c3 = AIUtility.GetCrossPoint(Border3, testedSegment);
-        if (c3.HasValue)
-        {
-            return c3;
-        }
-        var c4 = AIUtility.GetCrossPoint(Border4, testedSegment);
-        if (c4.HasValue)
-        {
-            return c4;
-        }
-        return null;
+        return asteroidsPreData;
     }
 
     public void ClearPosition(Vector3 vector3)
@@ -169,7 +101,7 @@ public class AICell
         HaveAsteroids = asteroidsPreData != null && asteroidsPreData.Count > 0;
         if (HaveAsteroids)
         {
-            asteroidsPreData.RemoveAll(cellASteroid =>
+            asteroidsPreData.RemoveWhere(cellASteroid =>
             {
                 var sDist = (cellASteroid.Position - vector3).sqrMagnitude;
                 return (sDist <= 9);
@@ -179,20 +111,23 @@ public class AICell
     public void AddShip(ShipBase shipBase)
     {
         HaveAsteroids = asteroidsPreData != null && asteroidsPreData.Count > 0;
+        var asteroidsCopy = new List<ShipAsteroidPoint>();
         if (HaveAsteroids)
         {
-            var asteroidsCopy = new List<ShipAsteroidPoint>();
-            for (int i = 0; i < asteroidsPreData.Count; i++)
+            foreach (var asteroidPredata in asteroidsPreData)
             {
-                var cellASteroid = asteroidsPreData[i];
+                var cellASteroid = asteroidPredata;
                 var asteroidShip = new ShipAsteroidPoint(cellASteroid);
                 cellASteroid.OnDeath += () =>
                 {
                     asteroidsCopy.Remove(asteroidShip);
                 };
-//                cellASteroid.AddAsteroidForShip(asteroidShip);
                 asteroidsCopy.Add(asteroidShip);
             }
+            _asteroids.Add(shipBase, asteroidsCopy);
+        }
+        else
+        {
             _asteroids.Add(shipBase, asteroidsCopy);
         }
     }
@@ -219,140 +154,9 @@ public class AICell
         return false;
     }
 
-    public bool HavePointsInside(Vector3 start, Vector3 end,out CellPoint point)
-    {
-        if (_arrayPoints != null)
-        {
-            for (int i = 0; i < _arrayPoints.Length; i++)
-            {
-                var p = _arrayPoints[i];
-                if (MyExtensions.IsPointInside(p.Position, start, end))
-                {
-                    point = p;
-                    return true;
-                }
-            }
-        }
-        point = null;
-        return false;
 
-    }
-    public bool HavePointsInsideNoY(Vector3 start, Vector3 end,out CellPoint point)
-    {
-        if (_arrayPoints != null)
-        {
-            for (int i = 0; i < _arrayPoints.Length; i++)
-            {
-                var p = _arrayPoints[i];
-                if (MyExtensions.IsPointInsideNoY(p.Position, start, end))
-                {
-                    point = p;
-                    return true;
-                }
-            }
-        }
-        point = null;
-        return false;
 
-    }
-
-    public void ImplementBorderDirection(AICell aICell,int index)
-    //0 ↑     //1 ↗    //2 →    //3 ↘
-    //4 ↓    //5 ↙    //6 ←    //7 ↖
-    {
-        var canGo = aICell.IsFree();
-        var ang = index * 360 / SIDES_COUNT;
-        Vector3 dir;
-        switch (index)
-        {
-            case 0:
-                dir = new Vector3(0, 0, 1);
-                break;
-            case 1:
-                dir = new Vector3(ONE_TO_SQRT_TWO, 0, ONE_TO_SQRT_TWO);
-                break;
-            case 2:
-                dir = new Vector3(1, 0, 0);
-                break;
-            case 3:
-                dir = new Vector3(ONE_TO_SQRT_TWO, 0, -ONE_TO_SQRT_TWO);
-                break;
-            case 4:
-                dir = new Vector3(0, 0, -1);
-                break;
-            case 5:
-                dir = new Vector3(-ONE_TO_SQRT_TWO, 0, -ONE_TO_SQRT_TWO);
-                break;
-            case 6:
-                dir = new Vector3(-1, 0, 0);
-                break;
-            case 7:
-                dir = new Vector3(-ONE_TO_SQRT_TWO, 0, ONE_TO_SQRT_TWO);
-                break;
-            default:
-                dir = Vector3.up;
-                break;
-        }
-
-        var cellDir = new CellDirection(dir, ang, index, canGo);
-        PosibleDirections.Add(index, cellDir);
-    }
-
-    //public void UpdatesClosestBorders()
-    //{
-    //    for (int i = 0; i < SIDES_COUNT; i++)
-    //    {
-    //        if (i == 0)
-    //        {
-    //            var prev = PosibleDirections[SIDES_COUNT - 1];
-    //            var next = PosibleDirections[1];
-    //            if (prev && next)
-    //            {
-
-    //            }
-    //        }
-    //        else
-    //        {
-
-    //        }
-    //    }
-    //}
-
-    private CellDirection ClosestPosibleDirection(Vector3 normDir, float eulerAng)
-    {
-        CellDirection closestDir = PosibleDirections[0];
-        if (closestDir.CanMove && eulerAng < ONE_TO_SIDES)
-        {
-            return closestDir;
-        }
-        if (closestDir.CanMove && 360 - eulerAng < ONE_TO_SIDES)
-        {
-            return closestDir;
-        }
-        float diff = Single.MaxValue;
-        for (int i = 1; i < SIDES_COUNT; i++)
-        {
-            var side = PosibleDirections[i];
-            if (side.CanMove)
-            {
-                var curDiff = Mathf.Abs(side.Angle - eulerAng);
-                if (curDiff <= ONE_TO_SIDES)
-                {
-                    return side;
-                }
-
-                if (curDiff < diff)
-                {
-                    closestDir = side;
-                    diff = curDiff;
-                }
-            }
-        }
-//                Debug.LogError("Can't find closest posible direction: " + normDir.ToString() + "  eulerAng:" + eulerAng);
-        return closestDir;
-    }
-
-    private CellDirection ClosestDir(Vector3 normDir,float eulerAng)
+    private CellDirection ClosestDir(Vector3 normDir, float eulerAng)
     {
         if (normDir.x > 0)
         {
@@ -471,7 +275,6 @@ public class AICell
         }
     }
 
-
     public float CheckWantSlow(Vector3 curDir, Vector3 pos, float eulerAng)
     {
         float sppedPercent = 1f;
@@ -524,25 +327,31 @@ public class AICell
 #if UNITY_EDITOR
         if (wantedNormDir.sqrMagnitude > 1.0001f)
         {
-            Debug.LogError("UpdatePosibleDirection dir not normazzed "  + wantedNormDir.sqrMagnitude);
+            Debug.LogError("UpdatePosibleDirection dir not normazzed " + wantedNormDir.sqrMagnitude);
         }
 #endif
 
-//        var closestDir = ClosestDir(wantedNormDir, eulerAng);
-//        if (closestDir.CanMove)
-//        {
-//            return wantedNormDir;
-//        }
-//        var targetDir = ClosestPosibleDirection(wantedNormDir, eulerAng);
-
-        //Maybe add later
 
         return wantedNormDir;
     }
 
-    public void AddAsteroid(AIAsteroidPredata asteroid)
+    public void AddAsteroid(AIAsteroidPredata asteroid, bool fromStart)
     {
         asteroidsPreData.Add(asteroid);
+        HaveAsteroids = true;
+        if (!fromStart)
+        {
+            foreach (var asteroid1 in _asteroids)
+            {
+                var cellASteroid = asteroid;
+                var asteroidShip = new ShipAsteroidPoint(cellASteroid);
+                cellASteroid.OnDeath += () =>
+                {
+                    asteroid1.Value.Remove(asteroidShip);
+                };
+                asteroid1.Value.Add(asteroidShip);
+            }
+        }
     }
     public void SetStubDirections()
     {
@@ -552,7 +361,7 @@ public class AICell
             for (int i = 0; i < SIDES_COUNT; i++)
             {
                 var ang = i * 360 / SIDES_COUNT;
-                PosibleDirections.Add(i,new CellDirection(Vector3.up, ang, i,false));
+                PosibleDirections.Add(i, new CellDirection(Vector3.up, ang, i, false));
             }
         }
     }
@@ -567,13 +376,13 @@ public class AICell
         var h = Side;
         Color c = CellType == CellType.Free ? Color.white : Color.red;
         Gizmos.color = c;
-        Gizmos.DrawWireCube(Center,new Vector3(h,0.1f,h));
-//        foreach (var posibleDirection in PosibleDirections)
-//        {
-//            var d = posibleDirection.Value;
-//            DrawUtils.DebugArrow(Center,d.Dir,d.CanMove?Color.green : Color.red);
-////            UnityEngine.Handheld.
-//        }
+        Gizmos.DrawWireCube(Center, new Vector3(h, 0.1f, h));
+        //        foreach (var posibleDirection in PosibleDirections)
+        //        {
+        //            var d = posibleDirection.Value;
+        //            DrawUtils.DebugArrow(Center,d.Dir,d.CanMove?Color.green : Color.red);
+        ////            UnityEngine.Handheld.
+        //        }
 
     }
 

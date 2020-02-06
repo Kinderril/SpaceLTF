@@ -16,15 +16,15 @@ public class CoreSpellBigInfo : AbstractBaseInfoUI
         base.Init(callback);
 
 
-        NameField.text = isZero ? Namings.PriorityTarget : Namings.BaitPriorityTarget;
-        DescField.text = isZero ? Namings.PriorityTargetDesc : Namings.BaitPriorityTargetDesc;
+        NameField.text = isZero ? Namings.Tag("PriorityTarget") : Namings.Tag("BaitPriorityTarget");
+        DescField.text = isZero ? Namings.Tag("PriorityTargetDesc") : Namings.Tag("BaitPriorityTargetDesc");
 
 
         var costDelay = isZero ? Library.PriorityTargetCostTime : Library.BaitPriorityTargetCostTime;
         var costCount = isZero ? Library.PriorityTargetCostCount : Library.BaitPriorityTargetCostCount;
 
-        CostCountField.text = String.Format(Namings.Tag("ChargesCount"), costCount);
-        CostDelayField.text = String.Format(Namings.Tag("ChargesDelay"), costDelay);
+        CostCountField.text = Namings.TryFormat(Namings.Tag("ChargesCount"), costCount);
+        CostDelayField.text = Namings.TryFormat(Namings.Tag("ChargesDelay"), costDelay);
     }
 
 

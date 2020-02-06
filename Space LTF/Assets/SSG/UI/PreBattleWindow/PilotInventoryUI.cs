@@ -3,17 +3,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PilotInventoryUI : MonoBehaviour  
+public class PilotInventoryUI : MonoBehaviour
 {
     private IPilotParameters _pilot;
     private ShipInventory _ship;
-//    public SliderWithTextMeshPro DelaySlider;
+    //    public SliderWithTextMeshPro DelaySlider;
     public ParameterWithLevelUp HealthField;
     public MoneySlotUI MoneyField;
     public Slider LevelUpSlider;
     public ParameterWithLevelUp ShieldField;
     public ParameterWithLevelUp SpeedField;
-//    public TextMeshProUGUI TacticField;
+    //    public TextMeshProUGUI TacticField;
     public TextMeshProUGUI RankField;
     public TextMeshProUGUI KillsField;
     public Image TacticPriorityIcon;
@@ -76,21 +76,21 @@ public class PilotInventoryUI : MonoBehaviour
                 tricksInfo = $" ,{name}";
             }
         }
-//        var rankName = Namings.Tag(_pilot.Stats.CurRank.ToString());
-        var reloadTime = String.Format(Namings.Tag("reloadBoost"),Library.CalcTrickReload(_pilot.Stats.CurRank,_ship.ShipType));
+        //        var rankName = Namings.Tag(_pilot.Stats.CurRank.ToString());
+        var reloadTime = Namings.TryFormat(Namings.Tag("reloadBoost"), Library.CalcTrickReload(_pilot.Stats.CurRank, _ship.ShipType));
         var tooltipInfo = $"{tricksInfo}\n{reloadTime}";
         RankIcon.Init(DataBaseController.Instance.DataStructPrefabs.GetRankSprite(_pilot.Stats.CurRank), tooltipInfo);
-        RankField.text =_pilot.Stats.CurRank.ToString();
+        RankField.text = _pilot.Stats.CurRank.ToString();
         var kills = _pilot.Stats.Kills;
-        var nextKills = (((int) (kills / Library.RANK_ERIOD)) + 1) * Library.RANK_ERIOD;
-        string info; 
+        var nextKills = (((int)(kills / Library.RANK_ERIOD)) + 1) * Library.RANK_ERIOD;
+        string info;
         if (_pilot.Stats.CurRank == PilotRank.Major)
         {
-            info = String.Format(Namings.KillUIPilotMini, kills);
+            info = Namings.TryFormat(Namings.Tag("KillUIPilotMini"), kills);
         }
         else
         {
-            info = String.Format(Namings.KillUIPilot, kills, nextKills);
+            info = Namings.TryFormat(Namings.Tag("KillUIPilot"), kills, nextKills);
         }
         KillsField.text = info;
     }
@@ -114,7 +114,7 @@ public class PilotInventoryUI : MonoBehaviour
         PriorityTooltipInfo.SetData(_pilot.Tactic.Priority);
         SideAttackTooltipInfo.SetData(_pilot.Tactic.SideAttack);
     }
-               
+
     private void OnShipRepaired(ShipInventory obj)
     {
         SetParamsAndMoney();
@@ -130,7 +130,7 @@ public class PilotInventoryUI : MonoBehaviour
         var maxHealth = ShipParameters.ParamUpdate(_ship.MaxHealth, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
 
         PilotParamsInUI pilotParams = new PilotParamsInUI()
-            {MaxSpeed = maxSpeed, MaxHealth = maxHealth, MaxShield = maxShiled, TurnSpeed = turnSpeed};
+        { MaxSpeed = maxSpeed, MaxHealth = maxHealth, MaxShield = maxShiled, TurnSpeed = turnSpeed };
 
         foreach (var modul in _ship.Moduls.SimpleModuls)
         {
@@ -148,40 +148,40 @@ public class PilotInventoryUI : MonoBehaviour
         var speedInfo = LevelInfo(Namings.Tag("Speed"), _pilot.SpeedLevel, Info(pilotParams.MaxSpeed, _pilot.SpeedLevel));
         var turnInfo = LevelInfo(Namings.Tag("TurnSpeed"), _pilot.TurnSpeedLevel, Info(pilotParams.TurnSpeed, _pilot.TurnSpeedLevel));
         var curHp = pilotParams.MaxHealth * _ship.HealthPercent;
-        var hpTxt = String.Format("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel));
+        var hpTxt = Namings.TryFormat("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel));
         var txt = LevelInfo(Namings.Tag("Health"), _pilot.HealthLevel, hpTxt);
 
-        ShieldField.SetData(shiledInfo, _pilot.ShieldLevel,_pilot,LibraryPilotUpgradeType.shield);
-        SpeedField.SetData(speedInfo,_pilot.SpeedLevel,_pilot,LibraryPilotUpgradeType.speed);
-        TurnField.SetData(turnInfo,_pilot.TurnSpeedLevel,_pilot,LibraryPilotUpgradeType.turnSpeed);
+        ShieldField.SetData(shiledInfo, _pilot.ShieldLevel, _pilot, LibraryPilotUpgradeType.shield);
+        SpeedField.SetData(speedInfo, _pilot.SpeedLevel, _pilot, LibraryPilotUpgradeType.speed);
+        TurnField.SetData(turnInfo, _pilot.TurnSpeedLevel, _pilot, LibraryPilotUpgradeType.turnSpeed);
         HealthField.SetData(txt, _pilot.HealthLevel, _pilot, LibraryPilotUpgradeType.health);
     }
 
-    private static string LevelInfo(string name,int level,string info)
+    private static string LevelInfo(string name, int level, string info)
     {
-        return String.Format("{0}:{2}", name, level, info);
+        return Namings.TryFormat("{0}:{2}", name, level, info);
     }
 
-    public static string Info(float p,int level)
+    public static string Info(float p, int level)
     {
-        var drob = p - (int) p;
+        var drob = p - (int)p;
         string format = "0";
         if (drob > 0f)
         {
             format = "0.0";
         }
 
-        return p.ToString(format);;
+        return p.ToString(format); ;
     }
-    
+
     public void Dispose()
     {
-//#if UNITY_EDITOR
-//    if (_pilot == null)
-//    {
-//        Debug.LogError("id of pilot Ui is NULL pilot " + id);
-//    }
-//#endif
+        //#if UNITY_EDITOR
+        //    if (_pilot == null)
+        //    {
+        //        Debug.LogError("id of pilot Ui is NULL pilot " + id);
+        //    }
+        //#endif
         if (_pilot != null)
         {
             _pilot.Tactic.OnPriorityChange -= OnTacticPriorityChange;

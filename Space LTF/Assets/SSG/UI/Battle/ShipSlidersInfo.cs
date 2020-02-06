@@ -57,7 +57,7 @@ public class ShipSlidersInfo : MonoBehaviour
     {
         if (withText)
         {
-            ShieldText.text = String.Format("{0}/{1}", v.ToString("0"), max.ToString("0"));
+            ShieldText.text = Namings.TryFormat("{0}/{1}", v.ToString("0"), max.ToString("0"));
         }
         ShieldSlider.value = Mathf.Clamp01((int)v / max);
         if (_shipBase.ShipParameters.ShieldParameters.ShiledIsActive != _lastState)
@@ -71,7 +71,7 @@ public class ShipSlidersInfo : MonoBehaviour
     {
         if (withText)
         {
-            HealthText.text = String.Format("{0}/{1}", v.ToString("0"), max.ToString("0"));
+            HealthText.text = Namings.TryFormat("{0}/{1}", v.ToString("0"), max.ToString("0"));
         }
         HealthSlider.value = Mathf.Clamp01((int) v/max);
     }

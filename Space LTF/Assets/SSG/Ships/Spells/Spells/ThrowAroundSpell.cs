@@ -5,14 +5,18 @@ using UnityEngine;
 [System.Serializable]
 public class ThrowAroundSpell : BaseSpellModulInv
 {
-    private const float DIST_SHOT = 18;
-    private const float DAMAGE_BASE = 12;
+    //A1 = lock engine
+    //B2 = drop weapons load
+
+    private const float DIST_SHOT = 24;
+    private const float DAMAGE_BASE = 5;
     private const float rad = 4f;
-    private float shieldDmg => DAMAGE_BASE + Level * 4;
-    private float powerThrow => 7 + Level * 2;
+    private const float timerToLockEngine = 3f;
+    private float shieldDmg => DAMAGE_BASE + Level * 3;
+    private float powerThrow => 7 + Level * 1.5f;
 
     public ThrowAroundSpell()
-        : base(SpellType.throwAround, 2, 15,
+        : base(SpellType.throwAround, 2, 10,
              new BulleStartParameters(19.7f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
 
@@ -32,19 +36,23 @@ public class ThrowAroundSpell : BaseSpellModulInv
     protected override AffectTargetDelegate affectAction => MainAffect;
     public override bool ShowLine => true;
     public override float ShowCircle => rad;
-    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet,
+        DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         ActionShip(target, bullet.Position, damagedone);
+    }
+    public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
+    {
+        return targetdistpos;
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        //        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
-        var startPos = shootpos;
-        var dir = target.Position - startPos;
-        bullestartparameters.distanceShoot = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
-        var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
-        //        var b = Bullet.Create(origin, weapon, target.Position - weapon.CurPosition, weapon.CurPosition, null, bullestartparameters);
+        var dir = target.Position - weapon.CurPosition;
+        var d = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
+        bullestartparameters.distanceShoot = d;
+        bullestartparameters.radiusShoot = d;
+        var b = Bullet.Create(origin, weapon, dir, weapon.CurPosition, null, bullestartparameters);
     }
 
     public override Bullet GetBulletPrefab()
@@ -52,6 +60,24 @@ public class ThrowAroundSpell : BaseSpellModulInv
         var bullet = DataBaseController.Instance.GetBullet(WeaponType.throwAroundSpell);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
+    }
+
+    public override BulletDestroyDelegate BulletDestroyDelegate => BulletDestroy;
+
+    private void BulletDestroy(Bullet origin, IWeapon weapon, AICell cell)
+    {
+        var asteroids = cell.GetAllAsteroids();
+        foreach (var aiAsteroidPredata in asteroids)
+        {
+            var dir = aiAsteroidPredata.Position - origin.Position;
+            var dist = dir.magnitude;
+            if (dist < rad)
+            {
+                var power = (1f - dist / rad) * powerThrow;
+                power = MyExtensions.GreateRandom(power);
+                aiAsteroidPredata.Push(dir, power);
+            }
+        }
     }
 
     protected override void CastAction(Vector3 pos)
@@ -64,12 +90,37 @@ public class ThrowAroundSpell : BaseSpellModulInv
         shipBase.ShipParameters.Damage(shieldDmg, 0, damageDoneCallback, shipBase);
         var dir = Utils.NormalizeFastSelf(shipBase.Position - fromPos);
         shipBase.ExternalForce.Init(powerThrow, 1f, dir);
+        switch (UpgradeType)
+        {
+            case ESpellUpgradeType.A1:
+                shipBase.DamageData.ApplyEffect(ShipDamageType.engine, timerToLockEngine);
+                break;
+            case ESpellUpgradeType.B2:
+                shipBase.WeaponsController.UnloadAll();
+                break;
+        }
 
     }
     public override string Desc()
     {
-        return String.Format(Namings.TrowAroundSpell, powerThrow, shieldDmg);
+        return Namings.TryFormat(Namings.Tag("TrowAroundSpell"), powerThrow, shieldDmg);
         //            $"Create a shockwave witch throw around all ships in radius with power {powerThrow}. And body damage {bodyDamage}.";
+    }
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("TrowAroundNameA1");
+        }
+        return Namings.Tag("TrowAroundNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("TrowAroundDescA1");
+        }
+        return Namings.Tag("TrowAroundDescB2");
     }
 }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 
 public static class MoneyConsts
@@ -30,26 +26,26 @@ public static class MoneyConsts
 
     public static Dictionary<int, int> WeaponUpgrade = new Dictionary<int, int>()
     {
-        {1, 20},
-        {2, 29},
-        {3, 38},
-        {4, 50},
-        {5, 60},
-        {6, 70},
-        {7, 85},
+        {1, 18},
+        {2, 28},
+        {3, 37},
+        {4, 46},
+        {5, 55},
+        {6, 64},
+        {7, 73},
     };
 
     public static Dictionary<int, int> SpellUpgrade = new Dictionary<int, int>()
     {
         {1, 18},
         {2, 28},
-        {3, 39},
-        {4, 45},
-        {5, 50},
-        {6, 60},
-        {7,70},
+        {3, 46},
+        {4, 52},
+        {5, 58},
+        {6, 66},
+        {7, 70},
     };
-                                       
+
 
     public const int BASE_WEAPON_MONEY_COST = 10;
     public const int LEVEL_WEAPON_MONEY_COST = 13;

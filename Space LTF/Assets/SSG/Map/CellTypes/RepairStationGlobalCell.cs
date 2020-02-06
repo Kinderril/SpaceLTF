@@ -58,7 +58,7 @@ public class RepairStationGlobalCell : GlobalMapCell
                 if (RemainEnergyRepairs > 0)
                 {
                     answers.Add(new AnswerDialogData(
-                        String.Format("Statilize energy module. Remain charges:{0}", RemainEnergyRepairs), null,
+                        Namings.TryFormat("Statilize energy module. Remain charges:{0}", RemainEnergyRepairs), null,
                         Statilize));
                 }
             }
@@ -78,7 +78,7 @@ public class RepairStationGlobalCell : GlobalMapCell
                 var canRepairFull = player.MoneyData.HaveMoney(total);
                 if (canRepairFull)
                 {
-                    answers.Add(new AnswerDialogData(String.Format(Namings.DialogTag("repairAll"), total), null, () =>
+                    answers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("repairAll"), total), null, () =>
                     {
                         var d = RepairAll(total);
                         return d;
@@ -107,7 +107,7 @@ public class RepairStationGlobalCell : GlobalMapCell
     {
         RepairFor(total);
         var answers = new List<AnswerDialogData>();
-        answers.Add(new AnswerDialogData(Namings.Ok, null));
+        answers.Add(new AnswerDialogData(Namings.Tag("Ok"), null));
         var mesData = new MessageDialogData(Namings.DialogTag("repairAll"), answers);
         return mesData;
     }
@@ -120,7 +120,7 @@ public class RepairStationGlobalCell : GlobalMapCell
             startShipPilotData.Ship.RestoreAllCriticalDamages();
         }
         var answers = new List<AnswerDialogData>();
-        answers.Add(new AnswerDialogData(Namings.Ok, null, () => GetDialog()));
+        answers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, () => GetDialog()));
         var mesData = new MessageDialogData(Namings.DialogTag("repairCritFixed"), answers);
         return mesData;
     }
@@ -128,12 +128,12 @@ public class RepairStationGlobalCell : GlobalMapCell
     private MessageDialogData Statilize()
     {
         var answers = new List<AnswerDialogData>();
-        answers.Add(new AnswerDialogData(Namings.Ok));
+        answers.Add(new AnswerDialogData(Namings.Tag("Ok")));
         var player = MainController.Instance.MainPlayer;
         RemainEnergyRepairs--;
         player.ByStepDamage.Repair();
         var mesData =
-            new MessageDialogData(String.Format("Module stabilized for {0} days", player.ByStepDamage._curRemainSteps),
+            new MessageDialogData(Namings.TryFormat("Module stabilized for {0} days", player.ByStepDamage._curRemainSteps),
                 answers);
         return mesData;
     }

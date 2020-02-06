@@ -58,7 +58,7 @@ public class WindowStart : BaseWindow
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null, Namings.NoSafeGame);
+            WindowManager.Instance.InfoWindow.Init(null, Namings.Tag("NoSafeGame"));
         }
     }
 

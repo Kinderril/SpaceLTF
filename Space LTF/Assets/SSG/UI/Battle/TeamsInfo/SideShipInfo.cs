@@ -126,8 +126,8 @@ public class SideShipInfo : MonoBehaviour
 
     private void OnStatChanged(ShipBattleData obj)
     {
-        DamageDoneField.text = String.Format(Namings.Tag("DamageInfoUI"), obj.ShieldhDamage.ToString("0"), obj.HealthDamage.ToString("0"));
-        KillsField.text = String.Format(Namings.Tag("KillsInfoUI"), obj.Kills.ToString("0"));
+        DamageDoneField.text = Namings.TryFormat(Namings.Tag("DamageInfoUI"), obj.ShieldhDamage.ToString("0"), obj.HealthDamage.ToString("0"));
+        KillsField.text = Namings.TryFormat(Namings.Tag("KillsInfoUI"), obj.Kills.ToString("0"));
     }
 
     public void OnToggleClick()
@@ -137,7 +137,7 @@ public class SideShipInfo : MonoBehaviour
         //            Debug.Log($"OnToggleClick {ToggleOpen.isOn}  {_ship.Id}");
         var showFull = ToggleOpen.isOn;
         UpdateToggle(showFull);
-        PlayerPrefs.SetInt(String.Format(PREFS_KEY, _ship.Id), (showFull ? 1 : 0));
+        PlayerPrefs.SetInt(Namings.TryFormat(PREFS_KEY, _ship.Id), (showFull ? 1 : 0));
         _toggleCallback(this);
         //        }
 

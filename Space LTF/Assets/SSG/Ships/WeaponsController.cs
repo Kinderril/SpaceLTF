@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 public class WeaponsController
@@ -15,18 +14,18 @@ public class WeaponsController
     private bool _enable = true;
     public event Action<WeaponInGame> OnWeaponShootStart;
     // private BaseEffectAbsorber _weaponCrashEffect;
-//    private WeaponWaveStrike _waveStrike;
+    //    private WeaponWaveStrike _waveStrike;
     private WeaponsAimSectorController AimSectorController;
-//    private AudioClip _maxinSootClip;
+    //    private AudioClip _maxinSootClip;
     private WeaponRoundWaveStrike _waveStrike;
 
-    public WeaponsController(List<WeaponPlace> weaponPosition, 
-        ShipBase owner,WeaponInv[] weapons, BaseModulInv[] moduls)
+    public WeaponsController(List<WeaponPlace> weaponPosition,
+        ShipBase owner, WeaponInv[] weapons, BaseModulInv[] moduls)
     {
 
         _waveStrike = new WeaponRoundWaveStrike(owner);
         AimSectorController = new WeaponsAimSectorController();
-        Dictionary<string,WeaponAimedType> weaponsAims = new Dictionary<string, WeaponAimedType>();
+        Dictionary<string, WeaponAimedType> weaponsAims = new Dictionary<string, WeaponAimedType>();
         // _weaponCrashEffect = weaponCrashEffect;
         _owner = owner;
         this.weaponPosition = weaponPosition;
@@ -53,7 +52,7 @@ public class WeaponsController
                 }
                 else
                 {
-                    weaponsAims.Add(weapon.Name,value: new WeaponAimedType(weapon));
+                    weaponsAims.Add(weapon.Name, value: new WeaponAimedType(weapon));
                 }
                 weapon.OnShootStart += weapon2 =>
                 {
@@ -81,7 +80,7 @@ public class WeaponsController
         }
 
         _weaponsToAim = weaponsAims.Values.ToArray();
-        AimSectorController.Init(_weaponsToAim,owner);
+        AimSectorController.Init(_weaponsToAim, owner);
 
     }
 
@@ -158,15 +157,15 @@ public class WeaponsController
             }
         }
         return false;
-    }    
-    public bool AnyWeaponIsLoaded(float delta,out bool fullLoad)
+    }
+    public bool AnyWeaponIsLoaded(float delta, out bool fullLoad)
     {
         bool loadByDelta = false;
         bool loadFull = false;
 
         foreach (var weapon in _weapons)
-        {                    
-            if (weapon.IsLoaded(delta,out var fullLoadWeapon))
+        {
+            if (weapon.IsLoaded(delta, out var fullLoadWeapon))
             {
                 if (fullLoadWeapon)
                 {
@@ -222,7 +221,7 @@ public class WeaponsController
             {
                 bestLoad = bl;
             }
-            
+
         }
         return false;
     }
@@ -244,6 +243,13 @@ public class WeaponsController
         foreach (var weapon in _weapons)
         {
             weapon.ReloadNow();
+        }
+    }
+    public void UnloadAll()
+    {
+        foreach (var weapon in _weapons)
+        {
+            weapon.Unload();
         }
     }
     public void DrawActiveWeapons()

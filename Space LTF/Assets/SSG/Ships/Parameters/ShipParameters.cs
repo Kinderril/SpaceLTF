@@ -142,7 +142,7 @@ public class ShipParameters : IShipAffectableParams
     {
         bodyDamage = ModifDamage(bodyDamage, BodyModifications);
 
-        Debug.Log(String.Format("Damage done:{0}/{1}  to:{2}. Time:{3}", 0, bodyDamage, _shipOwner.Id, Time.time).Red()); var c = CurHealth;
+        Debug.Log(Namings.TryFormat("Damage done:{0}/{1}  to:{2}. Time:{3}", 0, bodyDamage, _shipOwner.Id, Time.time).Red()); var c = CurHealth;
 
         float healthDelta = 0f;
         CurHealth -= bodyDamage;
@@ -163,7 +163,7 @@ public class ShipParameters : IShipAffectableParams
         bodyDamage = ModifDamage(bodyDamage, BodyModifications);
         shildDamage = ModifDamage(shildDamage, ShieldModifications);
 
-        Debug.Log(String.Format("Damage done:{0}/{1}  to:{2}. Time:{3}", shildDamage, bodyDamage, _shipOwner.Id, Time.time).Red());
+        Debug.Log(Namings.TryFormat("Damage done:{0}/{1}  to:{2}. Time:{3}", shildDamage, bodyDamage, _shipOwner.Id, Time.time).Red());
         float healthDelta = 0f;
         float shieldDelta = 0f;
         if (!ShieldParameters.ShiledIsActive)

@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
 public class StatisticsController : MonoBehaviour
 {
@@ -16,9 +15,9 @@ public class StatisticsController : MonoBehaviour
         var stats = MainController.Instance.Statistics.EndGameStatistics;
         if (!_isInited)
         {
-            NoResults.text = Namings.StatisticNoResult;
-            NoLastResult.text = Namings.StatisticNoLastResult;
-            LastResultResults.text = Namings.StatisticLastResult;
+            NoResults.text = Namings.Tag("StatisticNoResult");
+            NoLastResult.text = Namings.Tag("StatisticNoLastResult");
+            LastResultResults.text = Namings.Tag("StatisticLastResult");
             _isInited = true;
             stats.OnAddResult += OnAddResult;
             DrawCurrent(stats);
@@ -47,7 +46,7 @@ public class StatisticsController : MonoBehaviour
     private void CreateResult(EndGameResult result)
     {
         var element = DataBaseController.GetItem(PrefabResultElement);
-        element.transform.SetParent(Layout,false);
+        element.transform.SetParent(Layout, false);
         element.Init(result);
     }
 
@@ -70,6 +69,6 @@ public class StatisticsController : MonoBehaviour
 
     public void Dispose()
     {
-//        MainController.Instance.Statistics.EndGameStatistics.OnAddResult -= OnAddResult;
+        //        MainController.Instance.Statistics.EndGameStatistics.OnAddResult -= OnAddResult;
     }
 }

@@ -73,6 +73,7 @@ public class Asteroid : MonoBehaviour
             return;
         }
         RotateUpdate();
+        _aiAsteroidPredata.UpdateFromUnity();
     }
 
     protected void RotateUpdate()
@@ -86,6 +87,7 @@ public class Asteroid : MonoBehaviour
         if (withSound)
             PlaySound();
         subDeath();
+        _aiAsteroidPredata.OnMove -= OnMove;
         _aiAsteroidPredata.Death();
     }
 
@@ -116,8 +118,14 @@ public class Asteroid : MonoBehaviour
     public void Init(AIAsteroidPredata aiAsteroidPredata)
     {
         _aiAsteroidPredata = aiAsteroidPredata;
+        _aiAsteroidPredata.OnMove += OnMove;
         Rad = aiAsteroidPredata.Rad / AIAsteroidPredata.SHIP_SIZE_COEF;
 
+    }
+
+    private void OnMove(AIAsteroidPredata data, Vector3 obj)
+    {
+        transform.position = obj;
     }
 }
 

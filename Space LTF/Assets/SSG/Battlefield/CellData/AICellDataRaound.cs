@@ -1,40 +1,18 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 
-public class AIAsteroidPredata
-{
-    public Vector3 Position;
-    public float Rad;
-    public event Action OnDeath;
-    public const float SHIP_SIZE_COEF = 3f;
 
-    public AIAsteroidPredata(Vector3 ateroidPos)
-    {
-        this.Position = ateroidPos;
-        Rad = MyExtensions.Random(0.8f, 1.2f) * SHIP_SIZE_COEF;
-    }
-
-    public void Death()
-    {
-        if (OnDeath != null)
-        {
-            OnDeath();
-        }
-
-    }
-}
 
 [Serializable]
 public class AICellDataRaound
 {
-    public const float SafeRadius = 9; 
-    private const float AsteroidRadius = 4; 
-    private const float AsteroidINFieldMin = 3; 
-    private const float AsteroidINFieldMax = 7; 
+    public const float SafeRadius = 9;
+    private const float AsteroidRadius = 1;
+    private const float AsteroidINFieldMin = 3;
+    private const float AsteroidINFieldMax = 7;
     public float CellSize;
     public float StartX;
     public float StartZ;
@@ -48,8 +26,9 @@ public class AICellDataRaound
     public float Radius;
 
     public float InsideRadius => Radius - AICellDataRaound.SafeRadius;
-    public Vector3 Min => new Vector3(StartX,0, StartZ);
-    public Vector3 Max => new Vector3(StartX + CellSize* MaxIx, 0, StartZ + CellSize * MaxIz);
+    public Vector3 Min { get; private set; }
+    
+    public Vector3 Max { get; private set; }
     public Vector3 CenterZone { get; private set; }
     public Vector3 StartPosition1 { get; private set; }
     public Vector3 StartPosition2 { get; private set; }
@@ -57,20 +36,22 @@ public class AICellDataRaound
     public List<AIAsteroidPredata> Asteroids = new List<AIAsteroidPredata>();
     public List<Vector3> FreePoints = new List<Vector3>();
 
-    public void Init(Vector3 startPos,int size,float cellSize)
+    public void Init(Vector3 startPos, int size, float cellSize)
     {
         Radius = size * cellSize / 2f - cellSize;
-//        Debug.Log(String.Format("Cells inited. SizeX:{0}  SizeZ:{1}",sizeX,sizeZ).Red());
+        //        Debug.Log(Namings.TryFormat("Cells inited. SizeX:{0}  SizeZ:{1}",sizeX,sizeZ).Red());
         Debug.Log($"Cells inited. SizeX:{size}  ".Red());
         CellSize = cellSize;
         StartX = startPos.x;
         StartZ = startPos.z;
-//        var xxDelta = Mathf.Abs(end.x - start.x);
-//        var zzDelta = Mathf.Abs(end.z - start.z);
+        //        var xxDelta = Mathf.Abs(end.x - start.x);
+        //        var zzDelta = Mathf.Abs(end.z - start.z);
         MaxIx = size;//(int)(xxDelta/CellSize) + 1;
         MaxIz = size;//(int)(zzDelta/CellSize) + 1;
         int cellX = MaxIx + 1;
         int cellZ = MaxIz + 1;
+        Min = new Vector3(StartX, 0, StartZ);
+        Max = new Vector3(StartX + CellSize * MaxIx, 0, StartZ + CellSize * MaxIz);
         CenterZone = (Max + Min) / 2f;
 
         CellPoint[,] cellsPoints = new CellPoint[cellX, cellZ];
@@ -111,9 +92,9 @@ public class AICellDataRaound
                 CellType ct = CellType.Free;
 
                 var startCorner = cellsPoints[i, j];
-                var leftCorner = cellsPoints[i, j+1];
-                var rightCorner = cellsPoints[i+1, j];
-                var endCorner = cellsPoints[i+1, j+1];
+                var leftCorner = cellsPoints[i, j + 1];
+                var rightCorner = cellsPoints[i + 1, j];
+                var endCorner = cellsPoints[i + 1, j + 1];
                 var cell = new AICell(ct, startCorner, leftCorner, rightCorner, endCorner, cellSize);
                 SetCell(i, j, cell);
             }
@@ -121,9 +102,9 @@ public class AICellDataRaound
 
         CalcStartPositinons();
 
-        int asteroidsFieldCount = (int)((size + 6f) / 2f);
+        int asteroidsFieldCount = (int)((size + 6f));
         Asteroids.Clear();
-        CreateAsteroidsOnCircle(4);
+        // CreateAsteroidsOnCircle(4);
         CreateRandomAsteroids(asteroidsFieldCount);
         FindFreeCorePoints();
 
@@ -133,7 +114,7 @@ public class AICellDataRaound
     {
         var rad1 = InsideRadius * 0.3f;
         var rad2 = InsideRadius * 0.5f;
-//        var rad3 = InsideRadius * 0.7f;
+        //        var rad3 = InsideRadius * 0.7f;
         var countSides = 16;
         var ang = 360f / countSides;
         var dir1 = new Vector3(1, 0, 0);
@@ -197,13 +178,13 @@ public class AICellDataRaound
 
     private void CreateRandomAsteroids(int fieldsCount)
     {
-//        AddAsteroidToPosition(CenterZone);
+        //        AddAsteroidToPosition(CenterZone);
         var offsetCEnterField = InsideRadius - AsteroidRadius;
         for (int i = 0; i < fieldsCount; i++)
         {
             var findPointX = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
             var findPointZ = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
-//            var point = new Vector3(findPointX, 0, findPointZ);
+            //            var point = new Vector3(findPointX, 0, findPointZ);
             var countAsteroids = MyExtensions.Random(AsteroidINFieldMin, AsteroidINFieldMax);
             for (int j = 0; j < countAsteroids; j++)
             {
@@ -215,14 +196,25 @@ public class AICellDataRaound
         }
     }
 
+    public AICell GetCellByPos(Vector3 pos)
+    {
+        var cellIx = (int)((pos.x - StartX) / CellSize);
+        var cellIz = (int)((pos.z - StartZ) / CellSize);
+        var iInd = Mathf.Clamp(cellIx, 0, MaxIx);
+        var jInd = Mathf.Clamp(cellIz, 0, MaxIz);
+        var cell = GetCell(iInd, jInd);
+        return cell;
+    }
+
     private void AddAsteroidToPosition(Vector3 ateroidPos)
     {
-        var distTostart1 = (ateroidPos - StartPosition1).magnitude; 
+        var distTostart1 = (ateroidPos - StartPosition1).magnitude;
         var distTostart2 = (ateroidPos - StartPosition2).magnitude;
         if (distTostart2 > 10 && distTostart1 > 10)
         {
             var asteroid = new AIAsteroidPredata(ateroidPos);
             Asteroids.Add(asteroid);
+            asteroid.OnMove += OnAsteroidMove;
             //        StartX + CellSize * i
             var cellIx = (int)((ateroidPos.x - StartX) / CellSize);
             var cellIz = (int)((ateroidPos.z - StartZ) / CellSize);
@@ -231,14 +223,20 @@ public class AICellDataRaound
                 for (int j = Mathf.Clamp(cellIz - 1, 0, MaxIz); j < Mathf.Clamp(cellIz + 2, 0, MaxIz); j++)
                 {
                     var cell = GetCell(i, j);
-                    cell.AddAsteroid(asteroid);
-                    //                Debug.LogError($"Add asteroid to cells {cell.Xindex},{cell.Zindex}");
+                    cell.AddAsteroid(asteroid, true);
                 }
             }
         }
+    }
 
-        
-
+    private void OnAsteroidMove(AIAsteroidPredata data, Vector3 nextPos)
+    {
+        var cellIx = (int)((nextPos.x - StartX) / CellSize);
+        var cellIz = (int)((nextPos.z - StartZ) / CellSize);
+        var ix = Mathf.Clamp(cellIx , 0, MaxIx);
+        var iz = Mathf.Clamp(cellIz , 0, MaxIz);
+        var coreCell = GetCell(ix, iz);
+        coreCell.AddAsteroid(data, false);
     }
 
     private void CreateAsteroidsOnCircle(int iterations)
@@ -253,7 +251,7 @@ public class AICellDataRaound
             for (int i = 0; i < countSTeps; i++)
             {
                 dir = Utils.RotateOnAngUp(dir, MyExtensions.GreateRandom(step));
-                var point = CenterZone + dir * MyExtensions.Random(minRad, Radius*1.1f);
+                var point = CenterZone + dir * MyExtensions.Random(minRad, Radius * 1.1f);
                 var asteroid = new AIAsteroidPredata(point);
                 Asteroids.Add(asteroid);
             }
@@ -276,7 +274,7 @@ public class AICellDataRaound
 
     public void SetCell(int i, int j, AICell cell)
     {
-        List[i,j] = cell;
+        List[i, j] = cell;
     }
 
     public AICell GetCell(int i, int j)
@@ -291,7 +289,7 @@ public class AICellDataRaound
             Debug.LogError("wrong gettin element " + i + "  " + j + "   " + CellSize);
         }
 #endif
-        return List[i,j];
+        return List[i, j];
     }
 
     public void ValidateOnStart()
@@ -351,7 +349,7 @@ public class AICellDataRaound
     public AICell FindClosestCellByType(AICell cell, CellType celType)
     {
         int d;
-        return FindClosestCellByType(cell, celType,false, out d);
+        return FindClosestCellByType(cell, celType, false, out d);
     }
 
     [CanBeNull]
@@ -362,7 +360,7 @@ public class AICellDataRaound
         {
             for (int j = 0; j < MaxIz; j++)
             {
-                var tested = List[i,j];
+                var tested = List[i, j];
                 if (tested.CellType == celType)
                 {
                     var tdist = Mathf.Abs(tested.Xindex - cell.Xindex) + Mathf.Abs(tested.Zindex - cell.Zindex);
@@ -398,7 +396,7 @@ public class AICellDataRaound
         return cellsTo;
     }
 
-    public AICell FindClosestCellByType(AICell cell, CellType celType, bool checkMarked,out int dist)
+    public AICell FindClosestCellByType(AICell cell, CellType celType, bool checkMarked, out int dist)
     {
         AICell closest = null;
         int iDist = Int32.MaxValue;

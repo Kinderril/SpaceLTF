@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class ConfirmWindow : MonoBehaviour
 {
     private Action onConfirm;
-    private Action onReject ;
+    private Action onReject;
     public TextMeshProUGUI labelField;
-    public virtual void Init(Action onConfirm, Action onReject,string ss)
+    public virtual void Init(Action onConfirm, Action onReject, string ss)
     {
         WindowManager.Instance.WindowMainCanvas.interactable = false;
         WindowManager.Instance.WindowSubCanvas.interactable = true;
@@ -41,14 +37,16 @@ public class ConfirmWindow : MonoBehaviour
     }
     void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+        if (gameObject.activeSelf)
         {
-            OnConfirmClick();
-        }
-        else
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            OnRejectClick();
+            if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+            {
+                OnConfirmClick();
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                OnRejectClick();
+            }
         }
     }
 }

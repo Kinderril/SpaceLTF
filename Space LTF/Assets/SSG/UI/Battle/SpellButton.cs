@@ -27,7 +27,7 @@ public class SpellButton : UIElementWithTooltip
         this.OnSpellClick = OnSpellClick;
         Selected.gameObject.SetActive(false);
         var a = DataBaseController.Instance.DataStructPrefabs.GetSpellIcon(spell.SpellType);
-        CostField.text = String.Format("{0}", _spell.CostCount.ToString("0"));
+        CostField.text = Namings.TryFormat("{0}", _spell.CostCount.ToString("0"));
         TimeField.text = $"{(_spell.CostPeriod * speedCoef).ToString("0")}";
         NameField.text = _spell.Name;
         Icon.sprite = a; switch (index)
@@ -76,7 +76,7 @@ public class SpellButton : UIElementWithTooltip
 
     protected override string TextToTooltip()
     {
-        var spellName = String.Format(_spell.Name);
+        var spellName = Namings.TryFormat(_spell.Name);
         return $"{spellName}\n{_spell.Desc}";
     }
 }

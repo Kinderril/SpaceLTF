@@ -5,6 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class RepairDronesSpell : BaseSpellModulInv
 {
+    //A1 - shield
+    //B2 - speedBuff x sec
+
     public const float HEAL_PERCENT = 0.28f;
     public const float MINES_DIST = 7f;
     private const float rad = 1f;
@@ -33,10 +36,10 @@ public class RepairDronesSpell : BaseSpellModulInv
         if (_lastClosest != null)
         {
             MainCreateBullet(new BulletTarget(_lastClosest), origin, weapon, shootPos, bullestartparameters);
-//            MainAffect(_lastClosest.ShipParameters, _lastClosest, null, null, null);
+            //            MainAffect(_lastClosest.ShipParameters, _lastClosest, null, null, null);
         }
-//        var dir = (target.Position - weapon.CurPosition);
-//        MainCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, bullestartparameters);
+        //        var dir = (target.Position - weapon.CurPosition);
+        //        MainCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, bullestartparameters);
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
@@ -48,8 +51,20 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
+        target.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
         var addHealth = shipparameters.MaxHealth * HealPercent;
         shipparameters.HealthRegen.Start(addHealth, HealPerTick);
+        switch (UpgradeType)
+        {
+            case ESpellUpgradeType.A1:
+                var maxShield = target.ShipParameters.ShieldParameters.MaxShield;
+                var countToHeal = maxShield * HealPercent * 0.33f;
+                target.ShipParameters.ShieldParameters.HealShield(countToHeal);
+                break;
+            case ESpellUpgradeType.B2:
+                target.BuffData.Apply(13f);
+                break;
+        }
     }
     public override bool ShowLine => false;
     public override float ShowCircle => rad;
@@ -93,12 +108,27 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     public override SpellDamageData RadiusAOE()
     {
-        return new SpellDamageData(rad,false);
-    }   
+        return new SpellDamageData(rad, false);
+    }
     public override string Desc()
     {
-        return String.Format(Namings.RepairDroneSpell, DronesCount, Utils.FloatToChance(HealPercent));
-        //            $"Set {MinesCount} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location. Each mine damage {damageShield}/{damageBody}";
+        return Namings.TryFormat(Namings.Tag("RepairDroneSpell"), DronesCount, Utils.FloatToChance(HealPercent));
+    }
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("RepairDroneNameA1");
+        }
+        return Namings.Tag("RepairDroneNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("RepairDroneDescA1");
+        }
+        return Namings.Tag("RepairDroneDescB2");
     }
 }
 

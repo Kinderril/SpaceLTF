@@ -67,10 +67,10 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
             }
             _itemsToTrade.CurrentInventory = _traderInventory;
 
-            var tradeData = String.Format(Namings.DialogTag("changeitem_tradeData"), _myItemsToTrade.GetInfo(), _itemsToTrade.GetInfo());
+            var tradeData = Namings.TryFormat(Namings.DialogTag("changeitem_tradeData"), _myItemsToTrade.GetInfo(), _itemsToTrade.GetInfo());
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("changeitem_ok"), DoTrade, null));
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("changeitem_no"), null));
-            var mesData = new MessageDialogData(String.Format(Namings.DialogTag("changeitem_start"), tradeData), mianAnswers);
+            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("changeitem_start"), tradeData), mianAnswers);
             return mesData;
         }
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null, null));

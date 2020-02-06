@@ -28,12 +28,12 @@ public class PathDebugObjectTest : MonoBehaviour
         }
         bool nextIsSame;
         bool goodDir;
-        var curCell = _cellController.FindCell(transform.position);
-        var d = TargeTransform.position - transform.position;
-
-        var dir = PathDirectionFinder.TryFindDirection(_cellController,Utils.NormalizeFastSelf(d), curCell, 
-            TargeTransform.position, transform.position,  out goodDir,
-            debugData);
+//        var curCell = _cellController.FindCell(transform.position);
+//        var d = TargeTransform.position - transform.position;
+//
+//        var dir = PathDirectionFinder.TryFindDirection(_cellController,Utils.NormalizeFastSelf(d), curCell, 
+//            TargeTransform.position, transform.position,  out goodDir,
+//            debugData);
     }
 
     void OnDrawGizmos()

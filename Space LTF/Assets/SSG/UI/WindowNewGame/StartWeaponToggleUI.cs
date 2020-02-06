@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,9 +11,9 @@ public class StartWeaponToggleUI : UIElementWithTooltip
     private Action<StartWeaponToggleUI> oncallback;
     public Toggle Toggle;
 
-    public void Init(WeaponsPair weaponsPair, Action<StartWeaponToggleUI> oncallback,bool interactable)
+    public void Init(WeaponsPair weaponsPair, Action<StartWeaponToggleUI> oncallback, bool interactable)
     {
-        Field.text = $"{Namings.Weapon(weaponsPair.Part1)} {Namings.And} {Namings.Weapon(weaponsPair.Part2)}";
+        Field.text = $"{Namings.Weapon(weaponsPair.Part1)} {Namings.Tag("And")} {Namings.Weapon(weaponsPair.Part2)}";
         this.oncallback = oncallback;
         WeaponsPair = weaponsPair;
         Toggle.interactable = interactable;

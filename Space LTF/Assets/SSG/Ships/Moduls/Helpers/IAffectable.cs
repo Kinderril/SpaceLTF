@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class BulletTarget
 {
@@ -26,21 +25,24 @@ public delegate void AffectTargetDelegate(ShipParameters targetParameters, ShipB
 public delegate void CreateBulletDelegate(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos,
     BulleStartParameters bulleStartParameters);
 
-public interface IAffectable 
+[System.Serializable]
+public delegate void BulletDestroyDelegate(Bullet origin, IWeapon weapon, AICell cell);
+
+public interface IAffectable
 {
 
-     WeaponInventoryAffectTarget AffectAction { get; }
-     CreateBulletDelegate CreateBulletAction { get; }
-     void SetBulletCreateAction(CreateBulletDelegate bulletCreate);
+    WeaponInventoryAffectTarget AffectAction { get; }
+    CreateBulletDelegate CreateBulletAction { get; }
+    void SetBulletCreateAction(CreateBulletDelegate bulletCreate);
 }
 
-public interface IAffectParameters 
+public interface IAffectParameters
 {
 
-     CurWeaponDamage CurrentDamage { get; }
-     float AimRadius { get; set; }
-     float SetorAngle { get; set; }
-     float BulletSpeed { get; set; }
-     float ReloadSec { get; set; }
-     int ShootPerTime { get; set; }
+    CurWeaponDamage CurrentDamage { get; }
+    float AimRadius { get; set; }
+    float SetorAngle { get; set; }
+    float BulletSpeed { get; set; }
+    float ReloadSec { get; set; }
+    int ShootPerTime { get; set; }
 }

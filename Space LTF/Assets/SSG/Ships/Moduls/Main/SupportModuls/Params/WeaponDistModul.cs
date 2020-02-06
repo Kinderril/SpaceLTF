@@ -12,7 +12,7 @@ public class WeaponDistModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return String.Format(Namings.Tag("DescWeaponDistModul"), Utils.FloatToChance(spd_inc));
+        return Namings.TryFormat(Namings.Tag("DescWeaponDistModul"), Utils.FloatToChance(spd_inc));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {

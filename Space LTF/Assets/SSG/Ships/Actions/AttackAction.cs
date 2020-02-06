@@ -78,7 +78,7 @@ public class AttackAction : AbstractAttackAction
                     _owner.MaxTurnRadius);
                 if (pp != null)
                 {
-                    var trg = _owner.CellController.FindCell(pp.Right);
+                    var trg = _owner.CellController.GetCell(pp.Right);
                     if (trg.IsFree())
                     {
                         _owner.MoveByWay(pp.Right);

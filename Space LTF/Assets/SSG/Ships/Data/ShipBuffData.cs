@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 
 public class ShipBuffData : ShipData
 {
@@ -26,15 +25,15 @@ public class ShipBuffData : ShipData
             }
         }
     }
-    public  void Apply()
+    public void Apply(float buff)
     {
         _deltaMaxSpeed = PERCENT_SPEED * _owner.ShipParameters.MaxSpeed;
         _owner.ShipParameters.MaxSpeed += _deltaMaxSpeed;
 
         _deltaTurnSpeed = PERCENT_SPEED * _owner.ShipParameters.TurnSpeed;
         _owner.ShipParameters.TurnSpeed += _deltaTurnSpeed;
-        
-        EndActiveTime = BUFF_TIME + Time.time;
+
+        EndActiveTime = buff + Time.time;
         IsActive = true;
     }
 

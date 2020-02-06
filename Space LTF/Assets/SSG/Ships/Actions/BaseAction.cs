@@ -82,7 +82,7 @@ public abstract class BaseAction
     public void EndAction(string causeEndAction)
     {
         Dispose();
-        Debug.Log(String.Format("<color=green>End Action  Id:{0}  Action:{1}  Cause:{2}  Time:{3}</color>"
+        Debug.Log(Namings.TryFormat("<color=green>End Action  Id:{0}  Action:{1}  Cause:{2}  Time:{3}</color>"
             ,_owner.Id, ActionType.ToString(),causeEndAction, Time.time.ToString()));
         _owner.EndAction();
     }

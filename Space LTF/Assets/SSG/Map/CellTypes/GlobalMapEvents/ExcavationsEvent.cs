@@ -32,7 +32,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-        var mesData = new MessageDialogData(String.Format("You see excavations. Small fleet searching something at this place.\nBut every piece of this place is mined. You should be very careful."), Serach());
+        var mesData = new MessageDialogData(Namings.TryFormat("You see excavations. Small fleet searching something at this place.\nBut every piece of this place is mined. You should be very careful."), Serach());
         return mesData;
     }
 
@@ -58,7 +58,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         {
             ans = new List<AnswerDialogData>()
             {
-                new AnswerDialogData(Namings.Ok, null,  null),
+                new AnswerDialogData(Namings.Tag("Ok"), null,  null),
             };
             string names = "";
             for (int i = 0; i < MyExtensions.Random(1, 2); i++)
@@ -72,7 +72,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
                     names = $"{names} {itemName} ";
                 }
             }
-            mesData = new MessageDialogData(String.Format("They blow up almost all. But your fast ship safe some modules:{0}", names), ans);
+            mesData = new MessageDialogData(Namings.TryFormat("They blow up almost all. But your fast ship safe some modules:{0}", names), ans);
             return mesData;
         }
         else
@@ -81,7 +81,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             {
                 new AnswerDialogData(Namings.Tag("leave"), null,  null),
             };
-            mesData = new MessageDialogData(String.Format("They blow up all and run away.", moneyTotal), ans);
+            mesData = new MessageDialogData(Namings.TryFormat("They blow up all and run away.", moneyTotal), ans);
             return mesData;
         }
     }
@@ -96,7 +96,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             new AnswerDialogData("Offer assistance", null,  assistance),
             new AnswerDialogData(Namings.Tag("leave"), null,  null),
         };
-        mesData = new MessageDialogData(String.Format("They are searching for something", moneyTotal), ans);
+        mesData = new MessageDialogData(Namings.TryFormat("They are searching for something", moneyTotal), ans);
         return mesData;
     }
 
@@ -106,11 +106,11 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         List<AnswerDialogData> ans;
         ans = new List<AnswerDialogData>()
         {
-            new AnswerDialogData(Namings.Ok, null,  Threaten),
+            new AnswerDialogData(Namings.Tag("Ok"), null,  Threaten),
         };
         BrokeShipWithRandom();
         _reputation.RemoveReputation(_config, 5);
-        mesData = new MessageDialogData(String.Format("They have nothing. And simply blow up everything. Some of your ships damaged.", moneyTotal), ans);
+        mesData = new MessageDialogData(Namings.TryFormat("They have nothing. And simply blow up everything. Some of your ships damaged.", moneyTotal), ans);
         return mesData;
     }
 
@@ -120,11 +120,11 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         List<AnswerDialogData> ans;
         ans = new List<AnswerDialogData>()
         {
-            new AnswerDialogData(Namings.Ok, null,  assistanceFine),
+            new AnswerDialogData(Namings.Tag("Ok"), null,  assistanceFine),
             new AnswerDialogData("No", null,  comeClose),
             new AnswerDialogData(Namings.Tag("leave"), null,  null),
         };
-        mesData = new MessageDialogData(String.Format("Ok, lets go 50/50", moneyTotal), ans);
+        mesData = new MessageDialogData(Namings.TryFormat("Ok, lets go 50/50", moneyTotal), ans);
         return mesData;
     }
     private void BrokeShipWithRandom()
@@ -146,18 +146,18 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         List<AnswerDialogData> ans;
         ans = new List<AnswerDialogData>()
         {
-            new AnswerDialogData(Namings.Ok, null,  null),
+            new AnswerDialogData(Namings.Tag("Ok"), null,  null),
         };
         if (SkillWork(Nothing, excvScounts + ScoutsLevel))
         {
             var m = moneyTotal / 2;
             _reputation.AddReputation(_config, 5);
-            mesData = new MessageDialogData(String.Format("All fine, you found some credits. Your part:{0}.", m), ans);
+            mesData = new MessageDialogData(Namings.TryFormat("All fine, you found some credits. Your part:{0}.", m), ans);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(m);
         }
         else
         {
-            mesData = new MessageDialogData(String.Format("Nothing. This isn't your day", moneyTotal), ans);
+            mesData = new MessageDialogData(Namings.TryFormat("Nothing. This isn't your day", moneyTotal), ans);
         }
 
         return mesData;
@@ -179,17 +179,17 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             case 0:   //Я вин
                 ans = new List<AnswerDialogData>()
                 {
-                    new AnswerDialogData(Namings.Ok, null,  null),
+                    new AnswerDialogData(Namings.Tag("Ok"), null,  null),
                 };
-                mesData = new MessageDialogData(String.Format("You found a lot of credits {0}", moneyTotal), ans);
+                mesData = new MessageDialogData(Namings.TryFormat("You found a lot of credits {0}", moneyTotal), ans);
                 return mesData;
 
             case 2:   //Они вин     
                 ans = new List<AnswerDialogData>()
                 {
-                    new AnswerDialogData(Namings.Ok, null,  null),
+                    new AnswerDialogData(Namings.Tag("Ok"), null,  null),
                 };
-                mesData = new MessageDialogData(String.Format("They found credits first {0}", moneyTotal), ans);
+                mesData = new MessageDialogData(Namings.TryFormat("They found credits first {0}", moneyTotal), ans);
                 return mesData;
         }
         mesData = new MessageDialogData("No one can't find anything", Serach());

@@ -48,7 +48,7 @@ public class EvadeAction : BaseAction
             //GO STRAIGHT
             // _owner.SetTargetSpeed(1f);
             var pos = _owner.Position + _owner.LookDirection * 10;
-            var cell = _owner.CellController.FindCell(pos);
+            var cell = _owner.CellController.GetCell(pos);
             if (cell.IsFree())
             {
                 _targetPoint = pos;
@@ -62,7 +62,7 @@ public class EvadeAction : BaseAction
             Vector3 side = GetSideDir(danger);
             // _owner.SetTargetSpeed(1f);
             var pos = _owner.Position + side * 7;
-            var cell = _owner.CellController.FindCell(pos);
+            var cell = _owner.CellController.GetCell(pos);
             if (cell.IsFree())
             {
                 _targetPoint = pos;

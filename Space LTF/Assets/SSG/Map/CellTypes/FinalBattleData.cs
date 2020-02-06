@@ -35,8 +35,8 @@ public class FinalBattleData
         MessageDialogData mesData;
         if (isFull)
         {
-            list.Add(new AnswerDialogData(Namings.Ok, null, ReadyToGo));
-            mesData = new MessageDialogData(String.Format(Namings.DialogTag("finalStartReady"),
+            list.Add(new AnswerDialogData(Namings.Tag("Ok"), null, ReadyToGo));
+            mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("finalStartReady"),
                 current, need), list);
         }
         else
@@ -46,8 +46,8 @@ public class FinalBattleData
             var delta = need - current;
             if (delta > armyCount - 1)
             {
-                list.Add(new AnswerDialogData(Namings.Ok, LoseGame, null));
-                mesData = new MessageDialogData(String.Format(Namings.DialogTag("finalStartNotReady"),
+                list.Add(new AnswerDialogData(Namings.Tag("Ok"), LoseGame, null));
+                mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("finalStartNotReady"),
                     current, need), list);
             }
             else
@@ -61,14 +61,14 @@ public class FinalBattleData
                         player.Army.RemoveShip(shipToDel);
                         player.QuestData.AddElement();
                     }
-                    list.Add(new AnswerDialogData(String.Format(Namings.Sacrifice, shipToDel.Ship.Name,
+                    list.Add(new AnswerDialogData(Namings.TryFormat(Namings.Tag("Sacrifice"), shipToDel.Ship.Name,
                         Namings.ShipType(shipToDel.Ship.ShipType), Namings.ShipConfig(shipToDel.Ship.ShipConfig)), null, () =>
                     {
                         Sacrifice();
                         return GetDialog();
                     }));
                 }
-                mesData = new MessageDialogData(String.Format(Namings.DialogTag("finalProcess"),
+                mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("finalProcess"),
                     current, need), list);
             }
         }
@@ -83,7 +83,7 @@ public class FinalBattleData
     private MessageDialogData ReadyToGo()
     {
         var list = new List<AnswerDialogData>();
-        list.Add(new AnswerDialogData(Namings.Fight, Fight, null));
+        list.Add(new AnswerDialogData(Namings.Tag("Fight"), Fight, null));
         var mesData = new MessageDialogData(Namings.DialogTag("finalStartFight"), list);
         return mesData;
     }
@@ -94,7 +94,7 @@ public class FinalBattleData
         if (mainQuest.Completed())
         {
             var list = new List<AnswerDialogData>();
-            list.Add(new AnswerDialogData(Namings.Ok, () =>
+            list.Add(new AnswerDialogData(Namings.Tag("Ok"), () =>
             {
                 MainController.Instance.EndGameWin();
             },null));
@@ -158,7 +158,7 @@ public class FinalBattleData
     public MessageDialogData GetAfterBattleDialog()
     {
         var list = new List<AnswerDialogData>();
-        list.Add(new AnswerDialogData(Namings.Ok, EndGameWin, null));
+        list.Add(new AnswerDialogData(Namings.Tag("Ok"), EndGameWin, null));
         var mesData = new MessageDialogData(Namings.DialogTag("finalEnd"), list);
         return mesData;
     }

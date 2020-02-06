@@ -61,13 +61,13 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         BulletSpeedField.InitBorders(0, 20, true);
         ShootPerTime.InitBorders(0, 4, true);
 
-        RadiuesField.InitName(Namings.Radius);
-        AngField.InitName(Namings.Sector);
-        ReloadField.InitName(Namings.Reload);
+        RadiuesField.InitName(Namings.Tag("Radius"));
+        AngField.InitName(Namings.Tag("Sector"));
+        ReloadField.InitName(Namings.Tag("Reload"));
         BulletSpeedField.InitName(Namings.Tag("Speed"));
         DamageHP.InitName(Namings.Tag("DamageBody"));
         DamageShield.InitName(Namings.Tag("DamageShield"));
-        ShootPerTime.InitName(Namings.ShootPerTime);
+        ShootPerTime.InitName(Namings.Tag("ShootPerTime"));
         DrawCurrentUpgrades(modif);
     }
 
@@ -81,7 +81,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
             var cost = MoneyConsts.WeaponUpgrade[_weapon.Level];
             UpgradeCost.Init(cost);
         }
-        ReqireLevelFeild.text = String.Format(Namings.ReqireLevelFeild, _weapon.RequireLevel());
+        ReqireLevelFeild.text = Namings.TryFormat(Namings.Tag("ReqireLevelFeild"), _weapon.RequireLevel());
     }
 
     public void OnClickUpgrade()

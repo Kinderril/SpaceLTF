@@ -137,7 +137,7 @@ public class WeaponSprayModul : BaseSupportModul
     }
     public override string DescSupport()
     {
-        return String.Format(Namings.Tag("SprayModulDesc"), BulletsCount(), Utils.FloatToChance(RELOAD));
+        return Namings.TryFormat(Namings.Tag("SprayModulDesc"), BulletsCount(), Utils.FloatToChance(RELOAD));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {

@@ -92,12 +92,12 @@ public static class SMUtils
 
     public static string Red(this string input)
     {
-        return string.Format("<color=red>{0}</color>", input);
+        return Namings.TryFormat("<color=red>{0}</color>", input);
     }
 
     public static string Blue(this string input)
     {
-        return string.Format("<color=blue>{0}</color>", input);
+        return Namings.TryFormat("<color=blue>{0}</color>", input);
     }
 
 }

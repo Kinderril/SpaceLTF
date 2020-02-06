@@ -6,12 +6,26 @@ using UnityEngine;
 [System.Serializable]
 public class LineShotSpell : BaseSpellModulInv
 {
+    //A1 - No death
+    //B2 - more fire
+
     private const float BULLET_SPEED = 10f;
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 38f;
 
     private const int FIRE_PERIOD = 6;
-    private float FireCoef => Level;
+
+    private float FireCoef
+    {
+        get
+        {
+            if (UpgradeType == ESpellUpgradeType.B2)
+            {
+                return Level * 1.6f;
+            }
+            return Level;
+        }
+    }
 
     private int FirePeriod => FIRE_PERIOD + Level * 3;
     private int Damage => 5 + Level;
@@ -40,6 +54,12 @@ public class LineShotSpell : BaseSpellModulInv
 
         var b1 = Bullet.Create(origin, weapon, r1, shootPos, target.target, bullestartparameters);
         var b2 = Bullet.Create(origin, weapon, r2, shootPos, target.target, bullestartparameters);
+
+
+        if (UpgradeType == ESpellUpgradeType.A1)
+        {
+            b1.DeathOnHit = b2.DeathOnHit = b0.DeathOnHit = false;
+        }
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
@@ -76,7 +96,23 @@ public class LineShotSpell : BaseSpellModulInv
     {
         var totalFireDamage = FirePeriod * FireCoef;
         var damageStr = totalFireDamage.ToString("0");
-        return String.Format(Namings.LineSHotSpell, CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod, damageStr);
+        return Namings.TryFormat(Namings.Tag("LineSHotSpell"), CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod, damageStr);
+    }
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("LineShotNameA1");
+        }
+        return Namings.Tag("LineShotNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("LineShotDescA1");
+        }
+        return Namings.Tag("LineShotDescB2");
     }
 }
 

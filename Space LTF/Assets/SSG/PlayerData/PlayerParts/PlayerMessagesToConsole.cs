@@ -24,7 +24,7 @@ public class PlayerMessagesToConsole
     public static string ModifWithDay(string msg)
     {
         int day = MainController.Instance.MainPlayer.MapData.Step;
-        return (String.Format("Day {0}: {1}", day, msg));
+        return (Namings.TryFormat("Day {0}: {1}", day, msg));
     }
 
     public List<string> GetAllAndClear()

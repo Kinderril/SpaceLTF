@@ -11,12 +11,25 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
     //    public TextMeshProUGUI LevelField;
     public GameObject ButtonContainer;
     public Button ButtonUpgrade;
+
+    public Transform ContainerSingleUpg;
+    public Transform ContainerDoubleUpg;
+    // public Button ButtonUpgradeA1;
+    // public Button ButtonUpgradeB2;
+    public TextMeshProUGUI UpgradeA1Field;
+    public TextMeshProUGUI UpgradeB2Field;
+    public UIElementWithTooltipByTag UpgradeA1Tooltip;
+    public UIElementWithTooltipByTag UpgradeB2Tooltip;
+
+
     public TextMeshProUGUI MaxLevel;
     public TextMeshProUGUI CostCountField;
     public TextMeshProUGUI CostDelayField;
     public TextMeshProUGUI WeaponLevelField;
     public MoneySlotUI UpgradeCost;
     private BaseSpellModulInv _spell;
+
+
     public void Init(BaseSpellModulInv spell, Action callback, bool canChange)
     {
         base.Init(callback);
@@ -25,18 +38,20 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         OnUpgrade(spell);
         _spell.OnUpgrade += OnUpgrade;
         ButtonUpgrade.interactable = canChange;
-        CostCountField.text = String.Format(Namings.Tag("ChargesCount"), spell.CostCount);
-        CostDelayField.text = String.Format(Namings.Tag("ChargesDelay"), spell.CostTime);
+        CostCountField.text = Namings.TryFormat(Namings.Tag("ChargesCount"), spell.CostCount);
+        CostDelayField.text = Namings.TryFormat(Namings.Tag("ChargesDelay"), spell.CostTime);
+
     }
 
     private void OnUpgrade(BaseSpellModulInv obj)
     {
         DrawLevel();
-        DescField.text = obj.Desc();
+        DescField.text = obj.DescFull();
     }
 
     private void DrawLevel()
     {
+
         var canUpgrade = _spell.CanUpgrade();
         ButtonContainer.gameObject.SetActive(canUpgrade);
         MaxLevel.gameObject.SetActive(!canUpgrade);
@@ -44,22 +59,40 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         {
             var cost = MoneyConsts.SpellUpgrade[_spell.Level];
             UpgradeCost.Init(cost);
+            var shallChoose = _spell.ShallAddSpecialNextLevel();
+            ContainerSingleUpg.gameObject.SetActive(!shallChoose);
+            ContainerDoubleUpg.gameObject.SetActive(shallChoose);
+            if (shallChoose)
+            {
+                UpgradeA1Field.text = _spell.GetUpgradeName(ESpellUpgradeType.A1);
+                UpgradeB2Field.text = _spell.GetUpgradeName(ESpellUpgradeType.B2);
+                UpgradeA1Tooltip.Tag = _spell.GetUpgradeDesc(ESpellUpgradeType.A1);
+                UpgradeB2Tooltip.Tag = _spell.GetUpgradeDesc(ESpellUpgradeType.B2);
+            }
         }
         WeaponLevelField.text = _spell.Level.ToString();
         if (!canUpgrade)
         {
-            WeaponLevelField.text = String.Format(Namings.Tag("SpellMaxLevel"), _spell.Level.ToString());
+            WeaponLevelField.text = Namings.TryFormat(Namings.Tag("SpellMaxLevel"), _spell.Level.ToString());
         }
         else
         {
 
-            WeaponLevelField.text = String.Format(Namings.Tag("Level")) + ":" + _spell.Level.ToString();
+            WeaponLevelField.text = Namings.TryFormat(Namings.Tag("Level")) + ":" + _spell.Level.ToString();
         }
     }
 
+    public void OnClickUpgradeB2()
+    {
+        _spell.TryUpgrade(ESpellUpgradeType.B2);
+    }
+    public void OnClickUpgradeA1()
+    {
+        _spell.TryUpgrade(ESpellUpgradeType.A1);
+    }
     public void OnClickUpgrade()
     {
-        _spell.TryUpgrade();
+        _spell.TryUpgrade(ESpellUpgradeType.None);
     }
 
 

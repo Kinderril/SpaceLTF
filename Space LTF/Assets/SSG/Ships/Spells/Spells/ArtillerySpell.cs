@@ -5,6 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class ArtillerySpell : BaseSpellModulInv
 {
+    //A1 - more bullets        
+    //B2 - faster shoot
+
     private const float DIST_SHOT = 40f;
     // private const float baseDamage = 4;
     private const float rad = 17f;
@@ -12,7 +15,17 @@ public class ArtillerySpell : BaseSpellModulInv
 
     private float DmgHull => 3 + Level;
     private float DmgShield => 2 + Level;
-    public int BulletsCount => Level * 3 + 11;
+    public int BulletsCount
+    {
+        get
+        {
+            if (UpgradeType == ESpellUpgradeType.A1)
+            {
+                return Level * 4 + 14;
+            }
+            return Level * 3 + 11;
+        }
+    }
 
     public ArtillerySpell()
         : base(SpellType.artilleryPeriod, 4, 25, new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
@@ -22,17 +35,22 @@ public class ArtillerySpell : BaseSpellModulInv
 
     public override SpellDamageData RadiusAOE()
     {
-        return new SpellDamageData(rad/2f,false);
+        return new SpellDamageData(rad / 2f, false);
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var battle = BattleController.Instance;
         var offset = rad / 2;
+        float period = 0.145f;
+        if (UpgradeType == ESpellUpgradeType.B2)
+        {
+            period = 0.095f;
+        }
         for (int i = 0; i < BulletsCount; i++)
         {
             var timer =
-                MainController.Instance.BattleTimerManager.MakeTimer(i * 0.145f);
+                MainController.Instance.BattleTimerManager.MakeTimer(i * period);
             timer.OnTimer += () =>
             {
                 if (battle.State == BattleState.process)
@@ -86,7 +104,24 @@ public class ArtillerySpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return String.Format(Namings.ArtillerySpell, BulletsCount, DmgHull, DmgShield);
+        return Namings.TryFormat(Namings.Tag("ArtillerySpell"), BulletsCount, DmgHull, DmgShield);
+    }
+
+    public override string GetUpgradeName(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("ArtilleryNameA1");
+        }
+        return Namings.Tag("ArtilleryNameB2");
+    }
+    public override string GetUpgradeDesc(ESpellUpgradeType type)
+    {
+        if (type == ESpellUpgradeType.A1)
+        {
+            return Namings.Tag("ArtilleryDescA1");
+        }
+        return Namings.Tag("ArtilleryDescB2");
     }
 }
 
