@@ -151,14 +151,34 @@ public class Player
         var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), config, this, logs);
 
         int simpleIndex;
-        foreach (var spellType in posibleSpell)
+//        foreach (var spellType in posibleSpell)
+//        {
+//            if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+//            {
+//                var m1 = Library.CreateSpell(spellType);
+//                bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+//            }
+//        }
+        List<SpellType> healSpells = new List<SpellType>(){SpellType.rechargeShield,SpellType.repairDrones};
+        List<SpellType> controlSpells = new List<SpellType>(){SpellType.engineLock,SpellType.vacuum,SpellType.throwAround,SpellType.shildDamage};
+        List<SpellType> damageSpells = new List<SpellType>(){SpellType.artilleryPeriod,SpellType.distShot,SpellType.lineShot,SpellType.machineGun,SpellType.mineField};
+
+        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
         {
-            if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-            {
-                var m1 = Library.CreateSpell(spellType);
-                bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-            }
+            var m1 = Library.CreateSpell(healSpells.RandomElement());
+            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+        }      
+        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        {
+            var m1 = Library.CreateSpell(controlSpells.RandomElement());
+            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+        }      
+        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        {
+            var m1 = Library.CreateSpell(damageSpells.RandomElement());
+            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
         }
+
         AddWeaponsToShips(ref r, ship1, posibleStartWeapons);
         AddWeaponsToShips(ref r, ship2, posibleStartWeapons);
 

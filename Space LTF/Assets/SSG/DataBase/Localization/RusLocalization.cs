@@ -5,7 +5,7 @@ public static class RusLocalization
 {
     public static Dictionary<string, string> _locals = new Dictionary<string, string>()
     {
-        {"StartInfo", "Вы находитесь на самом граю обитаемого мира в отдаленом секторе.\n" +
+        {"StartInfo", "Вы находитесь на самом краю обитаемого мира в отдаленом секторе.\n" +
                   "В результате спецоперации вам пришлось похитеть командный корабль и энергетический\n" +
                   " элемент на нём. Теперь единсченный выход собрать достаточное количество элементов," +
                   "\n для открытия межпространственых врат, и достаить информацию для командования."},
@@ -28,11 +28,11 @@ public static class RusLocalization
         {"ActionModul", "Вспомотаьельный модуль."},
         {"CataclysmProcess", "{0} ячеек уничтоженно"},
         {"RemainCataclysm", "Дней осталось:{0}"},
-        {"VeryEasy", "Очень просто"},
+        {"VeryEasy", "Легчайше"},
         {"Easy", "Легко"},
         {"Normal", "Нормально"},
         {"Hard", "Тяжело"},
-        {"Impossible", "Невозможно"},
+        {"Imposilbe", "Невозможно"},
         {"Radius", "Радиус"},
         {"Sector", "Сектор"},
         {"Reload", "Перезарядка"},
@@ -201,17 +201,20 @@ public static class RusLocalization
         {"MinesSpell","Set {0} mines for {1} sec to selected location. Each mine damage {2}/{3}" },
         {"ShieldOffSpell","Disable shields of ships in radius for {0} sec. And damages shield for {1}." },
         {"TrowAroundSpell", "Create a shockwave witch throw around all ships in radius with power {0}. And shield damage {1}."},
-        {"KillUIPilotMini","Kills:{0}" },
-        {"KillUIPilot", "Kills:{0}/{1}"},
-        {"Remain","Remain" },
-        {"EngineDest", "Engine destroyed"},
-        {"ShieldDest","Shield destroyed" },
-        {"FireDest", "Fire on board"},
-        {"Retreat", "Retreat"},
-        {"DoWantRetire","Do you want run away?" },
-        {"NoSafeGame","No save game" },
-        {"MaxLevel", "Max"},
-
+        {"KillUIPilotMini","Убийств:{0}" },
+        {"KillUIPilot", "Убийств:{0}/{1}"},
+        {"Remain","Осталось" },
+        {"EngineDest", "Двигатель поврежден"},
+        {"ShieldDest","Щит отключен" },
+        {"FireDest", "Пожар на борту"},
+        {"Retreat", "Сбежать"},
+        {"DoWantRetire","Вы хотите сбежать?" },
+        {"NoSafeGame","Не сохраненных игр" },
+        {"MaxLevel", "Максимальный"},
+        {"RusLang", "Русский"},
+        {"EngLang", "Англисский"},
+        {"ReloadToLoc", "Перезапустите игру что бы использовать выбранный язык"},
+        {"SettingsWindow", "Настройки"},
 
 
         {"DamageInfoUI", "Damage: {0}/{1}" },

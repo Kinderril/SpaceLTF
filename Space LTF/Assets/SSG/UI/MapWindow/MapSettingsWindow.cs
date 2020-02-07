@@ -32,8 +32,17 @@ public class MapSettingsWindow : MonoBehaviour
         Keys.gameObject.SetActive(false);
         SoundToggle.isOn = (CamerasController.Instance.IsAudioEnable);
         FXAAToggle.isOn = (CamerasController.Instance.FxaaEnable);
-        EngToggle.isOn = Namings.LocTag == ELocTag.English;
-        RusToggle.isOn = Namings.LocTag == ELocTag.Russian;
+        switch (Namings.LocTag)
+        {
+            case ELocTag.English:
+                EngToggle.isOn = true;
+                RusToggle.isOn = false;
+                break;
+            case ELocTag.Russian:
+                RusToggle.isOn = true;
+                EngToggle.isOn = false;
+                break;
+        }
     }
 
     public void Open(Action closeCallback)
@@ -45,12 +54,14 @@ public class MapSettingsWindow : MonoBehaviour
 
     public void OnClickEng()
     {
-        Namings.English();
+        if (EngToggle.isOn)
+            Namings.English();
         LangChanged.gameObject.SetActive(true);
     }
     public void OnClickRus()
     {
-        Namings.Rus();
+        if (RusToggle.isOn)
+            Namings.Rus();
         LangChanged.gameObject.SetActive(true);
     }
 

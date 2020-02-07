@@ -18,8 +18,8 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
     // public Button ButtonUpgradeB2;
     public TextMeshProUGUI UpgradeA1Field;
     public TextMeshProUGUI UpgradeB2Field;
-    public UIElementWithTooltipByTag UpgradeA1Tooltip;
-    public UIElementWithTooltipByTag UpgradeB2Tooltip;
+    public UIElementWithTooltipCache UpgradeA1Tooltip;
+    public UIElementWithTooltipCache UpgradeB2Tooltip;
 
 
     public TextMeshProUGUI MaxLevel;
@@ -66,8 +66,8 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
             {
                 UpgradeA1Field.text = _spell.GetUpgradeName(ESpellUpgradeType.A1);
                 UpgradeB2Field.text = _spell.GetUpgradeName(ESpellUpgradeType.B2);
-                UpgradeA1Tooltip.Tag = _spell.GetUpgradeDesc(ESpellUpgradeType.A1);
-                UpgradeB2Tooltip.Tag = _spell.GetUpgradeDesc(ESpellUpgradeType.B2);
+                UpgradeA1Tooltip.Cache = _spell.GetUpgradeDesc(ESpellUpgradeType.A1);
+                UpgradeB2Tooltip.Cache = _spell.GetUpgradeDesc(ESpellUpgradeType.B2);
             }
         }
         WeaponLevelField.text = _spell.Level.ToString();
