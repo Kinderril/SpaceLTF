@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -93,7 +92,7 @@ public class ShieldOffSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("ShieldOffSpell"), Period.ToString("0"), SHIELD_DAMAGE);
+        return Namings.Format(Namings.Tag("ShieldOffSpell"), Period.ToString("0"), SHIELD_DAMAGE);
         //            $"Disable shields of ships in radius for {Period.ToString("0")} sec. And damages shield for {SHIELD_DAMAGE}.";
     }
 
@@ -111,7 +110,7 @@ public class ShieldOffSpell : BaseSpellModulInv
         {
             return Namings.Tag("ShieldOffDescA1");
         }
-        return Namings.Tag("ShieldOffDescB2");
+        return Namings.Format(Namings.Tag("ShieldOffDescB2"), FIRE_PERIOD);
     }
 
 }

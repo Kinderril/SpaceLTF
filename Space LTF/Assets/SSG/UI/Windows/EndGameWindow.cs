@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,9 +17,6 @@ public class EndGameWindow : BaseWindow
     public Image ToMy;
     public Image ToMiddle;
     public Image ToShips;
-
-
-    //    private PlayerArmyUI _redArmyUi;
 
     public FragDataUI FragDataUIPrefab;
     public EndBattleShipPllotInfoUI EndBattleShipPllotInfoUIPrefab;
@@ -59,25 +55,36 @@ public class EndGameWindow : BaseWindow
             sum = 1f;
         }
         var lastReward = player.LastReward;
-        _totalMoney = lastReward.Money;
-        TotalMoneyRewardField.Init(_totalMoney);
-        var showScotsFind = lastReward.Moduls.Count > 0 || lastReward.Weapons.Count > 0;
-        ScoutsFindField.gameObject.SetActive(showScotsFind);
-        ScoutsFindField.text = Namings.TryFormat("Scouts (Level{0}) find something!", player.Parameters.Scouts.Level);
-        foreach (var moduls in lastReward.Moduls)
+        if (lastReward != null)
         {
-            var itemSlot = InventoryOperation.GetDragableItemSlot();
-            itemSlot.transform.SetParent(LayoutRewards, false);
-            itemSlot.Init(moduls.CurrentInventory, false);
-            itemSlot.StartItemSet(moduls);
-        }
+            _totalMoney = lastReward.Money;
+            TotalMoneyRewardField.Init(_totalMoney);
+            var showScotsFind = lastReward.Moduls.Count > 0 || lastReward.Weapons.Count > 0 || lastReward.Spells.Count > 0;
+            ScoutsFindField.gameObject.SetActive(showScotsFind);
+            ScoutsFindField.text = Namings.Format("Scouts (Level{0}) find something!", player.Parameters.Scouts.Level);
+            foreach (var moduls in lastReward.Moduls)
+            {
+                var itemSlot = InventoryOperation.GetDragableItemSlot();
+                itemSlot.transform.SetParent(LayoutRewards, false);
+                itemSlot.Init(moduls.CurrentInventory, false);
+                itemSlot.StartItemSet(moduls);
+            }
 
-        foreach (var moduls in lastReward.Weapons)
-        {
-            var itemSlot = InventoryOperation.GetDragableItemSlot();
-            itemSlot.transform.SetParent(LayoutRewards, false);
-            itemSlot.Init(moduls.CurrentInventory, false);
-            itemSlot.StartItemSet(moduls);
+            foreach (var moduls in lastReward.Weapons)
+            {
+                var itemSlot = InventoryOperation.GetDragableItemSlot();
+                itemSlot.transform.SetParent(LayoutRewards, false);
+                itemSlot.Init(moduls.CurrentInventory, false);
+                itemSlot.StartItemSet(moduls);
+            }
+
+            foreach (var moduls in lastReward.Spells)
+            {
+                var itemSlot = InventoryOperation.GetDragableItemSlot();
+                itemSlot.transform.SetParent(LayoutRewards, false);
+                itemSlot.Init(moduls.CurrentInventory, false);
+                itemSlot.StartItemSet(moduls);
+            }
         }
 
         ClearTransform(LayoutEnemyShipsDestroyed);
@@ -90,20 +97,6 @@ public class EndGameWindow : BaseWindow
             d.transform.SetParent(LayoutEnemyShipsDestroyed);
             d.Init(sDestr);
         }
-        //        foreach (var shipPilotData in player.Army)
-        //        {
-        //            percents.Add(shipPilotData,0f);
-        //            if (shipPilotData.Ship.FinalBattleData.Destroyed)
-        //            {
-        ////                shipPilotData.Ship.DamageTimes++;
-        ////                if (shipPilotData.Ship.DamageTimes >= 3)
-        ////                {
-        ////                    shipPilotData.Ship.Destroyed = true;
-        ////                }
-        //            }
-        //        }
-        //AllToMe();
-        //UpdateMoneys();
     }
 
     public void MiddleMoneys()
@@ -184,45 +177,49 @@ public class EndGameWindow : BaseWindow
 
     private void UpdateMoneys()
     {
-        GoToMapButton.interactable = true;
-        //        TotalMoneyRewardField.Init(0);
         var player = MainController.Instance.MainPlayer;
         var lastReward = player.LastReward;
-        var forPilots = lastReward.Money - _myMoney;
-        MyMoneyField.Init(_myMoney + player.MoneyData.MoneyCount);
-        int spendedMoneys = 0;
-        foreach (var infoUi in _allMyShips)
-        {
-            var p = percents[infoUi.StartShipPilotData];
-            var moneyTo = (int)(p * forPilots);
-            spendedMoneys += moneyTo;
-            infoUi.SetMoneyAdd(moneyTo);
-        }
-        if (spendedMoneys <= forPilots)
-        {
-            var remain = forPilots - spendedMoneys;
-            int index = 0;
-            while (remain > 0)
-            {
-                var field = _allMyShips[index];
-                spendedMoneys++;
-                field.SetMoneyAdd(field.MoneyToAdd + 1);
-                remain--;
-                index++;
-                if (index >= _allMyShips.Count)
-                {
-                    index = 0;
-                }
-            }
-        }
-        else
-        {
-            Debug.LogError("HOW??!! sum:" + sum + "  momeyForPilots:" + forPilots);
-        }
-        if (spendedMoneys != forPilots)
+        if (lastReward != null)
         {
 
-            Debug.LogError("Wrong spended money! sum:" + sum);
+            GoToMapButton.interactable = true;
+            //        TotalMoneyRewardField.Init(0);
+            var forPilots = lastReward.Money - _myMoney;
+            MyMoneyField.Init(_myMoney + player.MoneyData.MoneyCount);
+            int spendedMoneys = 0;
+            foreach (var infoUi in _allMyShips)
+            {
+                var p = percents[infoUi.StartShipPilotData];
+                var moneyTo = (int)(p * forPilots);
+                spendedMoneys += moneyTo;
+                infoUi.SetMoneyAdd(moneyTo);
+            }
+            if (spendedMoneys <= forPilots)
+            {
+                var remain = forPilots - spendedMoneys;
+                int index = 0;
+                while (remain > 0)
+                {
+                    var field = _allMyShips[index];
+                    spendedMoneys++;
+                    field.SetMoneyAdd(field.MoneyToAdd + 1);
+                    remain--;
+                    index++;
+                    if (index >= _allMyShips.Count)
+                    {
+                        index = 0;
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("HOW??!! sum:" + sum + "  momeyForPilots:" + forPilots);
+            }
+            if (spendedMoneys != forPilots)
+            {
+
+                Debug.LogError("Wrong spended money! sum:" + sum);
+            }
         }
     }
 

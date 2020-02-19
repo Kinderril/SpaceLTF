@@ -63,27 +63,33 @@ public static class ArmyCreator
         {
             remainPoints = Library.MIN_WORKING_SHIP + 1;
         }
+        List<StartShipPilotData> army = new List<StartShipPilotData>();
 
-        StartShipPilotData baseShip = null;
+        //        StartShipPilotData baseShip = null;
         if (remainPoints > Library.MIN_POINTS_TO_CREATE_ARMY_WITH_BASESHIP)
         {
-            baseShip = CreateBaseShip(points, data.ArmyConfig, player);
-            var spell = data.GetSpell();
-            if (spell.HasValue)
+            var countOfMainShips = Mathf.Max(1, data.MainShipCount);
+            // var configs = data.RndShipConfig;
+            for (int i = 0; i < countOfMainShips; i++)
             {
-                TryAddCastModul(points, baseShip.Ship, spell.Value, logger);
-            }
-            spell = data.GetSpell();
-            if (spell.HasValue)
-            {
-                TryAddCastModul(points, baseShip.Ship, spell.Value, logger);
+                var baseShip = CreateBaseShip(points, data.NextShipConfig(), player);
+                var spell = data.GetSpell();
+                if (spell.HasValue)
+                {
+                    TryAddCastModul(points, baseShip.Ship, spell.Value, logger);
+                }
+                spell = data.GetSpell();
+                if (spell.HasValue)
+                {
+                    TryAddCastModul(points, baseShip.Ship, spell.Value, logger);
+                }
+                if (baseShip != null)
+                    army.Add(baseShip);
             }
         }
 
-        var army = CreateShips(points, data, player, pointsOnStart, 0.5f, logger);
-        if (baseShip != null)
-            army.Add(baseShip);
-
+        var subArmy = CreateShips(points, data, player, pointsOnStart, 0.5f, logger);
+        army.AddRange(subArmy);
         int index = 0;
         int upgradeIterations = 100;
         if (army.Count == 0)
@@ -317,8 +323,19 @@ public static class ArmyCreator
             return null;
         }
         var listTyper = new List<ShipType>() { ShipType.Light, ShipType.Heavy, ShipType.Middle };
+        return CreateShipByConfig(v, listTyper.RandomElement(), config, player, logs);
+    }
+
+    [CanBeNull]
+    public static StartShipPilotData CreateShipByConfig(ArmyRemainPoints v, ShipType type, ShipConfig config, Player player, ArmyCreatorLogs logs)
+    {
+
+        if (v.Points < Library.BASE_SHIP_VALUE)
+        {
+            return null;
+        }
         var pilot = Library.CreateDebugPilot();
-        var ship = Library.CreateShip(listTyper.RandomElement(), config, player, pilot);
+        var ship = Library.CreateShip(type, config, player, pilot);
         v.Points -= Library.BASE_SHIP_VALUE;
         logs.AddLog(v.Points, "create ship");
         var startData = new StartShipPilotData(pilot, ship);
@@ -629,5 +646,27 @@ public static class ArmyCreator
         return false;
     }
 
+    public static List<StartShipPilotData> CreateTurrets(float pointsToTurrents, Player player,
+        ShipConfig config, ArmyCreatorLogs logs, out float remainPoints)
+    {
+        var listWeaponTypes = new List<WeaponType>() { WeaponType.impulse, WeaponType.laser, WeaponType.rocket, WeaponType.eimRocket };
+        var pointRemain1 = new ArmyRemainPoints(pointsToTurrents);
+        List<StartShipPilotData> list = new List<StartShipPilotData>();
+        var oneTurretPoints = Library.BASE_TURRET_VALUE + 2 * Library.BASE_WEAPON_VALUE;
+        int trgCount = (int)(pointsToTurrents / oneTurretPoints);
+        for (int i = 0; i < trgCount; i++)
+        {
+            var pilot = Library.CreateDebugPilot();
+            var ship = Library.CreateShip(ShipType.Turret, config, player, pilot);
+            pointRemain1.Points -= Library.BASE_TURRET_VALUE;
+            WeaponType weapon = listWeaponTypes.RandomElement();
+            TryAddWeapon(pointRemain1, ship, weapon, false, logs);
+            TryAddWeapon(pointRemain1, ship, weapon, false, logs);
+            list.Add(new StartShipPilotData(pilot, ship));
+        }
+
+        remainPoints = pointRemain1.Points;
+        return list;
+    }
 }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -8,7 +7,7 @@ public class ThrowAroundSpell : BaseSpellModulInv
     //A1 = lock engine
     //B2 = drop weapons load
 
-    private const float DIST_SHOT = 24;
+    private const float DIST_SHOT = 50;
     private const float DAMAGE_BASE = 5;
     private const float rad = 4f;
     private const float timerToLockEngine = 3f;
@@ -66,6 +65,23 @@ public class ThrowAroundSpell : BaseSpellModulInv
 
     private void BulletDestroy(Bullet origin, IWeapon weapon, AICell cell)
     {
+        Commander commander = weapon.TeamIndex == TeamIndex.green
+            ? BattleController.Instance.RedCommander
+            : BattleController.Instance.GreenCommander;
+
+        foreach (var obj in commander.Connectors)
+        {
+            var dir = obj.Position - origin.Position;
+            var dist = dir.magnitude;
+            if (dist < rad)
+            {
+                dir.y = 0f;
+                var dirNorm = Utils.NormalizeFastSelf(dir);
+                var powerFoShip = powerThrow * 1.5f;
+                obj.ExternalForce.Init(powerFoShip, 1f, dirNorm);
+            }
+        }
+
         var asteroids = cell.GetAllAsteroids();
         foreach (var aiAsteroidPredata in asteroids)
         {
@@ -103,7 +119,7 @@ public class ThrowAroundSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("TrowAroundSpell"), powerThrow, shieldDmg);
+        return Namings.Format(Namings.Tag("TrowAroundSpell"), powerThrow, shieldDmg);
         //            $"Create a shockwave witch throw around all ships in radius with power {powerThrow}. And body damage {bodyDamage}.";
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
@@ -118,7 +134,7 @@ public class ThrowAroundSpell : BaseSpellModulInv
     {
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("TrowAroundDescA1");
+            return Namings.Format(Namings.Tag("TrowAroundDescA1"), timerToLockEngine);
         }
         return Namings.Tag("TrowAroundDescB2");
     }

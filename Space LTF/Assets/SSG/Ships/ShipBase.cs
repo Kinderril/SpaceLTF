@@ -109,7 +109,7 @@ public class ShipBase : MovingObject
 
     public float MaxTurnRadius => Mathf.Rad2Deg * (ShipParameters.MaxSpeed / ShipParameters.TurnSpeed);
 
-    public void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos,
+    public virtual void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos,
         IPilotParameters pilotParams, Commander commander, Action<ShipBase> dealthCallback)
     {
         //        gameObject.SetActive(false);
@@ -260,7 +260,7 @@ public class ShipBase : MovingObject
         Dispose();
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         if (Arrow != null)
         {
@@ -268,6 +268,7 @@ public class ShipBase : MovingObject
         }
         VisibilityData.Dispose();
         IsInited = false;
+        base.Dispose();
         if (OnDispose != null)
         {
             OnDispose(this);

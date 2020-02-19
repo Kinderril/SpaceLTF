@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public class GlobalMapCellObject : MonoBehaviour
@@ -20,6 +15,7 @@ public class GlobalMapCellObject : MonoBehaviour
     public GameObject StartObject;
     public GameObject AsteroidsEvent;
     public GameObject EMPSurgeEvent;
+    public GameObject StartDungeon;
     public Renderer ActiveRenderer;
 
     private GameObject ObjectPainted;
@@ -29,7 +25,7 @@ public class GlobalMapCellObject : MonoBehaviour
     public GameObject IAmHere;
     public Transform Container;
     public GameObject SelectedObj;
-//    public GameObject CanBeTargetObject;
+    //    public GameObject CanBeTargetObject;
     public Color CompleteColor;
     private bool _IamHere;
 
@@ -50,12 +46,13 @@ public class GlobalMapCellObject : MonoBehaviour
         StartObject.gameObject.SetActive(false);
         AsteroidsEvent.gameObject.SetActive(false);
         EMPSurgeEvent.gameObject.SetActive(false);
+        StartDungeon.gameObject.SetActive(false);
     }
 
     public void Init(GlobalMapCell cell, float cellSize)
     {
-//        HistoryInfo.gameObject.SetActive(false);
-//        DestroyedContainer.gameObject.SetActive(false);
+        //        HistoryInfo.gameObject.SetActive(false);
+        //        DestroyedContainer.gameObject.SetActive(false);
         Cell = cell;
         Cell.OnDestoyedCell += OnDestoyedCell;
         Cell.OnUnconnect += OnUnconnect;
@@ -63,29 +60,30 @@ public class GlobalMapCellObject : MonoBehaviour
         Cell.OnComplete += OnComplete;
         InitMainObject();
         var c = cellSize * 0.3f;
-        Container.localPosition = new Vector3(MyExtensions.Random(-c,c),0, MyExtensions.Random(-c, c));
+        Container.localPosition = new Vector3(MyExtensions.Random(-c, c), 0, MyExtensions.Random(-c, c));
 
-//        var ranDElta = MainController.Instance.TimerManager.MakeTimer(MyExtensions.Random(0, 0.3f));
-//        ranDElta.OnTimer += () =>
-//        {
-//            main.gameObject.SetActive(true);
-//        };
+        //        var ranDElta = MainController.Instance.TimerManager.MakeTimer(MyExtensions.Random(0, 0.3f));
+        //        ranDElta.OnTimer += () =>
+        //        {
+        //            main.gameObject.SetActive(true);
+        //        };
         if (Cell.IsDestroyed)
         {
             OnDestoyedCell(cell);
         }
     }
 
-//    void OnEnable()
-//    {
-//        var timer = MainController.Instance.TimerManager.MakeTimer(MyExtensions.Random(0.1f, 1f));
-//        timer.OnTimer += () => { ShipAnimator.enabled = true; };
-//    }
+    //    void OnEnable()
+    //    {
+    //        var timer = MainController.Instance.TimerManager.MakeTimer(MyExtensions.Random(0.1f, 1f));
+    //        timer.OnTimer += () => { ShipAnimator.enabled = true; };
+    //    }
 
-    private void OnComplete(GlobalMapCell obj,bool isComplete)
+    private void OnComplete(GlobalMapCell obj, bool isComplete)
     {
         Unknown.gameObject.SetActive(false);
-        ObjectPainted.gameObject.SetActive(true);
+        if (ObjectPainted != null)
+            ObjectPainted.gameObject.SetActive(true);
         if (ActiveRenderer != null)
         {
             SetColor(CompleteColor);
@@ -106,7 +104,8 @@ public class GlobalMapCellObject : MonoBehaviour
     private void OnScouted(GlobalMapCell obj)
     {
         Unknown.gameObject.SetActive(false);
-        ObjectPainted.gameObject.SetActive(true);
+        if (ObjectPainted != null)
+            ObjectPainted.gameObject.SetActive(true);
         TryOpenBattleEvent();
     }
 
@@ -124,8 +123,8 @@ public class GlobalMapCellObject : MonoBehaviour
                     case BattlefildEventType.shieldsOff:
                         EMPSurgeEvent.gameObject.SetActive(true);
                         break;
-                    case BattlefildEventType.engineOff:
-                        break;
+                    // case BattlefildEventType.engineOff:
+                    //     break;
                     case BattlefildEventType.turrets:
                         break;
                 }
@@ -151,6 +150,12 @@ public class GlobalMapCellObject : MonoBehaviour
                 Unknown.gameObject.gameObject.SetActive(false);
                 ExitObject.gameObject.gameObject.SetActive(true);
                 ObjectPainted = ExitObject;
+            }
+            else  if (Cell is ArmyDungeonEnterGlobalMapCell)
+            {
+                StartDungeon.gameObject.SetActive(true);
+                ObjectPainted = StartDungeon;
+                StartDungeon = Fleet;
             }
             else
             {
@@ -187,7 +192,7 @@ public class GlobalMapCellObject : MonoBehaviour
                 {
                     Unknown.gameObject.gameObject.SetActive(false);
                     StartObject.gameObject.gameObject.SetActive(true);
-//                ObjectPainted = StartObject;
+                    //                ObjectPainted = StartObject;
                 }
             }
 
@@ -198,7 +203,7 @@ public class GlobalMapCellObject : MonoBehaviour
         {
             Debug.LogError("Wrong ObjectPainted " + Cell);
         }
-        
+
 #endif
     }
 
@@ -206,25 +211,18 @@ public class GlobalMapCellObject : MonoBehaviour
     {
         Destroyed.gameObject.SetActive(Cell.IsDestroyed);
         Unknown.gameObject.SetActive(false);
-        ObjectPainted.gameObject.SetActive(false);
+        if (ObjectPainted != null)
+            ObjectPainted.gameObject.SetActive(false);
     }
 
     public void SetIAmHere(bool iAmHere)
     {
-//        if (Cell.InfoOpen)
-//        {
-//            SetColorToPS(Cell.Color());
-//        }
-//        else
-//        {
-//            SetColorToPS(Color.gray);
-//        }
         IAmHere.gameObject.SetActive(iAmHere);
         if (iAmHere)
         {
             SelectedObj.gameObject.SetActive(false);
         }
-//        CompletedGameObject.gameObject.SetActive(Cell.Completed);
+        //        CompletedGameObject.gameObject.SetActive(Cell.Completed);
         _IamHere = iAmHere;
     }
 
@@ -234,29 +232,19 @@ public class GlobalMapCellObject : MonoBehaviour
         {
             SelectedObj.gameObject.SetActive(true);
         }
-//        foreach (var systemsColor in _systemsColors)
-//        {
-//            ParticleSystem.MainModule ma = systemsColor.Key.main;
-//            ma.startColor = new ParticleSystem.MinMaxGradient(SelectColor);
-//        }
     }
-    
+
     public void UnSelected()
     {
         if (!_IamHere)
         {
             SelectedObj.gameObject.SetActive(false);
         }
-//        foreach (var systemsColor in _systemsColors)
-//        {
-//            ParticleSystem.MainModule ma = systemsColor.Key.main;
-//            ma.startColor = new ParticleSystem.MinMaxGradient(systemsColor.Value);
-//        }
     }
 
     public void Refresh()
     {
-        
+
     }
 
     void OnDestroy()

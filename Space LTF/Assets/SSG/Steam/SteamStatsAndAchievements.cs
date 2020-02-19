@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.ComponentModel;
+﻿using Steamworks;
 using System.Linq;
-using Steamworks;
+using UnityEngine;
 
 // This is a port of StatsAndAchievements.cpp from SpaceWar, the official Steamworks Example.
 public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
@@ -11,56 +9,48 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
     {
         ACH_WIN_1_BATTLE = 0,
         ACH_WIN_10_BATTLE = 1,
-        ACH_WIN_100_BATTLES = 2,
-        FULL_ARMY = 3,
-        NO_CRASH = 4,       //Завершить игру без разбитых кораблей
-        ALL_CELLS = 5,      //Запонить все ячейки  
+        ACH_WIN_100_BATTLE = 2,
+        // FULL_ARMY = 3,
+        // NO_CRASH = 4,       //Завершить игру без разбитых кораблей
+        // ALL_CELLS = 5,      //Запонить все ячейки  
         TEAM_FIVE = 6,
-        WEAPON_MAX_60 = 7,
-        SPELL_MAX_30 = 8,
-        SHIP_LEVEL_20 = 9,
-        SHIP_LEVEL_30 = 10,
-        SHIP_LEVEL_40 = 11,
+        // WEAPON_MAX_60 = 7,
+        // SPELL_MAX_30 = 8,
+        // SHIP_LEVEL_20 = 9,
+        // SHIP_LEVEL_30 = 10,
+        // SHIP_LEVEL_40 = 11,
         SHIP_DESTROY_100 = 12,
         SHIP_DESTROY_1000 = 13,
         SHIP_DESTROY_10000 = 14,
-        DAMAGE_500 = 15,
-        DAMAGE_5000 = 16,
-        DAMAGE_50000 = 17,
-        NO_WEAPON_WIN = 18,
-        COLLECT_MONEY_1000 = 19,                                            
-        COLLECT_MONEY_10000 = 20,
+        // DAMAGE_500 = 15,
+        // DAMAGE_5000 = 16,
+        // DAMAGE_50000 = 17,
+        // NO_WEAPON_WIN = 18,
+        // COLLECT_MONEY_1000 = 19,                                            
+        // COLLECT_MONEY_10000 = 20,   
+        WIN_AS_MER = 21,
+        WIN_AS_FED = 22,
+        WIN_AS_OCR = 23,
+        WIN_AS_KRI = 24,
+        WIN_AS_RDR = 25,
     };
 
     public Achievement_t[] Achievements = new Achievement_t[] {
-        new Achievement_t(Achievement.ACH_WIN_1_BATTLE, "Winner", ""),
-        new Achievement_t(Achievement.ACH_WIN_10_BATTLE, "Captain", ""),
-        new Achievement_t(Achievement.ACH_WIN_100_BATTLES, "Mayor", ""), 
-        
-        new Achievement_t(Achievement.SPELL_MAX_30, "Big guns", ""),
-        new Achievement_t(Achievement.WEAPON_MAX_60, "Improver", ""),
-        new Achievement_t(Achievement.TEAM_FIVE, "Team five", ""),
+        new Achievement_t(Achievement.ACH_WIN_1_BATTLE, "Winner"),
+        new Achievement_t(Achievement.ACH_WIN_10_BATTLE, "Captain"),
+        new Achievement_t(Achievement.ACH_WIN_100_BATTLE, "Mayor"),
 
-        new Achievement_t(Achievement.SHIP_LEVEL_20, "Friend", ""),
-        new Achievement_t(Achievement.SHIP_LEVEL_30, "Boss", ""),
-        new Achievement_t(Achievement.SHIP_LEVEL_40, "Master", ""),
+        new Achievement_t(Achievement.SHIP_DESTROY_100, "Fighter"),
+        new Achievement_t(Achievement.SHIP_DESTROY_1000, "Destroyer"),
+        new Achievement_t(Achievement.SHIP_DESTROY_10000, "Annihilator"),
 
-        new Achievement_t(Achievement.SHIP_DESTROY_100, "Fighter", ""),
-        new Achievement_t(Achievement.SHIP_DESTROY_1000, "Destroyer", ""),
-        new Achievement_t(Achievement.SHIP_DESTROY_10000, "Annihilator", ""),  
-        
-        new Achievement_t(Achievement.DAMAGE_500, "Shooter", ""),
-        new Achievement_t(Achievement.DAMAGE_5000, "Sniper", ""),
-        new Achievement_t(Achievement.DAMAGE_50000, "Gunner", ""),     
-        
-        new Achievement_t(Achievement.COLLECT_MONEY_1000, "Banker", ""),
-        new Achievement_t(Achievement.COLLECT_MONEY_10000, "Croesus", ""),
+        new Achievement_t(Achievement.TEAM_FIVE, "Team five"),
 
-        new Achievement_t(Achievement.NO_WEAPON_WIN, "Unusual", ""),
-
-        new Achievement_t(Achievement.NO_CRASH, "No crash", ""),
-        new Achievement_t(Achievement.FULL_ARMY, "Full pack", ""),
-        new Achievement_t(Achievement.ALL_CELLS, "Full ammo", "")
+        new Achievement_t(Achievement.WIN_AS_MER, "MerWin"),
+        new Achievement_t(Achievement.WIN_AS_FED, "FedWin"),
+        new Achievement_t(Achievement.WIN_AS_OCR, "OcrWin"),
+        new Achievement_t(Achievement.WIN_AS_KRI, "KriWin"),
+        new Achievement_t(Achievement.WIN_AS_RDR, "RdrWin"),
     };
 
     // Our GameID
@@ -309,7 +299,7 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
         /// <param name="achievement">The "API Name Progress Stat" used to uniquely identify the achievement.</param>
         /// <param name="name">The "Display Name" that will be shown to players in game and on the Steam Community.</param>
         /// <param name="desc">The "Description" that will be shown to players in game and on the Steam Community.</param>
-        public Achievement_t(Achievement achievementID, string name, string desc)
+        public Achievement_t(Achievement achievementID, string name)
         {
             m_eAchievementID = achievementID;
             m_strName = name;

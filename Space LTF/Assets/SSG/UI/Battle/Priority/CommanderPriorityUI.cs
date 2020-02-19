@@ -15,13 +15,13 @@ public class CommanderPriorityUI : MonoBehaviour
     }
 
     //Base defence
-    public void ClickDefenceBase()
+    public void ClickFight()
     {
-        _commander.Priority.ChangeTo(EBaseDefence.Yes);
+        _commander.Priority.ChangeTo(EGlobalTactics.Fight);
     }  
-    public void ClickStopDefenceBase()
+    public void ClickGosafe()
     {
-        _commander.Priority.ChangeTo(EBaseDefence.No);
+        _commander.Priority.ChangeTo(EGlobalTactics.GoSafe);
     }
     //Straight|Flangs
     public void ClickStraight()
@@ -56,15 +56,15 @@ public class CommanderPriorityUI : MonoBehaviour
     }    
     public void ClickECommanderPriority2Light()
     {
-        _commander.Priority.ChangeTo(ECommanderPriority1.Light);
+//        _commander.Priority.ChangeTo(ECommanderPriority1.Light);
     }    
     public void ClickECommanderPriority2Mid()
     {
-        _commander.Priority.ChangeTo(ECommanderPriority1.Mid);
+//        _commander.Priority.ChangeTo(ECommanderPriority1.Mid);
     }    
     public void ClickECommanderPriority2Heavy()
     {
-        _commander.Priority.ChangeTo(ECommanderPriority1.Heavy);
+//        _commander.Priority.ChangeTo(ECommanderPriority1.Heavy);
     }
 
 

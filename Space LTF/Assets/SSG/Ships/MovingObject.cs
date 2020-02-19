@@ -42,6 +42,7 @@ public abstract class MovingObject : PoolElement
     protected virtual float BankSpeed => BANK_SPEED;
 
     public event Action<MovingObject, bool> OnStop;
+    public event Action<MovingObject> OnMainDispose;
 
     public float CurSpeed
     {
@@ -350,5 +351,9 @@ public abstract class MovingObject : PoolElement
         ApplyMove(Vector3.zero, false);
     }
 
+    public virtual void Dispose()
+    {
+        OnMainDispose?.Invoke(this);
+    }
 }
 

@@ -59,9 +59,9 @@ public class MapNavigationList : MonoBehaviour
         var cells = map.AllCells();
         int cnt = 1;
         InitScoutsButton();
-        for (int i = 0; i < map.Size; i++)
+        for (int i = 0; i < map.SizeX; i++)
         {
-            for (int j = 0; j < map.Size; j++)
+            for (int j = 0; j < map.SizeZ; j++)
             {
                 var c = cells[i, j];
                 NavigationButton navigButton = null;
@@ -97,11 +97,11 @@ public class MapNavigationList : MonoBehaviour
         string txt;
         if (cell.Taken)
         {
-            txt = Namings.TryFormat(Namings.Tag("Complete"), c);
+            txt = Namings.Format(Namings.Tag("Complete"), c);
         }
         else
         {
-            txt = Namings.TryFormat(Namings.Tag("Target"), c);
+            txt = Namings.Format(Namings.Tag("Target"), c);
 
         }
         navigButton.Field.text = txt;

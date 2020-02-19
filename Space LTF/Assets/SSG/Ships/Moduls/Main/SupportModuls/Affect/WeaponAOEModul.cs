@@ -1,8 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponAOEModul : BaseSupportModul
 {
     private const float RAD = 5f;
@@ -22,9 +18,10 @@ public class WeaponAOEModul : BaseSupportModul
     }
     public override string DescSupport()
     {
-        return $"Damage all ships in radius {RAD}. Decrease damage by {Utils.FloatToChance(decrase)}%.";
+        return Namings.Format(Namings.Tag(Type.ToString()), RAD,
+            Utils.FloatToChance(decrase));
     }
-    protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase target, Bullet bullet, DamageDoneDelegate doneDelegate,WeaponAffectionAdditionalParams additional)
+    protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase target, Bullet bullet, DamageDoneDelegate doneDelegate, WeaponAffectionAdditionalParams additional)
     {
         var ships = BattleController.Instance.GetAllShipsInRadius(target.Position,
             BattleController.OppositeIndex(bullet.Weapon.TeamIndex), RAD);

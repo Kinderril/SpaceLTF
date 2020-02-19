@@ -36,7 +36,7 @@ public class NextBattleData
         }
         else
         {
-            Statistics.AddWin();
+            Statistics.AddWin(MainPlayer.Army.BaseShipConfig);
             WindowManager.Instance.OpenWindow(MainState.endBattle);
             Statistics.EndBattle(EndBattleType.win);
             MainPlayer.MessagesToConsole.AddMsg("Battle won!");

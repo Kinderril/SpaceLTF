@@ -73,7 +73,7 @@ public class GalaxyEnemiesArmyController
                 _totalBornArmies++;
                 var coordinates = $"{movingArmy.CurCell.indX},{movingArmy.CurCell.indZ}";
                 WindowManager.Instance.InfoWindow.Init(null,
-                    Namings.TryFormat(Namings.Tag("MovingArmyBorn"),
+                    Namings.Format(Namings.Tag("MovingArmyBorn"),
                         Namings.ShipConfig(movingArmy._player.Army.BaseShipConfig), coordinates));
             }
             else

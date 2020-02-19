@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 
@@ -22,8 +21,8 @@ public class PlayerAfterBattleOptions
         {
             _lastStepGetDialog = step;
             var ans = InitPosibleAnswers(cellPower, config);
-            ans.Add(new AnswerDialogData(Namings.DialogTag("Leave")));
-            var msg = Namings.TryFormat(Namings.DialogTag("afterBattleStart"));
+            ans.Add(new AnswerDialogData(Namings.Tag("leave")));
+            var msg = Namings.Format(Namings.DialogTag("afterBattleStart"));
             var dialog = new MessageDialogData(msg, ans);
             return dialog;
         }
@@ -73,7 +72,7 @@ public class PlayerAfterBattleOptions
             }
         }
 
-        msg = Namings.TryFormat(Namings.DialogTag("afterBattleTeachOk"), pilotsToTeach);
+        msg = Namings.Format(Namings.DialogTag("afterBattleTeachOk"), pilotsToTeach.Count);
         var dialog = new MessageDialogData(msg, ans);
         return dialog;
     }
@@ -89,12 +88,12 @@ public class PlayerAfterBattleOptions
             var spell = ship.Ship.SpellsModuls.Where(x => x != null).ToList().RandomElement();
             if (spell.Upgrade(ESpellUpgradeType.None))
             {
-                msg = Namings.TryFormat(Namings.DialogTag("afterBattleUpgradeSpellOk"), spell.Name);
+                msg = Namings.Format(Namings.DialogTag("afterBattleUpgradeSpellOk"), spell.Name);
                 return new MessageDialogData(msg, ans);
             }
         }
 
-        msg = Namings.TryFormat(Namings.DialogTag("afterBattleUpgradeSpellFail"));
+        msg = Namings.Format(Namings.DialogTag("afterBattleUpgradeSpellFail"));
         var dialog = new MessageDialogData(msg, ans);
         return dialog;
     }
@@ -138,11 +137,11 @@ public class PlayerAfterBattleOptions
             int monet = (int)(MyExtensions.Random(delta * 3, delta * 5) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
 
-            msg = Namings.TryFormat(Namings.DialogTag("afterBattleBuyoutConfirm"), monet);
+            msg = Namings.Format(Namings.DialogTag("afterBattleBuyoutConfirm"), monet);
         }
         else
         {
-            msg = Namings.TryFormat(Namings.DialogTag("afterBattleBuyoutFail"));
+            msg = Namings.Format(Namings.DialogTag("afterBattleBuyoutFail"));
         }
 
         var dialog = new MessageDialogData(msg, ans);
@@ -163,12 +162,12 @@ public class PlayerAfterBattleOptions
             var coef = (float)power * Library.MONEY_QUEST_COEF;
             int monet = (int)(MyExtensions.Random(scouts * 3, scouts * 5) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
-            msg = Namings.TryFormat(Namings.DialogTag("afterBattleSearchOk"), monet);        //"Credits add: {0}."
+            msg = Namings.Format(Namings.DialogTag("afterBattleSearchOk"), monet);        //"Credits add: {0}."
             MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, Library.REPUTATION_STEAL_REMOVE);
         }
         else
         {
-            msg = Namings.TryFormat(Namings.DialogTag("afterBattleSearchFail"));//
+            msg = Namings.Format(Namings.DialogTag("afterBattleSearchFail"));//
         }
         var dialog = new MessageDialogData(msg, ans);
         return dialog;
@@ -178,14 +177,14 @@ public class PlayerAfterBattleOptions
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
-        var shallWork = SkillWork(3, MainController.Instance.MainPlayer.Parameters.Scouts.Level);
+        var shallWork = true;//SkillWork(1, MainController.Instance.MainPlayer.Parameters.Scouts.Level);
         if (shallWork)
         {
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 6);
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 8);
             var coef = (float)power * Library.MONEY_QUEST_COEF;
-            int monet = (int)(MyExtensions.Random(15, 25) * coef);
+            int monet = (int)(MyExtensions.Random(20, 30) * coef);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
-            msg = Namings.TryFormat(Namings.DialogTag("afterBattleKillOk"), monet);//
+            msg = Namings.Format(Namings.DialogTag("afterBattleKillOk"), monet);//
         }
         else
         {
@@ -204,7 +203,7 @@ public class PlayerAfterBattleOptions
         if (shallWork)
         {
             MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 15);
-            msg = Namings.TryFormat(Namings.DialogTag("afterBattleRepairOk"));
+            msg = Namings.Format(Namings.DialogTag("afterBattleRepairOk"));
         }
         else
         {
@@ -256,7 +255,7 @@ public class PlayerAfterBattleOptions
         var cng = config.HasValue ? config.Value : configs.Random();
         var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
         var hireMsg = Namings.DialogTag("afterBattleHireOk");//
-        msg = Namings.TryFormat(hireMsg, Namings.ShipConfig(cng), Namings.ShipType(type));
+        msg = Namings.Format(hireMsg, Namings.ShipConfig(cng), Namings.ShipType(type));
         int itemsCount = MyExtensions.Random(1, 2);
         for (int i = 0; i < itemsCount; i++)
         {

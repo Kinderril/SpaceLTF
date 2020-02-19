@@ -27,13 +27,13 @@ public class WindowEndGame : BaseWindow
         var stat = MainController.Instance.Statistics;
         var player = MainController.Instance.MainPlayer;
 
-        StepsField.text = Namings.TryFormat(Namings.Tag("EndGameDays"), player.MapData.Step);
+        StepsField.text = Namings.Format(Namings.Tag("EndGameDays"), player.MapData.Step);
         var result = stat.EndGameStatistics.LastResult;
-        DifficultyField.text = Namings.TryFormat(Namings.Tag("StatisticDifficulty"), result.Difficulty);
-        ConfigField.text = Namings.TryFormat(Namings.Tag("StatisticConfig"), result.Config);
-        MapSizeField.text = Namings.TryFormat(Namings.Tag("StatisticMapSize"), result.MapSize);
-        FinalArmyPowerField.text = Namings.TryFormat(Namings.Tag("StatisticFinalArmyPower"), result.FinalArmyPower);
-        BattleWinsField.text = Namings.TryFormat(Namings.Tag("BattleWinsStat"), stat.Wins);
+        DifficultyField.text = Namings.Format(Namings.Tag("StatisticDifficulty"), result.Difficulty);
+        ConfigField.text = Namings.Format(Namings.Tag("StatisticConfig"), result.Config);
+        MapSizeField.text = Namings.Format(Namings.Tag("StatisticMapSize"), result.MapSize);
+        FinalArmyPowerField.text = Namings.Format(Namings.Tag("StatisticFinalArmyPower"), result.FinalArmyPower);
+        BattleWinsField.text = Namings.Format(Namings.Tag("BattleWinsStat"), stat.Wins);
         WinLoseField.text = result.Win ? Namings.Tag("WinEnd") : Namings.Tag("LoseEnd");
         DrawOpens(stat);
         GooBad.color = result.Win ? WinColor : LoseColor;
@@ -49,12 +49,12 @@ public class WindowEndGame : BaseWindow
         if (stats.LastWeaponsPairOpen != null)
         {
             haveOne = true;
-            openWeapons = Namings.TryFormat(Namings.Tag("OpenWeaponsEndGame"), Namings.Weapon(stats.LastWeaponsPairOpen.Part1), Namings.Weapon(stats.LastWeaponsPairOpen.Part2));
+            openWeapons = Namings.Format(Namings.Tag("OpenWeaponsEndGame"), Namings.Weapon(stats.LastWeaponsPairOpen.Part1), Namings.Weapon(stats.LastWeaponsPairOpen.Part2));
         }
         if (stats.LastOpenShipConfig != null)
         {
             haveOne = true;
-            openWeapons = Namings.TryFormat(Namings.Tag("OpenConfigEndGame"), Namings.ShipConfig(stats.LastOpenShipConfig.Config));
+            openWeapons = Namings.Format(Namings.Tag("OpenConfigEndGame"), Namings.ShipConfig(stats.LastOpenShipConfig.Config));
         }
         OpenDataContainer.gameObject.SetActive(haveOne);
         if (haveOne)

@@ -1,12 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public enum BattlefildEventType
+﻿public enum BattlefildEventType
 {
-     asteroids,
-     shieldsOff,
-     engineOff,
-     turrets,
+    asteroids,
+    shieldsOff,
+    // engineOff,
+    turrets,
 }
 
 public abstract class BattleFieldEvent
@@ -17,7 +14,8 @@ public abstract class BattleFieldEvent
         _battle = battle;
     }
 
-    public abstract BattlefildEventType Type { 
+    public abstract BattlefildEventType Type
+    {
         get;
     }
 

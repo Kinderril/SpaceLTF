@@ -50,7 +50,7 @@ public class WindowNewGame : BaseWindow
         // StartDeathTime.SetValue(Library.MAX_GLOBAL_MAP_DEATHSTART + 1);
         UpdateStartData();
         CheckButtonIsOpen();
-        AdditionalPower.SetValue(0);
+        AdditionalPower.SetValue(1);
         base.Init();
     }
 
@@ -107,6 +107,7 @@ public class WindowNewGame : BaseWindow
             SpellType.artilleryPeriod,
             SpellType.repairDrones,
             SpellType.vacuum,
+            SpellType.hookShot,
 //            SpellType.spaceWall,
         };
         List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
@@ -122,7 +123,7 @@ public class WindowNewGame : BaseWindow
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), /*StartDeathTime.GetValueInt()*/999, CoresCount.GetValueInt(),
             DifficultyNewGame.CurDifficulty, posibleSpells, GetPowerPerTurn());
         var dif = Utils.FloatToChance(gameData.CalcDifficulty());
-        DifficultyFIeld.text = Namings.TryFormat(Namings.Tag("StatisticDifficulty"), dif);
+        DifficultyFIeld.text = Namings.Format(Namings.Tag("StatisticDifficulty"), dif);
     }
 
     private int GetPowerPerTurn()
@@ -178,10 +179,10 @@ public class WindowNewGame : BaseWindow
 
     public void DebugOpenAll()
     {
-#if UNITY_EDITOR
+        // #if UNITY_EDITOR
         StartGameWeaponsChooseUI.DebugOpenAll();
         ArmyTypeSelectorUI.DebugOpenAll();
-#endif
+        // #endif
     }
 }
 

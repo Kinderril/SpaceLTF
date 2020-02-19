@@ -1,11 +1,7 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponShieldIgnore : BaseSupportModul
 {
-    private const float decrase = 0.7f; 
+    private const float decrase = 0.7f;
     public WeaponShieldIgnore(int level)
         : base(SimpleModulType.WeaponShieldIgnore, level)
     {
@@ -23,11 +19,11 @@ public class WeaponShieldIgnore : BaseSupportModul
     {
         if (Level == 1)
         {
-            return ($"Ignore shield. Decrease damage by {Utils.FloatToChance(decrase)}%.");
+            return Namings.Format(Namings.Tag("IgnoreShieldLevel1"), Utils.FloatToChance(decrase));
         }
         else
         {
-            return Namings.TryFormat("Ignore shield");
+            return Namings.Format(Namings.Tag("Ignore shield"));
         }
     }
 
@@ -45,13 +41,13 @@ public class WeaponShieldIgnore : BaseSupportModul
         }
     }
 
-//    protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate,WeaponAffectionAdditionalParams additional)
-//    {
-//        if (MyExtensions.IsTrue01(.25f))
-//        {
-//            paramsTargte.Damage(0,10,doneDelegate);
-//        }
-//    }
+    //    protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate,WeaponAffectionAdditionalParams additional)
+    //    {
+    //        if (MyExtensions.IsTrue01(.25f))
+    //        {
+    //            paramsTargte.Damage(0,10,doneDelegate);
+    //        }
+    //    }
 
 
 }

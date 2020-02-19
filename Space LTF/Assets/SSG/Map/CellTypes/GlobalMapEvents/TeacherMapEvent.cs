@@ -19,7 +19,7 @@ public class TeacherMapEvent : BaseGlobalMapEvent
 
     public override string Desc()
     {
-        return "Science ship";
+        return Namings.DialogTag("Science ship");
     }
 
     public override MessageDialogData GetDialog()
@@ -30,7 +30,6 @@ public class TeacherMapEvent : BaseGlobalMapEvent
         switch (_teachType)
         {
             case TeachType.mainShip:
-                //                PlayerParameterType tt = PlayerParameterType.diplomaty;
                 List<PlayerParameterType> posibleUpg = new List<PlayerParameterType>();
                 var player = MainController.Instance.MainPlayer.Parameters;
                 PlayerParameter param = null;
@@ -50,6 +49,9 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                         case PlayerParameterType.chargesSpeed:
                             param = player.ChargesSpeed;
                             break;
+                        case PlayerParameterType.engineParameter:
+                            param = player.EnginePower;
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -66,11 +68,14 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                     _cost = (int)(param.UpgradeCost() * MyExtensions.Random(0.5f, 0.75f));
                     if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_cost))
                     {
-                        mianAnswers.Add(new AnswerDialogData($"Ok.", () => DoUpgradeMain(paramToUpgrade), null));
+                        mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), () => DoUpgradeMain(paramToUpgrade), null));
                     }
                 }
-                mianAnswers.Add(new AnswerDialogData("No, thanks.", null));
-                mesData = new MessageDialogData($"This is science ship. They can improve your fleet [credits:{_cost}]. Do you want to upgrade {Namings.ParameterName(paramToUpgrade)}?", mianAnswers);
+                mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("teacherNo"), null));
+                mesData = new MessageDialogData(
+                    Namings.Format(Namings.DialogTag("teacherStartSience")
+                        ,
+                        _cost, Namings.ParameterName(paramToUpgrade)), mianAnswers);
                 return mesData;
             case TeachType.pilots:
                 var army = MainController.Instance.MainPlayer.Army;
@@ -79,10 +84,11 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                 _cost = (int)(costMidLvl * MyExtensions.Random(0.5f, 0.75f));
                 if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_cost))
                 {
-                    mianAnswers.Add(new AnswerDialogData($"Ok.", () => DoPilotTeach(), null));
+                    mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), () => DoPilotTeach(), null));
                 }
-                mianAnswers.Add(new AnswerDialogData("No, thanks.", null));
-                mesData = new MessageDialogData($"This is science ship. They can teach some of your pilots [credits:{_cost}].", mianAnswers);
+                mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("teacherNo"), null));  //
+                mesData = new MessageDialogData(
+                    Namings.Format(Namings.DialogTag("teacherStartPilots"), _cost), mianAnswers);   //
                 return mesData;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -93,7 +99,7 @@ public class TeacherMapEvent : BaseGlobalMapEvent
     private MessageDialogData DoPilotTeach()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Ok.", null, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
         MainController.Instance.MainPlayer.MoneyData.RemoveMoney(_cost);
         var army = MainController.Instance.MainPlayer.Army.Army.Suffle();
         var points = 1000f;
@@ -104,12 +110,13 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                 if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
                 {
                     var mesData = new MessageDialogData(
-                        $"Ship {pilotData.Ship.Name} Improved. Pilot level:{pilotData.Pilot.CurLevel}", mianAnswers);
+                        Namings.Format(Namings.DialogTag("teacherImproved"), pilotData.Ship.Name,  //
+                            pilotData.Pilot.CurLevel), mianAnswers);
                     return mesData;
                 }
             }
         }
-        return new MessageDialogData($"Fail.", mianAnswers); ;
+        return new MessageDialogData(Namings.DialogTag("teacherFail"), mianAnswers);//
     }
 
     private void DoUpgradeMain(PlayerParameterType paramToUpgrade)
@@ -128,6 +135,9 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                 break;
             case PlayerParameterType.chargesSpeed:
                 player.Parameters.ChargesSpeed.TryUpgrade();
+                break;
+            case PlayerParameterType.engineParameter:
+                player.Parameters.EnginePower.TryUpgrade();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(paramToUpgrade), paramToUpgrade, null);

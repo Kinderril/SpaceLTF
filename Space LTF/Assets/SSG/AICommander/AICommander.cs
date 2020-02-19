@@ -5,27 +5,29 @@ using UnityEngine;
 
 public class AICommander
 {
-    private Commander _commander;
+    //    private Commander _commander;
     private bool enable = false;
     private BaseAISpell[] _spells;
     private AICommanderMainShip _mainShip;
     private float _createdTime;
+    private ShipControlCenter _shipControl;
 
-    public AICommander(Commander commander)
+    public AICommander(ShipControlCenter shipControl)
     {
         _createdTime = Time.time;
-        _commander = commander;
+        //        _commander = commander;
+        _shipControl = shipControl;
         var spellTmp = new List<BaseAISpell>();
-        enable = _commander.MainShip != null;
+        enable = true;
         if (enable)
         {
-            _commander.MainShip.OnDeath += OnDeath;
-            _mainShip = new AICommanderMainShip(_commander);
-            foreach (var baseSpellModulInv in commander.MainShip.ShipInventory.SpellsModuls)
+            shipControl.OnDeath += OnDeath;
+            _mainShip = new AICommanderMainShip(_shipControl);
+            foreach (var baseSpellModulInv in _shipControl.ShipInventory.SpellsModuls)
             {
                 if (baseSpellModulInv != null)
                 {
-                    var v = Create(baseSpellModulInv, commander);
+                    var v = Create(baseSpellModulInv);
                     if (v != null)
                     {
                         spellTmp.Add(v);
@@ -37,7 +39,7 @@ public class AICommander
             if (_spells.Length == 0)
             {
                 Debug.LogError(
-                    $"AI commander have no spells to use spell modules:{commander.MainShip.ShipInventory.SpellsModuls}");
+                    $"AI commander have no spells to use spell modules:{_shipControl.ShipInventory.SpellsModuls}");
             }
             Debug.Log("AIcommander Inited. Spells: " + _spells.Length);
         }
@@ -52,43 +54,45 @@ public class AICommander
     }
 
     [CanBeNull]
-    private BaseAISpell Create(BaseSpellModulInv baseSpellModul, Commander commander)
+    private BaseAISpell Create(BaseSpellModulInv baseSpellModul)
     {
-        var mainShip = commander.MainShip;
+        var mainShip = _shipControl;
         var spellInGame = new SpellInGame(baseSpellModul, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
             baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount, baseSpellModul.SpellType,
-            baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.DescFull(), baseSpellModul.DiscCounter);
+            baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.DescFull(), baseSpellModul.DiscCounter, 1f);
 
 
         switch (baseSpellModul.SpellType)
         {
             case SpellType.shildDamage:
-                return new ShieldDamageSpellAI(baseSpellModul as ShieldOffSpell, commander, spellInGame);
+                return new ShieldDamageSpellAI(baseSpellModul as ShieldOffSpell, _shipControl, spellInGame);
             case SpellType.engineLock:
-                return new EngineLockSpellAI(baseSpellModul as EngineLockSpell, commander, spellInGame);
+                return new EngineLockSpellAI(baseSpellModul as EngineLockSpell, _shipControl, spellInGame);
             case SpellType.lineShot:
-                return new LineShotSpellAI(baseSpellModul as LineShotSpell, commander, spellInGame);
+                return new LineShotSpellAI(baseSpellModul as LineShotSpell, _shipControl, spellInGame);
             case SpellType.distShot:
-                return new DistShotSpellAI(baseSpellModul as DistShotSpell, commander, spellInGame);
+                return new DistShotSpellAI(baseSpellModul as DistShotSpell, _shipControl, spellInGame);
             case SpellType.mineField:
-                return new MineFieldSpellAI(baseSpellModul as MineFieldSpell, commander, spellInGame);
+                return new MineFieldSpellAI(baseSpellModul as MineFieldSpell, _shipControl, spellInGame);
             // case SpellType.randomDamage:
             //     return new RandomDamageSpellAI(baseSpellModul as RandomDamageSpell, commander, spellInGame);
             case SpellType.artilleryPeriod:
-                return new ArtilleryAI(baseSpellModul as ArtillerySpell, commander, spellInGame);
+                return new ArtilleryAI(baseSpellModul as ArtillerySpell, _shipControl, spellInGame);
             case SpellType.repairDrones:
-                return new RepairDropneAI(baseSpellModul as RepairDronesSpell, commander, spellInGame);
+                return new RepairDropneAI(baseSpellModul as RepairDronesSpell, _shipControl, spellInGame);
             case SpellType.rechargeShield:
-                return new RechargeShieldAI(baseSpellModul as RechargeShieldSpell, commander, spellInGame);
+                return new RechargeShieldAI(baseSpellModul as RechargeShieldSpell, _shipControl, spellInGame);
             // case SpellType.roundWave:
             //
             //     break;
             case SpellType.machineGun:
-                return new MachineGunSpellAI(baseSpellModul as MachineGunSpell, commander, spellInGame);
+                return new MachineGunSpellAI(baseSpellModul as MachineGunSpell, _shipControl, spellInGame);
             case SpellType.throwAround:
-                return new ThrowAroundAI(baseSpellModul as ThrowAroundSpell, commander, spellInGame);
+                return new ThrowAroundAI(baseSpellModul as ThrowAroundSpell, _shipControl, spellInGame);
             case SpellType.vacuum:
-                return new VacuumSpellAI(baseSpellModul as VacuumSpell, commander, spellInGame);
+                return new VacuumSpellAI(baseSpellModul as VacuumSpell, _shipControl, spellInGame);
+            case SpellType.hookShot:
+                return new HookShotSpellAI(baseSpellModul as HookShotSpell, _shipControl, spellInGame);
         }
 
         return null;
@@ -111,9 +115,9 @@ public class AICommander
 
     public void Dispose()
     {
-        if (enable)
+        if (enable && _shipControl != null)
         {
-            _commander.MainShip.OnDeath -= OnDeath;
+            _shipControl.OnDeath -= OnDeath;
         }
     }
 }

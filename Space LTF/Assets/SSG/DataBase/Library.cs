@@ -33,6 +33,7 @@ public enum LibraryPilotUpgradeType
 public static class Library
 {
     public const float SECTOR_COEF_POWER = 0.3f;
+    public const float COEF_CORE_ARMY = 1.3f;
 
     public const int MAX_WEAPON_LVL = 5;
     public const int MAX_SPELL_LVL = 4;
@@ -42,7 +43,8 @@ public static class Library
     public const float MIN_WORKING_SHIP = 6;
     public const float MAX_ARMY_POWER_MAP = 70;
 
-    public const float REPAIR_DISCOUTNT = 0.5f;
+    public const float REPAIR_DISCOUTNT = 1.2f;
+    public const float COST_REPAIR_CRIT = 1.1f;
 
     private const float LASER_SPEED = 9.7f;
     private const float LASER_DELAY = 4f;
@@ -63,23 +65,20 @@ public static class Library
     private const float BEAM_DELAY = 3f;
     private const float BEAM_SPEED = 1f;
 
-    private const float SPREAD_ANG = 20f;
-    private const float SPREAD_DELAY = 6f;
-    private const float SPREAD_SPEED = 4.9f;
-
-    private const float ARTILLERY_ANG = 10f;
-
     private const float EMI_ANG = 50f;
     private const float EMI_DELAY = 7f;
     private const float EMI_SPEED = 15f;
 
+    public const float MOVING_ARMY_POWER_COEF = 1.5f;
+
     public const float BASE_WEAPON_VALUE = 1.2f;
     public const float BASE_SPELL_VALUE = 1.1f;
-    public const float BASE_SPELL_VALUE_LEVEL = 0.5f;
+    public const float BASE_SPELL_VALUE_LEVEL = 0.35f;
     public const float BASE_SIMPLE_MODUL_VALUE = 0.8f;
     public const float BASE_SIMPLE_MODUL_VALUE_UPGRADE = 0.6f;
     public const float MIN_POINTS_TO_CREATE_ARMY_WITH_BASESHIP = 20f;
     public const float BASE_SHIP_VALUE = 2f;
+    public const float BASE_TURRET_VALUE = 1f;
     public const float WEAPON_LEVEL_COEF = 0.8f;
     public const float PILOT_LEVEL_COEF = 0.15f;
     public const float PILOT_RANK_COEF = 0f; //0.7f;
@@ -91,7 +90,7 @@ public static class Library
     public const int COINS_TO_WAVE_SHIP = 1;
     public const int COINS_TO_CHARGE_SHIP_SHIELD_DELAY = 20;
     public const int COINS_TO_WAVE_SHIP_DELAY = 30;
-    public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.35f;
+    public const float CHARGE_SHIP_SHIELD_HEAL_PERCENT = 0.36f;
 
     public const int PriorityTargetCostTime = 120;
     public const int PriorityTargetCostCount = 1;
@@ -201,6 +200,33 @@ public static class Library
 
     public static ShipInventory CreateShip(ShipType shipType, ShipConfig config, Player player, PilotParameters pilot)
     {
+        float hull = 50;
+        float shield = 0;
+        if (shipType == ShipType.Turret)
+        {
+            switch (config)
+            {
+                case ShipConfig.raiders:
+                case ShipConfig.mercenary:
+                case ShipConfig.droid:
+
+                    break;
+                case ShipConfig.federation:
+                    hull = 40;
+                    shield = 20;
+                    break;
+                case ShipConfig.ocrons:
+                    hull = 60;
+                    shield = 0;
+                    break;
+                case ShipConfig.krios:
+                    hull = 25;
+                    shield = 30;
+                    break;
+            }
+            var par = new StartShipParams(ShipType.Turret, config, hull, shield, 0, 90, 2, 1, 0, 0, 0, 1f, 0f);
+            return new ShipInventory(par, player, pilot);
+        }
         var reloadTime = CalcTrickReload(pilot.Stats.CurRank, shipType);
         switch (config)
         {
@@ -380,6 +406,10 @@ public static class Library
                 return new MachineGunSpell();
             case SpellType.vacuum:
                 return new VacuumSpell();
+            case SpellType.hookShot:
+                return new HookShotSpell();     
+//            case SpellType.mainShipBlink:
+//                return new Telepo();  
 
             default:
                 Debug.LogError("spellType not implemented " + spellType);
@@ -547,31 +577,40 @@ public static class Library
                       .Sum(spell => BASE_SPELL_VALUE + +(spell.Level - 1) * BASE_SPELL_VALUE_LEVEL);
         //        float shipCoef = ShipPowerCoef(ship.ShipType);
         //        var t = sum*shipCoef + BASE_SHIP_VALUE;
-        var t = sum + BASE_SHIP_VALUE;
+        float t;
+        if (ship.ShipType == ShipType.Turret)
+        {
+            t = sum + BASE_TURRET_VALUE;
+        }
+        else
+        {
+            t = sum + BASE_SHIP_VALUE;
+        }
+
         return t;
     }
 
-    public static float ShipPowerCoef(ShipType shipType)
-    {
-        var shipCoef = 1f;
-        switch (shipType)
-        {
-            case ShipType.Light:
-                shipCoef = 1.6f;
-                break;
-            case ShipType.Middle:
-                shipCoef = 1.3f;
-                break;
-            case ShipType.Heavy:
-                shipCoef = 1f;
-                break;
-            case ShipType.Base:
-                shipCoef = 1f;
-                break;
-        }
-
-        return shipCoef;
-    }
+    // public static float ShipPowerCoef(ShipType shipType)
+    // {
+    //     var shipCoef = 1f;
+    //     switch (shipType)
+    //     {
+    //         case ShipType.Light:
+    //             shipCoef = 1.6f;
+    //             break;
+    //         case ShipType.Middle:
+    //             shipCoef = 1.3f;
+    //             break;
+    //         case ShipType.Heavy:
+    //             shipCoef = 1f;
+    //             break;
+    //         case ShipType.Base:
+    //             shipCoef = 1f;
+    //             break;
+    //     }
+    //
+    //     return shipCoef;
+    // }
 
     public static float CalcPilotPower(IPilotParameters pilot)
     {
@@ -598,11 +637,11 @@ public static class Library
     public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 0;
     public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 10;
 
-    public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 8;
-    public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 9;
-    public const int MIN_GLOBAL_MAP_NORMAL_BASE_POWER = 10;
-    public const int MIN_GLOBAL_MAP_HARD_BASE_POWER = 11;
-    public const int MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER = 12;
+    public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 10;
+    public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 11;
+    public const int MIN_GLOBAL_MAP_NORMAL_BASE_POWER = 12;
+    public const int MIN_GLOBAL_MAP_HARD_BASE_POWER = 14;
+    public const int MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER = 15;
 
 
     public const int MIN_GLOBAL_MAP_SECTOR_COUNT = 3;
@@ -629,6 +668,7 @@ public static class Library
     public const int REPUTATION_FRIGHTEN_SHIP_REMOVE = 9;
     public const int REPUTATION_HIRE_CRIMINAL_REMOVED = 10;
     public const float REPAIR_PERCENT_PERSTEP_PERLEVEL = 0.08f;
+
 
     #endregion
 }

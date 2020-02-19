@@ -75,7 +75,7 @@ public class MercenaryHideout : BaseGlobalMapEvent
         mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("hirePay"), null, TryPay));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null, null));
 
-        var msg = Namings.TryFormat(Namings.DialogTag("hireEnter"), creditsToEnter
+        var msg = Namings.Format(Namings.DialogTag("hireEnter"), creditsToEnter
             );
         MessageDialogData mesData = new MessageDialogData(msg, mianAnswers);
         return mesData;
@@ -147,7 +147,7 @@ public class MercenaryHideout : BaseGlobalMapEvent
             foreach (var mercsConfig in _mercsConfigs)
             {
                 var ship = mercsConfig;
-                var str = Namings.TryFormat(Namings.Tag("HireMerc"), Namings.ShipConfig(mercsConfig.Congif),
+                var str = Namings.Format(Namings.Tag("HireMerc"), Namings.ShipConfig(mercsConfig.Congif),
                     Namings.ShipType(mercsConfig.Type), mercsConfig.PilotLevel, mercsConfig.Cost);
 
                 MessageDialogData HireShip()

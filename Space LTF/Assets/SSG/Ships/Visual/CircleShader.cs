@@ -10,12 +10,14 @@ public class CircleShader : MonoBehaviour
     private Material MatToCircle;
     private ShipBase _ship;
     private float _ang;
+    private float _range;
     private bool isEnable = false;
 
     public void Init(ShipBase ship,float ang,float range)
     {
         _ang = ang;
         _ship = ship;
+        _range = range;
         transform.localScale = transform.localScale * range * 2f;
         var renderer = GetComponent<MeshRenderer>();
         Utils.CopyMaterials(renderer,null);
@@ -58,6 +60,14 @@ public class CircleShader : MonoBehaviour
         {
             UpdateAng();
         }
+    }
+
+    public void IncreaseShootsDist(float coef)
+    {
+        var nextRange = _range * coef;
+        _range = nextRange;
+        transform.localScale = transform.localScale * coef;
+
     }
 }
 

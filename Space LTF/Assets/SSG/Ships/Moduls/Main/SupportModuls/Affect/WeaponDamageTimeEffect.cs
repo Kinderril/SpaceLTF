@@ -1,8 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponDamageTimeEffect : BaseSupportModul
 {
     private const float Chance = 0.3f;
@@ -10,16 +6,16 @@ public class WeaponDamageTimeEffect : BaseSupportModul
     private const float Period = 8f;
     private ShipDamageType _damageType;
     public WeaponDamageTimeEffect(ShipDamageType damageType, int level)
-        : base(  ByDmg(damageType), level)
+        : base(ByDmg(damageType), level)
     {
         _damageType = damageType;
     }
 
     //protected virtual bool AffectImplement => true;
-    protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate,WeaponAffectionAdditionalParams additional)
+    protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate, WeaponAffectionAdditionalParams additional)
     {
         if (MyExtensions.IsTrue01(ChanceLevel()))
-            ship.DamageData.ApplyEffect(_damageType,8f);
+            ship.DamageData.ApplyEffect(_damageType, 8f);
     }
 
     private float ChanceLevel()
@@ -29,19 +25,17 @@ public class WeaponDamageTimeEffect : BaseSupportModul
 
     public override string DescSupport()
     {
-        string period = $"with a {Utils.FloatToChance(ChanceLevel())}% chance for {Period:0} sec.";
+        string period = Namings.Format(Namings.Tag("DamageTimeEffect"), Utils.FloatToChance(ChanceLevel()), Period);
         switch (_damageType)
         {
             case ShipDamageType.engine:
-                return $"Turn off engine {period}";
-            // case ShipDamageType.weapon:
-            //     return $"Off all weapons {period}";
+                return Namings.Format("DamageTimeEffectEngine", period);
             case ShipDamageType.shiled:
-                return $"Off all shield {period}";
+                return Namings.Format("DamageTimeEffectShield", period);
             case ShipDamageType.fire:
-                return $"Start fire {period}";
+                return Namings.Format("DamageTimeEffectFire", period);
             default:
-                throw new ArgumentOutOfRangeException();
+                return "Error";
         }
     }
 

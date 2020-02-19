@@ -188,7 +188,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     public string DamageInfo()
     {
         var dmg = CurrentDamage;
-        return Namings.TryFormat("Damage: Shield:{0}. Body:{1}", dmg.ShieldDamage, dmg.BodyDamage);
+        return Namings.Format("Damage: Shield:{0}. Body:{1}", dmg.ShieldDamage, dmg.BodyDamage);
     }
 
     private int RequireLevelByLevel(int lvl)
@@ -250,7 +250,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                     var cost = MoneyConsts.WeaponUpgrade[Level];
                     if (owner.MoneyData.HaveMoney(cost))
                     {
-                        var txt = Namings.TryFormat(Namings.Tag("WANT_UPGRADE_WEAPON"), Namings.Weapon(WeaponType));
+                        var txt = Namings.Format(Namings.Tag("WANT_UPGRADE_WEAPON"), Namings.Weapon(WeaponType));
                         WindowManager.Instance.ConfirmWindow.Init(() =>
                         {
                             WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.Upgrade);
@@ -276,7 +276,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                 {
                     int pilotLevel = shipInv.PilotParameters.CurLevel;
                     int targetLevel = this.RequireLevel(Level + 1);
-                    WindowManager.Instance.InfoWindow.Init(null, Namings.TryFormat(Namings.Tag("CanCauseNoLevel"), pilotLevel, targetLevel));
+                    WindowManager.Instance.InfoWindow.Init(null, Namings.Format(Namings.Tag("CanCauseNoLevel"), pilotLevel, targetLevel));
                 }
             }
 

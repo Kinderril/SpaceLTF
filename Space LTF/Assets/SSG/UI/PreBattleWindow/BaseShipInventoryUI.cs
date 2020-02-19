@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-public  class BaseShipInventoryUI : DragZone
+public class BaseShipInventoryUI : DragZone
 {
     public Image IconType;
     public TextMeshProUGUI ConfigType;
@@ -20,7 +16,7 @@ public  class BaseShipInventoryUI : DragZone
 
     private ShipInventory _shipInventory;
 
-    public void Init(PlayerParameters playerParameters,ShipInventory shipInventory, bool usable, ConnectInventory connectedInventory)
+    public void Init(PlayerParameters playerParameters, ShipInventory shipInventory, bool usable, ConnectInventory connectedInventory)
     {
         _curParams.Clear();
         _shipInventory = shipInventory;
@@ -37,6 +33,8 @@ public  class BaseShipInventoryUI : DragZone
         InitParameter(playerParameters.ChargesSpeed);
         InitParameter(playerParameters.Scouts);
         InitParameter(playerParameters.Repair);
+        InitParameter(playerParameters.EnginePower);
+
         var rect = PamsLayout.GetComponent<RectTransform>();
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
 
@@ -48,7 +46,7 @@ public  class BaseShipInventoryUI : DragZone
     private void InitParameter(PlayerParameter parameter)
     {
         var itemParameter = DataBaseController.GetItem(PlayerParameterPrefab);
-        itemParameter.transform.SetParent(PamsLayout,false);
+        itemParameter.transform.SetParent(PamsLayout, false);
         itemParameter.Init(parameter);
         _curParams.Add(itemParameter);
     }
@@ -70,7 +68,7 @@ public  class BaseShipInventoryUI : DragZone
         {
             var spellSlot = InventoryOperation.GetDragableItemSlot();
             allslots.Add(spellSlot);
-            spellSlot.Init(_shipInventory,true);
+            spellSlot.Init(_shipInventory, true);
             spellSlot.transform.SetParent(SpellsLayout, false);
             spellSlot.DragItemType = DragItemType.spell;
         }

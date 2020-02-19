@@ -1,11 +1,8 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor;
-using UnityEngine.UI;
+using UnityEngine;
 
 public class ScoutShipInfoUI : MonoBehaviour
 {
@@ -21,7 +18,7 @@ public class ScoutShipInfoUI : MonoBehaviour
         LevelField.gameObject.SetActive(false);
         var allScountTYpes = ((EShipScoutType[])Enum.GetValues(typeof(EShipScoutType))).ToList();
         var copy = allScountTYpes.ToList();
-        Dictionary<EShipScoutType,GameObject> allObjecst = new Dictionary<EShipScoutType, GameObject>();
+        Dictionary<EShipScoutType, GameObject> allObjecst = new Dictionary<EShipScoutType, GameObject>();
 
         foreach (var eShipScoutType in data.InfoTypeGetToShow)
         {
@@ -30,14 +27,14 @@ public class ScoutShipInfoUI : MonoBehaviour
             {
                 case EShipScoutType.shipType:
                     ShipTypeImage.gameObject.SetActive(true);
-                    ShipTypeImage.Init(DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(data.ShipType), Namings.ShipType(data.ShipType) );
+                    ShipTypeImage.Init(DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(data.ShipType), Namings.ShipType(data.ShipType));
                     allObjecst.Add(eShipScoutType, ShipTypeImage.gameObject);
                     break;
                 case EShipScoutType.weapons:
                     var weaponImage = DataBaseController.GetItem(ShipTypeImage);
-                    weaponImage.transform.SetParent(Layout,false);
+                    weaponImage.transform.SetParent(Layout, false);
                     weaponImage.transform.SetAsLastSibling();
-                    weaponImage.Init(DataBaseController.Instance.DataStructPrefabs.GetWeaponIcon(data.WeaponType),Namings.Weapon(data.WeaponType));
+                    weaponImage.Init(DataBaseController.Instance.DataStructPrefabs.GetWeaponIcon(data.WeaponType), Namings.Weapon(data.WeaponType));
                     weaponImage.gameObject.SetActive(true);
                     allObjecst.Add(eShipScoutType, weaponImage.gameObject);
                     break;
@@ -52,7 +49,7 @@ public class ScoutShipInfoUI : MonoBehaviour
                         var modul = DataBaseController.GetItem(ShipTypeImage);
                         modul.transform.SetParent(Modules, false);
                         modul.transform.SetAsLastSibling();
-                        modul.Init(DataBaseController.Instance.DataStructPrefabs.GetModulIcon(simpleModulType),Namings.SimpleModulName(simpleModulType));
+                        modul.Init(DataBaseController.Instance.DataStructPrefabs.GetModulIcon(simpleModulType), Namings.SimpleModulName(simpleModulType));
                         modul.gameObject.SetActive(true);
                     }
                     allObjecst.Add(eShipScoutType, Modules.gameObject);
@@ -63,7 +60,7 @@ public class ScoutShipInfoUI : MonoBehaviour
                         var modul = DataBaseController.GetItem(ShipTypeImage);
                         modul.transform.SetParent(Spells, false);
                         modul.transform.SetAsLastSibling();
-                        modul.Init(DataBaseController.Instance.DataStructPrefabs.GetSpellIcon(spellType),Namings.SpellName(spellType));
+                        modul.Init(DataBaseController.Instance.DataStructPrefabs.GetSpellIcon(spellType), Namings.SpellName(spellType));
                         modul.gameObject.SetActive(true);
                     }
                     allObjecst.Add(eShipScoutType, Spells.gameObject);
@@ -77,6 +74,7 @@ public class ScoutShipInfoUI : MonoBehaviour
             {
                 case ShipType.Light:
                 case ShipType.Middle:
+                case ShipType.Turret:
                 case ShipType.Heavy:
                     if (eShipScoutType == EShipScoutType.spells)
                     {
@@ -93,13 +91,13 @@ public class ScoutShipInfoUI : MonoBehaviour
 
             if (eShipScoutType == EShipScoutType.weapons && data.ShipType == ShipType.Base)
             {
-                
+
             }
             var nodata = DataBaseController.Instance.DataStructPrefabs.NoScoutData;
             ImageWithTooltip element = DataBaseController.GetItem(nodata);
             element.transform.SetParent(Layout);
             allObjecst.Add(eShipScoutType, element.gameObject);
-            element.Init(null,Namings.Tag($"scout_{eShipScoutType.ToString()}"));
+            element.Init(null, Namings.Tag($"scout_{eShipScoutType.ToString()}"));
         }
 
         foreach (var eShipScoutType in copy)

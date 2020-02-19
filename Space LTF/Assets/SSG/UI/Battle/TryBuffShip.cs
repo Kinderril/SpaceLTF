@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public class TryBuffShip : TryApplyToShip
@@ -8,23 +7,23 @@ public class TryBuffShip : TryApplyToShip
     private float _nextClickTime;
 
 
-    public void OnTryChargeClick()
-    {
-        if (!IsReady)
-        {
-            FailObject.SetTrigger("Play");
-            return;
-        }
-
-        if (_ship.Commander.TryBuffShip(_ship))
-        {
-            StartCooldown();
-        }
-        else
-        {
-            FailObject.SetTrigger("Play");
-        }
-    }
+    // public void OnTryChargeClick()
+    // {
+    //     if (!IsReady)
+    //     {
+    //         FailObject.SetTrigger("Play");
+    //         return;
+    //     }
+    //
+    //     if (_ship.Commander.TryBuffShip(_ship))
+    //     {
+    //         StartCooldown();
+    //     }
+    //     else
+    //     {
+    //         FailObject.SetTrigger("Play");
+    //     }
+    // }
 
     public void Dispose()
     {
@@ -32,7 +31,7 @@ public class TryBuffShip : TryApplyToShip
     }
     protected override string TextToTooltip()
     {
-        return Namings.TryFormat(Namings.Tag("BuffButton"), Library.COINS_TO_CHARGE_SHIP_SHIELD, Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY);
+        return Namings.Format(Namings.Tag("BuffButton"), Library.COINS_TO_CHARGE_SHIP_SHIELD, Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY);
     }
 }
 

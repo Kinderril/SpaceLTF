@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 
-public  class SelectedElement : MonoBehaviour
+public class SelectedElement : MonoBehaviour
 {
     public Transform ScalTransform;
 
@@ -25,6 +21,9 @@ public  class SelectedElement : MonoBehaviour
                 break;
             case ShipType.Base:
                 scale = 2f;
+                break;
+            case ShipType.Turret:
+                scale = 1.3f;
                 break;
         }
         ScalTransform.localScale = Vector3.one * scale;

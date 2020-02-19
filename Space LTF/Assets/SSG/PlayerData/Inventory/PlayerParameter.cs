@@ -43,7 +43,7 @@ public class PlayerParameter
                 {
                     OnUpgrade(this);
                 }
-            }, null, Namings.TryFormat(Namings.Tag("UpgParams"), Name, cost));
+            }, null, Namings.Format(Namings.Tag("UpgParams"), Name, cost));
         }
         else
         {

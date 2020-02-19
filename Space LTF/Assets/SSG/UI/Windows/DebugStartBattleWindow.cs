@@ -103,7 +103,7 @@ public class DebugStartBattleWindow : BaseWindow
         }
         var greenPLayer = new Player("Me");
         greenPLayer.Army.SetArmy(greenSide);
-        var redPlayer = new Player("Bot_" + Utils.GetId());
+        var redPlayer = new PlayerAI("Bot_" + Utils.GetId());
         redPlayer.Army.SetArmy(redSide);
         MainController.Instance.PreBattle(greenPLayer, redPlayer);
     }

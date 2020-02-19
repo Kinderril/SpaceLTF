@@ -27,13 +27,13 @@ public class LogHandler : Singleton<LogHandler>
         string logEntr;
         if (type == LogType.Error)
         {
-            logEntr = Namings.TryFormat("\n {0} {1} {2}\n{3}"
+            logEntr = Namings.Format("\n {0} {1} {2}\n{3}"
                 , DateTime.Now, type, condition, Environment.StackTrace);
         }
         else
         {
 
-            logEntr = Namings.TryFormat("\n {0} {1}  {2}"
+            logEntr = Namings.Format("\n {0} {1}  {2}"
                 , DateTime.Now, type, condition);
         }
 

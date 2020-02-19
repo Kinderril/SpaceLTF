@@ -1,11 +1,9 @@
-﻿using System;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponMultiTargetModul : BaseSupportModul
 {
-    private const float _decrase_Base = 0.4f;
+    private const float _decrase_Base = 0.35f;
 
-    public float Decrase => _decrase_Base + 0.14f * Level;
+    public float Decrase => _decrase_Base + 0.11f * Level;
     public WeaponMultiTargetModul(int level)
         : base(SimpleModulType.WeaponMultiTarget, level)
     {
@@ -43,7 +41,7 @@ public class WeaponMultiTargetModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return Namings.TryFormat(Namings.Tag("ChainModulDesc"), Utils.FloatToChance(Decrase));
+        return Namings.Format(Namings.Tag("ChainModulDesc"), Utils.FloatToChance(Decrase));
         // return ($"After hit can reflect to another target. Decrease damage by {Utils.FloatToChance(Decrase)}.");
     }
 

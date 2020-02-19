@@ -38,6 +38,7 @@ public class TutorialElement : MonoBehaviour
         //        Debug.LogError($"Close tutor:{gameObject.name}");
         //        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
         gameObject.SetActive(false);
+        subClose();
         if (DontShowNoreToggle.isOn)
         {
             PlayerPrefs.SetInt(Id, 1);
@@ -48,6 +49,11 @@ public class TutorialElement : MonoBehaviour
             _isCompleted = true;
             Dispose();
         }
+    }
+
+    protected virtual void subClose()
+    {
+
     }
 
     public virtual void Dispose()

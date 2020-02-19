@@ -4,25 +4,25 @@ public abstract class BaseAISpell
 {
     private float _delay = 1f;
     private float _nextCheck = 1f;
-    protected Commander _commander;
+//    protected Commander _commander;
     protected SpellInGame _spellData;
-    protected ShipBase _owner;
+    protected ShipControlCenter _owner;
     protected BulleStartParameters _bulletStartParams;
     protected Bullet _bulletOrigin;
     protected float ShootDistSqrt;
     protected float _maxDist;
+    protected TeamIndex _teamIndex;
 
-    protected BaseAISpell(Commander commander, SpellInGame spellData)
+    protected BaseAISpell(ShipControlCenter commander, SpellInGame spellData)
     {
         _spellData = spellData;
-        _owner = commander.MainShip;
-        _commander = commander;
+        _owner = commander;
+        _teamIndex = commander.TeamIndex;
         _delay = MyExtensions.Random(1f, 4f);
-        _owner = commander.MainShip;
     }
     protected bool CanCast()
     {
-        return _commander.CoinController.CanUseCoins(_spellData.CostCount);
+        return _owner.CoinController.CanUseCoins(_spellData.CostCount);
     }
 
     protected Vector3 _modulPos()
@@ -64,10 +64,10 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
     protected T _spell;
     protected TeamIndex oIndex;
 
-    protected BaseAISpell(SpellInGame spellData, T spell, Commander commander)
+    protected BaseAISpell(SpellInGame spellData, T spell, ShipControlCenter commander)
         : base(commander, spellData)
     {
-        oIndex = BattleController.OppositeIndex(_commander.TeamIndex);
+        oIndex = BattleController.OppositeIndex(_teamIndex);
         _spell = spell;
         _bulletOrigin = spell.GetBulletPrefab();
         _bulletStartParams = _spell.BulleStartParameters;
@@ -79,7 +79,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         {
             Debug.LogError($"{this} Spell have BAD Shoot radius");
         }
-        var canUseSpell = _commander.CoinController.CanUseCoins(_spell.CostCount);
+        var canUseSpell = _owner.CoinController.CanUseCoins(_spell.CostCount);
         Debug.Log($"AI spell controller init: {spell.GetType()}  spell.AimRadius:{spell.AimRadius}   canUseSpell:{canUseSpell}");
         if (!canUseSpell)
         {
@@ -91,7 +91,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
     protected override void PeriodInnerUpdate()
     {
         Vector3 trg;
-//        Debug.LogError($"Cast spell 1 {this}");
+        //        Debug.LogError($"Cast spell 1 {this}");
         if (CanCast())
         {
             if (IsEnemyClose(out trg))
@@ -103,8 +103,8 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
 
     protected override bool IsEnemyClose(out Vector3 trg)
     {
-        var ship = BattleController.Instance.ClosestShipToPos(_commander.MainShip.Position, oIndex, out var sDist);
-//        Debug.LogError($"IsEnemyClose  dist {Mathf.Sqrt(sDist)} <  {Mathf.Sqrt(ShootDistSqrt)}");
+        var ship = BattleController.Instance.ClosestShipToPos(_owner.Position, oIndex, out var sDist);
+        //        Debug.LogError($"IsEnemyClose  dist {Mathf.Sqrt(sDist)} <  {Mathf.Sqrt(ShootDistSqrt)}");
         if (sDist < ShootDistSqrt)
         {
             trg = ship.Position;
@@ -119,8 +119,8 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         if (CanCast())
         {
             Cast(v);
-            _commander.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
-//            Debug.LogError($"_spell.TryCast {this}");
+            _owner.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
+            //            Debug.LogError($"_spell.TryCast {this}");
         }
     }
 

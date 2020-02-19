@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -22,7 +21,7 @@ public class MineFieldSpell : BaseSpellModulInv
     public float DAMAGE_SHIELD => damageShield + Level;
 
     public MineFieldSpell()
-        : base(SpellType.mineField, 2, 15,
+        : base(SpellType.mineField, 2, 14,
              new BulleStartParameters(8f, 36f, MINES_DIST, MINES_DIST), false)
     {
 
@@ -97,7 +96,7 @@ public class MineFieldSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("MinesSpell"), MINES_COUNT, MineFieldSpell.MINES_PERIOD.ToString("0"), DAMAGE_SHIELD, DAMAGE_BODY);
+        return Namings.Format(Namings.Tag("MinesSpell"), MINES_COUNT, MineFieldSpell.MINES_PERIOD.ToString("0"), DAMAGE_SHIELD, DAMAGE_BODY);
         //            $"Set {MinesCount} mines for {MineFieldSpell.MINES_PERIOD.ToString("0")} sec to selected location. Each mine damage {damageShield}/{damageBody}";
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
@@ -112,9 +111,9 @@ public class MineFieldSpell : BaseSpellModulInv
     {
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("MinesSpellDescA1");
+            return Namings.Format(Namings.Tag("MinesSpellDescA1"), effectPeriod);
         }
-        return Namings.Tag("MinesSpellDescB2");
+        return Namings.Format(Namings.Tag("MinesSpellDescB2"), effectPeriod);
     }
 }
 

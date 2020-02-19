@@ -32,7 +32,8 @@ public class WeaponShieldPerHit : BaseSupportModul
 
     public override string DescSupport()
     {
-        return $"Decrease damage by {Utils.FloatToChance(Damage)}%. Restore {ShieldToSTeal} of shield per hit.";
+        return Namings.Format(Namings.Tag("WeaponShieldPerHitDesc"), Utils.FloatToChance(Damage),
+            ShieldToSTeal);
     }
 
 

@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class BattleMapTutorial : TutorialElement
+﻿public class BattleMapTutorial : TutorialElement
 {
+    public bool ThisLauchOpened { get; private set; }
     public override void Init()
-    {                                                                                           
+    {
         if (!_isCompleted)
             WindowManager.Instance.OnWindowSetted += OnWindowSetted;
         base.Init();
@@ -19,6 +17,11 @@ public class BattleMapTutorial : TutorialElement
             if (!_isCompleted)
                 BattleController.Instance.PauseData.Pause();
         }
+    }
+
+    protected override void subClose()
+    {
+        ThisLauchOpened = true;
     }
 
     public override void Dispose()

@@ -24,7 +24,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * 1.9f;
         _credits = (int)MyExtensions.GreateRandom(myArmyPower);
-        var mesData = new MessageDialogData(Namings.TryFormat("Power fleet of {0} protect storage of energy.", Namings.ShipConfig(_config)), new List<AnswerDialogData>()
+        var mesData = new MessageDialogData(Namings.Format("Power fleet of {0} protect storage of energy.", Namings.ShipConfig(_config)), new List<AnswerDialogData>()
         {
             new AnswerDialogData("Fight",null,Figth),
 //            new AnswerDialogData("Send fail message",null,FailMessage),
@@ -44,7 +44,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
     {
         if (SkillWork(3, ScoutsLevel))
         {
-            var mesData = new MessageDialogData(Namings.TryFormat("{0} credits are yours.", _credits), new List<AnswerDialogData>()
+            var mesData = new MessageDialogData(Namings.Format("{0} credits are yours.", _credits), new List<AnswerDialogData>()
             {
                 new AnswerDialogData(Namings.Tag("Take"),() =>
                     MainController.Instance.MainPlayer.MoneyData.AddMoney(_credits)
@@ -80,7 +80,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
         if (_doFight)
         {
             _doFight = false;
-            var mesData = new MessageDialogData(Namings.TryFormat("{0} credits are yours.", _credits), new List<AnswerDialogData>()
+            var mesData = new MessageDialogData(Namings.Format("{0} credits are yours.", _credits), new List<AnswerDialogData>()
             {
                 new AnswerDialogData(Namings.Tag("Take"),() =>
                     MainController.Instance.MainPlayer.MoneyData.AddMoney(_credits)

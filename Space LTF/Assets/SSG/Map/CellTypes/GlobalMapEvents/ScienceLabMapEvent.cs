@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 
@@ -30,7 +29,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
         _moneyToBuy = (int)(MyExtensions.Random(10, 30) * coef);
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
-        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("scLabStart"), Namings.ShipConfig(_config)), mianAnswers);
+        var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("scLabStart"), Namings.ShipConfig(_config)), mianAnswers);
         return mesData;
     }
 
@@ -67,7 +66,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     {
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(
-            Namings.TryFormat(Namings.DialogTag("scLabGiveCredits"), _moneyToBuy), null, moneyGive));
+            Namings.Format(Namings.DialogTag("scLabGiveCredits"), _moneyToBuy), null, moneyGive));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
         var mesData = new MessageDialogData(Namings.DialogTag("scLabSimpleThiefs"), mianAnswers);
         return mesData;
@@ -148,7 +147,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
             var rnd = army.RandomElement();
             var parameter = rnd.Pilot.UpgradeRandomLevel(false, true);
             return new MessageDialogData(
-                Namings.TryFormat(Namings.DialogTag("scLabShipUpgraded"), Namings.ParameterName(parameter), rnd.Ship.Name), mianAnswers);
+                Namings.Format(Namings.DialogTag("scLabShipUpgraded"), Namings.ParameterName(parameter), rnd.Ship.Name), mianAnswers);
         }
         else
         {
@@ -177,12 +176,16 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         {
             allParams.Add(playerParams.Scouts);
         }
+        if (playerParams.EnginePower.CanUpgrade())
+        {
+            allParams.Add(playerParams.EnginePower);
+        }
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null));
         if (allParams.Count > 0)
         {
             var rnd = allParams.RandomElement();
-            return new MessageDialogData(Namings.TryFormat(Namings.DialogTag("scParamUpgraded"), rnd.Name), mianAnswers);
+            return new MessageDialogData(Namings.Format(Namings.DialogTag("scParamUpgraded"), rnd.Name), mianAnswers);
         }
         else
         {

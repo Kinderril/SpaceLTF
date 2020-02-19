@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 public enum PlayerParameterType
 {
@@ -11,26 +7,29 @@ public enum PlayerParameterType
     repair,
     chargesCount,
     chargesSpeed,
+    engineParameter,
 }
 
 [System.Serializable]
 public class PlayerParameters
 {
-//    private Player _player;
+    //    private Player _player;
     public PlayerParameter Scouts;
     // public PlayerParameter Diplomaty;
     public PlayerParameter ChargesCount;
     public PlayerParameter ChargesSpeed;
     public PlayerParameter Repair;
+    public PlayerParameter EnginePower;
 
 
-    public PlayerParameters(Player player,Dictionary<PlayerParameterType,int> level = null)
+    public PlayerParameters(Player player, Dictionary<PlayerParameterType, int> level = null)
     {
-        Scouts = new PlayerParameter(player) {IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.scout) };
+        Scouts = new PlayerParameter(player) { IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.scout) };
         // Diplomaty = new PlayerParameter(player) {IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.diplomaty) };
-        ChargesCount = new PlayerParameter(player) {IsBattle = true, Level = 1, Name = Namings.ParameterName(PlayerParameterType.chargesCount) };
-        ChargesSpeed = new PlayerParameter(player) {IsBattle = true, Level = 1, Name = Namings.ParameterName(PlayerParameterType.chargesSpeed) };
-        Repair = new PlayerParameter(player) {IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.repair) };
+        ChargesCount = new PlayerParameter(player) { IsBattle = true, Level = 1, Name = Namings.ParameterName(PlayerParameterType.chargesCount) };
+        ChargesSpeed = new PlayerParameter(player) { IsBattle = true, Level = 1, Name = Namings.ParameterName(PlayerParameterType.chargesSpeed) };
+        Repair = new PlayerParameter(player) { IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.repair) };
+        EnginePower = new PlayerParameter(player) { IsBattle = true, Level = 1, Name = Namings.ParameterName(PlayerParameterType.engineParameter) };
         if (level != null)
         {
             foreach (var lvl in level)
@@ -52,6 +51,9 @@ public class PlayerParameters
                     case PlayerParameterType.chargesSpeed:
                         ChargesSpeed.Level = lvl.Value;
                         break;
+                    case PlayerParameterType.engineParameter:
+                        EnginePower.Level = lvl.Value;
+                        break;
                 }
             }
         }
@@ -59,10 +61,10 @@ public class PlayerParameters
 
     public float RepairPercentPerStep()
     {
-        return (1 + Repair.Level)*Library.REPAIR_PERCENT_PERSTEP_PERLEVEL;
+        return (1 + Repair.Level) * Library.REPAIR_PERCENT_PERSTEP_PERLEVEL;
     }
 
-    
+
 
     public int GetChargesToBattle()
     {

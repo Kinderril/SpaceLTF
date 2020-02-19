@@ -42,7 +42,10 @@ public  class ShipAttackersData       :ShipData
 
     public void ShipStartsAttack(ShipBase attacker)
     {
-        _lastAttacker = _owner.Enemies[attacker];
+        if (_owner.Enemies.TryGetValue(attacker, out var info))
+        {
+            _lastAttacker = info;
+        }
     }   
 
     public void ShipEndsAttack(ShipBase attacker)

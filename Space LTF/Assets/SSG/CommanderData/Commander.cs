@@ -14,12 +14,16 @@ using UnityEngine;
 
 public class Commander
 {
+    private const float rowDelta = 3;
+    private const float lineDelta = 3;
     public Dictionary<int, ShipBase> Ships = new Dictionary<int, ShipBase>();
     public List<ShipInventory> _destroyedShips = new List<ShipInventory>();
     private List<ShipBase> _shipsToRemove = new List<ShipBase>();
     private Dictionary<int, CommanderShipEnemy> _enemies = new Dictionary<int, CommanderShipEnemy>();
-    public ShipBase MainShip;
+    public ShipControlCenter MainShip;
     public CommanderCoinController CoinController;
+
+//    public CommanderShipBlink CommanderShipBlink;
     //    public CommanderRewardController RewardController;
     public CommanderSpells SpellController;
     public CommaderBattleStats BattleStats;
@@ -34,9 +38,10 @@ public class Commander
     private Action<Commander> OnCommanderDeathCallback;
     private Action<Commander, ShipBase> OnShipInited;
     private Action<ShipBase> OnShipLauched;
-    //    private List<StartShipPilotData> _delayedShips = new List<StartShipPilotData>();
-    private int index = 0;
+
     private CommanderShipEnemy LastPriorityTarget;
+
+    private bool _oneCoinContrInited;
     //    private bool isRunawayComplete = false;
     public float StartPower { get; private set; }
     private Vector3 _enemyCell;
@@ -49,6 +54,7 @@ public class Commander
 
     private List<StartShipPilotData> _paramsOfShips;
     private BattleController _battleController;
+    public List<TurretConnectorContainer> Connectors = new List<TurretConnectorContainer>();
     public ShipConfig FirstShipConfig { get; private set; }
 
     public Commander(TeamIndex teamIndex, Battlefield battlefield, Player player, BattleController battleController)
@@ -70,6 +76,7 @@ public class Commander
         //        RewardController= new CommanderRewardController(this);
         SpellController = new CommanderSpells(this);
         Priority = new CommanderPriority(this);
+//        CommanderShipBlink = new CommanderShipBlink(player.Parameters.EnginePower.Level);
     }
 
     public Dictionary<int, ShipBase> InitShips(Vector3 startPosition, Vector3 enemyCenterCell, List<Vector3> positionsToClear)
@@ -78,33 +85,56 @@ public class Commander
         HavePerairPlace = false;
         //        var closestCell = Battlefield.CellController.Data.FindClosestCellByType(startPosition, CellType.Free);
         StartMyPosition = startPosition;
-        var dirToEnemy = Utils.NormalizeFastSelf(_enemyCell - startPosition);
-        var count = _paramsOfShips.Count;
+        var dirToEnemyT = _enemyCell - startPosition;
+        var distToEnemy = dirToEnemyT.magnitude;
+        var dirToEnemyNorm = Utils.NormalizeFastSelf(dirToEnemyT);
+        var countTurrets = _paramsOfShips.Count(x => x.Ship.ShipType == ShipType.Turret);
+        var countShips = _paramsOfShips.Count - countTurrets;
+        int rowIndex = 1;
+        var halfShip = countShips / 2;
+        var halfTurrets = 1 + countTurrets / 2;
+        int indexShips = 0;
+        int indexTurrets = 1;
+        CreateTurretConnecttors((1 + countTurrets) / 2, dirToEnemyNorm, startPosition);
         foreach (var v in _paramsOfShips)
         {
-            int rowIndex = 1;
-            float rowDelta = 3;
-            float lineDelta = 3;
-            var halfShip = count / 2;
+            bool isTurret = (v.Ship.ShipType == ShipType.Turret && distToEnemy > 30);
+            var index = isTurret ? indexTurrets : indexShips;
+            var half = isTurret ? halfTurrets : halfShip;
             Vector3 side;
-            if (index <= halfShip)
+            int count = isTurret ? countTurrets : countShips;
+            if (index <= half)
             {
-                side = Utils.Rotate90(dirToEnemy, SideTurn.left) * lineDelta * index;
+                side = Utils.Rotate90(dirToEnemyNorm, SideTurn.left) * lineDelta * index;
             }
             else
             {
-                side = Utils.Rotate90(dirToEnemy, SideTurn.right) * lineDelta * (count - index);
+                side = Utils.Rotate90(dirToEnemyNorm, SideTurn.right) * lineDelta * (count - index);
             }
-            var shipPosition = startPosition + side + dirToEnemy * rowDelta * rowIndex;
+
+
+            Vector3 shipPosition;
 
             index++;
-            InitShip(v, shipPosition, dirToEnemy);
+            if (isTurret)
+            {
+                shipPosition = startPosition + side + dirToEnemyNorm * (rowDelta * rowIndex + 4);
+                indexTurrets = index;
+            }
+            else
+            {
+                shipPosition = startPosition + side + dirToEnemyNorm * rowDelta * rowIndex;
+                indexShips = index;
+            }
+
+            InitShip(v, shipPosition, dirToEnemyNorm);
             positionsToClear.Add(shipPosition);
         }
         if (MainShip != null)
         {
             var weaponsIndex = 0;
             var zeroPosition = MainShip.WeaponPosition[0].transform;
+            SpellController.AddMainShipBlink();
             foreach (var baseSpellModul in MainShip.ShipParameters.Spells)
             {
                 if (baseSpellModul != null)
@@ -122,17 +152,65 @@ public class Commander
                     SpellController.AddSpell(baseSpellModul, shootPos);
                 }
             }
-            CoinController.Init(MainShip);
             MainShip.ShipParameters.ShieldParameters.Enable();
         }
 
         return Ships;
     }
 
+    private void CreateTurretConnecttors(int countTurrets, Vector3 dirToEnemyNorm, Vector3 startPosition)
+    {
+        var aiPlayer = Player as PlayerAI;
+        Connectors.Clear();
+        if (aiPlayer != null)
+        {
+            switch (aiPlayer.GetTurretBehaviour())
+            {
+                case ETurretBehaviour.stayAtPoint:
+                    var halfTurrets = 1 + countTurrets / 2;
+                    for (int i = 0; i < countTurrets; i++)
+                    {
+                        var element =
+                            DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.TurretConnector);
+                        Connectors.Add(element);
+                        element.Init();
+                        Vector3 side;
+                        if (i <= halfTurrets)
+                        {
+                            side = Utils.Rotate90(dirToEnemyNorm, SideTurn.left) * lineDelta * i;
+                        }
+                        else
+                        {
+                            side = Utils.Rotate90(dirToEnemyNorm, SideTurn.right) * lineDelta * (countTurrets - i);
+                        }
+                        var shipPosition = startPosition + side + dirToEnemyNorm * (rowDelta + 4);
+                        element.transform.position = shipPosition;
+                    }
+                    break;
+            }
+        }
+    }
+
     private void InitShip(StartShipPilotData v, Vector3 position, Vector3 direction)
     {
-        var shipPrefab = DataBaseController.Instance.GetShip(v.Ship.ShipType, v.Ship.ShipConfig);
-        //            var freeCell = closestCells[index];
+        ShipConfig config = v.Ship.ShipConfig;
+        ShipBase shipPrefab;
+        if (v.Ship.ShipType == ShipType.Turret)
+        {
+            var weapon = v.Ship.WeaponsModuls.FirstOrDefault(x => x != null);
+            WeaponType? type = null;
+            if (weapon != null)
+            {
+                type = weapon.WeaponType;
+            }
+            shipPrefab = DataBaseController.Instance.GetShipTurret(type);
+        }
+        else
+        {
+            shipPrefab = DataBaseController.Instance.GetShip(v.Ship.ShipType, config);
+        }
+
+        //            var freeCell = closestCells[indexShips];
 #if UNITY_EDITOR
         if (shipPrefab == null)
         {
@@ -140,20 +218,7 @@ public class Commander
         }
         CheckModuls(shipPrefab, v);
 #endif
-        ShipBase ship1;
-        switch (v.Ship.ShipType)
-        {
-            case ShipType.Heavy:
-            case ShipType.Middle:
-            case ShipType.Light:
-                ship1 = DataBaseController.GetItem<ShipBase>(shipPrefab, position);
-                break;
-            case ShipType.Base:
-                ship1 = DataBaseController.GetItem<ShipBase>(shipPrefab, position);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        var ship1 = DataBaseController.GetItem<ShipBase>(shipPrefab, position);
         ship1.Init(_teamIndex, v.Ship, new ShipBornPosition(position, direction), v.Pilot, this, ShipDeath);
         Ships.Add(ship1.Id, ship1);
         if (OnShipAdd != null)
@@ -163,7 +228,21 @@ public class Commander
         if (ship1.ShipParameters.StartParams.ShipType == ShipType.Base)
         {
             HavePerairPlace = true;
-            MainShip = ship1;
+            MainShip = ship1 as ShipControlCenter;
+            if (MainShip == null)
+            {
+                Debug.LogError("Crit error main ship have wrong class must me {ShipControlCenter}");
+            }
+            else
+            {
+                CommanderCoinController crollerToSet = CoinController;
+                if (_oneCoinContrInited)
+                {
+                    crollerToSet = CoinController.Copy();
+                }
+                _oneCoinContrInited = true;
+                MainShip.SetCoinController(crollerToSet);
+            }
         }
         if (OnShipInited != null)
         {
@@ -255,6 +334,14 @@ public class Commander
         {
             shipBase.Value.UpdateManual();
         }
+
+        if (Connectors.Count > 0)
+        {
+            foreach (var turretConnectorContainer in Connectors)
+            {
+                turretConnectorContainer.ManualUpdate();
+            }
+        }
     }
 
     public void SetPriorityTarget(ShipBase target, bool isBait)
@@ -299,6 +386,12 @@ public class Commander
         {
             shipBase.Value.Dispose();
         }
+
+        foreach (var turretConnector in Connectors)
+        {
+            GameObject.Destroy(turretConnector.gameObject);
+        }
+        Connectors.Clear();
         OnShipDestroy = null;
         OnShipAdd = null;
     }
@@ -340,88 +433,6 @@ public class Commander
         }
         _destroyedShips.Clear();
     }
-
-    public bool TryRechargeShield(ShipBase ship)
-    {
-        var c = Library.COINS_TO_CHARGE_SHIP_SHIELD;
-        var delay = Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY;
-        var percent = Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT;
-        if (CoinController.CanUseCoins(c))
-        {
-            CoinController.UseCoins(c, delay);
-            var maxShield = ship.ShipParameters.ShieldParameters.MaxShield;
-            var countToHeal = maxShield * percent;
-            ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
-            ship.ShipParameters.ShieldParameters.HealShield(countToHeal);
-            return true;
-        }
-        return false;
-    }
-
-    public bool TryWave(ShipBase ship)
-    {
-        var c = Library.COINS_TO_WAVE_SHIP;
-        var delay = Library.COINS_TO_WAVE_SHIP_DELAY;
-        if (CoinController.CanUseCoins(c))
-        {
-            CoinController.UseCoins(c, delay);
-            ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.WaveStrikeShip);
-            ship.WeaponsController.StrikeWave();
-            return true;
-        }
-        return false;
-    }
-
-    public bool TryWeaponBuffShip(ShipBase ship)
-    {
-        var c = Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD;
-        var delay = Library.COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY;
-        if (CoinController.CanUseCoins(c))
-        {
-            CoinController.UseCoins(c, delay);
-            ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.ChargePowerWeapons);
-            ship.WeaponsController.ChargePowerToAllWeapons();
-            return true;
-        }
-        return false;
-    }
-    public bool TryBuffShip(ShipBase ship)
-    {
-        var c = Library.COINS_TO_CHARGE_SHIP_SHIELD;
-        var delay = Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY;
-        //        var percent = Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT;
-        if (CoinController.CanUseCoins(c))
-        {
-            CoinController.UseCoins(c, delay);
-            ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.BufffShip);
-            ship.BuffData.Apply(15f);
-            //ship.WeaponsController.TryWeaponReload();
-            return true;
-        }
-        return false;
-    }
-
-    public void ExtraCharge()
-    {
-        var cointToReCharge = (int)(MainShip.ShipParameters.ShieldParameters.CurShiled / Library.SHIELD_COEF_EXTRA_CHARGE);
-        if (cointToReCharge > 0)
-        {
-            int notCharged = CoinController.NotChargedCoins();
-            if (notCharged < cointToReCharge)
-            {
-                cointToReCharge = notCharged;
-            }
-
-            if (cointToReCharge > 0)
-            {
-                var sheildToClear = cointToReCharge * Library.SHIELD_COEF_EXTRA_CHARGE;
-                MainShip.ShipParameters.ShieldParameters.CurShiled =
-                    MainShip.ShipParameters.ShieldParameters.CurShiled - sheildToClear;
-                CoinController.RechargerCoins(sheildToClear);
-            }
-        }
-    }
-
     public void ShipRunAway(ShipBase owner)
     {
         owner.ShipRunAway();
@@ -460,6 +471,27 @@ public class Commander
             {
                 mDist = sDist;
                 closets = shipBase.Value;
+            }
+        }
+
+        return closets;
+    }
+
+    public TurretConnectorContainer GetClosestConnector(Vector3 pos)
+    {
+        TurretConnectorContainer closets = null;
+        float mDist = Single.MaxValue;
+        foreach (var shipBase in Connectors)
+        {
+            if (shipBase.Connector.CanConnect)
+            {
+                var trg = pos - shipBase.Position;
+                var sDist = trg.sqrMagnitude;
+                if (sDist < mDist)
+                {
+                    mDist = sDist;
+                    closets = shipBase;
+                }
             }
         }
 

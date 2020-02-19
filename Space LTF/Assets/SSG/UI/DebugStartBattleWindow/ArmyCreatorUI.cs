@@ -32,7 +32,7 @@ public class ArmyCreatorUI : MonoBehaviour
         Action<DebugShipInShop> OnUnselect, Action<DebugShipInShop, TeamIndex> OnSelect)
     {
         OppositeArmy = oppositeArmy;
-        PlayerOwner = new Player("Bot_" + Utils.GetId());
+        PlayerOwner = new PlayerAI("Bot_" + Utils.GetId());
         _prefabDebugShipInShop = prefabDebugShipInShop;
         SliderPointsCount.minValue = 40;
         SliderPointsCount.maxValue = 80;

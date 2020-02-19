@@ -54,7 +54,7 @@ public abstract class BaseGlobalMapEvent
         var cng = congif;
         var pilot = Library.CreateDebugPilot();
         var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
-        WindowManager.Instance.InfoWindow.Init(null, Namings.TryFormat("You hired a new pilot. Type:{0}  Config:{1}",
+        WindowManager.Instance.InfoWindow.Init(null, Namings.Format("You hired a new pilot. Type:{0}  Config:{1}",
             Namings.ShipConfig(cng), Namings.ShipType(type)));
         var data = new StartShipPilotData(pilot, ship);
         data.Ship.SetRepairPercent(0.1f);
@@ -103,7 +103,7 @@ public abstract class BaseGlobalMapEvent
     private Player GetArmy(ArmyCreatorData data, float power)
     {
 
-        var player = new Player("Army");
+        var player = new PlayerAI("Army");
         float coreShipChance = 0;
         if (power > 15)
         {
@@ -158,7 +158,7 @@ public abstract class BaseGlobalMapEvent
     protected MessageDialogData ShowFail(string msg, Action callback = null)
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("Ok")), null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("Ok")), null));
         var mesData = new MessageDialogData(msg, mianAnswers);
         return mesData;
     }

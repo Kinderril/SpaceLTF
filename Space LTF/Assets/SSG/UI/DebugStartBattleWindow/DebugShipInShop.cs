@@ -133,10 +133,10 @@ public class DebugShipInShop : MonoBehaviour
 
         string f = "{0}:" + "{1}".ToString() + "(" + "{2}" + ")";
         CreatAndText("ShipType:" + _shipInv.ShipType.ToString(), LayoutParameters);
-        CreatAndText(Namings.TryFormat(f, "MaxHealth", MaxHealth, PilotParameters.HealthLevel), LayoutParameters);
-        CreatAndText(Namings.TryFormat(f, "MaxShiled", MaxShiled, PilotParameters.ShieldLevel), LayoutParameters);
-        CreatAndText(Namings.TryFormat(f, "TurnSpeed", TurnSpeed, PilotParameters.TurnSpeedLevel), LayoutParameters);
-        CreatAndText(Namings.TryFormat(f, "MaxSpeed", MaxSpeed, PilotParameters.SpeedLevel), LayoutParameters);
+        CreatAndText(Namings.Format(f, "MaxHealth", MaxHealth, PilotParameters.HealthLevel), LayoutParameters);
+        CreatAndText(Namings.Format(f, "MaxShiled", MaxShiled, PilotParameters.ShieldLevel), LayoutParameters);
+        CreatAndText(Namings.Format(f, "TurnSpeed", TurnSpeed, PilotParameters.TurnSpeedLevel), LayoutParameters);
+        CreatAndText(Namings.Format(f, "MaxSpeed", MaxSpeed, PilotParameters.SpeedLevel), LayoutParameters);
 
 //        CreatAndText("MaxHealth:" + MaxHealth.ToString("0"), LayoutParameters);
 //        CreatAndText("MaxShiled:" + MaxShiled.ToString("0"), LayoutParameters);

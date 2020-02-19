@@ -1,12 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class WeaponSprayModul : BaseSupportModul
 {
     private const float ANG_1 = 8f;
     private const float ANG_2 = 12f;
-    private const float RELOAD = 2.5f;
+    private const float RELOAD = 3.2f;
 
 
     protected override bool BulletImplement => true;
@@ -23,7 +22,7 @@ public class WeaponSprayModul : BaseSupportModul
 
         }
 
-        return (target, origin, weapon, pos, parameters) =>  BulletCreateSpray4(target, origin, weapon, pos, parameters,standartDelegate);
+        return (target, origin, weapon, pos, parameters) => BulletCreateSpray4(target, origin, weapon, pos, parameters, standartDelegate);
     }
 
     private int BulletsCount()
@@ -41,7 +40,7 @@ public class WeaponSprayModul : BaseSupportModul
         return 4;
     }
 
-    private void BulletCreateSpray4(BulletTarget target, Bullet origin, 
+    private void BulletCreateSpray4(BulletTarget target, Bullet origin,
         IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters, CreateBulletDelegate standartDelegate)
     {
 
@@ -76,8 +75,8 @@ public class WeaponSprayModul : BaseSupportModul
             standartDelegate(new BulletTarget(shootPos + r4), origin, weapon, shootPos, startParameters);
         }
     }
-    private void BulletCreateSpray3(BulletTarget target, Bullet origin, 
-        IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters,CreateBulletDelegate standartDelegate)
+    private void BulletCreateSpray3(BulletTarget target, Bullet origin,
+        IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters, CreateBulletDelegate standartDelegate)
     {
 
         var dirToShoot = target.Position - shootPos;
@@ -108,8 +107,8 @@ public class WeaponSprayModul : BaseSupportModul
         }
     }
 
-    private void BulletCreateSpray2(BulletTarget target, Bullet origin, 
-        IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters,CreateBulletDelegate standartDelegate)
+    private void BulletCreateSpray2(BulletTarget target, Bullet origin,
+        IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters, CreateBulletDelegate standartDelegate)
     {
         var dirToShoot = target.Position - shootPos;
 
@@ -137,7 +136,7 @@ public class WeaponSprayModul : BaseSupportModul
     }
     public override string DescSupport()
     {
-        return Namings.TryFormat(Namings.Tag("SprayModulDesc"), BulletsCount(), Utils.FloatToChance(RELOAD));
+        return Namings.Format(Namings.Tag("SprayModulDesc"), BulletsCount(), Utils.FloatToChance(RELOAD));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {

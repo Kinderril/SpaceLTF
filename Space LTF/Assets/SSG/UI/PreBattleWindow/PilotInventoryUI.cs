@@ -77,7 +77,7 @@ public class PilotInventoryUI : MonoBehaviour
             }
         }
         //        var rankName = Namings.Tag(_pilot.Stats.CurRank.ToString());
-        var reloadTime = Namings.TryFormat(Namings.Tag("reloadBoost"), Library.CalcTrickReload(_pilot.Stats.CurRank, _ship.ShipType));
+        var reloadTime = Namings.Format(Namings.Tag("reloadBoost"), Library.CalcTrickReload(_pilot.Stats.CurRank, _ship.ShipType));
         var tooltipInfo = $"{tricksInfo}\n{reloadTime}";
         RankIcon.Init(DataBaseController.Instance.DataStructPrefabs.GetRankSprite(_pilot.Stats.CurRank), tooltipInfo);
         RankField.text = _pilot.Stats.CurRank.ToString();
@@ -86,11 +86,11 @@ public class PilotInventoryUI : MonoBehaviour
         string info;
         if (_pilot.Stats.CurRank == PilotRank.Major)
         {
-            info = Namings.TryFormat(Namings.Tag("KillUIPilotMini"), kills);
+            info = Namings.Format(Namings.Tag("KillUIPilotMini"), kills);
         }
         else
         {
-            info = Namings.TryFormat(Namings.Tag("KillUIPilot"), kills, nextKills);
+            info = Namings.Format(Namings.Tag("KillUIPilot"), kills, nextKills);
         }
         KillsField.text = info;
     }
@@ -148,7 +148,7 @@ public class PilotInventoryUI : MonoBehaviour
         var speedInfo = LevelInfo(Namings.Tag("Speed"), _pilot.SpeedLevel, Info(pilotParams.MaxSpeed, _pilot.SpeedLevel));
         var turnInfo = LevelInfo(Namings.Tag("TurnSpeed"), _pilot.TurnSpeedLevel, Info(pilotParams.TurnSpeed, _pilot.TurnSpeedLevel));
         var curHp = pilotParams.MaxHealth * _ship.HealthPercent;
-        var hpTxt = Namings.TryFormat("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel));
+        var hpTxt = Namings.Format("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel));
         var txt = LevelInfo(Namings.Tag("Health"), _pilot.HealthLevel, hpTxt);
 
         ShieldField.SetData(shiledInfo, _pilot.ShieldLevel, _pilot, LibraryPilotUpgradeType.shield);
@@ -159,7 +159,7 @@ public class PilotInventoryUI : MonoBehaviour
 
     private static string LevelInfo(string name, int level, string info)
     {
-        return Namings.TryFormat("{0}:{2}", name, level, info);
+        return Namings.Format("{0}:{2}", name, level, info);
     }
 
     public static string Info(float p, int level)
@@ -199,6 +199,7 @@ public class PilotInventoryUI : MonoBehaviour
     }
 
 
+
     //Straight|Flangs
     public void ClickStraight()
     {
@@ -230,16 +231,16 @@ public class PilotInventoryUI : MonoBehaviour
     {
         _pilot.Tactic.ChangeTo(ECommanderPriority1.MaxHealth);
     }
-    public void ClickECommanderPriority1Light()
+    public void ClickECommanderPriority1Fast()
     {
-        _pilot.Tactic.ChangeTo(ECommanderPriority1.Light);
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.Fast);
     }
-    public void ClickECommanderPriority1Mid()
+    public void ClickECommanderPriority1Slow()
     {
-        _pilot.Tactic.ChangeTo(ECommanderPriority1.Mid);
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.Slow);
     }
-    public void ClickECommanderPriority1Heavy()
+    public void ClickECommanderPriority1Base()
     {
-        _pilot.Tactic.ChangeTo(ECommanderPriority1.Heavy);
+        _pilot.Tactic.ChangeTo(ECommanderPriority1.Base);
     }
 }

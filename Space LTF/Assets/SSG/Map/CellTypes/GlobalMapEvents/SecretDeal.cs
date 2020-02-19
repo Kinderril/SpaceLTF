@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -53,7 +52,7 @@ public class SecretDeal : BaseGlobalMapEvent
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretConnectWith"), null, connectWithCommander));
             var mesData =
                 new MessageDialogData(
-                    Namings.TryFormat(Namings.DialogTag("secretScoutResult"), ScoutsLevel),
+                    Namings.Format(Namings.DialogTag("secretScoutResult"), ScoutsLevel),
                     mianAnswers);
             return mesData;
         }
@@ -63,7 +62,7 @@ public class SecretDeal : BaseGlobalMapEvent
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretRun"), null, tryRun));
             var mesData =
                 new MessageDialogData(
-                    Namings.TryFormat(Namings.DialogTag("secretSeeHugeArmy"), ScoutsLevel),
+                    Namings.Format(Namings.DialogTag("secretSeeHugeArmy"), ScoutsLevel),
                     mianAnswers);
             return mesData;
         }
@@ -83,7 +82,7 @@ public class SecretDeal : BaseGlobalMapEvent
             MainController.Instance.MainPlayer.Inventory.TryAddSimpleModul(m, slot);
         }
 
-        return tryRunWithCoef(-1, Namings.TryFormat(Namings.DialogTag("secretHaveCredits"), money, itemName));
+        return tryRunWithCoef(-1, Namings.Format(Namings.DialogTag("secretHaveCredits"), money, itemName));
     }
 
     private MessageDialogData tryRun()
@@ -104,13 +103,13 @@ public class SecretDeal : BaseGlobalMapEvent
         if (SkillWork(2, ScoutsLevel + coef))
         {
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
-            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("secretYouRun"), add, ScoutsLevel), mianAnswers);
+            var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("secretYouRun"), add, ScoutsLevel), mianAnswers);
             return mesData;
         }
         else
         {
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretFight"), () => Fight(fullCoef, false), null));
-            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("secretRunFail"), ScoutsLevel), mianAnswers);
+            var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("secretRunFail"), ScoutsLevel), mianAnswers);
             return mesData;
         }
     }
@@ -162,7 +161,7 @@ public class SecretDeal : BaseGlobalMapEvent
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretDoProvocation"), null, provacation));
         mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("secretWait"), null, waitDeal));
-        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("secretSecondCome"), Namings.ShipConfig(_secondSide)), mianAnswers);
+        var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("secretSecondCome"), Namings.ShipConfig(_secondSide)), mianAnswers);
         return mesData;
     }
 
@@ -187,7 +186,7 @@ public class SecretDeal : BaseGlobalMapEvent
         var money = (int)(MyExtensions.Random(5, 9) * coef);
         MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("secretTake"), money)));
+        mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("secretTake"), money)));
         var mesData = new MessageDialogData(Namings.DialogTag("secretForgotCredits"), mianAnswers);
         return mesData;
 
@@ -213,7 +212,7 @@ public class SecretDeal : BaseGlobalMapEvent
             MainController.Instance.MainPlayer.MoneyData.AddMoney(_moneyToBuy);
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, null));
             var mesData = new MessageDialogData(
-                Namings.TryFormat(Namings.DialogTag("secretFindGoods"), _moneyToBuy),
+                Namings.Format(Namings.DialogTag("secretFindGoods"), _moneyToBuy),
                 mianAnswers);
             return mesData;
         }

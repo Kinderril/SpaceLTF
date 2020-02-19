@@ -29,8 +29,10 @@ public class SideShipInfo : MonoBehaviour
 
     public Image TacticPriorityIcon;
     public Image TacticSideIcon;
+    public Image GlobalTacticsIcon;
     public PriorityTooltipInfo PriorityTooltipInfo;
     public SideAttackTooltipInfo SideAttackTooltipInfo;
+    public GlobaltacticsTooltipInfo GlobaltacticsTooltipInfo;
     public Slider BoostSlider;
 
     private ShipBase _ship;
@@ -55,6 +57,8 @@ public class SideShipInfo : MonoBehaviour
         _ship.DamageData.OnDamageDone += OnDamageDone;
         OnShipDesicionChange(ship, ship.DesicionData);
         ShipSlidersInfo.Init(ship);
+        ship.DesicionData.OnChagePriority += OnChagePriority;
+//        _pilot.Tactic.OnSideChange += OnTacticSideChange;
         //        TryWaveButton.Init(_ship,5);
         //        TryChargeButton.Init(_ship,5);
         //        TryWeaponsShipButton.Init(_ship);
@@ -66,6 +70,11 @@ public class SideShipInfo : MonoBehaviour
         UpdateToggle(shallOpen);
         UpdateTacticField();
 
+    }
+
+    private void OnChagePriority()
+    {
+        UpdateTacticField();
     }
 
     void Update()
@@ -81,11 +90,13 @@ public class SideShipInfo : MonoBehaviour
         }
     }
     private void UpdateTacticField()
-    {
-        TacticPriorityIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.PilotParameters.Tactic.Priority);
-        TacticSideIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.PilotParameters.Tactic.SideAttack);
-        PriorityTooltipInfo.SetData(_ship.PilotParameters.Tactic.Priority);
-        SideAttackTooltipInfo.SetData(_ship.PilotParameters.Tactic.SideAttack);
+    {                              
+        TacticPriorityIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.DesicionData.CommanderPriority1);
+        TacticSideIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.DesicionData.SideAttack);
+        GlobalTacticsIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.DesicionData.GlobalTactics);
+        PriorityTooltipInfo.SetData(_ship.DesicionData.CommanderPriority1);
+        SideAttackTooltipInfo.SetData(_ship.DesicionData.SideAttack);
+        GlobaltacticsTooltipInfo.SetData(_ship.DesicionData.GlobalTactics);
     }
     private void OnDamageDone(ShipBase arg1, ShipDamageType arg2, bool val)
     {
@@ -126,8 +137,8 @@ public class SideShipInfo : MonoBehaviour
 
     private void OnStatChanged(ShipBattleData obj)
     {
-        DamageDoneField.text = Namings.TryFormat(Namings.Tag("DamageInfoUI"), obj.ShieldhDamage.ToString("0"), obj.HealthDamage.ToString("0"));
-        KillsField.text = Namings.TryFormat(Namings.Tag("KillsInfoUI"), obj.Kills.ToString("0"));
+        DamageDoneField.text = Namings.Format(Namings.Tag("DamageInfoUI"), obj.ShieldhDamage.ToString("0"), obj.HealthDamage.ToString("0"));
+        KillsField.text = Namings.Format(Namings.Tag("KillsInfoUI"), obj.Kills.ToString("0"));
     }
 
     public void OnToggleClick()
@@ -137,7 +148,7 @@ public class SideShipInfo : MonoBehaviour
         //            Debug.Log($"OnToggleClick {ToggleOpen.isOn}  {_ship.Id}");
         var showFull = ToggleOpen.isOn;
         UpdateToggle(showFull);
-        PlayerPrefs.SetInt(Namings.TryFormat(PREFS_KEY, _ship.Id), (showFull ? 1 : 0));
+        PlayerPrefs.SetInt(Namings.Format(PREFS_KEY, _ship.Id), (showFull ? 1 : 0));
         _toggleCallback(this);
         //        }
 
@@ -169,9 +180,59 @@ public class SideShipInfo : MonoBehaviour
             //ControlBlockHolder.SetParent(MinorOpenHolder, false);
             _ship.SelfCamera.Dispose();
         }
+    }            //Base defence
+    public void ClickFight()
+    {
+        _ship.DesicionData.ChangePriority(EGlobalTactics.Fight);
+    }
+    public void ClickGosafe()
+    {
+        _ship.DesicionData.ChangePriority(EGlobalTactics.GoSafe);
     }
 
+    //Straight|Flangs
+    public void ClickStraight()
+    {
+        _ship.DesicionData.ChangePriority(ESideAttack.Straight);
+    }
+    public void ClickFlangs()
+    {
+        _ship.DesicionData.ChangePriority(ESideAttack.Flangs);
+    }
 
+    //Base CommanderPriority   
+    public void ClickECommanderPriority1Any()
+    {
+        _ship.DesicionData.ChangePriority(ECommanderPriority1.Any);
+    }
+    public void ClickECommanderPriority1MinShield()
+    {
+        _ship.DesicionData.ChangePriority(ECommanderPriority1.MinShield);
+    }
+    public void ClickECommanderPriority1MinHealth()
+    {
+        _ship.DesicionData.ChangePriority(ECommanderPriority1.MinHealth);
+    }
+    public void ClickECommanderPriority1MaxShield()
+    {
+        _ship.DesicionData.ChangePriority(ECommanderPriority1.MaxShield);
+    }
+    public void ClickECommanderPriority1MaxHealth()
+    {
+        _ship.DesicionData.ChangePriority(ECommanderPriority1.MaxHealth);
+    }
+    public void ClickECommanderPriority1Fast()
+    {
+        _ship.DesicionData.ChangePriority(ECommanderPriority1.Fast);
+    }
+    public void ClickECommanderPriority1Slow()
+    {
+        _ship.DesicionData.ChangePriority(ECommanderPriority1.Slow);
+    }
+    public void ClickECommanderPriority1Base()
+    {
+        _ship.DesicionData.ChangePriority(ECommanderPriority1.Base);
+    }
     private void OnShipDesicionChange(ShipBase arg1, IShipDesicion arg2)
     {
 
@@ -187,6 +248,7 @@ public class SideShipInfo : MonoBehaviour
         _ship.DamageData.OnDamageDone -= OnDamageDone;
         _ship.ShipInventory.LastBattleData.OnStatChanged -= OnStatChanged;
         _ship.OnShipDesicionChange -= OnShipDesicionChange;
+        _ship.DesicionData.OnChagePriority -= OnChagePriority;
         ShipSlidersInfo.Dispose();
         //        TryChargeButton.Dispose();
         //        TryWeaponsShipButton.Dispose();

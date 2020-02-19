@@ -21,13 +21,26 @@ public class ArmyCreatorData
     private List<WeaponType> _weaponType;
     private ShipConfig _ownerConfig;
 
+    public int MainShipCount = 0;
+
     public SimpleModulType SimpleModul => _simlplModuls.RandomElement();
     public SimpleModulType EliteModul => _eliteModuls.RandomElement();
-    public ShipConfig NextShipConfig => _posibleConfigs.RandomElement();
+    public ShipConfig RndShipConfig => _posibleConfigs.RandomElement();
     public ShipConfig ArmyConfig => _ownerConfig;
     public WeaponType MainWeapon => _weaponType.RandomElement();
 
+    private int _lastShipConfig = 0;
+    public ShipConfig NextShipConfig()
+    {
+        var to = _posibleConfigs[_lastShipConfig];
+        _lastShipConfig++;
+        if (_lastShipConfig > _posibleConfigs.Count - 1)
+        {
+            _lastShipConfig = 0;
+        }
 
+        return to;
+    }
     public ArmyCreatorData Merge(ArmyCreatorData merged)
     {
         var copy = Copy();
@@ -118,6 +131,7 @@ public class ArmyCreatorData
 //            SpellType.randomDamage,
             SpellType.distShot    ,
             SpellType.vacuum  ,
+            SpellType.hookShot  ,
         };
     }
 

@@ -1,0 +1,258 @@
+fileFormatVersion: 2
+guid: caf45c70b13bf4a44aa8dfd4b41d5907
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: 1
+    100002: 2
+    100004: 3
+    100006: 4
+    100008: 5
+    100010: 6
+    100012: 7
+    100014: 8
+    100016: Base
+    100018: LeftGun
+    100020: Level1
+    100022: Level2
+    100024: Level3
+    100026: MainWeapon
+    100028: RightGun
+    100030: //RootNode
+    400000: 1
+    400002: 2
+    400004: 3
+    400006: 4
+    400008: 5
+    400010: 6
+    400012: 7
+    400014: 8
+    400016: Base
+    400018: LeftGun
+    400020: Level1
+    400022: Level2
+    400024: Level3
+    400026: MainWeapon
+    400028: RightGun
+    400030: //RootNode
+    2100000: Base
+    2100002: 1
+    2100004: 2
+    2100006: 3
+    2100008: 4
+    2100010: 5
+    2100012: 6
+    2100014: 7
+    2100016: 8
+    2100018: Level1
+    2100020: Level2
+    2100022: RightGun
+    2100024: LeftGun
+    2100026: Level3
+    2100028: MainWeapon
+    2300000: 1
+    2300002: 2
+    2300004: 3
+    2300006: 4
+    2300008: 5
+    2300010: 6
+    2300012: 7
+    2300014: 8
+    2300016: Base
+    2300018: LeftGun
+    2300020: Level1
+    2300022: Level2
+    2300024: Level3
+    2300026: MainWeapon
+    2300028: RightGun
+    3300000: 1
+    3300002: 2
+    3300004: 3
+    3300006: 4
+    3300008: 5
+    3300010: 6
+    3300012: 7
+    3300014: 8
+    3300016: Base
+    3300018: LeftGun
+    3300020: Level1
+    3300022: Level2
+    3300024: Level3
+    3300026: MainWeapon
+    3300028: RightGun
+    4300000: Base
+    4300002: 1
+    4300004: 2
+    4300006: 3
+    4300008: 4
+    4300010: 5
+    4300012: 6
+    4300014: 7
+    4300016: 8
+    4300018: Level1
+    4300020: Level2
+    4300022: RightGun
+    4300024: LeftGun
+    4300026: Level3
+    4300028: MainWeapon
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1
+    second: {fileID: 2100000, guid: 5e1cdb58efde70943bd5853e6cc51bf5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 2
+    second: {fileID: 2100000, guid: ae558aa2e942c94488371692c735a2db, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 3
+    second: {fileID: 2100000, guid: 5726bbed768e3764399df284cf2f4397, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 4
+    second: {fileID: 2100000, guid: 4561f3f314cc7cc49a5d7ac18d128f43, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 5
+    second: {fileID: 2100000, guid: ab2117e591d76b040b243e192a1a085a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 6
+    second: {fileID: 2100000, guid: ad57136944cf3324286f59e691b97d58, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 7
+    second: {fileID: 2100000, guid: cf197b93f09a75948a859b5bc3e0dfe9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 8
+    second: {fileID: 2100000, guid: 1f37a909aaf62834da02fb6ee9f99b10, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Base
+    second: {fileID: 2100000, guid: ee880178bebd919488b89a5ca7d23d02, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LeftGun
+    second: {fileID: 2100000, guid: a0f07e3b9f82c1d489adc6cb8b2613bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Level1
+    second: {fileID: 2100000, guid: 531dc84ccec45184aa29f767d7858c08, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Level2
+    second: {fileID: 2100000, guid: 413dc7a8ea22e3849912e20303121823, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Level3
+    second: {fileID: 2100000, guid: 9c9da7fa7fc7d974a8d2e5a23479713c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MainWeapon
+    second: {fileID: 2100000, guid: a3e1493f416db88449be57c3ec3714fd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RightGun
+    second: {fileID: 2100000, guid: 4511c7a650d08df419c4c2262ba5c0ee, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

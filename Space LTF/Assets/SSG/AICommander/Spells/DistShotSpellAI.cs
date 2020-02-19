@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class DistShotSpellAI : BaseAISpell<DistShotSpell>
 {
-    public DistShotSpellAI([NotNull] DistShotSpell spell, Commander commander, SpellInGame spellData)
+    public DistShotSpellAI([NotNull] DistShotSpell spell, ShipControlCenter commander, SpellInGame spellData)
         : base(spellData, spell, commander)
     {
 

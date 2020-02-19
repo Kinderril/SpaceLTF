@@ -53,7 +53,7 @@ public class ReputationElement : UIElementWithTooltip
         }
 
         StatusField.color = color;
-        var en = Namings.TryFormat(Namings.Tag("ReputationElement"), enemiesString);
+        var en = Namings.Format(Namings.Tag("ReputationElement"), enemiesString);
         EnemiesField.text = en;
         _tooltip = Namings.Tag($"rep_adv_{status.ToString()}");
         if (config == ShipConfig.droid)
@@ -72,7 +72,7 @@ public class ReputationElement : UIElementWithTooltip
     private string Info(ShipConfig mercenary)
     {
         var rep = MainController.Instance.MainPlayer.ReputationData;
-        return Namings.TryFormat(Namings.Tag("ReputationData"), Namings.ShipConfig(mercenary), rep.ReputationFaction[mercenary]);
+        return Namings.Format(Namings.Tag("ReputationData"), Namings.ShipConfig(mercenary), rep.ReputationFaction[mercenary]);
     }
 }
 

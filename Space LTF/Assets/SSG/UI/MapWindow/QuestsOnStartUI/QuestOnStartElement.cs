@@ -39,7 +39,9 @@ public class QuestOnStartElement : MonoBehaviour
         }
     }
 
-    public void Dispose()
+
+
+    public void ClearAll()
     {
         _quest.OnElementFound -= OnElementFound;
     }

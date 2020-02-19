@@ -74,10 +74,12 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     private AudioSource Source;
 
     public TargetType TargetType;
-    private TestTargetPosition _testTargetPosition = new TestTargetPosition();
+    private TestTargetPosition _testTargetPosition;
+    public Vector3? PosToAim => _testTargetPosition.PosToAim;
 
     public WeaponInGame(WeaponInv weaponInv)
     {
+        _testTargetPosition = new TestTargetPosition();
         _weaponType = weaponInv.WeaponType;
         Name = weaponInv.Name;
         BulletSpeed = weaponInv.BulletSpeed;
@@ -230,7 +232,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         _nextShootMorePower = true;
     }
 
-    protected bool IsAimedStraight(ShipPersonalInfo targInfo, ShipBase owner, Vector3 shootPos, float distShoot)
+    protected bool IsAimedStraight(ShipPersonalInfo targInfo, ShipBase owner, Vector3 shootStartPos, float distShoot)
     {
         float distCoef = 1f;
         var dist = targInfo.Dist;
@@ -240,8 +242,8 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         }
         var offsetCoef = TargetSpeed * distCoef;
 
-        _testTargetPosition.TestTarget(targInfo.ShipLink.Position, targInfo.ShipLink.LookDirection, targInfo.ShipLink.LookRight,
-            shootPos, Owner.LookDirection, distShoot, offsetCoef);
+        _testTargetPosition.TestTarget(targInfo.ShipLink.Position, targInfo.ShipLink.LookDirection,
+            targInfo.ShipLink.LookRight, shootStartPos, Owner.LookDirection, distShoot, offsetCoef);
 
         return _testTargetPosition.ShallShoot;
     }
@@ -482,5 +484,10 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
 
 
         _nextShootTime = Time.time + ReloadSec;
+    }
+
+    public void DropAimPos()
+    {
+        _testTargetPosition.DropAimPos();
     }
 }

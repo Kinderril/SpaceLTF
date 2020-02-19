@@ -442,6 +442,11 @@ public static class Utils
         var b = ang * 1.2f;
         return RandomNormal(a, b);
     }
+
+    public static bool IsEven(int c)
+    {
+        return (c % 2 == 0);
+    }
 }
 
 

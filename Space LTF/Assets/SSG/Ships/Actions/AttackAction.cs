@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using System.Linq;
 using UnityEngine;
 
 public class AttackAction : AbstractAttackAction
@@ -55,7 +55,7 @@ public class AttackAction : AbstractAttackAction
         if (_isDogFight)
         {
             ShallEndDogFight();
-            _owner.WeaponsController.CheckWeaponFire(Target);
+            var aimPos = _owner.WeaponsController.CheckWeaponFire(Target);
             // _owner.SetTargetSpeed(1f);
             if (Target.ShipLink.CurSpeed < 0.01f)
             {
@@ -63,7 +63,7 @@ public class AttackAction : AbstractAttackAction
             }
             else
             {
-                var dir = Target.ShipLink.PredictionPosAim() - _owner.Position;
+                var dir = GetDirToAimPos(aimPos);
                 _owner.MoveToDirection(dir);
             }
         }
@@ -94,6 +94,21 @@ public class AttackAction : AbstractAttackAction
             else
                 _owner.MoveByWay(Target.ShipLink);
         }
+    }
+
+    protected Vector3 GetDirToAimPos(Vector3? aimPos)
+    {
+        Vector3 targetAimPos;
+        if (aimPos.HasValue)
+        {
+            targetAimPos = aimPos.Value;
+        }
+        else
+        {
+            targetAimPos = Target.ShipLink.PredictionPosAim();
+        }
+        var dir = targetAimPos - _owner.Position;
+        return dir;
     }
 
     private void ShallStartDogFight()

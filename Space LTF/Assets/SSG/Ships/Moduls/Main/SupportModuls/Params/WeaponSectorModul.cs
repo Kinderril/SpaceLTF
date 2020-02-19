@@ -1,19 +1,17 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class WeaponSectorModul : BaseSupportModul
 {
     private const float spd_inc = 0.3f;
-    public WeaponSectorModul( int level) 
+    public WeaponSectorModul(int level)
         : base(SimpleModulType.WeaponSector, level)
     {
 
     }
     public override string DescSupport()
     {
-        return $"Increase aim sector by {Utils.FloatToChance(spd_inc)}% per level";
+        return Namings.Format(Namings.Tag(Type.ToString()), Utils.FloatToChance(spd_inc));
     }
 
     public override void ChangeParams(IAffectParameters weapon)

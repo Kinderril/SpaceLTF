@@ -25,15 +25,15 @@ public class LinearBullet : Bullet
         }
         _bornTime = Time.time;
         _moveLifeTime = _distanceShoot / _curSpeed;
-#if UNITY_EDITOR
-        if (_moveLifeTime < 0.3f)
-        {
-            Debug.LogError("bullet is too fast. _lifeTimeSec:" + _moveLifeTime.ToString("0.000"));
-            Debug.LogError("_distanceShoot:" + _distanceShoot.ToString("0.000"));
-            Debug.LogError("_curSpeed:" + _curSpeed.ToString("0.000"));
-        }
-
-#endif
+//#if UNITY_EDITOR
+//        if (_moveLifeTime < 0.3f)
+//        {
+//            Debug.LogError("bullet is too fast. _lifeTimeSec:" + _moveLifeTime.ToString("0.000"));
+//            Debug.LogError("_distanceShoot:" + _distanceShoot.ToString("0.000"));
+//            Debug.LogError("_curSpeed:" + _curSpeed.ToString("0.000"));
+//        }
+//
+//#endif
     }
 
     protected void DoVisual(float f)

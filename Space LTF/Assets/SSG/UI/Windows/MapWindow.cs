@@ -130,6 +130,11 @@ public class MapWindow : BaseWindow
     private void ReturnToLastCell()
     {
         var lastCell = player.MapData.LastCell;
+        if (lastCell == null || lastCell == player.MapData.CurrentCell)
+        {
+            Debug.LogError($"can't return to last cell  lastCell:{lastCell}");
+        }
+
         player.MapData.GoToTarget(lastCell, GlobalMap, (comeToTarget) =>
         {
             GlobalMap.SingleReset(comeToTarget, player.MapData.ConnectedCellsToCurrent());
@@ -250,7 +255,7 @@ public class MapWindow : BaseWindow
     private void OnMoneyChange(int obj)
     {
         MoneyField.Init(player.MoneyData.MoneyCount);
-        player.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("AddCredits"), obj));
+        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("AddCredits"), obj));
     }
 
     private void CellsOfSector()
@@ -267,7 +272,7 @@ public class MapWindow : BaseWindow
     private void OnCellChanged(GlobalMapCell cell)
     {
         //        UpdateDayField();
-        player.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("RelocateTo"), cell.Desc()));
+        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("RelocateTo"), cell.Desc()));
         //        GlobalMap.CellChange();
         //        foreach (var mapCellElement in cellsElements)
         //        {

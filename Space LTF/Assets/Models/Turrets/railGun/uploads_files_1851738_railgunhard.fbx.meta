@@ -1,0 +1,243 @@
+fileFormatVersion: 2
+guid: 7b29e50af285f764989d96d7da444445
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Camera
+    100002: Cube.000
+    100004: Cube.001
+    100006: Cube.002
+    100008: Cylinder.000
+    100010: Cylinder.001
+    100012: Cylinder.002
+    100014: Cylinder.003
+    100016: Cylinder.005
+    100018: Cylinder.007
+    100020: NurbsPath.001
+    100022: NurbsPath.002
+    100024: NurbsPath.003
+    100026: NurbsPath.004
+    100028: Sun
+    100030: //RootNode
+    400000: Camera
+    400002: Cube.000
+    400004: Cube.001
+    400006: Cube.002
+    400008: Cylinder.000
+    400010: Cylinder.001
+    400012: Cylinder.002
+    400014: Cylinder.003
+    400016: Cylinder.005
+    400018: Cylinder.007
+    400020: NurbsPath.001
+    400022: NurbsPath.002
+    400024: NurbsPath.003
+    400026: NurbsPath.004
+    400028: Sun
+    400030: //RootNode
+    2000000: Camera
+    2100000: Material.003
+    2100002: Material.005
+    2100004: Material.004
+    2100006: Material.001
+    2100008: Material.010
+    2100010: Material.011
+    2100012: Material.012
+    2100014: Material.002
+    2100016: Material.006
+    2100018: Material.007
+    2100020: Material.008
+    2100022: Material.009
+    2100024: Material.013
+    2300000: Cube.000
+    2300002: Cube.001
+    2300004: Cube.002
+    2300006: Cylinder.000
+    2300008: Cylinder.001
+    2300010: Cylinder.002
+    2300012: Cylinder.003
+    2300014: Cylinder.005
+    2300016: Cylinder.007
+    2300018: NurbsPath.001
+    2300020: NurbsPath.002
+    2300022: NurbsPath.003
+    2300024: NurbsPath.004
+    3300000: Cube.000
+    3300002: Cube.001
+    3300004: Cube.002
+    3300006: Cylinder.000
+    3300008: Cylinder.001
+    3300010: Cylinder.002
+    3300012: Cylinder.003
+    3300014: Cylinder.005
+    3300016: Cylinder.007
+    3300018: NurbsPath.001
+    3300020: NurbsPath.002
+    3300022: NurbsPath.003
+    3300024: NurbsPath.004
+    4300000: Cube.000
+    4300002: NurbsPath.004
+    4300004: NurbsPath.003
+    4300006: NurbsPath.002
+    4300008: Cylinder.007
+    4300010: Cylinder.000
+    4300012: Cylinder.005
+    4300014: NurbsPath.001
+    4300016: Cylinder.003
+    4300018: Cube.002
+    4300020: Cylinder.002
+    4300022: Cube.001
+    4300024: Cylinder.001
+    10800000: Sun
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: f4da8183753b15a4abb45f3ce6fc29e0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: a60d6c97dc97c254cb95f76caf3a215d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 9dd0145994632c74f809a6d38eaff8db, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.004
+    second: {fileID: 2100000, guid: 19199dc8d1b2ed849829278ce77e3a88, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.005
+    second: {fileID: 2100000, guid: 2d501ea984ed81b468dac0b724a90981, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.006
+    second: {fileID: 2100000, guid: 00138bf4e9adec34da1beb2e63870b93, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.007
+    second: {fileID: 2100000, guid: b3a2690839545db499b3df61ded383c5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.008
+    second: {fileID: 2100000, guid: 566448dea79c3d0438b26a264982830f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.009
+    second: {fileID: 2100000, guid: 69dd2532a6801c4469b060e4896c6348, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.010
+    second: {fileID: 2100000, guid: c1306bbead48fca49a0727374eeb36d9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.011
+    second: {fileID: 2100000, guid: d3e0aa8552e336e4c889817e8aa741de, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.012
+    second: {fileID: 2100000, guid: 5e49361766307d944b233092eecd57c4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.013
+    second: {fileID: 2100000, guid: 729742db15b33bf4f93e970d06afefe4, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

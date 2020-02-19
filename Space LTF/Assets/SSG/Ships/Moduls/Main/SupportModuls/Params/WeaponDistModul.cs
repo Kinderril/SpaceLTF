@@ -1,6 +1,4 @@
-﻿using System;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponDistModul : BaseSupportModul
 {
     private const float spd_inc = 0.3f;
@@ -12,7 +10,7 @@ public class WeaponDistModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return Namings.TryFormat(Namings.Tag("DescWeaponDistModul"), Utils.FloatToChance(spd_inc));
+        return Namings.Format(Namings.Tag("DescWeaponDistModul"), Utils.FloatToChance(spd_inc));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {

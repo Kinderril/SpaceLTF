@@ -9,6 +9,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
     //B2 - Resist X sec
 
     public const float MINES_DIST = 7f;
+    public const float OFF_PERIOD = 20f;
     private const float rad = 1f;
     private const float AOE_rad = 4f;
 
@@ -17,9 +18,9 @@ public class RechargeShieldSpell : BaseSpellModulInv
     [field: NonSerialized]
     private ShipBase _lastClosest;
 
-    private float HealPercent => Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT + Level * 0.08f;
+    private float HealPercent => Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT + Level * 0.12f;
     public RechargeShieldSpell()
-        : base(SpellType.rechargeShield, 2, 10,
+        : base(SpellType.rechargeShield, 2, 30,
              new BulleStartParameters(15f, 46f, MINES_DIST, MINES_DIST), false)
     {
 
@@ -32,7 +33,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
     {
         if (UpgradeType == ESpellUpgradeType.A1)
         {
-            var closestsShips = BattleController.Instance.GetAllShipsInRadius(origin.Position, weapon.TeamIndex, ShowCircle);
+            var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position, weapon.TeamIndex, ShowCircle);
             foreach (var ship in closestsShips)
             {
                 MainAffect(ship.ShipParameters, ship, null, null, null);
@@ -46,6 +47,10 @@ public class RechargeShieldSpell : BaseSpellModulInv
             }
         }
 
+    }
+    public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
+    {
+        return targetdistpos;
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
@@ -65,7 +70,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
         {
             if (!ship.DamageData.IsReflecOn)
             {
-                ship.DamageData.TurnOnReflectFor(20);
+                ship.DamageData.TurnOnReflectFor(OFF_PERIOD);
             }
         }
     }
@@ -120,11 +125,11 @@ public class RechargeShieldSpell : BaseSpellModulInv
 
     public override SpellDamageData RadiusAOE()
     {
-        return new SpellDamageData(rad);
+        return new SpellDamageData(ShowCircle);
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("RechargeSheildSpell"), Utils.FloatToChance(HealPercent));
+        return Namings.Format(Namings.Tag("RechargeSheildSpell"), Utils.FloatToChance(HealPercent));
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
     {
@@ -138,9 +143,9 @@ public class RechargeShieldSpell : BaseSpellModulInv
     {
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("RechargeSheildDescA1");
+            return Namings.Format(Namings.Tag("RechargeSheildDescA1"), AOE_rad);
         }
-        return Namings.Tag("RechargeSheildDescB2");
+        return Namings.Format(Namings.Tag("RechargeSheildDescB2"), OFF_PERIOD);
     }
 }
 

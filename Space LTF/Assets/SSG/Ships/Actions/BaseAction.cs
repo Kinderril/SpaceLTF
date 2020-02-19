@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum ActionType
 {
@@ -25,12 +21,13 @@ public enum ActionType
     waitEdnGame,
     readyToAttack,
     attackHalfLoop,
+    shootFromPlace,
 }
 
 public abstract class BaseAction
 {
     protected Vector3? _targetPoint;
-//    protected MoveWayNoLerp _moveWay = null;
+    //    protected MoveWayNoLerp _moveWay = null;
     protected const float RECALC_WAY_DELTA = 0.3f;
     protected ShipBase _owner;
     private CauseAction[] _causes;
@@ -51,7 +48,7 @@ public abstract class BaseAction
 
     public abstract void ManualUpdate();
 
-//    public abstract void ShallEndUpdate();
+    //    public abstract void ShallEndUpdate();
 
     public void ShallEndUpdate2()
     {
@@ -70,31 +67,31 @@ public abstract class BaseAction
 
     public virtual void DrawGizmos()
     {
-        
+
     }
 
 
     protected virtual void Dispose()
     {
-        
+
     }
 
     public void EndAction(string causeEndAction)
     {
         Dispose();
-        Debug.Log(Namings.TryFormat("<color=green>End Action  Id:{0}  Action:{1}  Cause:{2}  Time:{3}</color>"
-            ,_owner.Id, ActionType.ToString(),causeEndAction, Time.time.ToString()));
+        Debug.Log(Namings.Format("<color=green>End Action  Id:{0}  Action:{1}  Cause:{2}  Time:{3}</color>"
+            , _owner.Id, ActionType.ToString(), causeEndAction, Time.time.ToString()));
         _owner.EndAction();
     }
 
-//    public virtual Vector3? LastWayPoint()
-//    {
-//        if (_moveWay != null)
-//        {
-//            return _moveWay.Points[_moveWay.Points.Length - 1].Vector3;
-//        }
-//        return null;
-//    }
+    //    public virtual Vector3? LastWayPoint()
+    //    {
+    //        if (_moveWay != null)
+    //        {
+    //            return _moveWay.Points[_moveWay.Points.Length - 1].Vector3;
+    //        }
+    //        return null;
+    //    }
     public bool ShallEndByTime()
     {
 

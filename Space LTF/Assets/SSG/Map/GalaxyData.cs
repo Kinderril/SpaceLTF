@@ -18,7 +18,8 @@ public enum GlobalMapCellType
 public class GalaxyData
 {
     private CellsInGalaxy cells;
-    public int Size { get; private set; }
+    public int SizeX => cells.SizeX;
+    public int SizeZ => cells.SizeZ;
     public int SizeOfSector { get; private set; }
     public int StartDeathStep { get; private set; }
     public int CellsDestroyed { get; private set; }
@@ -26,13 +27,13 @@ public class GalaxyData
     public string Name;
     //    public int startIndexX { get; private set; }
     //    public int startIndexZ { get; private set; }
-    private const int zoneCount = 5;
-    public const int VERTICAL_COUNT = 3;
-    private bool _prevStepDestroy = false;
+    // private const int zoneCount = 5;
+    public const int VERTICAL_COUNT = 4;
+    // private bool _prevStepDestroy = false;
     private float _powerPerTurn = 0f;
     public List<SectorData> AllSectors = new List<SectorData>();
 
-
+    private int _sectorsCount;
 
     Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
 
@@ -58,45 +59,67 @@ public class GalaxyData
         var unPopulatedSectors = new List<SectorData>();
         var step = (sizeSector + 1);
         SizeOfSector = step;
-        var sectorsCount = sectorCount;
-        Debug.Log($"global map size: {sectorsCount} {VERTICAL_COUNT}");
-        SectorData[,] sectors = new SectorData[sectorsCount, VERTICAL_COUNT];
+        _sectorsCount = sectorCount;
+        Debug.Log($"global map size: {_sectorsCount} {VERTICAL_COUNT}");
+        SectorData[,] sectors = new SectorData[_sectorsCount, VERTICAL_COUNT];
         int id = 0;
         int maxDist = 0;
-        for (int i = 0; i < sectorsCount; i++)
+        for (int i = 0; i < _sectorsCount; i++)
         {
             for (int j = 0; j < VERTICAL_COUNT; j++)
             {
                 var xx = i * step;
                 var zz = j * step;
                 var distToStart = i + j;
-                ShipConfig shipConfig = GetConfig(i, j, sectorsCount);
-                var subSector = new SectorData(xx, zz, sizeSector, _eventsCount, shipConfig, id, i, _powerPerTurn);
-                id++;
-                allSubSectors.Add(subSector);
-                unPopulatedSectors.Add(subSector);
-                if (distToStart > maxDist)
+                SectorData subSector = null;
+                ShipConfig shipConfig = GetConfig(i, j, _sectorsCount);
+                bool upper = j == VERTICAL_COUNT - 1;
+                bool bot = j == 0;
+                if (upper || bot)
                 {
-                    maxDist = distToStart;
+                    if (MyExtensions.IsTrue01(.75f) && i < sectorCount - 1)
+                    {
+                        bool isUp = upper;
+                        subSector = new SectorDungeon(xx, zz, sizeSector,
+                            _eventsCount, shipConfig, id, i, _powerPerTurn, isUp);
+                    }
                 }
-                sectors[i, j] = subSector;
+                else
+                {
+
+                    subSector = new SectorData(xx, zz, sizeSector,
+                        _eventsCount, shipConfig, id, i, _powerPerTurn);
+                }
+
+                id++;
+                if (subSector != null)
+                {
+                    allSubSectors.Add(subSector);
+                    unPopulatedSectors.Add(subSector);
+                    if (distToStart > maxDist)
+                    {
+                        maxDist = distToStart;
+                    }
+                    sectors[i, j] = subSector;
+                }
             }
         }
 
 
-        //Create start sector
-        var startSector = allSubSectors.Where(x => x.StartX == 0).ToList().RandomElement();
+        //Create start sector       
+        var startSector = sectors[0, MyExtensions.Random(1, VERTICAL_COUNT - 2)];
+        //        var startSector = allSubSectors.Where(x => x.StartX == 0 && x.S).ToList().RandomElement();
         startSector.ChangeSectorOwner(playerShipConfig);
         var xCell = startSector.StartX + sizeSector / 2;
         var zCell = startSector.StartZ + sizeSector / 2;
         var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell, startSector, playerShipConfig);
         startSector.SetCell(startCell, id);
         unPopulatedSectors.Remove(startSector);
-        startSector.Populate(startPower, startSector);
+        startSector.Populate(startPower);
         startSector.MarkAsVisited();
 
         //CreateEndSector   
-        var endSector = sectors[sectorsCount - 1, RndIndex(VERTICAL_COUNT)];
+        var endSector = sectors[_sectorsCount - 1, MyExtensions.Random(1, VERTICAL_COUNT - 2)];
 
 
         xCell = endSector.StartX + 1 + RndIndex(sizeSector - 1);
@@ -104,7 +127,7 @@ public class GalaxyData
         var endCell = new EndGlobalCell(startPower, Utils.GetId(), xCell, zCell, endSector);
         endSector.SetCell(endCell, id);
         unPopulatedSectors.Remove(endSector);
-        endSector.Populate(startPower, startSector);
+        endSector.Populate(startPower);
         Debug.Log($"CreateEndSector : {xCell} {zCell}");
 
         //Create core sectors
@@ -123,7 +146,19 @@ public class GalaxyData
         for (int i = 0; i < xIndexs.Count; i++)
         {
             var secrosDist = xIndexs[i];
-            var coreSector = allSubSectors.Where(x => x.XIndex == secrosDist).ToList().RandomElement();
+            List<SectorData> possibleSectors;
+            if (MyExtensions.IsTrue01(.3f) && allSubSectors.Count > VERTICAL_COUNT - 2)
+            {
+                //Only dungeons
+                possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && (x is SectorDungeon)).ToList();
+            }
+            else
+            {
+                //Only inner
+                possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && !(x is SectorDungeon)).ToList();
+            }
+
+            var coreSector = possibleSectors.RandomElement();
             if (coreSector == null)
             {
                 Debug.LogError($"can't find sector with dist:{secrosDist}");
@@ -137,14 +172,17 @@ public class GalaxyData
         var notGoodCores = coreCells - goodCorePositions;
         for (int i = 0; i < notGoodCores; i++)
         {
-            var coreSector = allSubSectors.Where(x => !x.IsPopulated && x.StartX != 0).ToList().RandomElement();
-            CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
+            var coreSector = allSubSectors.Where(x => !x.IsPopulated && x.StartX != 0 && x != null).ToList().RandomElement();
+            if (coreSector != null)
+            {
+                CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
+            }
         }
 
         foreach (var sectorData in unPopulatedSectors)
         {
             Debug.Log($"Populate others : {sectorData.StartX} {sectorData.StartZ}");
-            sectorData.Populate(startPower, startSector);
+            sectorData.Populate(startPower);
         }
 
         foreach (var sectorData in allSubSectors)
@@ -153,9 +191,9 @@ public class GalaxyData
             sectorData.CacheWays();
         }
 
-        AddPortals(sectorsCount, sectors);
-        InplementSectorToGalaxy(sectors, sizeSector, sectorsCount);
-
+        AddPortals(_sectorsCount, sectors);
+        AddExitsFromDungeons(sectorCount, sectors);
+        InplementSectorToGalaxy(sectors, sizeSector, _sectorsCount);
 
         Debug.Log("Population end");
 #if UNITY_EDITOR
@@ -167,6 +205,10 @@ public class GalaxyData
         }
 #endif
         GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController(GetAllList());
+        //        if (startCell == null)
+        //        {
+        //            Debug.LogError("WF");
+        //        }
         return startCell;
     }
 
@@ -181,12 +223,22 @@ public class GalaxyData
     {
         var xCell = coreSector.StartX + RndIndex(sizeSector);
         var zCell = coreSector.StartZ + RndIndex(sizeSector);
+
+//#if UNITY_EDITOR      
+//        var s = _sectorsCount * (sizeSector + 1) - 1;
+//
+//        if (zCell >= s)
+//        {
+//            Debug.LogError($"How it posible core:{ coreSector.StartZ}  s:{s}");
+//            return;
+//        }
+//#endif
         var coreId = Utils.GetId();
         var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, startSector);
-        coreSector.Populate(startPower, startSector);
+        coreSector.Populate(startPower);
         coreSector.SetCell(coreCell, id);
         unPopulatedSectors.Remove(coreSector);
-        coreSector.MarkAsCore(coreId);
+        coreSector.MarkAsCore(coreId, coreCell);
         Debug.Log($"Core created {coreSector.StartX} {coreSector.StartZ}.  coreCell:{coreCell.indX} {coreCell.indZ}");
     }
 
@@ -200,24 +252,120 @@ public class GalaxyData
         return MyExtensions.Random(0, upsizeZoneSector - 1);
     }
 
-    private void AddPortals(int sectorsCount, SectorData[,] sectors)
+    private void AddExitsFromDungeons(int sectorsCount, SectorData[,] sectors)
     {
-
         for (int i = 0; i < sectorsCount; i++)
         {
             for (int j = 0; j < VERTICAL_COUNT; j++)
             {
                 var subSector = sectors[i, j];
-                if (i + 1 < sectorsCount)
+                if (subSector == null)
+                {
+                    continue;
+                }
+
+                var dungeon = subSector as SectorDungeon;
+                if (dungeon != null)
+                {
+                    //                    Debug.LogError("FINDED DUNGEON");
+                    SectorData sectorConnected = null;
+                    var pointToExit = dungeon.ExitCell;
+                    bool connectedSecotAtBot = j == 0;
+                    bool connectedSecotAtTop = j == VERTICAL_COUNT - 1;
+                    if (connectedSecotAtBot)
+                    {
+                        sectorConnected = sectors[i, 1];
+                    }
+                    else if (connectedSecotAtTop)
+                    {
+                        sectorConnected = sectors[i, VERTICAL_COUNT - 2];
+                    }
+
+                    if (sectorConnected != null)
+                    {
+                        SectorCellContainer cellToConnect = FindEndExtraPortal(sectorConnected, connectedSecotAtBot);
+                        if (cellToConnect != null && cellToConnect.Data != null)
+                        {
+                            //                            Debug.LogError($"Extra portal {pointToExit}   to {cellToConnect.Data}");
+                            pointToExit.AddWay(cellToConnect.Data);
+                        }
+                        else
+                        {
+
+                            Debug.LogError("Can't find FindEndExtraPortal");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Can't find sector to create exit of military portal");
+                    }
+
+                }
+            }
+        }
+    }
+
+    private SectorCellContainer FindEndExtraPortal(SectorData sectorConnected, bool reverse)
+    {
+        if (reverse)
+        {
+            for (int k = 0; k < sectorConnected.Size; k++)
+            {
+                for (int m = 0; m < sectorConnected.Size; m++)
+                {
+                    var cellToTest = sectorConnected.Cells[m, k];
+                    if (cellToTest != null && cellToTest.Data != null &&
+                        (!(cellToTest.Data is GlobalMapNothing)))
+                    {
+                        return cellToTest;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int k = sectorConnected.Size - 1; k >= 0; k--)
+            {
+                for (int m = 0; m < sectorConnected.Size; m++)
+                {
+                    var cellToTest = sectorConnected.Cells[m, k];
+                    if (cellToTest != null && cellToTest.Data != null &&
+                        (!(cellToTest.Data is GlobalMapNothing)))
+                    {
+                        return cellToTest;
+                    }
+                }
+            }
+        }
+
+
+        return null;
+    }
+
+    private void AddPortals(int sectorsCount, SectorData[,] sectors)
+    {
+        for (int i = 0; i < sectorsCount; i++)
+        {
+            for (int j = 0; j < VERTICAL_COUNT - 1; j++)
+            {
+                var subSector = sectors[i, j];
+                if (subSector == null)
+                {
+                    continue;
+                }
+                if (i + 1 < sectorsCount && j > 0)
                 {
                     var rightConnectSector = sectors[i + 1, j];
+                    if (rightConnectSector == null)
+                        continue;
                     ConnectSectorsRight(subSector, rightConnectSector);
                 }
 
                 if (j + 1 < VERTICAL_COUNT)
                 {
-
                     var topConnectedSector = sectors[i, j + 1];
+                    if (topConnectedSector == null)
+                        continue;
                     ConnectSectorTop(subSector, topConnectedSector);
                 }
             }
@@ -259,7 +407,7 @@ public class GalaxyData
         }
 
 
-        ConnectedCellsListsFirst(rightCells, leftCells, "RL");
+        ConnectedCellsListsFirst(rightCells, leftCells, "RightLeft", 2);
 
     }
 
@@ -267,14 +415,17 @@ public class GalaxyData
     {
         HashSet<GlobalMapCell> botCells = new HashSet<GlobalMapCell>();
         int moveIndex = 1;
-        while (botCells.Count < 2 && bot.Size - moveIndex > 0)
+        int targetConnections = bot is SectorDungeon || top is SectorDungeon ? 1 : 2;
+
+        while (botCells.Count < targetConnections && bot.Size - moveIndex > 0)
         {
             for (int i = 0; i < bot.Size; i++)
             {
                 var cell = bot.Cells[i, bot.Size - moveIndex];
                 if (!(cell.Data is GlobalMapNothing))
                 {
-                    botCells.Add(cell.Data);
+                    if (cell.Data != null)
+                        botCells.Add(cell.Data);
                 }
             }
 
@@ -282,92 +433,134 @@ public class GalaxyData
         }
         moveIndex = 0;
         HashSet<GlobalMapCell> topCells = new HashSet<GlobalMapCell>();
-        while (topCells.Count < 2 && moveIndex < bot.Size)
+        while (topCells.Count < targetConnections && moveIndex < bot.Size)
         {
             for (int i = 0; i < top.Size; i++)
             {
                 var cell = top.Cells[i, moveIndex];
                 if (!(cell.Data is GlobalMapNothing))
                 {
-                    topCells.Add(cell.Data);
+                    if (cell.Data != null)
+                        topCells.Add(cell.Data);
                 }
             }
 
             moveIndex++;
         }
 
-        ConnectedCellsListsFirst(topCells, botCells, "TB");
+        if (topCells.Count == 0 || botCells.Count == 0)
+        {
+            Debug.LogError("Sectors have not enought portals");
+        }
+
+        //        if (targetConnections == 1)
+        //        {
+        ////            Debug.LogError($"Connected sectors {bot} ID:{bot.Id} Index:{bot.XIndex} and {top} ID:{top.Id} Index:{top.XIndex}   counts:{topCells.Count} {botCells.Count}");
+        //
+        //        }
+
+        ConnectedCellsListsFirst(topCells, botCells, "TopBottom", targetConnections);
 
     }
 
-    private void ConnectedCellsListsFirst(HashSet<GlobalMapCell> rightCells, HashSet<GlobalMapCell> leftCells, string info)
+    private void ConnectedCellsListsFirst(HashSet<GlobalMapCell> rightCells, HashSet<GlobalMapCell> leftCells, string info, int targetCount)
     {
-        if (leftCells.Count < 2)
+        if (leftCells.Count < targetCount)
         {
-            Debug.LogError("ConnectSectorsRight left cell less < 2....");
+            Debug.LogError($"{info} cell less < {targetCount}....");
             return;
         }
-        if (rightCells.Count < 2)
+        if (rightCells.Count < targetCount)
         {
-            Debug.LogError("ConnectSectorsRight right cell less < 2....");
+            Debug.LogError($"{info}t cell less < {targetCount}....");
             return;
         }
 
         if (MyExtensions.IsTrueEqual())
         {
-            ConnectedCellsListsSecond(leftCells, rightCells, info);
+            ConnectedCellsListsSecond(leftCells, rightCells, info, targetCount);
         }
         else
         {
-            ConnectedCellsListsSecond(rightCells, leftCells, info);
+            ConnectedCellsListsSecond(rightCells, leftCells, info, targetCount);
         }
     }
 
 
-    private void ConnectedCellsListsSecond(HashSet<GlobalMapCell> rightCells, HashSet<GlobalMapCell> leftCells, string info)
+    private void ConnectedCellsListsSecond(HashSet<GlobalMapCell> rightCells, HashSet<GlobalMapCell> leftCells, string info, int targetCount)
     {
+#if UNITY_EDITOR
+        bool connectedSomething = false;
+#endif
         //        Debug.Log($"ConnectedCellsListsSecond rightCells:{rightCells.Count}. leftCells:{leftCells.Count}. {info}");
-        if (rightCells.Count < 2 || rightCells.Count < 2)
+        if (rightCells.Count < targetCount || rightCells.Count < targetCount)
         {
             var cellL = leftCells.ToList().RandomElement();
             var cellR = rightCells.ToList().RandomElement();
             ConnectCells(cellL, cellR, info);
+#if UNITY_EDITOR
+            if (targetCount == 1 && cellL != null && cellR != null)
+            {
+                connectedSomething = true;
+                Debug.LogError($"ConnectCells c1:{cellL.indX},{cellL.indZ}  =>  c2:{cellR.indX},{cellR.indZ}");
+            }
+#endif
         }
         else
         {
             var cellsL = leftCells.ToList().Suffle();
             var cellsR = rightCells.ToList().Suffle();
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < targetCount; i++)
             {
                 var c1 = cellsL[i];
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < targetCount; j++)
                 {
                     var c2 = cellsR[j];
                     ConnectCells(c1, c2, info);
+#if UNITY_EDITOR      
+                    if (targetCount == 1 && c1 != null && c2 != null)
+                    {
+                        connectedSomething = true;
+                        //                        Debug.LogError($"ConnectCells c1:{c1.indX},{c1.indZ}  =>  c2:{c2.indX},{c2.indZ}");
+                    }
+#endif
                 }
             }
         }
+#if UNITY_EDITOR
+        if (targetCount == 1 && !connectedSomething)
+        {
+            Debug.LogError($"Nothing CONNECTED!");
+        }
+#endif
     }
 
     private void ConnectCells(GlobalMapCell cellL, GlobalMapCell cellR, string info)
     {
         //        Debug.Log($"Connect cell ({cellL.indX};{cellL.indZ})<->({cellR.indX};{cellR.indZ}) __ info:{info}");
-        cellL.AddWay(cellR);
-        cellR.AddWay(cellL);
+        if (cellL != null && cellR != null)
+        {
+            cellL.AddWay(cellR);
+            cellR.AddWay(cellL);
+        }
     }
 
     private void InplementSectorToGalaxy(SectorData[,] sectors, int sizeZoneSector, int sectorsCount)
     {
         //        Debug.Log(Namings.TryFormat("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}", sizeSector, sectorsCount) );
-        Size = sectorsCount * (sizeZoneSector + 1) - 1;
-        cells = new CellsInGalaxy(Size);
+        var SizeX = sectorsCount * (sizeZoneSector + 1) - 1;
+        var SizeZ = VERTICAL_COUNT * (sizeZoneSector + 1) - 1;
+        cells = new CellsInGalaxy(SizeX, SizeZ);
         for (int i = 0; i < sectorsCount; i++)
         {
             for (int j = 0; j < VERTICAL_COUNT; j++)
             {
                 var subSector = sectors[i, j];
-                SetNullsTo(cells, subSector, sizeZoneSector);
-                subSector.ApplyPointsTo(cells);
+                if (subSector != null)
+                {
+                    SetNullsTo(cells, subSector, sizeZoneSector);
+                    subSector.ApplyPointsTo(cells);
+                }
             }
         }
 
@@ -376,15 +569,15 @@ public class GalaxyData
     private void SetNullsTo(CellsInGalaxy cellsInGalaxy, SectorData sector, int sizeZoneSector)
     {
         var verticalNullsStartX = sector.StartX + sizeZoneSector;
-        if (sector.StartZ < cellsInGalaxy.Size)
+        if (sector.StartZ < cellsInGalaxy.SizeZ)
         {
             for (int i = 0; i < sizeZoneSector + 1; i++)
             {
                 var xx = verticalNullsStartX;
-                if (xx < cellsInGalaxy.Size)
+                if (xx < cellsInGalaxy.SizeX)
                 {
                     var zz = sector.StartZ + i;
-                    if (zz < cellsInGalaxy.Size)
+                    if (zz < cellsInGalaxy.SizeZ)
                     {
                         var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz, sector, sector.ShipConfig);
                         cellsInGalaxy.SetCell(nothing);
@@ -395,15 +588,15 @@ public class GalaxyData
         }
 
         var horizontalNullsStartZ = sector.StartZ + sizeZoneSector;
-        if (sector.StartX < cellsInGalaxy.Size)
+        if (sector.StartX < cellsInGalaxy.SizeX)
         {
             for (int i = 0; i < sizeZoneSector + 1; i++)
             {
                 var zz = horizontalNullsStartZ;
-                if (zz < cellsInGalaxy.Size)
+                if (zz < cellsInGalaxy.SizeZ)
                 {
                     var xx = sector.StartX + i;
-                    if (xx < cellsInGalaxy.Size)
+                    if (xx < cellsInGalaxy.SizeX)
                     {
 
                         var nothing = new GlobalMapNothing(Utils.GetId(), xx, zz, sector, sector.ShipConfig);
@@ -458,9 +651,9 @@ public class GalaxyData
         if (obj is CoreGlobalMapCell)
         {
             int idToUnconnect = obj.ConnectedGates;
-            for (int i = 0; i < Size; i++)
+            for (int i = 0; i < SizeX; i++)
             {
-                for (int j = 0; j < Size; j++)
+                for (int j = 0; j < SizeZ; j++)
                 {
                     var cell = cells.GetCell(i, j);
                     if (cell != null)

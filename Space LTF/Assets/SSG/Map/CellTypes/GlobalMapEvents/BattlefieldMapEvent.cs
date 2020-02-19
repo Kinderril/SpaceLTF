@@ -20,11 +20,11 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("battlefield_provocate"), ScoutsLevel), null, provacation));
+        mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("battlefield_provocate"), ScoutsLevel), null, provacation));
         mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_reconcile"), null, reconcile));
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
 
-        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("battlefield_start"), Namings.ShipConfig(_config)), mianAnswers);
+        var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("battlefield_start"), Namings.ShipConfig(_config)), mianAnswers);
         return mesData;
     }
 
@@ -64,7 +64,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
         {
             MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, 10);
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_ufff"), null, null));
-            mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("battlefield_stopAttack")), mianAnswers);
+            mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("battlefield_stopAttack")), mianAnswers);
 
         }
         return mesData;
@@ -96,7 +96,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
             MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
             var mianAnswers = new List<AnswerDialogData>();
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
-            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("battlefield_killEachOther"), money), mianAnswers);
+            var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("battlefield_killEachOther"), money), mianAnswers);
             return mesData;
         }
         else

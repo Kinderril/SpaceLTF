@@ -1,0 +1,114 @@
+newmtl SFG_01_light
+Kd 0.4 1 0
+Ke 1 1 1
+Ka 1 1 1
+Ks 0 0 0
+Ns 50
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Kd scifi_gun_UV00000000.jpg
+map_Ks scifigun_scifi_gun_main_specular.jpg
+
+newmtl SFG_01_light2
+Kd 1 0 0
+Ke 1 1 1
+Ka 1 1 1
+Ks 0 0 0
+Ns 50
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Kd scifi_gun_UV00000000.jpg
+map_Ks scifigun_scifi_gun_main_specular.jpg
+
+newmtl SFG_barels
+Kd 0.752941 0.752941 0.752941
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.05 0.05 0.05
+Ns 50
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Kd scifigun_scifi_gun_barrel_color.jpg
+
+newmtl SFG_barels_end
+Kd 0.752941 0.752941 0.752941
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.05 0.05 0.05
+Ns 50
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Kd scifigun_scifi_gun_barrel_color.jpg
+
+newmtl SFG_hull
+Kd 0.752941 0.752941 0.752941
+Ke 0 0 0
+Ka 1 1 1
+Ks 0.05 0.05 0.05
+Ns 50
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Kd scifigun_scifi_gun_main_color.jpg
+map_Ks scifigun_scifi_gun_main_specular.jpg
+map_bump scifigun_scifi_gun_main_nmap.jpg
+bump scifigun_scifi_gun_main_nmap.jpg
+
+newmtl SFG_redlights
+Kd 0.74902 0 0
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 1000
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Kd scifi_gun_UV00000000.jpg
+map_Ks scifigun_scifi_gun_main_specular.jpg
+
+newmtl SFG_redlights_barrel
+Kd 0.74902 0 0
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 1000
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Ks scifigun_scifi_gun_main_specular.jpg
+
+newmtl SFG_vents
+Kd 0.164706 0.164706 0.164706
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 0
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+
+newmtl SFG_windows
+Kd 0 0 0
+Ke 0 0 0
+Ka 1 1 1
+Ks 0 0 0
+Ns 1000
+Tr 0
+d 1
+Ni 1
+Tf 1 1 1
+map_Kd scifi_gun_UV00000000.jpg
+map_Ks scifigun_scifi_gun_main_specular.jpg
+

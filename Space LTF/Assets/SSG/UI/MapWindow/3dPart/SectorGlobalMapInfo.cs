@@ -66,7 +66,31 @@ public class SectorGlobalMapInfo : MonoBehaviour
     private void UpdateField()
     {
         var sectorCells = _data.GetAllList().Where(x => !(x is GlobalMapNothing) && x.SectorId == _sector.Id).ToList();
-        string ss = _sector.IsFinal ? Namings.Tag("FinalSector") : _sector.IsCore ? Namings.Tag("CoreSector") : Namings.Tag("NotCoreSector");
+        string ss = "";
+        if (_sector.IsFinal)
+        {
+            ss = Namings.Tag("FinalSector");
+        }
+        else
+        {
+            if (_sector.IsCore)
+            {
+                ss = Namings.Tag("CoreSector");
+            }
+            else
+            {
+                if (_sector is SectorDungeon)
+                {
+
+                    ss = Namings.Tag("SectorDungeon");
+                }
+                else
+                {
+
+                    ss = Namings.Tag("NotCoreSector");
+                }
+            }
+        }
         var completedCount = sectorCells.Count(x => x.Completed);
         var totalCount = sectorCells.Count;
         var txt = $"{ss}\n{Namings.Tag("Completed")}:{completedCount}/{totalCount} \n {_sector.Name}";

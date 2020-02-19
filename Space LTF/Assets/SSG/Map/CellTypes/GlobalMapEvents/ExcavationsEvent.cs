@@ -32,7 +32,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-        var mesData = new MessageDialogData(Namings.TryFormat("You see excavations. Small fleet searching something at this place.\nBut every piece of this place is mined. You should be very careful."), Serach());
+        var mesData = new MessageDialogData(Namings.Format("You see excavations. Small fleet searching something at this place.\nBut every piece of this place is mined. You should be very careful."), Serach());
         return mesData;
     }
 
@@ -72,7 +72,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
                     names = $"{names} {itemName} ";
                 }
             }
-            mesData = new MessageDialogData(Namings.TryFormat("They blow up almost all. But your fast ship safe some modules:{0}", names), ans);
+            mesData = new MessageDialogData(Namings.Format("They blow up almost all. But your fast ship safe some modules:{0}", names), ans);
             return mesData;
         }
         else
@@ -81,7 +81,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             {
                 new AnswerDialogData(Namings.Tag("leave"), null,  null),
             };
-            mesData = new MessageDialogData(Namings.TryFormat("They blow up all and run away.", moneyTotal), ans);
+            mesData = new MessageDialogData(Namings.Format("They blow up all and run away.", moneyTotal), ans);
             return mesData;
         }
     }
@@ -96,7 +96,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             new AnswerDialogData("Offer assistance", null,  assistance),
             new AnswerDialogData(Namings.Tag("leave"), null,  null),
         };
-        mesData = new MessageDialogData(Namings.TryFormat("They are searching for something", moneyTotal), ans);
+        mesData = new MessageDialogData(Namings.Format("They are searching for something", moneyTotal), ans);
         return mesData;
     }
 
@@ -110,7 +110,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         };
         BrokeShipWithRandom();
         _reputation.RemoveReputation(_config, 5);
-        mesData = new MessageDialogData(Namings.TryFormat("They have nothing. And simply blow up everything. Some of your ships damaged.", moneyTotal), ans);
+        mesData = new MessageDialogData(Namings.Format("They have nothing. And simply blow up everything. Some of your ships damaged.", moneyTotal), ans);
         return mesData;
     }
 
@@ -124,7 +124,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             new AnswerDialogData("No", null,  comeClose),
             new AnswerDialogData(Namings.Tag("leave"), null,  null),
         };
-        mesData = new MessageDialogData(Namings.TryFormat("Ok, lets go 50/50", moneyTotal), ans);
+        mesData = new MessageDialogData(Namings.Format("Ok, lets go 50/50", moneyTotal), ans);
         return mesData;
     }
     private void BrokeShipWithRandom()
@@ -152,12 +152,12 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         {
             var m = moneyTotal / 2;
             _reputation.AddReputation(_config, 5);
-            mesData = new MessageDialogData(Namings.TryFormat("All fine, you found some credits. Your part:{0}.", m), ans);
+            mesData = new MessageDialogData(Namings.Format("All fine, you found some credits. Your part:{0}.", m), ans);
             MainController.Instance.MainPlayer.MoneyData.AddMoney(m);
         }
         else
         {
-            mesData = new MessageDialogData(Namings.TryFormat("Nothing. This isn't your day", moneyTotal), ans);
+            mesData = new MessageDialogData(Namings.Format("Nothing. This isn't your day", moneyTotal), ans);
         }
 
         return mesData;
@@ -181,7 +181,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
                 {
                     new AnswerDialogData(Namings.Tag("Ok"), null,  null),
                 };
-                mesData = new MessageDialogData(Namings.TryFormat("You found a lot of credits {0}", moneyTotal), ans);
+                mesData = new MessageDialogData(Namings.Format("You found a lot of credits {0}", moneyTotal), ans);
                 return mesData;
 
             case 2:   //Они вин     
@@ -189,7 +189,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
                 {
                     new AnswerDialogData(Namings.Tag("Ok"), null,  null),
                 };
-                mesData = new MessageDialogData(Namings.TryFormat("They found credits first {0}", moneyTotal), ans);
+                mesData = new MessageDialogData(Namings.Format("They found credits first {0}", moneyTotal), ans);
                 return mesData;
         }
         mesData = new MessageDialogData("No one can't find anything", Serach());

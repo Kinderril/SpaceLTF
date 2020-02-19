@@ -49,10 +49,18 @@ public struct PilotTacticIconSide
     public ESideAttack Tactic;
 }
 
+[Serializable]
+public struct PilotGlobalTacticIconSide
+{
+    public Sprite Icon;
+    public EGlobalTactics Tactic;
+}
+
 public class DataStructPrefabs : MonoBehaviour
 {
     public List<Bullet> Bullets = new List<Bullet>();
     public List<ShipStruct> Ships = new List<ShipStruct>();
+    public List<ShipStruct> Turrets = new List<ShipStruct>();
 
     public DebugRationInfo DebugRationInfo;
     public ShipUIOnMap ShipUIOnMap;
@@ -88,7 +96,9 @@ public class DataStructPrefabs : MonoBehaviour
     public List<PilotTacticIconPriority> ShipTacticIcons = new List<PilotTacticIconPriority>();
     private Dictionary<ECommanderPriority1, Sprite> ShipTacticIconsDic = new Dictionary<ECommanderPriority1, Sprite>();
     public List<PilotTacticIconSide> ShipTacticSideIcons = new List<PilotTacticIconSide>();
+    public List<PilotGlobalTacticIconSide> GlobalTacticsIconsSide = new List<PilotGlobalTacticIconSide>();
     private Dictionary<ESideAttack, Sprite> ShipTacticIconsSideDic = new Dictionary<ESideAttack, Sprite>();
+    private Dictionary<EGlobalTactics, Sprite> GlobalTacticsIconsSideDic = new Dictionary<EGlobalTactics, Sprite>();
 
     public List<ShipTypeIcon> ShipTypeIcons = new List<ShipTypeIcon>();
     private Dictionary<ShipType, Sprite> ShipTypeIconsDic = new Dictionary<ShipType, Sprite>();
@@ -117,6 +127,8 @@ public class DataStructPrefabs : MonoBehaviour
     public ImageWithTooltip NoScoutData;
     public Material GreenFlare;
     public Material RedFlare;
+    public RoadMeshCreator ConnectorTurrets;
+    public TurretConnectorContainer TurretConnector;
 
 
     public void Init()
@@ -193,6 +205,17 @@ public class DataStructPrefabs : MonoBehaviour
             Debug.LogError("not enought pilot ESideAttack tactics");
         }
 
+        //----------
+        foreach (var actionIcon in GlobalTacticsIconsSide)
+        {
+            GlobalTacticsIconsSideDic.Add(actionIcon.Tactic, actionIcon.Icon);
+        }
+        var values9 = Enum.GetValues(typeof(EGlobalTactics)).Length;
+        if (values9 != GlobalTacticsIconsSideDic.Count)
+        {
+            Debug.LogError("not enought pilot GlobalTactics tactics");
+        }
+
     }
 
     private void LoadAchievementsIcon()
@@ -206,7 +229,7 @@ public class DataStructPrefabs : MonoBehaviour
             if (ss != null)
             {
                 var name = ss.m_eAchievementID.ToString();
-                var str = Namings.TryFormat("Icons/Achievements/{0}", name);
+                var str = Namings.Format("Icons/Achievements/{0}", name);
                 var obj = Resources.Load<Sprite>(str);
                 if (obj != null)
                     SpritesByName.Add(name, obj);
@@ -232,7 +255,7 @@ public class DataStructPrefabs : MonoBehaviour
         var noIcon = new HashSet<SimpleModulType>();
         foreach (var v in values3)
         {
-            var obj = Resources.Load<Sprite>(Namings.TryFormat("Icons/moduls/{0}", v.ToString()));
+            var obj = Resources.Load<Sprite>(Namings.Format("Icons/moduls/{0}", v.ToString()));
             ModulsIconsDic.Add(v, obj);
             if (obj == null)
             {
@@ -253,7 +276,7 @@ public class DataStructPrefabs : MonoBehaviour
         var values3 = (PilotRank[])array;
         foreach (var v in values3)
         {
-            var obj = Resources.Load<Sprite>(Namings.TryFormat("Icons/PilotRanks/{0}", v.ToString()));
+            var obj = Resources.Load<Sprite>(Namings.Format("Icons/PilotRanks/{0}", v.ToString()));
             PilotRankIconsDic.Add(v, obj);
 
         }
@@ -268,7 +291,7 @@ public class DataStructPrefabs : MonoBehaviour
             var s = Library.CreateShip(shipStruct.ShipType, shipStruct.ShipConfig, p, Library.CreateDebugPilot());
             if (s.WeaponModulsCount != shipStruct.ShipBase.WeaponPosition.Count && shipStruct.ShipType != ShipType.Base)
             {
-                Debug.LogError(Namings.TryFormat("wrong weapons postions count {0} and {1}.   target:{2}  onPrefab:{3}", shipStruct.ShipType,
+                Debug.LogError(Namings.Format("wrong weapons postions count {0} and {1}.   target:{2}  onPrefab:{3}", shipStruct.ShipType,
                     shipStruct.ShipConfig, s.WeaponModulsCount, shipStruct.ShipBase.WeaponPosition.Count));
             }
         }
@@ -309,6 +332,18 @@ public class DataStructPrefabs : MonoBehaviour
 #endif
 
         return ShipTacticIconsSideDic[actionType];
+    }
+
+    public Sprite GetTacticIcon(EGlobalTactics actionType)
+    {
+#if UNITY_EDITOR
+        if (!GlobalTacticsIconsSideDic.ContainsKey(actionType))
+        {
+            Debug.LogError("have no pilot tactic icon" + actionType.ToString());
+        }
+#endif
+
+        return GlobalTacticsIconsSideDic[actionType];
     }
 
     public Sprite GetSpellIcon(SpellType actionType)

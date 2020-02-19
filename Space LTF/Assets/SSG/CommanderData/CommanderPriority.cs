@@ -10,10 +10,10 @@ public enum ESideAttack
     Flangs
 }
 
-public enum EBaseDefence
+public enum EGlobalTactics
 {
-    No,
-    Yes,
+    Fight,
+    GoSafe,
 }
 
 public enum ECommanderPriority1
@@ -23,9 +23,9 @@ public enum ECommanderPriority1
     MinHealth,  
     MaxShield,
     MaxHealth,
-    Light,
-    Mid,
-    Heavy,
+    Fast,
+    Slow,
+    Base,
 } 
 
 
@@ -37,7 +37,7 @@ public class CommanderPriority
 {
     private Commander _commander;
     public ESideAttack SideAttack;
-    public EBaseDefence BaseDefence;
+    public EGlobalTactics GlobalTactics;
     public ECommanderPriority1 CommanderPriority1;
 
     public CommanderPriority(Commander commander)
@@ -54,12 +54,12 @@ public class CommanderPriority
         }
     } 
 
-    public void ChangeTo(EBaseDefence BaseDefence)
+    public void ChangeTo(EGlobalTactics globalTactics)
     {
-        this.BaseDefence = BaseDefence;
+        this.GlobalTactics = globalTactics;
         foreach (var shipsValue in _commander.Ships.Values)
         {
-            shipsValue.DesicionData.ChangePriority(this.BaseDefence);
+            shipsValue.DesicionData.ChangePriority(this.GlobalTactics);
         }
     } 
 

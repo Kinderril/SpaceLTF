@@ -89,7 +89,7 @@ public class PlayerReputationData
         var delta = Mathf.Abs(sum - old);
         if (delta > 0)
         {
-            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("ReputationChanges"), old, clampedVal, Namings.ShipConfig(config)));
+            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("ReputationChanges"), old, clampedVal, Namings.ShipConfig(config)));
             if (OnReputationNationChange != null)
             {
                 OnReputationNationChange(config, val, delta);
@@ -107,7 +107,7 @@ public class PlayerReputationData
         var delta = Mathf.Abs(sum - old);
         if (delta > 0)
         {
-            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("ReputationChanges"), old, clampedVal, Namings.ShipConfig(config)));
+            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("ReputationChanges"), old, clampedVal, Namings.ShipConfig(config)));
             if (OnReputationNationChange != null)
             {
                 OnReputationNationChange(config, val, delta);

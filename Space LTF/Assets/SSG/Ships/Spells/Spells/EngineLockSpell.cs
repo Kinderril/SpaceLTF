@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -12,16 +11,15 @@ public class EngineLockSpell : BaseSpellModulInv
     public const float LOCK_PERIOD = 4;
     public const float LOCK_LEVEL = 2f;
 
-    private float rad
+    private float rad => GetRad(UpgradeType);
+
+    private float GetRad(ESpellUpgradeType upd)
     {
-        get
+        if (upd == ESpellUpgradeType.A1)
         {
-            if (UpgradeType == ESpellUpgradeType.A1)
-            {
-                return 4;
-            }
-            return 2.5f;
+            return 4;
         }
+        return 2.5f;
     }
     // [NonSerialized]
     // private SpellZoneVisualCircle ObjectToShow;
@@ -38,8 +36,8 @@ public class EngineLockSpell : BaseSpellModulInv
         }
     }
 
-    private const int _baseCostTime = 15;
-    private const int _B2_costTime = 10;
+    private const int _baseCostTime = 13;
+    private const int _B2_costTime = 9;
 
     public float CurLockPeriod => LOCK_PERIOD + LOCK_LEVEL * Level;
 
@@ -125,7 +123,7 @@ public class EngineLockSpell : BaseSpellModulInv
 
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("EnerguLockSpell"), CurLockPeriod.ToString("0"), rad.ToString("0"));
+        return Namings.Format(Namings.Tag("EnerguLockSpell"), CurLockPeriod.ToString("0"), rad.ToString("0"));
         //            $"Destroy engines for {CurLockPeriod.ToString("0")} sec.";
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
@@ -140,9 +138,12 @@ public class EngineLockSpell : BaseSpellModulInv
     {
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("EngineLockDescA1");
+            var delta = GetRad(ESpellUpgradeType.A1) - GetRad(ESpellUpgradeType.None);
+            return Namings.Format(Namings.Tag("EngineLockDescA1"), delta);
         }
-        return Namings.Tag("EngineLockDescB2");
+
+        var d = _baseCostTime - _B2_costTime;
+        return Namings.Format(Namings.Tag("EngineLockDescB2"), d);
     }
 }
 

@@ -71,16 +71,16 @@ public class PlayerByStepDamage
                     case ItemType.weapon:
                         var item = itemToDel as WeaponInv;
                         data.Ship.RemoveWeaponModul(item);
-                        player.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("BrokenItem"), Namings.Weapon(item.WeaponType)));
+                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), Namings.Weapon(item.WeaponType)));
                         break;
                     case ItemType.modul:
                         var item1 = itemToDel as BaseModulInv;
-                        player.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("BrokenItem"), (item1.Name)));
+                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), (item1.Name)));
                         data.Ship.RemoveSimpleModul(item1);
                         break;
                     case ItemType.spell:
                         var item2 = itemToDel as BaseSpellModulInv;
-                        player.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("BrokenItem"), item2.Name));
+                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), item2.Name));
                         data.Ship.RemoveSpellModul(item2);
                         break;
                 }

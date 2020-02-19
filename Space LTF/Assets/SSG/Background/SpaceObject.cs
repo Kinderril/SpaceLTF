@@ -10,18 +10,22 @@ public class SpaceObject : MonoBehaviour
     public float MinScale = 0.7f;
     public float MaxScale = 2f;
     public bool AllSidesRotation = false;
+    public bool CanRotate = true;
     private bool _wannaRotate = false;
     private float _rotateSpeed;
     private Vector3 _rotateDir;
 
     void Awake()
     {
-        _wannaRotate = MyExtensions.IsTrue01(0.7f);
-        _rotateSpeed = MyExtensions.Random(0.1f, 0.25f);
-        var xx = MyExtensions.Random(0f, 1f);
-        var yy = MyExtensions.Random(0f, 1f);
-        var zz = MyExtensions.Random(0f, 1f);
-        _rotateDir = new Vector3(xx, yy, zz);
+        if (CanRotate)
+        {
+            _wannaRotate = MyExtensions.IsTrue01(0.7f);
+            _rotateSpeed = MyExtensions.Random(0.1f, 0.25f);
+            var xx = MyExtensions.Random(0f, 1f);
+            var yy = MyExtensions.Random(0f, 1f);
+            var zz = MyExtensions.Random(0f, 1f);
+            _rotateDir = new Vector3(xx, yy, zz);
+        }
     }
 
 
@@ -44,7 +48,8 @@ public class SpaceObject : MonoBehaviour
         {
             q = new Quaternion(0,MyExtensions.Random(-delta, delta),0, 1f);
         }
-        ObjecTransform.rotation = q;
+        if (CanRotate)
+            ObjecTransform.rotation = q;
     }
 
     void Update()

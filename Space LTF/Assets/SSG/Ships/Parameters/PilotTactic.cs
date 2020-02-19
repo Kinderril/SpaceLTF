@@ -24,6 +24,7 @@ public class PilotTactic
         Priority = priority;
         SideAttack = sideAttack;
     }
+
     public void ChangeTo(ESideAttack sideAttack)
     {
         if (sideAttack != SideAttack)

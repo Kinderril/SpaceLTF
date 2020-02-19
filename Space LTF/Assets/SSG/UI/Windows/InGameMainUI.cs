@@ -30,9 +30,6 @@ public class InGameMainUI : BaseWindow
     public CreditControllerUI CreditController;
     public SpellModulsContainer SpellModulsContainer;
     public event Action<SpellInGame> OnSelectSpell;
-    //    public WindowKeys WindowKeys;
-    //    public GameObject RetireButtonObject;
-    //    public CommanderPriorityUI CommanderPriority;    
     public RetirreButton RetireButton;
 
     public TimeScaleBattleUI TimeScaleBattle;
@@ -129,7 +126,7 @@ public class InGameMainUI : BaseWindow
 
     private void OnSpellClicked(SpellInGame spellToCast)
     {
-        if (spellToCast.CanCast(MyCommander.CoinController))
+        if (spellToCast.CanCast())
         {
             if (_spellSelected != null)
             {
@@ -157,12 +154,6 @@ public class InGameMainUI : BaseWindow
         DebugUtils.KillAllEnemies();
 #endif
     }
-
-    public void OnClickExtraCharge()
-    {
-        MyCommander.ExtraCharge();
-    }
-
     private void UnselectSpell()
     {
         _spellSelected = null;

@@ -34,7 +34,7 @@ public class WeaponFireNearModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return Namings.TryFormat(Namings.Tag("FireNearModulDesc"), Sec);
+        return Namings.Format(Namings.Tag("FireNearModulDesc"), Sec);
     }
 
 

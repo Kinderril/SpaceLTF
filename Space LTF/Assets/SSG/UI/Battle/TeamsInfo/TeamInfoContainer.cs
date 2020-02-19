@@ -55,7 +55,7 @@ public class TeamInfoContainer : MonoBehaviour
     {
         if (_commander.TeamIndex == TeamIndex.green)
         {
-            var shallOpen = 1 == PlayerPrefs.GetInt(Namings.TryFormat(SideShipInfo.PREFS_KEY, obj.Id),1);
+            var shallOpen = 1 == PlayerPrefs.GetInt(Namings.Format(SideShipInfo.PREFS_KEY, obj.Id),1);
             if (obj.ShipParameters.StartParams.ShipType == ShipType.Base)
             {
                 shallOpen = false;

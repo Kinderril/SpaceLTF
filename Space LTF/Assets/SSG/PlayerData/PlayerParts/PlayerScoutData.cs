@@ -147,12 +147,12 @@ public class PlayerScoutData
 
         var a_rnd1 = MyExtensions.Random(armyCount - 2, armyCount);
         var a_rnd2 = MyExtensions.Random(armyCount, armyCount + 2);
-        var s1_rndCount = Namings.TryFormat("Army count between {0} and {1}", a_rnd1, a_rnd2);
-        var s2_armyCount = Namings.TryFormat("Army count is {0}", armyCount);
-        var s3_SomeWeapons = Namings.TryFormat("Weapons types contains {0}", firstWeaponType.ToString());
+        var s1_rndCount = Namings.Format("Army count between {0} and {1}", a_rnd1, a_rnd2);
+        var s2_armyCount = Namings.Format("Army count is {0}", armyCount);
+        var s3_SomeWeapons = Namings.Format("Weapons types contains {0}", firstWeaponType.ToString());
         var s4_HaveMother = haveBase ? "Have mother ship" : "Just fleet";
-        var s5_weapoModulsCount = Namings.TryFormat("Weapons count:{0}. Moduls count:{1}", weaponsCount, modulsCount);
-        var s6_allweapons = Namings.TryFormat("Using weapons:{0}", ssWeapons);
+        var s5_weapoModulsCount = Namings.Format("Weapons count:{0}. Moduls count:{1}", weaponsCount, modulsCount);
+        var s6_allweapons = Namings.Format("Using weapons:{0}", ssWeapons);
 
         switch (level)
         {

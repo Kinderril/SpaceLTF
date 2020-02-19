@@ -1,0 +1,29 @@
+﻿public class LateBattleMapTutorial : TutorialElement
+{
+    public override void Init()
+    {
+        if (!_isCompleted)
+            WindowManager.Instance.OnWindowSetted += OnWindowSetted;
+        base.Init();
+    }
+
+    private void OnWindowSetted(BaseWindow obj)
+    {
+        if (TutorialController.Instance.battleStart3.ThisLauchOpened)
+        {
+            var imGameWindow = obj as InGameMainUI;
+            if (imGameWindow != null)
+            {
+                OpenIfNotCompleted();
+                if (!_isCompleted)
+                    BattleController.Instance.PauseData.Pause();
+            }
+        }
+    }
+
+    public override void Dispose()
+    {
+        WindowManager.Instance.OnWindowSetted -= OnWindowSetted;
+        base.Dispose();
+    }
+}

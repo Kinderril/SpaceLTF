@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class WeaponCritModul : BaseSupportModul
@@ -26,14 +25,15 @@ public class WeaponCritModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return $"Add a {Utils.FloatToChance(ChanceLevel())}% chance to get a {Damage} additional body damage.";
+        return Namings.Format(Namings.Tag("WeaponCrit"),
+            Utils.FloatToChance(ChanceLevel()), Damage);
     }
 
     protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate, WeaponAffectionAdditionalParams additional)
     {
         if (MyExtensions.IsTrue01(ChanceLevel()))
         {
-            FlyNumberWithDependence.Create(ship.transform, Namings.TryFormat(Namings.Tag("Crit"), Damage), Color.red, FlyNumerDirection.right);
+            FlyNumberWithDependence.Create(ship.transform, Namings.Format(Namings.Tag("Crit"), Damage), Color.red, FlyNumerDirection.right);
             paramsTargte.Damage(0, Damage, doneDelegate, ship);
         }
     }

@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using UnityEngine;
 
 
 public class MineFieldSpellAI : BaseAISpell<MineFieldSpell>
 {
-    private const float ShootDistSqrt = 45*45;
+    private const float ShootDistSqrt = 45 * 45;
 
-    public MineFieldSpellAI([NotNull] MineFieldSpell spell, Commander commander, SpellInGame spellData) 
-        : base(spellData,spell, commander)
+    public MineFieldSpellAI([NotNull] MineFieldSpell spell, ShipControlCenter commander, SpellInGame spellData)
+        : base(spellData, spell, commander)
     {
 
     }
@@ -35,21 +30,19 @@ public class MineFieldSpellAI : BaseAISpell<MineFieldSpell>
 
     private void FindCells()
     {
-        var cc = _commander.Battlefield.CellController;
-        var halfX = cc.Data.MaxIx/2;
-        var halfZ = cc.Data.MaxIz/2;
+        
+        var cc = BattleController.Instance.Battlefield.CellController;
+        var halfX = cc.Data.MaxIx / 2;
+        var halfZ = cc.Data.MaxIz / 2;
         var cellCenter = cc.Data.GetCell(halfX, halfZ);
         var goodCell = cc.Data.FindClosestCellByType(cellCenter, CellType.Free);
         TryUse(goodCell.Center);
     }
 
     private bool IsEnemyClose(out Vector3 trg)
-    {
-
-        var oIndex = BattleController.OppositeIndex(_commander.TeamIndex);
-
+    {                                                                
         float sDist;
-        var ship = BattleController.Instance.ClosestShipToPos(_commander.MainShip.Position, oIndex,out sDist);
+        var ship = BattleController.Instance.ClosestShipToPos(_owner.Position, oIndex, out sDist);
         if (sDist < ShootDistSqrt)
         {
             trg = ship.Position;

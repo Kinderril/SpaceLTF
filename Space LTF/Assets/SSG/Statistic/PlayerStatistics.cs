@@ -216,12 +216,18 @@ public class PlayerStatistics
     {
         if (win)
         {
-            CollectedPoints += _lastDifficulty;
+            AddOpenPoints(_lastDifficulty);
         }
         var mainShip = player.Army.Army.First(x => x.Ship.ShipType == ShipType.Base);
         var finalPower = ArmyCreator.CalcArmyPower(player.Army);
-        EndGameResult res = new EndGameResult(win, _lastDifficulty, mainShip.Ship.ShipConfig, player.MapData.GalaxyData.Size, DateTime.Now, finalPower);
+        EndGameResult res = new EndGameResult(win, _lastDifficulty, mainShip.Ship.ShipConfig, player.MapData.GalaxyData.SizeX, DateTime.Now, finalPower);
         EndGameStatistics.AddResult(res);
+        SaveGame();
+    }
+
+    public void AddOpenPoints(int val)
+    {
+        CollectedPoints += val;
         SaveGame();
     }
 
@@ -269,9 +275,40 @@ public class PlayerStatistics
         _lastDifficulty = (int)(d * 100);
     }
 
-    public void AddWin()
+    public void AddWin(ShipConfig config)
     {
+        switch (config)
+        {
+            case ShipConfig.raiders:
+                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.WIN_AS_RDR);
+                break;
+            case ShipConfig.federation:
+                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.WIN_AS_FED);
+                break;
+            case ShipConfig.mercenary:
+                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.WIN_AS_MER);
+                break;
+            case ShipConfig.ocrons:
+                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.WIN_AS_OCR);
+                break;
+            case ShipConfig.krios:
+                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.WIN_AS_KRI);
+                break;
+        }
+
         Wins++;
+        if (Wins > 1)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.ACH_WIN_1_BATTLE);
+        }
+        if (Wins > 10)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.ACH_WIN_10_BATTLE);
+        }
+        if (Wins > 100)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.ACH_WIN_100_BATTLE);
+        }
     }
     public void AddMaxLevelWeapons()
     {
@@ -280,6 +317,19 @@ public class PlayerStatistics
     public void AddShipsDestroyed()
     {
         ShipsDestroyed++;
+        if (ShipsDestroyed > 100)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.SHIP_DESTROY_100);
+        }
+        if (ShipsDestroyed > 1000)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.SHIP_DESTROY_1000);
+        }
+        if (ShipsDestroyed > 10000)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.SHIP_DESTROY_10000);
+        }
+
     }
     public void AddMaxLevelSpells()
     {
@@ -292,18 +342,18 @@ public class PlayerStatistics
 
     public void AddCollectMaxMoney(int money)
     {
-        if (money > CollectMaxMoney)
-        {
-            CollectMaxMoney = money;
-            if (CollectMaxMoney > 1000)
-            {
-                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.COLLECT_MONEY_1000);
-            }
-            if (CollectMaxMoney > 10000)
-            {
-                SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.COLLECT_MONEY_10000);
-            }
-        }
+        // if (money > CollectMaxMoney)
+        // {
+        //     CollectMaxMoney = money;
+        //     if (CollectMaxMoney > 1000)
+        //     {
+        //         SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.COLLECT_MONEY_1000);
+        //     }
+        //     if (CollectMaxMoney > 10000)
+        //     {
+        //         SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.COLLECT_MONEY_10000);
+        //     }
+        // }
 
     }
     public void AddCollectMaxLevelShip(int lvl)

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -8,24 +7,23 @@ public class VacuumSpell : BaseSpellModulInv
     //A1 - more rad
     //B2 - less timer
 
-    private const float DIST_SHOT = 24;
-    private const float DAMAGE_BASE = 10;
+    private const float DIST_SHOT = 50;
+    private const float DAMAGE_BASE = 8;
     private const float radBase = 4f;
-    private float shieldDmg => DAMAGE_BASE + Level;
-    private float powerThrow => 3 + Level * 0.5f;
+    private float shieldDmg => DAMAGE_BASE + Level * 2;
+    private float powerThrow => 3 + Level * 0.8f;
 
-    private float rad
+    private float rad => RadCalc(Level, UpgradeType);
+
+    private float RadCalc(int lvl, ESpellUpgradeType upg)
     {
-        get
-        {
-            var a = radBase + Level * 2;
+        var a = radBase + lvl * 2;
 
-            if (UpgradeType == ESpellUpgradeType.A1)
-            {
-                return a + 3;
-            }
-            return a;
+        if (upg == ESpellUpgradeType.A1)
+        {
+            return a + 3;
         }
+        return a;
     }
     public override int CostTime
     {
@@ -93,6 +91,23 @@ public class VacuumSpell : BaseSpellModulInv
 
     private void BulletDestroy(Bullet origin, IWeapon weapon, AICell cell)
     {
+        Commander commander = weapon.TeamIndex == TeamIndex.green
+            ? BattleController.Instance.RedCommander
+            : BattleController.Instance.GreenCommander;
+
+        foreach (var obj in commander.Connectors)
+        {
+            var dir = obj.Position - origin.Position;
+            var dist = dir.magnitude;
+            if (dist < rad)
+            {
+                dir.y = 0f;
+                var dirNorm = -Utils.NormalizeFastSelf(dir);
+                var powerFoShip = powerThrow * 1.5f;
+                obj.ExternalForce.Init(powerFoShip, 1f, dirNorm);
+            }
+        }
+
         var asteroids = cell.GetAllAsteroids();
         foreach (var aiAsteroidPredata in asteroids)
         {
@@ -124,7 +139,7 @@ public class VacuumSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("DescVacuumSpell"), powerThrow, shieldDmg);
+        return Namings.Format(Namings.Tag("DescVacuumSpell"), powerThrow, shieldDmg);
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
     {
@@ -138,9 +153,13 @@ public class VacuumSpell : BaseSpellModulInv
     {
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("VacuumDescA1");
+            var d = RadCalc(Library.SPECIAL_SPELL_LVL, ESpellUpgradeType.A1) -
+                    RadCalc(Library.SPECIAL_SPELL_LVL, ESpellUpgradeType.None);
+            return Namings.Format(Namings.Tag("VacuumDescA1"), d);
         }
-        return Namings.Tag("VacuumDescB2");
+
+        var d1 = _baseCostTime - _B2_costTime;
+        return Namings.Format(Namings.Tag("VacuumDescB2"), d1);
     }
 }
 

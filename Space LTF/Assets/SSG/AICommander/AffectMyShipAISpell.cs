@@ -5,7 +5,7 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
     protected T _spell;
     private TeamIndex oIndex;
 
-    public AffectMyShipAISpell(SpellInGame spellData, T spell, Commander commander)
+    public AffectMyShipAISpell(SpellInGame spellData, T spell, ShipControlCenter commander)
         : base(commander, spellData)
     {
         _spell = spell;
@@ -31,7 +31,7 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
 
     protected override bool IsEnemyClose(out Vector3 trg)
     {
-        var ship = BattleController.Instance.ClosestShipToPos(_commander.MainShip.Position, oIndex, out var sDist);
+        var ship = BattleController.Instance.ClosestShipToPos(_owner.Position, oIndex, out var sDist);
         if (sDist < ShootDistSqrt)
         {
             trg = ship.Position;
@@ -46,7 +46,7 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         if (CanCast())
         {
             Cast(v);
-            _commander.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
+            _owner.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
 //            Debug.LogError($"_spell.TryCast {this}");
         }
     }

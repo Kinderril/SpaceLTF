@@ -9,7 +9,7 @@ public class WeaponLessDist : BaseSupportModul
 
     }
 
-    private float DmgLevel => dmg_inc + Level * 0.15f;
+    private float DmgLevel => dmg_inc + Level * 0.12f;
 
     public override void ChangeParams(IAffectParameters weapon)
     {
@@ -21,6 +21,7 @@ public class WeaponLessDist : BaseSupportModul
     public override string DescSupport()
     {
         return
-            $"Decrease aim radius by {Utils.FloatToChance(1f - spd_inc)}%. Increase damage by {Utils.FloatToChance(DmgLevel)}%.";
+            Namings.Format(Namings.Tag(Type.ToString()), Utils.FloatToChance(1f - spd_inc),
+                Utils.FloatToChance(DmgLevel));
     }
 }

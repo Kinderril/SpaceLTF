@@ -1,13 +1,9 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class ShipSpeedModul : BaseSupportModul
 {
-//    private const float spd_inc = 0.3f;
+    //    private const float spd_inc = 0.3f;
     public const float PER_LEVEL = 0.1f;
-    public ShipSpeedModul( int level) 
+    public ShipSpeedModul(int level)
         : base(SimpleModulType.ShipSpeed, level)
     {
 
@@ -16,7 +12,7 @@ public class ShipSpeedModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return $"Increase ship max speed by {Utils.FloatToChance(d)}%";
+        return Namings.Format(Namings.Tag(Type.ToString()), Utils.FloatToChance(d));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {

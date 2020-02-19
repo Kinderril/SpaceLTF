@@ -51,9 +51,9 @@ public class DebugAtGlobalMap : MonoBehaviour
     public void OnDebugScoutedAll()
     {  
         var s = MainController.Instance.MainPlayer.MapData.GalaxyData;
-        for (int i = 0; i < s.Size; i++)
+        for (int i = 0; i < s.SizeX; i++)
         {
-            for (int j = 0; j < s.Size; j++)
+            for (int j = 0; j < s.SizeZ; j++)
             {
                 var cell = s.AllCells()[i, j];
                 if (cell != null)

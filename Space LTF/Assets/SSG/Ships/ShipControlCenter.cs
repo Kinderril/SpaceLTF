@@ -1,28 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using UnityEngine.AI;
 
 
 public class ShipControlCenter : ShipBase
 {
+
     private Vector3? CurTarget;
     private float _nextClosePoint;
     private float dist2flow = 2f;
-//    private List<Vector3> listOfDirs = new List<Vector3>();
     private Vector3 StartPos;
+    public TurretConnector Connector;
+    public CommanderCoinController CoinController { get; private set; }
+
+    public override void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos, IPilotParameters pilotParams,
+        Commander commander, Action<ShipBase> dealthCallback)
+    {
+        base.Init(teamIndex, shipInventory, pos, pilotParams, commander, dealthCallback);
+        Connector.Init(this);
+    }
 
     protected override void DesicionDataInit()
     {
         DesicionData = new ControlCenterDesicionData(this);
     }
 
-//    protected override void EngineUpdate()
-//    {
-//        _curSpeed = 0f;
-//    }
+
 
     protected override void UpdateAction()
     {
@@ -53,7 +55,24 @@ public class ShipControlCenter : ShipBase
     protected override void GizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(StartPos,dist2flow);
+        Gizmos.DrawWireSphere(StartPos, dist2flow);
+    }
+
+
+
+    public void SetCoinController(CommanderCoinController coinController)
+    {
+        CoinController = coinController;
+        CoinController.Init(this);
+    }
+
+    public override void Dispose()
+    {
+        if (CoinController != null)
+        {
+            CoinController.Dispsoe();
+        }
+        base.Dispose();
     }
 }
 

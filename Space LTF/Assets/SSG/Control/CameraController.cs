@@ -87,14 +87,19 @@ public class CameraController : MonoBehaviour
 
     public void MoveMainCamToDir(Vector3 keybordDir)
     {
-        if (_isEnable)
+        // if (_isEnable)
+        // {
+        keybordDir.y = 0;
+        var dist = keybordDir.sqrMagnitude > 0;
+        if (dist && _targetPos.HasValue)
         {
-            keybordDir.y = 0;
-            var nextPos = GameCameraHolder.transform.position + keybordDir * SpeedXZ;
-            nextPos.z = Mathf.Clamp(nextPos.z, _min.z, _max.z);
-            nextPos.x = Mathf.Clamp(nextPos.x, _min.x, _max.x);
-            GameCameraHolder.transform.position = nextPos;
+            _targetPos = null;
         }
+        var nextPos = GameCameraHolder.transform.position + keybordDir * SpeedXZ;
+        nextPos.z = Mathf.Clamp(nextPos.z, _min.z, _max.z);
+        nextPos.x = Mathf.Clamp(nextPos.x, _min.x, _max.x);
+        GameCameraHolder.transform.position = nextPos;
+        // }
     }
 
     private void UpdateWheel()

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-public enum ShipType
+﻿public enum ShipType
 {
     Light,
     Middle,
     Heavy,
     Base,
+    Turret,
 }
 
 public enum ShipConfig
@@ -27,7 +23,7 @@ public interface IStartShipParams
     float MaxShiled { get; }
     float MaxSpeed { get; }
     float TurnSpeed { get; }
-    float ShieldRegen { get; }   
+    float ShieldRegen { get; }
     float BodyArmor { get; }
     float ShiledArmor { get; }
     float HealthPercent { get; }
@@ -36,7 +32,7 @@ public interface IStartShipParams
     int WeaponModulsCount { get; }
     int SimpleModulsCount { get; }
     int SpellModulsCount { get; }
-    string Name { get;}
+    string Name { get; }
     float BoostChargeTime { get; }
 
     //    PilotTactic Tactic { get; }

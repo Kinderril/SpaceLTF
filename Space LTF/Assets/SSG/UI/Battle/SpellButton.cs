@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,10 +13,11 @@ public class SpellButton : UIElementWithTooltip
     public TextMeshProUGUI TimeField;
     public TextMeshProUGUI CostField;
     public TextMeshProUGUI NameField;
+    public Image ImageSlider;
     private InGameMainUI _inGameMain;
     private KeyCode _keyCode;
 
-    public void Init(InGameMainUI inGameMain, SpellInGame spell,Action<SpellInGame> OnSpellClick,float speedCoef,int index)
+    public void Init(InGameMainUI inGameMain, SpellInGame spell, Action<SpellInGame> OnSpellClick, float speedCoef, int index)
     {
         _inGameMain = inGameMain;
         _inGameMain.OnSelectSpell += OnSelectSpell;
@@ -27,7 +25,7 @@ public class SpellButton : UIElementWithTooltip
         this.OnSpellClick = OnSpellClick;
         Selected.gameObject.SetActive(false);
         var a = DataBaseController.Instance.DataStructPrefabs.GetSpellIcon(spell.SpellType);
-        CostField.text = Namings.TryFormat("{0}", _spell.CostCount.ToString("0"));
+        CostField.text = Namings.Format("{0}", _spell.CostCount.ToString("0"));
         TimeField.text = $"{(_spell.CostPeriod * speedCoef).ToString("0")}";
         NameField.text = _spell.Name;
         Icon.sprite = a; switch (index)
@@ -67,6 +65,19 @@ public class SpellButton : UIElementWithTooltip
         {
             OnSpellClick(_spell);
         }
+
+        if (!_spell.IsReady)
+        {
+            if (!ImageSlider.gameObject.activeSelf)
+                ImageSlider.gameObject.SetActive(true);
+
+            ImageSlider.fillAmount = _spell.DelayedAction.GetPercent();
+        }
+        else
+        {
+            if (ImageSlider.gameObject.activeSelf)
+                ImageSlider.gameObject.SetActive(false);
+        }
     }
 
     public void Dispose()
@@ -76,7 +87,7 @@ public class SpellButton : UIElementWithTooltip
 
     protected override string TextToTooltip()
     {
-        var spellName = Namings.TryFormat(_spell.Name);
+        var spellName = Namings.Format(_spell.Name);
         return $"{spellName}\n{_spell.Desc}";
     }
 }

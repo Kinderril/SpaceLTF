@@ -35,7 +35,7 @@ public class BattleController : Singleton<BattleController>
     public Commander GreenCommander;
     public Commander RedCommander;
 
-    public AICommander AICommander;
+    public List<AICommander> AICommander = new List<AICommander>();
 
     public bool CanRetire => _canRetire;
     public CellController CellController { get; private set; }
@@ -67,6 +67,7 @@ public class BattleController : Singleton<BattleController>
 
     public void LaunchGame(Player greenSide, Player redSide, bool canRetire, BattlefildEventType? eventType)
     {
+        AICommander.Clear();
         _canRetire = canRetire;
         ActiveBullet.Clear();
         ActiveBulletKillers.Clear();
@@ -162,7 +163,15 @@ public class BattleController : Singleton<BattleController>
         RedCommander.OnShipDestroy += OnShipDestroy;
 
         InGameMainUI.Init(Instance);
-        AICommander = new AICommander(RedCommander);
+        foreach (var redCommanderShip in RedCommander.Ships)
+        {
+            if (redCommanderShip.Value.ShipParameters.StartParams.ShipType == ShipType.Base)
+            {
+                var controlCenter = redCommanderShip.Value as ShipControlCenter;
+                var aiCommander = new AICommander(controlCenter);
+                AICommander.Add(aiCommander);
+            }
+        }
         CamerasController.Instance.GameCamera.InitBorders(CellController.Min, CellController.Max);
         InputManager.Init(InGameMainUI, GreenCommander);
 
@@ -307,7 +316,10 @@ public class BattleController : Singleton<BattleController>
         {
             UpdateDistances();
             UpdateCells();
-            AICommander.ManualUpdate();
+            foreach (var aiCommander in AICommander)
+            {
+                aiCommander.ManualUpdate();
+            }
             //Manual Ships update
             GreenCommander.UpdateManual();
             RedCommander.UpdateManual();
@@ -452,7 +464,11 @@ public class BattleController : Singleton<BattleController>
         OnShipAdd = null;
         GreenCommander.Dispose();
         RedCommander.Dispose();
-        AICommander.Dispose();
+        foreach (var aiCommander in AICommander)
+        {
+            aiCommander.Dispose();
+        }
+        AICommander.Clear();
         GroundParticles.Disable();
     }
 

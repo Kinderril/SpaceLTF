@@ -9,8 +9,10 @@ public class RepairDronesSpell : BaseSpellModulInv
     //B2 - speedBuff x sec
 
     public const float HEAL_PERCENT = 0.28f;
+    public const float SHIELD_PERCENT = 0.40f;
     public const float MINES_DIST = 7f;
     private const float rad = 1f;
+    private const float BUFF_TIME = 13f;
 
     private const float _sDistToShoot = 4 * 4;
     private bool _lastCheckIsOk = false;
@@ -18,8 +20,13 @@ public class RepairDronesSpell : BaseSpellModulInv
     private ShipBase _lastClosest;
 
     private int DronesCount => 1;//DRONES_COUNT + Level/2;
-    private float HealPercent => HEAL_PERCENT + Level * 0.16f;
+    private float HealPercent => CalcHealPercent(Level);
     private float HealPerTick => 8 + Level * 2;
+
+    private float CalcHealPercent(int l)
+    {
+        return HEAL_PERCENT + l * 0.16f;
+    }
 
     public RepairDronesSpell()
         : base(SpellType.repairDrones, 3, 30,
@@ -58,11 +65,11 @@ public class RepairDronesSpell : BaseSpellModulInv
         {
             case ESpellUpgradeType.A1:
                 var maxShield = target.ShipParameters.ShieldParameters.MaxShield;
-                var countToHeal = maxShield * HealPercent * 0.33f;
+                var countToHeal = maxShield * HealPercent * SHIELD_PERCENT;
                 target.ShipParameters.ShieldParameters.HealShield(countToHeal);
                 break;
             case ESpellUpgradeType.B2:
-                target.BuffData.Apply(13f);
+                target.BuffData.Apply(BUFF_TIME);
                 break;
         }
     }
@@ -112,7 +119,7 @@ public class RepairDronesSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("RepairDroneSpell"), DronesCount, Utils.FloatToChance(HealPercent));
+        return Namings.Format(Namings.Tag("RepairDroneSpell"), DronesCount, Utils.FloatToChance(HealPercent));
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
     {
@@ -126,9 +133,10 @@ public class RepairDronesSpell : BaseSpellModulInv
     {
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("RepairDroneDescA1");
+            var p = CalcHealPercent(Library.MAX_SPELL_LVL) * SHIELD_PERCENT;
+            return Namings.Format(Namings.Tag("RepairDroneDescA1"), Utils.FloatToChance(p));
         }
-        return Namings.Tag("RepairDroneDescB2");
+        return Namings.Format(Namings.Tag("RepairDroneDescB2"), BUFF_TIME);
     }
 }
 

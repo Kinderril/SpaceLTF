@@ -65,9 +65,9 @@ public class GlobalMapController : MonoBehaviour
         isInited = true;
         _data = data;
         _data.GalaxyEnemiesArmyController.OnAddMovingArmy += OnAddMovingArmy;
-        _allCells = new GlobalMapCellObject[data.Size, data.Size];
+        _allCells = new GlobalMapCellObject[data.SizeX, data.SizeZ];
         min = Vector3.zero;
-        max = new Vector3(OffsetCell * data.Size, 0, OffsetCell * data.Size);
+        max = new Vector3(OffsetCell * data.SizeX, 0, OffsetCell * data.SizeZ);
 
         DrawSectors(_data);
         var startCell = DrawCells(data);
@@ -153,17 +153,21 @@ public class GlobalMapController : MonoBehaviour
 
 #endif  
         GlobalMapCell startCell = null;
-        for (int i = 0; i < data.Size; i++)
+        for (int i = 0; i < data.SizeX; i++)
         {
             for (int j = 0; j < GalaxyData.VERTICAL_COUNT * data.SizeOfSector - 1; j++)
             {
                 var cell = allCells2[i, j];
+                if (cell == null)
+                {
+                    continue;
+                }
+
                 if (!(cell is GlobalMapNothing))
                 {
                     if (cell is StartGlobalCell)
                     {
                         startCell = cell;
-                        //                        haveStartCell = true;
                     }
                     Vector3 v = new Vector3(OffsetCell * i, 0, OffsetCell * j);
                     var cellObj = DataBaseController.GetItem(CellPrefab);
@@ -249,7 +253,7 @@ public class GlobalMapController : MonoBehaviour
 
     public void Dispsoe()
     {
-        for (int i = 0; i < _data.Size; i++)
+        for (int i = 0; i < _data.SizeX; i++)
         {
             for (int j = 0; j < GalaxyData.VERTICAL_COUNT * _data.SizeOfSector - 1; j++)
             {
@@ -280,9 +284,9 @@ public class GlobalMapController : MonoBehaviour
             return;
         }
         //        var cells = _data.AllCells();
-        for (int i = 0; i < _data.Size; i++)
+        for (int i = 0; i < _data.SizeX; i++)
         {
-            for (int j = 0; j < _data.Size; j++)
+            for (int j = 0; j < _data.SizeZ; j++)
             {
                 var cell = _allCells[i, j];
                 if (cell != null)
@@ -313,9 +317,9 @@ public class GlobalMapController : MonoBehaviour
 
     private void DrawConnecttion(GlobalMapCellObject myCEll, GlobalMapCell globalMapCell, ref int connectd)
     {
-        for (int i = 0; i < _data.Size; i++)
+        for (int i = 0; i < _data.SizeX; i++)
         {
-            for (int j = 0; j < _data.Size; j++)
+            for (int j = 0; j < _data.SizeZ; j++)
             {
                 var cell = _allCells[i, j];
                 if (cell != null)
@@ -483,7 +487,7 @@ public class GlobalMapController : MonoBehaviour
         float vv = Single.MaxValue;
         var xIndex = (int)((pos.x + OffsetCell / 2f) / OffsetCell);
         var zIndex = (int)((pos.z + OffsetCell / 2f) / OffsetCell);
-        if (xIndex >= 0 && xIndex < _data.Size && zIndex >= 0 && zIndex < _data.Size)
+        if (xIndex >= 0 && xIndex < _data.SizeX && zIndex >= 0 && zIndex < _data.SizeZ)
         {
             var a = _allCells[xIndex, zIndex];
             if (a != null)
@@ -606,6 +610,7 @@ public class GlobalMapController : MonoBehaviour
                 isMainReady = true;
                 CheckIsAllReady();
                 SingleReset();
+                CamerasController.Instance.SetCameraTo(targetCell.ModifiedPosition);
             }, MainObjectMoveTo);
             MoveEnemies(() =>
             {

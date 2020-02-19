@@ -86,6 +86,8 @@ public class DebugPanelWindow : EditorWindow
             {
                 SwitchAnyWay();
             }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("AllModuls." + AllModuls))
             {
                 AllModuls = !AllModuls;
@@ -95,10 +97,6 @@ public class DebugPanelWindow : EditorWindow
                 }
                 DebugParamsController.AllModuls = AllModuls;
             }
-
-            EditorGUILayout.EndHorizontal();
-            //        SelectedShip = (ShipBase)EditorGUILayout.ObjectField("Selected ship ", SelectedShip, typeof(ShipBase), true);      
-            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Hire test."))
             {
                 DebugParamsController.TestHire();

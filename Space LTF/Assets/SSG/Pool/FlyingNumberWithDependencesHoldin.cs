@@ -120,7 +120,7 @@ public class FlyingNumberWithDependencesHoldin : MonoBehaviour
             _lastChangeDelta = delta;
         }
         var curInfo = _lastChangeDelta.ToString("0");
-        Field.text = _lastChangeDelta > 0 ? Namings.TryFormat("+{0}", curInfo) : curInfo;
+        Field.text = _lastChangeDelta > 0 ? Namings.Format("+{0}", curInfo) : curInfo;
     }
 
     private void ResetStayingTimer()

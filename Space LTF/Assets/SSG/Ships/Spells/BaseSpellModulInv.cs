@@ -27,6 +27,8 @@ public enum SpellType
     // roundWave = 16,
     machineGun = 17,
     vacuum = 18,
+    mainShipBlink = 19,
+    hookShot = 20,
 }
 
 public enum ESpellUpgradeType
@@ -107,7 +109,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
 
     public string WideInfo()
     {
-        var cost = Namings.TryFormat(Namings.Tag("SpellModulChargers"), CostCount, CostTime);
+        var cost = Namings.Format(Namings.Tag("SpellModulChargers"), CostCount, CostTime);
         return GetInfo() + "\n" + cost
                + "\n" + DescFull();
     }
@@ -164,7 +166,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
                 var cost = MoneyConsts.SpellUpgrade[Level];
                 if (owner.MoneyData.HaveMoney(cost))
                 {
-                    var txt = Namings.TryFormat("You want to upgrade {0}", Namings.SpellName(SpellType));
+                    var txt = Namings.Format("You want to upgrade {0}", Namings.SpellName(SpellType));
                     WindowManager.Instance.ConfirmWindow.Init(() =>
                     {
                         owner.MoneyData.RemoveMoney(cost);

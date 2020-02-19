@@ -64,7 +64,7 @@ public static class ArmyCreatorDebug
         {
             var rnd = posibleArmies.RandomElement();
             var army = rnd(power);
-            var player = new Player("boss");
+            var player = new PlayerAI("boss");
             player.Army.SetArmy(army);
             return player;
         }

@@ -1,17 +1,15 @@
-﻿using System;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponSelfDamageModul : BaseSupportModul
 {
 
-    private const int Damage = 4;
-    private int Self => _self + Level * 2;
-    private const int _self = 1;
+    private const int Damage = 2;
+    private const int _self = 2;
     public WeaponSelfDamageModul(int level)
         : base(SimpleModulType.WeaponSelfDamage, level)
     {
     }
 
+    private int Self => _self + Level * 1;
     private int Dmg => Damage + Level * 2;
 
     public override void ChangeParams(IAffectParameters weapon)
@@ -35,7 +33,7 @@ public class WeaponSelfDamageModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return Namings.TryFormat("Add a +{0}/+{0} Damage. But hit own ship when strikes on {1}/{1}", Dmg, Self);
+        return Namings.Format(Namings.Tag("WeaponSelfDamage"), Dmg, Self);
     }
 
 

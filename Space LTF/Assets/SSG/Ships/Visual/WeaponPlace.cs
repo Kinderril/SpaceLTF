@@ -8,8 +8,8 @@ using UnityEngine;
 public class WeaponPlace : MonoBehaviour
 {
     public Transform BulletOut;
-    public GameObject PlaceVisual;
-    public Renderer ReloadIndicator;
+//    public GameObject PlaceVisual;
+//    public Renderer ReloadIndicator;
 //    private Material _material;
     private bool _lastFrame = false;
     private bool setted = false;
@@ -25,11 +25,11 @@ public class WeaponPlace : MonoBehaviour
         if (IsActivePlace)
         {
             this.weapon = weapon;
-           Utils.CopyMaterials(ReloadIndicator,Color.white);
+//           Utils.CopyMaterials(ReloadIndicator,Color.white);
 //            _material = ReloadIndicator.material;
             weapon.SetTransform(this);
         }
-        PlaceVisual.gameObject.SetActive(IsActivePlace);
+//        PlaceVisual.gameObject.SetActive(IsActivePlace);
     }
 
     void Update()

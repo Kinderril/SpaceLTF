@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class EngineLockSpellAI : BaseAISpell<EngineLockSpell>
 {
-    public EngineLockSpellAI([NotNull] EngineLockSpell spell, Commander commander, SpellInGame spellData)
+    public EngineLockSpellAI([NotNull] EngineLockSpell spell, ShipControlCenter commander, SpellInGame spellData)
         : base(spellData, spell, commander)
     {
 

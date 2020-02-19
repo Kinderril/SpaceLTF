@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void OnComeToDelegate(GlobalMapCell to, GlobalMapCell from);
 
 [System.Serializable]
 public class ArmyGlobalMapCell : GlobalMapCell
 {
     public float HIRE_CHANCE = 0.01f;
-    protected ArmyCreatorType _armyType;
-    private bool canHire = false;
-    private Player _player;
-    private BattlefildEventType? _eventType = null;
-
+    protected Player _player;
+    protected BattlefildEventType? _eventType = null;
     public BattlefildEventType? EventType => _eventType;
 
-    public int Power
-    {
-        get { return _power; }
-    }
+    public virtual int Power => _power;
 
     protected int _power;
     protected int _additionalPower;
+
+
+    [field: NonSerialized]
+    public event OnComeToDelegate OnComeToCell;
 
     protected virtual Player GetArmy()
     {
@@ -32,20 +31,12 @@ public class ArmyGlobalMapCell : GlobalMapCell
         return _player;
     }
 
-    private void CacheArmy()
+    protected virtual void CacheArmy()
     {
         ArmyCreatorData data = ArmyCreatorLibrary.GetArmy(ConfigOwner);
-        var player = new Player(name);
+        var player = new PlayerAI(name);
         var army = ArmyCreator.CreateSimpleEnemyArmy(Power, data, player);
         player.Army.SetArmy(army);
-        switch (ConfigOwner)
-        {
-            case ShipConfig.raiders:
-            case ShipConfig.mercenary:
-                canHire = MyExtensions.IsTrue01(HIRE_CHANCE);
-                break;
-        }
-
         _player = player;
     }
 
@@ -53,12 +44,15 @@ public class ArmyGlobalMapCell : GlobalMapCell
     {
         return true;
     }
-
-    public ArmyGlobalMapCell(int power, ShipConfig config, int id, ArmyCreatorType type, int Xind, int Zind,
+    public override void ComeTo(GlobalMapCell from)
+    {
+        OnComeToCell?.Invoke(this, from);
+    }
+    public ArmyGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind,
         SectorData sector)
         : base(id, Xind, Zind, sector, config)
     {
-        _armyType = type;
+        // _armyType = type;
         _power = power;
         if (Xind > 5)
         //        if (true)
@@ -98,7 +92,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         string scoutsField;
         if (_eventType.HasValue)
         {
-            scoutsField = Namings.TryFormat(Namings.DialogTag("armySectorEvent"), Namings.BattleEvent(_eventType.Value)); ;
+            scoutsField = Namings.Format(Namings.DialogTag("armySectorEvent"), Namings.BattleEvent(_eventType.Value)); ;
         }
         else
         {
@@ -112,8 +106,8 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
         if (isFriends)
         {
-            masinMsg = Namings.TryFormat(Namings.DialogTag("armyFrendly"), scoutsField); ;
-            ans.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("armyAskHelp"), rep), null, DimlomatyOption));
+            masinMsg = Namings.Format(Namings.DialogTag("armyFrendly"), scoutsField); ;
+            ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyAskHelp"), rep), null, DimlomatyOption));
         }
         else
         {
@@ -122,22 +116,22 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
             if (myPlaer.MoneyData.HaveMoney(buyoutCost) && (ConfigOwner == ShipConfig.mercenary || ConfigOwner == ShipConfig.raiders))
             {
-                ans.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
+                ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
                     () => BuyOutOption(buyoutCost)));
             }
             if (status == EReputationStatus.neutral)
             {
-                masinMsg = Namings.TryFormat(Namings.DialogTag("armyNeutral"), scoutsField);
+                masinMsg = Namings.Format(Namings.DialogTag("armyNeutral"), scoutsField);
             }
             else
             {
                 if (playersPower < Power)
                 {
-                    masinMsg = Namings.TryFormat(Namings.DialogTag("armyStronger"), scoutsField);
+                    masinMsg = Namings.Format(Namings.DialogTag("armyStronger"), scoutsField);
                 }
                 else
                 {
-                    masinMsg = Namings.TryFormat(Namings.DialogTag("armyShallFight"), scoutsField);
+                    masinMsg = Namings.Format(Namings.DialogTag("armyShallFight"), scoutsField);
                 }
             }
         }
@@ -151,21 +145,9 @@ public class ArmyGlobalMapCell : GlobalMapCell
         else
         {
             ans.Add(new AnswerDialogData(
-                Namings.TryFormat(Namings.DialogTag("armyRun"), scoutsField),
+                Namings.Format(Namings.DialogTag("armyRun"), scoutsField),
                 () =>
                 {
-                    // bool doRun = MyExtensions.IsTrue01((float)ScoutsLevel / 4f);
-                    // #if UNITY_EDITOR
-                    //                    var doRun = true;
-                    //                    // #endif
-                    //                    if (doRun)
-                    //                    {
-                    //                        WindowManager.Instance.InfoWindow.Init(null, Namings.DialogTag("armyRunComplete"));
-                    //                    }
-                    //                    else
-                    //                    {
-                    //                        WindowManager.Instance.InfoWindow.Init(Take, Namings.DialogTag("armyRunFail"));
-                    //                    }
                 }, null, false, true));
         }
 
@@ -179,7 +161,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         var ans = new List<AnswerDialogData>();
         player.MoneyData.RemoveMoney(buyoutCost);
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
-        var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("armyBuyoutComplete"), buyoutCost), ans);
+        var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("armyBuyoutComplete"), buyoutCost), ans);
         return mesData;
     }
 
@@ -210,7 +192,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
             if (a == 0)
             {
                 var money = AddMoney(Power / 3, Power / 2);
-                helpInfo = Namings.TryFormat("They give you some credits {0}", money);
+                helpInfo = Namings.Format("They give you some credits {0}", money);
             }
             else
             {
@@ -242,7 +224,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
                 if (canAdd)
                 {
-                    helpInfo = Namings.TryFormat("They give {0}.", itemName);
+                    helpInfo = Namings.Format("They give {0}.", itemName);
                 }
                 else
                 {

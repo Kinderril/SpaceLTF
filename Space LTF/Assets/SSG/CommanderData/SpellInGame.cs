@@ -69,18 +69,25 @@ public class SpellInGame : IWeapon
     //    float ShowCircleRadius { get; }
     bool ShowLine { get; }
     private float _maxDist;
+    public CanUseDelayedAction DelayedAction;
     public bool ShowCircle { get; private set; }
     private DistCounter _distCounter;
+    private ShipControlCenter _controlShip;
 
     public SpellInGame(ISpellToGame spellData, Func<Vector3> modulPos,
         TeamIndex teamIndex, ShipBase owner, int level, string name, int period,
-        int count, SpellType spellType, float maxDist, string desc, DistCounter distCounter)
+        int count, SpellType spellType, float maxDist, string desc, DistCounter distCounter, float delayPeriod)
     {
         if (maxDist < 1)
         {
             Debug.LogError($"Shoot dist is vey low {spellData}  {maxDist}  name:{name}");
         }
-
+        _controlShip = owner as ShipControlCenter;
+        if (_controlShip == null)
+        {
+            Debug.LogError($"SpellInGame have wrong owner");
+        }
+        DelayedAction = new CanUseDelayedAction(delayPeriod);
         _distCounter = distCounter;
 
         Desc = desc;
@@ -106,9 +113,15 @@ public class SpellInGame : IWeapon
         BulletDestroyAction = spellData.BulletDestroyDelegate;
         ShowCircle = _spellDamageData.AOERad > 0;
     }
-    public bool CanCast(CommanderCoinController coinController)
+
+    public bool IsReady => DelayedAction.IsReady;
+    public bool CanCast()
     {
-        var canUse = coinController.CanUseCoins(CostCount);
+        if (!DelayedAction.IsReady)
+        {
+            return false;
+        }
+        var canUse = _controlShip.CoinController.CanUseCoins(CostCount);
         if (!canUse)
         {
             return false;
@@ -132,9 +145,7 @@ public class SpellInGame : IWeapon
             var dir = (pos - _modulPos());
             LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir, _maxDist);
         }
-
     }
-
     public void StartShowCast()
     {
         _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.SelectSpell);
@@ -182,6 +193,7 @@ public class SpellInGame : IWeapon
         var dir = Utils.NormalizeFastSelf(target - startPos);
         var maxDistPos = startPos + dir * _maxDist;
         var distCal = _distCounter(maxDistPos, target);
+        DelayedAction.Use();
         CastSpell(new BulletTarget(distCal), _bulletOrigin, this, startPos, _bulletStartParams);
         //        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
     }
@@ -261,13 +273,13 @@ public class SpellInGame : IWeapon
     }
 
 
-    public bool TryCast(CommanderCoinController commanderCoinController, Vector3 trg)
+    public bool TryCast(Vector3 trg)
     {
-        if (CanCast(commanderCoinController))
+        if (CanCast())
         {
             if (CanCastAtPoint(trg))
             {
-                commanderCoinController.UseCoins(CostCount, CostPeriod);
+                _controlShip.CoinController.UseCoins(CostCount, CostPeriod);
                 Cast(trg);
                 return true;
             }

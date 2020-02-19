@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -13,12 +14,12 @@ public class RepairStationGlobalCell : GlobalMapCell
 
     public override string Desc()
     {
-        return "Repair station";
+        return Namings.Tag("RepairStation");
     }
 
     public override void Take()
     {
-        WindowManager.Instance.InfoWindow.Init(null, "Repair compete");
+        WindowManager.Instance.InfoWindow.Init(null, Namings.Tag("RepairCompete"));
     }
 
     protected override MessageDialogData GetDialog()
@@ -55,10 +56,12 @@ public class RepairStationGlobalCell : GlobalMapCell
             {
                 mainMsg =
                     "This is repair station. We can repair our fleet here.\n And we can try to stabilize energy module of core ship.";
+
+
                 if (RemainEnergyRepairs > 0)
                 {
                     answers.Add(new AnswerDialogData(
-                        Namings.TryFormat("Statilize energy module. Remain charges:{0}", RemainEnergyRepairs), null,
+                        Namings.Format("Statilize energy module. Remain charges:{0}", RemainEnergyRepairs), null,
                         Statilize));
                 }
             }
@@ -67,9 +70,12 @@ public class RepairStationGlobalCell : GlobalMapCell
                 mainMsg = Namings.DialogTag("repairStart");
             }
 
+
             if (haveDamages)
             {
-                answers.Add(new AnswerDialogData(Namings.DialogTag("fixCrit"), null, FixCrit));
+                float count = player.Army.Army.Sum(startShipPilotData => startShipPilotData.Ship.CriticalDamages * (5 + startShipPilotData.Pilot.CurLevel * 0.2f));
+                var critFixCost = (int)(count * Library.COST_REPAIR_CRIT);
+                answers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("fixCrit"), critFixCost), null, () => FixCrit(critFixCost)));
             }
 
             MessageDialogData mesData;
@@ -78,7 +84,7 @@ public class RepairStationGlobalCell : GlobalMapCell
                 var canRepairFull = player.MoneyData.HaveMoney(total);
                 if (canRepairFull)
                 {
-                    answers.Add(new AnswerDialogData(Namings.TryFormat(Namings.DialogTag("repairAll"), total), null, () =>
+                    answers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("repairAll"), total), null, () =>
                     {
                         var d = RepairAll(total);
                         return d;
@@ -112,16 +118,25 @@ public class RepairStationGlobalCell : GlobalMapCell
         return mesData;
     }
 
-    private MessageDialogData FixCrit()
+    private MessageDialogData FixCrit(int cost)
     {
         var player = MainController.Instance.MainPlayer;
-        foreach (var startShipPilotData in player.Army.Army)
-        {
-            startShipPilotData.Ship.RestoreAllCriticalDamages();
-        }
+        var haveMoney = player.MoneyData.HaveMoney(cost);
         var answers = new List<AnswerDialogData>();
+        MessageDialogData mesData;
         answers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, () => GetDialog()));
-        var mesData = new MessageDialogData(Namings.DialogTag("repairCritFixed"), answers);
+        if (haveMoney)
+        {
+            foreach (var startShipPilotData in player.Army.Army)
+            {
+                startShipPilotData.Ship.RestoreAllCriticalDamages();
+            }
+            mesData = new MessageDialogData(Namings.DialogTag("repairCritFixed"), answers);
+        }
+        else
+        {
+            mesData = new MessageDialogData(Namings.Tag("NotEnoughtMoney"), answers);
+        }
         return mesData;
     }
 
@@ -133,7 +148,7 @@ public class RepairStationGlobalCell : GlobalMapCell
         RemainEnergyRepairs--;
         player.ByStepDamage.Repair();
         var mesData =
-            new MessageDialogData(Namings.TryFormat("Module stabilized for {0} days", player.ByStepDamage._curRemainSteps),
+            new MessageDialogData(Namings.Format("Module stabilized for {0} days", player.ByStepDamage._curRemainSteps),
                 answers);
         return mesData;
     }

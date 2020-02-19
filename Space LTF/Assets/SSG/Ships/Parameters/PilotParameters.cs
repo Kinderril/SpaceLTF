@@ -145,7 +145,7 @@ public class PilotParameters : IPilotParameters
                 break;
         }
 
-        var msg = Namings.TryFormat("Ship {0} upgraded!", Namings.ParameterName(rnd));
+        var msg = Namings.Format("Ship {0} upgraded!", Namings.ParameterName(rnd));
         UnityEngine.Debug.Log(msg.Yellow());
         if (withMsg)
             MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(msg);

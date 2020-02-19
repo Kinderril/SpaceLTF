@@ -1,6 +1,4 @@
-﻿
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -20,11 +18,11 @@ public class DistShotSpell : BaseSpellModulInv
     // [NonSerialized]
     // private CurWeaponDamage CurWeaponDamage;
 
-    private const float BULLET_SPEED = 13f;
+    private const float BULLET_SPEED = 12f;
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 34f;
     public DistShotSpell()
-        : base(SpellType.distShot, 5, 20, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
+        : base(SpellType.distShot, 5, 7, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
     {
         // CurWeaponDamage = new CurWeaponDamage(0, 12);
     }
@@ -39,7 +37,7 @@ public class DistShotSpell : BaseSpellModulInv
     }
 
     public int BASE_damage => BASE_DAMAGE + LEVEL_DAMAGE * Level;
-    public float Engine_Off => ENGINE_OFF_DELTA + ENGINE_OFF_LEVEL * Level;
+    public float Engine_Off => ENGINE_OFF_DELTA;
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
@@ -89,7 +87,7 @@ public class DistShotSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("DistShotSpell"), BASE_damage, Engine_Off.ToString("0.0"));
+        return Namings.Format(Namings.Tag("DistShotSpell"), BASE_damage, Engine_Off.ToString("0.0"));
         // return Namings.TryFormat(Namings.Tag("DistShotSpellSpecial"), BASE_damage, Engine_Off.ToString("0.0"));
 
     }
@@ -105,9 +103,9 @@ public class DistShotSpell : BaseSpellModulInv
     {
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("DistShotDescA1");
+            return Namings.Format(Namings.Tag("DistShotDescA1"), Engine_Off);
         }
-        return Namings.Tag("DistShotDescB2");
+        return Namings.Format(Namings.Tag("DistShotDescB2"), RAD_B2);
     }
 
 }

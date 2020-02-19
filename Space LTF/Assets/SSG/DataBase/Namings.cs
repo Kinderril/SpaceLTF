@@ -12,7 +12,7 @@ public static class Namings
 {
     private const string LANG_KEY = "LANG_KEY";
 
-    public static string TryFormat(string core, params object[] args)
+    public static string Format(string core, params object[] args)
     {
         try
         {
@@ -139,6 +139,8 @@ public static class Namings
                 break;
             case global::ShipType.Base:
                 return Tag("Base");
+            case global::ShipType.Turret:
+                return Tag("Turret");
                 break;
         }
         return "none";
@@ -339,6 +341,8 @@ public static class Namings
         {
             case ActionType.readyToAttack:
                 return Tag("Preparing");
+            case ActionType.shootFromPlace:
+                return Tag("Attack");
             case ActionType.attack:
                 return Tag("Attack");
             case ActionType.attackHalfLoop:
@@ -381,11 +385,11 @@ public static class Namings
         switch (damageType)
         {
             case ShipDamageType.engine:
-                return Namings.TryFormat(Tag("engineCrash"), time);
+                return Namings.Format(Tag("engineCrash"), time);
             case ShipDamageType.shiled:
-                return Namings.TryFormat(Tag("shieldCrash"), time);
+                return Namings.Format(Tag("shieldCrash"), time);
             case ShipDamageType.fire:
-                return Namings.TryFormat(Tag("fireCrash"), time);
+                return Namings.Format(Tag("fireCrash"), time);
             default:
                 return "null";
         }
@@ -407,45 +411,45 @@ public static class Namings
             case EQuestOnStart.sellModuls:
                 return Tag("sellModuls");
             case EQuestOnStart.laserDamage:
-                return Namings.TryFormat(Tag("damageByQuest"), Weapon(WeaponType.laser));
+                return Namings.Format(Tag("damageByQuest"), Weapon(WeaponType.laser));
             case EQuestOnStart.rocketDamage:
-                return Namings.TryFormat(Tag("damageByQuest"), Weapon(WeaponType.rocket));
+                return Namings.Format(Tag("damageByQuest"), Weapon(WeaponType.rocket));
             case EQuestOnStart.impulseDamage:
-                return Namings.TryFormat(Tag("damageByQuest"), Weapon(WeaponType.impulse));
+                return Namings.Format(Tag("damageByQuest"), Weapon(WeaponType.impulse));
             case EQuestOnStart.emiDamage:
-                return Namings.TryFormat(Tag("damageByQuest"), Weapon(WeaponType.eimRocket));
+                return Namings.Format(Tag("damageByQuest"), Weapon(WeaponType.eimRocket));
             case EQuestOnStart.cassetDamage:
-                return Namings.TryFormat(Tag("damageByQuest"), Weapon(WeaponType.casset));
+                return Namings.Format(Tag("damageByQuest"), Weapon(WeaponType.casset));
             case EQuestOnStart.winRaiders:
-                return Namings.TryFormat(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.raiders));
+                return Namings.Format(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.raiders));
             case EQuestOnStart.winMerc:
-                return Namings.TryFormat(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.mercenary));
+                return Namings.Format(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.mercenary));
             case EQuestOnStart.winFed:
-                return Namings.TryFormat(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.federation));
+                return Namings.Format(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.federation));
             case EQuestOnStart.winKrios:
-                return Namings.TryFormat(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.krios));
+                return Namings.Format(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.krios));
             case EQuestOnStart.winOcrons:
-                return Namings.TryFormat(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.ocrons));
+                return Namings.Format(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.ocrons));
             case EQuestOnStart.winDroids:
-                return Namings.TryFormat(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.droid));
+                return Namings.Format(Tag("winAgainst"), Namings.ShipConfig(global::ShipConfig.droid));
             case EQuestOnStart.killRaiders:
-                return Namings.TryFormat(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.raiders));
+                return Namings.Format(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.raiders));
             case EQuestOnStart.killMerc:
-                return Namings.TryFormat(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.mercenary));
+                return Namings.Format(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.mercenary));
             case EQuestOnStart.killFed:
-                return Namings.TryFormat(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.federation));
+                return Namings.Format(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.federation));
             case EQuestOnStart.killKrios:
-                return Namings.TryFormat(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.krios));
+                return Namings.Format(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.krios));
             case EQuestOnStart.killOcrons:
-                return Namings.TryFormat(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.ocrons));
+                return Namings.Format(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.ocrons));
             case EQuestOnStart.killDroids:
-                return Namings.TryFormat(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.droid));
+                return Namings.Format(Tag("questKills"), Namings.ShipConfig(global::ShipConfig.droid));
         }
         return $"ERROR{type.ToString()}";
     }
     public static string TooltipWeapons(WeaponsPair weaponsPair)
     {
-        return Namings.TryFormat(Tag("WeaponsStart"), Weapon(weaponsPair.Part1),
+        return Namings.Format(Tag("WeaponsStart"), Weapon(weaponsPair.Part1),
             Weapon(weaponsPair.Part2));
     }
 
@@ -483,6 +487,8 @@ public static class Namings
                 return Tag("ParamchargesCount");
             case PlayerParameterType.chargesSpeed:
                 return Tag("ParamchargesSpeed");
+            case PlayerParameterType.engineParameter:
+                return Tag("ParamEngine");
         }
 
         return "null";
@@ -496,8 +502,8 @@ public static class Namings
                 return Tag("asteroidsEvent");
             case BattlefildEventType.shieldsOff:
                 return Tag("shieldsOffEvent");
-            case BattlefildEventType.engineOff:
-                return Tag("engineOffEvent");
+            // case BattlefildEventType.engineOff:
+            //     return Tag("engineOffEvent");
             case BattlefildEventType.turrets:
                 break;
             case null:

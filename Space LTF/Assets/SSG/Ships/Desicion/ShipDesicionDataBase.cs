@@ -1,8 +1,7 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -12,9 +11,9 @@ public abstract class ShipDesicionDataBase : IShipDesicion
     public const float _defDist = 12f;
     protected ShipBase _owner;
     protected ActionType _lastAction;
-    protected ESideAttack SideAttack;
-    protected EBaseDefence BaseDefence;
-    protected ECommanderPriority1 CommanderPriority1;
+    public EGlobalTactics GlobalTactics { get; private set; }
+    public ECommanderPriority1 CommanderPriority1 { get; private set; }
+    public ESideAttack SideAttack { get; private set; }
 
     public ShipDesicionDataBase(ShipBase owner, PilotTactic tactic)
     {
@@ -26,7 +25,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
     public static ShipDesicionDataBase Create(ShipBase ship, PilotTactic tactic)
     {
 
-        return new ShipDesicionDataAttack(ship,tactic);
+        return new ShipDesicionDataAttack(ship, tactic);
     }
 
     public BaseAction CalcAction()
@@ -40,29 +39,35 @@ public abstract class ShipDesicionDataBase : IShipDesicion
     public void ChangePriority(ESideAttack SideAttack)
     {
         this.SideAttack = SideAttack;
+        OnChagePriority?.Invoke();
     }
 
-    public void ChangePriority(EBaseDefence BaseDefence)
+    public void ChangePriority(EGlobalTactics globalTactics)
     {
-        this.BaseDefence = BaseDefence;
+        this.GlobalTactics = globalTactics;
+        OnChagePriority?.Invoke();
     }
 
     public void ChangePriority(ECommanderPriority1 CommanderPriority1)
     {
         this.CommanderPriority1 = CommanderPriority1;
+        OnChagePriority?.Invoke();
     }
+
+    public event Action OnChagePriority;
 
 
     protected ActionType RepairOrGoHide()
     {
         int dist;
-        AICell cell = _owner.CellController.Data.FindClosestCellByType(_owner.Cell, CellType.Clouds,false,out dist);
+        AICell cell = _owner.CellController.Data.FindClosestCellByType(_owner.Cell, CellType.Clouds, false, out dist);
         if (cell != null && dist <= 2)
         {
             return ActionType.goToHide;
         }
         return ActionType.repairAction;
     }
+
 
     public ActionType CalcTask(out ShipBase ship)
     {
@@ -77,11 +82,21 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             ship = null;
             return ActionType.waitEdnGame;
         }
-        if (HaveEnemyInDangerZone(out ship))
+
+        if (GlobalTactics == EGlobalTactics.Fight)
         {
-            return DoAttackAction(ship);
+            if (HaveEnemyInDangerZone(out ship))
+            {
+                return DoAttackAction(ship);
+            }
+            return OptionalTask(out ship);
         }
-        return OptionalTask(out ship);
+        else
+        {
+            ship = null;
+            return ActionType.evade;
+
+        }
     }
 
     public BaseAction ActivateTask(ActionType task, ShipBase target)
@@ -93,13 +108,15 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             case ActionType.goToHide:
                 return new GoToHideAction(_owner);
             case ActionType.readyToAttack:
-                return new ReadyToAttackAction(_owner, _owner.Enemies[target]);  
+                return new ReadyToAttackAction(_owner, _owner.Enemies[target]);
+            case ActionType.shootFromPlace:
+                return new StayAttackAction(_owner, _owner.Enemies[target]);
             case ActionType.attack:
-                return new AttackAction(_owner, _owner.Enemies[target]);  
+                return new AttackAction(_owner, _owner.Enemies[target]);
             case ActionType.attackHalfLoop:
                 return new AttackTrickAction(_owner, _owner.Enemies[target]);
             case ActionType.moveToBase:
-                return (new GoToBaseAction(_owner, target,false));
+                return (new GoToBaseAction(_owner, target, false));
             case ActionType.returnToBattle:
                 return (new ReturnActionToBattlefield(_owner));
             case ActionType.closeStrikeAction:
@@ -137,7 +154,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 return (new MineFieldAction(_owner, mineModul, cellToProtect, cellToCare));
             case ActionType.attackSide:
                 Vector3 controlPoint = AttackSideAction.FindControlPoint(_owner.Position, target.Position, _owner.Commander.Battlefield);
-                return new AttackSideAction(_owner,_owner.Enemies[target], controlPoint);
+                return new AttackSideAction(_owner, _owner.Enemies[target], controlPoint);
             case ActionType.waitEnemy:
                 var wait = new WaitEnemy(_owner, _owner.Commander.GetWaitPosition(_owner));
                 return (wait);
@@ -162,8 +179,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         //TODO wait hide
         return ActionType.goToHide;
     }
-    
-    protected ActionType DoOrWait(ActionType defaultAction,ShipBase ship,ActionType defNo = ActionType.afterAttack)
+
+    protected ActionType DoOrWait(ActionType defaultAction, ShipBase ship, ActionType defNo = ActionType.afterAttack)
     {
         if (_owner.WeaponsController.AnyWeaponIsLoaded(2f, out var fullLoad))
         {
@@ -180,20 +197,20 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             }
         }
 
-//        if (_owner.WeaponsController.AnyWeaponIsLoaded() && ship != null && ship.VisibilityData.Visible)
-//        {
-//            return def;
-//        }
-//        if (_owner.Locator.DangerEnemy != null)
-//        {
-//            return ActionType.evade;
-//        }
+        //        if (_owner.WeaponsController.AnyWeaponIsLoaded() && ship != null && ship.VisibilityData.Visible)
+        //        {
+        //            return def;
+        //        }
+        //        if (_owner.Locator.DangerEnemy != null)
+        //        {
+        //            return ActionType.evade;
+        //        }
         return defNo;
     }
 
     protected ActionType AttackOrAttackSide(ShipBase target)
     {
-        if (_owner.Boost.IsReady && !_owner.Boost.IsActive &&  _owner.Boost.BoostHalfLoop.CanUse)
+        if (_owner.Boost.IsReady && !_owner.Boost.IsActive && _owner.Boost.BoostHalfLoop.CanUse)
         {
             var enemy = _owner.Enemies[target];
             var isBack = enemy.IsInBack();
@@ -234,12 +251,12 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         return enemy.ShipLink.ShipParameters.MaxSpeed < _owner.ShipParameters.MaxSpeed;
     }
 
-    protected bool HaveEnemyClose(out ShipBase ship,float closeDist)
+    protected bool HaveEnemyClose(out ShipBase ship, float closeDist)
     {
-        return HaveEnemyClose(out ship,_owner , closeDist);
+        return HaveEnemyClose(out ship, _owner, closeDist);
     }
 
-    protected bool HaveEnemyClose(out ShipBase ship,ShipBase testedShip,float closeDist)
+    protected bool HaveEnemyClose(out ShipBase ship, ShipBase testedShip, float closeDist)
     {
         foreach (var info in testedShip.Enemies)
         {
@@ -266,7 +283,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         }
         return null;
     }
-    
+
     protected bool IsOutOField()
     {
         return !_owner.InBattlefield;
@@ -307,15 +324,15 @@ public abstract class ShipDesicionDataBase : IShipDesicion
     [CanBeNull]
     protected ShipPersonalInfo CalcBestEnemy(out float rating, Dictionary<ShipBase, ShipPersonalInfo> posibleTargets)
     {
-        if (BaseDefence == EBaseDefence.Yes && _owner.Commander.MainShip != null)
-        {
-            if (HaveEnemyClose(out var defSHip, _owner.Commander.MainShip, _defDist))
-            {
-                ShipPersonalInfo trg = posibleTargets[defSHip];
-                rating = ShipValue(trg);
-                return trg;
-            }
-        }
+        //        if (GlobalTactics == EGlobalTactics.Fight && _owner.Commander.MainShip != null)
+        //        {
+        //            if (HaveEnemyClose(out var defSHip, _owner.Commander.MainShip, _defDist))
+        //            {
+        //                ShipPersonalInfo trg = posibleTargets[defSHip];
+        //                rating = ShipValue(trg);
+        //                return trg;
+        //            }
+        //        }
 
         switch (CommanderPriority1)
         {
@@ -323,6 +340,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             case ECommanderPriority1.MinHealth:
             case ECommanderPriority1.MaxShield:
             case ECommanderPriority1.MaxHealth:
+            case ECommanderPriority1.Fast:
+            case ECommanderPriority1.Slow:
                 ShipPersonalInfo trg2 = BestParameter(posibleTargets, CommanderPriority1);
                 if (trg2 != null)
                 {
@@ -330,16 +349,17 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                     return trg2;
                 }
                 break;
-            case ECommanderPriority1.Light:
-            case ECommanderPriority1.Mid:
-            case ECommanderPriority1.Heavy:
-                ShipPersonalInfo trg = BestByType(posibleTargets, CommanderPriority1);
-                if (trg != null)
+            case ECommanderPriority1.Base:
+                foreach (var shipPersonalInfo in posibleTargets)
                 {
-                    rating = ShipValue(trg);
-                    return trg;
+                    if (shipPersonalInfo.Key.ShipParameters.StartParams.ShipType == ShipType.Base)
+                    {
+                        rating = 100;
+                        return shipPersonalInfo.Value;
+                    }
                 }
-                break;
+                var bestEnemy2 = BestByParams(out rating, posibleTargets);
+                return bestEnemy2;
         }
 
         var bestEnemy = BestByParams(out rating, posibleTargets);
@@ -372,59 +392,6 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         return bestEnemy;
     }
 
-    private ShipPersonalInfo BestByType(Dictionary<ShipBase, ShipPersonalInfo> posibleTargets, ECommanderPriority1 commanderPriority2)
-    {
-        Dictionary<ShipBase, ShipPersonalInfo> selectedTargets    = new Dictionary<ShipBase, ShipPersonalInfo>();
-        switch (commanderPriority2)
-        {
-            case ECommanderPriority1.Light:
-                foreach (var shipPersonalInfo in posibleTargets)
-                {
-                    if (shipPersonalInfo.Key.ShipParameters.StartParams.ShipType == ShipType.Light)
-                    {
-                        selectedTargets.Add(shipPersonalInfo.Key,shipPersonalInfo.Value);
-                    }
-                }
-
-                if (selectedTargets.Count > 0)
-                {
-                    var bestEnemy1 = BestByParams(out var rating1, selectedTargets);
-                    return bestEnemy1;
-                }
-                break;
-            case ECommanderPriority1.Mid:
-                foreach (var shipPersonalInfo in posibleTargets)
-                {
-                    if (shipPersonalInfo.Key.ShipParameters.StartParams.ShipType == ShipType.Middle)
-                    {
-                        selectedTargets.Add(shipPersonalInfo.Key, shipPersonalInfo.Value);
-                    }
-                }
-
-                if (selectedTargets.Count > 0)
-                {
-                    var bestEnemy1 = BestByParams(out var rating1, selectedTargets);
-                    return bestEnemy1;
-                }
-                break;
-            case ECommanderPriority1.Heavy:
-                foreach (var shipPersonalInfo in posibleTargets)
-                {
-                    if (shipPersonalInfo.Key.ShipParameters.StartParams.ShipType == ShipType.Heavy)
-                    {
-                        selectedTargets.Add(shipPersonalInfo.Key, shipPersonalInfo.Value);
-                    }
-                }
-
-                if (selectedTargets.Count > 0)
-                {
-                    var bestEnemy1 = BestByParams(out var rating1, selectedTargets);
-                    return bestEnemy1;
-                }
-                break;
-        }
-        return null;
-    }
 
     private ShipPersonalInfo BestParameter(Dictionary<ShipBase, ShipPersonalInfo> posibleTargets, ECommanderPriority1 commanderPriority1)
     {
@@ -435,10 +402,12 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         {
             case ECommanderPriority1.MinShield:
             case ECommanderPriority1.MinHealth:
+            case ECommanderPriority1.Slow:
                 curPercent = Single.MaxValue;
                 break;
             case ECommanderPriority1.MaxShield:
             case ECommanderPriority1.MaxHealth:
+            case ECommanderPriority1.Fast:
                 curPercent = Single.MinValue;
                 break;
         }
@@ -466,7 +435,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                         curPercent = curHp;
                         curTarget = target.Value;
                     }
-                    break;  
+                    break;
                 case ECommanderPriority1.MaxShield:
                     if (target.Key.ShipParameters.MaxShield > 0)
                     {
@@ -482,6 +451,22 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 case ECommanderPriority1.MaxHealth:
                     curHp = target.Key.ShipParameters.CurHealth / target.Key.ShipParameters.MaxHealth;
                     if (curHp > curPercent)
+                    {
+                        curPercent = curHp;
+                        curTarget = target.Value;
+                    }
+                    break;
+                case ECommanderPriority1.Fast:
+                    curHp = target.Key.ShipParameters.MaxSpeed + target.Key.ShipParameters.TurnSpeed;
+                    if (curHp > curPercent)
+                    {
+                        curPercent = curHp;
+                        curTarget = target.Value;
+                    }
+                    break;
+                case ECommanderPriority1.Slow:
+                    curHp = target.Key.ShipParameters.MaxSpeed + target.Key.ShipParameters.TurnSpeed;
+                    if (curHp < curPercent)
                     {
                         curPercent = curHp;
                         curTarget = target.Value;
@@ -533,12 +518,12 @@ public abstract class ShipDesicionDataBase : IShipDesicion
 
     public virtual void Select(bool val)
     {
-        
+
     }
 
     public virtual void DrawUpdate()
     {
-        
+
     }
 
     public virtual void Dispose()

@@ -148,7 +148,7 @@ public static class InventoryOperation
             {
                 sellPrice = Mathf.Clamp(preSellPrice, 1, 999999);
             }
-            var msg = Namings.TryFormat("Do you want sell item for {0}?", sellPrice);
+            var msg = Namings.Format("Do you want sell item for {0}?", sellPrice);
             WindowManager.Instance.ConfirmWindow.Init(
                 () =>
                 {
@@ -186,7 +186,7 @@ public static class InventoryOperation
             if (to.Owner.MoneyData.HaveMoney(buyPrice))
             {
                 //Buying item from shop
-                var msg = Namings.TryFormat("Do you want buy item for {0}?", buyPrice);
+                var msg = Namings.Format("Do you want buy item for {0}?", buyPrice);
                 WindowManager.Instance.ConfirmWindow.Init(
                 () =>
                 {

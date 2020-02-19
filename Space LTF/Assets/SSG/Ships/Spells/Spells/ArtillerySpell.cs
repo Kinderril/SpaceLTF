@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -15,20 +14,19 @@ public class ArtillerySpell : BaseSpellModulInv
 
     private float DmgHull => 3 + Level;
     private float DmgShield => 2 + Level;
-    public int BulletsCount
+    public int BulletsCount => BulletByLevel(Level, UpgradeType);
+
+    private int BulletByLevel(int l, ESpellUpgradeType up)
     {
-        get
+        if (up == ESpellUpgradeType.A1)
         {
-            if (UpgradeType == ESpellUpgradeType.A1)
-            {
-                return Level * 4 + 14;
-            }
-            return Level * 3 + 11;
+            return l * 4 + 14;
         }
+        return l * 3 + 11;
     }
 
     public ArtillerySpell()
-        : base(SpellType.artilleryPeriod, 4, 25, new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
+        : base(SpellType.artilleryPeriod, 4, 20, new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
     {
 
     }
@@ -38,15 +36,22 @@ public class ArtillerySpell : BaseSpellModulInv
         return new SpellDamageData(rad / 2f, false);
     }
 
+    private float Period(ESpellUpgradeType upg)
+    {
+        float period = 0.145f;
+        if (upg == ESpellUpgradeType.B2)
+        {
+            period = 0.095f;
+        }
+
+        return period;
+    }
+
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var battle = BattleController.Instance;
         var offset = rad / 2;
-        float period = 0.145f;
-        if (UpgradeType == ESpellUpgradeType.B2)
-        {
-            period = 0.095f;
-        }
+        float period = Period(UpgradeType);
         for (int i = 0; i < BulletsCount; i++)
         {
             var timer =
@@ -104,7 +109,7 @@ public class ArtillerySpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("ArtillerySpell"), BulletsCount, DmgHull, DmgShield);
+        return Namings.Format(Namings.Tag("ArtillerySpell"), BulletsCount, DmgHull, DmgShield);
     }
 
     public override string GetUpgradeName(ESpellUpgradeType type)
@@ -119,9 +124,13 @@ public class ArtillerySpell : BaseSpellModulInv
     {
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("ArtilleryDescA1");
+            var b1 = BulletByLevel(Library.MAX_SPELL_LVL, ESpellUpgradeType.A1) -
+                     BulletByLevel(Library.MAX_SPELL_LVL, ESpellUpgradeType.None);
+            return Namings.Format(Namings.Tag("ArtilleryDescA1"), b1);
         }
-        return Namings.Tag("ArtilleryDescB2");
+
+        var b2 = Period(ESpellUpgradeType.B2) - Period(ESpellUpgradeType.A1);
+        return Namings.Format(Namings.Tag("ArtilleryDescB2"), b2);
     }
 }
 

@@ -35,7 +35,8 @@ public class GlobalMapMoverObject : MonoBehaviour
         _callback = callback;
         var dir = target.Container.position - _curCell.Container.position;
         var dist = dir.magnitude;
-        _timeToMove = dist / Speed;
+        var tmpTimeToMove = dist / Speed;
+        _timeToMove = Mathf.Clamp(tmpTimeToMove, 1f, 4f);
         _endTimeToMove = Time.time + _timeToMove;
         _isActive = true;
         return _timeToMove;
@@ -51,7 +52,7 @@ public class GlobalMapMoverObject : MonoBehaviour
         var p = 1 - (_endTimeToMove - Time.time) / _timeToMove;
         if (p >= 1f)
         {
-            _moveToPosition = null;
+            // _moveToPosition = null;
             p = 1f;
             _isActive = false;
             _callback();
@@ -62,6 +63,6 @@ public class GlobalMapMoverObject : MonoBehaviour
         }
         var pos = Vector3.Lerp(_startPos, _endPos, p);
         transform.position = pos;
-        _moveToPosition?.Invoke(pos);
+        // _moveToPosition?.Invoke(pos);
     }
 }

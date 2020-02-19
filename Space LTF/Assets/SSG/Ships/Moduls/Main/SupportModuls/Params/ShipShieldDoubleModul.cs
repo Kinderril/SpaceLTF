@@ -1,14 +1,12 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class ShipShieldDoubleModul : BaseSupportModul
 {
-//    private const float spd_inc = 0.3f;
-//    public const float PER_LEVEL = 0.8f;
+    //    private const float spd_inc = 0.3f;
+    //    public const float PER_LEVEL = 0.8f;
     private const float dmg_inc = 0.5f;
-    public ShipShieldDoubleModul( int level) 
+    public ShipShieldDoubleModul(int level)
         : base(SimpleModulType.ShieldDouble, level)
     {
 
@@ -17,7 +15,8 @@ public class ShipShieldDoubleModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return $"Increase shield power by {Utils.FloatToChance(PER_LEVEL)}% . Decrease ship body points by {Utils.FloatToChance(PER_LEVEL)}%";
+        return Namings.Format(Namings.Tag(Type.ToString()),
+            Utils.FloatToChance(PER_LEVEL), Utils.FloatToChance(PER_LEVEL));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {
@@ -27,8 +26,8 @@ public class ShipShieldDoubleModul : BaseSupportModul
     public override void ChangeParamsShip(IShipAffectableParams Parameters)
     {
         var _delta = PER_LEVEL * Parameters.MaxShield;
-        Parameters.MaxShield += _delta;   
+        Parameters.MaxShield += _delta;
         var _deltaHp = PER_LEVEL * Parameters.MaxHealth;
-        Parameters.MaxHealth = Mathf.Clamp(_deltaHp - Parameters.MaxHealth,5,99999);
+        Parameters.MaxHealth = Mathf.Clamp(_deltaHp - Parameters.MaxHealth, 5, 99999);
     }
 }

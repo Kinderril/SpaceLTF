@@ -90,17 +90,24 @@ public class PlayerArmy
     {
 
         var delta = playersPower / powerToCompare;
+        string srt;
         if (delta < 0.95f)
         {
-            return Namings.Tag("Risky");
-        }
-
-        if (delta > 1.15f)
+            srt = Namings.Tag("Risky");
+        }else if (delta > 1.15f)
         {
-            return Namings.Tag("Easily");
+            srt = Namings.Tag("Easily");
+        }
+        else
+        {
+
+            srt = Namings.Tag("Comparable");
         }
 
-        return Namings.Tag("Comparable");
+#if UNITY_EDITOR
+        srt = $"{srt} {playersPower}/{powerToCompare}";
+#endif
+        return srt;
     }
 
     public void RemoveShip(StartShipPilotData shipToDel)

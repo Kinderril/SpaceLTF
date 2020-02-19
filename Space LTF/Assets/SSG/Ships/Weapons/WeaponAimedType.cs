@@ -16,6 +16,7 @@ public class WeaponAimedType
     public bool TryShoot(ShipPersonalInfo target, Vector3 ownerLokkDir)
     {
         bool subCanFire = false;
+        WeaponToAim.DropAimPos();
         switch (WeaponToAim.TargetType)
         {
             case TargetType.Enemy:
@@ -26,7 +27,7 @@ public class WeaponAimedType
                 subCanFire = CheckWeaponAimed(WeaponToAim, target);
                 break;
         }
-
+        // WeaponToAim.
         bool someWeaponSHoot = false;
         if (subCanFire)
         {
@@ -46,8 +47,8 @@ public class WeaponAimedType
 
     private bool CheckWeaponAimed(WeaponInGame weapon, ShipPersonalInfo shipInfo)
     {
-        shipInfo.CanShoot = weapon.IsInRadius(shipInfo.Dist);// && weapon.IsInSector(shipInfo.DirNorm);
-        if (shipInfo.CanShoot)
+        var isInRadius = weapon.IsInRadius(shipInfo.Dist);// && weapon.IsInSector(shipInfo.DirNorm);
+        if (isInRadius)
         {
             var isAimed = weapon.IsAimed(shipInfo);
             if (isAimed)

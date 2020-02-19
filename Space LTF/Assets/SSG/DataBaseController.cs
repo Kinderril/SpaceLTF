@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
@@ -15,7 +13,7 @@ public struct ShipStruct
 
 public class DataBaseController : Singleton<DataBaseController>
 {
- //   public List<ShipControlCenter> ControlBase = new List<ShipControlCenter>();
+    //   public List<ShipControlCenter> ControlBase = new List<ShipControlCenter>();
     public DataStructPrefabs DataStructPrefabs;
     public SpellDataBase SpellDataBase;
     public AudioDataBase AudioDataBase;
@@ -51,7 +49,7 @@ public class DataBaseController : Singleton<DataBaseController>
         return (Instantiate(item.gameObject, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<T>();
     }
 
-    public static GameObject GetItem(GameObject item) 
+    public static GameObject GetItem(GameObject item)
     {
         return (Instantiate(item.gameObject, Vector3.zero, Quaternion.identity) as GameObject);
     }
@@ -68,7 +66,7 @@ public class DataBaseController : Singleton<DataBaseController>
         var posibleBullet = DataStructPrefabs.Bullets.FirstOrDefault(x => x.WeaponType == weaponType);
         if (posibleBullet == null)
         {
-            Debug.LogError("can find bulet for parameters " + weaponType.ToString() );
+            Debug.LogError("can find bulet for parameters " + weaponType.ToString());
         }
         return posibleBullet;
     }
@@ -76,6 +74,25 @@ public class DataBaseController : Singleton<DataBaseController>
     public ShipBase GetShip(ShipType shipType, ShipConfig shipConfig)
     {
         var ship = DataStructPrefabs.Ships.FirstOrDefault(x => x.ShipType == shipType && x.ShipConfig == shipConfig);
+        return ship.ShipBase;
+    }
+    public ShipBase GetShipTurret(WeaponType? type)
+    {
+        if (type.HasValue && DataStructPrefabs.Turrets.Count >= 3)
+        {
+            switch (type)
+            {
+                case WeaponType.laser:
+                    return DataStructPrefabs.Turrets[0].ShipBase;
+                case WeaponType.rocket:
+                case WeaponType.casset:
+                    return DataStructPrefabs.Turrets[1].ShipBase;
+                case WeaponType.impulse:
+                case WeaponType.eimRocket:
+                    return DataStructPrefabs.Turrets[2].ShipBase;
+            }
+        }
+        var ship = DataStructPrefabs.Turrets.RandomElement();
         return ship.ShipBase;
     }
 }

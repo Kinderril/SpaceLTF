@@ -1,15 +1,11 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponPerTimeBullet : BaseSupportModul
 {
-    private const float spd_inc = 0.5f;
+    private const float dmg_inc = 0.5f;
     private const float per_level = 0.1f;
 
-    private float dmgRes => spd_inc - Level * per_level;
-    public WeaponPerTimeBullet( int level) 
+    private float dmgRes => dmg_inc + Level * per_level;
+    public WeaponPerTimeBullet(int level)
         : base(SimpleModulType.WeaponShootPerTime, level)
     {
 
@@ -17,7 +13,7 @@ public class WeaponPerTimeBullet : BaseSupportModul
 
     public override string DescSupport()
     {
-        return Namings.TryFormat("Add 1 bullet per shoot. Decrease damage by {0}& ", Utils.FloatToChance(dmgRes));
+        return Namings.Format(Namings.Tag(Type.ToString()), Utils.FloatToChance(dmgRes));
     }
 
     public override void ChangeParams(IAffectParameters weapon)

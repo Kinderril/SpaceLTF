@@ -103,7 +103,20 @@ public class CellIinfoObjectUI : MonoBehaviour
                         }
                         else
                         {
-                            desc = Namings.Tag("Fleet");
+                            string tag;
+                            if (cell is ArmyDungeonEnterGlobalMapCell)
+                            {
+                                tag = "BaseEnter";
+                            }
+                            else if (cell is ArmyDungeonExitGlobalMapCell)
+                            {
+                                tag = "BaseCenter";
+                            }
+                            else
+                            {
+                                tag = "Fleet";
+                            }
+                            desc = Namings.Tag(tag);
                         }
                         // #if UNITY_EDITOR
                         desc += $"({isArmy.PowerDesc()})";

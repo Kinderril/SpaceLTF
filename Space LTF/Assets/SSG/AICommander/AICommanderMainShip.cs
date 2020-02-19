@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class AICommanderMainShip
 {
-    private ShipBase _mainShipBase;
-    private Commander _commander;
+    private ShipControlCenter _mainShipBase;
+//    private Commander _commander;
     private float _nextTimeMove;
     private Vector3 _lastTarget;
-    public AICommanderMainShip(Commander commander)
+    public AICommanderMainShip(ShipControlCenter commander)
     {
-        _commander = commander;
-        _mainShipBase = commander.MainShip;
+//        _commander = commander;
+        _mainShipBase = commander;
     }
 
     public void Update()
@@ -34,19 +35,22 @@ public class AICommanderMainShip
 
     private Vector3 MidPos()
     {
-        Vector3 totalPos = Vector3.zero;
-        int p = 0;
-        foreach (var ship in _commander.Ships)
-        {
-            if (ship.Value.ShipParameters.StartParams.ShipType != ShipType.Base)
-            {
-                totalPos += ship.Value.Position;
-                p++;
-            }
-        }
-
-        var midPos = totalPos / p;
-        return midPos;
+        var enemies = _mainShipBase.Enemies.Keys.ToList();
+        var rndEnemy = enemies.RandomElement();
+        return rndEnemy.Position;
+//        int p = 0;
+//        Vector3 totalPos = Vector3.zero;
+//        foreach (var ship in _commander.Ships)
+//        {
+//            if (ship.Value.ShipParameters.StartParams.ShipType != ShipType.Base)
+//            {
+//                totalPos += ship.Value.Position;
+//                p++;
+//            }
+//        }
+//
+//        var midPos = totalPos / p;
+//        return midPos;
     }
 
 }

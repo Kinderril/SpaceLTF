@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public static class ArmyCreatorSpecial
 {
@@ -144,35 +145,64 @@ public static class ArmyCreatorSpecial
     private static List<StartShipPilotData> CreateBoss(float points, ShipConfig config,
         Func<ShipConfig, Player, float, List<StartShipPilotData>> getArmy)
     {
+//#if UNITY_EDITOR
+        float pointsOnStart = points;
+//#endif
         var bossLogger = new ArmyCreatorLogs();
         List<StartShipPilotData> list = new List<StartShipPilotData>();
-        var remainPoints = points;
-        var player = new Player("Boss1");
+        var remainPoints = new ArmyRemainPoints(points);
+        var player = new PlayerAIMilitaryFinal("Boss1");
 
         var pilot = Library.CreateDebugPilot();
         var shipMain = Library.CreateShip(ShipType.Base, config, player, pilot);
-
+        remainPoints.Points -= Library.BASE_SHIP_VALUE;
+//        remainPoints.Points -= Library.BASE_SPELL_VALUE;
+//        remainPoints.Points -= Library.BASE_SPELL_VALUE;
         var listOfSpells = ArmyCreatorData.AllSpellsStatic();
         var rnd2 = listOfSpells.RandomElement(2);
         foreach (var spellType in rnd2)
         {
-            ArmyCreator.TryAddCastModul(new ArmyRemainPoints(points), shipMain, spellType, bossLogger);
+            ArmyCreator.TryAddCastModul(remainPoints, shipMain, spellType, bossLogger);
         }
         var shipMainStartData = new StartShipPilotData(pilot, shipMain);
         list.Add(shipMainStartData);
+#if UNITY_EDITOR
+        var pointsForAmry = remainPoints.Points;
+#endif
 
-        var subArmy = getArmy(config, player, points);
+        var subArmy = getArmy(config, player, remainPoints.Points);
+        var subArmyPower2 = ArmyCreator.CalcArmyPower(list);
+        remainPoints.Points -= subArmyPower2;
+#if UNITY_EDITOR
+        //        var subArmyPower2 = ArmyCreator.CalcArmyPower(list);
+        if (subArmyPower2 > pointsForAmry)
+        {
+            Debug.LogError($"CalcArmyPower error subArmyPower2:{subArmyPower2} > pointsForAmry:{pointsForAmry}");
+        }
 
+#endif
         foreach (var startShipPilotData in subArmy)
         {
             list.Add(startShipPilotData);
         }
-
-        if (remainPoints > 0)
+        var subArmyPower3 = ArmyCreator.CalcArmyPower(list);
+        remainPoints.Points = pointsOnStart - subArmyPower3;
+//#if UNITY_EDITOR
+//        var a = subArmyPower3;
+//
+//#endif
+        if (remainPoints.Points > 0)
         {
-            UpgradeArmy(list, remainPoints);
+            UpgradeArmy(list, remainPoints.Points);
         }
 
+#if UNITY_EDITOR
+        var debugTestPower2 = ArmyCreator.CalcArmyPower(list);
+        if (debugTestPower2 > pointsOnStart)
+        {
+               Debug.LogError($"Power of boss army more than i need target:{pointsOnStart}   result:{debugTestPower2}   onlyArmyPonts:{pointsForAmry}");
+        }
+#endif
         return list;
     }
 

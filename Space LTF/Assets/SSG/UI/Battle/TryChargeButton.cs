@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public class TryChargeButton : TryApplyToShip
@@ -8,24 +7,24 @@ public class TryChargeButton : TryApplyToShip
     private float _nextClickTime;
 
 
-    public void OnTryChargeClick()
-    {
-
-        if (!IsReady)
-        {
-            FailObject.SetTrigger("Play");
-            return;
-        }
-
-        if (_ship.Commander.TryRechargeShield(_ship))
-        {
-            StartCooldown();
-        }
-        else
-        {
-            FailObject.SetTrigger("Play");
-        }
-    }
+    // public void OnTryChargeClick()
+    // {
+    //
+    //     if (!IsReady)
+    //     {
+    //         FailObject.SetTrigger("Play");
+    //         return;
+    //     }
+    //
+    //     if (_ship.Commander.TryRechargeShield(_ship))
+    //     {
+    //         StartCooldown();
+    //     }
+    //     else
+    //     {
+    //         FailObject.SetTrigger("Play");
+    //     }
+    // }
 
     public void Dispose()
     {
@@ -34,7 +33,7 @@ public class TryChargeButton : TryApplyToShip
 
     protected override string TextToTooltip()
     {
-        return Namings.TryFormat(Namings.Tag("RechargeButton"), Library.COINS_TO_CHARGE_SHIP_SHIELD, Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY);
+        return Namings.Format(Namings.Tag("RechargeButton"), Library.COINS_TO_CHARGE_SHIP_SHIELD, Library.COINS_TO_CHARGE_SHIP_SHIELD_DELAY);
     }
 }
 

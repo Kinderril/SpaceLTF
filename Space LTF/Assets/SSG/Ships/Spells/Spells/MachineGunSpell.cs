@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -29,19 +28,18 @@ public class MachineGunSpell : BaseSpellModulInv
 
     private float DmgShield => 1 + (int)(Level * 1.5f);
 
-    public int BulletsCount
+    public int BulletsCount => ClacBulletCount(UpgradeType);
+
+    private int ClacBulletCount(ESpellUpgradeType a)
     {
-        get
+        switch (a)
         {
-            switch (UpgradeType)
-            {
-                case ESpellUpgradeType.A1:
-                    return 6;
-                case ESpellUpgradeType.B2:
-                    return 3;
-            }
-            return 4;
+            case ESpellUpgradeType.A1:
+                return 3;
+            case ESpellUpgradeType.B2:
+                return 6;
         }
+        return 4;
     }
 
     public MachineGunSpell()
@@ -60,8 +58,8 @@ public class MachineGunSpell : BaseSpellModulInv
         var offset = rad / 2;
         if (UpgradeType == ESpellUpgradeType.A1)
         {
-            var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position,
-                BattleController.OppositeIndex(weapon.TeamIndex), RAD_A1);
+            var closestsShips = BattleController.Instance.GetAllShipsInRadius(shootpos,
+                BattleController.OppositeIndex(weapon.TeamIndex), DIST_SHOT);
             foreach (var ship in closestsShips)
             {
                 for (int i = 0; i < BulletsCount; i++)
@@ -139,7 +137,7 @@ public class MachineGunSpell : BaseSpellModulInv
     }
     public override string Desc()
     {
-        return Namings.TryFormat(Namings.Tag("MachineGunSpellDesc"), BulletsCount, DmgShield, DmgHull);
+        return Namings.Format(Namings.Tag("MachineGunSpellDesc"), BulletsCount, DmgShield, DmgHull);
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
     {
@@ -151,11 +149,14 @@ public class MachineGunSpell : BaseSpellModulInv
     }
     public override string GetUpgradeDesc(ESpellUpgradeType type)
     {
+
         if (type == ESpellUpgradeType.A1)
         {
-            return Namings.Tag("MachineGunDescA1");
+            var bulCout = ClacBulletCount(type);
+            return Namings.Format(Namings.Tag("MachineGunDescA1"), bulCout);
         }
-        return Namings.Tag("MachineGunDescB2");
+        var bulCou2t = ClacBulletCount(type);
+        return Namings.Format(Namings.Tag("MachineGunDescB2"), bulCou2t);
     }
 }
 

@@ -1,6 +1,4 @@
-﻿
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
@@ -17,23 +15,42 @@ public class LineShotSpell : BaseSpellModulInv
 
     private float FireCoef
     {
-        get
+        get { return FireCoefCalc(Level, UpgradeType); }
+    }
+
+    private float FireCoefCalc(int level, ESpellUpgradeType upd)
+    {
+        if (upd == ESpellUpgradeType.B2)
         {
-            if (UpgradeType == ESpellUpgradeType.B2)
+            switch (level)
             {
-                return Level * 1.6f;
+                case 4:
+                    return 2.5f;
+                case 3:
+                    return 2.2f;
             }
-            return Level;
+        }
+        switch (level)
+        {
+            case 4:
+                return 1.9f;
+            case 3:
+                return 1.6f;
+            case 2:
+                return 1.3f;
+            default:
+            case 1:
+                return 1f;
         }
     }
 
-    private int FirePeriod => FIRE_PERIOD + Level * 3;
+    private int FirePeriod => FIRE_PERIOD + Level;
     private int Damage => 5 + Level;
 
     private static CurWeaponDamage CurrentDamage { get; set; }
 
     public LineShotSpell()
-        : base(SpellType.lineShot, 4, 15,
+        : base(SpellType.lineShot, 4, 11,
              new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
     {
         CurrentDamage = new CurWeaponDamage(Damage, Damage);
@@ -96,7 +113,7 @@ public class LineShotSpell : BaseSpellModulInv
     {
         var totalFireDamage = FirePeriod * FireCoef;
         var damageStr = totalFireDamage.ToString("0");
-        return Namings.TryFormat(Namings.Tag("LineSHotSpell"), CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod, damageStr);
+        return Namings.Format(Namings.Tag("LineSHotSpell"), CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod, damageStr);
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
     {
@@ -112,7 +129,9 @@ public class LineShotSpell : BaseSpellModulInv
         {
             return Namings.Tag("LineShotDescA1");
         }
-        return Namings.Tag("LineShotDescB2");
+        var b1 = FireCoefCalc(Library.MAX_SPELL_LVL, ESpellUpgradeType.B2) -
+                 FireCoefCalc(Library.MAX_SPELL_LVL, ESpellUpgradeType.None);
+        return Namings.Format(Namings.Tag("LineShotDescB2"), b1);
     }
 }
 

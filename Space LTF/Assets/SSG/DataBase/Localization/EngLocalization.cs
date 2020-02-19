@@ -23,7 +23,11 @@ public static class EngLocalization
         {"ReqireLevelFeild", "Require pilot level:{0}"},
         {"CanCauseNoLevel", "Can't upgrade weapon cause pilot don't have enough level.\nPilot level:{0}. Target Level{1}"},
         {"RoundWaveStrike", "Damage all ships near by [{2}/{3}].\n[Cost:{0}/{1}]"},
-        {"And", "And"},
+        {"And", "and"},
+        {"Shop", "Shop"},
+        {"BaseCenter", "Headquarters"},
+        {"BaseEnter", "Military base"},
+        {"SectorDungeon", "Military base"},
         {"SupportModul", "Support module. Affect on weapons."},
         {"ActionModul", "Action module"},
         {"CataclysmProcess", "{0} cells destroyed"},
@@ -36,6 +40,7 @@ public static class EngLocalization
         {"Radius", "Radius"},
         {"Sector", "Sector"},
         {"Reload", "Reload"},
+        {"WeaponShieldPerHit", "Shield stealer"},
         {"ShootPerTime", "Bullet count"},
 
         {"cantUpgrade", "Can't upgrade"},
@@ -52,7 +57,8 @@ public static class EngLocalization
         {"StatisticNoLastResult", "Wait for game..."},
         {"StatisticLastResult", "Last result:"},
         {"Sacrifice", "Sacrifice ship {0} the {1} of {2}"},
-        {"TutorCloseForever", "Do not show this tip again"},
+
+
         {"EndGameDays", "Days:{0}"},
         {"BattleWinsStat", "Wins:{0}"},
         {"OpenWeaponsEndGame","New weapons for start open {0} and {1}"},
@@ -105,12 +111,12 @@ public static class EngLocalization
         {"Protector", "Protector"},
         {"Beam upgrade", "Beam upgrade"},
         {"Heavy weapons", "Heavy weapons"},
-        {"Maximum shield", "Maximum shield"}      ,
-        {"Ignore shield", "Ignore shield"},
+        {"Maximum shield", "Maximum shield"},
         {"scout", "Scouts"},
         {"repair", "Repair services"},
         {"chargesCount", "Charges Count"},
         {"chargesSpeed", "Charges Speed"},
+        {"engineParameter", "Engine"},
 
         {"Preparing", "Preparing"},
         {"Return", "Return"},
@@ -119,7 +125,11 @@ public static class EngLocalization
         {"Wait", "Wait"},
         {"Hiding", "Hiding"},
 
-        {"shildDamage", "Shield Locker"},
+        {"MainShipBlinkDesc", "Teleports your main ship to selected target"},
+        {"MainShipBlinkName", "Jumper"},
+        {"hookShot", "Magnet strike"},
+
+
         {"engineLock", "Engine locker"},
         {"lineShot", "Line shot"},
         {"throwAround", "Power explosion"},
@@ -151,11 +161,6 @@ public static class EngLocalization
         {"Complete", "Complete {0}"},
         {"Target", "Target {0}"},
         {"Delay", "Delay"},
-
-
-
-
-
 
 
 
@@ -215,6 +220,7 @@ public static class EngLocalization
         {"MinesSpell","Set {0} mines for {1} sec to selected location. Each mine damage {2}/{3}" },
         {"ShieldOffSpell","Disable shields of ships in radius for {0} sec. And damages shield for {1}." },
         {"TrowAroundSpell", "Create a shockwave witch throw around all ships in radius with power {0}. And shield damage {1}."},
+        {"DescHookShotSpell", "Push all target to your commander ship and damage engines for a {0} sec"},
         {"KillUIPilotMini","Kills:{0}" },
         {"KillUIPilot", "Kills:{0}/{1}"},
         {"Remain","Remain" },
@@ -225,6 +231,28 @@ public static class EngLocalization
         {"DoWantRetire","Do you want run away?" },
         {"NoSafeGame","No save game" },
         {"MaxLevel", "Max"},
+
+        {"WeaponAOE", "Damage all ships in radius {0}. Decrease damage by {1}%."},
+        {"WeaponSector",  "Increase aim sector by {0}% per level"},
+        {"WeaponPowerShot", "Increase reload time by {0}%. Increase damage by {1}%."},
+        {"WeaponShootPerTime", "Add 1 bullet per shoot. Decrease damage by {0}% "},
+        {"WeaponLessDist", "Decrease aim radius by {0}%. Increase damage by {1}%."},
+        {"ShipTurnSpeed", "Increase ship turn speed by {0}%"},
+        {"ShipSpeed", "Increase ship max speed by {0}%"},
+        {"ShieldDouble", "Increase shield power by {0}% . Decrease ship body points by {1}%"},
+        {"ShipDecreaseSpeed", "Increase damage by {0}%.  Decrease ship max speed by {1}%"},
+        {"WeaponIncreaseDamage", "Increase damage by {0}% for all {1} weapons."},
+        {"WeaponNoBulletDeath", "Bullet don't destroy when hit target. Increase reload time by {0}%."},
+        {"WeaponShieldPerHitDesc", "Decrease damage by {0}%. Restore {1} of shield per hit."},
+        {"IgnoreShieldLevel1", "Ignore shield. Decrease damage by {0}%."},
+        {"Ignore shield", "Ignore shield."},
+        {"WeaponSelfDamage", "Add a +{0}/+{0} Damage. But hit own ship when strikes on {1}/{1}"},
+        {"WeaponPush","Push target when hit"},
+        {"WeaponCrit","Add a {0}% chance to get a {1} additional body damage."},
+        {"DamageTimeEffect","with a {0}% chance for {1:0} sec, when hit."},
+        {"DamageTimeEffectEngine","Turn off engine {0}"},
+        {"DamageTimeEffectShield","Off all shield {0}"},
+        {"DamageTimeEffectFire","Start fire {0}"},
 
 
 
@@ -243,66 +271,71 @@ public static class EngLocalization
 
         {"EngineLockNameA1", "Radius"},
         {"EngineLockNameB2", "Low time"},
-        {"EngineLockDescA1", "Increase radius of affection"},
-        {"EngineLockDescB2", "Decrease batteries reload time"},
+        {"EngineLockDescA1", "Increase radius of affection on {0}"},
+        {"EngineLockDescB2", "Decrease batteries reload time on {0} sec"},
 
         {"ArtilleryNameA1", "Bullets"},
         {"ArtilleryNameB2", "Fast shoots"},
-        {"ArtilleryDescA1", "Increase count of bullets"},
-        {"ArtilleryDescB2", "Decrease period between bullets"},
+        {"ArtilleryDescA1", "Increase count of bullets on {0}"},
+        {"ArtilleryDescB2", "Decrease period between bullets on {0} sec"},
 
         {"DistShotNameA1", "Engine lock"},
         {"DistShotNameB2", "AOE"},
-        {"DistShotDescA1", "Damage engine when hit"},
-        {"DistShotDescB2", "Add damage to all closest enemies"},
+        {"DistShotDescA1", "Damage engine when hit. Engine stops for {0} sec"},
+        {"DistShotDescB2", "Add damage to all closest enemies at radius {0}"},
 
         {"LineShotNameA1", "Penetraiting"},
         {"LineShotNameB2", "Termit"},
         {"LineShotDescA1", "No bullet death when hit"},
-        {"LineShotDescB2", "Increase fire power"},
+        {"LineShotDescB2", "Increase fire power on {0}"},
 
         {"MachineGunNameA1", "Multishot"},
         {"MachineGunNameB2", "More bullets"},
-        {"MachineGunDescA1", "Shoots to all nearby targets"},
-        {"MachineGunDescB2", "More bullets in line"},
+        {"MachineGunDescA1", "Shoots to all nearby targets. Bullets count: {0} for each target"},
+        {"MachineGunDescB2", "More bullets in line. Bullets count: {0}"},
 
         {"MinesSpellNameA1", "Fire"},
         {"MinesSpellNameB2", "Engine damage"},
-        {"MinesSpellDescA1", "Add fire damage"},
-        {"MinesSpellDescB2", "Destroy engines"},
+        {"MinesSpellDescA1", "Add fire damage for {0} sec"},
+        {"MinesSpellDescB2", "Destroy engines for {0} sec"},
 
         {"RechargeSheildNameA1", "AOE"},
         {"RechargeSheildNameB2", "Resists"},
-        {"RechargeSheildDescA1", "Effects to all nearby ships"},
-        {"RechargeSheildDescB2", "Add period resist to ship"},
+        {"RechargeSheildDescA1", "Effects to all nearby ships at {0} radius"},
+        {"RechargeSheildDescB2", "Add for {0} sec resist to ship"},
 
         {"RepairDroneNameA1", "Shield"},
         {"RepairDroneNameB2", "Buff"},
-        {"RepairDroneDescA1", "Repair shield for some percent"},
-        {"RepairDroneDescB2", "Add period speed buff"},
+        {"RepairDroneDescA1", "Repair shield for {0} %"},
+        {"RepairDroneDescB2", "Add for {0} speed buff"},
 
         {"ShieldOffNameA1", "Battery"},
         {"ShieldOffNameB2", "Fire"},
-        {"ShieldOffDescA1", "Decrease battaries count"},
-        {"ShieldOffDescB2", "Add fire damage"},
+        {"ShieldOffDescA1", "Decrease batteries count"},
+        {"ShieldOffDescB2", "Add fire damage for {0} sec"},
 
         {"TrowAroundNameA1", "Engines"},
         {"TrowAroundNameB2", "Drop load"},
-        {"TrowAroundDescA1", "Destroy engines when hit"},
+        {"TrowAroundDescA1", "Destroy engines when hit for {0} sec"},
         {"TrowAroundDescB2", "Unload all weapons of target"},
 
         {"VacuumNameA1", "Radius"},
         {"VacuumNameB2", "Battery"},
-        {"VacuumDescA1", "Increase radius of effect"},
-        {"VacuumDescB2", "Decrease batteries reload time"},
+        {"VacuumDescA1", "Increase radius of effect on {0}"},
+        {"VacuumDescB2", "Decrease batteries reload time for {0} sec"},
+
+        {"HookShotNameA1", "Radius"},
+        {"HookShotNameB2", "Battery"},
+        {"HookShotDescA1", "Increase radius of effect on {0}"},
+        {"HookShotDescB2", "Decrease batteries reload time for {0} sec"},
 
 
 
         {"RaidersProCons", "Pros: Good speed, many slots for modules.\nCons: Few weapon slots. No shield regeneration."},
         {"FederationProCons", "Pros: Many weapon slots. Shield regeneration.\nCons: Low speed."},
         {"MercenaryProCons", "Pros: Balanced.\nCons: Balanced."},
-        {"OcronsProCons", "Pros: Perfect body health. Many slots for modules.\nCons: No shied. No shield regeneration."},
-        {"KriosProCons", "Pros: Good shield. Perfect shield regeneration.\nCons: Low body health."},
+        {"OcronsProCons", "Pros: Perfect hull health. Many slots for modules.\nCons: No shied. No shield regeneration."},
+        {"KriosProCons", "Pros: Good shield. Perfect shield regeneration.\nCons: Low hull health."},
 
         {"WeaponsStart","On start your ships will have one of {0} or {1} complect."},
 
@@ -310,11 +343,12 @@ public static class EngLocalization
         {"Paramrepair", "Between battles you will need to repair your fleet.\nThis one will help you."},
         {"ParamchargesCount", "Increase main ship charges count."},
         {"ParamchargesSpeed","Increase main ship charges regeneration speed."},
+        {"ParamEngine","Upgrade engine. More speed and faster recharge of blink."},
 
         {"asteroidsEvent", "Asteroid vortex"},
         {"shieldsOffEvent", "EMP surge"},
-        {"engineOffEvent", "Engines off"},
 
+        {"ShipsRepaired", "Ships Repaired"},
         {"Raiders", "Raiders"},
         {"Federation", "Federation"},
         {"Mercenary", "Mercenary"},
@@ -329,10 +363,15 @@ public static class EngLocalization
         {"ESideAttackFlangs", "Attack from flags"},
         {"BaseDefenceYes", "Defend the base"},
         {"BaseDefenceNo", "No"},
-        {"ECommanderPriority1MinShield","Choose to attack ships with minimum shield" },
-        {"ECommanderPriority1MinHealth","Choose to attack ships with minimum hull"  },
-        {"ECommanderPriority1MaxShield","Choose to attack ships with max shield"  },
-        {"ECommanderPriority1MaxHealth","Choose to attack ships with max hull"  },
+        {"EGlobalTacticsFight", "Fight"},
+        {"EGlobalTacticsGoSafe", "Stay in safe"},
+        {"ECommanderPriority1Base","Attack commander ship" },
+        {"ECommanderPriority1Fast","Choose to attack fastest ship"  },
+        {"ECommanderPriority1Slow","Choose to attack slowest ship"  },
+        {"ECommanderPriority1MinShield","Choose to attack ship with minimum shield" },
+        {"ECommanderPriority1MinHealth","Choose to attack ship with minimum hull"  },
+        {"ECommanderPriority1MaxShield","Choose to attack ship with max shield"  },
+        {"ECommanderPriority1MaxHealth","Choose to attack ship with max hull"  },
         {"ECommanderPriority1Any", "Any ships to attack"},
         {"ECommanderPriority1Light","Light ships will be a priority" },
         {"ECommanderPriority1Mid","Medium ships will be a priority" },
@@ -362,49 +401,31 @@ public static class EngLocalization
         {"SpellMaxLevel", "Max level reached: {0}"},
 
 
-        {"descWinner", "--"},
-        {"descCaptain", "--"},
-        {"descMayor", "--"},
-        {"descBig guns", "--"},
-        {"descImprover", "--"},
-        {"descTeam five", "--"},
-        {"descFriend", "--"},
-        {"descBoss", "--"},
-        {"descMaster", "--"},
-        {"descFighter", "--"},
-        {"descDestroyer", "--"},
-        {"descAnnihilator", "--"},
-        {"descShooter", "--"},
-        {"descSniper", "--"},
-        {"descGunner", "--"},
-        {"descBanker", "--"},
-        {"descCroesus", "--"},
-        {"descUnusual", "--"},
-        {"descNo crash", "--"},
-        {"descFull pack", "--"},
-        {"descFull ammo", "--"},
+        {"descWinner", "Win at 1 battle"},
+        {"descCaptain", "Win at 10 battle"},
+        {"descMayor", "Win at 100 battle"},
+        {"descTeam five", "Hire all faction at one army"},
+        {"descFighter", "Destroy 100 enemy ships"},
+        {"descDestroyer", "Destroy 1000 enemy ships"},
+        {"descAnnihilator", "Destroy 10000 enemy ships"},
+        {"descMerWin", "Win as mercenaries"},
+        {"descFedWin", "Win as federation"},
+        {"descKriWin", "Win as krios"},
+        {"descOcrWin", "Win as ocrons"},
+        {"descRdrWin", "Win as kingdom"},
 
         {"nameWinner", "Winner"},
         {"nameCaptain", "Captain"},
         {"nameMayor", "Mayor"},
-        {"nameBig guns", "Big guns"},
-        {"nameImprover", "Improver"},
         {"nameTeam five", "Team five"},
-        {"nameFriend", "Friend"},
-        {"nameBoss", "Boss"},
-        {"nameMaster", "Master"},
         {"nameFighter", "Fighter"},
         {"nameDestroyer", "Destroyer"},
         {"nameAnnihilator", "Annihilator"},
-        {"nameShooter", "Shooter"},
-        {"nameSniper", "Sniper"},
-        {"nameGunner", "Gunner"},
-        {"nameBanker", "Banker"},
-        {"nameCroesus", "Croesus"},
-        {"nameUnusual", "Unusual"},
-        {"nameNo crash", "No crash"},
-        {"nameFull pack", "Full pack"},
-        {"nameFull ammo", "Full ammo"},
+        {"nameMerWin", "Ringleader"},
+        {"nameFedWin", "Chancellor"},
+        {"nameKriWin", "Experimentalist"},
+        {"nameOcrWin", "Fanatic"},
+        {"nameRdrWin", "King"},
 
         {"MercGlobal", "Mercenary hideout"},
         {"NotEnoughtMoney", "Not enough money"},
@@ -440,12 +461,15 @@ public static class EngLocalization
 
         {"Demo", "This is demo version. We are not ready to show more. Maximum visited sectors:{0}. Maximum turns:{1}"},
 
-        {"RecievePoints", "You will get points to unlock after winning. Amount depends on difficulty."},
+        {"RecievePoints", "You will get points to unlock after winning. Amount depends on difficulty. Also you can get some points winning battles."},
         {"AA_FXAA", "Anti aliasing"},
         {"Sound", "Sound"},
+        {"Turret", "Turret"},
         {"battlefield", "Battlefield"},
         {"Amry","Amry"},
         {"Trader","Trader"},
+        {"RepairCompete","Repair Compete"},
+        {"RepairStation","Repair Station"},
         {"BrokenNavigation", "Broken navigation"},
         {"modifBaseStart", "This is modification base. You can try to modificate something."},
         {"modifCellName", "Modification station"},
@@ -490,7 +514,7 @@ public static class EngLocalization
         {"dialog_shopTrade", "You see shop. Maybe you want buy something?" },
         {"dialog_repairEnemy", "This is repair station. They won't help you." },
         {"dialog_repairStart", "This is repair station. We can repair our fleet here." },
-        {"dialog_fixCrit", "Fix all critical damages" },
+        {"dialog_fixCrit", "Fix all critical damages. Cost{0}" },
         {"dialog_repairCritFixed", "Critical damages fixed" },
         {"dialog_repairAll", "Yes repair all.{0} credits" },
         {"dialog_repairNotEnough", "I don't have enough credits" },
@@ -693,19 +717,43 @@ public static class EngLocalization
         {"dialog_afterBattleHireOk","You hired a new pilot. Type:{0}  Config:{1}"},
         {"dialog_afterBattleRepairOk","Repair complete reputation add"},
         {"dialog_afterBattleRepairFail","Repair fail."},
+
+        {"dialog_dungeonExitFinalWin","This military base completly destoyed"},
+        {"dialog_dungeonExitGo","Grab all items and go"},
+        {"dialog_dungeonExitFinalBattle","This is main militaly base at this sector"},
+        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there? This sector have only one exit on the other side."},
+        {"dialog_dungeogArmyFriendGoIn","Ask your friend to go in."},
+
+        {"dialog_teacherImproved","Ship {0} Improved. Pilot level:{1}"},
+        {"dialog_teacherFail","Fail."},
+        {"dialog_teacherStartPilots","This is science ship. They can teach some of your pilots [credits:{0}]."},
+        {"dialog_teacherNo","No, thanks."},
+        {"dialog_Science ship","Science ship"},
+        {"dialog_teacherStartSience", "This is science ship. They can improve your fleet [credits:{0}]. Do you want to upgrade {1}?"},
+
+
+      /*P2*/  {"battleSpells", "Commander ship special options.\nAny shot will take some batteries for a period.\nYou must catch the moment to use them successfully."},
+      /*P1*/  {"battleStart", "Battle starts.\nAll your ships will choose target and attack by self." },
+      /*P1*/  {"battleEnemy", "Enemies fleet" },
+      // /*P2*/  {"TutorMyMainShip", "Your main ship. To move it just click right mouse button on map."},
+      /*P1*/  {"battleYour", "Your fleet. You can't control it directly.\nOnly choose tactics." },
+      /*P2*/ {"battleMainShip", "You can control commander ship. Use mouse to select and move it. And use skill to teleport it to another location" },
+        {"mapInsideInventory", "This is your fleet page. Here you can change equipment of your ships, or do some upgrades."},
+        {"mapMain","This is global map.\nYou can move only to near places. To move click to point you want to go." },
+        {"mapInventory", "Click here to choose equipment of your fleet." },
+        {"mapFleetFast", "Your fleet. You can't control it directly.\nOnly choose tactics."},
+        {"mapUpgrade", "One of your ships can be upgraded." },
+        {"preBattle", "Preparation for the battle.\nChoose equipment suitable against the current opponent, based on information from scouts"},
+        {"shopMain", "This is shop \nHere you can buy or sell something. Different good at different sectors can costs different money. Try to sell and buy at right sectors"},
+        {"endBattle", "Choose a way to split bonus credits.\n If you want to level up battle ships choose \"to pilots\".\nIf you want to buy weapons or upgrade something choose \"to main\" "},
+
+        {"TutorCloseForever", "Do not show this tip again"},
+        // {"TutorEnemyFleet", "Enemies fleet"},
+        // {"TutorEndBattle", "You win battle. Now you must choose what is better now. Increase ship levels, or take credits to other thhings"},
+        // {"TutorMyFleet", "Your fleet. You can't control it directly.\nOnly choose tactics."},
+        // {"TutorSpells", "Commander ship special options.\nAny shot will take some batteries for a period.\nYou must catch the moment to use them successfully."},
+
     };
 
-    public static string DialogTag(string tag)
-    {
-        return Tag($"dialog_{tag}");
-    }
-    public static string Tag(string tag)
-    {
-        if (_locals.TryGetValue(tag, out var info))
-        {
-            return info;
-        }
-        return $"ERROR:{tag}";
-    }
 }
 

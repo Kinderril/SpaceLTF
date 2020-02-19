@@ -8,6 +8,7 @@ public abstract class GlobalMapCell
 {
     protected SectorData _sector;
 
+    public SectorData Sector => _sector;
     private List<GlobalMapCell> _ways = new List<GlobalMapCell>();
     public MovingArmy CurMovingArmy = null;
 
@@ -30,6 +31,10 @@ public abstract class GlobalMapCell
         ConfigOwner = config;
         indZ = iZ;
         Id = id;
+//        if (indZ == 12)
+//        {
+//            Debug.LogError("sas");
+//        }
     }
 
     public ShipConfig ConfigOwner { get; private set; }
@@ -112,7 +117,14 @@ public abstract class GlobalMapCell
 
     public void AddWay(GlobalMapCell extraWay)
     {
-        _ways.Add(extraWay);
+        if (extraWay != null)
+        {
+            _ways.Add(extraWay);
+        }
+        else
+        {
+            Debug.LogError("Try add null way");
+        }
     }
 
     public void SetConnectedCell(int coreIndex)
@@ -145,8 +157,9 @@ public abstract class GlobalMapCell
 
     public abstract bool OneTimeUsed();
 
-    public virtual void ComeTo()
+    public virtual void ComeTo(GlobalMapCell from)
     {
+
     }
 
     public virtual void Scouted()
@@ -199,7 +212,17 @@ public abstract class GlobalMapCell
 
     public void AddWays(List<GlobalMapCell> ways)
     {
-        foreach (var way in ways) _ways.Add(way);
+        foreach (var way in ways)
+        {
+            if (way != null)
+            {
+                _ways.Add(way);
+            }
+            else
+            {
+                Debug.LogError("Try add null way");
+            }
+        }
     }
 
     public List<GlobalMapCell> GetCurrentPosibleWays()

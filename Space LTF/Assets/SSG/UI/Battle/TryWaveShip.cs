@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public class TryWaveShip : TryApplyToShip
@@ -8,23 +7,23 @@ public class TryWaveShip : TryApplyToShip
     private float _nextClickTime;
 
 
-    public void OnTryChargeClick()
-    {
-        if (!IsReady)
-        {
-            FailObject.SetTrigger("Play");
-            return;
-        }
-
-        if (_ship.Commander.TryWave(_ship))
-        {
-            StartCooldown();
-        }
-        else
-        {
-            FailObject.SetTrigger("Play");
-        }
-    }
+    // public void OnTryChargeClick()
+    // {
+    //     if (!IsReady)
+    //     {
+    //         FailObject.SetTrigger("Play");
+    //         return;
+    //     }
+    //
+    //     if (_ship.Commander.TryWave(_ship))
+    //     {
+    //         StartCooldown();
+    //     }
+    //     else
+    //     {
+    //         FailObject.SetTrigger("Play");
+    //     }
+    // }
 
     public void Dispose()
     {
@@ -33,7 +32,7 @@ public class TryWaveShip : TryApplyToShip
 
     protected override string TextToTooltip()
     {
-        return Namings.TryFormat(Namings.Tag("RoundWaveStrike"), Library.COINS_TO_WAVE_SHIP,
+        return Namings.Format(Namings.Tag("RoundWaveStrike"), Library.COINS_TO_WAVE_SHIP,
             Library.COINS_TO_WAVE_SHIP_DELAY, WeaponRoundWaveStrike.SHIELD_DAMAGE, WeaponRoundWaveStrike.BODY_DAMAGE);
     }
 }

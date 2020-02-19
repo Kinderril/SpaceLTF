@@ -1,8 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponPushModul : BaseSupportModul
 {
     public WeaponPushModul(int level)
@@ -15,14 +11,14 @@ public class WeaponPushModul : BaseSupportModul
         get { return true; }
     }
 
-    protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate,WeaponAffectionAdditionalParams additional)
+    protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate, WeaponAffectionAdditionalParams additional)
     {
-       ship.ExternalForce.Init(8, 1f, bullet.LookDirection);
+        ship.ExternalForce.Init(8, 1f, bullet.LookDirection);
     }
 
     public override string DescSupport()
     {
-        return Namings.TryFormat("Push target when hit");
+        return Namings.Format(Namings.Tag("WeaponPush"));
     }
     protected override WeaponInventoryAffectTarget AffectTarget(WeaponInventoryAffectTarget affections)
     {

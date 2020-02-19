@@ -11,21 +11,21 @@ public class SectorData
     public int Size { get; private set; }
     public bool IsCore { get; private set; }
     public bool IsFinal { get; private set; }
-    public string Name { get; private set; }
+    public string Name { get; protected set; }
     public int XIndex { get; private set; }
     public int Id { get; private set; }
-    public bool IsPopulated { get; private set; }
-    public int StartPowerGalaxy { get; private set; }
-    private int _power;
+    public bool IsPopulated { get; protected set; }
+    public int StartPowerGalaxy { get; protected set; }
+    protected int _power;
     private bool _isVisited;
     public SectorCellContainer[,] Cells;
     private float _powerPerTurn;
-    private HashSet<SectorCellContainer> _listCells = new HashSet<SectorCellContainer>();
+    protected HashSet<SectorCellContainer> _listCells = new HashSet<SectorCellContainer>();
 
     Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
 
     //    private static Dictionary<int, WDictionary<ShipConfig>> ShipsDictionary;
-    private ShipConfig _shipConfig;
+    protected ShipConfig _shipConfig;
     public ShipConfig ShipConfig => _shipConfig;
     private Dictionary<GlobalMapEventType, int> _maxCount;
 
@@ -40,6 +40,10 @@ public class SectorData
         _maxCount = maxCountEvents;
         StartX = startX;
         StartZ = startZ;
+//        if (startZ >= 12)
+//        {
+//            Debug.LogError("WTF");
+//        }
         Size = size;
         //        Debug.Log(Namings.TryFormat("Sub Sector X:{0} Z:{1}.     Congif:{2}", startX, startZ, shipConfig.ToString()));
         for (int i = 0; i < size; i++)
@@ -88,7 +92,7 @@ public class SectorData
         return power;
     }
 
-    public void Populate(int startPowerGalaxy, SectorData startSectorData)
+    public virtual void Populate(int startPowerGalaxy)
     {
         IsPopulated = true;
         StartPowerGalaxy = startPowerGalaxy;
@@ -175,24 +179,12 @@ public class SectorData
             }
         }
 
-        if (armiesCount > 0)
+        foreach (var armyContainer in remainFreeCells.ToList())
         {
-            List<ArmyCreatorType> _armyCreatorTypes = new List<ArmyCreatorType>()
-            {
-                ArmyCreatorType.laser,
-                ArmyCreatorType.destroy,
-                ArmyCreatorType.mine,
-                ArmyCreatorType.simple,
-                ArmyCreatorType.rocket,
-            };
-            foreach (var armyContainer in remainFreeCells.ToList())
-            {
-                var config = IsDroids(_shipConfig);
-                var t1 = _armyCreatorTypes.RandomElement();
-                var armyCellcell = new ArmyGlobalMapCell(_power, config, Utils.GetId(), t1, StartX + armyContainer.indX, StartZ + armyContainer.indZ, this);
-                armyContainer.SetData(armyCellcell);
-                remainFreeCells.Remove(armyContainer);
-            }
+            var config = IsDroids(_shipConfig);
+            var armyCellcell = new ArmyGlobalMapCell(_power, config, Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, this);
+            armyContainer.SetData(armyCellcell);
+            remainFreeCells.Remove(armyContainer);
         }
 
         //        Debug.Log($"Sector populated: {Id}");
@@ -218,7 +210,10 @@ public class SectorData
                 for (int j = 0; j < Size; j++)
                 {
                     var cell = Cells[i, j];
-                    cell.Data.UpdatePowers(visitedSectors, StartPowerGalaxy, (int)(_powerPerTurn * step));
+                    if (cell.Data != null)
+                    {
+                        cell.Data.UpdatePowers(visitedSectors, StartPowerGalaxy, (int)(_powerPerTurn * step));
+                    }
                 }
             }
 
@@ -228,7 +223,7 @@ public class SectorData
         return false;
     }
 
-    private ShipConfig IsDroids(ShipConfig coreConfig)
+    protected ShipConfig IsDroids(ShipConfig coreConfig)
     {
         float doirdChance = -1f;
         switch (coreConfig)
@@ -254,7 +249,7 @@ public class SectorData
         return config;
     }
 
-    private void RandomizeBorders()
+    protected virtual void RandomizeBorders()
     {
         if (Size >= 4)
         {
@@ -354,7 +349,7 @@ public class SectorData
         _isVisited = true;
     }
 
-    public void MarkAsCore(int coreId)
+    public virtual void MarkAsCore(int coreId, CoreGlobalMapCell coreCell)
     {
         IsCore = true;
         Debug.Log($"Sector marked as core:{Id}  coreId:{coreId}");
@@ -379,12 +374,13 @@ public class SectorData
             for (int j = 0; j < Size; j++)
             {
                 var cell = Cells[i, j];
-                cellInGalaxy.SetCell(cell.Data);
+                if (cell.Data != null)
+                    cellInGalaxy.SetCell(cell.Data);
             }
         }
     }
 
-    public void CacheWays()
+    public virtual void CacheWays()
     {
         foreach (var cell in _listCells)
         {
@@ -427,7 +423,7 @@ public class SectorData
     }
 
 
-    private List<GlobalMapCell> ConnectedCellsToCurrent(int XINdex, int ZINdex)
+    protected List<GlobalMapCell> ConnectedCellsToCurrent(int XINdex, int ZINdex)
     {
         List<GlobalMapCell> list = new List<GlobalMapCell>();
         TryAddClose(XINdex - 1, ZINdex - 1, list);
@@ -438,6 +434,23 @@ public class SectorData
         TryAddClose(XINdex + 1, ZINdex - 1, list);
         TryAddClose(XINdex + 1, ZINdex, list);
         TryAddClose(XINdex + 1, ZINdex + 1, list);
+        return list;
+    }
+
+    protected List<GlobalMapCell> connectedCellsToCurrentOnlyZUpMapCells(int XINdex, int ZINdex)
+    {
+        List<GlobalMapCell> list = new List<GlobalMapCell>();
+        TryAddClose(XINdex - 1, ZINdex + 1, list);
+        TryAddClose(XINdex, ZINdex + 1, list);
+        TryAddClose(XINdex + 1, ZINdex + 1, list);
+        return list;
+    }
+    protected List<GlobalMapCell> connectedCellsToCurrentOnlyZDownMapCells(int XINdex, int ZINdex)
+    {
+        List<GlobalMapCell> list = new List<GlobalMapCell>();
+        TryAddClose(XINdex - 1, ZINdex - 1, list);
+        TryAddClose(XINdex, ZINdex - 1, list);
+        TryAddClose(XINdex + 1, ZINdex - 1, list);
         return list;
     }
 

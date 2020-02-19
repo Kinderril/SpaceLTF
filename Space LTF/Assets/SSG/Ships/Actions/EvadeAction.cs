@@ -10,11 +10,18 @@ public class EvadeAction : BaseAction
 {
     private AICell _clouds = null;
 
-    public EvadeAction([NotNull] ShipBase owner) 
-        : base(owner,ActionType.evade)
+    private Vector3 target;
+    private Vector3 side;
+    private Vector3 pos;
+
+    private float _nextPosibleRecalc;
+
+    public EvadeAction([NotNull] ShipBase owner)
+        : base(owner, ActionType.evade)
     {
         int dist;
-        var cloudsCell = _owner.CellController.Data.FindClosestCellByType(_owner.Cell, CellType.Clouds,false,out dist);
+        var cloudsCell =
+            _owner.CellController.Data.FindClosestCellByType(_owner.Cell, CellType.Clouds, false, out dist);
         if (dist < 3)
         {
             if (cloudsCell != null)
@@ -25,7 +32,6 @@ public class EvadeAction : BaseAction
             {
 //                cloudsCell = _owner.CellController.Data.FindClosestCellByType(_owner.Cell, CellType.Free, out dist);
             }
-
         }
     }
 
@@ -34,64 +40,91 @@ public class EvadeAction : BaseAction
         if (_clouds != null)
         {
             // _owner.SetTargetSpeed(1f);
-            var pos = _clouds.Center;
+            pos = _clouds.Center;
             _targetPoint = pos;
             _owner.MoveByWay(pos);
             return;
         }
 
         var danger = _owner.Locator.DangerEnemy;
-        Vector3 target;
-        bool acceleration = false;
-        if (_owner.ShipParameters.MaxSpeed > danger.ShipLink.ShipParameters.MaxSpeed)
+        var acceleration = false;
+        if (danger != null)
         {
-            //GO STRAIGHT
-            // _owner.SetTargetSpeed(1f);
-            var pos = _owner.Position + _owner.LookDirection * 10;
-            var cell = _owner.CellController.GetCell(pos);
-            if (cell.IsFree())
+            if (_owner.ShipParameters.MaxSpeed > danger.ShipLink.ShipParameters.MaxSpeed)
             {
-                _targetPoint = pos;
-                _owner.MoveByWay(pos);
-                return;
+                //GO STRAIGHT
+                // _owner.SetTargetSpeed(1f);
+                pos = _owner.Position + _owner.LookDirection * 10;
+                var cell = _owner.CellController.GetCell(pos);
+                if (cell.IsFree())
+                {
+                    _targetPoint = pos;
+                    _owner.MoveByWay(pos);
+                    return;
+                }
             }
-        }
-        if (_owner.ShipParameters.TurnSpeed > danger.ShipLink.ShipParameters.TurnSpeed)
-        {
-            //DO TURN
-            Vector3 side = GetSideDir(danger);
-            // _owner.SetTargetSpeed(1f);
-            var pos = _owner.Position + side * 7;
-            var cell = _owner.CellController.GetCell(pos);
-            if (cell.IsFree())
-            {
-                _targetPoint = pos;
-                _owner.MoveByWay(pos);
-                return;
-            }
-        }
-        else
-        {
-            var side = GetSideDir(danger);
-            // if (_owner.IsInFromt(danger.ShipLink.Position))
-            // {
-            //     // _owner.SetTargetSpeed(1f);
-            // }
-            // else
-            // {
-            //     _owner.SetTargetSpeed(0.1f);
-            // }
 
-            var pos = _owner.Position + side * 7;
+            if (_owner.ShipParameters.TurnSpeed > danger.ShipLink.ShipParameters.TurnSpeed)
+            {
+                //DO TURN
+                side = GetSideDir(danger);
+                // _owner.SetTargetSpeed(1f);
+                pos = _owner.Position + side * 7;
+                var cell = _owner.CellController.GetCell(pos);
+                if (cell.IsFree())
+                {
+                    _targetPoint = pos;
+                    _owner.MoveByWay(pos);
+                    return;
+                }
+            }
+            side = GetSideDir(danger);
+            pos = _owner.Position + side * 7;
             _targetPoint = pos;
             _owner.MoveByWay(pos);
+            return;
         }
-        
+
+        if (_nextPosibleRecalc < Time.time)
+        {
+            _nextPosibleRecalc = Time.time + 4f;
+            Vector3 sumVectors = Vector3.zero;
+            var enemiesPos = _owner.Enemies.Where(x => x.Key.ShipParameters.StartParams.ShipType != ShipType.Base)
+                .ToList();
+            if (enemiesPos.Count > 0)
+            {
+
+                foreach (var shipPersonalInfo in enemiesPos)
+                {
+                    sumVectors += shipPersonalInfo.Key.Position;
+                }
+
+                var enemiesCenter = sumVectors / enemiesPos.Count;
+                var cellC = _owner.CellController;
+                var fieldCenter = (cellC.Min + cellC.Max) / 2f;
+                var dir = enemiesCenter - fieldCenter;
+                var norm = Utils.NormalizeFastSelf(dir);
+                pos = fieldCenter - norm * (AICellDataRaound.SafeRadius - 1);
+            }
+            else
+            {
+                pos = _owner.Position;
+            }
+
+
+            _targetPoint = pos;
+        }
+
+        _owner.MoveByWay(pos);
+
+
     }
+
     public override Vector3? GetTargetToArrow()
     {
         return _targetPoint;
     }
+
     private Vector3 GetSideDir(ShipPersonalInfo danger)
     {
         Vector3 side;
@@ -99,7 +132,7 @@ public class EvadeAction : BaseAction
         side = sideDot ? _owner.LookLeft : _owner.LookRight;
         return side;
     }
-    
+
 
     protected override CauseAction[] GetEndCauses()
     {
@@ -107,17 +140,20 @@ public class EvadeAction : BaseAction
         {
 //            new CauseAction("_owner dead", () => !_owner.InBattlefield),
             new CauseAction("out bf", () => !_owner.InBattlefield),
-            new CauseAction("no danger", () => _owner.Locator.DangerEnemy == null),
-            new CauseAction("no danger ship link", () => _owner.Locator.DangerEnemy.ShipLink == null),
-            new CauseAction("weapon load", () => _owner.WeaponsController.AnyWeaponIsLoaded())
+            new CauseAction("no danger",
+                () => _owner.DesicionData.GlobalTactics == EGlobalTactics.Fight && _owner.Locator.DangerEnemy == null),
+            new CauseAction("no danger ship link",
+                () => _owner.DesicionData.GlobalTactics == EGlobalTactics.Fight &&
+                      _owner.Locator.DangerEnemy.ShipLink == null),
+            new CauseAction("weapon load",
+                () => _owner.DesicionData.GlobalTactics == EGlobalTactics.Fight &&
+                      _owner.WeaponsController.AnyWeaponIsLoaded())
 //            new CauseAction("path complete", () => _owner.PathController.Complete(_targetPoint.Value)),
         };
         return c;
     }
-    
+
     public override void DrawGizmos()
     {
-
     }
 }
-

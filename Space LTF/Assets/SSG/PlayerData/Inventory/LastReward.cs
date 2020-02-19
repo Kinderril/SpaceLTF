@@ -12,12 +12,16 @@ public class LastReward
     public int Money;
     public List<WeaponInv> Weapons = new List<WeaponInv>();
     public List<BaseModulInv> Moduls = new List<BaseModulInv>();
+    public List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();
 
 
-
-    public LastReward(Commander enemyCommander, Player winner)
+    public LastReward()
     {
-        var power = enemyCommander.StartPower;
+
+    }
+    public LastReward(PlayerAI losePLayer, Player winner)
+    {
+        var power = losePLayer.Army.GetPower();
         var scoutsLevel = winner.Parameters.Scouts.Level;
         var powerPlayer = winner.Army.GetPower();
         var coef = power * 0.1f;
@@ -45,10 +49,10 @@ public class LastReward
         var itemsCountCoef = (maxLowItems - 1) * 6.5f;
 
 
-        float l1 = Mathf.Clamp(12 + weaponCoef, 1,999);
+        float l1 = Mathf.Clamp(12 + weaponCoef, 1, 999);
         weapDic.Add(1, l1);
 
-        float l2 = 8 + weaponCoef - itemsCountCoef; 
+        float l2 = 8 + weaponCoef - itemsCountCoef;
         if (l2 > 0)
             weapDic.Add(2, l2);
         float l3 = 2 + weaponCoef - itemsCountCoef;

@@ -54,10 +54,10 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
         {
             var ans = new List<AnswerDialogData>()
             {
-                new     AnswerDialogData(Namings.TryFormat(Namings.DialogTag("asteroid_brokenShipRepair"),RepairLevel) ,null,repairResult),
+                new     AnswerDialogData(Namings.Format(Namings.DialogTag("asteroid_brokenShipRepair"),RepairLevel) ,null,repairResult),
                 new     AnswerDialogData(Namings.DialogTag("asteroid_brokenShipdecompile"),null,()=> moneyResult(10,20))
             };
-            var mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("asteroid_brokenShip"), Namings.ShipConfig(_config)), ans);
+            var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("asteroid_brokenShip"), Namings.ShipConfig(_config)), ans);
             return mesData;
         }
     }
@@ -75,7 +75,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
             if (MainController.Instance.MainPlayer.Inventory.GetFreeWeaponSlot(out var slot))
             {
                 var modul = Library.CreateWeapon(false);
-                mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("repairResultFull"), Namings.Weapon(modul.WeaponType)), ans);
+                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("repairResultFull"), Namings.Weapon(modul.WeaponType)), ans);
                 MainController.Instance.MainPlayer.Inventory.TryAddWeaponModul(modul, slot);
             }
             else

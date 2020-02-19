@@ -20,7 +20,7 @@ public class LastScoutsData
         HaveScouted = true;
         intX = cell.indX;
         intZ = cell.indZ;
-        MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.TryFormat(Namings.Tag("CellScouted"), intX, intZ));
+        MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("CellScouted"), intX, intZ));
         if (OnLastScouts != null)
         {
             OnLastScouts();

@@ -126,17 +126,25 @@ public class WeaponsController
         _enable = val;
     }
 
-    public void CheckWeaponFire(ShipPersonalInfo target)
+    public Vector3? CheckWeaponFire(ShipPersonalInfo target)
     {
         if (!_enable)
         {
-            return;
+            return null;
         }
+
+        Vector3? posToAim = null;
         for (int i = 0; i < _weaponsToAim.Length; i++)
         {
             var weaponsToCheck = _weaponsToAim[i];
             weaponsToCheck.TryShoot(target, _owner.LookDirection);
+            if (weaponsToCheck.WeaponToAim.PosToAim.HasValue)
+            {
+                posToAim = weaponsToCheck.WeaponToAim.PosToAim;
+            }
         }
+
+        return posToAim;
     }
 
     public void Dispose()
@@ -244,6 +252,15 @@ public class WeaponsController
         {
             weapon.ReloadNow();
         }
+    }
+    public void IncreaseShootsDist(float coef)
+    {
+        foreach (var weaponInGame in _weapons)
+        {
+            weaponInGame.AimRadius *= coef;
+            weaponInGame.BulletSpeed *= coef;
+        }
+        AimSectorController.IncreaseShootsDist(coef);
     }
     public void UnloadAll()
     {

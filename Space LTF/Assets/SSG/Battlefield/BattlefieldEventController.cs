@@ -1,18 +1,15 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class BattlefieldEventController
 {
     private List<BattlefildEventType> _posibleTypes = new List<BattlefildEventType>()
     {
-        BattlefildEventType.asteroids,BattlefildEventType.engineOff,BattlefildEventType.shieldsOff
+        BattlefildEventType.asteroids,BattlefildEventType.shieldsOff
     };
 
     private BattleFieldEvent _event = null;
 
-    public void Init(BattleController battleController,BattlefildEventType? type,bool canRerandom)
+    public void Init(BattleController battleController, BattlefildEventType? type, bool canRerandom)
     {
         _event = null;
         if (type == null && canRerandom)
@@ -23,9 +20,9 @@ public class BattlefieldEventController
             }
         }
 
-//#if UNITY_EDITOR    
-//        type = BattlefildEventType.asteroids;
-//#endif
+        //#if UNITY_EDITOR    
+        //        type = BattlefildEventType.asteroids;
+        //#endif
         if (type != null)
         {
             switch (type.Value)
@@ -36,15 +33,15 @@ public class BattlefieldEventController
                 case BattlefildEventType.shieldsOff:
                     _event = new ShieldOffEvent(battleController);
                     break;
-                case BattlefildEventType.engineOff:
-                    break;
+                    // case BattlefildEventType.engineOff:
+                    //     break;
             }
             if (_event != null)
             {
                 _event.Init();
             }
         }
-           
+
     }
     public void Dispose()
     {

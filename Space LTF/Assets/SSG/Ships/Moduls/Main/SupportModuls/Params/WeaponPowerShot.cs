@@ -9,7 +9,7 @@ public class WeaponPowerShot : BaseSupportModul
 
     }
 
-    private float DmgLevel => dmg_inc + Level * 0.35f;
+    private float DmgLevel => dmg_inc + Level * 0.23f;
 
 
     public override void ChangeParams(IAffectParameters weapon)
@@ -20,7 +20,8 @@ public class WeaponPowerShot : BaseSupportModul
     }
     public override string DescSupport()
     {
-        return $"Increase reload time by {Utils.FloatToChance(relocad_inc)}%. Increase damage by {Utils.FloatToChance(DmgLevel)}%.";
+        return Namings.Format(Namings.Tag(Type.ToString()), Utils.FloatToChance(relocad_inc),
+            Utils.FloatToChance(DmgLevel));
     }
 
 }

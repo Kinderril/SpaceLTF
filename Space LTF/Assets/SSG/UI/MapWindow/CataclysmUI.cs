@@ -26,11 +26,11 @@ public class CataclysmUI : MonoBehaviour
         //        Field.gameObject.SetActive(!isStarted);
         if (isStarted)
         {
-            Field.text = Namings.TryFormat(Namings.Tag("CataclysmProcess"), _data.GalaxyData.CellsDestroyed);
+            Field.text = Namings.Format(Namings.Tag("CataclysmProcess"), _data.GalaxyData.CellsDestroyed);
         }
         else
         {
-            Field.text = Namings.TryFormat(Namings.Tag("RemainCataclysm"), remainSteps);
+            Field.text = Namings.Format(Namings.Tag("RemainCataclysm"), remainSteps);
         }
         //        StartedObject.SetActive(isStarted);
     }

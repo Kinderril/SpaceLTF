@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 
 [Serializable]
@@ -36,7 +37,7 @@ public class FinalBattleData
         if (isFull)
         {
             list.Add(new AnswerDialogData(Namings.Tag("Ok"), null, ReadyToGo));
-            mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("finalStartReady"),
+            mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartReady"),
                 current, need), list);
         }
         else
@@ -47,7 +48,7 @@ public class FinalBattleData
             if (delta > armyCount - 1)
             {
                 list.Add(new AnswerDialogData(Namings.Tag("Ok"), LoseGame, null));
-                mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("finalStartNotReady"),
+                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartNotReady"),
                     current, need), list);
             }
             else
@@ -61,14 +62,14 @@ public class FinalBattleData
                         player.Army.RemoveShip(shipToDel);
                         player.QuestData.AddElement();
                     }
-                    list.Add(new AnswerDialogData(Namings.TryFormat(Namings.Tag("Sacrifice"), shipToDel.Ship.Name,
+                    list.Add(new AnswerDialogData(Namings.Format(Namings.Tag("Sacrifice"), shipToDel.Ship.Name,
                         Namings.ShipType(shipToDel.Ship.ShipType), Namings.ShipConfig(shipToDel.Ship.ShipConfig)), null, () =>
                     {
                         Sacrifice();
                         return GetDialog();
                     }));
                 }
-                mesData = new MessageDialogData(Namings.TryFormat(Namings.DialogTag("finalProcess"),
+                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalProcess"),
                     current, need), list);
             }
         }
@@ -145,13 +146,27 @@ public class FinalBattleData
      */
     private void Fight()
     {
-        var rep = MainController.Instance.MainPlayer;
-        ShipConfig config = rep.ReputationData.WorstFaction(rep.Army.BaseShipConfig);
+//        var player = new PlayerAIMainBoss(name);
+        var rep = MainController.Instance.MainPlayer.ReputationData;
+        var array = rep.ReputationFaction.OrderBy(x => x.Value).ToArray();
+        var conf1 = array[1].Key;
+        var conf2 = array[2].Key;
+        var armyType = ArmyCreatorLibrary.GetArmy(conf1, conf2);
+        armyType.MainShipCount = 2;
+        var power = Mathf.Clamp(_power, 30, 999);
+        // ArmyCreator.cre
+//        player.Army.SetArmy(army);
+//        _player = player;
+
+
+//        var rep = MainController.Instance.MainPlayer;
+//        ShipConfig config = rep.ReputationData.WorstFaction(rep.Army.BaseShipConfig);
         _lastFight = true;
-        var player = new Player("Final boss");
-        var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize,
-            5, 7, ArmyCreatorLibrary.GetArmy(config),
-            true, player);
+        var player = new PlayerAI("Final boss");
+        //        var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize,
+        //            5, 7, ArmyCreatorLibrary.GetArmy(config),
+        //            true, player);   
+        var army = ArmyCreator.CreateSimpleEnemyArmy(power, armyType, player);
         player.Army.SetArmy(army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer, player, true, false);
     }

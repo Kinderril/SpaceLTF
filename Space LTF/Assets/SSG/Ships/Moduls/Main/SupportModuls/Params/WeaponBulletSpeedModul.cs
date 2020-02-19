@@ -12,7 +12,7 @@ public class WeaponBulletSpeedModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return Namings.TryFormat(Namings.Tag("WeaponSpeedModulDesc"), Utils.FloatToChance(spd_inc));
+        return Namings.Format(Namings.Tag("WeaponSpeedModulDesc"), Utils.FloatToChance(spd_inc));
     }
 
     public override void ChangeParams(IAffectParameters weapon)

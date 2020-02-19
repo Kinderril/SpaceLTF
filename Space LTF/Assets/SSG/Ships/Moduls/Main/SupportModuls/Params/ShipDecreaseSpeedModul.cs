@@ -17,7 +17,8 @@ public class ShipDecreaseSpeedModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return $"Increase damage by {Utils.FloatToChance(DmgLevel)}%.  Decrease ship max speed by {Utils.FloatToChance(SpeedDecrease)}%";
+        return Namings.Format(Namings.Tag(Type.ToString()), Utils.FloatToChance(DmgLevel),
+            Utils.FloatToChance(SpeedDecrease));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {

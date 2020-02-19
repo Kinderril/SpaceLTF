@@ -18,6 +18,10 @@ public class ControlCenterDesicionData : IShipDesicion
     }
 
 
+    public ECommanderPriority1 CommanderPriority1 { get; }
+    public ESideAttack SideAttack { get; }
+    public EGlobalTactics GlobalTactics { get; }
+
     public ActionType CalcTask(out ShipBase ship)
     {
         ship = null;
@@ -61,7 +65,7 @@ public class ControlCenterDesicionData : IShipDesicion
         
     }
 
-    public void ChangePriority(EBaseDefence BaseDefence)
+    public void ChangePriority(EGlobalTactics globalTactics)
     {
 
     }
@@ -71,5 +75,6 @@ public class ControlCenterDesicionData : IShipDesicion
 
     }
 
+    public event Action OnChagePriority;
 }
 

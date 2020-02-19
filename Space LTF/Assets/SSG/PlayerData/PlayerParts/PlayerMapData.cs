@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 
@@ -16,7 +15,7 @@ public class PlayerMapData
     private PlayerByStepDamage _stepDamage;
 
     [field: NonSerialized]
-    public event Action<GlobalMapCell> OnCellChanged;    
+    public event Action<GlobalMapCell> OnCellChanged;
     [field: NonSerialized]
     public event Action OnStep;
 
@@ -30,24 +29,36 @@ public class PlayerMapData
         get => _currentCell;
         set
         {
-            LastCell = _currentCell;
-           _currentCell = value;
+            bool setLast = true;
+            var nextIsDungeon = (value is ArmyDungeonExitGlobalMapCell) || (value is ArmyDungeonGlobalMapCell);
+            if (nextIsDungeon)
+            {
+                if (LastCell is ArmyDungeonEnterGlobalMapCell)
+                {
+                    setLast = false;
+                }
+            }
+            if (setLast)
+            {
+                LastCell = _currentCell;
+            }
+            _currentCell = value;
         }
     }
 
-    public void Init(StartNewGameData data,PlayerByStepDamage stepDamage)
+    public void Init(StartNewGameData data, PlayerByStepDamage stepDamage)
     {
         _stepDamage = stepDamage;
         Step = 0;
         var sectorIndex = MyExtensions.Random(10 * data.SectorSize, 100 * data.SectorSize);
         var sector = new GalaxyData("Sector " + sectorIndex.ToString());
-        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount,data.StepsBeforeDeath, data.shipConfig,data.PowerPerTurn);
+        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
         GalaxyData = sector;
         CurrentCell = startCell;
         OpenAllNear();
     }
 
-    public int ScoutedCells(int min,int max)
+    public int ScoutedCells(int min, int max)
     {
         var allCells = GalaxyData.GetAllList().Where(x => !x.IsScouted && !x.Completed).ToList();
         var cellsToScout = MyExtensions.Random(min, max);
@@ -70,22 +81,23 @@ public class PlayerMapData
         ScoutAllAround(CurrentCell);
     }
 
-    public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap,Action<GlobalMapCell> callback)
+    public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap, Action<GlobalMapCell> callback)
     {
+        var lastCell = CurrentCell;
         if (CanGoTo(target))
         {
             if (target != CurrentCell)
             {
                 WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.ShipGlobalMapMove);
-                globalMap.MoveToCell(target,() =>
-                {
-                    callback(target);
-                    GoNextAfterDialog(target);
-                    target.OpenInfo();
-                    target.VisitCell(this,Step);
-                    target.ComeTo();
-                    ScoutAllAround(target);
-                });
+                globalMap.MoveToCell(target, () =>
+                 {
+                     callback(target);
+                     GoNextAfterDialog(target);
+                     target.OpenInfo();
+                     target.VisitCell(this, Step);
+                     target.ComeTo(lastCell);
+                     ScoutAllAround(target);
+                 });
             }
             else
             {
@@ -142,6 +154,11 @@ public class PlayerMapData
         }
 #endif
 
+        if (target == null)
+        {
+            Debug.LogError("Can't go to null target");
+            return false;
+        }
         if (target is GlobalMapNothing)
         {
             return false;
@@ -171,9 +188,9 @@ public class PlayerMapData
 
     public void OpenRetranslatorInfo()
     {
-        for (int i = 0; i < GalaxyData.Size; i++)
+        for (int i = 0; i < GalaxyData.SizeX; i++)
         {
-            for (int j = 0; j < GalaxyData.Size; j++)
+            for (int j = 0; j < GalaxyData.SizeZ; j++)
             {
                 var cell = GalaxyData.AllCells()[i, j];
                 var core = cell as CoreGlobalMapCell;

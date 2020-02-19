@@ -26,11 +26,20 @@ public class WeaponsAimSectorController
         circleShader.transform.position = weapon.WeaponToAim.GetShootPos;
         circleShader.Init(ship, _sectorCos, weapon.WeaponToAim.AimRadius);
         return circleShader;
-//        var _sectorCos = Mathf.Cos(SetorAngle * Mathf.Deg2Rad / 2f);
-//        CircleShader = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.CircleShader);
-//        CircleShader.transform.SetParent(Owner.transform, false);
-//        CircleShader.transform.position = GetShootPos;
-//        CircleShader.Init(Owner, _sectorCos, AimRadius);
+        //        var _sectorCos = Mathf.Cos(SetorAngle * Mathf.Deg2Rad / 2f);
+        //        CircleShader = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.CircleShader);
+        //        CircleShader.transform.SetParent(Owner.transform, false);
+        //        CircleShader.transform.position = GetShootPos;
+        //        CircleShader.Init(Owner, _sectorCos, AimRadius);
+    }
+    public void IncreaseShootsDist(float coef)
+    {
+        for (int i = 0; i < CircleShader.Length; i++)
+        {
+            var shader = CircleShader[i];
+            shader.IncreaseShootsDist(coef);
+        }
+
     }
 
     public void Activate()
@@ -52,4 +61,5 @@ public class WeaponsAimSectorController
                 
 
     }
+
 }

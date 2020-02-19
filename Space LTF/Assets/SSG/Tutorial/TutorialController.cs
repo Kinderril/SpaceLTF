@@ -1,10 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class TutorialController : Singleton<TutorialController>
+﻿public class TutorialController : Singleton<TutorialController>
 {
-    public BattleMapTutorial battleStart;
-    public BattleMapTutorial battleStart2;
+    public LateBattleMapTutorial battleStart;
+    public LateBattleMapTutorial battleStartLate;
     public BattleMapTutorial battleStart3;
     public BattleMapTutorial battleStartEnemy;
     public LevelUpMapTutorial mapUpgrade;
@@ -21,15 +18,15 @@ public class TutorialController : Singleton<TutorialController>
         if (EnableTutor)
         {
             if (preBattle != null)
-                preBattle.Init();  
+                preBattle.Init();
             if (endBattle != null)
-                endBattle.Init();  
+                endBattle.Init();
             if (battleStart != null)
                 battleStart.Init();
-            if (battleStart2 != null)
-                battleStart2.Init();
+            if (battleStartLate != null)
+                battleStartLate.Init();
             if (battleStart3 != null)
-                battleStart3.Init();    
+                battleStart3.Init();
             if (battleStartEnemy != null)
                 battleStartEnemy.Init();
 

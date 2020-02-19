@@ -112,17 +112,7 @@ public class Player
                     var modul = Library.CreatSimpleModul(type, 1);
                     Inventory.TryAddSimpleModul(modul, index1);
                 }
-
             }
-
-            //            for (int i = 0; i < 3; i++)
-            //            {
-            //                if (Inventory.GetFreeWeaponSlot(out var index2))
-            //                {
-            //                    var modul1 = Library.CreateWeapon(WeaponType.beam);
-            //                    Inventory.TryAddWeaponModul(modul1, index2);
-            //                }
-            //            }
 
             var allSpellType = (SpellType[])Enum.GetValues(typeof(SpellType));
             foreach (var type in allSpellType)
@@ -146,33 +136,38 @@ public class Player
         float r = 1000;
         var bShip = ArmyCreator.CreateBaseShip(new ArmyRemainPoints(r), config, this);
         r += Library.BASE_SHIP_VALUE;
-        var ship1 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), config, this, logs);
+
+        var listTyper = new List<ShipType>() { ShipType.Light, ShipType.Heavy, ShipType.Middle };
+        var t1 = listTyper.RandomElement();
+        listTyper.Remove(t1);
+        var t2 = listTyper.RandomElement();
+        var ship1 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), t1, config, this, logs);
         r += Library.BASE_SHIP_VALUE;
-        var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), config, this, logs);
+        var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), t2, config, this, logs);
 
         int simpleIndex;
-//        foreach (var spellType in posibleSpell)
-//        {
-//            if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-//            {
-//                var m1 = Library.CreateSpell(spellType);
-//                bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-//            }
-//        }
-        List<SpellType> healSpells = new List<SpellType>(){SpellType.rechargeShield,SpellType.repairDrones};
-        List<SpellType> controlSpells = new List<SpellType>(){SpellType.engineLock,SpellType.vacuum,SpellType.throwAround,SpellType.shildDamage};
-        List<SpellType> damageSpells = new List<SpellType>(){SpellType.artilleryPeriod,SpellType.distShot,SpellType.lineShot,SpellType.machineGun,SpellType.mineField};
+        //        foreach (var spellType in posibleSpell)
+        //        {
+        //            if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        //            {
+        //                var m1 = Library.CreateSpell(spellType);
+        //                bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+        //            }
+        //        }
+        List<SpellType> healSpells = new List<SpellType>() { SpellType.rechargeShield, SpellType.repairDrones };
+        List<SpellType> controlSpells = new List<SpellType>() { SpellType.engineLock, SpellType.hookShot, SpellType.throwAround, SpellType.shildDamage };
+        List<SpellType> damageSpells = new List<SpellType>() { SpellType.artilleryPeriod, SpellType.distShot, SpellType.lineShot, SpellType.machineGun, SpellType.mineField };
 
         if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
         {
             var m1 = Library.CreateSpell(healSpells.RandomElement());
             bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }      
+        }
         if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
         {
             var m1 = Library.CreateSpell(controlSpells.RandomElement());
             bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }      
+        }
         if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
         {
             var m1 = Library.CreateSpell(damageSpells.RandomElement());
@@ -196,6 +191,10 @@ public class Player
     private void AddWeaponsToShips(ref float r, StartShipPilotData ship, List<WeaponType> list)
     {
         var ship2Weapon = list.RandomElement();
+        if (list.Count > 1)
+        {
+            list.Remove(ship2Weapon);
+        }
         int count = MyExtensions.Random(2, 4);
         for (int i = 0; i < count; i++)
         {
@@ -218,9 +217,6 @@ public class Player
         Name = name;
     }
 
-
-
-
     public void SaveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -230,7 +226,6 @@ public class Player
         file.Close();
         Debug.Log("Game Saved");
     }
-
 
     public static bool LoadGame(out Player player)
     {
@@ -248,14 +243,21 @@ public class Player
         player = null;
         return false;
     }
-
-
-
-
-
+    public virtual ETurretBehaviour GetTurretBehaviour()
+    {
+        return ETurretBehaviour.stayAtPoint;
+    }
     public void WinBattleReward(Commander enemyCommander)
     {
-        LastReward = new LastReward(enemyCommander,this);
+        if (enemyCommander.Player is PlayerAI enemyPlayer)
+        {
+            LastReward = enemyPlayer.GetReward(this);
+        }
+        else
+        {
+            LastReward = new LastReward();
+        }
+
     }
 
 
@@ -273,5 +275,6 @@ public class Player
             QuestsOnStartController.DisposeQuests();
         }
     }
+
 }
 

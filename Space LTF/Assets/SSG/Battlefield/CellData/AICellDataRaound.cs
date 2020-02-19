@@ -10,7 +10,7 @@ using UnityEngine;
 public class AICellDataRaound
 {
     public const float SafeRadius = 9;
-    private const float AsteroidRadius = 1;
+    private const float AsteroidRadius = -2;
     private const float AsteroidINFieldMin = 3;
     private const float AsteroidINFieldMax = 7;
     public float CellSize;
@@ -27,7 +27,7 @@ public class AICellDataRaound
 
     public float InsideRadius => Radius - AICellDataRaound.SafeRadius;
     public Vector3 Min { get; private set; }
-    
+
     public Vector3 Max { get; private set; }
     public Vector3 CenterZone { get; private set; }
     public Vector3 StartPosition1 { get; private set; }
@@ -102,7 +102,7 @@ public class AICellDataRaound
 
         CalcStartPositinons();
 
-        int asteroidsFieldCount = (int)((size + 6f));
+        int asteroidsFieldCount = (int)((size + MyExtensions.Random(4, 10)));
         Asteroids.Clear();
         // CreateAsteroidsOnCircle(4);
         CreateRandomAsteroids(asteroidsFieldCount);
@@ -233,8 +233,8 @@ public class AICellDataRaound
     {
         var cellIx = (int)((nextPos.x - StartX) / CellSize);
         var cellIz = (int)((nextPos.z - StartZ) / CellSize);
-        var ix = Mathf.Clamp(cellIx , 0, MaxIx);
-        var iz = Mathf.Clamp(cellIz , 0, MaxIz);
+        var ix = Mathf.Clamp(cellIx, 0, MaxIx);
+        var iz = Mathf.Clamp(cellIz, 0, MaxIz);
         var coreCell = GetCell(ix, iz);
         coreCell.AddAsteroid(data, false);
     }

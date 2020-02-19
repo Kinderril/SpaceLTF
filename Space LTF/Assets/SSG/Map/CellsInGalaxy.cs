@@ -10,13 +10,15 @@ public class CellsInGalaxy
 
     private GlobalMapCell[,] cells;
     private List<GlobalMapCell> cellsList;
-    public int Size { get; private set; }
+    public int SizeX { get; private set; }
+    public int SizeZ { get; private set; }
 
-    public CellsInGalaxy(int size)
+    public CellsInGalaxy(int sizeX,int sizeZ)
     {
-        Size = size;
-        cells = new GlobalMapCell[size, size];
-        cellsList = new List<GlobalMapCell>(size);
+        SizeX = sizeX;
+        SizeZ = sizeZ;
+        cells = new GlobalMapCell[SizeX, SizeZ];
+        cellsList = new List<GlobalMapCell>(sizeX * sizeZ);
     }
     public List<GlobalMapCell> GetAllList()
     {
@@ -31,8 +33,15 @@ public class CellsInGalaxy
 
     public void SetCell(GlobalMapCell cell)
     {
-        cells[cell.indX, cell.indZ] = cell;
-        cellsList.Add(cell);
+        try
+        {
+            cells[cell.indX, cell.indZ] = cell;
+            cellsList.Add(cell);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("can't implement sector");
+        }
     }
 
     public GlobalMapCell GetCell(int x, int z)
@@ -61,9 +70,9 @@ public class CellsInGalaxy
     {
         int minLengh = 9999;
         GlobalMapCell cellOut = null;
-        for (int i = 0; i < Size; i++)
+        for (int i = 0; i < SizeX; i++)
         {
-            for (int j = 0; j < Size; j++)
+            for (int j = 0; j < SizeZ; j++)
             {
                 var cell = cells[i, j];
                 if (cell != null && !cell.IsScouted && !cell.Completed)

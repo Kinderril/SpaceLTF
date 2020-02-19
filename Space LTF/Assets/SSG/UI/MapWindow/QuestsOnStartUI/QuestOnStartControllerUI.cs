@@ -45,6 +45,10 @@ public class QuestOnStartControllerUI : MonoBehaviour
 
     public void ClearAll()
     {
+        foreach (var element in _elements.ToList())
+        {
+            element.ClearAll();
+        }
         _inited = false;
         _elements.Clear();
         Layout.ClearTransform();

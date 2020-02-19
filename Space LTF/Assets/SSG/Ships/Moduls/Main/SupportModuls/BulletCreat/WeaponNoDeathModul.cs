@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class WeaponNoDeathModul : BaseSupportModul
@@ -24,7 +22,8 @@ public class WeaponNoDeathModul : BaseSupportModul
 
     public override string DescSupport()
     {
-        return $"Bullet don't destroy when hit target. Increase reload time by {Utils.FloatToChance(RELOAD)}%.";
+        return Namings.Format(Namings.Tag(Type.ToString()),
+            Utils.FloatToChance(RELOAD));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {

@@ -3,7 +3,7 @@
 
 public class VacuumSpellAI : BaseAISpell<VacuumSpell>
 {
-    public VacuumSpellAI([NotNull] VacuumSpell spell, Commander commander, SpellInGame spellData)
+    public VacuumSpellAI([NotNull] VacuumSpell spell, ShipControlCenter commander, SpellInGame spellData)
         : base(spellData, spell, commander)
     {
 

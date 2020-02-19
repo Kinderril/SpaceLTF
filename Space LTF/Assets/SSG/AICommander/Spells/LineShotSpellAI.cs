@@ -10,7 +10,7 @@ using UnityEngine;
 public class LineShotSpellAI : BaseAISpell<LineShotSpell>
 {
 
-    public LineShotSpellAI([NotNull] LineShotSpell spell, Commander commander, SpellInGame spellData)
+    public LineShotSpellAI([NotNull] LineShotSpell spell, ShipControlCenter commander, SpellInGame spellData)
         : base(spellData, spell, commander)
     {
 
