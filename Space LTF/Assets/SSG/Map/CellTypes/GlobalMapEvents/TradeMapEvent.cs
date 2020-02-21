@@ -20,7 +20,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
 
     public override string Desc()
     {
-        return "Trader";
+        return Namings.DialogTag("Trader");
     }
 
     public TradeMapEvent(ShipConfig config)
@@ -73,7 +73,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
         {
             case TradeType.traderSell:
                 _cost = (int)(_itemsToTrade.CostValue * 0.7f);
-                tradeData = Namings.Format("He want to sell {0} for {1} credits.", _itemsToTrade.GetInfo(), _cost);
+                tradeData = Namings.Format(Namings.DialogTag("tradeStartSell"), _itemsToTrade.GetInfo(), _cost);
                 break;
             case TradeType.traderBuy:
                 if (inventory.Moduls.Count > 0)
@@ -85,7 +85,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
                     _itemsToTrade = inventory.Weapons.RandomElement();
                 }
                 _cost = (int)(_itemsToTrade.CostValue * 1f);
-                tradeData = Namings.Format("He want to buy your item {0} for {1} credits.", _itemsToTrade.GetInfo(),
+                tradeData = Namings.Format(Namings.DialogTag("tradeStartBuy"), _itemsToTrade.GetInfo(),
                     _cost);
                 break;
             default:
@@ -100,10 +100,10 @@ public class TradeMapEvent : BaseGlobalMapEvent
                      _TradeType == TradeType.traderSell);
         if (canUse)
         {
-            mianAnswers.Add(new AnswerDialogData($"Ok. Lets trade.", DoTrade, null));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("tradeStartOk"), DoTrade, null));
         }
-        mianAnswers.Add(new AnswerDialogData("No, thanks.", null));
-        var mesData = new MessageDialogData(Namings.Format("This ship wants to trade with you. {0}", tradeData), mianAnswers);
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("tradeStartNo"), null));
+        var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("tradeStartWantTrade"), tradeData), mianAnswers);
         return mesData;
     }
 

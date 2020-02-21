@@ -3,19 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-//public enum BattleRewardType
-//{
-//    money,
-//    weapon,
-//    modul,
-//}
-
-
-
 public class Commander
 {
-    private const float rowDelta = 3;
-    private const float lineDelta = 3;
+    private float rowDelta = 1.5f;
+    private float lineDelta = 3;
     public Dictionary<int, ShipBase> Ships = new Dictionary<int, ShipBase>();
     public List<ShipInventory> _destroyedShips = new List<ShipInventory>();
     private List<ShipBase> _shipsToRemove = new List<ShipBase>();
@@ -23,8 +14,6 @@ public class Commander
     public ShipControlCenter MainShip;
     public CommanderCoinController CoinController;
 
-//    public CommanderShipBlink CommanderShipBlink;
-    //    public CommanderRewardController RewardController;
     public CommanderSpells SpellController;
     public CommaderBattleStats BattleStats;
     public bool HavePerairPlace { get; private set; }
@@ -76,7 +65,7 @@ public class Commander
         //        RewardController= new CommanderRewardController(this);
         SpellController = new CommanderSpells(this);
         Priority = new CommanderPriority(this);
-//        CommanderShipBlink = new CommanderShipBlink(player.Parameters.EnginePower.Level);
+        //        CommanderShipBlink = new CommanderShipBlink(player.Parameters.EnginePower.Level);
     }
 
     public Dictionary<int, ShipBase> InitShips(Vector3 startPosition, Vector3 enemyCenterCell, List<Vector3> positionsToClear)
@@ -95,9 +84,27 @@ public class Commander
         var halfTurrets = 1 + countTurrets / 2;
         int indexShips = 0;
         int indexTurrets = 1;
+
+        lineDelta = MyExtensions.Random(2, 5);
         CreateTurretConnecttors((1 + countTurrets) / 2, dirToEnemyNorm, startPosition);
         foreach (var v in _paramsOfShips)
         {
+            switch (v.Ship.ShipType)
+            {
+                case ShipType.Light:
+                    rowIndex = 1;
+                    break;
+                case ShipType.Middle:
+                case ShipType.Heavy:
+                    rowIndex = 2;
+                    break;
+                case ShipType.Base:
+                    rowIndex = 1;
+                    break;
+                case ShipType.Turret:
+                    rowIndex = 3;
+                    break;
+            }
             bool isTurret = (v.Ship.ShipType == ShipType.Turret && distToEnemy > 30);
             var index = isTurret ? indexTurrets : indexShips;
             var half = isTurret ? halfTurrets : halfShip;
@@ -111,10 +118,7 @@ public class Commander
             {
                 side = Utils.Rotate90(dirToEnemyNorm, SideTurn.right) * lineDelta * (count - index);
             }
-
-
             Vector3 shipPosition;
-
             index++;
             if (isTurret)
             {

@@ -10,7 +10,7 @@ public class ShieldOffSpell : BaseSpellModulInv
     public const float PERIOD = 13f;
     private const float SHIELD_DAMAGE = 3f;
     private const float rad = 3.5f;
-    private const float DIST_SHOT = 21f;
+    private const float DIST_SHOT = 61f;
     private const float FIRE_PERIOD = 5f;
     private const int cost_base = 3;
     private const int cost_A1 = 2;
@@ -65,9 +65,17 @@ public class ShieldOffSpell : BaseSpellModulInv
         var b = Bullet.Create(origin, weapon, dir,
             weapon.CurPosition, null, bullestartparameters);
     }
+    public override BulletDestroyDelegate BulletDestroyDelegate => BulletDestroy;
+
+    private void BulletDestroy(Bullet origin, IWeapon weapon, AICell cell)
+    {
+        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShieldOffAOE, origin.Position, 3f);
+    }
+
     public override Bullet GetBulletPrefab()
     {
-        var bullet = DataBaseController.Instance.GetBullet(WeaponType.shieldOFfSpell);
+        // var bullet = DataBaseController.Instance.GetBullet(WeaponType.shieldOFfSpell);
+        var bullet = DataBaseController.Instance.GetBullet(WeaponType.nextFrame);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
     }

@@ -364,7 +364,7 @@ public static class Namings
             case ActionType.mineField:
                 break;
             case ActionType.attackSide:
-                return Tag("Attack");
+                return Tag("FlangAttack");
             case ActionType.repairAction:
                 return Tag("RepairAction");
             case ActionType.waitEnemy:

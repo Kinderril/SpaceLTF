@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-using UnityEngine;
+﻿using JetBrains.Annotations;
 
 public enum WeaponUpdageType
 {
@@ -18,12 +12,12 @@ public class ImpulseInventory : WeaponInv
 {
 
 
-    public ImpulseInventory([NotNull] WeaponInventoryParameters parameters,  int Level)
+    public ImpulseInventory([NotNull] WeaponInventoryParameters parameters, int Level)
         : base(parameters, WeaponType.impulse, Level)
     {
 
     }
-        
+
 
 
 

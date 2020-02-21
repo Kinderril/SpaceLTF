@@ -114,7 +114,18 @@ public class Pool
 
     public BaseEffectAbsorber GetEffect(BaseEffectAbsorber example)
     {
+        if (example == null)
+        {
+            Debug.LogError("Null pool element");
+        }
+
         BaseEffectAbsorber effect;
+#if UNITY_EDITOR
+        if (!effectsPool2.ContainsKey(example))
+        {
+            Debug.LogError($"Effect not registered {example.gameObject.name}");
+        }
+#endif
         var pool = effectsPool2[example];
         effect = pool.FirstOrDefault(x => !x.IsUsing);
         if (effect == null)

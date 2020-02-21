@@ -7,7 +7,7 @@ public class EngineLockSpell : BaseSpellModulInv
     //A1 - more rad
     //B2 - less timer
 
-    public const float DIST_SHOT = 22f;
+    public const float DIST_SHOT = 62f;
     public const float LOCK_PERIOD = 4;
     public const float LOCK_LEVEL = 2f;
 
@@ -71,7 +71,12 @@ public class EngineLockSpell : BaseSpellModulInv
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
 
     }
+    public override BulletDestroyDelegate BulletDestroyDelegate => BulletDestroy;
 
+    private void BulletDestroy(Bullet origin, IWeapon weapon, AICell cell)
+    {
+        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE, origin.Position, 3f);
+    }
 
     protected override CreateBulletDelegate createBullet => EngineCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
@@ -111,7 +116,8 @@ public class EngineLockSpell : BaseSpellModulInv
 
     public override Bullet GetBulletPrefab()
     {
-        var bullet = DataBaseController.Instance.GetBullet(WeaponType.engineLockSpell);
+        // var bullet = DataBaseController.Instance.GetBullet(WeaponType.engineLockSpell);
+        var bullet = DataBaseController.Instance.GetBullet(WeaponType.nextFrame);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
     }

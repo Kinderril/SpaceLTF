@@ -118,6 +118,8 @@ public class HookShotSpell : BaseSpellModulInv
                 var dirNorm = -Utils.NormalizeFastSelf(dir);
                 var powerFoShip = GetShipPower(dist);
                 pushedDist = dist;
+                var effert = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.HookShot, obj.Position, 3f);
+                TurnToDir(effert, dirNorm);
                 obj.ExternalForce.Init(powerFoShip, GetDelay(dist), dirNorm);
                 return true;
             }
@@ -140,8 +142,13 @@ public class HookShotSpell : BaseSpellModulInv
         var posToHook = weapon.CurPosition;
         var pushedDist = 0f;
         foreach (var obj in commanderSelfShips.Ships.Values)
+        {
             if (PushShip(obj, posToHook, out pushedDist))
+            {
+
                 obj.DamageData.ApplyEffect(ShipDamageType.engine, GetDelay(pushedDist));
+            }
+        }
 
         foreach (var obj in commanderConnectors.Connectors) PushShip(obj, posToHook, out pushedDist);
 
@@ -160,10 +167,17 @@ public class HookShotSpell : BaseSpellModulInv
                     var dist = dir.magnitude;
                     var power = dist * powerThrow * 0.28f;
                     power = MyExtensions.GreateRandom(power);
+                    var effert = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.HookShot, aiAsteroidPredata.Position, 3f);
+                    TurnToDir(effert, -dir);
                     aiAsteroidPredata.Push(-dir, power);
                 }
             }
         }
+    }
+
+    private void TurnToDir(BaseEffectAbsorber effect, Vector3 dir)
+    {
+           effect.transform.rotation = Quaternion.LookRotation(dir);
     }
 
     protected override void CastAction(Vector3 pos)
@@ -181,6 +195,9 @@ public class HookShotSpell : BaseSpellModulInv
         var powerFoShip = GetShipPower(dist);
         var delay = GetDelay(dist);
         shipBase.DamageData.ApplyEffect(ShipDamageType.engine, delay);
+        var effert = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.HookShot, shipBase.Position, 3f);
+        TurnToDir(effert, dir);
+
         shipBase.ExternalForce.Init(powerFoShip, delay, dir);
     }
 

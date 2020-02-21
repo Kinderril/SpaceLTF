@@ -488,11 +488,13 @@ public class MapWindow : BaseWindow
         playerArmyUI.Dispose();
         ReputationMapUI.Dispose();
         //        Cataclysm.Dispose();
-        GameObject.Destroy(playerArmyUI.gameObject);
+        if (playerArmyUI != null)
+            Destroy(playerArmyUI.gameObject);
     }
 
     public void ClearAll()
     {
+        Dispose();
         MovingArmyUIController.ClearAll();
         _sideShipsInited = false;
         //        _stablePosCached = true;
@@ -502,7 +504,6 @@ public class MapWindow : BaseWindow
         GlobalMap.ClearAll();
         MapConsoleUI.ClearAll();
         QuestsOnStartController.ClearAll();
-        Dispose();
     }
 }
 

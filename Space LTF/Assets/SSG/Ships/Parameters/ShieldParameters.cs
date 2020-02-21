@@ -212,10 +212,10 @@ public class ShieldParameters
 
     private void SetState(ShieldChangeSt v)
     {
-        if (State == ShieldChangeSt.disable && v == ShieldChangeSt.active)
-        {
-            return;
-        }
+//        if (State == ShieldChangeSt.disable && v == ShieldChangeSt.active)
+//        {
+//            return;
+//        }
         if (State == v)
         {
             return;

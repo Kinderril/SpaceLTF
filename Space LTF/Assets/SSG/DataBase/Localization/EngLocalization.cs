@@ -124,6 +124,7 @@ public static class EngLocalization
         {"RepairAction", "Repair"},
         {"Wait", "Wait"},
         {"Hiding", "Hiding"},
+        {"FlangAttack", "Flank Attack"},
 
         {"MainShipBlinkDesc", "Teleports your main ship to selected target"},
         {"MainShipBlinkName", "Jumper"},
@@ -167,6 +168,7 @@ public static class EngLocalization
 
 
 
+        {"shildDamage",  "Shield locker"},
         {"shieldLocker",  "Lock shield of target enemy."},
         {"autoShieldRepair", "Repair shield when it's down."},
         {"shieldRegen", "Faster shield restoring."},
@@ -190,7 +192,7 @@ public static class EngLocalization
 
         {"questKills", "{0} kills"},
         {"Fleet", "Fleet"},
-        {"RusLang", "Russian"},
+        {"RusLang", "Russian (Not full)"},
         {"EngLang", "English"},
         {"ReloadToLoc", "Restart game to update localization"},
         {"SettingsWindow", "Settings Window"},
@@ -723,6 +725,24 @@ public static class EngLocalization
         {"dialog_dungeonExitFinalBattle","This is main militaly base at this sector"},
         {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there? This sector have only one exit on the other side."},
         {"dialog_dungeogArmyFriendGoIn","Ask your friend to go in."},
+
+        {"dialog_Trader","Trader"},
+        {"dialog_tradeStartSell","He want to sell {0} for {1} credits."},
+        {"dialog_tradeStartBuy","He want to buy your item {0} for {1} credits."},
+        {"dialog_tradeStartOk","Ok. Lets trade."},
+        {"dialog_tradeStartNo","No, thanks."},
+        {"dialog_tradeStartWantTrade","This ship wants to trade with you. {0}"},
+
+        {"dialog_Space garbage", "Space garbage"},
+        {"dialog_scGarbage", "In front of you a huge count of garbage."},
+        {"dialog_scNoWant", "I don't want to dig in the trash."},
+        {"dialog_scSearch", "Search on border. [Scouts:{0}]."},
+        {"dialog_scDive", "Dive deep. [Scouts:{0}]"},
+        {"dialog_nothing", "Nothing"},
+        {"dialog_scAmbush", "Ambush!"},
+        {"dialog_scWeapon", "This is new weapon {0}"},
+        {"dialog_scScouted", "{0} points on global map scouted."},
+        {"dialog_scMap", "This is galaxy map! {0}"},
 
         {"dialog_teacherImproved","Ship {0} Improved. Pilot level:{1}"},
         {"dialog_teacherFail","Fail."},

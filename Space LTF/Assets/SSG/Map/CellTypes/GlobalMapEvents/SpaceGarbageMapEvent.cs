@@ -6,17 +6,17 @@ public class SpaceGarbageMapEvent : BaseGlobalMapEvent
 {
     public override string Desc()
     {
-        return "Space garbage";
+        return Namings.DialogTag("Space garbage");
     }
 
     public override MessageDialogData GetDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
 
-        mianAnswers.Add(new AnswerDialogData(string.Format("Dive deep. [Scouts:{0}]", ScoutsLevel), null, HalfGood));
-        mianAnswers.Add(new AnswerDialogData(string.Format("Search on border. [Scouts:{0}].", ScoutsLevel), null, DiveDeep));
-        mianAnswers.Add(new AnswerDialogData("I don't want to dig in the trash.", null));
-        var mesData = new MessageDialogData("In front of you a huge count of garbage.", mianAnswers);
+        mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("scDive"), ScoutsLevel), null, HalfGood));
+        mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("scSearch"), ScoutsLevel), null, DiveDeep));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scNoWant"), null));
+        var mesData = new MessageDialogData(Namings.DialogTag("scGarbage"), mianAnswers);
         return mesData;
     }
 
@@ -31,22 +31,22 @@ public class SpaceGarbageMapEvent : BaseGlobalMapEvent
                 var modul = Library.CreateWeapon(false);
                 MainController.Instance.MainPlayer.Inventory.TryAddWeaponModul(modul, slot);
 
-                mianAnswers.Add(new AnswerDialogData("Ok.", null, null));
+                mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
                 var mesData = new MessageDialogData(
-                    string.Format("This is new weapon {0}", Namings.Weapon(modul.WeaponType)), mianAnswers);
+                    Namings.Format(Namings.DialogTag("scWeapon"), Namings.Weapon(modul.WeaponType)), mianAnswers);
                 return mesData;
             }
             else
             {
-                mianAnswers.Add(new AnswerDialogData("Ok.", null, null));
-                var mesData = new MessageDialogData("Nothing.", mianAnswers);
+                mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
+                var mesData = new MessageDialogData(Namings.DialogTag("nothing"), mianAnswers);
                 return mesData;
             }
         }
         else
         {
-            mianAnswers.Add(new AnswerDialogData("Fight.", Fight, null));
-            var mesData = new MessageDialogData("Ambush!", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.Tag("Fight"), Fight, null));
+            var mesData = new MessageDialogData(Namings.DialogTag("scAmbush"), mianAnswers);
             return mesData;
         }
     }
@@ -60,19 +60,19 @@ public class SpaceGarbageMapEvent : BaseGlobalMapEvent
     private MessageDialogData HalfGood()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData("Ok.", null, null));
+        mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
         if (SkillWork(2, ScoutsLevel))
         {
 
             var cellsToScout = MainController.Instance.MainPlayer.MapData.ScoutedCells(3, 5);
-            var d = string.Format("{0} points on global map scouted.", cellsToScout);
-            var mesData = new MessageDialogData(string.Format("This is galaxy map! {0}", d), mianAnswers);
+            var d = Namings.Format(Namings.DialogTag("scScouted"), cellsToScout);
+            var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("scMap"), d), mianAnswers);
             return mesData;
         }
         else
         {
 
-            var mesData = new MessageDialogData($"Nothing.", mianAnswers);
+            var mesData = new MessageDialogData(Namings.DialogTag("nothing"), mianAnswers);
             return mesData;
         }
 

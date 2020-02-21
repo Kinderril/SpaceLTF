@@ -35,6 +35,8 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
         WIN_AS_RDR = 25,
     };
 
+    private const string STATISTIC_STATS_BATTLE_WINS = "NumWins";
+
     public Achievement_t[] Achievements = new Achievement_t[] {
         new Achievement_t(Achievement.ACH_WIN_1_BATTLE, "Winner"),
         new Achievement_t(Achievement.ACH_WIN_10_BATTLE, "Captain"),
@@ -134,7 +136,7 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
         {
             // already set any achievements in UnlockAchievement
             var playerStat = MainController.Instance.Statistics;
-            SteamUserStats.SetStat("NumWins", playerStat.Wins);
+            SteamUserStats.SetStat(STATISTIC_STATS_BATTLE_WINS, playerStat.Wins);
             bool bSuccess = SteamUserStats.StoreStats();
             // If this failed, we never sent anything to the server, try
             // again later.

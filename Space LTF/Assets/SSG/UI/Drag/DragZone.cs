@@ -53,7 +53,7 @@ public class DragZone : MonoBehaviour
     
     public virtual void Dispose()
     {
-        Debug.Log("DragZone dispose:" + _zoneId + "  " + gameObject.name);
+//        Debug.Log("DragZone dispose:" + _zoneId + "  " + gameObject.name);
         _slots.Clear();
         Disable();
     }
@@ -212,7 +212,7 @@ public class DragZone : MonoBehaviour
     {
         if (_enabled)
         {
-            Debug.Log("drag zone Disable:" + _zoneId + "  " + gameObject.name);
+//            Debug.Log("drag zone Disable:" + _zoneId + "  " + gameObject.name);
             _enabled = false;
             _subcribed = false;
             _inventory.OnItemAdded -= OnItem;

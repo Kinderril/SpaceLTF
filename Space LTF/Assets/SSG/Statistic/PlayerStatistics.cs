@@ -275,8 +275,9 @@ public class PlayerStatistics
         _lastDifficulty = (int)(d * 100);
     }
 
-    public void AddWin(ShipConfig config)
+    public void AddWinFinal(ShipConfig config)
     {
+
         switch (config)
         {
             case ShipConfig.raiders:
@@ -295,6 +296,9 @@ public class PlayerStatistics
                 SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.WIN_AS_KRI);
                 break;
         }
+    }
+    public void AddWin(ShipConfig config)
+    {
 
         Wins++;
         if (Wins > 1)
