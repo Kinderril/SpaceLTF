@@ -40,10 +40,10 @@ public class SectorData
         _maxCount = maxCountEvents;
         StartX = startX;
         StartZ = startZ;
-//        if (startZ >= 12)
-//        {
-//            Debug.LogError("WTF");
-//        }
+        //        if (startZ >= 12)
+        //        {
+        //            Debug.LogError("WTF");
+        //        }
         Size = size;
         //        Debug.Log(Namings.TryFormat("Sub Sector X:{0} Z:{1}.     Congif:{2}", startX, startZ, shipConfig.ToString()));
         for (int i = 0; i < size; i++)
@@ -86,17 +86,22 @@ public class SectorData
 
     public static int CalcCellPower(int visited, int Size, int startPowerGalaxy, int additionalPower)
     {
-        var sectorPowerCoef = Library.SECTOR_COEF_POWER + startPowerGalaxy * 0.045f;
-        var additional = (int)(visited * Size * sectorPowerCoef);
+        var sectorPowerCoef = Library.SECTOR_COEF_POWER + startPowerGalaxy * Library.SECTOR_POWER_START_COEF;
+        var additional = (int)((visited+1) * Size * sectorPowerCoef);
         var power = startPowerGalaxy + additional + additionalPower;
-        return power;
+
+        var underLog = power * power * Library.SECTOR_POWER_LOG2;
+        var log = Mathf.Log(underLog);
+        var modif = (int)(log * Library.SECTOR_POWER_LOG1 -
+                    Library.SECTOR_POWER_LOG3);
+        return modif;
     }
 
     public virtual void Populate(int startPowerGalaxy)
     {
         IsPopulated = true;
         StartPowerGalaxy = startPowerGalaxy;
-        _power = CalcCellPower(0, startPowerGalaxy, startPowerGalaxy, 0);
+        _power = CalcCellPower(0, Size, startPowerGalaxy, 0);
         RandomizeBorders();
         var remainFreeCells = _listCells.Where(x => x.IsFreeToPopulate()).ToList();
         //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");

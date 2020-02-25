@@ -11,13 +11,14 @@ public class MovingArmy
     private bool _noStepNext;
     // private List<IItemInv> _getRewardsItems;
     // private bool _rewardsComplete = false;
+    public int Id { get; private set; }
 
     public MovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback)
     {
         var humanPlayer = MainController.Instance.MainPlayer;
         _destroyCallback = destroyCallback;
         var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
-
+        Id = Utils.GetId();
         CurCell = startCell;
         _player = new PlayerAIMovingArmy($"{ Namings.Tag("Destroyed")}:{MyExtensions.Random(3, 9999)}");
         var armyPower = humanPower * Library.MOVING_ARMY_POWER_COEF;

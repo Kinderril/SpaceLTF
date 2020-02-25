@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
 {
@@ -23,13 +24,15 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
         var objPlace = _mapController.GetCellObjectByCell(place);
         if (objPlace != null)
         {
-            MoveTo(timeToMove,objPlace, () =>
-            {
-                Owner.CurCell.CurMovingArmy = null;
-                Owner.CurCell = place;
-                Owner.CurCell.CurMovingArmy = Owner;
-                callback();
-            });
+            Debug.Log($"Id:{Owner.Id}  Moving start go to: {place.ToString()}");
+            MoveTo(timeToMove, objPlace, () =>
+             {
+                 Owner.CurCell.CurMovingArmy = null;
+                 Owner.CurCell = place;
+                 Owner.CurCell.CurMovingArmy = Owner;
+                 Debug.Log($"Id:{Owner.Id}   Moving army come to: {Owner.CurCell.ToString()}");
+                 callback();
+             });
             return true;
         }
         else

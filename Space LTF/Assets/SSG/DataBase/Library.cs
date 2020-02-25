@@ -32,8 +32,12 @@ public enum LibraryPilotUpgradeType
 
 public static class Library
 {
-    public const float SECTOR_COEF_POWER = 0.3f;
+    public const float SECTOR_COEF_POWER = 0.4f;
     public const float COEF_CORE_ARMY = 1.3f;
+    public static float SECTOR_POWER_START_COEF = 0.048f;
+    public static float SECTOR_POWER_LOG1 = 14f;
+    public static float SECTOR_POWER_LOG2 = 0.145f;
+    public static float SECTOR_POWER_LOG3 = 34f;
 
     public const int MAX_WEAPON_LVL = 5;
     public const int MAX_SPELL_LVL = 4;
@@ -407,9 +411,9 @@ public static class Library
             case SpellType.vacuum:
                 return new VacuumSpell();
             case SpellType.hookShot:
-                return new HookShotSpell();     
-//            case SpellType.mainShipBlink:
-//                return new Telepo();  
+                return new HookShotSpell();
+            //            case SpellType.mainShipBlink:
+            //                return new Telepo();  
 
             default:
                 Debug.LogError("spellType not implemented " + spellType);

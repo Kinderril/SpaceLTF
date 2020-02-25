@@ -31,10 +31,10 @@ public abstract class GlobalMapCell
         ConfigOwner = config;
         indZ = iZ;
         Id = id;
-//        if (indZ == 12)
-//        {
-//            Debug.LogError("sas");
-//        }
+        //        if (indZ == 12)
+        //        {
+        //            Debug.LogError("sas");
+        //        }
     }
 
     public ShipConfig ConfigOwner { get; private set; }
@@ -66,6 +66,7 @@ public abstract class GlobalMapCell
 
     public MessageDialogData GetDialogMain()
     {
+        Debug.Log($"Activate dialog: {this.ToString()}.   CurMovingArmy:{CurMovingArmy != null}");
         if (CurMovingArmy != null)
         {
             return DialogMovingArmy();
@@ -242,5 +243,10 @@ public abstract class GlobalMapCell
 
     public virtual void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
     {
+    }
+
+    public override string ToString()
+    {
+        return $"CEll: X:{indX} Z:{indZ}";
     }
 }

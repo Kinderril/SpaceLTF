@@ -611,7 +611,8 @@ public class GlobalMapController : MonoBehaviour
                 CheckIsAllReady();
                 SingleReset();
                 CamerasController.Instance.SetCameraTo(targetCell.ModifiedPosition);
-            }, MainObjectMoveTo);
+                Debug.Log($"My object come to: {targetCell.Cell.ToString()}.   CurMovingArmy:{targetCell.Cell.CurMovingArmy != null}");
+            }, null);
             MoveEnemies(() =>
             {
                 isEnemiesReady = true;
@@ -626,10 +627,10 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-    private void MainObjectMoveTo(Vector3 obj)
-    {
-        CamerasController.Instance.SetCameraTo(obj);
-    }
+    // private void MainObjectMoveTo(Vector3 obj)
+    // {
+    //     CamerasController.Instance.SetCameraTo(obj);
+    // }
 
     private void MoveEnemies(Action callback, GlobalMapCell playersCell, float timeToMove)
     {

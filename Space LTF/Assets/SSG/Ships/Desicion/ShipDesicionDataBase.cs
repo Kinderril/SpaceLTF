@@ -8,6 +8,7 @@ using UnityEngine;
 
 public abstract class ShipDesicionDataBase : IShipDesicion
 {
+    private const bool PERCENT_CHOOSE = false;
     public const float _defDist = 12f;
     protected ShipBase _owner;
     protected ActionType _lastAction;
@@ -419,7 +420,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 case ECommanderPriority1.MinShield:
                     if (target.Key.ShipParameters.MaxShield > 0)
                     {
-                        curShield = target.Key.ShipParameters.CurShiled / target.Key.ShipParameters.MaxShield;
+                        var p1 = target.Key.ShipParameters.CurShiled / target.Key.ShipParameters.MaxShield;
+                        curShield = PERCENT_CHOOSE ? p1 : target.Key.ShipParameters.CurShiled;
                         if (curShield < curPercent)
                         {
                             curPercent = curShield;
@@ -429,7 +431,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
 
                     break;
                 case ECommanderPriority1.MinHealth:
-                    curHp = target.Key.ShipParameters.CurHealth / target.Key.ShipParameters.MaxHealth;
+                    var p2 = target.Key.ShipParameters.CurHealth / target.Key.ShipParameters.MaxHealth;
+                    curHp = PERCENT_CHOOSE ? p2 : target.Key.ShipParameters.CurHealth;
                     if (curHp < curPercent)
                     {
                         curPercent = curHp;
@@ -439,7 +442,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 case ECommanderPriority1.MaxShield:
                     if (target.Key.ShipParameters.MaxShield > 0)
                     {
-                        curShield = target.Key.ShipParameters.CurShiled / target.Key.ShipParameters.MaxShield;
+                        var p3 = target.Key.ShipParameters.CurShiled / target.Key.ShipParameters.MaxShield;
+                        curShield = PERCENT_CHOOSE ? p3 : target.Key.ShipParameters.CurShiled;
                         if (curShield > curPercent)
                         {
                             curPercent = curShield;
@@ -449,7 +453,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
 
                     break;
                 case ECommanderPriority1.MaxHealth:
-                    curHp = target.Key.ShipParameters.CurHealth / target.Key.ShipParameters.MaxHealth;
+                    var p4 = target.Key.ShipParameters.CurHealth / target.Key.ShipParameters.MaxHealth;
+                    curHp = PERCENT_CHOOSE ? p4 : target.Key.ShipParameters.CurHealth;
                     if (curHp > curPercent)
                     {
                         curPercent = curHp;

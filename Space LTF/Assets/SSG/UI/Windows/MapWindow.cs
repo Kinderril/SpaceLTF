@@ -154,9 +154,19 @@ public class MapWindow : BaseWindow
         }
         else
         {
+            var shipsToDel = new List<SideShipGlobalMapInfo>();
             foreach (var sideShipGlobalMapInfo in _sideInfos)
             {
                 sideShipGlobalMapInfo.UpToDate();
+                if (sideShipGlobalMapInfo.IsDead())
+                {
+                    shipsToDel.Add(sideShipGlobalMapInfo);
+                }
+            }
+
+            foreach (var sideShipGlobalMapInfo in shipsToDel)
+            {
+                OnAddShip(sideShipGlobalMapInfo.pilot, false);
             }
         }
     }

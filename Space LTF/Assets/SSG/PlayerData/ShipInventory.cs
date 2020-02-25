@@ -278,10 +278,15 @@ public class ShipInventory : IStartShipParams, IInventory
         return false;
     }
 
+    public bool IsDead()
+    {
+        return CriticalDamages >= Library.CRITICAL_DAMAGES_TO_DEATH;
+    }
+
     public void AddCriticalyDamage()
     {
         CriticalDamages++;
-        if (CriticalDamages >= Library.CRITICAL_DAMAGES_TO_DEATH)
+        if (IsDead())
         {
             Debug.Log("Ship fully destroyed cause critical damages");
             MainController.Instance.MainPlayer.Army.RemoveShip(this);

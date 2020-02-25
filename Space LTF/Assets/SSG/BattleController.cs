@@ -176,7 +176,7 @@ public class BattleController : Singleton<BattleController>
         InputManager.Init(InGameMainUI, GreenCommander);
 
         GreenCommander.LaunchAll(ShipInited, CommanderDeath);
-        RedCommander.LaunchAll(ShipInited, CommanderDeath);
+        RedCommander.LaunchAll(ShipInited, CommanderDeathRed);
 
         //        Time.timeScale = 1f;
         State = BattleState.process;
@@ -185,11 +185,16 @@ public class BattleController : Singleton<BattleController>
         WindowManager.Instance.LoadingScreen.gameObject.SetActive(false);
         await Task.Yield();
 
-        CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition,-1);
+        CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition, -1);
         var ambientSource = CamerasController.Instance.GameCamera.SourceAmbient;
         ambientSource.clip = DataBaseController.Instance.AudioDataBase.AmbientsClips.RandomElement();
         ambientSource.volume = 0.2f;
         ambientSource.Play();
+    }
+
+    private void CommanderDeathRed(Commander obj)
+    {
+        
     }
 
     private void RandomizeColorAndAng()
@@ -256,20 +261,15 @@ public class BattleController : Singleton<BattleController>
             if (lastShip.TeamIndex == TeamIndex.green)
             {
                 LastWinner = EndBattleType.lose;
+                WaitEndBattle();
+                return;
             }
-            else
-            {
-                LastWinner = EndBattleType.win;
-            }
-            WaitEndBattle();
-            return;
         }
 
         if (SideGreen.Count == 0 || SideRed.Count == 0)
         {
             LastWinner = (SideGreen.Count >= 1) ? EndBattleType.win : EndBattleType.lose;
             WaitEndBattle();
-            return;
         }
     }
 
@@ -280,12 +280,12 @@ public class BattleController : Singleton<BattleController>
             WaitEndBattle();
             return;
         }
-        if (SideRed.Count == 1 && SideRed[0].ShipParameters.StartParams.ShipType == ShipType.Base)
-        {
-            CanFastEnd = true;
-            LastWinner = EndBattleType.win;
-            // InGameMainUI.CanFastEnd();
-        }
+        // if (SideRed.Count == 1 && SideRed[0].ShipParameters.StartParams.ShipType == ShipType.Base)
+        // {
+        //     CanFastEnd = true;
+        //     LastWinner = EndBattleType.win;
+        //     // InGameMainUI.CanFastEnd();
+        // }
     }
 
     private bool IsLoose()

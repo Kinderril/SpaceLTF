@@ -114,6 +114,10 @@ public class SideShipGlobalMapInfo : MonoBehaviour
             criticalDamage.gameObject.SetActive(isActive);
         }
     }
+    public bool IsDead()
+    {
+        return _ship.Ship.IsDead();
+    }
 
     public void Dispose()
     {
@@ -122,4 +126,5 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         _ship.Pilot.Stats.OnRankChange -= OnRankChange;
         _ship.Ship.OnShipCriticalChange -= OnShipCriticalChange;
     }
+
 }
