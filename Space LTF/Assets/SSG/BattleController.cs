@@ -185,7 +185,7 @@ public class BattleController : Singleton<BattleController>
         WindowManager.Instance.LoadingScreen.gameObject.SetActive(false);
         await Task.Yield();
 
-        CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition);
+        CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition,-1);
         var ambientSource = CamerasController.Instance.GameCamera.SourceAmbient;
         ambientSource.clip = DataBaseController.Instance.AudioDataBase.AmbientsClips.RandomElement();
         ambientSource.volume = 0.2f;

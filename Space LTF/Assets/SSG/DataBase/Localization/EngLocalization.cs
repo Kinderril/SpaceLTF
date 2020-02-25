@@ -505,7 +505,7 @@ public static class EngLocalization
         {"DemoStart", "This is not final version on game, something can change later."},
         {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
 
-        {"dialog_ok", "Ok"},
+        {"dialog_Ok", "Ok"},
         {"dialog_MovingArmyStart", "You have been occupied by special force. You have no chanse to run."},
 
         {"dialog_MovingArmyFight", "Fight"},

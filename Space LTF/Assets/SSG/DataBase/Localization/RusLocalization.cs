@@ -496,7 +496,7 @@ public static class RusLocalization
         {"RepairCompete","Repair Compete"},
         {"RepairStation","Repair Station"},
 
-        {"dialog_ok", "Ок"},
+        {"dialog_Ok", "Ок"},
         {"dialog_MovingArmyStart", "Вы встретились со спец силами и окружены."},
 
         {"dialog_MovingArmyFight", "В битву"},

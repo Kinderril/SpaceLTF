@@ -49,7 +49,7 @@ public class ShieldOffSpell : BaseSpellModulInv
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 
-    public override bool ShowLine => true;
+    public override bool ShowLine => false;
     public override float ShowCircle => rad;
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {

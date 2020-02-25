@@ -80,9 +80,16 @@ public class CameraController : MonoBehaviour
 
     public void SetCameraTo(Vector3 v, float period)
     {
-        startMoveTime = Time.time;
-        _targetPos = v;
-        _period = period;
+        if (period > 0)
+        {
+            startMoveTime = Time.time;
+            _targetPos = v;
+            _period = period;
+        }
+        else
+        {
+            GameCameraHolder.transform.position = v;
+        }
     }
 
     public void MoveMainCamToDir(Vector3 keybordDir)
