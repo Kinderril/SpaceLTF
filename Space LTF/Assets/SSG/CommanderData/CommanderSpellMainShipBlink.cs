@@ -26,7 +26,6 @@ public class CommanderSpellMainShipBlink : ISpellToGame
     {
         //ADD ACTION HERE
     };
-
     public BulletDestroyDelegate BulletDestroyDelegate { get; }
 
     public CastActionSpell CastSpell => (target, origin, weapon, shootpos, bullestartparameters) =>
@@ -34,7 +33,7 @@ public class CommanderSpellMainShipBlink : ISpellToGame
 
         var pos = target.Position;
         var distFromCenter = (pos - center).sqrMagnitude;
-        if (distFromCenter   <MaxRadiusSqrt)
+        if (distFromCenter < MaxRadiusSqrt)
         {
             CreateBulletAction(target, origin, weapon, shootpos, bullestartparameters);
             EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.BlinkPlaceEffect, pos, 3f);
@@ -65,4 +64,5 @@ public class CommanderSpellMainShipBlink : ISpellToGame
     {
         get { return pos => true; }
     }
+
 }

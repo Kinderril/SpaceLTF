@@ -166,12 +166,13 @@ public class Commander
     {
         var aiPlayer = Player as PlayerAI;
         Connectors.Clear();
+        float turretBaseSideLenght = 5f;
         if (aiPlayer != null)
         {
             switch (aiPlayer.GetTurretBehaviour())
             {
                 case ETurretBehaviour.stayAtPoint:
-                    var halfTurrets = 1 + countTurrets / 2;
+                    var halfTurrets = countTurrets / 2;
                     for (int i = 0; i < countTurrets; i++)
                     {
                         var element =
@@ -179,13 +180,13 @@ public class Commander
                         Connectors.Add(element);
                         element.Init();
                         Vector3 side;
-                        if (i <= halfTurrets)
+                        if (i < halfTurrets)
                         {
-                            side = Utils.Rotate90(dirToEnemyNorm, SideTurn.left) * lineDelta * i;
+                            side = Utils.Rotate90(dirToEnemyNorm, SideTurn.left) * turretBaseSideLenght * (i + 1);
                         }
                         else
                         {
-                            side = Utils.Rotate90(dirToEnemyNorm, SideTurn.right) * lineDelta * (countTurrets - i);
+                            side = Utils.Rotate90(dirToEnemyNorm, SideTurn.right) * turretBaseSideLenght * (countTurrets - i);
                         }
                         var shipPosition = startPosition + side + dirToEnemyNorm * (rowDelta + 4);
                         element.transform.position = shipPosition;

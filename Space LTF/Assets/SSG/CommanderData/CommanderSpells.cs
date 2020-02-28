@@ -21,9 +21,24 @@ public class CommanderSpells
         var delay = 20 - _commander.Player.Parameters.EnginePower.Level * 2;
 
         ShipBase mainShip = _commander.MainShip;
+
+        Vector3 posCutter(Vector3 maxdistpos, Vector3 targetdistpos)
+        {
+            var distFromShip = (targetdistpos - mainShip.Position).magnitude;
+            if (distFromShip > radius)
+            {
+                return maxdistpos;
+            }
+            else
+            {
+                return targetdistpos;
+            }
+        }
+
         var priority = new CommanderSpellMainShipBlink(radius, mainShip);
         var spellInGame = new SpellInGame(priority, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
-            Namings.Tag("MainShipBlinkName"), 0, 0, SpellType.mainShipBlink, radius, Namings.Tag("MainShipBlinkDesc"), (pos, distPos) => distPos, delay);
+            Namings.Tag("MainShipBlinkName"), 0, 0, SpellType.mainShipBlink, radius, Namings.Tag("MainShipBlinkDesc"),
+            posCutter, delay);
         AllSpells.Add(spellInGame);
     }
     public bool TryCastspell(SpellInGame spell, Vector3 trg)

@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class AICommander
 {
-    //    private Commander _commander;
+    private Commander _commander;
     private bool enable = false;
     private BaseAISpell[] _spells;
     private AICommanderMainShip _mainShip;
     private float _createdTime;
     private ShipControlCenter _shipControl;
+    private const float CAST_PERIOD = 4f;
 
-    public AICommander(ShipControlCenter shipControl)
+    public AICommander(ShipControlCenter shipControl, Commander commanderOwner)
     {
         _createdTime = Time.time;
-        //        _commander = commander;
+        _commander = commanderOwner;
         _shipControl = shipControl;
         var spellTmp = new List<BaseAISpell>();
         enable = true;
@@ -100,13 +101,14 @@ public class AICommander
 
     public void ManualUpdate()
     {
-        if (enable && Time.time - _createdTime > 4)
+        if (enable && Time.time - _createdTime > CAST_PERIOD)
         {
+            var myArmyCount = _commander.Ships.Count;
             for (int i = 0; i < _spells.Length; i++)
             {
                 var spell = _spells[i];
                 spell.ManualUpdate();
-                spell.PeriodlUpdate();
+                spell.PeriodlUpdate(myArmyCount);
             }
 
             _mainShip.Update();

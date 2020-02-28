@@ -4,7 +4,7 @@ public abstract class BaseAISpell
 {
     private float _delay = 1f;
     private float _nextCheck = 1f;
-//    protected Commander _commander;
+    //    protected Commander _commander;
     protected SpellInGame _spellData;
     protected ShipControlCenter _owner;
     protected BulleStartParameters _bulletStartParams;
@@ -39,16 +39,16 @@ public abstract class BaseAISpell
     {
     }
 
-    public void PeriodlUpdate()
+    public void PeriodlUpdate(int myArmyCount)
     {
         if (_nextCheck < Time.time)
         {
             _nextCheck = Time.time + MyExtensions.GreateRandom(_delay);
-            PeriodInnerUpdate();
+            PeriodInnerUpdate(myArmyCount);
         }
     }
 
-    protected virtual void PeriodInnerUpdate()
+    protected virtual void PeriodInnerUpdate(int myArmyCount)
     {
 
     }
@@ -88,11 +88,17 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
 #endif
 
     }
-    protected override void PeriodInnerUpdate()
+
+    protected virtual bool CanCastByCount(int myArmyCount)
+    {
+        return true;
+    }
+
+    protected override void PeriodInnerUpdate(int myArmyCount)
     {
         Vector3 trg;
         //        Debug.LogError($"Cast spell 1 {this}");
-        if (CanCast())
+        if (CanCast() && CanCastByCount(myArmyCount))
         {
             if (IsEnemyClose(out trg))
             {

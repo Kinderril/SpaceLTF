@@ -12,7 +12,7 @@ public class MineFieldSpellAI : BaseAISpell<MineFieldSpell>
 
     }
 
-    protected override void PeriodInnerUpdate()
+    protected override void PeriodInnerUpdate(int myArmyCount)
     {
         if (CanCast())
         {
@@ -30,7 +30,7 @@ public class MineFieldSpellAI : BaseAISpell<MineFieldSpell>
 
     private void FindCells()
     {
-        
+
         var cc = BattleController.Instance.Battlefield.CellController;
         var halfX = cc.Data.MaxIx / 2;
         var halfZ = cc.Data.MaxIz / 2;
@@ -40,7 +40,7 @@ public class MineFieldSpellAI : BaseAISpell<MineFieldSpell>
     }
 
     private bool IsEnemyClose(out Vector3 trg)
-    {                                                                
+    {
         float sDist;
         var ship = BattleController.Instance.ClosestShipToPos(_owner.Position, oIndex, out sDist);
         if (sDist < ShootDistSqrt)

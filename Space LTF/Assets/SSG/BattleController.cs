@@ -168,7 +168,7 @@ public class BattleController : Singleton<BattleController>
             if (redCommanderShip.Value.ShipParameters.StartParams.ShipType == ShipType.Base)
             {
                 var controlCenter = redCommanderShip.Value as ShipControlCenter;
-                var aiCommander = new AICommander(controlCenter);
+                var aiCommander = new AICommander(controlCenter, RedCommander);
                 AICommander.Add(aiCommander);
             }
         }
@@ -194,7 +194,7 @@ public class BattleController : Singleton<BattleController>
 
     private void CommanderDeathRed(Commander obj)
     {
-        
+
     }
 
     private void RandomizeColorAndAng()

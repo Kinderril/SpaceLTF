@@ -16,11 +16,11 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         _maxDist = spellRad;
         ShootDistSqrt = spellRad * spellRad;
     }
-    protected override void PeriodInnerUpdate()
+    protected override void PeriodInnerUpdate(int myArmyCount)
     {
         Vector3 trg;
-//        Debug.LogError($"Cast spell 1 {this}");
-        if (CanCast())
+        //        Debug.LogError($"Cast spell 1 {this}");
+        if (CanCast() && myArmyCount > 1)
         {
             if (IsEnemyClose(out trg))
             {
@@ -47,7 +47,7 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         {
             Cast(v);
             _owner.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
-//            Debug.LogError($"_spell.TryCast {this}");
+            //            Debug.LogError($"_spell.TryCast {this}");
         }
     }
 

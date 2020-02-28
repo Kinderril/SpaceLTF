@@ -34,25 +34,25 @@ public static class ArmyCreatorLibrary
             new List<WeaponType>() { WeaponType.impulse },
             new List<SimpleModulType>() { SimpleModulType.WeaponSpeed, SimpleModulType.damageMines },
             new List<SimpleModulType>() { SimpleModulType.WeaponCrit, SimpleModulType.WeaponSpray, SimpleModulType.autoRepair },
-            new List<SpellType>() { SpellType.artilleryPeriod, SpellType.mineField });
+            new List<SpellType>() { SpellType.artilleryPeriod, SpellType.engineLock });
 
         var fedManyLasers = new ArmyCreatorData(new List<ShipConfig>() { ShipConfig.federation },
             new List<WeaponType>() { WeaponType.laser },
             new List<SimpleModulType>() { SimpleModulType.WeaponSpeed, SimpleModulType.systemMines },
             new List<SimpleModulType>() { SimpleModulType.WeaponMultiTarget, SimpleModulType.WeaponSpray, SimpleModulType.WeaponShootPerTime },
-            new List<SpellType>() { SpellType.artilleryPeriod, SpellType.mineField });
+            new List<SpellType>() { SpellType.artilleryPeriod, SpellType.engineLock });
 
         var kriosEMIShoots = new ArmyCreatorData(new List<ShipConfig>() { ShipConfig.krios },
             new List<WeaponType>() { WeaponType.eimRocket },
             new List<SimpleModulType>() { SimpleModulType.engineLocker, SimpleModulType.systemMines },
             new List<SimpleModulType>() { SimpleModulType.WeaponCrit, SimpleModulType.WeaponShootPerTime, SimpleModulType.ShieldDouble },
-            new List<SpellType>() { SpellType.rechargeShield, SpellType.engineLock });
+            new List<SpellType>() { SpellType.mineField, SpellType.rechargeShield });
 
         var kriosImpulse = new ArmyCreatorData(new List<ShipConfig>() { ShipConfig.krios },
             new List<WeaponType>() { WeaponType.impulse },
             new List<SimpleModulType>() { SimpleModulType.frontShield, SimpleModulType.ShipDecreaseSpeed },
             new List<SimpleModulType>() { SimpleModulType.WeaponCrit, SimpleModulType.blink, SimpleModulType.ShieldDouble },
-            new List<SpellType>() { SpellType.rechargeShield, SpellType.engineLock });
+            new List<SpellType>() { SpellType.mineField, SpellType.rechargeShield });
 
         var ocrons1 = new ArmyCreatorData(new List<ShipConfig>() { ShipConfig.ocrons },
             new List<WeaponType>() { WeaponType.eimRocket },
@@ -64,13 +64,13 @@ public static class ArmyCreatorLibrary
             new List<WeaponType>() { WeaponType.casset },
             new List<SimpleModulType>() { SimpleModulType.antiPhysical, SimpleModulType.antiEnergy, SimpleModulType.ShipSpeed },
             new List<SimpleModulType>() { SimpleModulType.armor, SimpleModulType.WeaponSelfDamage },
-            new List<SpellType>() { SpellType.repairDrones, SpellType.distShot });
+            new List<SpellType>() { SpellType.distShot, SpellType.repairDrones });
 
         var droids = new ArmyCreatorData(new List<ShipConfig>() { ShipConfig.droid },
             new List<WeaponType>() { WeaponType.casset, WeaponType.laser, WeaponType.eimRocket, WeaponType.rocket, WeaponType.casset, WeaponType.impulse },
             new List<SimpleModulType>() { SimpleModulType.ShipSpeed, SimpleModulType.ShipDecreaseSpeed, SimpleModulType.ShipTurnSpeed },
             new List<SimpleModulType>() { SimpleModulType.armor, SimpleModulType.WeaponCrit, SimpleModulType.WeaponSpray, },
-            new List<SpellType>() { SpellType.repairDrones, SpellType.distShot });
+            new List<SpellType>() { SpellType.distShot, SpellType.repairDrones });
 
         _datas.Add(ShipConfig.mercenary, new List<ArmyCreatorData>() { merc1, merc2 });
         _datas.Add(ShipConfig.raiders, new List<ArmyCreatorData>() { raidFireRockets, raidCassetBurner });
