@@ -64,13 +64,16 @@ public abstract class GlobalMapCell
     [CanBeNull]
     protected abstract MessageDialogData GetDialog();
 
-    public MessageDialogData GetDialogMain()
+    public MessageDialogData GetDialogMain(out bool activateAnyway)
     {
         Debug.Log($"Activate dialog: {this.ToString()}.   CurMovingArmy:{CurMovingArmy != null}");
         if (CurMovingArmy != null)
         {
+            activateAnyway = true;
             return DialogMovingArmy();
         }
+
+        activateAnyway = false;
         return GetDialog();
     }
 

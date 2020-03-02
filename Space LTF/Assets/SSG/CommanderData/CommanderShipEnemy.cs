@@ -12,7 +12,7 @@ public class CommanderShipEnemy
         this.BaitPriority = baitPriority;
     }
 
-    public void SetPriority(bool val,bool isBait)
+    public void SetPriority(bool val, bool isBait)
     {
         IsPriority = val;
         if (isBait)

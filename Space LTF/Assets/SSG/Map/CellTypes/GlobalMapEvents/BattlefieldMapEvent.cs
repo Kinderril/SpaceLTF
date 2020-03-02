@@ -132,7 +132,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
 
     private void GetItemsAfterBattle(bool low)
     {
-        var m = Library.CreateWeapon(low);
+        var m = Library.CreateDamageWeapon(low);
         var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeWeaponSlot(out var slot);
         if (canAdd)
         {

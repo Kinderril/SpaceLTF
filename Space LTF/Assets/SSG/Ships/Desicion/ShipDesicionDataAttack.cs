@@ -16,16 +16,23 @@ public class ShipDesicionDataAttack : ShipDesicionDataBase
     }
     
 
-    protected override ActionType DoAttackAction(ShipBase ship)
+    protected override ActionType? DoAttackAction(ShipBase ship)
     {
         var attackOptional = AttackOrAttackSide(ship);
-        return DoOrWait(attackOptional, ship);
+        var attack =  DoOrWait(attackOptional, ship);
+
+        if (attack.HasValue)
+        {
+            return attack.Value;
+        }
+
+        return null;
     }
 
     protected override ActionType OptionalTask(out ShipBase ship)
     {
         ship = null;
-        return ActionType.waitEnemySec;
+        return ActionType.afterAttack;
     }
 
     protected override bool HaveEnemyInDangerZone(out ShipBase ship)

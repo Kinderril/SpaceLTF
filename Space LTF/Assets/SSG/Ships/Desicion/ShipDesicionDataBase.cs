@@ -10,6 +10,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
 {
     private const bool PERCENT_CHOOSE = false;
     public const float _defDist = 12f;
+    public const float POSIBLE_UNLOAD_WEAPONS = 2f;
     protected ShipBase _owner;
     protected ActionType _lastAction;
     public EGlobalTactics GlobalTactics { get; private set; }
@@ -58,18 +59,6 @@ public abstract class ShipDesicionDataBase : IShipDesicion
     public event Action OnChagePriority;
 
 
-    protected ActionType RepairOrGoHide()
-    {
-        int dist;
-        AICell cell = _owner.CellController.Data.FindClosestCellByType(_owner.Cell, CellType.Clouds, false, out dist);
-        if (cell != null && dist <= 2)
-        {
-            return ActionType.goToHide;
-        }
-        return ActionType.repairAction;
-    }
-
-
     public ActionType CalcTask(out ShipBase ship)
     {
         if (IsOutOField())
@@ -88,17 +77,47 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         {
             if (HaveEnemyInDangerZone(out ship))
             {
-                return DoAttackAction(ship);
+                var attack = DoAttackAction(ship);
+                if (attack.HasValue)
+                {
+                    return attack.Value;
+                }
             }
+
+            if (_owner.HaveClosestDamagedFriend(out ship))
+            {
+                if (_owner.WeaponsController.AnySupportWeaponIsLoaded(0f, out var fullLoadSupport))
+                {
+                    if (ship != null)
+                    {
+                        if (fullLoadSupport)
+                        {
+                            return ActionType.support;
+                        }
+                    }
+                }
+            }
+
             return OptionalTask(out ship);
         }
-        else
-        {
-            ship = null;
-            return ActionType.evade;
 
+        if (_owner.HaveClosestDamagedFriend(out ship))
+        {
+            if (_owner.WeaponsController.AnySupportWeaponIsLoaded(0f, out var fullLoadSupport))
+            {
+                if (ship != null)
+                {
+                    if (fullLoadSupport)
+                    {
+                        return ActionType.support;
+                    }
+                }
+            }
         }
+        ship = null;
+        return ActionType.evade;
     }
+
 
     public BaseAction ActivateTask(ActionType task, ShipBase target)
     {
@@ -114,6 +133,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 return new StayAttackAction(_owner, _owner.Enemies[target]);
             case ActionType.attack:
                 return new AttackAction(_owner, _owner.Enemies[target]);
+            case ActionType.support:
+                return new SupportAction(_owner, _owner.Commander.GetSameSide(target, _owner));
             case ActionType.attackHalfLoop:
                 return new AttackTrickAction(_owner, _owner.Enemies[target]);
             case ActionType.moveToBase:
@@ -170,7 +191,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         return null;
     }
 
-    protected abstract ActionType DoAttackAction(ShipBase ship);
+    protected abstract ActionType? DoAttackAction(ShipBase ship);
     protected abstract ActionType OptionalTask(out ShipBase ship);
     protected abstract bool HaveEnemyInDangerZone(out ShipBase ship);
     public abstract string GetName();
@@ -181,9 +202,9 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         return ActionType.goToHide;
     }
 
-    protected ActionType DoOrWait(ActionType defaultAction, ShipBase ship, ActionType defNo = ActionType.afterAttack)
+    protected ActionType? DoOrWait(ActionType defaultAction, ShipBase ship)
     {
-        if (_owner.WeaponsController.AnyWeaponIsLoaded(2f, out var fullLoad))
+        if (_owner.WeaponsController.AnyDamagedWeaponIsLoaded(POSIBLE_UNLOAD_WEAPONS, out var fullLoad))
         {
             if (ship != null && ship.VisibilityData.Visible)
             {
@@ -198,15 +219,9 @@ public abstract class ShipDesicionDataBase : IShipDesicion
             }
         }
 
-        //        if (_owner.WeaponsController.AnyWeaponIsLoaded() && ship != null && ship.VisibilityData.Visible)
-        //        {
-        //            return def;
-        //        }
-        //        if (_owner.Locator.DangerEnemy != null)
-        //        {
-        //            return ActionType.evade;
-        //        }
-        return defNo;
+
+
+        return null;
     }
 
     protected ActionType AttackOrAttackSide(ShipBase target)
@@ -379,10 +394,10 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         foreach (var shipInfo in posibleTargets) //_owner.Enemies)
         {
             var ship = shipInfo.Value;
-            if (ship.CommanderShipEnemy.IsPriority)
-            {
-                return ship;
-            }
+            // if (ship.CommanderShipEnemy.IsPriority)
+            // {
+            //     return ship;
+            // }
             var cRating = ShipValue(ship);
             if (cRating > rating)
             {

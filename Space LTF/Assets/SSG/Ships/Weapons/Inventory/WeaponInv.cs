@@ -32,12 +32,14 @@ public class WeaponInventoryParameters
     public int shootPerTime;
     public float _bulletSpeed;
     public float AimRadius;
+    public TargetType TargetType;
 
 
     public WeaponInventoryParameters(int shieldDamage, int bodyDamage, float shieldPreLevelDamage, float bodyPreLevelDamage, float sectorAngle, float reloadSec,
         float delayBetweenShootsSec,
-        int shootPerTime, float _bulletSpeed, float AimRadius, float turnSpeed = 0f)
+        int shootPerTime, float _bulletSpeed, float AimRadius, float turnSpeed, TargetType targetType)
     {
+        TargetType = targetType;
         this.shieldPreLevelDamage = shieldPreLevelDamage;
         this.bodyPreLevelDamage = bodyPreLevelDamage;
         this.AimRadius = AimRadius;
@@ -78,6 +80,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     public float delayBetweenShootsSec;
     //    public int shootPerTime;
     public WeaponType WeaponType;
+    public TargetType TargetType = TargetType.Enemy;
     public bool isRoundAng;
     public readonly float fixedDelta;
     // private CurWeaponDamage _currentDamage;
@@ -127,14 +130,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         this.ReloadSec = parameters.reloadSec;
         this.delayBetweenShootsSec = parameters.delayBetweenShootsSec;
         this._aimRadius = parameters.AimRadius;
-        //        if (WeaponType == WeaponType.beam)
-        //        {
-        //            this.RadiusShoot = AimRadius;
-        //        }
-        //        else
-        //        {
-        //            this.RadiusShoot = AimRadius * 1.6f;
-        //        }
+        TargetType = parameters.TargetType;
         this._radiusShoot = _aimRadius * 1.6f;
         this.sectorAngle = parameters.sectorAngle;
         //        this.MaxCharges = MaxCharges;
@@ -213,7 +209,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         set { _aimRadius = value; }
     }
 
-    public void BulletCreate(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos,
+    public virtual void BulletCreate(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos,
         BulleStartParameters bulleStartParameters)
     {
         //        var dirToShoot = Owner.LookDirection;

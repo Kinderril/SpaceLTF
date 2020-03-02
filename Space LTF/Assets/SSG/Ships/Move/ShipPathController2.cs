@@ -44,10 +44,10 @@ public class ShipPathController2
     private const float _maxTimeSpends = 0.25f;
     private Vector3 _lastDirection;
 
-    public Vector3 GetCurentDirection(ShipBase target, out bool exactlyPoint, out bool goodDir, out float speed)
+    public Vector3 GetCurentDirection(IShipData target, out bool exactlyPoint, out bool goodDir, out float speed)
     {
-        var isInBlack = _owner.Enemies[target].IsInBack();
-        var targetDirection = GetCurentDirection(target.Position, out exactlyPoint, out goodDir, out speed);
+        var isInBlack = target.IsInBack();
+        var targetDirection = GetCurentDirection(target.ShipLink.Position, out exactlyPoint, out goodDir, out speed);
         targetDirection = Utils.NormalizeFastSelf(targetDirection);
         if (_timeSpends < _maxTimeSpends && isInBlack)
         {

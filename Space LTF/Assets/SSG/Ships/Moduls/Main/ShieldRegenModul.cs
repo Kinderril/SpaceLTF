@@ -5,7 +5,7 @@ using System.Text;
 
 
 [System.Serializable]
-public class ShieldRegenModul : BaseModul
+public class ShieldRegenModul : ActionModulInGame
 {
     private const float  SHILD_PER_MIN_BASE = 5f;
     private const float  SHILD_PER_MIN_LEVEL = 4f;

@@ -1,9 +1,6 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -13,9 +10,10 @@ public class ShopInventory : PlayerInventory
     private const int MIN_WEAPONS = 3;
     private const int MAX_WEAPONS = 6;
     private const int MIN_MODULS = 1;
-    private const int Max_MODULS = 4; 
+    private const int Max_MODULS = 4;
     private const int MIN_SPELLS = 1;
     private const int Max_SPELLS = 2;
+    private const float CHANCE_SUPPORT_1 = .6f;
 
     private const float VALUABLE_COEF = 1.5f;
     private const float UNVALUABLE_COEF = 0.5f;
@@ -30,7 +28,7 @@ public class ShopInventory : PlayerInventory
     public List<SimpleModulType> ValuableTypesModulsList => _valuableTypesModuls;
     public List<SimpleModulType> NotValuableTypesModulsList => _notValuableTypesModuls;
 
-    public ShopInventory([NotNull] Player player) 
+    public ShopInventory([NotNull] Player player)
         : base(player)
     {
 
@@ -38,7 +36,7 @@ public class ShopInventory : PlayerInventory
 
     public static List<WeaponType> ValuableTypesWeapon(ShipConfig config)
     {
-        List<WeaponType> valuableTypesWeapon  = new List<WeaponType>();
+        List<WeaponType> valuableTypesWeapon = new List<WeaponType>();
         switch (config)
         {
             case ShipConfig.raiders:
@@ -72,7 +70,7 @@ public class ShopInventory : PlayerInventory
     }
     public static List<SimpleModulType> ValuableTypesModuls(ShipConfig config)
     {
-        List<SimpleModulType> valuableTypesWeapon  = new List<SimpleModulType>();
+        List<SimpleModulType> valuableTypesWeapon = new List<SimpleModulType>();
         switch (config)
         {
             case ShipConfig.raiders:
@@ -106,7 +104,7 @@ public class ShopInventory : PlayerInventory
     }
     public static List<SimpleModulType> NotValuableTypesModuls(ShipConfig config)
     {
-        List<SimpleModulType> valuableTypesWeapon  = new List<SimpleModulType>();
+        List<SimpleModulType> valuableTypesWeapon = new List<SimpleModulType>();
         switch (config)
         {
             case ShipConfig.raiders:
@@ -137,10 +135,10 @@ public class ShopInventory : PlayerInventory
         }
 
         return valuableTypesWeapon;
-    } 
+    }
     public static List<WeaponType> NotValuableTypesWeapon(ShipConfig config)
     {
-        List<WeaponType> notValuableTypesWeapon  = new List<WeaponType>();
+        List<WeaponType> notValuableTypesWeapon = new List<WeaponType>();
         switch (config)
         {
             case ShipConfig.raiders:
@@ -175,7 +173,7 @@ public class ShopInventory : PlayerInventory
         return true;
     }
 
-    public void FillItems(float power,ShipConfig config)
+    public void FillItems(float power, ShipConfig config)
     {
         try
         {
@@ -189,10 +187,18 @@ public class ShopInventory : PlayerInventory
             bool goodPower = power > 22;
             for (var i = 0; i < weaponsCount; i++)
             {
-                var w = Library.CreateWeapon(goodPower);
+                var w = Library.CreateDamageWeapon(goodPower);
                 w.CurrentInventory = this;
                 Weapons.Add(w);
             }
+
+            if (MyExtensions.IsTrue01(CHANCE_SUPPORT_1))
+            {
+                var w = Library.CreateSupportWeapon(1);
+                w.CurrentInventory = this;
+                Weapons.Add(w);
+            }
+
 
             WDictionary<int> levels = new WDictionary<int>(new Dictionary<int, float>()
             {

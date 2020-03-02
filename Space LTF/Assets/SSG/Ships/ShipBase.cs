@@ -66,7 +66,7 @@ public class ShipBase : MovingObject
     public ShipParameters ShipParameters { get; private set; }
     public ShipModuls ShipModuls { get; private set; }
     //    public AimingBox AimingBox;
-    public ShipPersonalInfo Target;
+    public IShipData Target;
     public TeamIndex TeamIndex;
     public AICell Cell;
     public SelfCamera SelfCamera;
@@ -455,7 +455,7 @@ public class ShipBase : MovingObject
 
     }
 
-    public void MoveByWay(ShipBase target)
+    public void MoveByWay(IShipData target)
     {
         DebugTurnData = null;
         var direction4 = PathController.GetCurentDirection(target, out var exactlyPoint, out var goodDir, out var speedRecommended);
@@ -547,9 +547,9 @@ public class ShipBase : MovingObject
         SetAction(a);
     }
 
-    public void AddEnemy(ShipBase enemy, bool isEnemy, CommanderShipEnemy commanderShipEnemy)
+    public void AddEnemy(ShipBase enemy, bool isEnemy)
     {
-        var enemyInfo = new ShipPersonalInfo(this, enemy, commanderShipEnemy);
+        var enemyInfo = new ShipPersonalInfo(this, enemy);
         var dir = enemy.Position - Position;
         enemyInfo.SetParams(dir, dir.magnitude);
         if (isEnemy)
@@ -608,6 +608,37 @@ public class ShipBase : MovingObject
             effect.transform.LookAt(posToLookAt, Vector3.up);
         }
         weapon.ApplyToShip(ShipParameters, this, bullet);
+    }
+    public bool HaveClosestDamagedFriend(out ShipBase ship)
+    {
+        float dist = Single.MaxValue;
+        ship = null;
+        bool haveVal = false;
+        // _owner.WeaponsController.AnyDamagedWeaponIsLoaded()
+        foreach (var shipTest in Commander.Ships)
+        {
+            var s = (shipTest.Value);
+            if (s.Id != Id)
+            {
+                var hpPercent = s.ShipParameters.CurHealth / s.ShipParameters.MaxHealth;
+                var spPercent = s.ShipParameters.CurShiled / s.ShipParameters.MaxShield;
+                bool hpWantHeal = hpPercent < .6f;
+                bool spWantHeal = spPercent < .6f && s.ShipParameters.MaxShield > 0f;
+                if ((hpWantHeal && WeaponsController.SupportWeaponsBuffPosibilities.BodyHeal)
+                    || (spWantHeal && WeaponsController.SupportWeaponsBuffPosibilities.ShieldHeal) ||
+                    WeaponsController.SupportWeaponsBuffPosibilities.Buff)
+                {
+                    var sDistTmp = (s.Position - Position).sqrMagnitude;
+                    if (sDistTmp < dist)
+                    {
+                        dist = sDistTmp;
+                        ship = s;
+                        haveVal = true;
+                    }
+                }
+            }
+        }
+        return haveVal;
     }
 
     public void SetAction(BaseAction nextAction)

@@ -70,7 +70,7 @@ public  class DebugShopCatcher : MonoBehaviour
             var WeaponType1 = s;
             b.Button.onClick.AddListener(() =>
             {
-                var weapon = Library.CreateWeapon(WeaponType1);
+                var weapon = Library.CreateWeaponByType(WeaponType1);
                 _debugStartBattleWindow.SetWeapon(weapon);
             });
         }

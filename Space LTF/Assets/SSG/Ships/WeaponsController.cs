@@ -6,27 +6,25 @@ using UnityEngine;
 public class WeaponsController
 {
     private List<WeaponPlace> weaponPosition;
-    private List<WeaponInGame> _weapons = new List<WeaponInGame>(5);
+    private List<WeaponInGame> _allWeapons = new List<WeaponInGame>(5);
+    private List<WeaponInGame> _damagedWeapons = new List<WeaponInGame>(5);
+    private List<WeaponInGame> _supportWeapons = new List<WeaponInGame>(5);
     private WeaponAimedType[] _weaponsToAim;
     private ShipBase _owner;
     private float _maxAttackRadius = -1f;
-    public float LastShootTime { get; private set; }
+    public SupportWeaponsBuffPosibilities SupportWeaponsBuffPosibilities;
+
+
     private bool _enable = true;
     public event Action<WeaponInGame> OnWeaponShootStart;
-    // private BaseEffectAbsorber _weaponCrashEffect;
-    //    private WeaponWaveStrike _waveStrike;
     private WeaponsAimSectorController AimSectorController;
-    //    private AudioClip _maxinSootClip;
-    private WeaponRoundWaveStrike _waveStrike;
 
     public WeaponsController(List<WeaponPlace> weaponPosition,
         ShipBase owner, WeaponInv[] weapons, BaseModulInv[] moduls)
     {
-
-        _waveStrike = new WeaponRoundWaveStrike(owner);
+        SupportWeaponsBuffPosibilities = new SupportWeaponsBuffPosibilities();
         AimSectorController = new WeaponsAimSectorController();
         Dictionary<string, WeaponAimedType> weaponsAims = new Dictionary<string, WeaponAimedType>();
-        // _weaponCrashEffect = weaponCrashEffect;
         _owner = owner;
         this.weaponPosition = weaponPosition;
         int slotIndex = 0;
@@ -45,7 +43,17 @@ public class WeaponsController
                 slotIndex++;
                 weapon.Init(owner);
                 UpgradeWithModuls(weapon, moduls);
-                _weapons.Add(weapon);
+                _allWeapons.Add(weapon);
+                if (weapon.TargetType == TargetType.Enemy)
+                {
+                    _damagedWeapons.Add(weapon);
+                }
+                else
+                {
+                    _supportWeapons.Add(weapon);
+                    SupportWeaponsBuffPosibilities.AddWepon(weapon);
+                }
+
                 if (weaponsAims.TryGetValue(weapon.Name, out var data))
                 {
                     data.AddWeapon(weapon);
@@ -93,27 +101,9 @@ public class WeaponsController
         }
     }
 
-    // public void CrashAllWeapons(bool val)
-    // {
-    //     if (_weaponCrashEffect != null)
-    //     {
-    //         if (val)
-    //         {
-    //             _weaponCrashEffect.Play();
-    //         }
-    //         else
-    //         {
-    //             _weaponCrashEffect.Stop();
-    //         }
-    //     }
-    //     foreach (var weapon in _weapons)
-    //     {
-    //         weapon.CrashReload(val);
-    //     }
-    // }
     public List<WeaponInGame> GelAllWeapons()
     {
-        return _weapons;
+        return _allWeapons;
     }
 
     public void Select(bool val)
@@ -126,7 +116,7 @@ public class WeaponsController
         _enable = val;
     }
 
-    public Vector3? CheckWeaponFire(ShipPersonalInfo target)
+    public Vector3? CheckWeaponFire(IShipData target)
     {
         if (!_enable)
         {
@@ -149,15 +139,15 @@ public class WeaponsController
 
     public void Dispose()
     {
-        foreach (var weapon in _weapons)
+        foreach (var weapon in _allWeapons)
         {
             weapon.Dispose();
         }
     }
 
-    public bool AnyWeaponIsLoaded()
+    private bool subAnyWeaponIsLoaded(List<WeaponInGame> list)
     {
-        foreach (var weapon in _weapons)
+        foreach (var weapon in list)
         {
             if (weapon.IsLoaded())
             {
@@ -166,14 +156,32 @@ public class WeaponsController
         }
         return false;
     }
-    public bool AnyWeaponIsLoaded(float delta, out bool fullLoad)
+
+    public bool AnyWeaponIsLoaded()
     {
+        return subAnyWeaponIsLoaded(_allWeapons);
+    }
+    public bool AnySupportWeaponIsLoaded()
+    {
+        return subAnyWeaponIsLoaded(_supportWeapons);
+    }
+    public bool AnyDamagedWeaponIsLoaded()
+    {
+        return subAnyWeaponIsLoaded(_damagedWeapons);
+    }
+    public bool subAnyWeaponIsLoaded(List<WeaponInGame> list, float posibleUnloadSec, out bool fullLoad)
+    {
+
         bool loadByDelta = false;
         bool loadFull = false;
-
-        foreach (var weapon in _weapons)
+        if (list.Count == 0)
         {
-            if (weapon.IsLoaded(delta, out var fullLoadWeapon))
+            fullLoad = false;
+            return false;
+        }
+        foreach (var weapon in list)
+        {
+            if (weapon.IsLoaded(posibleUnloadSec, out var fullLoadWeapon))
             {
                 if (fullLoadWeapon)
                 {
@@ -186,13 +194,33 @@ public class WeaponsController
         fullLoad = loadFull;
         return loadByDelta;
     }
-
-
-    public bool AllWeaponNotLoad()
+    public bool AnyDamagedWeaponIsLoaded(float posibleUnloadSec, out bool fullLoad)
     {
-        foreach (var weapon in _weapons)
+        return subAnyWeaponIsLoaded(_damagedWeapons, posibleUnloadSec, out fullLoad);
+    }
+    public bool AnySupportWeaponIsLoaded(float posibleUnloadSec, out bool fullLoad)
+    {
+        return subAnyWeaponIsLoaded(_supportWeapons, posibleUnloadSec, out fullLoad);
+    }
+
+    public bool AllDamageWeaponNotLoad(float posibleUnloadDelta)
+    {
+        return subAllWeaponNotLoad(_damagedWeapons, posibleUnloadDelta);
+    }
+    public bool AllSupportWeaponNotLoad(float posibleUnloadDelta)
+    {
+        return subAllWeaponNotLoad(_supportWeapons, posibleUnloadDelta);
+    }
+
+    public bool subAllWeaponNotLoad(List<WeaponInGame> list, float posibleUnloadDelta)
+    {
+        if (list.Count == 0)
         {
-            if (weapon.IsLoaded())
+            return true;
+        }
+        foreach (var weapon in list)
+        {
+            if (weapon.IsLoaded(posibleUnloadDelta, out var fullLoad))
             {
                 return false;
             }
@@ -203,7 +231,7 @@ public class WeaponsController
     public bool IsInRadius(ShipBase shipLink)
     {
         var info = _owner.Enemies[shipLink];
-        foreach (var weapon in _weapons)
+        foreach (var weapon in _allWeapons)
         {
             if (weapon.IsInRadius(info.Dist))
             {
@@ -216,7 +244,7 @@ public class WeaponsController
     public bool BestLoadedWeapon(out float bestLoad)
     {
         bestLoad = Single.MaxValue;
-        foreach (var weapon in _weapons)
+        foreach (var weapon in _allWeapons)
         {
             var isLoad = weapon.IsLoaded();
             if (isLoad)
@@ -234,28 +262,28 @@ public class WeaponsController
         return false;
     }
 
-    public void ChargePowerToAllWeapons()
-    {
-        foreach (var weapon in _weapons)
-        {
-            weapon.ChargeWeaponsForNextShoot();
-        }
-
-    }
-    public void StrikeWave()
-    {
-        _waveStrike.Apply();
-    }
+    // public void ChargePowerToAllWeapons()
+    // {
+    //     foreach (var weapon in _allWeapons)
+    //     {
+    //         weapon.ChargeWeaponsForNextShoot();
+    //     }
+    //
+    // }
+    // public void StrikeWave()
+    // {
+    //     _waveStrike.Apply();
+    // }
     public void TryWeaponReload()
     {
-        foreach (var weapon in _weapons)
+        foreach (var weapon in _allWeapons)
         {
             weapon.ReloadNow();
         }
     }
     public void IncreaseShootsDist(float coef)
     {
-        foreach (var weaponInGame in _weapons)
+        foreach (var weaponInGame in _allWeapons)
         {
             weaponInGame.AimRadius *= coef;
             weaponInGame.BulletSpeed *= coef;
@@ -264,22 +292,22 @@ public class WeaponsController
     }
     public void UnloadAll()
     {
-        foreach (var weapon in _weapons)
+        foreach (var weapon in _allWeapons)
         {
             weapon.Unload();
         }
     }
     public void DrawActiveWeapons()
     {
-        if (_weapons.Count > 0)
+        if (_allWeapons.Count > 0)
         {
-            var weapon = _weapons[0];
+            var weapon = _allWeapons[0];
             if (weapon != null)
             {
                 weapon.GizmosDraw();
             }
         }
-        foreach (var w in _weapons)
+        foreach (var w in _allWeapons)
         {
             Gizmos.color = w.IsLoaded() ? Color.blue : new Color(.85f, .1f, .1f, 1f);
             Gizmos.DrawSphere(w.GetShootPos, 0.14f);

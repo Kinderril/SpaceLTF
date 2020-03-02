@@ -207,33 +207,26 @@ public class BattleController : Singleton<BattleController>
     private void ShipAdd(ShipBase obj)
     {
         CellController.AddShip(obj);
-        var commanderEnemy = new CommanderShipEnemy(obj.PriorityObject, obj.FakePriorityObject);
         if (obj.Commander.TeamIndex == TeamIndex.green)
         {
             SideGreen.Add(obj);
-            RedCommander.AddEnemy(obj, commanderEnemy);
+            RedCommander.AddEnemy(obj);
             foreach (var shipBase in SideRed)
             {
-                obj.AddEnemy(shipBase, true, commanderEnemy);
+                obj.AddEnemy(shipBase, true);
             }
         }
         else
         {
             SideRed.Add(obj);
-            GreenCommander.AddEnemy(obj, commanderEnemy);
+            GreenCommander.AddEnemy(obj);
             foreach (var shipBase in SideGreen)
             {
-                obj.AddEnemy(shipBase, true, commanderEnemy);
+                obj.AddEnemy(shipBase, true);
             }
         }
         //        ShipInited(obj);
     }
-
-    //    private IEnumerator Loading(List<StartShipPilotData> greenSide, List<StartShipPilotData> redSide)
-    //    {
-    ////        WindowManager.Instance.OpenWindow(MainState.play);
-    //    } 
-
 
     private void CommanderDeath(Commander commander)
     {

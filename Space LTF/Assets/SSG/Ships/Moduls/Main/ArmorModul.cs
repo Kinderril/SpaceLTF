@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public class ArmorModul : BaseModul
+public class ArmorModul : ActionModulInGame
 {
     public ArmorModul(BaseModulInv baseModulInv)
         : base(baseModulInv)

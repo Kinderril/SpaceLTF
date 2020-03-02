@@ -5,7 +5,7 @@ using System.Text;
 
 
 [System.Serializable]
-public class AutoShieldRepairModul : BaseModul
+public class AutoShieldRepairModul : ActionModulInGame
 {
     private bool isCharged;
 

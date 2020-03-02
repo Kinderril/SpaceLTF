@@ -5,7 +5,7 @@ using System.Text;
 
 
 [System.Serializable]
-public class AutoRepairModul : BaseModul
+public class AutoRepairModul : ActionModulInGame
 {
     private bool heapNextFrame = false;
     private bool heapNextFrame2 = false;

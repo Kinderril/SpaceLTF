@@ -30,7 +30,7 @@ public class PlayerAIMilitaryFinal : PlayerAI
                     var weaponLvl = power * 0.1f;
                     deltaMin = Mathf.Clamp((int)(weaponLvl - 1), 2, 5);
                     deltaMax = Mathf.Clamp((int)(weaponLvl + 1), 2, 6);
-                    var item = Library.CreateWeapon(MyExtensions.Random(deltaMin, deltaMax));
+                    var item = Library.CreateDamageWeapon(MyExtensions.Random(deltaMin, deltaMax));
                     item.CurrentInventory = Inventory;
                     Debug.Log($"exit dungeon army weapon reward weaponLvl:{weaponLvl}  armyPower:{power}");
                     reward.Weapons.Add(item);

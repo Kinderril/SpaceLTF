@@ -213,7 +213,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
                 }
                 else
                 {
-                    var w = Library.CreateWeapon(false);
+                    var w = Library.CreateDamageWeapon(false);
                     itemName = Namings.Weapon(w.WeaponType);
                     canAdd = player.Inventory.GetFreeWeaponSlot(out slot);
                     if (canAdd)

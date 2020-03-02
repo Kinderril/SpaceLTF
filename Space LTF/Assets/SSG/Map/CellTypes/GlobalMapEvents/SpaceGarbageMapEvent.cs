@@ -28,7 +28,7 @@ public class SpaceGarbageMapEvent : BaseGlobalMapEvent
             int slot;
             if (MyExtensions.IsTrue01(.5f) && MainController.Instance.MainPlayer.Inventory.GetFreeWeaponSlot(out slot))
             {
-                var modul = Library.CreateWeapon(false);
+                var modul = Library.CreateDamageWeapon(false);
                 MainController.Instance.MainPlayer.Inventory.TryAddWeaponModul(modul, slot);
 
                 mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));

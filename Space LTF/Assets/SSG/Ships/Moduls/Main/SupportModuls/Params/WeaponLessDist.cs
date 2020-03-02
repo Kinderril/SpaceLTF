@@ -1,7 +1,7 @@
 ﻿[System.Serializable]
 public class WeaponLessDist : BaseSupportModul
 {
-    private const float spd_inc = 0.7f;
+    private const float spd_inc = 0.5f;
     private const float dmg_inc = 1.0f;
     public WeaponLessDist(int level)
         : base(SimpleModulType.WeaponLessDist, level)

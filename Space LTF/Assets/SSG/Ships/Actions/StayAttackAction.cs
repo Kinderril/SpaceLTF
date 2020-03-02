@@ -81,10 +81,10 @@ public class StayAttackAction : AbstractAttackAction
         foreach (var shipInfo in posibleTargets) //_owner.Enemies)
         {
             var ship = shipInfo.Value;
-            if (ship.CommanderShipEnemy.IsPriority)
-            {
-                return ship;
-            }
+            // if (ship.CommanderShipEnemy.IsPriority)
+            // {
+            //     return ship;
+            // }
             var cRating = ShipValue(ship);
             if (cRating > rating)
             {

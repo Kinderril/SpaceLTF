@@ -119,7 +119,7 @@ public class BaseModulInv : IItemInv
         return GetInfo() + "\n" + GetDesc();
     }
 
-    public string GetDesc()
+    public virtual string GetDesc()
     {
         return Namings.DescSimpleModul(Type);
     }

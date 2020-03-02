@@ -8,14 +8,14 @@ public class ShipModuls
 {
 
     public List<BaseSupportModul> SupportModuls;
-    public List<BaseModul> Moduls;
+    public List<ActionModulInGame> Moduls;
     private ShipBase _owner;
-    private BaseModul UpdatableModul;
+    private ActionModulInGame UpdatableModul;
 
     public ShipModuls(ShipBase owner, BaseModulInv[] moduls)
     {
         _owner = owner;
-        Moduls = new List<BaseModul>();
+        Moduls = new List<ActionModulInGame>();
         SupportModuls = new List<BaseSupportModul>();
         for (int i = 0; i < moduls.Length; i++)
         {
@@ -32,7 +32,7 @@ public class ShipModuls
 
                     continue;
                 }
-                var modul = BaseModul.Create(m);
+                var modul = ActionModulInGame.Create(m);
                 Moduls.Add(modul);
                 var mine = modul as MineAbstractModul;
                 if (mine != null)

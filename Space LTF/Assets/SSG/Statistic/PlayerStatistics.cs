@@ -76,10 +76,10 @@ public class PlayerStatistics
         OpenShipsTypes = new List<OpenShipConfig>()
         {
             new OpenShipConfig(ShipConfig.mercenary),
-            new OpenShipConfig(ShipConfig.raiders),
             new OpenShipConfig(ShipConfig.federation),
             new OpenShipConfig(ShipConfig.ocrons),
             new OpenShipConfig(ShipConfig.krios),
+            new OpenShipConfig(ShipConfig.raiders),
         };
         WeaponsPairs = new List<WeaponsPair>()
         {

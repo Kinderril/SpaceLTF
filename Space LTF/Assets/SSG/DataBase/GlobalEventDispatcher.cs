@@ -10,7 +10,7 @@ public static class GlobalEventDispatcher
     public static event Action<ShipBase, ShipBase> OnShipDeath;
     public static event Action<ShipBase,float, float, WeaponType> OnShipDamage;
     public static event Action<ShipConfig> OnWinBattle;
-    public static event Action<BaseModul> OnSellModul;
+    public static event Action<ActionModulInGame> OnSellModul;
     public static event Action<WeaponInv> OnUpgradeWeapon;
 
     public static void ShipDeath(ShipBase target,ShipBase killer)
@@ -20,7 +20,7 @@ public static class GlobalEventDispatcher
             OnShipDeath(target, killer);
         }
     }    
-    public static void SellModul(BaseModul s)
+    public static void SellModul(ActionModulInGame s)
     {
         if (OnSellModul != null)
         {

@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using UnityEngine;
 
 
 [System.Serializable]
 public class BlinkModul : TimerModul
 {
-
-    public BlinkModul(BaseModulInv baseModulInv) 
+    public BlinkModul(BaseModulInv baseModulInv)
         : base(baseModulInv)
     {
         Period = 15 - ModulData.Level * 3;
     }
-
 
     protected override float Delay()
     {
@@ -26,13 +20,12 @@ public class BlinkModul : TimerModul
     {
         ActionCheck(_owner.CurAction);
     }
-
     public override void Apply(ShipParameters Parameters, ShipBase owner)
     {
-        base.Apply(Parameters,owner);
+        base.Apply(Parameters, owner);
         _owner.OnActionChange += ActionChanged;
     }
-    
+
     private void ActionCheck([CanBeNull]BaseAction act)
     {
         var curAction = act;
@@ -77,13 +70,13 @@ public class BlinkModul : TimerModul
         if (!isInFront && isClose)
         {
             BlinkTo(trg.ShipLink.LookDirection * -5 + trg.ShipLink.Position, trg.ShipLink.LookDirection);
-            Use();
         }
     }
 
-    private void BlinkTo(Vector3 pos,Vector3 dir)
+    private void BlinkTo(Vector3 pos, Vector3 dir)
     {
-        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.BlinkPlaceEffect,pos,3f);
+        Use();
+        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.BlinkPlaceEffect, pos, 3f);
         EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.BlinkTargetEffect, _owner.transform, 3f);
         _owner.Rotation = Quaternion.FromToRotation(Vector3.forward, dir);
         _owner.Position = pos;

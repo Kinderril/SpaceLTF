@@ -124,6 +124,21 @@ public class Player
                 }
 
             }
+
+            var allWeaponType = new List<WeaponType>()
+            {
+              WeaponType.healBodySupport,
+              WeaponType.healShieldSupport
+            };
+            foreach (var type in allWeaponType)
+            {
+                if (Inventory.GetFreeWeaponSlot(out var index1))
+                {
+                    var modul = Library.CreateWeaponByType(type);
+                    Inventory.TryAddWeaponModul(modul, index1);
+                }
+
+            }
         }
 #endif
 

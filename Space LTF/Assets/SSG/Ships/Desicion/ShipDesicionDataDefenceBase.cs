@@ -22,7 +22,7 @@ public class ShipDesicionDataDefenceBase : ShipDesicionDataBase
     }
 
 
-    protected override ActionType DoAttackAction(ShipBase ship)
+    protected override ActionType? DoAttackAction(ShipBase ship)
     {
         return DoOrWait(ActionType.attack, ship);
 

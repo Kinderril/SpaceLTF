@@ -5,7 +5,7 @@ using System.Text;
 
 
 [System.Serializable]
-public class ResistDamagesModul : BaseModul
+public class ResistDamagesModul : ActionModulInGame
 {
 
     public ResistDamagesModul(BaseModulInv baseModulInv) 

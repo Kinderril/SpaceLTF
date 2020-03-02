@@ -22,6 +22,7 @@ public enum ActionType
     readyToAttack,
     attackHalfLoop,
     shootFromPlace,
+    support,
 }
 
 public abstract class BaseAction

@@ -300,7 +300,7 @@ public static class ArmyCreatorSpecial
     {
         if (ship.GetFreeWeaponSlot(out int weaponIndex))
         {
-            WeaponInv a1 = Library.CreateWeapon(weapon);
+            WeaponInv a1 = Library.CreateWeaponByType(weapon);
             ship.TryAddWeaponModul(a1, weaponIndex);
             return true;
         }

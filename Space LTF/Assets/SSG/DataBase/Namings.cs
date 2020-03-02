@@ -160,9 +160,15 @@ public static class Namings
             case WeaponType.eimRocket:
                 return Tag("EMI");
             case WeaponType.beam:
-                return Tag("Beam");
+                return Tag("Beam");  
+            case WeaponType.healBodySupport:
+                return Tag("healBodySupport");  
+            case WeaponType.healShieldSupport:
+                return Tag("healShieldSupport");
         }
-        return $"none.{config.ToString()} ___  {config}";
+        var error = $"none.{config.ToString()} ___  {config}";
+        Debug.LogError(error);
+        return error;
     }
     public static string SimpleModulName(SimpleModulType config)
     {

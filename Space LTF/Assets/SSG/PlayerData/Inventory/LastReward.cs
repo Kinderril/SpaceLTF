@@ -115,7 +115,7 @@ public class LastReward
                 moneyCoef = lowMoneyCoef;
                 for (int i = 0; i < weaponsCount; i++)
                 {
-                    var w = Library.CreateWeapon(weaponLevels.Random());
+                    var w = Library.CreateDamageWeapon(weaponLevels.Random());
                     if (winner.Inventory.GetFreeWeaponSlot(out slotIndex))
                     {
                         winner.Inventory.TryAddWeaponModul(w, slotIndex);

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class SellItemQuestOnStart : BaseQuestOnStart
 {
     private ItemType _type;
-    private HashSet<BaseModul> _selledModuls = new HashSet<BaseModul>();
+    private HashSet<ActionModulInGame> _selledModuls = new HashSet<ActionModulInGame>();
 
     public SellItemQuestOnStart(ItemType type, int target, EQuestOnStart typeQuest)
         : base(target, typeQuest)
@@ -19,7 +19,7 @@ public class SellItemQuestOnStart : BaseQuestOnStart
         GlobalEventDispatcher.OnSellModul += OnSellModul;
     }
 
-    private void OnSellModul(BaseModul obj)
+    private void OnSellModul(ActionModulInGame obj)
     {
         if (!_selledModuls.Contains(obj))
         {

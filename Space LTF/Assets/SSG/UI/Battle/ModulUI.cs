@@ -11,10 +11,10 @@ public class ModulUI : MonoBehaviour
 {
     public Image Background;
     public TextMeshProUGUI Name;
-    private BaseModul _baseModul;
+    private ActionModulInGame _baseModul;
     private bool _prevIsReady;
     
-    public virtual void Init(BaseModul baseModul)
+    public virtual void Init(ActionModulInGame baseModul)
     {
         _baseModul = baseModul;
 //        _baseModul.OnApply += OnApply;

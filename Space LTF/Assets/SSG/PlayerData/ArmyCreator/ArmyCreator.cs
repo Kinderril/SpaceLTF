@@ -605,7 +605,7 @@ public static class ArmyCreator
         {
             if (ship.GetFreeWeaponSlot(out weaponIndex))
             {
-                WeaponInv a1 = Library.CreateWeapon(weapon);
+                WeaponInv a1 = Library.CreateWeaponByType(weapon);
                 ship.TryAddWeaponModul(a1, weaponIndex);
                 v.Points -= val;
                 logs.AddLog(v.Points, "add weapon");

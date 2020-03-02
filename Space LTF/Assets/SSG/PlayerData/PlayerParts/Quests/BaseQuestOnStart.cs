@@ -67,7 +67,7 @@ public  abstract class BaseQuestOnStart
             {5, 1f},
             {6, 1f},
         });
-        WeaponReward = Library.CreateWeapon(levelsWeapons.Random());
+        WeaponReward = Library.CreateDamageWeapon(levelsWeapons.Random());
         WDictionary<int> levelsModuls = new WDictionary<int>(new Dictionary<int, float>()
         {
             {2, 5f},

@@ -9,10 +9,10 @@ public class AttackAction : AbstractAttackAction
     private readonly float _minAttackDist;
     private readonly float _minAttackDistToEnd;
     private readonly float _minAttackDistToStart;
-    private float _nextRecalTime;
-    public ShipPersonalInfo Target;
+    protected float _nextRecalTime;
+    public IShipData Target;
 
-    public AttackAction([NotNull] ShipBase owner, [NotNull] ShipPersonalInfo target,
+    public AttackAction([NotNull] ShipBase owner, [NotNull] IShipData target,
         ActionType actionType = ActionType.attack)
         : base(owner, actionType)
     {
@@ -23,7 +23,8 @@ public class AttackAction : AbstractAttackAction
         foreach (var weapon in owner.WeaponsController.GelAllWeapons())
         {
             weapon.OnShootEnd += OnShootEnd;
-            if (weapon.AimRadius < _minAttackDist) _minAttackDist = weapon.AimRadius;
+            if (weapon.AimRadius < _minAttackDist)
+                _minAttackDist = weapon.AimRadius;
         }
 
         _minAttackDistToStart = _minAttackDist * 1.3f;
@@ -31,7 +32,7 @@ public class AttackAction : AbstractAttackAction
         _isShootEnd = false;
     }
 
-    private void OnShootEnd(WeaponInGame obj)
+    protected void OnShootEnd(WeaponInGame obj)
     {
         _isShootEnd = true;
     }
@@ -92,7 +93,7 @@ public class AttackAction : AbstractAttackAction
             if (pp1 != null)
                 _owner.MoveByWay(pp1.Right);
             else
-                _owner.MoveByWay(Target.ShipLink);
+                _owner.MoveByWay(Target);
         }
     }
 
@@ -140,13 +141,13 @@ public class AttackAction : AbstractAttackAction
             new CauseAction("invisible", () => !Target.Visible),
             new CauseAction("target null", () => Target == null),
             new CauseAction("another target close", AnotherTargetBetter),
-            new CauseAction("weapon not load", () => _owner.WeaponsController.AllWeaponNotLoad()),
+            new CauseAction("weapon not load", () => _owner.WeaponsController.AllDamageWeaponNotLoad(ShipDesicionDataBase.POSIBLE_UNLOAD_WEAPONS)),
             new CauseAction("target is dead", () => Target.ShipLink.IsDead)
         };
         return c;
     }
 
-    private bool AnotherTargetBetter()
+    protected virtual bool AnotherTargetBetter()
     {
         if (_nextRecalTime < Time.time)
         {

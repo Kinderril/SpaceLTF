@@ -321,10 +321,11 @@ public class MapWindow : BaseWindow
     {
         void ActivateDialog()
         {
-            var dialog = obj.GetDialogMain();
+            var dialog = obj.GetDialogMain(out var activateAnyway);
+            
             if (dialog != null)
             {
-                if (!(obj.Completed && obj.OneTimeUsed()))
+                if (activateAnyway || !(obj.Completed && obj.OneTimeUsed()))
                 {
                     StartDialog(dialog, OnMainDialogEnds);
                 }
@@ -370,7 +371,7 @@ public class MapWindow : BaseWindow
 
     public void ActivateCellDialog(GlobalMapCell cell)
     {
-        var dialog = cell.GetDialogMain();
+        var dialog = cell.GetDialogMain(out var activateAnyway);
         StartDialog(dialog, OnMainDialogEnds);
     }
 

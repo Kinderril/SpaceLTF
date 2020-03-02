@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using UnityEngine;
 
-public  class ReadyToAttackAction : AbstractAttackAction
+public class ReadyToAttackAction : AbstractAttackAction
 {
-//    protected bool _isShootEnd = false;
-//    protected bool _isDogFight = false;
+    //    protected bool _isShootEnd = false;
+    //    protected bool _isDogFight = false;
     public ShipPersonalInfo Target;
     private float _nextRecalTime;
-//    private float _minAttackDist;
-//    private float _minAttackDistToStart;
-//    private float _minAttackDistToEnd;
+    //    private float _minAttackDist;
+    //    private float _minAttackDistToStart;
+    //    private float _minAttackDistToEnd;
 
     public ReadyToAttackAction([NotNull] ShipBase owner, [NotNull] ShipPersonalInfo target)
         : base(owner, ActionType.readyToAttack)
@@ -22,7 +18,7 @@ public  class ReadyToAttackAction : AbstractAttackAction
     }
 
 
-    
+
     public override void ManualUpdate()
     {
         MoveToTarget();
@@ -50,11 +46,11 @@ public  class ReadyToAttackAction : AbstractAttackAction
         }
         else
         {
-            _owner.MoveByWay(Target.ShipLink);
+            _owner.MoveByWay(Target);
         }
     }
 
-   
+
 
     protected override CauseAction[] GetEndCauses()
     {
@@ -64,7 +60,7 @@ public  class ReadyToAttackAction : AbstractAttackAction
             new CauseAction("invisible", () => !Target.Visible),
             new CauseAction("target null", () => Target == null),
             new CauseAction("another target close", AnotherTargetBetter),
-            new CauseAction("weapon load", () => _owner.WeaponsController.AnyWeaponIsLoaded()),
+            new CauseAction("weapon load", () => _owner.WeaponsController.AnyDamagedWeaponIsLoaded()),
             new CauseAction("target is dead", () => Target.ShipLink.IsDead)
         };
         return c;

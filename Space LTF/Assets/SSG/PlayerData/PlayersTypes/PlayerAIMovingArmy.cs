@@ -30,7 +30,7 @@ public class PlayerAIMovingArmy : PlayerAI
                     var weaponLvl = armyPower * 0.1f;
                     deltaMin = Mathf.Clamp((int)(weaponLvl - 1), 2, 5);
                     deltaMax = Mathf.Clamp((int)(weaponLvl + 1), 2, 6);
-                    var item = Library.CreateWeapon(MyExtensions.Random(deltaMin, deltaMax));
+                    var item = Library.CreateDamageWeapon(MyExtensions.Random(deltaMin, deltaMax));
                     item.CurrentInventory = Inventory;
                     Debug.Log($"moving army weapon reward weaponLvl:{weaponLvl}  armyPower:{armyPower}");
                     // _getRewardsItems.Add(item);

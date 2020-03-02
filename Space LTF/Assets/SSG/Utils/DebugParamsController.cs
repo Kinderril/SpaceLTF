@@ -55,7 +55,7 @@ public class DebugParamsController
         {
             if (data.Ship.GetFreeWeaponSlot(out var inex))
             {
-                var weapon = Library.CreateWeapon(true);
+                var weapon = Library.CreateDamageWeapon(true);
                 data.Ship.TryAddWeaponModul(weapon, inex);
             }
         }

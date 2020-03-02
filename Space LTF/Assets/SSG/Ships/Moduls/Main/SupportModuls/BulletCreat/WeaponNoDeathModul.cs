@@ -18,12 +18,9 @@ public class WeaponNoDeathModul : BaseSupportModul
         var b0 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, startParameters);
         b0.DeathOnHit = false;
     }
-
-
     public override string DescSupport()
     {
-        return Namings.Format(Namings.Tag(Type.ToString()),
-            Utils.FloatToChance(RELOAD));
+        return Namings.Format(Namings.Tag(Type.ToString()), Utils.FloatToChance(RELOAD));
     }
     public override void ChangeParams(IAffectParameters weapon)
     {

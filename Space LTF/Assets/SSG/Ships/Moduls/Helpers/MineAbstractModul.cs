@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 
-public abstract class MineAbstractModul : BaseModul , IWeapon
+public abstract class MineAbstractModul : ActionModulInGame , IWeapon
 {
     private const float DELAY_BASE = 20f;
     private const float DELAY_DELTA = 1.5f;

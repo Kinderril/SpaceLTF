@@ -8,9 +8,10 @@ public class Commander
     private float rowDelta = 1.5f;
     private float lineDelta = 3;
     public Dictionary<int, ShipBase> Ships = new Dictionary<int, ShipBase>();
+    // public Dictionary<ShipBase, ShipPersonalInfo> MyShipsInfos = new Dictionary<ShipBase, ShipPersonalInfo>();
     public List<ShipInventory> _destroyedShips = new List<ShipInventory>();
     private List<ShipBase> _shipsToRemove = new List<ShipBase>();
-    private Dictionary<int, CommanderShipEnemy> _enemies = new Dictionary<int, CommanderShipEnemy>();
+    // private Dictionary<int, CommanderShipEnemy> _enemies = new Dictionary<int, CommanderShipEnemy>();
     public ShipControlCenter MainShip;
     public CommanderCoinController CoinController;
 
@@ -28,7 +29,7 @@ public class Commander
     private Action<Commander, ShipBase> OnShipInited;
     private Action<ShipBase> OnShipLauched;
 
-    private CommanderShipEnemy LastPriorityTarget;
+    // private CommanderShipEnemy LastPriorityTarget;
 
     private bool _oneCoinContrInited;
     //    private bool isRunawayComplete = false;
@@ -162,6 +163,11 @@ public class Commander
         return Ships;
     }
 
+    public SameSidePersonalInfo GetSameSide(ShipBase infoOf, ShipBase requester)
+    {
+        return new SameSidePersonalInfo(infoOf, requester);
+    }
+
     private void CreateTurretConnecttors(int countTurrets, Vector3 dirToEnemyNorm, Vector3 startPosition)
     {
         var aiPlayer = Player as PlayerAI;
@@ -264,7 +270,7 @@ public class Commander
         }
     }
 
-    public void AddEnemy(ShipBase enemy, CommanderShipEnemy commanderShipEnemy)
+    public void AddEnemy(ShipBase enemy)
     {
         enemy.OnDeath += ship =>
         {
@@ -275,7 +281,7 @@ public class Commander
         };
         foreach (var s in Ships)
         {
-            s.Value.AddEnemy(enemy, true, commanderShipEnemy);
+            s.Value.AddEnemy(enemy, true);
         }
     }
 
@@ -283,9 +289,9 @@ public class Commander
     {
         foreach (var enemy in enemies)
         {
-            var commanderEnemy = new CommanderShipEnemy(enemy.Value.PriorityObject, enemy.Value.FakePriorityObject);
-            _enemies.Add(enemy.Key, commanderEnemy);
-            AddEnemy(enemy.Value, commanderEnemy);
+            // var commanderEnemy = new CommanderShipEnemy(enemy.Value.PriorityObject, enemy.Value.FakePriorityObject);
+            // _enemies.Add(enemy.Key, commanderEnemy);
+            AddEnemy(enemy.Value);
         }
     }
 
@@ -327,7 +333,7 @@ public class Commander
         {
             foreach (var shipBase in _shipsToRemove)
             {
-                _enemies.Remove(shipBase.Id);
+                // _enemies.Remove(shipBase.Id);
                 shipBase.Dispose();
                 Ships.Remove(shipBase.Id);
                 _destroyedShips.Add(shipBase.ShipInventory);
@@ -349,15 +355,15 @@ public class Commander
         }
     }
 
-    public void SetPriorityTarget(ShipBase target, bool isBait)
-    {
-        if (LastPriorityTarget != null)
-        {
-            LastPriorityTarget.SetPriority(false, isBait);
-        }
-        LastPriorityTarget = _enemies[target.Id];
-        LastPriorityTarget.SetPriority(true, isBait);
-    }
+    // public void SetPriorityTarget(ShipBase target, bool isBait)
+    // {
+    //     if (LastPriorityTarget != null)
+    //     {
+    //         LastPriorityTarget.SetPriority(false, isBait);
+    //     }
+    //     LastPriorityTarget = _enemies[target.Id];
+    //     LastPriorityTarget.SetPriority(true, isBait);
+    // }
 
     public Vector3 GetWaitPosition(ShipBase ship)
     {

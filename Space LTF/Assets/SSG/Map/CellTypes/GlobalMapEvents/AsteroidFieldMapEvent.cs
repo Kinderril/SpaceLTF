@@ -74,7 +74,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
             MessageDialogData mesData;
             if (MainController.Instance.MainPlayer.Inventory.GetFreeWeaponSlot(out var slot))
             {
-                var modul = Library.CreateWeapon(false);
+                var modul = Library.CreateDamageWeapon(false);
                 mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("repairResultFull"), Namings.Weapon(modul.WeaponType)), ans);
                 MainController.Instance.MainPlayer.Inventory.TryAddWeaponModul(modul, slot);
             }

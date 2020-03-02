@@ -118,7 +118,8 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         foreach (var item in allItems)
         {
             var support = item as BaseSupportModul;
-            if (support != null)
+            var notSupport = item is BaseActionModul;
+            if (support != null && !notSupport)
             {
                 support.ChangeParams(dataModif);
                 haveModuls = true;

@@ -1,0 +1,30 @@
+﻿using UnityEngine;
+
+[System.Serializable]
+public class ShipShieldDoubleModul : BaseActionModul
+{
+    private const float dmg_inc = 0.5f;
+
+    private float PER_LEVEL => dmg_inc + Level * 0.2f;
+
+
+    public ShipShieldDoubleModul(int level)
+        : base(SimpleModulType.ShieldDouble, level)
+    {
+
+    }
+
+    public override void ChangeParamsShip(IShipAffectableParams Parameters)
+    {
+        var _delta = PER_LEVEL * Parameters.MaxShield;
+        Parameters.MaxShield += _delta;
+        var _deltaHp = PER_LEVEL * Parameters.MaxHealth;
+        Parameters.MaxHealth = Mathf.Clamp(_deltaHp - Parameters.MaxHealth, 5, 99999);
+    }
+
+    public override string DescSupport()
+    {
+        return Namings.Format(Namings.Tag(Type.ToString()),
+            Utils.FloatToChance(PER_LEVEL), Utils.FloatToChance(PER_LEVEL));
+    }
+}

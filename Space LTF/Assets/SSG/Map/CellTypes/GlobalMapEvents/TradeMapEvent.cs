@@ -49,7 +49,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
             switch (types.RandomElement())
             {
                 case ItemType.weapon:
-                    _itemsToTrade = Library.CreateWeapon(MyExtensions.IsTrueEqual());
+                    _itemsToTrade = Library.CreateDamageWeapon(MyExtensions.IsTrueEqual());
                     break;
                 case ItemType.modul:
                     var list = new List<int>() { 1, 2 };

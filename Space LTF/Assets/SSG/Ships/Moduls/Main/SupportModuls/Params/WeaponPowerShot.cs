@@ -9,7 +9,7 @@ public class WeaponPowerShot : BaseSupportModul
 
     }
 
-    private float DmgLevel => dmg_inc + Level * 0.23f;
+    private float DmgLevel => dmg_inc + Level * 0.2f;
 
 
     public override void ChangeParams(IAffectParameters weapon)

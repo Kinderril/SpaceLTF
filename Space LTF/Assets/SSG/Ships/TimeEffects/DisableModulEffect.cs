@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 public class DisableModulEffect : BaseTimeEffect
 {
-    private BaseModul _modul;
+    private ActionModulInGame _modul;
 
     public DisableModulEffect([NotNull] ShipBase shipToApply, float deltaTimeSec) 
         : base(shipToApply, deltaTimeSec)

@@ -13,7 +13,7 @@ public class WeaponAimedType
         preList.Add(firstWeapon);
     }
 
-    public bool TryShoot(ShipPersonalInfo target, Vector3 ownerLokkDir)
+    public bool TryShoot(IShipData target, Vector3 ownerLokkDir)
     {
         bool subCanFire = false;
         WeaponToAim.DropAimPos();
@@ -45,7 +45,7 @@ public class WeaponAimedType
         return someWeaponSHoot;
     }
 
-    private bool CheckWeaponAimed(WeaponInGame weapon, ShipPersonalInfo shipInfo)
+    private bool CheckWeaponAimed(WeaponInGame weapon, IShipData shipInfo)
     {
         var isInRadius = weapon.IsInRadius(shipInfo.Dist);// && weapon.IsInSector(shipInfo.DirNorm);
         if (isInRadius)

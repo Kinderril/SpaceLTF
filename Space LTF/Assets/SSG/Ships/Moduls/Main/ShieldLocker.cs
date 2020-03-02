@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class ShieldLocker : BaseModul
+public class ShieldLocker : ActionModulInGame
 {
 
     public ShieldLocker(BaseModulInv baseModulInv) 

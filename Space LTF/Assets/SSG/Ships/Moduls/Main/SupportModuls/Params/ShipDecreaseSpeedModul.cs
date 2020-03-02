@@ -3,8 +3,8 @@ public class ShipDecreaseSpeedModul : BaseSupportModul
 {
     //    private const float spd_inc = 0.3f;
     public const float SPEED_LEVEL = 0.5f;
-    public const float PER_LEVEL = 0.1f;
-    private const float dmg_inc = 0.6f;
+    public const float PER_LEVEL = 0.08f;
+    private const float dmg_inc = 0.3f;
 
 
     public ShipDecreaseSpeedModul(int level)

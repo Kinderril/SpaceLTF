@@ -9,10 +9,12 @@ using UnityEngine;
 public class AfterAttackAction : BaseAction
 {
     private bool _canDoBackflip;
+    private float _nextCheckCanSupport;
     public AfterAttackAction([NotNull] ShipBase owner) 
         : base(owner,ActionType.afterAttack)
     {
         FindWay();
+        _nextCheckCanSupport = Time.time + 2f;
         _canDoBackflip = MyExtensions.IsTrue01(.45f);
     }
 
@@ -56,12 +58,36 @@ public class AfterAttackAction : BaseAction
         var c = new CauseAction[]
         {
             new CauseAction("out bf", () => !_owner.InBattlefield),
+            new CauseAction("can support", () => CanSupport()),
             new CauseAction("_targetPoint null", () => _targetPoint == null && !_owner.Boost.BoostLoop.IsActive),
             new CauseAction("path complete", () => _owner.PathController.Complete(_targetPoint.Value)  && !_owner.Boost.BoostLoop.IsActive),
-            new CauseAction("weapon load", () => _owner.WeaponsController.AnyWeaponIsLoaded()  && !_owner.Boost.BoostLoop.IsActive)
+            new CauseAction("weapon load", () => _owner.WeaponsController.AnyDamagedWeaponIsLoaded()  && !_owner.Boost.BoostLoop.IsActive)
         };
         return c;
     }
+
+    private bool CanSupport()
+    {
+        if (_owner.WeaponsController.SupportWeaponsBuffPosibilities.HaveAny)
+        {
+            if (_nextCheckCanSupport < Time.time)
+            {
+                _nextCheckCanSupport = Time.time + 2f;
+
+                if (_owner.WeaponsController.AnySupportWeaponIsLoaded(0f, out var fullLoadSupport))
+                {
+                    if (_owner.HaveClosestDamagedFriend(out var ship))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+
+        return false;
+    }
+
     public override Vector3? GetTargetToArrow()
     {
         return _targetPoint;

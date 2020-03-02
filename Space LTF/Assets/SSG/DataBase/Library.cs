@@ -65,6 +65,10 @@ public static class Library
     private const float MINE_DELAY = 7f;
     private const float MINE_ANG = 19f;
 
+    private const float SUPPORT_ANG = 180f;
+    private const float SUPPORT_SPEED = 6.8f;
+    // private const float SUPPORT_ANG = 44f;
+
     private const float BEAM_ANG = 180f;
     private const float BEAM_DELAY = 3f;
     private const float BEAM_SPEED = 1f;
@@ -137,30 +141,43 @@ public static class Library
         return _lvlUps[curLvl];
     }
 
-    public static WeaponInv CreateWeapon(WeaponType weapon)
+    public static WeaponInv CreateWeaponByType(WeaponType weapon)
     {
         WeaponInventoryParameters parametes;
         switch (weapon)
         {
+            //DAMAGE
             case WeaponType.laser:
-                parametes = new WeaponInventoryParameters(8, 8, 2, 2, LASER_ANG, LASER_DELAY, 0.5f, 1, LASER_SPEED, 8);
+                parametes = new WeaponInventoryParameters(8, 8, 2, 2, LASER_ANG, LASER_DELAY, 0.5f, 1, LASER_SPEED, 8, 0, TargetType.Enemy);
                 return new LaserInventory(parametes, 1);
             case WeaponType.rocket:
                 parametes = new WeaponInventoryParameters(4, 12, 1, 3, ROCKET_ANG, ROCKET_DELAY, 0.5f, 1, ROCKET_SPEED, 11,
-                    36f);
+                    36f, TargetType.Enemy);
                 return new RocketInventory(parametes, 1);
             case WeaponType.impulse:
-                parametes = new WeaponInventoryParameters(5, 2, 2, 1, LASER_ANG, IMPULSE_DELAY, 0.5f, 2, IMPULSE_SPEED, 6);
+                parametes = new WeaponInventoryParameters(5, 2, 2, 1, LASER_ANG, IMPULSE_DELAY, 0.5f, 2, IMPULSE_SPEED, 6, 0f, TargetType.Enemy);
                 return new ImpulseInventory(parametes, 1);
             case WeaponType.casset:
-                parametes = new WeaponInventoryParameters(4, 8, 1, 2, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9, 70f);
+                parametes = new WeaponInventoryParameters(4, 8, 1, 2, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9, 70f, TargetType.Enemy);
                 return new BombInventoryWeapon(parametes, 1);
             case WeaponType.eimRocket:
-                parametes = new WeaponInventoryParameters(4, 4, 2, 1, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 11);
+                parametes = new WeaponInventoryParameters(4, 4, 2, 1, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 11, 0f, TargetType.Enemy);
                 return new EMIRocketInventory(parametes, 1);
             case WeaponType.beam:
-                parametes = new WeaponInventoryParameters(2, 8, 1, 3, BEAM_ANG, BEAM_DELAY, 0.4f, 1, BEAM_SPEED, 2.5f);
+                parametes = new WeaponInventoryParameters(2, 8, 1, 3, BEAM_ANG, BEAM_DELAY, 0.4f, 1, BEAM_SPEED, 2.5f, 0f, TargetType.Enemy);
                 return new BeamWeaponInventory(parametes, 1);
+
+            //SUPPORT
+            case WeaponType.healBodySupport:
+                parametes = new WeaponInventoryParameters(0, 4, 0, 2, SUPPORT_ANG, BEAM_DELAY, 0.4f, 1, SUPPORT_SPEED, 4.5f, 80f, TargetType.Ally);
+                return new HealSuppotWeaponInventory(parametes, 1);
+            case WeaponType.healShieldSupport:
+                parametes = new WeaponInventoryParameters(4, 0, 2, 0, SUPPORT_ANG, BEAM_DELAY, 0.4f, 1, SUPPORT_SPEED, 4.5f, 80f, TargetType.Ally);
+                return new ShieldSuppotWeaponInventory(parametes, 1);
+
+
+
+
                 //            case WeaponType.beam://NO USABLE
                 //                return new WeaponInv(2,7, MINE_ANG, BEAM_DELAY, 0.5f, 1, BEAM_SPEED,4, weapon, 1);
                 //            case WeaponType.artillery:
@@ -174,7 +191,7 @@ public static class Library
         return null;
     }
 
-    public static WeaponInv CreateWeapon(bool low)
+    public static WeaponInv CreateDamageWeapon(bool low)
     {
         var level = new WDictionary<int>(new Dictionary<int, float>
         {
@@ -182,10 +199,10 @@ public static class Library
             {2, low ? 4 : 3},
             {3, low ? 0.5f : 1}
         });
-        return CreateWeapon(level.Random());
+        return CreateDamageWeapon(level.Random());
     }
 
-    public static WeaponInv CreateWeapon(int level)
+    public static WeaponInv CreateDamageWeapon(int level)
     {
         var types = new WDictionary<WeaponType>(new Dictionary<WeaponType, float>
         {
@@ -197,14 +214,26 @@ public static class Library
             {WeaponType.beam, 7}
         });
 
-        var w = CreateWeapon(types.Random());
+        var w = CreateWeaponByType(types.Random());
+        w.Level = level;
+        return w;
+    }
+    public static WeaponInv CreateSupportWeapon(int level)
+    {
+        var types = new WDictionary<WeaponType>(new Dictionary<WeaponType, float>
+        {
+            {WeaponType.healBodySupport, 9},
+            {WeaponType.healShieldSupport, 9},
+        });
+
+        var w = CreateWeaponByType(types.Random());
         w.Level = level;
         return w;
     }
 
     public static ShipInventory CreateShip(ShipType shipType, ShipConfig config, Player player, PilotParameters pilot)
     {
-        float hull = 50;
+        float hull = 34;
         float shield = 0;
         if (shipType == ShipType.Turret)
         {
@@ -216,16 +245,16 @@ public static class Library
 
                     break;
                 case ShipConfig.federation:
-                    hull = 40;
-                    shield = 20;
+                    hull = 26;
+                    shield = 12;
                     break;
                 case ShipConfig.ocrons:
-                    hull = 60;
+                    hull = 44;
                     shield = 0;
                     break;
                 case ShipConfig.krios:
-                    hull = 25;
-                    shield = 30;
+                    hull = 14;
+                    shield = 24;
                     break;
             }
             var par = new StartShipParams(ShipType.Turret, config, hull, shield, 0, 90, 2, 1, 0, 0, 0, 1f, 0f);
@@ -331,7 +360,7 @@ public static class Library
                         return ship3;
                     case ShipType.Base:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 132, 20, 0.75f, 40, 0, 0, 4, 1, 0f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 132, 20, 0.75f, 40, 0, 0, 5, 1, 0f, 1f, reloadTime), player, pilot);
                 }
 
                 break;

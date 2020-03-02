@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class CloseStrikeModul : BaseModul,IWeapon
+public class CloseStrikeModul : ActionModulInGame,IWeapon
 {
 //    private bool isCharged;
     private TimerManager.ITimer _timer;

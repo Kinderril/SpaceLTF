@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 
-public abstract class TimerModul : BaseModul
+public abstract class TimerModul : ActionModulInGame
 {
     private TimerManager.ITimer _timer;
 

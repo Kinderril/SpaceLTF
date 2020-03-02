@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class FrontShieldModul : BaseModul
+public class FrontShieldModul : ActionModulInGame
 {
     private bool _isActivated;
     private float _activationTimeEnd;
@@ -38,18 +38,18 @@ public class FrontShieldModul : BaseModul
 
     private CurWeaponDamage HitModification(CurWeaponDamage damage, Bullet bullet, ShipBase target)
     {
-        var isAtFront = Utils.FastDot(bullet.LookDirection, target.LookDirection) < 0;
+        var isAtFront = true;//Utils.FastDot(bullet.LookDirection, target.LookDirection) < 0;
 
-        if (isAtFront)
+        // if (isAtFront)
+        // {
+        if (IsReady())
         {
-            if (IsReady())
-            {
 
-                _isActivated = true;
-                FlyNumberWithDependence.Create(_owner.transform, Namings.Tag("FrontShieldActivate"), Color.red, FlyNumerDirection.right);
-                _activationTimeEnd = Time.time + 1f;
-            }
+            _isActivated = true;
+            FlyNumberWithDependence.Create(_owner.transform, Namings.Tag("FrontShieldActivate"), Color.red, FlyNumerDirection.right);
+            _activationTimeEnd = Time.time + 1f;
         }
+        // }
 
         if (_isActivated)
         {
