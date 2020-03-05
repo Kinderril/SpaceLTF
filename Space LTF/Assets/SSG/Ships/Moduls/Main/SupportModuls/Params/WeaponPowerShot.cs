@@ -24,4 +24,18 @@ public class WeaponPowerShot : BaseSupportModul
             Utils.FloatToChance(DmgLevel));
     }
 
+    public override string DescSupport(WeaponInv inv)
+    {
+        if (inv.TargetType == TargetType.Enemy)
+        {
+            return DescSupport();
+        }
+        else
+        {
+            return Namings.Format(Namings.Tag("WeaponPowerShotSupport"), Utils.FloatToChance(relocad_inc),
+                Utils.FloatToChance(DmgLevel));
+        }
+
+    }
+
 }

@@ -1,14 +1,8 @@
 ﻿using JetBrains.Annotations;
 
-public enum WeaponUpdageType
-{
-    random,
-    a1,
-    b1,
-}
 
 [System.Serializable]
-public class ImpulseInventory : WeaponInv
+public class ImpulseInventory : DamageWeaponInv
 {
 
 

@@ -98,7 +98,7 @@ public class ShipDamageData : ShipData
         }
     }
 
-    private void Repair(ShipDamageType key)
+    public void Repair(ShipDamageType key)
     {
         damagedDetails[key] = false;
         switch (key)

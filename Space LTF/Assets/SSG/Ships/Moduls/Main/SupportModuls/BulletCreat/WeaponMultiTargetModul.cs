@@ -16,8 +16,9 @@ public class WeaponMultiTargetModul : BaseSupportModul
     {
         return (target, origin, weapon, shootpos, bullestartparameters) =>
         {
-            var shipsInRad = BattleController.Instance.GetAllShipsInRadius(weapon.CurPosition,
-                BattleController.OppositeIndex(weapon.TeamIndex), bullestartparameters.radiusShoot);
+            var isWeaponSupport = weapon is SupportWeaponInGame;
+            var index = isWeaponSupport ? weapon.TeamIndex : BattleController.OppositeIndex(weapon.TeamIndex);
+            var shipsInRad = BattleController.Instance.GetAllShipsInRadius(weapon.CurPosition, index, bullestartparameters.radiusShoot);
             if (shipsInRad.Count > 0)
             {
                 foreach (var shipBase in shipsInRad)

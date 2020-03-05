@@ -58,7 +58,7 @@ public class DragableSpellItem : DragableItem
         var cost = MoneyConsts.WeaponUpgrade[Spell.Level];
         var haveMoney = MainController.Instance.MainPlayer.MoneyData.HaveMoney(cost);
         var isMy = MainController.Instance.MainPlayer == Spell.CurrentInventory.Owner;
-        var canUse = Spell.CanUpgrade() && haveMoney && Usable && isMy;
+        var canUse = Spell.CanUpgradeByLevel() && haveMoney && Usable && isMy;
         UpgradeButton.gameObject.SetActive(canUse);
 
     }

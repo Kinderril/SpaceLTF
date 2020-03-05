@@ -20,6 +20,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     public SliderWithTextMeshPro ReloadField;
     public SliderWithTextMeshPro BulletSpeedField;
     public SliderWithTextMeshPro ShootPerTime;
+    public GameObject ReloadIncrease;
 
     public Transform Layout;
 
@@ -30,6 +31,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
     public MoneySlotUI UpgradeCost;
     private WeaponUIParams dataModif;
     private bool _withModul;
+    private bool _reloadIncrease;
 
 
     public void Init(WeaponInv inv, Action callback, bool canClick, bool withModul)
@@ -57,7 +59,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         DamageShield.InitBorders(0, 20, true);
         RadiuesField.InitBorders(0, 15, true);
         AngField.InitBorders(0, 180, true);
-        ReloadField.InitBorders(1, 20, true);
+        ReloadField.InitBorders(1, 30, true);
         BulletSpeedField.InitBorders(0, 20, true);
         ShootPerTime.InitBorders(0, 4, true);
 
@@ -65,8 +67,10 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         AngField.InitName(Namings.Tag("Sector"));
         ReloadField.InitName(Namings.Tag("Reload"));
         BulletSpeedField.InitName(Namings.Tag("Speed"));
-        DamageHP.InitName(Namings.Tag("DamageBody"));
-        DamageShield.InitName(Namings.Tag("DamageShield"));
+        var dmgBodyName = _weapon is SupportWeaponInv ? Namings.Tag("HealBody") : Namings.Tag("DamageBody");
+        var dmgShieldName = _weapon is SupportWeaponInv ? Namings.Tag("HealShield") : Namings.Tag("DamageShield");
+        DamageHP.InitName(dmgBodyName);
+        DamageShield.InitName(dmgShieldName);
         ShootPerTime.InitName(Namings.Tag("ShootPerTime"));
         DrawCurrentUpgrades(modif);
     }
@@ -95,7 +99,8 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         //        DamageField.text = $"Damage. Shield:{modif.CurrentDamage.ShieldDamage}  Body:{modif.CurrentDamage.BodyDamage}";
         RadiuesField.Slider.value = modif.AimRadius;
         AngField.Slider.value = modif.SetorAngle;
-        ReloadField.Slider.value = modif.ReloadSec;
+        ReloadField.Slider.value = _reloadIncrease ? Library.RELOAD_COEF_DIF_WEAPONS * modif.ReloadSec : modif.ReloadSec;
+        ReloadIncrease.gameObject.SetActive(_reloadIncrease);
         BulletSpeedField.Slider.value = modif.BulletSpeed;
         DamageHP.Slider.value = modif.CurrentDamage.BodyDamage;
         DamageShield.Slider.value = modif.CurrentDamage.ShieldDamage;
@@ -115,6 +120,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
         }
         var allItems = _weapon.CurrentInventory.GetAllItems();
         bool haveModuls = false;
+        bool haveDamageWeapons = false, haveSupportWeapons = false;
         foreach (var item in allItems)
         {
             var support = item as BaseSupportModul;
@@ -125,9 +131,21 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
                 haveModuls = true;
                 var supportField = DataBaseController.GetItem(PrefabText);
                 supportField.transform.SetParent(Layout);
-                supportField.text = support.DescSupport();
+                supportField.text = support.DescSupport(_weapon);
+            }
+
+            var isSupport = item is SupportWeaponInv;
+            if (isSupport)
+            {
+                haveSupportWeapons = true;
+            }
+            var isDamage = item is DamageWeaponInv;
+            if (isDamage)
+            {
+                haveDamageWeapons = true;
             }
         }
+        _reloadIncrease = (haveSupportWeapons && haveDamageWeapons);
         Layout.gameObject.SetActive(haveModuls);
         DrawParams(dataModif);
     }

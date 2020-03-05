@@ -19,7 +19,7 @@ public class DebugPanelWindow : EditorWindow
     public static ShipBase SelectedShip;
     public static bool EngineOff;
     public static bool NoDamage;
-    public static bool NoMouseMove;
+//    public static bool NoMouseMove;
     public static bool FastRecharge;
     public static bool AnyWay;
     public static bool AllModuls;
@@ -73,10 +73,10 @@ public class DebugPanelWindow : EditorWindow
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("NoMouseMove." + NoMouseMove))
-            {
-                SwitchNoMouseMove();
-            }
+//            if (GUILayout.Button("NoMouseMove." + NoMouseMove))
+//            {
+//                SwitchNoMouseMove();
+//            }
 
             if (GUILayout.Button("FastRecharge." + FastRecharge))
             {
@@ -230,11 +230,11 @@ public class DebugPanelWindow : EditorWindow
         NoDamage = !NoDamage;
         DebugParamsController.NoDamage = NoDamage;
     }
-    public static void SwitchNoMouseMove()
-    {
-        NoMouseMove = !NoMouseMove;
-        DebugParamsController.NoMouseMove = NoMouseMove;
-    }
+//    public static void SwitchNoMouseMove()
+//    {
+//        NoMouseMove = !NoMouseMove;
+////        DebugParamsController.NoMouseMove = NoMouseMove;
+//    }
 
     public static void SwitchFastRecharge()
     {

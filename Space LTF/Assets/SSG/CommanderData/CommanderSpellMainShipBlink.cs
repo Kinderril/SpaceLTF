@@ -3,7 +3,7 @@
 public class CommanderSpellMainShipBlink : ISpellToGame
 {
     public BulleStartParameters BulleStartParameters { get; private set; }
-    public WeaponInventoryAffectTarget AffectAction => new WeaponInventoryAffectTarget(AffectACtion);
+    public WeaponInventoryAffectTarget AffectAction => new WeaponInventoryAffectTarget(AffectACtion, TargetType.Ally);
     private ShipBase _shipToMove;
     private Vector3 center;
     private float MaxRadiusSqrt;

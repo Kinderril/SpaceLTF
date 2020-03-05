@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 
 [System.Serializable]
-public class EMIRocketInventory : WeaponInv
+public class EMIRocketInventory : DamageWeaponInv
 {
     public EMIRocketInventory([NotNull] WeaponInventoryParameters parameters, int Level)
         : base(parameters, WeaponType.eimRocket, Level)

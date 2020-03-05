@@ -10,6 +10,7 @@ public class ThrowAroundSpell : BaseSpellModulInv
     private const float DIST_SHOT = 50;
     private const float DAMAGE_BASE = 5;
     private const float rad = 4f;
+    private const float powerAsteroidCoef = 1.5f;
     private const float timerToLockEngine = 3f;
     private float shieldDmg => DAMAGE_BASE + Level * 3;
     private float powerThrow => 7 + Level * 1.5f;
@@ -89,7 +90,7 @@ public class ThrowAroundSpell : BaseSpellModulInv
             var dist = dir.magnitude;
             if (dist < rad)
             {
-                var power = (1f - dist / rad) * powerThrow;
+                var power = (1f - dist / rad) * powerThrow * powerAsteroidCoef;
                 power = MyExtensions.GreateRandom(power);
                 aiAsteroidPredata.Push(dir, power);
             }

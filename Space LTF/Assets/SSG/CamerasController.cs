@@ -4,12 +4,14 @@
 public class CamerasController : Singleton<CamerasController>
 {
     private const string KEY_FXAA = "KEY_FXAA";
-    private const string KEY = "SoundKey";
+    private const string KEY_SOUND = "SoundKey";
+    private const string KEY_NO_MOUSE_MOVE = "KEY_NO_MOUSE_MOVE";
     public CameraController GameCamera;
     public BackgroundCamera BackgroundCamera;
     public CameraController GlobalMapCamera;
     // public AudioListener BattleListerer;
     // public AudioListener MenuListerer;
+    private bool _noMouseMove = false;
     private bool _isAudioEnabled = true;
     public AudioSourceMusicControl MusicControl;
     public Camera UICamera;
@@ -18,6 +20,7 @@ public class CamerasController : Singleton<CamerasController>
     private CameraController _activeCamera;
     private const float MinOffset = 40;
     private const float MaxOffset = 20;
+    public bool IsNoMouseMove => _noMouseMove;
     public bool IsAudioEnable => _isAudioEnabled;
     private bool _fxaaEnable;
 
@@ -28,9 +31,21 @@ public class CamerasController : Singleton<CamerasController>
         OpenUICamera();
     }
 
+    public void CheckNoMouseMoveOnStart()
+    {
+        var key = PlayerPrefs.GetInt(KEY_NO_MOUSE_MOVE, 1);
+        _noMouseMove = key == 1;
+    }
+
+    // public void MainNoMouseMoveSwitch()
+    // {
+    //     _noMouseMove = !_noMouseMove;
+    //     PlayerPrefs.SetInt(KEY_NO_MOUSE_MOVE, _noMouseMove ? 1 : 0);
+    // }
+
     public void CheckSoundOnStart()
     {
-        var key = PlayerPrefs.GetInt(KEY, 1);
+        var key = PlayerPrefs.GetInt(KEY_SOUND, 1);
         _isAudioEnabled = key == 1;
         CheckListaner();
     }
@@ -38,7 +53,7 @@ public class CamerasController : Singleton<CamerasController>
     public void MainListenerSwitch()
     {
         _isAudioEnabled = !_isAudioEnabled;
-        PlayerPrefs.SetInt(KEY, _isAudioEnabled ? 1 : 0);
+        PlayerPrefs.SetInt(KEY_SOUND, _isAudioEnabled ? 1 : 0);
         CheckListaner();
     }
 
@@ -49,7 +64,7 @@ public class CamerasController : Singleton<CamerasController>
             return;
         }
         _isAudioEnabled = val;
-        PlayerPrefs.SetInt(KEY, _isAudioEnabled ? 1 : 0);
+        PlayerPrefs.SetInt(KEY_SOUND, _isAudioEnabled ? 1 : 0);
         CheckListaner();
 
     }
@@ -159,12 +174,17 @@ public class CamerasController : Singleton<CamerasController>
             keybordDir = new Vector3(y, 0, x);
             if (_activeCamera != null)
             {
-#if UNITY_EDITOR
-                if (DebugParamsController.NoMouseMove)
+                if (_noMouseMove)
                 {
                     return;
                 }
-#endif
+
+                // #if UNITY_EDITOR
+                //                 if (DebugParamsController.NoMouseMove)
+                //                 {
+                //                     return;
+                //                 }
+                // #endif
                 _activeCamera.MoveMainCamToDir(keybordDir);
             }
         }
@@ -202,7 +222,6 @@ public class CamerasController : Singleton<CamerasController>
         OpenUICamera();
     }
 
-
     public void OpenUICamera()
     {
         UICamera.gameObject.SetActive(true);
@@ -221,8 +240,6 @@ public class CamerasController : Singleton<CamerasController>
         UICamera.gameObject.SetActive(false);
     }
 
-
-
     public void OpenGameCamera()
     {
         MusicControl.StopGlobalAudio();
@@ -232,15 +249,11 @@ public class CamerasController : Singleton<CamerasController>
         UICamera.gameObject.SetActive(false);
     }
 
-
     public void CloseGameCamera()
     {
         GameCamera.gameObject.SetActive(false);
         _activeCamera = null;
     }
-
-
-
     public void CloseGlobalCamera()
     {
         _activeCamera = null;
@@ -265,6 +278,7 @@ public class CamerasController : Singleton<CamerasController>
     {
         StartCheckAA();
         CheckSoundOnStart();
+        CheckNoMouseMoveOnStart();
     }
 
     private void CheckAntiAlysing(bool fxaaEnable)
@@ -289,6 +303,11 @@ public class CamerasController : Singleton<CamerasController>
     public void FXAASwitch()
     {
         EnableAA(!_fxaaEnable);
+    }
+
+    public void SetNoMouseMove(bool isOn)
+    {
+        _noMouseMove = isOn;
     }
 }
 

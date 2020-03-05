@@ -2,7 +2,7 @@
 using System;
 
 [System.Serializable]
-public class BombInventoryWeapon : WeaponInv
+public class BombInventoryWeapon : DamageWeaponInv
 {
 
     [NonSerialized]

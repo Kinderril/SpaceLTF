@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using Toggle = UnityEngine.UI.Toggle;
 
 public class WindowKeys : MonoBehaviour
@@ -60,5 +59,9 @@ public class WindowKeys : MonoBehaviour
     {
         CamerasController.Instance.MainListenerSwitch();
     }
+//    public void OnNoMouseMove()
+//    {
+//        CamerasController.Instance.MainNoMouseMoveSwitch();
+//    }
 
 }

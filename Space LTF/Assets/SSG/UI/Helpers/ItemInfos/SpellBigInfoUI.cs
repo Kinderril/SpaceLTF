@@ -52,7 +52,7 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
 
         CostCountField.text = Namings.Format(Namings.Tag("ChargesCount"), _spell.CostCount);
         CostDelayField.text = Namings.Format(Namings.Tag("ChargesDelay"), _spell.CostTime);
-        var canUpgrade = _spell.CanUpgrade();
+        var canUpgrade = _spell.CanUpgradeByLevel();
         ButtonContainer.gameObject.SetActive(canUpgrade);
         MaxLevel.gameObject.SetActive(!canUpgrade);
         if (canUpgrade)

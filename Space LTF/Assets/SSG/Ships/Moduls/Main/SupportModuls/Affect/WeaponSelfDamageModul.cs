@@ -37,6 +37,17 @@ public class WeaponSelfDamageModul : BaseSupportModul
     }
 
 
+    public override string DescSupport(WeaponInv inv)
+    {
+        if (inv.TargetType == TargetType.Enemy)
+        {
+            return DescSupport();
+        }
+        else
+        {
+            return Namings.Format(Namings.Tag("WeaponSelfDamageSupport"), Dmg, Self);
+        }
 
+    }
 
 }

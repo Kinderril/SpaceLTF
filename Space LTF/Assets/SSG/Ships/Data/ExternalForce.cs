@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ExternalForce
 {
@@ -11,7 +7,7 @@ public class ExternalForce
     private float Power;
     private float EndTime;
     private float Period;
-    
+
 
     public ExternalForce()
     {
@@ -33,7 +29,7 @@ public class ExternalForce
         var delta = EndTime - Time.time;
         if (delta <= 0)
         {
-            IsActive = false;
+            Stop();
             return Vector3.zero;
         }
         var d = delta / Period;
@@ -41,5 +37,11 @@ public class ExternalForce
 
         return p * Dir * Time.deltaTime;
     }
-    
+
+    public void Stop()
+    {
+
+        IsActive = false;
+    }
+
 }

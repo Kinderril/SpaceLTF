@@ -618,8 +618,8 @@ public class ShipBase : MovingObject
         foreach (var shipTest in Commander.Ships)
         {
             var s = (shipTest.Value);
-            if (s.Id != Id)
-            {
+//            if (s.Id != Id)
+//            {
                 var hpPercent = s.ShipParameters.CurHealth / s.ShipParameters.MaxHealth;
                 var spPercent = s.ShipParameters.CurShiled / s.ShipParameters.MaxShield;
                 bool hpWantHeal = hpPercent < .6f;
@@ -636,7 +636,7 @@ public class ShipBase : MovingObject
                         haveVal = true;
                     }
                 }
-            }
+//            }
         }
         return haveVal;
     }

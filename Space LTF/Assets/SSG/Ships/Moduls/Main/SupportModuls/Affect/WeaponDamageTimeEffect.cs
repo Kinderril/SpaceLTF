@@ -18,6 +18,11 @@ public class WeaponDamageTimeEffect : BaseSupportModul
             ship.DamageData.ApplyEffect(_damageType, 8f);
     }
 
+    protected void AffectTargetDelegateSupport(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate, WeaponAffectionAdditionalParams additional)
+    {
+        ship.DamageData.Repair(_damageType);
+    }
+
     private float ChanceLevel()
     {
         return Chance + Level * PerLevel;
@@ -39,9 +44,29 @@ public class WeaponDamageTimeEffect : BaseSupportModul
         }
     }
 
+    public override string DescSupport(WeaponInv inv)
+    {
+        if (inv.TargetType == TargetType.Enemy)
+        {
+            return DescSupport();
+        }
+        else
+        {
+            return Namings.Tag("DamageTimeEffectRepair");
+        }
+
+    }
+
     protected override WeaponInventoryAffectTarget AffectTarget(WeaponInventoryAffectTarget affections)
     {
-        affections.Add(AffectTargetDelegate);
+        if (affections.TargetType == TargetType.Enemy)
+        {
+            affections.Add(AffectTargetDelegate);
+        }
+        else
+        {
+            affections.Add(AffectTargetDelegateSupport);
+        }
         return base.AffectTarget(affections);
     }
 

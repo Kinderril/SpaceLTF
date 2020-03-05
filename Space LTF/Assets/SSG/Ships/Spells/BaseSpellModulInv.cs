@@ -55,7 +55,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
         IsHoming = isHoming;
         CastSpell = castActionSpell;
         BulleStartParameters = bulleStartParameters;
-        AffectAction = new WeaponInventoryAffectTarget(affectAction);
+        AffectAction = new WeaponInventoryAffectTarget(affectAction, TargetType.Enemy);
         CreateBullet = createBullet;
         SpellType = spell;
         CostCount = costCount;
@@ -159,14 +159,14 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
     public void TryUpgrade(ESpellUpgradeType upgradeType)
     {
         var owner = CurrentInventory.Owner;
-        if (CanUpgrade())
+        if (CanUpgradeByLevel())
         {
             if (MoneyConsts.SpellUpgrade.ContainsKey(Level))
             {
                 var cost = MoneyConsts.SpellUpgrade[Level];
                 if (owner.MoneyData.HaveMoney(cost))
                 {
-                    var txt = Namings.Format("You want to upgrade {0}", Namings.SpellName(SpellType));
+                    var txt = Namings.Format(Namings.Tag("wantUpgrade"), Namings.SpellName(SpellType), cost);
                     WindowManager.Instance.ConfirmWindow.Init(() =>
                     {
                         owner.MoneyData.RemoveMoney(cost);
@@ -185,7 +185,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
         }
     }
 
-    public bool CanUpgrade()
+    public bool CanUpgradeByLevel()
     {
         return Level < Library.MAX_SPELL_LVL;
     }
@@ -193,7 +193,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
 
     public bool Upgrade(ESpellUpgradeType upgradeType)
     {
-        if (CanUpgrade())
+        if (CanUpgradeByLevel())
         {
             var isNextSpecial = ShallAddSpecialNextLevel();
             Level++;

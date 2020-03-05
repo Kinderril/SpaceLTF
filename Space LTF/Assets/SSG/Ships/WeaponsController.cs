@@ -28,6 +28,7 @@ public class WeaponsController
         _owner = owner;
         this.weaponPosition = weaponPosition;
         int slotIndex = 0;
+        bool haveDamageWeapons = false, haveSupportWeapons = false;
         foreach (var weapon1 in weapons)
         {
             if (weapon1 == null)
@@ -46,10 +47,12 @@ public class WeaponsController
                 _allWeapons.Add(weapon);
                 if (weapon.TargetType == TargetType.Enemy)
                 {
+                    haveDamageWeapons = true;
                     _damagedWeapons.Add(weapon);
                 }
                 else
                 {
+                    haveSupportWeapons = true;
                     _supportWeapons.Add(weapon);
                     SupportWeaponsBuffPosibilities.AddWepon(weapon);
                 }
@@ -76,6 +79,15 @@ public class WeaponsController
             {
                 Debug.LogError("ship have low weapons position " + _owner.name + " " + weaponPosition.Count);
             }
+
+            if (haveSupportWeapons && haveDamageWeapons)
+            {
+                foreach (var weaponInGame in _allWeapons)
+                {
+                    weaponInGame.IncreaseReload(Library.RELOAD_COEF_DIF_WEAPONS);
+                }
+            }
+
             if (_maxAttackRadius <= 0)
             {
                 _maxAttackRadius = weapon.AimRadius;

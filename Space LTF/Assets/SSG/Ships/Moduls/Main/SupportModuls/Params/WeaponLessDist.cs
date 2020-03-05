@@ -24,4 +24,17 @@ public class WeaponLessDist : BaseSupportModul
             Namings.Format(Namings.Tag(Type.ToString()), Utils.FloatToChance(1f - spd_inc),
                 Utils.FloatToChance(DmgLevel));
     }
+    public override string DescSupport(WeaponInv inv)
+    {
+        if (inv.TargetType == TargetType.Enemy)
+        {
+            return DescSupport();
+        }
+        else
+        {
+            return Namings.Format(Namings.Tag("WeaponLessDistSupport"), Utils.FloatToChance(1f - spd_inc),
+                Utils.FloatToChance(DmgLevel));
+        }
+
+    }
 }

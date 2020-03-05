@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class DebugParamsController
@@ -8,7 +7,7 @@ public class DebugParamsController
 
     public static bool EngineOff;
     public static bool NoDamage;
-    public static bool NoMouseMove;
+    // public static bool NoMouseMove;
     public static bool FastRecharge;
     public static bool AllModuls = false;
     public static bool AnyWay = false;

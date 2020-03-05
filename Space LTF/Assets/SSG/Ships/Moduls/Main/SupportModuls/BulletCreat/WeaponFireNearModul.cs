@@ -1,6 +1,4 @@
-﻿using System;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WeaponFireNearModul : BaseSupportModul
 {
     private const float RAD = 3.8f;
@@ -17,10 +15,13 @@ public class WeaponFireNearModul : BaseSupportModul
 
     protected override CreateBulletDelegate BulletCreate(CreateBulletDelegate standartDelegate)
     {
+        // weapon.
+
         return (target, origin, weapon, pos, parameters) =>
             {
                 var ships = BattleController.Instance.GetAllShipsInRadius(pos,
                     BattleController.OppositeIndex(weapon.TeamIndex), RAD);
+
 
                 foreach (var ship in ships)
                 {

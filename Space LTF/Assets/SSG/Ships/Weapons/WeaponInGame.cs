@@ -91,7 +91,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         DestroyAction = weaponInv.BulletDestroyed;
         _level = weaponInv.Level;
         _bulletTurnSpeed = weaponInv._bulletTurnSpeed;
-        AffectAction = new WeaponInventoryAffectTarget(AffectBulletOnShip);
+        AffectAction = new WeaponInventoryAffectTarget(AffectBulletOnShip, weaponInv.TargetType);
         _isRoundAng = weaponInv.isRoundAng;
         CreateBulletAction = weaponInv.BulletCreate;
         ShootPerTime = weaponInv.ShootPerTime;
@@ -467,11 +467,13 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         OnShootEnd = null;
         OnShootStart = null;
     }
+    public void IncreaseReload(float reloadCoefDifWeapons)
+    {
+        ReloadSec = reloadCoefDifWeapons * ReloadSec;
+    }
 
     public void Unload()
     {
-
-
         _nextShootTime = Time.time + ReloadSec;
     }
 
@@ -479,4 +481,5 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     {
         _testTargetPosition.DropAimPos();
     }
+
 }

@@ -163,7 +163,7 @@ public abstract class Bullet : MovingObject
                 bullet.InitNextFrame(weapon, dir, position, distanceShoot, bulletSpeed);
                 break;
             case BulletType.delayHoming:
-                bullet.InitDelayHoming(weapon, dir, position, distanceShoot, bulletSpeed, turnSpeed);
+                bullet.InitDelayHoming(weapon, dir, position, target, distanceShoot, bulletSpeed, turnSpeed);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -216,7 +216,7 @@ public abstract class Bullet : MovingObject
 
     }
 
-    private void InitDelayHoming(IWeapon weapon, Vector3 dir, Vector3 position, float distanceShoot, float bulletSpeed, float turnSpeed)
+    private void InitDelayHoming(IWeapon weapon, Vector3 dir, Vector3 position, ShipBase target, float distanceShoot, float bulletSpeed, float turnSpeed)
     {
         _turnSpeed = turnSpeed;
         _curTime = 0;
@@ -230,6 +230,7 @@ public abstract class Bullet : MovingObject
         Weapon = weapon;
         _startTime = Time.time;
         _startPos = position;
+        Target = target;
         transform.position = _startPos;
         _endPos = _startPos + Utils.NormalizeFastSelf(dir) * distanceShoot;
         _distanceShoot = distanceShoot;
@@ -361,7 +362,8 @@ public abstract class Bullet : MovingObject
                             return;
                         }
 
-                        if (ship.ShipBase == Weapon.Owner)
+                        var deltaStart = Time.time - _startTime;
+                        if (deltaStart < 0.6f)
                         {
                             return;
                         }

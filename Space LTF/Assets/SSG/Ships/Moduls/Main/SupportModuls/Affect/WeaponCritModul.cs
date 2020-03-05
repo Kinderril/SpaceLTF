@@ -14,7 +14,14 @@ public class WeaponCritModul : BaseSupportModul
     protected override bool AffectTargetImplement => true;
     protected override WeaponInventoryAffectTarget AffectTarget(WeaponInventoryAffectTarget affections)
     {
-        affections.Add(AffectTargetDelegate);
+        if (affections.TargetType == TargetType.Enemy)
+        {
+            affections.Add(AffectTargetDelegate);
+        }
+        else
+        {
+            affections.Add(AffectTargetDelegateSupport);
+        }
         return base.AffectTarget(affections);
     }
 
@@ -22,11 +29,22 @@ public class WeaponCritModul : BaseSupportModul
     {
         return Chance + Level * PerLevel;
     }
+    public override string DescSupport(WeaponInv inv)
+    {
+        if (inv.TargetType == TargetType.Enemy)
+        {
+            return DescSupport();
+        }
+        else
+        {
+            return Namings.Tag("WeaponCritSupport");
+        }
+
+    }
 
     public override string DescSupport()
     {
-        return Namings.Format(Namings.Tag("WeaponCrit"),
-            Utils.FloatToChance(ChanceLevel()), Damage);
+        return Namings.Format(Namings.Tag("WeaponCrit"), Utils.FloatToChance(ChanceLevel()), Damage);
     }
 
     protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate, WeaponAffectionAdditionalParams additional)
@@ -38,5 +56,13 @@ public class WeaponCritModul : BaseSupportModul
         }
     }
 
-
+    protected void AffectTargetDelegateSupport(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate, WeaponAffectionAdditionalParams additional)
+    {
+        if (MyExtensions.IsTrue01(ChanceLevel()))
+        {
+            var healCount = Damage * 1.5f;
+            FlyNumberWithDependence.Create(ship.transform, Namings.Format(Namings.Tag("Crit"), healCount), Color.red, FlyNumerDirection.right);
+            paramsTargte.HealHp(healCount);
+        }
+    }
 }

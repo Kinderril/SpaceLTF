@@ -1,8 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
-public abstract class BaseSupportModul :  BaseModulInv
+﻿[System.Serializable]
+public abstract class BaseSupportModul : BaseModulInv
 {
     public BaseSupportModul(SimpleModulType type, int level)
         : base(type, level)
@@ -59,5 +56,10 @@ public abstract class BaseSupportModul :  BaseModulInv
     }
 
     public abstract string DescSupport();
+
+    public virtual string DescSupport(WeaponInv inv)
+    {
+        return DescSupport();
+    }
 
 }

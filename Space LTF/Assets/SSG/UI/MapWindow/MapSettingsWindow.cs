@@ -6,7 +6,8 @@ using Toggle = UnityEngine.UI.Toggle;
 public class MapSettingsWindow : MonoBehaviour
 {
     public Toggle SoundToggle;
-    public Toggle FXAAToggle; 
+    public Toggle NoMouseMoveSoundToggle;
+    public Toggle FXAAToggle;
     public Toggle EngToggle;
     public Toggle RusToggle;
     private Action _closeCallback;
@@ -20,6 +21,11 @@ public class MapSettingsWindow : MonoBehaviour
         CamerasController.Instance.SetAudioMainListener(SoundToggle.isOn);
     }
 
+    public void OnNoMouseMoveSound()
+    {
+        CamerasController.Instance.SetNoMouseMove(NoMouseMoveSoundToggle.isOn);
+    }
+
     public void OnFXAA()
     {
         CamerasController.Instance.FXAASwitch();
@@ -30,6 +36,7 @@ public class MapSettingsWindow : MonoBehaviour
         LangChanged.gameObject.SetActive(false);
         ButtonHolder.SetActive(withButtons);
         Keys.gameObject.SetActive(false);
+        NoMouseMoveSoundToggle.isOn = (CamerasController.Instance.IsNoMouseMove);
         SoundToggle.isOn = (CamerasController.Instance.IsAudioEnable);
         FXAAToggle.isOn = (CamerasController.Instance.FxaaEnable);
         switch (Namings.LocTag)

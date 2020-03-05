@@ -22,6 +22,7 @@ public class DelayHomingBullet : LinearBullet
     private float _endHomingPeriod;
     private float _moreTurnHomingPeriod;
     private bool _isLeft;
+    public bool RecalcTargetAtStartHoming = true;
 
     public override BulletType GetType => BulletType.delayHoming;
 
@@ -107,8 +108,11 @@ public class DelayHomingBullet : LinearBullet
         }
         else
         {
-            TrailEffect.Play();
-            TrailEffect.StartEmmision();
+            if (TrailEffect != null)
+            {
+                TrailEffect.Play();
+                TrailEffect.StartEmmision();
+            }
             _homing = true;
             _endHomingPeriod = Time.time + HomingPeriodSec;
             _moreTurnHomingPeriod = Time.time + TurnSpeedDeltaHomingPeriod;
@@ -122,17 +126,23 @@ public class DelayHomingBullet : LinearBullet
     [CanBeNull]
     private ShipBase FindTarget(Vector3 position)
     {
-        var opIndex = BattleController.OppositeIndex(Weapon.TeamIndex);
-        var all = BattleController.Instance.GetAllShipsInRadius(position, opIndex, HomigRadius);
-        if (all.Count > 0)
+        if (RecalcTargetAtStartHoming)
         {
-            return all.RandomElement();
-        }
-        else
-        {
-            return null;
+
+            var opIndex = AffectTypeHit == BulletAffectType.damage ? BattleController.OppositeIndex(Weapon.TeamIndex) : Weapon.TeamIndex;
+            var all = BattleController.Instance.GetAllShipsInRadius(position, opIndex, HomigRadius);
+            if (all.Count > 0)
+            {
+                return all.RandomElement();
+            }
         }
 
+        if (Target != null)
+        {
+            return Target;
+        }
+
+        return null;
     }
 
     private void OnDeathTarget(ShipBase obj)

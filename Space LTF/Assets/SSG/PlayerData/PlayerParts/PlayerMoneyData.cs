@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [System.Serializable]
 public class PlayerMoneyData
 {
-//    private Player _player;
     public int MoneyCount { get; private set; }
+    public int UpgradesCount { get; private set; }
 
     [field: NonSerialized]
     public event Action<int> OnMoneyChange;
+    [field: NonSerialized]
+    public event Action<int> OnUpgradeChange;
 
     public PlayerMoneyData()
     {
 #if UNITY_EDITOR
-//        MoneyCount = 1000;
+        //        MoneyCount = 1000;
 #endif
-        //        _player = player;
     }
 
     public void AddMoney(int moneyToReward)
@@ -30,7 +27,19 @@ public class PlayerMoneyData
             OnMoneyChange(MoneyCount);
         }
     }
+    public void AddUpgrades(int val)
+    {
+        UpgradesCount += val;
+        if (OnUpgradeChange != null)
+        {
+            OnUpgradeChange(MoneyCount);
+        }
+    }
 
+    public bool HaveUpgrades(int costValue)
+    {
+        return UpgradesCount >= costValue;
+    }
     public bool HaveMoney(int costValue)
     {
         return MoneyCount >= costValue;
@@ -47,6 +56,14 @@ public class PlayerMoneyData
         if (OnMoneyChange != null)
         {
             OnMoneyChange(MoneyCount);
+        }
+    }
+    public void RemoveUpgrades(int val)
+    {
+        UpgradesCount -= val;
+        if (OnUpgradeChange != null)
+        {
+            OnUpgradeChange(MoneyCount);
         }
     }
 

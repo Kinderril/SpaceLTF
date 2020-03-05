@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DebugInGame : MonoBehaviour
 {
@@ -22,14 +21,14 @@ public class DebugInGame : MonoBehaviour
                 _inGameWindow.OnKillOnEnemiesDebugClick();
         }
 
-        if (Input.GetKeyDown(KeyCode.F6))
-        {
-            DebugParamsController.NoMouseMove = !DebugParamsController.NoMouseMove;
-        }  
+        // if (Input.GetKeyDown(KeyCode.F6))
+        // {
+        //     DebugParamsController.NoMouseMove = !DebugParamsController.NoMouseMove;
+        // }  
         if (Input.GetKeyDown(KeyCode.F7))
         {
             DebugParamsController.EngineOff = !DebugParamsController.EngineOff;
-        }  
+        }
         if (Input.GetKeyDown(KeyCode.F8))
         {
             DebugParamsController.NoDamage = !DebugParamsController.NoDamage;

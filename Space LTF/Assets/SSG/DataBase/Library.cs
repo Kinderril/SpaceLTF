@@ -66,7 +66,9 @@ public static class Library
     private const float MINE_ANG = 19f;
 
     private const float SUPPORT_ANG = 180f;
-    private const float SUPPORT_SPEED = 6.8f;
+    private const float SUPPORT_SPEED = 4.0f;
+    private const float SUPPORT_RELOAD = 9.0f;
+    private const float SUPPORT_TURN_SPEED = 104.0f;
     // private const float SUPPORT_ANG = 44f;
 
     private const float BEAM_ANG = 180f;
@@ -91,6 +93,7 @@ public static class Library
     public const float PILOT_LEVEL_COEF = 0.15f;
     public const float PILOT_RANK_COEF = 0f; //0.7f;
     public const int MAX_PILOT_PARAMETER_LEVEL = 80;
+    public static float RELOAD_COEF_DIF_WEAPONS = 2f;
 
     public const int COINS_TO_POWER_WEAPON_SHIP_SHIELD = 1;
     public const int COINS_TO_POWER_WEAPON_SHIP_SHIELD_DELAY = 40;
@@ -169,10 +172,10 @@ public static class Library
 
             //SUPPORT
             case WeaponType.healBodySupport:
-                parametes = new WeaponInventoryParameters(0, 4, 0, 2, SUPPORT_ANG, BEAM_DELAY, 0.4f, 1, SUPPORT_SPEED, 4.5f, 80f, TargetType.Ally);
+                parametes = new WeaponInventoryParameters(0, 4, 0, 1, SUPPORT_ANG, SUPPORT_RELOAD, 0.4f, 1, SUPPORT_SPEED, 4.5f, SUPPORT_TURN_SPEED, TargetType.Ally);
                 return new HealSuppotWeaponInventory(parametes, 1);
             case WeaponType.healShieldSupport:
-                parametes = new WeaponInventoryParameters(4, 0, 2, 0, SUPPORT_ANG, BEAM_DELAY, 0.4f, 1, SUPPORT_SPEED, 4.5f, 80f, TargetType.Ally);
+                parametes = new WeaponInventoryParameters(4, 0, 1, 0, SUPPORT_ANG, SUPPORT_RELOAD, 0.4f, 1, SUPPORT_SPEED, 4.5f, SUPPORT_TURN_SPEED, TargetType.Ally);
                 return new ShieldSuppotWeaponInventory(parametes, 1);
 
 
