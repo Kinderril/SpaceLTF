@@ -211,6 +211,7 @@ public static class RusLocalization
         {"DamageTimeEffectFire","Поджигает на {0}"},
         {"shildDamage",  "Глушилка"},
         {"wantUpgrade", "Улучшить {0}? Стоимость {1}"},
+        {"wantUpgradeLong", "Улучшить {0}? Стоимость:{1}. Микрочипы:{2}"},
 
 
         {"questKills", "{0} Убийств"},
@@ -432,6 +433,8 @@ public static class RusLocalization
 
         {"MercGlobal", "Убежище наемников"},
         {"NotEnoughtMoney", "Недостаточно денег"},
+        {"NotEnoughtMoneyLong", "Недостаточно денег {0}."},
+        {"NotEnoughtUpgrades", "Недостаточно микрочипов для улучшения {0}."},
         {"leave", "Уйти"},
         {"HireMerc", "Нанять {1} {0}. Уровень:{2}. Стоимость:{3} кредитов."},
         {"Take", "Взять"},
@@ -443,6 +446,9 @@ public static class RusLocalization
         {"Shield", "Щит"},
         {"TurnSpeed", "Поворот"},
         {"Unknown", "Неизвестно"},
+        {"NewGame", "Новая игра"},
+        {"Continue", "Продолжить"},
+        {"Exit", "Выход"},
 
         {"Laser", "Лазер"},
         {"Rocket", "Ракеты"},
@@ -455,6 +461,7 @@ public static class RusLocalization
         {"AdditionalPower", "Улучшения флотов"},
 
         {"AddCredits", "Добавленно кредитов:{0}"},
+        {"AddMicrochips", "Добавленно микрочипов:{0}"},
         {"Comparable", "Сопоставим"},
         {"Risky", "Рисковано"},
         {"Easily", "Легко"},
@@ -739,11 +746,14 @@ public static class RusLocalization
         {"dialog_afterBattleHireOk","Найм совершен. Тип:{0}  Фракция:{1}"},
         {"dialog_afterBattleRepairOk","Ремонт завершен. Рупутация увеличена."},
         {"dialog_afterBattleRepairFail","Ремонт неудачен."},
+        {"dialog_afterBattleMicrochip","Разобрать корабль и попробовать достать микрочип для улучшений."},
+        {"dialog_afterBattleMircochipOk","Чип получен"},
+        {"dialog_afterBattleMircochipFail","Ничего не найдено"} ,
 
         {"dialog_dungeonExitFinalWin","Военная база полностью разрушена"},
         {"dialog_dungeonExitGo","Забрать все и улететь"},
         {"dialog_dungeonExitFinalBattle","Это военная база."},
-        {"dialog_dungeogArmyEnterStart","Э/то военный сектор. Вы действительно хотите отправится туда? Выход будет только на другой стороне."},
+        {"dialog_dungeogArmyEnterStart","Это военный сектор. Вы действительно хотите отправится туда? Выход будет только на другой стороне. Вы можете найти здесь некоторые уникальные предметы."},
         {"dialog_dungeogArmyFriendGoIn","Попросить ваших друзей впустить вас."},
 
         {"dialog_teacherImproved","Корабль {0} улучшен. Уровень:{1}"},

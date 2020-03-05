@@ -205,6 +205,25 @@ public static class Library
         return CreateDamageWeapon(level.Random());
     }
 
+    public static WeaponInv CreatWeapon(int level)
+    {
+        var types = new WDictionary<WeaponType>(new Dictionary<WeaponType, float>
+        {
+            {WeaponType.laser, 9},
+            {WeaponType.rocket, 9},
+            {WeaponType.eimRocket, 7},
+            {WeaponType.casset, 7},
+            {WeaponType.impulse, 7},
+            {WeaponType.beam, 7}   ,
+                {WeaponType.healBodySupport, 6},
+            {WeaponType.healShieldSupport, 6},
+        });
+
+        var w = CreateWeaponByType(types.Random());
+        w.Level = level;
+        return w;
+    }
+
     public static WeaponInv CreateDamageWeapon(int level)
     {
         var types = new WDictionary<WeaponType>(new Dictionary<WeaponType, float>

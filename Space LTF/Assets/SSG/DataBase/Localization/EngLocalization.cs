@@ -130,6 +130,7 @@ public static class EngLocalization
         {"MainShipBlinkName", "Jumper"},
         {"hookShot", "Magnet strike"},
         {"wantUpgrade", "You want to upgrade {0}? Credits:{1}"},
+        {"wantUpgradeLong", "You want to upgrade {0}? Credits:{1}. Microchips:{2}"},
 
 
         {"engineLock", "Engine locker"},
@@ -441,7 +442,9 @@ public static class EngLocalization
         {"nameRdrWin", "King"},
 
         {"MercGlobal", "Mercenary hideout"},
-        {"NotEnoughtMoney", "Not enough money"},
+        {"NotEnoughtMoney", "Not enough credits"},
+        {"NotEnoughtMoneyLong", "Not enought credits {0}."},
+        {"NotEnoughtUpgrades", "Not enought microchips {0}."},
         {"leave", "Leave"},
         {"HireMerc", "Hire {1} the {0}. Level:{2}. Cost:{3} credits."},
         {"Take", "Take"},
@@ -453,6 +456,9 @@ public static class EngLocalization
         {"Shield", "Shield"},
         {"TurnSpeed", "Turn"},
         {"Unknown", "Unknown"},
+        {"NewGame", "New Game"},
+        {"Continue", "Continue"},
+        {"Exit", "Exit"},
 
         {"Laser", "Laser"},
         {"Rocket", "Rocket"},
@@ -465,6 +471,7 @@ public static class EngLocalization
         {"AdditionalPower", "Enemies upgrades"},
 
         {"AddCredits", "Add credits:{0}"},
+        {"AddMicrochips", "Add microchips:{0}"},
         {"Comparable", "Comparable"},
         {"Risky", "Risky"},
         {"Easily", "Easily"},
@@ -730,11 +737,14 @@ public static class EngLocalization
         {"dialog_afterBattleHireOk","You hired a new pilot. Type:{0}  Config:{1}"},
         {"dialog_afterBattleRepairOk","Repair complete reputation add"},
         {"dialog_afterBattleRepairFail","Repair fail."},
+        {"dialog_afterBattleMicrochip","Decompile ship and try to find microchip for upgrades"},
+        {"dialog_afterBattleMircochipOk","Ok"},
+        {"dialog_afterBattleMircochipFail","Fail"},
 
         {"dialog_dungeonExitFinalWin","This military base completly destoyed"},
         {"dialog_dungeonExitGo","Grab all items and go"},
         {"dialog_dungeonExitFinalBattle","This is main militaly base at this sector"},
-        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there? This sector have only one exit on the other side."},
+        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there? This sector have only one exit on the other side. You can find here some unique items."},
         {"dialog_dungeogArmyFriendGoIn","Ask your friend to go in."},
 
         {"dialog_Trader","Trader"},

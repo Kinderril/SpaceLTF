@@ -239,7 +239,11 @@ public class WindowManager : Singleton<WindowManager>
 
     public void NotEnoughtMoney(int money)
     {
-        WindowManager.Instance.InfoWindow.Init(null, Namings.Format("Not enought credits {0}.", money));
+        WindowManager.Instance.InfoWindow.Init(null, Namings.Format(Namings.Tag("NotEnoughtMoneyLong"), money));
+    }
+    public void NotEnoughtUpgrades(int cost)
+    {
+        WindowManager.Instance.InfoWindow.Init(null, Namings.Format(Namings.Tag("NotEnoughtUpgrades"), cost));
     }
 
     public void ItemWindowClose()

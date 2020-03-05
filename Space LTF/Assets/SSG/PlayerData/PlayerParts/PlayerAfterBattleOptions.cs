@@ -11,7 +11,8 @@ public enum EAfterBattleAnswers
     afterBattleHireAction,
     afterBattleSearchFor,
     afterBattleKillAction,
-    afterBattleRepairAction
+    afterBattleRepairAction,
+    afterBattleMicrochip,
 }
 
 
@@ -30,7 +31,8 @@ public class PlayerAfterBattleOptions
         {EAfterBattleAnswers.afterBattleHireAction, START_MAX_COUNT},
         {EAfterBattleAnswers.afterBattleSearchFor, START_MAX_COUNT},
         {EAfterBattleAnswers.afterBattleKillAction, START_MAX_COUNT},
-        {EAfterBattleAnswers.afterBattleRepairAction, START_MAX_COUNT}
+        {EAfterBattleAnswers.afterBattleRepairAction, START_MAX_COUNT}   ,
+        {EAfterBattleAnswers.afterBattleMicrochip, START_MAX_COUNT}
     };
 
     private int _lastStepGetDialog;
@@ -79,6 +81,7 @@ public class PlayerAfterBattleOptions
             preList.Add(EAfterBattleAnswers.afterBattleKillAction);
             preList.Add(EAfterBattleAnswers.afterBattleRepairAction);
             preList.Add(EAfterBattleAnswers.afterBattleSearchFor);
+            preList.Add(EAfterBattleAnswers.afterBattleMicrochip);
         }
         foreach (var answerse in preList)
         {
@@ -122,6 +125,9 @@ public class PlayerAfterBattleOptions
             case EAfterBattleAnswers.afterBattleRepairAction:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleRepairAction"), IncCallback,
                     () => RepairAction(power, config));
+            case EAfterBattleAnswers.afterBattleMicrochip:
+                return new AnswerDialogData(Namings.DialogTag("afterBattleMicrochip"), IncCallback,
+                    () => GetMicrochip(power, config));
             default:
                 return null;
         }
@@ -219,6 +225,29 @@ public class PlayerAfterBattleOptions
         else
         {
             msg = Namings.Format(Namings.DialogTag("afterBattleBuyoutFail"));
+        }
+
+        var dialog = new MessageDialogData(msg, ans);
+        return dialog;
+    }
+
+    private MessageDialogData GetMicrochip(float power, ShipConfig config)
+    {
+        var ws = new WDictionary<bool>(new Dictionary<bool, float>
+        {
+            {true, MainController.Instance.MainPlayer.Parameters.Repair.Level}, {false, 1}
+        });
+        var ans = new List<AnswerDialogData>();
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        string msg;
+        if (ws.Random())
+        {
+            msg = Namings.Format(Namings.DialogTag("afterBattleMircochipOk"));
+            MainController.Instance.MainPlayer.MoneyData.AddMicrochips(1);
+        }
+        else
+        {
+            msg = Namings.Format(Namings.DialogTag("afterBattleMircochipFail")); //
         }
 
         var dialog = new MessageDialogData(msg, ans);

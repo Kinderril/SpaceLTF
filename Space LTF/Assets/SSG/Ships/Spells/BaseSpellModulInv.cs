@@ -42,7 +42,7 @@ public enum ESpellUpgradeType
 [Serializable]
 public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, IAffectParameters
 {
-    public BaseSpellModulInv(IInventory currentInventory)
+    protected BaseSpellModulInv(IInventory currentInventory)
     {
         CurrentInventory = currentInventory;
     }
@@ -164,18 +164,27 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
             if (MoneyConsts.SpellUpgrade.ContainsKey(Level))
             {
                 var cost = MoneyConsts.SpellUpgrade[Level];
-                if (owner.MoneyData.HaveMoney(cost))
+                int microchipsElement = MoneyConsts.SpellMicrochipsElements[Level];
+                if (owner.MoneyData.HaveMicrochips(microchipsElement))
                 {
-                    var txt = Namings.Format(Namings.Tag("wantUpgrade"), Namings.SpellName(SpellType), cost);
-                    WindowManager.Instance.ConfirmWindow.Init(() =>
+                    if (owner.MoneyData.HaveMoney(cost))
                     {
-                        owner.MoneyData.RemoveMoney(cost);
-                        Upgrade(upgradeType);
-                    }, null, txt);
+                        var txt = Namings.Format(Namings.Tag("wantUpgradeLong"), Namings.SpellName(SpellType), cost, microchipsElement);
+                        WindowManager.Instance.ConfirmWindow.Init(() =>
+                        {
+                            owner.MoneyData.RemoveMicrochips(microchipsElement);
+                            owner.MoneyData.RemoveMoney(cost);
+                            Upgrade(upgradeType);
+                        }, null, txt);
+                    }
+                    else
+                    {
+                        WindowManager.Instance.NotEnoughtMoney(cost);
+                    }
                 }
                 else
                 {
-                    WindowManager.Instance.NotEnoughtMoney(cost);
+                    WindowManager.Instance.NotEnoughtUpgrades(microchipsElement);
                 }
             }
         }

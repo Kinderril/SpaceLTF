@@ -55,10 +55,12 @@ public class DragableSpellItem : DragableItem
         {
             return;
         }
-        var cost = MoneyConsts.WeaponUpgrade[Spell.Level];
+        var cost = MoneyConsts.SpellUpgrade[Spell.Level];
+        var upgradeElements = MoneyConsts.SpellMicrochipsElements[Spell.Level];
         var haveMoney = MainController.Instance.MainPlayer.MoneyData.HaveMoney(cost);
+        var haveUpgrades = MainController.Instance.MainPlayer.MoneyData.HaveMicrochips(upgradeElements);
         var isMy = MainController.Instance.MainPlayer == Spell.CurrentInventory.Owner;
-        var canUse = Spell.CanUpgradeByLevel() && haveMoney && Usable && isMy;
+        var canUse = Spell.CanUpgradeByLevel() && haveMoney && Usable && isMy && haveUpgrades;
         UpgradeButton.gameObject.SetActive(canUse);
 
     }

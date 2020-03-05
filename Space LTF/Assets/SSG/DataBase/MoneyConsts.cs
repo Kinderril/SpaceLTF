@@ -46,6 +46,16 @@ public static class MoneyConsts
         {7, 70},
     };
 
+    public static Dictionary<int, int> SpellMicrochipsElements = new Dictionary<int, int>()
+    {
+        {1, 0},
+        {2, 1},
+        {3, 2},
+        {4, 3},
+        {5, 4},
+        {6, 5},
+    };
+
 
     public const int BASE_WEAPON_MONEY_COST = 10;
     public const int LEVEL_WEAPON_MONEY_COST = 13;

@@ -14,12 +14,16 @@ public class PlayerAIMilitaryFinal : PlayerAI
     public override LastReward GetReward(Player winner)
     {
         MainController.Instance.Statistics.AddOpenPoints(5);
+
         var reward = new LastReward();
         List<ItemType> items = new List<ItemType>() { ItemType.modul, ItemType.spell, ItemType.weapon };
         var rnd = items.RandomElement();
         items.Remove(rnd);
         var power = Army.GetPower();
-        // _getRewardsItems = new List<IItemInv>();
+        // _getRewardsItems = new List<IItemInv>();   
+        var countMircochips = power > 25 ? 2 : 1;
+        winner.MoneyData.AddMicrochips(countMircochips);
+        reward.Microchips = countMircochips;
         int deltaMin, deltaMax;
 
         foreach (var itemType in items)

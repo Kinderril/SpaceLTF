@@ -22,9 +22,10 @@ public class MapWindow : BaseWindow
     public DialogWindow DialogWindow;
 
     public TextMeshProUGUI MainQuestELelemntField;
-    public TextMeshProUGUI ReputationField;
+//    public TextMeshProUGUI ReputationField;
 
     public ChangingCounter MoneyField;
+    public ChangingCounter MicrochipField;
     public MapNavigationList NavigationList;
     public CellIinfoObjectUI CellIinfoObject;
     public ReputationMapUI ReputationMapUI;
@@ -79,7 +80,9 @@ public class MapWindow : BaseWindow
         //        player.MapData.OnSectorChanged += OnSectorChanged;
         //        _selectedCell = data.GetNextCell(player.MapData.CurrentCell);
         MoneyField.Init(player.MoneyData.MoneyCount);
+        MicrochipField.Init(player.MoneyData.MicrochipsCount);
         player.MoneyData.OnMoneyChange += OnMoneyChange;
+        player.MoneyData.OnUpgradeChange += OnMicrochipChange;
         player.MapData.OnCellChanged += OnCellChanged;
         player.Army.OnAddShip += OnAddShip;
         // player.ReputationData.OnReputationNationChange += OnReputationChange;
@@ -266,6 +269,11 @@ public class MapWindow : BaseWindow
     {
         MoneyField.Init(player.MoneyData.MoneyCount);
         player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("AddCredits"), obj));
+    } 
+    private void OnMicrochipChange(int obj)
+    {
+        MicrochipField.Init(player.MoneyData.MicrochipsCount);
+        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("AddMicrochips"), obj));
     }
 
     private void CellsOfSector()
@@ -488,6 +496,7 @@ public class MapWindow : BaseWindow
         player.QuestData.OnElementFound -= OnElementFound;
         player.RepairData.OnSomeShipRepaired -= OnSomeShipRepaired;
         player.MoneyData.OnMoneyChange -= OnMoneyChange;
+        player.MoneyData.OnUpgradeChange -= OnMicrochipChange;
         player.MapData.OnCellChanged -= OnCellChanged;
         player.Army.OnAddShip -= OnAddShip;
         // player.ReputationData.OnReputationNationChange -= OnReputationChange;

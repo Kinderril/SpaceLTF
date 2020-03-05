@@ -26,6 +26,7 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
     public TextMeshProUGUI CostCountField;
     public TextMeshProUGUI CostDelayField;
     public TextMeshProUGUI WeaponLevelField;
+    public TextMeshProUGUI UpgradeMicrochipsCount;
     public MoneySlotUI UpgradeCost;
     private BaseSpellModulInv _spell;
 
@@ -58,7 +59,9 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
         if (canUpgrade)
         {
             var cost = MoneyConsts.SpellUpgrade[_spell.Level];
+            var upgradeElements = MoneyConsts.SpellMicrochipsElements[_spell.Level];
             UpgradeCost.Init(cost);
+            UpgradeMicrochipsCount.text = (upgradeElements).ToString();
             var shallChoose = _spell.ShallAddSpecialNextLevel();
             ContainerSingleUpg.gameObject.SetActive(!shallChoose);
             ContainerDoubleUpg.gameObject.SetActive(shallChoose);

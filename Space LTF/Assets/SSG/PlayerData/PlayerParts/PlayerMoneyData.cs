@@ -5,7 +5,7 @@
 public class PlayerMoneyData
 {
     public int MoneyCount { get; private set; }
-    public int UpgradesCount { get; private set; }
+    public int MicrochipsCount { get; private set; }
 
     [field: NonSerialized]
     public event Action<int> OnMoneyChange;
@@ -27,18 +27,18 @@ public class PlayerMoneyData
             OnMoneyChange(MoneyCount);
         }
     }
-    public void AddUpgrades(int val)
+    public void AddMicrochips(int val)
     {
-        UpgradesCount += val;
+        MicrochipsCount += val;
         if (OnUpgradeChange != null)
         {
             OnUpgradeChange(MoneyCount);
         }
     }
 
-    public bool HaveUpgrades(int costValue)
+    public bool HaveMicrochips(int costValue)
     {
-        return UpgradesCount >= costValue;
+        return MicrochipsCount >= costValue;
     }
     public bool HaveMoney(int costValue)
     {
@@ -58,9 +58,9 @@ public class PlayerMoneyData
             OnMoneyChange(MoneyCount);
         }
     }
-    public void RemoveUpgrades(int val)
+    public void RemoveMicrochips(int val)
     {
-        UpgradesCount -= val;
+        MicrochipsCount -= val;
         if (OnUpgradeChange != null)
         {
             OnUpgradeChange(MoneyCount);

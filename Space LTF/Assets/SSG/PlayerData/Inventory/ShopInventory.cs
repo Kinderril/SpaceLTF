@@ -13,7 +13,7 @@ public class ShopInventory : PlayerInventory
     private const int Max_MODULS = 4;
     private const int MIN_SPELLS = 1;
     private const int Max_SPELLS = 2;
-    private const float CHANCE_SUPPORT_1 = .6f;
+    private const float CHANCE_SUPPORT_1 = .4f;
 
     private const float VALUABLE_COEF = 1.5f;
     private const float UNVALUABLE_COEF = 0.5f;

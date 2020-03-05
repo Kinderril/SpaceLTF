@@ -12,6 +12,7 @@ public class EndGameWindow : BaseWindow
 
     public MoneySlotUI MyMoneyField;
     public MoneySlotUI TotalMoneyRewardField;
+    public MoneySlotUI TotalMicroChipsField;
     public Button GoToMapButton;
 
     public Image ToMy;
@@ -58,7 +59,12 @@ public class EndGameWindow : BaseWindow
         if (lastReward != null)
         {
             _totalMoney = lastReward.Money;
+            var microChips = lastReward.Microchips;
             TotalMoneyRewardField.Init(_totalMoney);
+            if (microChips > 0)
+            {
+                TotalMicroChipsField.Init(microChips);
+            }
             var showScotsFind = lastReward.Moduls.Count > 0 || lastReward.Weapons.Count > 0 || lastReward.Spells.Count > 0;
             ScoutsFindField.gameObject.SetActive(showScotsFind);
             ScoutsFindField.text = Namings.Format("Scouts (Level{0}) find something!", player.Parameters.Scouts.Level);

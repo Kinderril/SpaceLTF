@@ -14,7 +14,10 @@ public class PlayerAIMovingArmy : PlayerAI
     public override LastReward GetReward(Player winner)
     {
         MainController.Instance.Statistics.AddOpenPoints(3);
+        var microchips = MyExtensions.IsTrue01(.7f) ? 1 : 0;
+        winner.MoneyData.AddMicrochips(microchips);
         var reward = new LastReward();
+        reward.Microchips = microchips;
         var armyPower = Army.GetPower();
         List<ItemType> items = new List<ItemType>() { ItemType.modul, ItemType.spell, ItemType.weapon };
         var rnd = items.RandomElement();

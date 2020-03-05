@@ -10,6 +10,7 @@ public enum BattleRewardType
 public class LastReward
 {
     public int Money;
+    public int Microchips;
     public List<WeaponInv> Weapons = new List<WeaponInv>();
     public List<BaseModulInv> Moduls = new List<BaseModulInv>();
     public List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();
@@ -115,7 +116,8 @@ public class LastReward
                 moneyCoef = lowMoneyCoef;
                 for (int i = 0; i < weaponsCount; i++)
                 {
-                    var w = Library.CreateDamageWeapon(weaponLevels.Random());
+                    var t = weaponLevels.Random();
+                    var w = Library.CreatWeapon(t);
                     if (winner.Inventory.GetFreeWeaponSlot(out slotIndex))
                     {
                         winner.Inventory.TryAddWeaponModul(w, slotIndex);
