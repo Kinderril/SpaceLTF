@@ -177,5 +177,27 @@ public class PlayerReputationData
 
         return worstConfig;
     }
+
+    public bool TryCallReinforsments(out ShipConfig shipConfig)
+    {
+        return CanCallReinforsments(out shipConfig, true);
+    }
+    public bool CanCallReinforsments(out ShipConfig shipConfig, bool withRemoveRep = false)
+    {
+
+        foreach (var rep in ReputationFaction)
+        {
+            if (IsFriend(rep.Key))
+            {
+                if (withRemoveRep)
+                    RemoveReputation(rep.Key, Library.REPUTATION_FOR_REINFORCMENTS);
+                shipConfig = rep.Key;
+                return true;
+            }
+        }
+
+        shipConfig = ShipConfig.droid;
+        return false;
+    }
 }
 

@@ -215,8 +215,8 @@ public static class Library
             {WeaponType.casset, 7},
             {WeaponType.impulse, 7},
             {WeaponType.beam, 7}   ,
-                {WeaponType.healBodySupport, 6},
-            {WeaponType.healShieldSupport, 6},
+            {WeaponType.healBodySupport, 5},
+            {WeaponType.healShieldSupport, 5},
         });
 
         var w = CreateWeaponByType(types.Random());
@@ -716,6 +716,7 @@ public static class Library
     public static int PEACE_REPUTATION = 50;
     public static int START_REPUTATION = -35;
     public static int BATTLE_REPUTATION_AFTER_FIGHT = 4;
+    public static int REPUTATION_FOR_REINFORCMENTS = 10;
 
     public const int REPUTATION_STEAL_REMOVE = 5;
     public const int REPUTATION_REPAIR_REMOVE = 4;

@@ -104,6 +104,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
             scoutsField = $"{scoutsField}\n{info}\n";
         }
 
+        ans.Add(new AnswerDialogData(Namings.DialogTag("Attack"), Take));
         if (isFriends)
         {
             masinMsg = Namings.Format(Namings.DialogTag("armyFrendly"), scoutsField); ;
@@ -136,7 +137,6 @@ public class ArmyGlobalMapCell : GlobalMapCell
             }
         }
 
-        ans.Add(new AnswerDialogData(Namings.DialogTag("Attack"), Take));
 
         if (isFriends || status == EReputationStatus.neutral)
         {

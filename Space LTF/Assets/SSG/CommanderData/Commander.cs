@@ -27,7 +27,7 @@ public class Commander
     public event Action<ShipBase> OnShipAdd;
     private Action<Commander> OnCommanderDeathCallback;
     private Action<Commander, ShipBase> OnShipInited;
-    private Action<ShipBase> OnShipLauched;
+//    private Action<ShipBase> OnShipLauched;
 
     // private CommanderShipEnemy LastPriorityTarget;
 
@@ -67,6 +67,30 @@ public class Commander
         SpellController = new CommanderSpells(this);
         Priority = new CommanderPriority(this);
         //        CommanderShipBlink = new CommanderShipBlink(player.Parameters.EnginePower.Level);
+    }
+
+    public void CallReinforcments(ShipConfig config,Action<ShipBase> OnShipLauched)
+    {
+        var armyPower = Player.Army.GetPower();
+        var armyCount = Mathf.Clamp(Player.Army.Count - 1, 1, 10);
+        var powerToOneShip = armyPower / (float)armyCount;
+        var armyPoints = new ArmyRemainPoints(powerToOneShip);
+        var logs = new ArmyCreatorLogs();
+
+        var dat = ArmyCreatorLibrary.GetArmy(config);
+        var shipData  = ArmyCreator.CreateShipByValue(armyPoints,dat,Player, logs);
+
+        var enemyCommander = _battleController.GetCommander(BattleController.OppositeIndex(TeamIndex));
+        var center = Battlefield.CellController.Data.CenterZone;
+        var dirToOffset = Utils.NormalizeFast(enemyCommander.StartMyPosition - center);
+        var rad = Battlefield.CellController.Data.Radius + 4;
+
+        var pos = center + dirToOffset * rad;
+        var startPos = pos;
+        var dir = enemyCommander.StartMyPosition - startPos;
+
+        var initedShip =  InitShip(shipData, startPos, Utils.NormalizeFastSelf(dir));
+        initedShip.Launch(OnShipLauched);
     }
 
     public Dictionary<int, ShipBase> InitShips(Vector3 startPosition, Vector3 enemyCenterCell, List<Vector3> positionsToClear)
@@ -202,7 +226,7 @@ public class Commander
         }
     }
 
-    private void InitShip(StartShipPilotData v, Vector3 position, Vector3 direction)
+    private ShipBase InitShip(StartShipPilotData v, Vector3 position, Vector3 direction)
     {
         ShipConfig config = v.Ship.ShipConfig;
         ShipBase shipPrefab;
@@ -259,6 +283,8 @@ public class Commander
         {
             OnShipInited(this, ship1);
         }
+
+        return ship1;
     }
 
     private void CheckModuls(ShipBase rndShip, StartShipPilotData startShipPilotData)
@@ -297,7 +323,7 @@ public class Commander
 
     public void LaunchAll(Action<ShipBase> OnShipLauched, Action<Commander> OnCommanderDeath)
     {
-        this.OnShipLauched = OnShipLauched;
+//        this.OnShipLauched = OnShipLauched;
         OnCommanderDeathCallback = OnCommanderDeath;
         foreach (var shipBase in Ships)
         {

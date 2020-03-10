@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class EngineStop
 {
-
+    public bool IsStop => _isStop;
     private bool _isStop;
     public float RepairEndTime;
     public float Period;

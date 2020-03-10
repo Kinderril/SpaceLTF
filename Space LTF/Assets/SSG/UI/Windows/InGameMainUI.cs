@@ -31,6 +31,7 @@ public class InGameMainUI : BaseWindow
     public SpellModulsContainer SpellModulsContainer;
     public event Action<SpellInGame> OnSelectSpell;
     public RetirreButton RetireButton;
+    public ReinforsmentsButton ReinforsmentsButton;
 
     public TimeScaleBattleUI TimeScaleBattle;
     //    public Button DebugKillAllEnemies;
@@ -108,6 +109,7 @@ public class InGameMainUI : BaseWindow
         BattleCoinUI.Init(MyCommander.CoinController);
         battle.OnShipAdd += OnShipAdd;
         RetireButton.Init(this, 15f, battle.CanRetire);
+        ReinforsmentsButton.Init(this);
         DebugUiControl.Init();
         //        HoldClearCoinUI.Init(HoldComplete);
         CreditController.Init(MyCommander);
@@ -290,6 +292,21 @@ public class InGameMainUI : BaseWindow
         //        {
         //            HoldClearCoinUI.Hold(pt,left,delta);
         //        }
+    }
+
+    public void OnClickReinforsment()
+    {
+        var player = MainController.Instance.MainPlayer;
+        if (player.ReputationData.TryCallReinforsments(out ShipConfig config))
+        {
+            BattleController.Instance.CallReinforcments(config);
+        }
+        else
+        {
+#if UNITY_EDITOR                                                
+            BattleController.Instance.CallReinforcments(ShipConfig.droid);
+#endif
+        }
     }
 
     public void OnClickFastFinish()

@@ -234,10 +234,14 @@ public class BattleController : Singleton<BattleController>
         //        EndPart1Battle();
     }
 
+    public void CallReinforcments(ShipConfig config)
+    {
+        GreenCommander.CallReinforcments(config, ShipInited);
+    }
+
     private void OnShipDestroy(ShipBase ship)
     {
-        if (OnShipAdd != null)
-            OnShipAdd(ship, false);
+        OnShipAdd?.Invoke(ship, false);
 
         SideGreen.Remove(ship);
         SideRed.Remove(ship);
@@ -299,8 +303,7 @@ public class BattleController : Singleton<BattleController>
 
     private void ShipInited(ShipBase ship)
     {
-        if (OnShipAdd != null)
-            OnShipAdd(ship, true);
+        OnShipAdd?.Invoke(ship, true);
     }
 
     void Update()
@@ -614,5 +617,6 @@ public class BattleController : Singleton<BattleController>
         SideGreen.Remove(owner);
         SideRed.Remove(owner);
     }
+
 }
 

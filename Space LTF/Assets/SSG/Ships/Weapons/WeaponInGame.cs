@@ -229,7 +229,16 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         {
             distCoef = dist * DistSpeed;
         }
-        var offsetCoef = TargetSpeed * distCoef;
+
+        float offsetCoef;
+        if (targInfo.ShipLink.DamageData.IsEngineWorks)
+        {
+            offsetCoef = TargetSpeed * distCoef;
+        }
+        else
+        {
+            offsetCoef = 0f;
+        }
 
         _testTargetPosition.TestTarget(targInfo.ShipLink.Position, targInfo.ShipLink.LookDirection,
             targInfo.ShipLink.LookRight, shootStartPos, Owner.LookDirection, distShoot, offsetCoef);

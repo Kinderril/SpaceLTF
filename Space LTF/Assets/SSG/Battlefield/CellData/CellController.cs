@@ -82,6 +82,7 @@ public class CellController : MonoBehaviour
     {
         var xIndex = IndexByFloat(pos.x, Data.StartX);
         var zIndex = IndexByFloat(pos.z, Data.StartZ);
+
         var cell = Data.GetCell(xIndex, zIndex);
         //        Debug.Log("cell count:" + cell.Links.Length);
         return cell;

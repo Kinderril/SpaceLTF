@@ -193,6 +193,7 @@ public abstract class MovingObject : PoolElement
         }
 
         var bSpeed = BankSpeed * Time.deltaTime;
+        float nextBank;
         if (!_banking.ImplementedXZ)
         {
             Vector3 dir = _banking.TargetDir;
@@ -204,18 +205,18 @@ public abstract class MovingObject : PoolElement
             {
                 if (isRight)
                 {
-                    _curBank += bSpeed;
+                    nextBank = _curBank + bSpeed;
                     if (_curBank >= BankMax)
                     {
-                        _curBank = BankMax;
+                        nextBank = BankMax;
                     }
                 }
                 else
                 {
-                    _curBank -= bSpeed;
+                    nextBank = _curBank - bSpeed;
                     if (_curBank <= -BankMax)
                     {
-                        _curBank = -BankMax;
+                        nextBank = -BankMax;
                     }
                 }
 
@@ -223,14 +224,15 @@ public abstract class MovingObject : PoolElement
             else
             {
                 //Returning to base state
-                _curBank = BankingToZero(_curBank, bSpeed);
+                nextBank = BankingToZero(_curBank, bSpeed);
             }
         }
         else
         {
-            _curBank = BankingToZero(_curBank, bSpeed);
+            nextBank = BankingToZero(_curBank, bSpeed);
         }
 
+        _curBank = _curBank * 0.3f +  nextBank * 0.7f;
         var rotationToImplement = YMoveRotation.RotateQuaternion;
         var bank = _curBank + rotationToImplement.z;
         var bankRotation = new Quaternion(rotationToImplement.x, 0, bank, rotationToImplement.w);

@@ -11,12 +11,14 @@ public class RetirreButton : MonoBehaviour
     public bool IsReady => _curReadyTime < Time.time;
     private InGameMainUI _mainUI;
     private bool _canRetire;
+    public UIElementWithTooltipCache TooltipCache;
 
     public void Init(InGameMainUI mainUI, float initDelta, bool canRetire)
     {
         _mainUI = mainUI;
         _canRetire = canRetire;
         _secCooldown = initDelta;
+        TooltipCache.Cache = Namings.Tag("Retreat");
         if (_canRetire)
         {
             StartCooldown(_secCooldown);

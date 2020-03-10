@@ -219,9 +219,9 @@ public class ShipParameters : IShipAffectableParams
             }
         }
 
-        currentDamage.ShieldDamage = currentDamage.ShieldDamage - ShieldArmor;
-        currentDamage.BodyDamage = currentDamage.BodyDamage - BodyArmor;
-        Damage(copy.ShieldDamage, copy.BodyDamage, callback, target);
+        var ShieldDamage = currentDamage.ShieldDamage - ShieldArmor;
+        var BodyDamage = currentDamage.BodyDamage - BodyArmor;
+        Damage(ShieldDamage, BodyDamage, callback, target);
     }
 
     public void Dispose()

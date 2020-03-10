@@ -279,17 +279,19 @@ public class AICellDataRaound
 
     public AICell GetCell(int i, int j)
     {
-#if  UNITY_EDITOR
+        var xClamped = Mathf.Clamp(i, 0, MaxIx - 1);
+        var zClamped = Mathf.Clamp(i, 0, MaxIz - 1);
+#if UNITY_EDITOR
         try
         {
-            var a = List[i, j];
+            var a = List[xClamped, zClamped];
         }
         catch (Exception e)
         {
-            Debug.LogError("wrong gettin element " + i + "  " + j + "   " + CellSize);
+            Debug.LogError("wrong gettin element " + xClamped + "  " + zClamped + $"   MaxIx:{MaxIx}   MaxIz:{MaxIz}  CellSize:{CellSize}");
         }
 #endif
-        return List[i, j];
+        return List[xClamped, zClamped];
     }
 
     public void ValidateOnStart()

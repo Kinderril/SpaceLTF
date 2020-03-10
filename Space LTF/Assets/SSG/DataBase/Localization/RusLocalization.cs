@@ -249,7 +249,6 @@ public static class RusLocalization
         {"EngineDest", "Двигатель поврежден"},
         {"ShieldDest","Щит отключен" },
         {"FireDest", "Пожар на борту"},
-        {"Retreat", "Сбежать"},
         {"Shop", "Магазин"},
         {"SectorDungeon", "Военная база"},
         {"DoWantRetire","Вы хотите сбежать?" },
@@ -259,11 +258,14 @@ public static class RusLocalization
         {"EngLang", "Англисский"},
         {"ReloadToLoc", "Перезапустите игру что бы использовать выбранный язык"},
         {"SettingsWindow", "Настройки"},
+        {"Microchips", "Микрочипы"},
+        {"AddMicrochips", "Получено микрочипов {0}"},
 
         {"DamageInfoUI", "Урон: {0}/{1}" },
         {"KillsInfoUI", "Убийства: {0}"},
         {"ReputationChanges", "{2} Репутация изменена {0} => {1}."},
         {"ReputationData", "{0} репутация: {1}"},
+        {"Credits", "Кредиты"},
 
         {"Turret", "Турель" },
         {"Destroyed", "Уничтожены" },
@@ -442,6 +444,10 @@ public static class RusLocalization
         {"StabilizaInfo", "Уровень стабилизации:{0}"},
         {"MainElements", "Энергетических элементов"},
 
+        {"ReinforcmentsCall", "Подкрепление"},
+        {"ReinforcmentsCalled", "Подкрепление недоступно"},
+        {"Retreat", "Сбежать"},
+
         {"Health", "Корпус"},
         {"Shield", "Щит"},
         {"TurnSpeed", "Поворот"},
@@ -461,7 +467,6 @@ public static class RusLocalization
         {"AdditionalPower", "Улучшения флотов"},
 
         {"AddCredits", "Добавленно кредитов:{0}"},
-        {"AddMicrochips", "Добавленно микрочипов:{0}"},
         {"Comparable", "Сопоставим"},
         {"Risky", "Рисковано"},
         {"Easily", "Легко"},
@@ -623,11 +628,11 @@ public static class RusLocalization
         {"dialog_coreDiplomacyFail", "Они не хотят отдавать вам элемент"},
 
         {"dialog_Trader","Торговец"},
-        {"dialog_tradeStartSell","Ваш хотят продать {0} за {1} кредитов."},
+        {"dialog_tradeStartSell","Они хотят вам продать {0} за {1} кредитов."},
         {"dialog_tradeStartBuy","У вас хотят выкупить {0} за {1} кредитов."},
         {"dialog_tradeStartOk","Ок."},
         {"dialog_tradeStartNo","Нет."},
-        {"dialog_tradeStartWantTrade","Этот корабль хочет поторговать с вами {0}"},
+        {"dialog_tradeStartWantTrade","Этот корабль хочет поторговать с вами {0}."},
 
         {"dialog_Space garbage", "Свалка мусора"},
         {"dialog_scGarbage", "Прямо перед вами огромное облако мусора."},

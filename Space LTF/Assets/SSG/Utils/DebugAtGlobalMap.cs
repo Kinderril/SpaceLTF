@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DebugAtGlobalMap : MonoBehaviour
 {
-//    private MapWindow _inGameWindow;
-//    void Awake()
-//    {
-////        _inGameWindow = GetComponent<MapWindow>();
-//    }
+    //    private MapWindow _inGameWindow;
+    //    void Awake()
+    //    {
+    ////        _inGameWindow = GetComponent<MapWindow>();
+    //    }
 
     void Update()
     {
@@ -39,17 +38,21 @@ public class DebugAtGlobalMap : MonoBehaviour
 
     public void OnDebugAddRep()
     {
-        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.federation,6);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.ocrons, 10);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.krios, 10);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.mercenary, 10);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.raiders, 10);
+        MainController.Instance.MainPlayer.ReputationData.AddReputation(ShipConfig.federation, 10);
     }
 
     public void OnDebugAddMoney()
-    {     
+    {
         MainController.Instance.MainPlayer.MoneyData.AddMoney(100);
 
     }
 
     public void OnDebugScoutedAll()
-    {  
+    {
         var s = MainController.Instance.MainPlayer.MapData.GalaxyData;
         for (int i = 0; i < s.SizeX; i++)
         {

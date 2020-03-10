@@ -21,6 +21,8 @@ public class ShipDamageData : ShipData
     public event Action<ShipBase, ShipDamageType, bool> OnDamageDone;
     public bool IsReflecOn = false;
 
+    public bool IsEngineWorks => !_engineStop.IsStop;
+
     public ShipDamageData([NotNull] ShipBase owner)
         : base(owner)
     {

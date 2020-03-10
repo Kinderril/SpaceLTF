@@ -235,11 +235,12 @@ public static class EngLocalization
         {"EngineDest", "Engine destroyed"},
         {"ShieldDest","Shield destroyed" },
         {"FireDest", "Fire on board"},
-        {"Retreat", "Retreat"},
         {"DoWantRetire","Do you want run away?" },
         {"NoSafeGame","No save game" },
         {"MaxLevel", "Max"},
         {"DamageTimeEffectRepair", "Remove all negative effects"},
+        {"AddMicrochips", "Add microchips {0}"},
+        {"Microchips", "Microchips"},
 
         {"WeaponAOE", "Affects for all ships in radius. {0}. Decrease damage by {1}%."},
         {"WeaponSector",  "Increase aim sector by {0}% per level"},
@@ -451,6 +452,7 @@ public static class EngLocalization
         {"BrokenItem", "Your item broken {0}"},
         {"StabilizaInfo", "Stability level:{0}"},
         {"MainElements", "Energy blocks"},
+        {"Credits", "Credits"},
 
         {"Health", "Health"},
         {"Shield", "Shield"},
@@ -459,6 +461,10 @@ public static class EngLocalization
         {"NewGame", "New Game"},
         {"Continue", "Continue"},
         {"Exit", "Exit"},
+
+        {"ReinforcmentsCall", "Reinforcements"},
+        {"ReinforcmentsCalled", "Reinforcements unavailable"},
+        {"Retreat", "Retreat"},
 
         {"Laser", "Laser"},
         {"Rocket", "Rocket"},
@@ -471,7 +477,6 @@ public static class EngLocalization
         {"AdditionalPower", "Enemies upgrades"},
 
         {"AddCredits", "Add credits:{0}"},
-        {"AddMicrochips", "Add microchips:{0}"},
         {"Comparable", "Comparable"},
         {"Risky", "Risky"},
         {"Easily", "Easily"},
