@@ -46,6 +46,7 @@ public static class RusLocalization
         {"StatisticConfig", "Флот:{0}."},
         {"StatisticMapSize", "Размер галактики:{0}."},
         {"StatisticFinalArmyPower", "Сила флота:{0}."},
+        {"StatisticRecievedOpendPoints", "Очков заработано:{0}."},
         {"StatisticDate", "{0}"},
         {"Fight", "В бой"},
         {"StatisticNoResult", "Нет результатов"},
@@ -363,6 +364,7 @@ public static class RusLocalization
         {"Base", "База"},
         {"ESideAttackStraight", "Атаковать как обычно"},
         {"ESideAttackFlangs", "Атака с флангов"},
+        {"ESideAttackBaseDefence", "Атаковать только рядом с командным центром"},
         {"BaseDefenceYes", "Защита базы"},
         {"BaseDefenceNo", "Нет"},
 
@@ -456,6 +458,7 @@ public static class RusLocalization
         {"NewGame", "Новая игра"},
         {"Continue", "Продолжить"},
         {"Exit", "Выход"},
+        {"ScoutsFind", "Разведчики нашли что то!"},
 
         {"Laser", "Лазер"},
         {"Rocket", "Ракеты"},

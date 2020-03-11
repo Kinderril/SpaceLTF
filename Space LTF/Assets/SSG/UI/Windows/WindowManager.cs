@@ -190,7 +190,6 @@ public class WindowManager : Singleton<WindowManager>
         bool withLOadWindow = windowToLoad.WithLoadWindow;
         if (withLOadWindow)
         {
-
             LoadingScreen.gameObject.SetActive(true);
             await Task.Yield();
             await Task.Delay(100);
@@ -206,12 +205,7 @@ public class WindowManager : Singleton<WindowManager>
             {
                 CurrentWindow.Close();
             }
-            //            Debug.LogError($"CurrentWindow.gameObject.SetActive(false) {CurrentWindow.name}");
             CurrentWindow.gameObject.SetActive(false);
-            //            var sIndex = currentWindow.transform.GetSiblingIndex();
-            //            nextWindow.transform.SetSiblingIndex(sIndex + 1);
-
-            //            TopPanel.transform.SetAsLastSibling();
         }
         //        Debug.LogError($"$Window to load {windowToLoad.name}");
         if (obj != null)

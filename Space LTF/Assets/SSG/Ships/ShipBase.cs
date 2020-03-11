@@ -611,34 +611,7 @@ public class ShipBase : MovingObject
     }
     public bool HaveClosestDamagedFriend(out ShipBase ship)
     {
-        float dist = Single.MaxValue;
-        ship = null;
-        bool haveVal = false;
-        // _owner.WeaponsController.AnyDamagedWeaponIsLoaded()
-        foreach (var shipTest in Commander.Ships)
-        {
-            var s = (shipTest.Value);
-//            if (s.Id != Id)
-//            {
-                var hpPercent = s.ShipParameters.CurHealth / s.ShipParameters.MaxHealth;
-                var spPercent = s.ShipParameters.CurShiled / s.ShipParameters.MaxShield;
-                bool hpWantHeal = hpPercent < .6f;
-                bool spWantHeal = spPercent < .6f && s.ShipParameters.MaxShield > 0f;
-                if ((hpWantHeal && WeaponsController.SupportWeaponsBuffPosibilities.BodyHeal)
-                    || (spWantHeal && WeaponsController.SupportWeaponsBuffPosibilities.ShieldHeal) ||
-                    WeaponsController.SupportWeaponsBuffPosibilities.Buff)
-                {
-                    var sDistTmp = (s.Position - Position).sqrMagnitude;
-                    if (sDistTmp < dist)
-                    {
-                        dist = sDistTmp;
-                        ship = s;
-                        haveVal = true;
-                    }
-                }
-//            }
-        }
-        return haveVal;
+        return DesicionData.HaveClosestDamagedFriend(out ship);
     }
 
     public void SetAction(BaseAction nextAction)

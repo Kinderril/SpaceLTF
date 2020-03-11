@@ -231,13 +231,6 @@ public class InGameMainUI : BaseWindow
             //            ship.ShipParameters.ShieldParameters.OnShildChanged += OnShildChanged;
             ShipsUIs.Add(ship.Id, info);
             info.transform.SetParent(ShipsInfoContainer);
-            if (ship.ShipParameters.StartParams.ShipType == ShipType.Base)
-            {
-                //                foreach (var spell in ship.ShipParameters.Spells)
-                //                {
-                //                    
-                //                }
-            }
         }
         else
         {
@@ -373,7 +366,6 @@ public class InGameMainUI : BaseWindow
                     myMainShip.GoToPointAction(ray.Value, true);
                 }
             }
-
         }
     }
 

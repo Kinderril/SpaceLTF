@@ -58,7 +58,7 @@ public class SideShipInfo : MonoBehaviour
         OnShipDesicionChange(ship, ship.DesicionData);
         ShipSlidersInfo.Init(ship);
         ship.DesicionData.OnChagePriority += OnChagePriority;
-//        _pilot.Tactic.OnSideChange += OnTacticSideChange;
+        //        _pilot.Tactic.OnSideChange += OnTacticSideChange;
         //        TryWaveButton.Init(_ship,5);
         //        TryChargeButton.Init(_ship,5);
         //        TryWeaponsShipButton.Init(_ship);
@@ -90,7 +90,7 @@ public class SideShipInfo : MonoBehaviour
         }
     }
     private void UpdateTacticField()
-    {                              
+    {
         TacticPriorityIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.DesicionData.CommanderPriority1);
         TacticSideIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.DesicionData.SideAttack);
         GlobalTacticsIcon.sprite = DataBaseController.Instance.DataStructPrefabs.GetTacticIcon(_ship.DesicionData.GlobalTactics);
@@ -194,6 +194,10 @@ public class SideShipInfo : MonoBehaviour
     public void ClickStraight()
     {
         _ship.DesicionData.ChangePriority(ESideAttack.Straight);
+    }
+    public void ClickBaseDefence()
+    {
+        _ship.DesicionData.ChangePriority(ESideAttack.BaseDefence);
     }
     public void ClickFlangs()
     {

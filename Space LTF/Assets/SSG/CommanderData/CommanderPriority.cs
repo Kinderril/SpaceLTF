@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public enum ESideAttack
+﻿public enum ESideAttack
 {
     Straight,
-    Flangs
+    Flangs,
+    BaseDefence,
 }
 
 public enum EGlobalTactics
@@ -20,13 +15,13 @@ public enum ECommanderPriority1
 {
     Any,
     MinShield,
-    MinHealth,  
+    MinHealth,
     MaxShield,
     MaxHealth,
     Fast,
     Slow,
     Base,
-} 
+}
 
 
 
@@ -52,7 +47,7 @@ public class CommanderPriority
         {
             shipsValue.DesicionData.ChangePriority(this.SideAttack);
         }
-    } 
+    }
 
     public void ChangeTo(EGlobalTactics globalTactics)
     {
@@ -61,7 +56,7 @@ public class CommanderPriority
         {
             shipsValue.DesicionData.ChangePriority(this.GlobalTactics);
         }
-    } 
+    }
 
     public void ChangeTo(ECommanderPriority1 CommanderPriority1)
     {
@@ -70,7 +65,7 @@ public class CommanderPriority
         {
             shipsValue.DesicionData.ChangePriority(this.CommanderPriority1);
         }
-    } 
+    }
 
 
 

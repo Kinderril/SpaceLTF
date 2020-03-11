@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -63,7 +64,8 @@ public class StayAttackAction : AbstractAttackAction
         {
             _nextRecalTime = Time.time + 3f;
             var trg = BestByParams(out var rating, _owner.Enemies);
-            Target = trg;
+            if (trg != null)
+                Target = trg;
         }
     }
     protected void TurnToTarget(Vector3 dir)
@@ -76,7 +78,7 @@ public class StayAttackAction : AbstractAttackAction
 
     private ShipPersonalInfo BestByParams(out float rating, Dictionary<ShipBase, ShipPersonalInfo> posibleTargets)
     {
-        rating = 0f;
+        rating = Single.MinValue;
         ShipPersonalInfo bestEnemy = null;
         foreach (var shipInfo in posibleTargets) //_owner.Enemies)
         {

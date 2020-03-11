@@ -74,6 +74,17 @@ public class ControlCenterDesicionData : IShipDesicion
     {
 
     }
+    public bool HaveEnemyInDangerZoneDefenceBase(out ShipBase ship)
+    {
+        ship = null;
+        return false;
+    }
+
+    public bool HaveClosestDamagedFriend(out ShipBase ship)
+    {
+        ship = null;
+        return false;
+    }
 
     public event Action OnChagePriority;
 }

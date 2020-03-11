@@ -14,7 +14,7 @@ public class AICommanderMainShip
         _mainShipBase = commander;
     }
 
-    public void Update()
+    public void UpdateMove()
     {
          if (_nextTimeMove < Time.time)
          {

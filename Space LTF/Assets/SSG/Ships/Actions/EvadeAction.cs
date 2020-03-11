@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using JetBrains.Annotations;
 using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -30,7 +27,7 @@ public class EvadeAction : BaseAction
             }
             else
             {
-//                cloudsCell = _owner.CellController.Data.FindClosestCellByType(_owner.Cell, CellType.Free, out dist);
+                //                cloudsCell = _owner.CellController.Data.FindClosestCellByType(_owner.Cell, CellType.Free, out dist);
             }
         }
     }
@@ -141,7 +138,8 @@ public class EvadeAction : BaseAction
 //            new CauseAction("_owner dead", () => !_owner.InBattlefield),
             new CauseAction("out bf", () => !_owner.InBattlefield),
             new CauseAction("no danger",
-                () => _owner.DesicionData.GlobalTactics == EGlobalTactics.Fight && _owner.Locator.DangerEnemy == null),
+                () => _owner.DesicionData.GlobalTactics == EGlobalTactics.Fight &&
+                      _owner.Locator.DangerEnemy == null),
             new CauseAction("no danger ship link",
                 () => _owner.DesicionData.GlobalTactics == EGlobalTactics.Fight &&
                       _owner.Locator.DangerEnemy.ShipLink == null),

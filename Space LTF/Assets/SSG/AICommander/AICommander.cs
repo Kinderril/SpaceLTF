@@ -12,9 +12,15 @@ public class AICommander
     private float _createdTime;
     private ShipControlCenter _shipControl;
     private const float CAST_PERIOD = 4f;
+    private bool _startAtStart;
 
     public AICommander(ShipControlCenter shipControl, Commander commanderOwner)
     {
+        var aiPlayer = commanderOwner.Player as PlayerAI;
+        if (aiPlayer != null)
+        {
+            _startAtStart = aiPlayer.DoBaseDefence();
+        }
         _createdTime = Time.time;
         _commander = commanderOwner;
         _shipControl = shipControl;
@@ -111,7 +117,8 @@ public class AICommander
                 spell.PeriodlUpdate(myArmyCount);
             }
 
-            _mainShip.Update();
+            if (!_startAtStart)
+                _mainShip.UpdateMove();
         }
     }
 

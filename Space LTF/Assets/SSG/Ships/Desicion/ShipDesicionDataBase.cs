@@ -59,6 +59,49 @@ public abstract class ShipDesicionDataBase : IShipDesicion
     public event Action OnChagePriority;
 
 
+    public ActionType FightTask(out ShipBase ship)
+    {
+        if (SideAttack == ESideAttack.BaseDefence)
+        {
+            if (HaveEnemyInDangerZoneDefenceBase(out ship))
+            {
+                var attack = DoAttackAction(ship);
+                if (attack.HasValue)
+                {
+                    return attack.Value;
+                }
+            }
+            else
+            {
+                ship = null;
+                return ActionType.waitEnemy;
+            }
+        }
+        else if (HaveEnemyInDangerZone(out ship))
+        {
+            var attack = DoAttackAction(ship);
+            if (attack.HasValue)
+            {
+                return attack.Value;
+            }
+        }
+
+        if (_owner.HaveClosestDamagedFriend(out ship))
+        {
+            if (_owner.WeaponsController.AnySupportWeaponIsLoaded(0f, out var fullLoadSupport))
+            {
+                if (ship != null)
+                {
+                    if (fullLoadSupport)
+                    {
+                        return ActionType.support;
+                    }
+                }
+            }
+        }
+
+        return OptionalTask(out ship);
+    }
     public ActionType CalcTask(out ShipBase ship)
     {
         if (IsOutOField())
@@ -75,30 +118,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
 
         if (GlobalTactics == EGlobalTactics.Fight)
         {
-            if (HaveEnemyInDangerZone(out ship))
-            {
-                var attack = DoAttackAction(ship);
-                if (attack.HasValue)
-                {
-                    return attack.Value;
-                }
-            }
-
-            if (_owner.HaveClosestDamagedFriend(out ship))
-            {
-                if (_owner.WeaponsController.AnySupportWeaponIsLoaded(0f, out var fullLoadSupport))
-                {
-                    if (ship != null)
-                    {
-                        if (fullLoadSupport)
-                        {
-                            return ActionType.support;
-                        }
-                    }
-                }
-            }
-
-            return OptionalTask(out ship);
+            return FightTask(out ship);
         }
 
         if (_owner.HaveClosestDamagedFriend(out ship))
@@ -178,7 +198,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 Vector3 controlPoint = AttackSideAction.FindControlPoint(_owner.Position, target.Position, _owner.Commander.Battlefield);
                 return new AttackSideAction(_owner, _owner.Enemies[target], controlPoint);
             case ActionType.waitEnemy:
-                var wait = new WaitEnemy(_owner, _owner.Commander.GetWaitPosition(_owner));
+                var wait = new WaitEnemy(_owner);
                 return (wait);
             case ActionType.goToCurrentPointAction:
                 Debug.LogError("DEBUG ACTION. HOW IT HAPPENS? ");
@@ -194,6 +214,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
     protected abstract ActionType? DoAttackAction(ShipBase ship);
     protected abstract ActionType OptionalTask(out ShipBase ship);
     protected abstract bool HaveEnemyInDangerZone(out ShipBase ship);
+    public abstract bool HaveEnemyInDangerZoneDefenceBase(out ShipBase ship);
     public abstract string GetName();
 
     protected ActionType HideOrWait()
@@ -201,6 +222,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         //TODO wait hide
         return ActionType.goToHide;
     }
+    public abstract bool HaveClosestDamagedFriend(out ShipBase ship);
 
     protected ActionType? DoOrWait(ActionType defaultAction, ShipBase ship)
     {
@@ -370,7 +392,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 {
                     if (shipPersonalInfo.Key.ShipParameters.StartParams.ShipType == ShipType.Base)
                     {
-                        rating = 100;
+                        rating = 1000;
                         return shipPersonalInfo.Value;
                     }
                 }

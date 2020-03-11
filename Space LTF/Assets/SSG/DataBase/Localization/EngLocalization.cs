@@ -51,6 +51,7 @@ public static class EngLocalization
         {"StatisticConfig", "Army:{0}."},
         {"StatisticMapSize", "Map size:{0}."},
         {"StatisticFinalArmyPower", "Final power:{0}."},
+        {"StatisticRecievedOpendPoints", "Received points:{0}."},
         {"StatisticDate", "{0}"},
         {"Fight", "Fight"},
         {"StatisticNoResult", "No results"},
@@ -376,6 +377,7 @@ public static class EngLocalization
         {"Base", "Base"},
         {"ESideAttackStraight", "Attack as usual"},
         {"ESideAttackFlangs", "Attack from flags"},
+        {"ESideAttackBaseDefence", "Attack only near commander ship"},
         {"BaseDefenceYes", "Defend the base"},
         {"BaseDefenceNo", "No"},
         {"EGlobalTacticsFight", "Fight"},
@@ -461,6 +463,7 @@ public static class EngLocalization
         {"NewGame", "New Game"},
         {"Continue", "Continue"},
         {"Exit", "Exit"},
+        {"ScoutsFind", "Scouts find something!"},
 
         {"ReinforcmentsCallNo", "No reinforcements"},
         {"ReinforcmentsCallConfig", "Call reinforcements:{0}"},

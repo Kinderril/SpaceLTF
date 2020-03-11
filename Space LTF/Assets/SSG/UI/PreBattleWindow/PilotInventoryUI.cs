@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -204,6 +203,10 @@ public class PilotInventoryUI : MonoBehaviour
     public void ClickStraight()
     {
         _pilot.Tactic.ChangeTo(ESideAttack.Straight);
+    }
+    public void ClickBaseDefence()
+    {
+        _pilot.Tactic.ChangeTo(ESideAttack.BaseDefence);
     }
     public void ClickFlangs()
     {

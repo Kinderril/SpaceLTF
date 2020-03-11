@@ -11,6 +11,10 @@ public class PlayerAIMilitaryFinal : PlayerAI
 
     }
 
+    public override bool DoBaseDefence()
+    {
+        return true;
+    }
     public override LastReward GetReward(Player winner)
     {
         MainController.Instance.Statistics.AddOpenPoints(5);

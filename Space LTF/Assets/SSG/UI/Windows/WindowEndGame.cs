@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +12,7 @@ public class WindowEndGame : BaseWindow
     public TextMeshProUGUI DifficultyField;
     public TextMeshProUGUI MapSizeField;
     public TextMeshProUGUI FinalArmyPowerField;
+    public TextMeshProUGUI RecievedOpendPointsField;
     public TextMeshProUGUI WinLoseField;
 
     public TextMeshProUGUI OpenDataField;
@@ -33,6 +33,8 @@ public class WindowEndGame : BaseWindow
         ConfigField.text = Namings.Format(Namings.Tag("StatisticConfig"), result.Config);
         MapSizeField.text = Namings.Format(Namings.Tag("StatisticMapSize"), result.MapSize);
         FinalArmyPowerField.text = Namings.Format(Namings.Tag("StatisticFinalArmyPower"), result.FinalArmyPower);
+        RecievedOpendPointsField.text = Namings.Format(Namings.Tag("StatisticRecievedOpendPoints"), result.RecievedOpendPoints);
+
         BattleWinsField.text = Namings.Format(Namings.Tag("BattleWinsStat"), stat.Wins);
         WinLoseField.text = result.Win ? Namings.Tag("WinEnd") : Namings.Tag("LoseEnd");
         DrawOpens(stat);

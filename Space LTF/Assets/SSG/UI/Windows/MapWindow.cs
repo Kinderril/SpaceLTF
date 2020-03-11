@@ -22,7 +22,7 @@ public class MapWindow : BaseWindow
     public DialogWindow DialogWindow;
 
     public TextMeshProUGUI MainQuestELelemntField;
-//    public TextMeshProUGUI ReputationField;
+    //    public TextMeshProUGUI ReputationField;
 
     public ChangingCounter MoneyField;
     public ChangingCounter MicrochipField;
@@ -269,7 +269,7 @@ public class MapWindow : BaseWindow
     {
         MoneyField.Init(player.MoneyData.MoneyCount);
         player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("AddCredits"), obj));
-    } 
+    }
     private void OnMicrochipChange(int obj)
     {
         MicrochipField.Init(player.MoneyData.MicrochipsCount);
@@ -289,13 +289,7 @@ public class MapWindow : BaseWindow
 
     private void OnCellChanged(GlobalMapCell cell)
     {
-        //        UpdateDayField();
         player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("RelocateTo"), cell.Desc()));
-        //        GlobalMap.CellChange();
-        //        foreach (var mapCellElement in cellsElements)
-        //        {
-        //            mapCellElement.Refresh(mapCellElement.Id == player.MapData.CurrentCell);
-        //        }
     }
 
     public void OnClickHome()
@@ -330,7 +324,7 @@ public class MapWindow : BaseWindow
         void ActivateDialog()
         {
             var dialog = obj.GetDialogMain(out var activateAnyway);
-            
+
             if (dialog != null)
             {
                 if (activateAnyway || !(obj.Completed && obj.OneTimeUsed()))

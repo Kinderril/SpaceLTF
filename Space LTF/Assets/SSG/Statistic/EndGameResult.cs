@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 
 [Serializable]
 public class EndGameResult
@@ -11,6 +9,7 @@ public class EndGameResult
     public DateTime Date;
     public float FinalArmyPower;
     public bool Win;
+    public int RecievedOpendPoints;
 
     public EndGameResult(
         bool win,
@@ -18,9 +17,11 @@ public class EndGameResult
         ShipConfig Config,
         int MapSize,
         DateTime Date,
-        float FinalArmyPower
+        float FinalArmyPower,
+        int recievedPoints
     )
     {
+        RecievedOpendPoints = recievedPoints;
         Win = win;
         this.Difficulty = Difficulty;
         this.Config = Config;

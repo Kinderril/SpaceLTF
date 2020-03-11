@@ -35,6 +35,18 @@ public class TurretDesicionData : IShipDesicion
     }
 
 
+    public bool HaveClosestDamagedFriend(out ShipBase ship)
+    {
+        ship = null;
+        return false;
+    }
+
+    public bool HaveEnemyInDangerZoneDefenceBase(out ShipBase ship)
+    {
+        ship = null;
+        return false;
+    }
+
     public void SetLastAction(ActionType actionType)
     {
 

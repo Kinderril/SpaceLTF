@@ -14,15 +14,11 @@ public class EndGameWindow : BaseWindow
     public MoneySlotUI TotalMoneyRewardField;
     public MoneySlotUI TotalMicroChipsField;
     public Button GoToMapButton;
-
     public Image ToMy;
     public Image ToMiddle;
     public Image ToShips;
-
     public FragDataUI FragDataUIPrefab;
     public EndBattleShipPllotInfoUI EndBattleShipPllotInfoUIPrefab;
-
-
     private int _totalMoney;
     private int _myMoney;
     private float sum;
@@ -65,7 +61,7 @@ public class EndGameWindow : BaseWindow
 
             var showScotsFind = lastReward.Moduls.Count > 0 || lastReward.Weapons.Count > 0 || lastReward.Spells.Count > 0;
             ScoutsFindField.gameObject.SetActive(showScotsFind);
-            ScoutsFindField.text = Namings.Format("Scouts (Level{0}) find something!", player.Parameters.Scouts.Level);
+            ScoutsFindField.text = Namings.Format(Namings.Tag("ScoutsFind"));
             foreach (var moduls in lastReward.Moduls)
             {
                 var itemSlot = InventoryOperation.GetDragableItemSlot();

@@ -17,5 +17,10 @@ public class PlayerAI : Player
         MainController.Instance.Statistics.AddOpenPoints(1);
         return new LastReward(this, winner);
     }
+
+    public virtual bool DoBaseDefence()
+    {
+        return false;
+    }
 }
 

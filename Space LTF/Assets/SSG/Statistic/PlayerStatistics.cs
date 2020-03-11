@@ -55,6 +55,7 @@ public class PlayerStatistics
     public EndBattleType LastBattle = EndBattleType.win;
     public EndGameStatistics EndGameStatistics = new EndGameStatistics();
     private int _lastDifficulty;
+    private int _pointsOnStart;
 
     [field: NonSerialized]
     public WeaponsPair LastWeaponsPairOpen = null;
@@ -218,9 +219,12 @@ public class PlayerStatistics
         {
             AddOpenPoints(_lastDifficulty);
         }
+
+        var recievedPoint = CollectedPoints - _pointsOnStart;
         var mainShip = player.Army.Army.First(x => x.Ship.ShipType == ShipType.Base);
         var finalPower = ArmyCreator.CalcArmyPower(player.Army);
-        EndGameResult res = new EndGameResult(win, _lastDifficulty, mainShip.Ship.ShipConfig, player.MapData.GalaxyData.SizeX, DateTime.Now, finalPower);
+        EndGameResult res = new EndGameResult(win, _lastDifficulty, mainShip.Ship.ShipConfig,
+            player.MapData.GalaxyData.SizeX, DateTime.Now, finalPower, recievedPoint);
         EndGameStatistics.AddResult(res);
         SaveGame();
     }
@@ -271,6 +275,7 @@ public class PlayerStatistics
 
     public void PlayNewGame(StartNewGameData data)
     {
+        _pointsOnStart = CollectedPoints;
         var d = data.CalcDifficulty();
         _lastDifficulty = (int)(d * 100);
     }

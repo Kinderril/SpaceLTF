@@ -27,7 +27,7 @@ public class Commander
     public event Action<ShipBase> OnShipAdd;
     private Action<Commander> OnCommanderDeathCallback;
     private Action<Commander, ShipBase> OnShipInited;
-//    private Action<ShipBase> OnShipLauched;
+    //    private Action<ShipBase> OnShipLauched;
 
     // private CommanderShipEnemy LastPriorityTarget;
 
@@ -69,7 +69,7 @@ public class Commander
         //        CommanderShipBlink = new CommanderShipBlink(player.Parameters.EnginePower.Level);
     }
 
-    public void CallReinforcments(ShipConfig config,Action<ShipBase> OnShipLauched)
+    public void CallReinforcments(ShipConfig config, Action<ShipBase> OnShipLauched)
     {
         var armyPower = Player.Army.GetPower();
         var armyCount = Mathf.Clamp(Player.Army.Count - 1, 1, 10);
@@ -78,7 +78,7 @@ public class Commander
         var logs = new ArmyCreatorLogs();
 
         var dat = ArmyCreatorLibrary.GetArmy(config);
-        var shipData  = ArmyCreator.CreateShipByValue(armyPoints,dat,Player, logs);
+        var shipData = ArmyCreator.CreateShipByValue(armyPoints, dat, Player, logs);
 
         var enemyCommander = _battleController.GetCommander(BattleController.OppositeIndex(TeamIndex));
         var center = Battlefield.CellController.Data.CenterZone;
@@ -89,7 +89,7 @@ public class Commander
         var startPos = pos;
         var dir = enemyCommander.StartMyPosition - startPos;
 
-        var initedShip =  InitShip(shipData, startPos, Utils.NormalizeFastSelf(dir));
+        var initedShip = InitShip(shipData, startPos, Utils.NormalizeFastSelf(dir));
         initedShip.Launch(OnShipLauched);
     }
 
@@ -112,6 +112,31 @@ public class Commander
 
         lineDelta = MyExtensions.Random(2, 5);
         CreateTurretConnecttors((1 + countTurrets) / 2, dirToEnemyNorm, startPosition);
+        int indexPreCalc = 0;
+        bool paramsIsOk = true;
+        _paramsOfShips.Sort((data, pilotData) => data.Ship.ShipType == ShipType.Base
+                                                 && pilotData.Ship.ShipType != ShipType.Base ? -1 : 1);
+        bool haveMainShip = false;
+
+        foreach (var paramsOfShip in _paramsOfShips)
+        {
+            if (paramsOfShip.Ship.ShipType == ShipType.Base)
+            {
+                haveMainShip = true;
+                if (indexPreCalc != 0)
+                {
+                    paramsIsOk = false;
+                }
+            }
+            indexPreCalc++;
+        }
+
+        if (!paramsIsOk)
+        {
+            Debug.LogError("Base ship not first inited big problem");
+        }
+
+        var aiPlayer = Player as PlayerAI;
         foreach (var v in _paramsOfShips)
         {
             switch (v.Ship.ShipType)
@@ -156,7 +181,15 @@ public class Commander
                 indexShips = index;
             }
 
-            InitShip(v, shipPosition, dirToEnemyNorm);
+            var ship = InitShip(v, shipPosition, dirToEnemyNorm);
+            if (haveMainShip)
+            {
+                if (aiPlayer != null)
+                {
+                    if (aiPlayer.DoBaseDefence())
+                        ship.DesicionData.ChangePriority(ESideAttack.BaseDefence);
+                }
+            }
             positionsToClear.Add(shipPosition);
         }
         if (MainShip != null)
@@ -323,7 +356,7 @@ public class Commander
 
     public void LaunchAll(Action<ShipBase> OnShipLauched, Action<Commander> OnCommanderDeath)
     {
-//        this.OnShipLauched = OnShipLauched;
+        //        this.OnShipLauched = OnShipLauched;
         OnCommanderDeathCallback = OnCommanderDeath;
         foreach (var shipBase in Ships)
         {
@@ -393,12 +426,11 @@ public class Commander
 
     public Vector3 GetWaitPosition(ShipBase ship)
     {
-        var mainShip = MainShip;
-        if (mainShip != null)
+        if (MainShip != null)
         {
-            var dir1 = (mainShip.Position - ship.Position);
+            var dir1 = (MainShip.Position - ship.Position);
             var nDir1 = Utils.NormalizeFastSelf(dir1);
-            var pos1 = mainShip.Position + nDir1 * 0.5f;
+            var pos1 = MainShip.Position + nDir1 * 4.5f;
             return pos1;
         }
         else
