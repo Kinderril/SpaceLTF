@@ -23,7 +23,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("prisonerBuy"), _itemCost), null, BuyStolen));
         mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("prisonerCatch")), null, ReternToPolice));
         if (MainController.Instance.MainPlayer.Army.CanAddShip())
-            mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("prisonerHire")), HireHim));
+            mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("prisonerHire")), null,HireHim));
         mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("prisonerHide"), Reputation), null, HideHim));
 
 
@@ -32,16 +32,16 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
         return mesData;
     }
 
-    private void HireHim()
+    private MessageDialogData HireHim()
     {
         var rep = Library.REPUTATION_HIRE_CRIMINAL_REMOVED;
         var info = Namings.Format(Namings.DialogTag("prisonerHired"), rep);
-        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, rep);
-        WindowManager.Instance.InfoWindow.Init(() =>
-        {
-            HireAction(2);
-        }, info);
-
+        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, rep);  
+        HireAction(2);
+        var mianAnswers = new List<AnswerDialogData>();
+        mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("Ok")), null));
+        var mesData = new MessageDialogData(Namings.Format(info), mianAnswers);
+        return mesData;
     }
 
     public void Fight()

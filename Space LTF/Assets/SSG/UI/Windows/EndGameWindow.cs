@@ -61,10 +61,8 @@ public class EndGameWindow : BaseWindow
             _totalMoney = lastReward.Money;
             var microChips = lastReward.Microchips;
             TotalMoneyRewardField.Init(_totalMoney);
-            if (microChips > 0)
-            {
-                TotalMicroChipsField.Init(microChips);
-            }
+            TotalMicroChipsField.Init(microChips);
+
             var showScotsFind = lastReward.Moduls.Count > 0 || lastReward.Weapons.Count > 0 || lastReward.Spells.Count > 0;
             ScoutsFindField.gameObject.SetActive(showScotsFind);
             ScoutsFindField.text = Namings.Format("Scouts (Level{0}) find something!", player.Parameters.Scouts.Level);

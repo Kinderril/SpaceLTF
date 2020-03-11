@@ -462,7 +462,8 @@ public static class EngLocalization
         {"Continue", "Continue"},
         {"Exit", "Exit"},
 
-        {"ReinforcmentsCall", "Reinforcements"},
+        {"ReinforcmentsCallNo", "No reinforcements"},
+        {"ReinforcmentsCallConfig", "Call reinforcements:{0}"},
         {"ReinforcmentsCalled", "Reinforcements unavailable"},
         {"Retreat", "Retreat"},
 

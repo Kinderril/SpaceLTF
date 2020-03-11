@@ -1,5 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -9,7 +8,7 @@ public class ReinforsmentsButton : MonoBehaviour
     private InGameMainUI _mainUI;
     private bool _canRetire;
     public Button Button;
-//    public TextMeshProUGUI Field;
+    //    public TextMeshProUGUI Field;
     public UIElementWithTooltipCache TooltipCache;
 
     public void Init(InGameMainUI mainUI)
@@ -19,16 +18,15 @@ public class ReinforsmentsButton : MonoBehaviour
         if (repdata.CanCallReinforsments(out var config))
         {
             _canRetire = true;
+            TooltipCache.Cache = Namings.Format(Namings.Tag("ReinforcmentsCallConfig"), Namings.ShipConfig(config));
         }
         else
         {
             _canRetire = false;
+            TooltipCache.Cache = Namings.Tag("ReinforcmentsCallNo");
         }
-        TooltipCache.Cache = Namings.Tag("ReinforcmentsCall");
         Button.interactable = _canRetire;
     }
-
-
 
     public void OnClickRetire()
     {

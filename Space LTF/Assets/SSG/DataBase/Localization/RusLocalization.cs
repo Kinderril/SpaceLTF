@@ -444,7 +444,8 @@ public static class RusLocalization
         {"StabilizaInfo", "Уровень стабилизации:{0}"},
         {"MainElements", "Энергетических элементов"},
 
-        {"ReinforcmentsCall", "Подкрепление"},
+        {"ReinforcmentsCallNo", "Нет подкреплений"},
+        {"ReinforcmentsCallConfig", "Вызвать подкрепление:{0}"},
         {"ReinforcmentsCalled", "Подкрепление недоступно"},
         {"Retreat", "Сбежать"},
 

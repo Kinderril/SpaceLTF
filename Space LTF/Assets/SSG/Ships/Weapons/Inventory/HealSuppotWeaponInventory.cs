@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class HealSuppotWeaponInventory : SupportWeaponInv
 {
-    public int DROIDS_COUNT = 4;
+    public int DROIDS_COUNT = 3;
     private float min_dist = .4f;
     private float max_dist = .7f;
     public HealSuppotWeaponInventory([NotNull] WeaponInventoryParameters parameters, int Level)

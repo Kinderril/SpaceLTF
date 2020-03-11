@@ -126,8 +126,21 @@ public static class Library
     {
         ArmyCreatorLibrary.Init();
         _lvlUps = new int[MAX_PILOT_PARAMETER_LEVEL];
-        for (var i = 0; i < MAX_PILOT_PARAMETER_LEVEL; i++)
-            _lvlUps[i] = (int)(i * MONEY_PILOT_LEVEL_UP_COST_COEF + MONEY_PILOT_LEVEL_UP_COST_BASE);
+        _lvlUps[0] = 6;
+        _lvlUps[1] = 6;
+        _lvlUps[2] = 8;
+        _lvlUps[3] = 10;
+        _lvlUps[4] = 13;
+        _lvlUps[5] = 16;
+        _lvlUps[6] = 19;
+        _lvlUps[7] = 24;
+        _lvlUps[8] = 28;
+        _lvlUps[9] = 33;
+        _lvlUps[10] = 38;
+        for (var i = 10; i < MAX_PILOT_PARAMETER_LEVEL; i++)
+        {
+            _lvlUps[i] = (int)((i - 10) * 5 + 50);
+        }
         LibraryModuls.Init();
 
         PosibleTricks = new Dictionary<PilotRank, List<EPilotTricks>>

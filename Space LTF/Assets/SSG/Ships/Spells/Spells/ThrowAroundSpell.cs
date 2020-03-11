@@ -72,16 +72,18 @@ public class ThrowAroundSpell : BaseSpellModulInv
 
         foreach (var obj in commander.Connectors)
         {
-            var dir = obj.Position - origin.Position;
-            var dist = dir.magnitude;
-            if (dist < rad)
+            AffectMovingObject(obj, origin.Position);
+        }
+
+        var bullets = BattleController.Instance.ActiveBullet;
+        foreach (var bullet in bullets)
+        {
+            if (bullet.IsAcive)
             {
-                dir.y = 0f;
-                var dirNorm = Utils.NormalizeFastSelf(dir);
-                var powerFoShip = powerThrow * 1.5f;
-                obj.ExternalForce.Init(powerFoShip, 1f, dirNorm);
+                AffectMovingObject(bullet, origin.Position);
             }
         }
+
 
         var asteroids = cell.GetAllAsteroids();
         foreach (var aiAsteroidPredata in asteroids)
@@ -94,6 +96,19 @@ public class ThrowAroundSpell : BaseSpellModulInv
                 power = MyExtensions.GreateRandom(power);
                 aiAsteroidPredata.Push(dir, power);
             }
+        }
+    }
+
+    private void AffectMovingObject(MovingObject obj, Vector3 startPos)
+    {
+        var dir = obj.Position - startPos;
+        var dist = dir.magnitude;
+        if (dist < rad)
+        {
+            dir.y = 0f;
+            var dirNorm = Utils.NormalizeFastSelf(dir);
+            var powerFoShip = powerThrow * 1.5f;
+            obj.ExternalForce.Init(powerFoShip, 1f, dirNorm);
         }
     }
 

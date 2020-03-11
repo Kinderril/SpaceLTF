@@ -150,7 +150,18 @@ public class HookShotSpell : BaseSpellModulInv
             }
         }
 
-        foreach (var obj in commanderConnectors.Connectors) PushShip(obj, posToHook, out pushedDist);
+        foreach (var obj in commanderConnectors.Connectors)
+            PushShip(obj, posToHook, out pushedDist);
+
+
+        var bullets = BattleController.Instance.ActiveBullet;
+        foreach (var bullet in bullets)
+        {
+            if (bullet.IsAcive)
+            {
+                PushShip(bullet, origin.Position, out var pushedDist2);
+            }
+        }
 
         var cellToTest = BattleController.Instance.CellController.GetCell(_lastTragetPosition);
         //        Debug.DrawRay(_lastTragetPosition,Vector3.up,Color.magenta,10);
@@ -177,7 +188,7 @@ public class HookShotSpell : BaseSpellModulInv
 
     private void TurnToDir(BaseEffectAbsorber effect, Vector3 dir)
     {
-           effect.transform.rotation = Quaternion.LookRotation(dir);
+        effect.transform.rotation = Quaternion.LookRotation(dir);
     }
 
     protected override void CastAction(Vector3 pos)

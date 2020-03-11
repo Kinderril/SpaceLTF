@@ -184,16 +184,26 @@ public class PlayerReputationData
     }
     public bool CanCallReinforsments(out ShipConfig shipConfig, bool withRemoveRep = false)
     {
-
+        int maxRep = Int32.MinValue;
+        ShipConfig? config = null;
         foreach (var rep in ReputationFaction)
         {
             if (IsFriend(rep.Key))
             {
                 if (withRemoveRep)
                     RemoveReputation(rep.Key, Library.REPUTATION_FOR_REINFORCMENTS);
-                shipConfig = rep.Key;
-                return true;
+                if (rep.Value > maxRep)
+                {
+                    config = rep.Key;
+                }
             }
+        }
+
+        if (config.HasValue)
+        {
+
+            shipConfig = config.Value;
+            return true;
         }
 
         shipConfig = ShipConfig.droid;
