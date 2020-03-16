@@ -193,8 +193,8 @@ public static class Namings
             case SimpleModulType.antiEnergy:
                 Name = Tag("Deflector");
                 break;
-            case SimpleModulType.closeStrike:
-                Name = Tag("Side strike");
+//            case SimpleModulType.closeStrike:
+//                Name = Tag("Side strike");
                 break;
             case SimpleModulType.engineLocker:
                 Name = Tag("Engine locker");

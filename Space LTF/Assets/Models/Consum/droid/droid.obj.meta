@@ -1,0 +1,215 @@
+fileFormatVersion: 2
+guid: 8c56c6ff08b11c749b336851dd9f3461
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: RetopoGroup1
+    100004: RetopoGroup10
+    100006: RetopoGroup11
+    100008: RetopoGroup2
+    100010: RetopoGroup3
+    100012: RetopoGroup4
+    100014: RetopoGroup5
+    100016: RetopoGroup6
+    100018: RetopoGroup7
+    100020: RetopoGroup8
+    100022: RetopoGroup9
+    400000: //RootNode
+    400002: RetopoGroup1
+    400004: RetopoGroup10
+    400006: RetopoGroup11
+    400008: RetopoGroup2
+    400010: RetopoGroup3
+    400012: RetopoGroup4
+    400014: RetopoGroup5
+    400016: RetopoGroup6
+    400018: RetopoGroup7
+    400020: RetopoGroup8
+    400022: RetopoGroup9
+    2100000: default1
+    2100002: RetopoGroup1Mat
+    2100004: RetopoGroup10Mat
+    2100006: RetopoGroup11Mat
+    2100008: RetopoGroup2Mat
+    2100010: RetopoGroup3Mat
+    2100012: RetopoGroup4Mat
+    2100014: RetopoGroup5Mat
+    2100016: RetopoGroup6Mat
+    2100018: RetopoGroup7Mat
+    2100020: RetopoGroup8Mat
+    2100022: RetopoGroup9Mat
+    2300000: RetopoGroup1
+    2300002: RetopoGroup10
+    2300004: RetopoGroup11
+    2300006: RetopoGroup2
+    2300008: RetopoGroup3
+    2300010: RetopoGroup4
+    2300012: RetopoGroup5
+    2300014: RetopoGroup6
+    2300016: RetopoGroup7
+    2300018: RetopoGroup8
+    2300020: RetopoGroup9
+    3300000: RetopoGroup1
+    3300002: RetopoGroup10
+    3300004: RetopoGroup11
+    3300006: RetopoGroup2
+    3300008: RetopoGroup3
+    3300010: RetopoGroup4
+    3300012: RetopoGroup5
+    3300014: RetopoGroup6
+    3300016: RetopoGroup7
+    3300018: RetopoGroup8
+    3300020: RetopoGroup9
+    4300000: RetopoGroup1
+    4300002: RetopoGroup10
+    4300004: RetopoGroup11
+    4300006: RetopoGroup2
+    4300008: RetopoGroup3
+    4300010: RetopoGroup4
+    4300012: RetopoGroup5
+    4300014: RetopoGroup6
+    4300016: RetopoGroup7
+    4300018: RetopoGroup8
+    4300020: RetopoGroup9
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup10Mat
+    second: {fileID: 2100000, guid: d1809c7fef218de4aa1e391fc19baf23, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup11Mat
+    second: {fileID: 2100000, guid: 8e6feae5c4e6acf4792235fde6118671, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup1Mat
+    second: {fileID: 2100000, guid: c73cecd18cdab334bb0ded802144301c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup2Mat
+    second: {fileID: 2100000, guid: 724b7bed6fb7ea5428f1ebe9af5cd7d7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup3Mat
+    second: {fileID: 2100000, guid: 179fc07184d19ae40878ae589b5b7926, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup4Mat
+    second: {fileID: 2100000, guid: eee4146ef660534418254c267e75e7c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup5Mat
+    second: {fileID: 2100000, guid: bc234fb1ca1407044ac93b9d9ccf48af, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup6Mat
+    second: {fileID: 2100000, guid: 37770686915634546baaca9ac6393810, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup7Mat
+    second: {fileID: 2100000, guid: ba3299f06af4a1549bb5a2cbdad7ef46, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup8Mat
+    second: {fileID: 2100000, guid: 51e6d521fd9acb44788d5eec6d2d66e1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RetopoGroup9Mat
+    second: {fileID: 2100000, guid: 99033468fca4baa49be82794ef4409ff, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

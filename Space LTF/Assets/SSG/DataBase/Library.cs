@@ -79,6 +79,8 @@ public static class Library
     private const float EMI_DELAY = 7f;
     private const float EMI_SPEED = 15f;
 
+    public static int DROID_SUPPORTS_PER_SHOOT = 3;
+
     public const float MOVING_ARMY_POWER_COEF = 1.5f;
 
     public const float BASE_WEAPON_VALUE = 1.2f;

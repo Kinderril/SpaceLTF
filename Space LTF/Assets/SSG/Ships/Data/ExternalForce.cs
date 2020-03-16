@@ -7,10 +7,12 @@ public class ExternalForce
     private float Power;
     private float EndTime;
     private float Period;
+    private float _coef = 1f;
 
 
-    public ExternalForce()
+    public ExternalForce(float coef = 1f)
     {
+        _coef = coef;
         IsActive = false;
     }
 
@@ -19,9 +21,9 @@ public class ExternalForce
         IsActive = true;
         dir.y = 0;
         Dir = Utils.NormalizeFastSelf(dir);
-        Power = power;
-        EndTime = Time.time + delay;
-        Period = delay;
+        Power = power * _coef;
+        Period = delay * _coef;
+        EndTime = Time.time + Period;
     }
 
     public Vector3 Update()

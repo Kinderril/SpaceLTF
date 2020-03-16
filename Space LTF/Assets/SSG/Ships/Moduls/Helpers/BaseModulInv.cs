@@ -27,19 +27,19 @@ public class BaseModulInv : IItemInv
         {
             case SimpleModulType.antiPhysical:
             case SimpleModulType.antiEnergy:
-            case SimpleModulType.systemMines:
-            case SimpleModulType.damageMines:
-            case SimpleModulType.fireMines:
             case SimpleModulType.WeaponSpeed:
             case SimpleModulType.WeaponDist:
             case SimpleModulType.ShipSpeed:
             case SimpleModulType.ShipTurnSpeed:
             case SimpleModulType.WeaponSector:
-            case SimpleModulType.WeaponLessDist:
                 return 0;
-            case SimpleModulType.closeStrike:
+//            case SimpleModulType.closeStrike:
             case SimpleModulType.shieldRegen:
+            case SimpleModulType.systemMines:
+            case SimpleModulType.damageMines:
+            case SimpleModulType.fireMines:
             case SimpleModulType.WeaponShield:
+            case SimpleModulType.WeaponLessDist:
                 // case SimpleModulType.WeaponWeapon:
                 return 2;
             case SimpleModulType.WeaponAOE:
@@ -52,30 +52,31 @@ public class BaseModulInv : IItemInv
                 return 3;
             case SimpleModulType.shieldLocker:
             case SimpleModulType.engineLocker:
-            case SimpleModulType.WeaponSpray:
             case SimpleModulType.WeaponFire:
             case SimpleModulType.WeaponEngine:
             case SimpleModulType.ShieldDouble:
-            case SimpleModulType.armor:
                 return 4;
+            case SimpleModulType.WeaponSpray:
+            case SimpleModulType.armor:
             case SimpleModulType.blink:
             case SimpleModulType.WeaponCrit:
             case SimpleModulType.WeaponPowerShot:
-            case SimpleModulType.WeaponShieldPerHit:
+            case SimpleModulType.WeaponMultiTarget:
+                return 5;
             case SimpleModulType.ShipDecreaseSpeed:
             case SimpleModulType.WeaponSelfDamage:
             case SimpleModulType.WeaponShootPerTime:
             case SimpleModulType.WeaponShieldIgnore:
             case SimpleModulType.autoRepair:
-            case SimpleModulType.WeaponMultiTarget:
-                return 5;
+            case SimpleModulType.WeaponShieldPerHit:
+                return 6;
             case SimpleModulType.laserUpgrade:
             case SimpleModulType.rocketUpgrade:
             case SimpleModulType.impulseUpgrade:
             case SimpleModulType.bombUpgrade:
             case SimpleModulType.EMIUpgrade:
             case SimpleModulType.beamUpgrade:
-                return 8;
+                return 9;
         }
         return 0;
     }

@@ -6,7 +6,7 @@ public enum SimpleModulType
     autoRepair = 0,
     autoShieldRepair = 1,
 
-    closeStrike = 6,
+//    closeStrike = 6,
     shieldRegen = 2,
 
     antiPhysical = 4,
@@ -104,8 +104,8 @@ public abstract class ActionModulInGame
                 return new AutoShieldRepairModul(baseModulInv);
             case SimpleModulType.shieldLocker:
                 return new ShieldLocker(baseModulInv);
-            case SimpleModulType.closeStrike:
-                return new CloseStrikeModul(baseModulInv);
+//            case SimpleModulType.closeStrike:
+//                return new CloseStrikeModul(baseModulInv);
             case SimpleModulType.engineLocker:
                 return new EngineLocker(baseModulInv);
             case SimpleModulType.damageMines:

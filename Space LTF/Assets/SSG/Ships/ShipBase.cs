@@ -131,7 +131,7 @@ public class ShipBase : MovingObject
         HitData = new ShipHitData();
         HitData.Init(ShipVisual.transform, Easing.EaseType.easeInOutElastic);
         EngineStop = new EngineStop(this, ShipEngineStop);
-        ExternalForce = new ExternalForce();
+        ExternalForce = new ExternalForce(shipInventory.ShipType == ShipType.Base ? 0.3f : 1f);
         ExternalSideForce = new ExternalSideForce();
         VisibilityData = new ShipVisibilityData(this);
         //        AsteroidDamage = new ShipAsteroidDamage(this);

@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
 public class ShieldLocker : ActionModulInGame
 {
 
-    public ShieldLocker(BaseModulInv baseModulInv) 
+    public ShieldLocker(BaseModulInv baseModulInv)
         : base(baseModulInv)
     {
         Period = 15f;
     }
-    
+
 
     public override void Apply(ShipParameters Parameters, ShipBase owner)
     {
-        base.Apply(Parameters,owner);
+        base.Apply(Parameters, owner);
         _owner.WeaponsController.OnWeaponShootStart += OnWeaponShootStart;
     }
 
@@ -36,7 +32,7 @@ public class ShieldLocker : ActionModulInGame
                 var shield = _owner.Target.ShipLink.ShipParameters.ShieldParameters;
                 if (shield.ShiledIsActive && shield.CurShiled > 2)
                 {
-                    _owner.Target.ShipLink.DamageData.ApplyEffect(ShipDamageType.shiled, 2f + ModulData.Level * 3f);
+                    _owner.Target.ShipLink.DamageData.ApplyEffect(ShipDamageType.shiled, 3f + ModulData.Level * 3f);
                 }
             }
         }

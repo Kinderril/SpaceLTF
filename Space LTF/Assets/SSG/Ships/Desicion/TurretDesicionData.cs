@@ -71,9 +71,8 @@ public class TurretDesicionData : IShipDesicion
     {
         var type = CalcTask(out var ship);
         var task = new StayAttackAction(_shipBase, _shipBase.Enemies[ship]);
-//        task.SetDesider(this);
         return task;
-//        return new WaitEnemyTime(_shipBase, 20f);
+        //        return new WaitEnemyTime(_shipBase, 20f);
     }
 
 

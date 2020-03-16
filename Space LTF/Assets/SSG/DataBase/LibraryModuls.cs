@@ -82,7 +82,7 @@ public static class LibraryModuls
         {
             SimpleModulType.autoRepair,
             SimpleModulType.autoShieldRepair,
-            SimpleModulType.closeStrike,
+//            SimpleModulType.closeStrike,
             SimpleModulType.antiPhysical,
             SimpleModulType.antiEnergy,
             SimpleModulType.shieldLocker,
@@ -179,7 +179,7 @@ public static class LibraryModuls
             SimpleModulType.ShipSpeed,
             SimpleModulType.ShipTurnSpeed,
             SimpleModulType.shieldRegen,
-            SimpleModulType.closeStrike,
+            // SimpleModulType.closeStrike,
             SimpleModulType.WeaponSpeed,
             SimpleModulType.WeaponDist,
             SimpleModulType.WeaponShield,
@@ -205,7 +205,7 @@ public static class LibraryModuls
         {
             SimpleModulType.autoRepair,
             SimpleModulType.autoShieldRepair,
-            SimpleModulType.closeStrike,
+            // SimpleModulType.closeStrike,
             SimpleModulType.antiPhysical,
             SimpleModulType.antiEnergy,
             SimpleModulType.shieldLocker,

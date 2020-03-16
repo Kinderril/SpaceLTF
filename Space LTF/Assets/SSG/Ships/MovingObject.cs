@@ -76,7 +76,6 @@ public abstract class MovingObject : PoolElement
 
     public override void Init()
     {
-
         ExternalForce = new ExternalForce();
         ExternalSideForce = new ExternalSideForce();
         EngineStop = new EngineStop(this, null);
@@ -232,7 +231,7 @@ public abstract class MovingObject : PoolElement
             nextBank = BankingToZero(_curBank, bSpeed);
         }
 
-        _curBank = _curBank * 0.3f +  nextBank * 0.7f;
+        _curBank = _curBank * 0.3f + nextBank * 0.7f;
         var rotationToImplement = YMoveRotation.RotateQuaternion;
         var bank = _curBank + rotationToImplement.z;
         var bankRotation = new Quaternion(rotationToImplement.x, 0, bank, rotationToImplement.w);
