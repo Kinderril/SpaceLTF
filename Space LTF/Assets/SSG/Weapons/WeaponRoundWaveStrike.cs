@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-public class WeaponRoundWaveStrike
+﻿public class WeaponRoundWaveStrike
 {
     public const float SHIELD_DAMAGE = 3;
     public const float BODY_DAMAGE = 3;
@@ -26,13 +19,14 @@ public class WeaponRoundWaveStrike
         var shipsToDamage = BattleController.Instance.GetAllShipsInRadius(_owner.Position, _indexToSearch, Rad);
         foreach (var shipBase in shipsToDamage)
         {
-            shipBase.ShipParameters.Damage(weapon.ShieldDamage, weapon.BodyDamage,damageDoneCallback,_owner);
+            shipBase.ShipParameters.Damage(weapon.ShieldDamage, weapon.BodyDamage, damageDoneCallback, _owner);
         }
     }
 
-    private void damageDoneCallback(float healthdelta, float shielddelta, ShipBase attacker)
+    private void damageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
-        _owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta);
+        var coef = damageAppliyer != null ? damageAppliyer.ExpCoef : 0f;
+        _owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
     }
 }
 

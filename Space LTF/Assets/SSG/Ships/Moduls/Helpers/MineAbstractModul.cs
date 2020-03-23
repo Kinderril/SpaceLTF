@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 
-public abstract class MineAbstractModul : ActionModulInGame , IWeapon
+public abstract class MineAbstractModul : ActionModulInGame, IWeapon
 {
     private const float DELAY_BASE = 20f;
     private const float DELAY_DELTA = 1.5f;
@@ -14,10 +10,10 @@ public abstract class MineAbstractModul : ActionModulInGame , IWeapon
     private Bullet _mineBulletPrefab;
     private float _timeCome;
 
-    public MineAbstractModul(BaseModulInv baseModulInv) 
+    public MineAbstractModul(BaseModulInv baseModulInv)
         : base(baseModulInv)
     {
-        CurrentDamage = new CurWeaponDamage(1,1);
+        CurrentDamage = new CurWeaponDamage(1, 1);
         _battleController = BattleController.Instance;
         Period = DELAY_BASE - ModulData.Level * DELAY_DELTA;
         _mineBulletPrefab = GetPrefab();
@@ -42,10 +38,10 @@ public abstract class MineAbstractModul : ActionModulInGame , IWeapon
         get { return _owner.Position; }
     }
 
-    public void BulletCreateByDir(ShipBase target,Vector3 dir)
+    public void BulletCreateByDir(ShipBase target, Vector3 dir)
     {
-//        Debug.Log($"Mine abstract BulletCreate {Time.time}");
-        for (int i = 0; i < 1+Level; i++)
+        //        Debug.Log($"Mine abstract BulletCreate {Time.time}");
+        for (int i = 0; i < 1 + Level; i++)
 
         {
             var dirToMove = Utils.RotateOnAngUp(_owner.LookDirection, MyExtensions.Random(-90, 90));
@@ -60,7 +56,7 @@ public abstract class MineAbstractModul : ActionModulInGame , IWeapon
     }
 
     protected abstract Bullet GetPrefab();
-    
+
     public override void Apply(ShipParameters Parameters, ShipBase owner)
     {
         if (_timer == null || !_timer.IsActive)
@@ -69,9 +65,9 @@ public abstract class MineAbstractModul : ActionModulInGame , IWeapon
             _timer.OnTimer += OnTimer;
         }
         //        _owner.WeaponsController.OnWeaponShootStart += OnWeaponShootStart;
-        base.Apply(Parameters,owner);
+        base.Apply(Parameters, owner);
     }
-    
+
 
     public ShipBase Owner
     {
@@ -137,7 +133,7 @@ public abstract class MineAbstractModul : ActionModulInGame , IWeapon
 
     public override void Delete()
     {
-//        _owner.WeaponsController.OnWeaponShootStart -= OnWeaponShootStart;
+        //        _owner.WeaponsController.OnWeaponShootStart -= OnWeaponShootStart;
         base.Delete();
     }
 
@@ -150,7 +146,8 @@ public abstract class MineAbstractModul : ActionModulInGame , IWeapon
 
     public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
-        _owner.ShipInventory.LastBattleData.AddDamage(healthdelta,shielddelta);
+        var coef = damageAppliyer != null ? damageAppliyer.ExpCoef : 0f;
+        _owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
     }
 }
 

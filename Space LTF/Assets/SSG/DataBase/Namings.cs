@@ -160,9 +160,9 @@ public static class Namings
             case WeaponType.eimRocket:
                 return Tag("EMI");
             case WeaponType.beam:
-                return Tag("Beam");  
+                return Tag("Beam");
             case WeaponType.healBodySupport:
-                return Tag("healBodySupport");  
+                return Tag("healBodySupport");
             case WeaponType.healShieldSupport:
                 return Tag("healShieldSupport");
         }
@@ -351,8 +351,8 @@ public static class Namings
                 return Tag("Attack");
             case ActionType.attack:
                 return Tag("Attack");
-            case ActionType.attackHalfLoop:
-                return Tag("AttackHalfLoop");
+            // case ActionType.attackHalfLoop:
+            //     return Tag("AttackHalfLoop");
             case ActionType.moveToBase:
                 break;
             case ActionType.returnToBattle:

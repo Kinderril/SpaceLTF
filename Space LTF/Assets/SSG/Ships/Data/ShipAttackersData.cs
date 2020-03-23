@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-public  class ShipAttackersData       :ShipData
+﻿public class ShipAttackersData : ShipData
 {
     private ShipPersonalInfo _lastAttacker = null;
 
     public ShipPersonalInfo CurAttacker => _lastAttacker;
-    public ShipAttackersData(ShipBase owner) 
+    public ShipAttackersData(ShipBase owner)
         : base(owner)
     {
 
@@ -24,19 +17,19 @@ public  class ShipAttackersData       :ShipData
             {
                 if (_owner.Boost.IsReady)
                 {
-                    _owner.Boost.ActivateBack();
+                    _owner.Boost.BoostTwist.ActivateBack(CurAttacker);
                 }
             }
-            else  if (CurAttacker.IsInFrontSector() && CurAttacker.Dist < 19)
-            {
-                if (_owner.Boost.IsReady)
-                {
-                    if (MyExtensions.IsTrueEqual())
-                    {
-                        _owner.Boost.EvadeToSide();
-                    }
-                }
-            }
+            // else  if (CurAttacker.IsInFrontSector() && CurAttacker.Dist < 19)
+            // {
+            //     if (_owner.Boost.IsReady)
+            //     {
+            //         if (MyExtensions.IsTrueEqual())
+            //         {
+            //             _owner.Boost.EvadeToSide();
+            //         }
+            //     }
+            // }
         }
     }
 
@@ -46,7 +39,7 @@ public  class ShipAttackersData       :ShipData
         {
             _lastAttacker = info;
         }
-    }   
+    }
 
     public void ShipEndsAttack(ShipBase attacker)
     {

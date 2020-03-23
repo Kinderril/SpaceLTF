@@ -35,6 +35,7 @@ public enum WeaponType
     vacuumdSpell = 24,
     healBodySupport = 25,
     healShieldSupport = 26,
+    ramStrike = 27,
 }
 
 public class WeaponAffectionAdditionalParams
@@ -54,6 +55,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     public float _delayBetweenShootsSec;
     protected float _fixedDelta;
     private bool _inProcess;
+    private bool _shouldPlaySount = true;
     private readonly bool _isRoundAng;
     public int _level;
     // private bool _nextShootMorePower;
@@ -155,11 +157,12 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
         GlobalEventDispatcher.ShipDamage(Owner, healthdelta, shielddelta, _weaponType);
-        Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta);
+        var coef = damageAppliyer != null ? damageAppliyer.ExpCoef : 0f;
+        Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
         if (damageAppliyer != null)
         {
 #if UNITY_EDITOR
-            if (damageAppliyer.IsDead == Owner)
+            if (damageAppliyer.Id == Owner.Id)
                 Debug.LogError(
                     $"Strange things. I wanna kill my self??? {Owner.Id}_{Owner.name}  side:{Owner.TeamIndex}  weap:{Name}");
 #endif
@@ -198,19 +201,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
 
     public void CrashReload(bool val)
     {
-        //        if (val)
-        //        {
-        ////            _reloadCoef = 2f;
-        //        }
-        //        else
-        //        {
-        ////            _reloadCoef = 1f;
-        //        }
         IsCrahed = val;
-        //        if (OnCrashed != null)
-        //        {
-        //            OnCrashed(this, val);
-        //        }
     }
 
     public abstract void AffectBulletOnShip(ShipParameters shipParameters, ShipBase target, Bullet bullet,
@@ -303,8 +294,6 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
 
     protected void Shoot(ShipBase target)
     {
-        //        Debug.Log("Shoot! " + Time.time);
-        //        var pos = target.Position;
         _curPeriodShoots = 0;
         if (OnShootStart != null)
             OnShootStart(this);
@@ -338,7 +327,8 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
 
     protected void ShootDir(ShipBase target)
     {
-        if (Source != null)
+        GlobalEventDispatcher.ShipShoot(Owner, target);
+        if (Source != null && _shouldPlaySount)
             Source.PlayOneShot(Clip);
         _curPeriodShoots++;
         BulletCreateByDir(target, Owner.LookDirection);
@@ -491,4 +481,8 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         _testTargetPosition.DropAimPos();
     }
 
+    public void DisableSound()
+    {
+        _shouldPlaySount = false;
+    }
 }

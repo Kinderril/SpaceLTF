@@ -29,6 +29,12 @@ public class WeaponPlace : MonoBehaviour
 //            _material = ReloadIndicator.material;
             weapon.SetTransform(this);
         }
+
+        if (Source != null)
+        {
+            Source.maxDistance = 40;
+            Source.volume = 0.4f;
+        }
 //        PlaceVisual.gameObject.SetActive(IsActivePlace);
     }
 

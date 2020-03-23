@@ -104,6 +104,10 @@ public class DebugPanelWindow : EditorWindow
             if (GUILayout.Button("LevelUp."))
             {
                 LevelUpRandom();
+            }     
+            if (GUILayout.Button("Exp."))
+            {
+                ExpAll();
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
@@ -199,6 +203,11 @@ public class DebugPanelWindow : EditorWindow
         }
         Debug.LogError("can't upgrade");
 
+    }
+
+    private void ExpAll()
+    {
+       MainController.Instance.MainPlayer.Army.DebugAddAllExp();
     }
 
     private void AddCore()

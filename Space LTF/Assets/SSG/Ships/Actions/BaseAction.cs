@@ -20,13 +20,14 @@ public enum ActionType
     waitEnemySec,
     waitEdnGame,
     readyToAttack,
-    attackHalfLoop,
+    // attackHalfLoop,
     shootFromPlace,
     support,
 }
 
 public abstract class BaseAction
 {
+    protected const float TRICK_CHECK_PERIOD = 1f;
     protected Vector3? _targetPoint;
     //    protected MoveWayNoLerp _moveWay = null;
     protected const float RECALC_WAY_DELTA = 0.3f;

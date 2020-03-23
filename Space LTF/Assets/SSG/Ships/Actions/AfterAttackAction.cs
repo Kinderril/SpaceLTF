@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -10,12 +6,28 @@ public class AfterAttackAction : BaseAction
 {
     private bool _canDoBackflip;
     private float _nextCheckCanSupport;
-    public AfterAttackAction([NotNull] ShipBase owner) 
-        : base(owner,ActionType.afterAttack)
+    protected float _nextCheckTwist;
+    public AfterAttackAction([NotNull] ShipBase owner)
+        : base(owner, ActionType.afterAttack)
     {
         FindWay();
+        GlobalEventDispatcher.OnShipShootDelegate += OnShipShootDelegate;
         _nextCheckCanSupport = Time.time + 2f;
         _canDoBackflip = MyExtensions.IsTrue01(.45f);
+    }
+
+    private void OnShipShootDelegate(ShipBase shooter, ShipBase target)
+    {
+        if (target == _owner && shooter.TeamIndex != _owner.TeamIndex)
+        {
+            CheckBoostTwist(shooter);
+        }
+    }
+
+    protected override void Dispose()
+    {
+        GlobalEventDispatcher.OnShipShootDelegate -= OnShipShootDelegate;
+        base.Dispose();
     }
 
     public override void ManualUpdate()
@@ -30,19 +42,30 @@ public class AfterAttackAction : BaseAction
             CheckBackflip();
         }
     }
+    private void CheckBoostTwist(ShipBase shooter)
+    {
+        if (!_owner.Boost.IsReady)
+        {
+            return;
+        }
+
+        if (_nextCheckTwist < Time.time)
+        {
+            _nextCheckTwist = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
+            if (_owner.Enemies.TryGetValue(shooter, out var data))
+            {
+                _owner.Boost.BoostTwist.Activate(data);
+            }
+        }
+    }
 
     private void CheckBackflip()
     {
         if (_owner.AttackersData.CurAttacker != null && !_owner.Boost.BoostLoop.IsActive)
         {
-            if (_owner.Boost.IsReady)
+            if (_owner.Boost.IsReady && _owner.Boost.BoostLoop.CanUse)
             {
-                _owner.Boost.ActivateLoop();
-//                if (Time.time - _owner.AttackersData.CurAttacker.ShipLink.WeaponsController.LastShootTime <
-//                    Time.deltaTime * 4f)
-//                {
-//                    _owner.Boost.ActivateBackflip();
-//                }
+                _owner.Boost.BoostLoop.Activate();
             }
         }
     }
@@ -52,7 +75,7 @@ public class AfterAttackAction : BaseAction
         var point = _owner.CellController.Data.FreePoints.RandomElement();
         _targetPoint = point;
     }
-    
+
     protected override CauseAction[] GetEndCauses()
     {
         var c = new CauseAction[]
@@ -95,13 +118,13 @@ public class AfterAttackAction : BaseAction
 
     public override void DrawGizmos()
     {
-//        if (_targetPoint != null)
-//        {
-//            _targetPoint.DrawGizmos(_owner.Position);
-//        }
-//        var d = 0.2f;
-//        Gizmos.DrawSphere(Target(),d);
-//        Gizmos.DrawSphere(Target()+Vector3.up*d,d);
+        //        if (_targetPoint != null)
+        //        {
+        //            _targetPoint.DrawGizmos(_owner.Position);
+        //        }
+        //        var d = 0.2f;
+        //        Gizmos.DrawSphere(Target(),d);
+        //        Gizmos.DrawSphere(Target()+Vector3.up*d,d);
     }
 }
 

@@ -64,7 +64,9 @@ public class ShipBase : MovingObject
 
     private ArrowTarget Arrow;
     public ShipParameters ShipParameters { get; private set; }
+
     public ShipModuls ShipModuls { get; private set; }
+
     //    public AimingBox AimingBox;
     public IShipData Target;
     public TeamIndex TeamIndex;
@@ -72,7 +74,9 @@ public class ShipBase : MovingObject
     public SelfCamera SelfCamera;
 
     public List<WeaponPlace> WeaponPosition;
+    public float ExpCoef { get; protected set; }
     public IShipDesicion DesicionData { get; protected set; }
+    // public int TotalExpByKill { get; protected set; }
 
     protected override float BankMax
     {
@@ -112,6 +116,10 @@ public class ShipBase : MovingObject
     public virtual void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos,
         IPilotParameters pilotParams, Commander commander, Action<ShipBase> dealthCallback)
     {
+        if (Audio != null)
+        {
+            Audio.volume = .45f;
+        }
         //        gameObject.SetActive(false);
         SelfCamera = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.SelfCameraPrefab);
         SelfCamera.transform.SetParent(ShipVisual.transform, false);
@@ -124,7 +132,6 @@ public class ShipBase : MovingObject
         SelectedElement = DataBaseController.GetItem<SelectedElement>(selectedElementPrefab);
         SelectedElement.Init(shipInventory.ShipType);
         SelectedElement.transform.SetParent(ShipVisual.transform, false);
-
         InitPriorityObjects();
 
         DamageData = new ShipDamageData(this);
@@ -182,6 +189,9 @@ public class ShipBase : MovingObject
             Arrow.transform.localPosition = Vector3.zero;
             Arrow.SetOwner(this);
         }
+        var totalExpByKill = Library.GetExp(ShipParameters.StartParams.ShipType, ShipParameters.StartParams.ShipConfig);
+        var maxSum = ShipParameters.MaxHealth + ShipParameters.MaxShield;
+        ExpCoef = totalExpByKill / maxSum;
     }
 
     private void InitPriorityObjects()
@@ -358,36 +368,6 @@ public class ShipBase : MovingObject
         // _backPredictionPos = -LookDirection * PREDICTION_DIST + Position;
     }
 
-    //     private void CheckYEnemies()
-    //     {
-    // //        return;
-    //         if (_curSpeed <= 0f)
-    //         {
-    //             return;
-    //         }
-    //
-    //         bool isGreen = (TeamIndex == TeamIndex.green);
-    //         if (_evadeNextFrame)
-    //         {
-    //             _evadeNextFrame = false;
-    //             int dir = isGreen ? 1 : -1;
-    //             MoveByY(dir, isGreen);
-    //             return;
-    //         }
-    //
-    //         if ((isGreen && yMove > 0) || (!isGreen && yMove < 0))
-    //         {
-    //             int dirInner = isGreen ? -1 : 1;
-    //             MoveByY(dirInner, isGreen);
-    //         }
-    //         else
-    //         {
-    //             yMove = 0;
-    //             var p = ShipVisual.transform.position;
-    //             ShipVisual.transform.position = new Vector3(p.x, yMove, p.z);
-    //         }
-    //     }
-
     private void MoveByY(float resultY)
     {
 #if UNITY_EDITOR
@@ -407,7 +387,6 @@ public class ShipBase : MovingObject
         ShipParameters.Update();
     }
 
-
     public void MoveToDirection(Vector3 dir)
     {
         var speed = ApplyRotation(dir, false);
@@ -421,17 +400,21 @@ public class ShipBase : MovingObject
             if (Boost.BoostTurn.IsActive)
             {
                 Boost.BoostTurn.ApplyRotation(dir);
-                return Boost.BoostTurn.TargetBoosSpeed;
+                return Boost.BoostTurn.CurSpeed;
+            }
+
+            if (Boost.BoostTwist.IsActive)
+            {
+                Boost.BoostTwist.ApplyRotation(dir);
+                return Boost.BoostTwist.CurSpeed;
             }
 
             if (Boost.BoostLoop.IsActive)
             {
                 return 1f;
             }
-
-            if (Boost.BoostTwist.IsActive)
+            if (Boost.BoostRam.IsActive)
             {
-                Boost.BoostTwist.ApplyRotation(dir);
                 return 1f;
             }
         }
@@ -442,7 +425,7 @@ public class ShipBase : MovingObject
     {
         DebugTurnData = null;
         var direction4 = PathController.GetCurentDirection(target, out var exactlyPoint, out var goodDir, out var speedRecommended);
-        if (!goodDir)
+        if (!goodDir || (Boost.IsActive && Boost.UseRotationByBoost))
         {
             var speed = ApplyRotation(direction4, exactlyPoint);
             SetTargetSpeed(speed);

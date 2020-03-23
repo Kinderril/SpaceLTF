@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 
 [System.Serializable]
@@ -10,7 +7,7 @@ public class RoundStrikeModul : TimerModul
     private bool isCharged;
     private const float CloseRad = 4f;
 
-    public RoundStrikeModul(BaseModulInv b) 
+    public RoundStrikeModul(BaseModulInv b)
         : base(b)
     {
         isCharged = true;
@@ -21,7 +18,7 @@ public class RoundStrikeModul : TimerModul
     {
         return Period;
     }
-    
+
 
     protected override void TimerAction()
     {
@@ -37,19 +34,20 @@ public class RoundStrikeModul : TimerModul
         {
             EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.RoundStrikeEffect,
                 _owner.transform, 3f);
-            _owner.ShipParameters.Damage(20, 0, DamageDoneCallback,_owner);
+            _owner.ShipParameters.Damage(20, 0, DamageDoneCallback, _owner);
             foreach (var shipBase in _shipsToDamage)
             {
                 EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.RoundStrikeEffectShip,
                     _owner.transform, 3f);
-                shipBase.ShipParameters.Damage(8 + ModulData.Level*2, 8 + ModulData.Level * 2, DamageDoneCallback,_owner);
+                shipBase.ShipParameters.Damage(8 + ModulData.Level * 2, 8 + ModulData.Level * 2, DamageDoneCallback, _owner);
             }
         }
     }
 
-    private void DamageDoneCallback(float healthdelta, float shielddelta,ShipBase applyTarget)
+    private void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
-        _owner.ShipInventory.LastBattleData.AddDamage(healthdelta,shielddelta);
+        var coef = damageAppliyer != null ? damageAppliyer.ExpCoef : 0f;
+        _owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
     }
 }
 

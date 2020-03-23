@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 [System.Serializable]
-public class CloseStrikeModul : ActionModulInGame,IWeapon
+public class CloseStrikeModul : ActionModulInGame, IWeapon
 {
-//    private bool isCharged;
+    //    private bool isCharged;
     private TimerManager.ITimer _timer;
     private BattleController _battleController;
     private Bullet _bulletOrigin;
@@ -18,7 +14,7 @@ public class CloseStrikeModul : ActionModulInGame,IWeapon
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 4f;
 
-    public CloseStrikeModul(BaseModulInv baseModulInv) 
+    public CloseStrikeModul(BaseModulInv baseModulInv)
         : base(baseModulInv)
     {
         CurrentDamage = new CurWeaponDamage(1 + Level, 1 + Level);
@@ -49,7 +45,7 @@ public class CloseStrikeModul : ActionModulInGame,IWeapon
 
     public void ApplyToShip(ShipParameters shipParameters, ShipBase shipBase, Bullet bullet)
     {
-        shipParameters.Damage(CurrentDamage.ShieldDamage, CurrentDamage.BodyDamage, DamageDoneCallback,shipBase);
+        shipParameters.Damage(CurrentDamage.ShieldDamage, CurrentDamage.BodyDamage, DamageDoneCallback, shipBase);
     }
 
     public float CurOwnerSpeed
@@ -66,31 +62,31 @@ public class CloseStrikeModul : ActionModulInGame,IWeapon
 
     public override void Apply(ShipParameters Parameters, ShipBase owner)
     {
-//        Debug.Log("Apply isReady closestShip");
+        //        Debug.Log("Apply isReady closestShip");
         if (_timer == null || !_timer.IsActive)
         {
             _timer = MainController.Instance.BattleTimerManager.MakeTimer(1f, true);
             _timer.OnTimer += OnTimer;
         }
         _battleController = BattleController.Instance;
-        base.Apply(Parameters,owner);
+        base.Apply(Parameters, owner);
     }
 
 
     private void OnTimer()
     {
         bool isReady = IsReady();
-//        Debug.Log("OnTimer");
+        //        Debug.Log("OnTimer");
         if (isReady)
         {
-//            Debug.Log("OnTimer isReady");
+            //            Debug.Log("OnTimer isReady");
             var closestShip = _battleController.ClosestShipToPos(_owner.Position, BattleController.OppositeIndex(_owner.TeamIndex));
             if (closestShip != null)
             {
-//                Debug.Log("OnTimer isReady closestShip");
+                //                Debug.Log("OnTimer isReady closestShip");
                 if (_owner.Enemies[closestShip].Dist < 2)
                 {
-//                    Debug.Log("Close strike StrikeToShip close");
+                    //                    Debug.Log("Close strike StrikeToShip close");
                     UpdateTime();
                     StrikeToShip(closestShip);
                 }
@@ -101,9 +97,9 @@ public class CloseStrikeModul : ActionModulInGame,IWeapon
     public void StartStrike()
     {
         //Force self
-        _owner.ExternalForce.Init(12f,0.6f,_owner.LookDirection);
+        _owner.ExternalForce.Init(12f, 0.6f, _owner.LookDirection);
         _striking = true;
-//        Debug.Log("CForce selfse");
+        //        Debug.Log("CForce selfse");
     }
 
     public bool WantStrikeNow(out ShipBase closestShip)
@@ -140,23 +136,23 @@ public class CloseStrikeModul : ActionModulInGame,IWeapon
 
     public void StrikeShip(ShipBase closestShip)
     {
-//        Debug.Log("Close StrikeShip HIT");
+        //        Debug.Log("Close StrikeShip HIT");
         StrikeToShip(closestShip);
-        closestShip.GetHit(this,null);
+        closestShip.GetHit(this, null);
         _striking = false;
     }
 
     private void StrikeToShip(ShipBase ship)
     {
 
-//        Debug.Log("StrikeToShip 1  " + _bulletOrigin);
+        //        Debug.Log("StrikeToShip 1  " + _bulletOrigin);
         var dir = Vector3.Dot(_owner.LookLeft, _owner.Enemies[ship].DirNorm) > 0 ? _owner.LookLeft : _owner.LookRight;
         var dir1 = Utils.RotateOnAngUp(dir, -ANG_OFFSET);
         var dir2 = Utils.RotateOnAngUp(dir, ANG_OFFSET);
 
 
-//        CreateBulletWithModif(baseEndPoint1_1);
-//        CreateBulletWithModif(baseEndPoint2_1);
+        //        CreateBulletWithModif(baseEndPoint1_1);
+        //        CreateBulletWithModif(baseEndPoint2_1);
 
         BulletCreateByDir(null, dir);
         BulletCreateByDir(null, dir1);
@@ -181,7 +177,7 @@ public class CloseStrikeModul : ActionModulInGame,IWeapon
 
     public void UpdateStrike(ShipBase attackShip)
     {
-//        Debug.Log("UpdateStrike");
+        //        Debug.Log("UpdateStrike");
         if (_striking)
         {
             var data = _owner.Enemies[attackShip];
@@ -199,7 +195,7 @@ public class CloseStrikeModul : ActionModulInGame,IWeapon
 
     public void BulletDestroyed(Vector3 position, Bullet bullet)
     {
-        
+
     }
 
     public TeamIndex TeamIndex
@@ -208,10 +204,10 @@ public class CloseStrikeModul : ActionModulInGame,IWeapon
     }
 
 
-    public void DamageDoneCallback(float healthdelta, float shielddelta,ShipBase damageAppliyer)
+    public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
-
-        _owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta);
+        var coef = damageAppliyer != null ? damageAppliyer.ExpCoef : 0f;
+        _owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
     }
 }
 

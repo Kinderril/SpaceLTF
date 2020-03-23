@@ -11,7 +11,7 @@ public class WeaponsController
     private List<WeaponInGame> _supportWeapons = new List<WeaponInGame>(5);
     private WeaponAimedType[] _weaponsToAim;
     private ShipBase _owner;
-    private float _maxAttackRadius = -1f;
+    public float MaxAttackRadius { get; private set; }
     public SupportWeaponsBuffPosibilities SupportWeaponsBuffPosibilities;
 
 
@@ -22,6 +22,7 @@ public class WeaponsController
     public WeaponsController(List<WeaponPlace> weaponPosition,
         ShipBase owner, WeaponInv[] weapons, BaseModulInv[] moduls)
     {
+        MaxAttackRadius = -1f;
         SupportWeaponsBuffPosibilities = new SupportWeaponsBuffPosibilities();
         AimSectorController = new WeaponsAimSectorController();
         Dictionary<string, WeaponAimedType> weaponsAims = new Dictionary<string, WeaponAimedType>();
@@ -88,9 +89,9 @@ public class WeaponsController
                 }
             }
 
-            if (_maxAttackRadius <= 0)
+            if (weapon.AimRadius >= MaxAttackRadius)
             {
-                _maxAttackRadius = weapon.AimRadius;
+                MaxAttackRadius = weapon.AimRadius;
             }
         }
 

@@ -1,9 +1,5 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class ShipBoostHalfLoop : ShipBoostAbstract
@@ -22,21 +18,25 @@ public class ShipBoostHalfLoop : ShipBoostAbstract
 
     private float _side = 1;
 
-    public ShipBoostHalfLoop(ShipBase ship,float halfLoopTimeSec, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMove) 
-        : base(ship, activateCallback,endCallback, setAddMove)
+    public ShipBoostHalfLoop(ShipBase ship, float halfLoopTimeSec, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMoveCallback)
+        : base(ship, activateCallback, endCallback, setAddMoveCallback)
     {
         _halfLoopTimeSec = halfLoopTimeSec;
     }
 
     public void Start(Func<Vector3?> targetGetter)
     {
+        if (!CanUse)
+        {
+            return;
+        }
         _part2 = false;
         _targetGetter = targetGetter;
         _curRotationAng = 0f;
         IsActive = true;
         _side = MyExtensions.IsTrueEqual() ? 1 : -1;
     }
-    
+
     public void ManualUpdate()
     {
         if (!IsActive)
@@ -90,7 +90,7 @@ public class ShipBoostHalfLoop : ShipBoostAbstract
         {
             var targetDir = target.Value - _owner.Position;
             var q = MovingObject.ApplyRotationXZ(targetDir, _owner.LookDirection, _owner.LookLeft, () => 1f, null,
-                _owner.Position,out var steps);
+                _owner.Position, out var steps);
             _quaternion = q;
         }
         else

@@ -1,13 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class DamageHelper 
+﻿public class DamageHelper
 {
 
     public static void StandartDamageDoneCallback(ShipBase Owner, float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
-//        GlobalEventDispatcher.ShipDamage(Owner, healthdelta, shielddelta, weaponType);
-        Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta);
+        var coef = damageAppliyer != null ? damageAppliyer.ExpCoef : 0f;
+        Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
         if (damageAppliyer != null)
         {
             //#if UNITY_EDITOR

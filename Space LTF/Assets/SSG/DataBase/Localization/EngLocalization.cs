@@ -168,10 +168,15 @@ public static class EngLocalization
         {"Target", "Target {0}"},
         {"Delay", "Delay"},
 
+        {"trick_turn", "Fast turn to attack enemy"},
+        {"trick_twist", "Ship moves to side to avoid attack and do strike from flank"},
+        {"trick_loop", "Loop to avoid attack and confuse enemy"},
+        {"trick_frontStrike", "Ram strike"}, 
 
-
-
-
+        {"trick_name_turn", "Drift"},
+        {"trick_name_twist", "Twist"},
+        {"trick_name_loop", "Loop"},
+        {"trick_name_frontStrike", "Ram"},
 
         {"healBodySupport",  "Repair drone"},
         {"healShieldSupport",  "Energy drone"},

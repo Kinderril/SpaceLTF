@@ -8,6 +8,7 @@ public interface IShipData
     float Rating { get; }
     DebugRating DebugRating { get; }
     bool Visible { get; }
+    bool IsDead { get; }
     bool IsInFrontSector();
     bool IsInBack();
 }

@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
 [Serializable]
 public class ShipBattleData
 {
     public bool Destroyed;
-//    public int DamageDone;
+    //    public int DamageDone;
     public float HealthDamage;
     public float ShieldhDamage;
     public float SelfDamage;
+    private float _expCollected = 0;
     public int Kills { get; private set; }
 
     [field: NonSerialized]
@@ -22,10 +20,12 @@ public class ShipBattleData
 
     }
 
-    public void AddDamage(float healthdelta, float shielddelta)
+    public void AddDamage(float healthdelta, float shielddelta, float expCoef)
     {
         HealthDamage += healthdelta;
         ShieldhDamage += shielddelta;
+        var exp = (Mathf.Abs(healthdelta) + Mathf.Abs(shielddelta)) * expCoef;
+        _expCollected += exp;
         if (OnStatChanged != null)
         {
             OnStatChanged(this);
@@ -34,6 +34,7 @@ public class ShipBattleData
 
     public void AddKill()
     {
+        _expCollected += Library.KILL_EXP;
         Kills++;
         if (OnStatChanged != null)
         {
@@ -41,9 +42,9 @@ public class ShipBattleData
         }
     }
 
-    public float GetTotalExp()
+    public int GetTotalExp()
     {
-        return 1 + HealthDamage + ShieldhDamage + Kills*5f;
+        return Mathf.Clamp((int)_expCollected, 1, 999999);
     }
 
     public void SetDamageCount(float countHealed)

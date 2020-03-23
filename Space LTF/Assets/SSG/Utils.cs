@@ -86,6 +86,50 @@ public static class Utils
         return MaxId;
     }
 
+    public static TimeCoef[] CreateTimeCoef(List<Tuple<float, float>> timeValue)
+    {
+        TimeCoef[] coefs = new TimeCoef[timeValue.Count];
+        float prevVal = 0f;
+        float prevTime = 0f;
+        for (int i = 0; i < timeValue.Count; i++)
+        {
+            var v = timeValue[i];
+            if (i == 0)
+            {
+                coefs[i] = new TimeCoef(v.val1, 0, v.val2, 0);
+            }
+            else
+            {
+                coefs[i] = new TimeCoef(v.val1, v.val1 - prevTime, v.val2, v.val2 - prevVal);
+            }
+            prevTime = v.val1;
+            prevVal = v.val2;
+
+        }
+
+        return coefs;
+    }
+
+    public static bool GetCoefByTime(TimeCoef[] coefs, out float val)
+    {
+        for (int i = 1; i < coefs.Length; i++)
+        {
+            var coef = coefs[i];
+            if (Time.time < coef.Time)
+            {
+                var prevCoef = coefs[i - 1];
+                var completedTime = Time.time - prevCoef.Time;
+                var timePercent = completedTime / coef.TimeFromPrev;
+                var res = prevCoef.Value + timePercent * coef.ValueFromPrev;
+                val = res;
+                return true;
+            }
+        }
+
+        val = 0f;
+        return false;
+    }
+
     public static string FloatToChance(float f)
     {
         return (f * 100).ToString("0.0");

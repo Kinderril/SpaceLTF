@@ -68,6 +68,13 @@ public class WeaponAimedType
     public void Cache()
     {
         WeaponsToShoot = preList.ToArray();
+        for (int i = 0; i < WeaponsToShoot.Length; i++)
+        {
+            if (i > 0)
+            {
+                WeaponsToShoot[i].DisableSound();
+            }
+        }
         preList = null;
 
     }

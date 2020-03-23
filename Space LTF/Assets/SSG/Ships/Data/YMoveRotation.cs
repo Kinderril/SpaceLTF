@@ -2,7 +2,7 @@
 
 public class YMoveRotation
 {
-    private float _xzMoveCoef =1f;
+    private float _xzMoveCoef = 1f;
     private float _yMoveCoef = 0f;
     public YMoveRotation()
     {
@@ -21,10 +21,10 @@ public class YMoveRotation
     //     // ImplementedY = true;
     // }
 
-    public void SetYDir(Quaternion quaternion,float moveCoef)
+    public void SetYDir(Quaternion quaternion, float moveCoef)
     {
         _xzMoveCoef = Mathf.Clamp01(moveCoef);
-        _yMoveCoef = 1f - XzMoveCoef;
+        _yMoveCoef = 1f - XzMoveCoef * .5f;
         RotateQuaternion = quaternion;
     }
 

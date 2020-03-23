@@ -7,23 +7,28 @@ public class ShipBoostTurn : ShipBoostAbstract
     private bool _isLeft;
     private Vector3 _lookDirOnStart;
     private float _speedOnStart;
+    private float _minAttackDistToStart;
     private Vector3 _targetDir;
     private readonly float _turnSpeed;
-    
 
-    public ShipBoostTurn(ShipBase owner,Action<bool> activateCallback,Action endCallback, Action<Vector3> setAddMove) 
-        : base(owner, activateCallback,endCallback,setAddMove)
+
+    public ShipBoostTurn(ShipBase owner, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMoveCallback)
+        : base(owner, activateCallback, endCallback, setAddMoveCallback)
     {
         _turnSpeed = _owner.ShipParameters.TurnSpeed * 1.5f;
+        var minAttackDist = float.MaxValue;
+        foreach (var weapon in owner.WeaponsController.GelAllWeapons())
+        {
+            if (weapon.AimRadius < minAttackDist)
+                minAttackDist = weapon.AimRadius;
+        }
+        _minAttackDistToStart = minAttackDist * 1.3f;
     }
-
-    
-
-    public float TargetBoosSpeed
+    public float CurSpeed
     {
         get
         {
-            if (_angle < 25f) 
+            if (_angle < 25f)
                 return 1f;
             return 0.01f;
         }
@@ -39,6 +44,11 @@ public class ShipBoostTurn : ShipBoostAbstract
 
     public void Activate(Vector3 dir)
     {
+        if (!CanUse)
+        {
+            return;
+        }
+        Debug.LogError($"Turn activated {_owner.Id}");
         _targetDir = dir;
         ActivateTime();
     }
@@ -46,15 +56,15 @@ public class ShipBoostTurn : ShipBoostAbstract
     public float ApplyRotation(Vector3 incomingDir)
     {
 
-        if (_owner.EngineStop.IsCrash()) 
+        if (_owner.EngineStop.IsCrash())
             return 0f;
 #if UNITY_EDITOR
-        if (DebugParamsController.EngineOff && _owner is ShipBase) 
+        if (DebugParamsController.EngineOff && _owner is ShipBase)
             return 0f;
 #endif
-        if (!_owner.EngineWork) 
+        if (!_owner.EngineWork)
             return 0f;
-        if (Time.deltaTime < 0.00001f) 
+        if (Time.deltaTime < 0.00001f)
             return 0f;
 
         var dirToMove = _targetDir;
@@ -63,7 +73,7 @@ public class ShipBoostTurn : ShipBoostAbstract
         var steps = _angle / angPerFrameTurn;
         if (steps <= 1f) // && exactlyPoint)
         {
-            Deactivate();
+            Stop();
             _owner.Rotation = Quaternion.FromToRotation(Vector3.forward, dirToMove);
             return 1f;
         }
@@ -97,18 +107,41 @@ public class ShipBoostTurn : ShipBoostAbstract
 
 
         var lastTurnAddtionalMove = dirSum * Time.deltaTime;
-        SetAddMove(lastTurnAddtionalMove);
-        _owner.BankingData.SetNewData(dirToMove, steps);          
+        SetAddMoveCallback(lastTurnAddtionalMove);
+        _owner.BankingData.SetNewData(dirToMove, steps);
         _owner.Rotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
 
         return 1f;
     }
 
-    public void Deactivate()
+    public void Stop()
     {
+        if (!IsActive)
+        {
+            return;
+        }
+
+        Debug.LogError($"Turn stop {_owner.Id}");
         IsActive = false;
         _angle = 90f;
-        SetAddMove(Vector3.zero);
-//        EndTime = 0f;
+        SetAddMoveCallback(Vector3.zero);
+        //        EndTime = 0f;
+    }
+
+    public bool ShallStartUse(IShipData target)
+    {
+        if (!CanUse)
+        {
+            return false;
+        }
+        if (target.Dist < _minAttackDistToStart && target.Dist > 2)
+        {
+            if (!Utils.IsAngLessNormazied(target.DirNorm, _owner.LookDirection, UtilsCos.COS_30_RAD))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

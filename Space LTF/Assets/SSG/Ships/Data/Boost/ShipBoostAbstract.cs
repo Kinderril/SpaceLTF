@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -11,7 +7,7 @@ public abstract class ShipBoostAbstract : ShipData
     protected Action<bool> _activateCallback;
     protected Action _endCallback;
     protected bool _isActive;
-    protected Action<Vector3> SetAddMove;
+    protected Action<Vector3> SetAddMoveCallback;
     public bool CanUse { get; set; }
     public bool IsActive
     {
@@ -30,10 +26,10 @@ public abstract class ShipBoostAbstract : ShipData
         }
     }
 
-    protected ShipBoostAbstract(ShipBase owner, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMove)
+    protected ShipBoostAbstract(ShipBase owner, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMoveCallback)
         : base(owner)
     {
-        SetAddMove = setAddMove;
+        SetAddMoveCallback = setAddMoveCallback;
         _activateCallback = activateCallback;
         _endCallback = endCallback;
     }

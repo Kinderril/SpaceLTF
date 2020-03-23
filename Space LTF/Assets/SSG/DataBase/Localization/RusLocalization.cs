@@ -147,6 +147,16 @@ public static class RusLocalization
         {"RunAwayComplete","Вы успешно сбежали" },
         {"Type", "Тип"},
 
+        {"trick_turn", "Резкий разворот для атаки противника."},
+        {"trick_twist", "Быстрое смещение в сторону, что бы избежать атаки и нанести удар с фланга"},
+        {"trick_loop", "Петля позволяет избежать атаки и запутать противника"},
+        {"trick_frontStrike", "Таранный удар. Резко ускоряется и разбрасывает врагов."},
+
+        {"trick_name_turn", "Поворот"},
+        {"trick_name_twist", "Смещение"},
+        {"trick_name_loop", "Петля"},
+        {"trick_name_frontStrike", "Таран"},
+
         {"Regen", "Регенерация"},
         {"DamageBody", "Урон по корпусу"},
         {"DamageShield", "Урон по щитам"},

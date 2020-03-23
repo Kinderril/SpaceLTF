@@ -163,8 +163,12 @@ public class DragableItemSlot : MonoBehaviour
 
     public void StartItemSet(IItemInv item)
     {
-#if UNITY_EDITOR
         if (item != null && item.CurrentInventory == null)
+        {
+
+        }
+#if UNITY_EDITOR
+            if (item != null && item.CurrentInventory == null)
         {
             var modul = item as BaseModulInv;
             string modulNUll = "";

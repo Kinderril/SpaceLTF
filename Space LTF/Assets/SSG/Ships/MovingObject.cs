@@ -335,16 +335,10 @@ public abstract class MovingObject : PoolElement
         if (EngineWork)
         {
             Vector3 dir = CurSpeed * LookDirection * Time.deltaTime;
-            if (ExternalForce.IsActive)
-            {
-                dir = dir + ExternalForce.Update();
-            }
-
+            Vector3 externalForce = ExternalForce.IsActive ? ExternalForce.Update() : Vector3.zero;
             float coef = YMoveRotation.XzMoveCoef;
             var deltaDir = useAdditive ? additionalMove : dir;
-            Position = Position + deltaDir * coef;
-
-
+            Position = Position + (deltaDir+ externalForce) * coef;
         }
     }
     protected void ApplyMove()

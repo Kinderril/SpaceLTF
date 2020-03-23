@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public class ShipBoostLoop   : ShipBoostAbstract
+public class ShipBoostLoop : ShipBoostAbstract
 {
     private float _yValueDir = 0;
     private float _turnSpeed = 0.5f;
@@ -15,18 +11,23 @@ public class ShipBoostLoop   : ShipBoostAbstract
     private Quaternion _quaternion;
 
 
-    public ShipBoostLoop(ShipBase ship,float turnSpeed, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMove) 
-        : base(ship, activateCallback,endCallback, setAddMove)
+    public ShipBoostLoop(ShipBase ship, float turnSpeed, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMoveCallback)
+        : base(ship, activateCallback, endCallback, setAddMoveCallback)
     {
         _turnSpeed = turnSpeed;
     }
 
-    public void Start()
+    public void Activate()
     {
+        if (!CanUse)
+        {
+            return;
+        }
+        Debug.LogError($"Loop activated {_owner.Id}");
         _curRotationAng = 0f;
         IsActive = true;
     }
-    
+
     public void ManualUpdate()
     {
         if (!IsActive)
@@ -53,6 +54,7 @@ public class ShipBoostLoop   : ShipBoostAbstract
 
     private void Stop()
     {
+        Debug.LogError($"Loop stop {_owner.Id}");
         _wCoefl = 1f;
         _yValueDir = 0f;
         IsActive = false;

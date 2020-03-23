@@ -37,12 +37,10 @@ public class ShipInventory : IStartShipParams, IInventory
     public PilotTactic Tactic => PilotParameters.Tactic;
 
     public int Id { get; private set; }
-    //    public bool Destroyed { get; set; }
-
-    //    public int BodyVisualType { get; private set; }
     public ShipModulsInventory Moduls;
     public WeaponInv[] WeaponsModuls;
     public BaseSpellModulInv[] SpellsModuls;
+
     private readonly Player _player;
     private PilotParameters _pilot;
 

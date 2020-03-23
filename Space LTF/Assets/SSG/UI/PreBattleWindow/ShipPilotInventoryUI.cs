@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
 
 public class ShipPilotInventoryUI : MonoBehaviour
 {
-//    public Image ImgTactic;
-//    public Button ChangeTacticButton;
     public ShipInventoryUI ShipInventory;
     public PilotInventoryUI PilotInventory;
 
     private Action ontoggleSwitched;
-    public Toggle ToggleElement;
+//    public Toggle ToggleElement;
     public StartShipPilotData ShipData { get; private set; }
 
-    public void Init(StartShipPilotData data,bool usable, ConnectInventory connectedInventory,Action ontoggleSwitched)
+    public void Init(StartShipPilotData data, bool usable, ConnectInventory connectedInventory, Action ontoggleSwitched)
     {
         ShipData = data;
         this.ontoggleSwitched = ontoggleSwitched;
         ShipInventory.Init(data, usable, connectedInventory);
         var openInfoPilot = true;
-        ToggleElement.interactable = usable;
-        ToggleElement.isOn = openInfoPilot;
+//        ToggleElement.interactable = usable;
+//        ToggleElement.isOn = openInfoPilot;
         PilotInventory.gameObject.SetActive(openInfoPilot);
         if (usable)
         {
@@ -34,7 +29,7 @@ public class ShipPilotInventoryUI : MonoBehaviour
 
     public void OnEnableAdditionsClick()
     {
-        PilotInventory.gameObject.SetActive(ToggleElement.isOn);
+//        PilotInventory.gameObject.SetActive(ToggleElement.isOn);
         ontoggleSwitched();
     }
 
@@ -51,6 +46,11 @@ public class ShipPilotInventoryUI : MonoBehaviour
     public void Enable()
     {
         ShipInventory.Enable();
+    }
+
+    public void SoftRefresh()
+    {
+        PilotInventory.SoftRefresh();
     }
 }
 

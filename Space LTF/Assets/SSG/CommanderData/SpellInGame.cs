@@ -217,11 +217,12 @@ public class SpellInGame : IWeapon
     public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
     {
         //        GlobalEventDispatcher.ShipDamage(Owner, healthdelta, shielddelta, _weaponType);
-        Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta);
+        var coef = damageAppliyer != null ? damageAppliyer.ExpCoef : 0f;
+        Owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
         if (damageAppliyer != null)
         {
 #if UNITY_EDITOR
-            if (damageAppliyer.IsDead == Owner)
+            if (damageAppliyer.Id == Owner.Id)
                 Debug.LogError(
                     $"Strange things. I wanna kill my self??? {Owner.Id}_{Owner.name}  side:{Owner.TeamIndex}  spell:{Name}");
 #endif

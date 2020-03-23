@@ -9,6 +9,7 @@ public class SameSidePersonalInfo : IShipData
     public float Rating { get; private set; }
     public DebugRating DebugRating { get; }
     public bool Visible => true;
+    public bool IsDead => ShipLink.IsDead;
     private ShipBase _requester;
 
     public SameSidePersonalInfo(ShipBase infoShip, ShipBase requester)

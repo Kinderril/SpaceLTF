@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public class ShipBoost : ShipData
@@ -14,7 +9,8 @@ public class ShipBoost : ShipData
     public ShipBoostTurn BoostTurn;
     public ShipBoostLoop BoostLoop;
     public ShipBoostTwist BoostTwist;
-    public ShipBoostHalfLoop BoostHalfLoop;
+    public ShipBoostRam BoostRam;
+    // public ShipBoostHalfLoop BoostHalfLoop;
     private bool _isWorkable;
     public bool UseRotationByBoost;
     public bool IsActive { get; private set; }
@@ -22,19 +18,20 @@ public class ShipBoost : ShipData
     public bool IsReady => _isWorkable && _nextBoostUse < Time.time;
     public Vector3 LastTurnAddtionalMove { get; private set; }
 
-    public ShipBoost(ShipBase owner,float chargePeriod,bool isWorkable) 
+    public ShipBoost(ShipBase owner, float chargePeriod, bool isWorkable)
         : base(owner)
     {
         _isWorkable = isWorkable;
         _chargePeriod = chargePeriod;
         _nextBoostUse = Time.time + chargePeriod;
         BoostTwist = new ShipBoostTwist(owner, 1f, Activate, EndBoost, SetAdditionaMove);
-        BoostTurn = new ShipBoostTurn(owner,Activate,EndBoost,SetAdditionaMove);
-        BoostLoop = new ShipBoostLoop(owner,1f, Activate, EndBoost, SetAdditionaMove);
-        BoostHalfLoop = new ShipBoostHalfLoop(owner,1f, Activate, EndBoost, SetAdditionaMove);
+        BoostTurn = new ShipBoostTurn(owner, Activate, EndBoost, SetAdditionaMove);
+        BoostLoop = new ShipBoostLoop(owner, 1f, Activate, EndBoost, SetAdditionaMove);
+        BoostRam = new ShipBoostRam(owner, 1f, Activate, EndBoost, SetAdditionaMove);
+        // BoostHalfLoop = new ShipBoostHalfLoop(owner, 1f, Activate, EndBoost, SetAdditionaMove);
 
 
-        var posibleTricks = Library.PosibleTricks[owner.PilotParameters.Stats.CurRank];
+        var posibleTricks = owner.PilotParameters.Stats.GetTriks();
         foreach (var ePilotTrickse in posibleTricks)
         {
             switch (ePilotTrickse)
@@ -43,9 +40,13 @@ public class ShipBoost : ShipData
                     BoostTurn.CanUse = true;
                     break;
                 case EPilotTricks.twist:
+                    BoostTwist.CanUse = true;
                     break;
                 case EPilotTricks.loop:
                     BoostLoop.CanUse = true;
+                    break;
+                case EPilotTricks.frontStrike:
+                    BoostRam.CanUse = true;
                     break;
             }
         }
@@ -65,6 +66,7 @@ public class ShipBoost : ShipData
     {
         UseRotationByBoost = isBloackTurn;
         IsActive = true;
+        SetUsed();
     }
 
 
@@ -74,50 +76,27 @@ public class ShipBoost : ShipData
         _nextBoostUse = Time.time + _chargePeriod;
     }
 
-    public void EvadeToSide()
-    {
-        if (BoostTurn.CanUse)
-        {
-            SetUsed();
-            var side = MyExtensions.IsTrueEqual() ? _owner.LookRight : _owner.LookLeft;
-            BoostTurn.Activate(side);
-        }
-    }
+    // public void EvadeToSide()
+    // {
+    //     if (BoostTurn.CanUse)
+    //     {
+    //         SetUsed();
+    //         var side = MyExtensions.IsTrueEqual() ? _owner.LookRight : _owner.LookLeft;
+    //         BoostTurn.Activate(side);
+    //     }
+    // }
 
     public void ManualUpdate()
     {
         BoostLoop.ManualUpdate();
+        BoostRam.ManualUpdate();
     }
 
-    public void ActivateLoop()
-    {
-        if (BoostLoop.CanUse)
-            BoostLoop.Start();
-    }
-
-    public void ActivateBack()
-    {
-        if (BoostTurn.CanUse)
-        {
-            SetUsed();
-            BoostTurn.Activate(-_owner.LookDirection);
-        }
-    }
-
-
-    public void ActivateTurn(Vector3 targetDirNorm)
-    {
-        if (BoostTurn.CanUse)
-        {
-            SetUsed();
-            // Debug.LogError("Actuivate targetDirNorm");
-            BoostTurn.Activate(targetDirNorm);
-        }
-    }
 
     public void Deactivate()
     {
-        BoostTurn.Deactivate();
+        BoostTurn.Stop();
+        // BoostRam.Stop();
     }
 }
 

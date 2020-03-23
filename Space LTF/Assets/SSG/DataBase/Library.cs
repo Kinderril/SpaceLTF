@@ -79,8 +79,6 @@ public static class Library
     private const float EMI_DELAY = 7f;
     private const float EMI_SPEED = 15f;
 
-    public static int DROID_SUPPORTS_PER_SHOOT = 3;
-
     public const float MOVING_ARMY_POWER_COEF = 1.5f;
 
     public const float BASE_WEAPON_VALUE = 1.2f;
@@ -117,12 +115,12 @@ public static class Library
     public const float MONEY_PILOT_LEVEL_UP_COST_COEF = 1.25f;
     public static int START_PLAYER_FREE_PARAMETERS = 2;
     private static int[] _lvlUps = new int[MAX_PILOT_PARAMETER_LEVEL];
-    public static int RANK_ERIOD = 12;
+    // public static int RANK_ERIOD = 12;
     public static int BASE_CHARGES_COUNT = 5;
     public static int WEAPON_REQUIRE_LEVEL_COEF = 2;
     public static int MODUL_REQUIRE_LEVEL_COEF = 2;
 
-    public static Dictionary<PilotRank, List<EPilotTricks>> PosibleTricks;
+    // public static Dictionary<PilotRank, List<EPilotTricks>> PosibleTricks;
 
     public static void Init()
     {
@@ -145,13 +143,13 @@ public static class Library
         }
         LibraryModuls.Init();
 
-        PosibleTricks = new Dictionary<PilotRank, List<EPilotTricks>>
-        {
-            {PilotRank.Private, new List<EPilotTricks> {EPilotTricks.turn}},
-            {PilotRank.Lieutenant, new List<EPilotTricks> {EPilotTricks.turn, EPilotTricks.twist}},
-            {PilotRank.Captain, new List<EPilotTricks> {EPilotTricks.turn, EPilotTricks.twist, EPilotTricks.loop}},
-            {PilotRank.Major, new List<EPilotTricks> {EPilotTricks.turn, EPilotTricks.twist, EPilotTricks.loop}}
-        };
+        // PosibleTricks = new Dictionary<PilotRank, List<EPilotTricks>>
+        // {
+        //     {PilotRank.Private, new List<EPilotTricks> {EPilotTricks.turn}},
+        //     {PilotRank.Lieutenant, new List<EPilotTricks> {EPilotTricks.turn, EPilotTricks.twist}},
+        //     {PilotRank.Captain, new List<EPilotTricks> {EPilotTricks.turn, EPilotTricks.twist, EPilotTricks.loop}},
+        //     {PilotRank.Major, new List<EPilotTricks> {EPilotTricks.turn, EPilotTricks.twist, EPilotTricks.loop}}
+        // };
     }
 
     public static int PilotLvlUpCost(int curLvl)
@@ -339,7 +337,7 @@ public static class Library
                         return ship2;
                     case ShipType.Base:
                         var ship3 = new ShipInventory(
-                            new StartShipParams(shipType, config, 92, 56, 1.5f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 86, 60, 1.5f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
                         ship3.ShiledArmor = 1;
                         ship3.BodyArmor = 1;
                         return ship3;
@@ -386,13 +384,13 @@ public static class Library
                 switch (shipType)
                 {
                     case ShipType.Light:
-                        return new ShipInventory(new StartShipParams(shipType, config, 90, 0, 3.4f, 70, 2, 2, 0, 1, 0f, 1f, reloadTime),
+                        return new ShipInventory(new StartShipParams(shipType, config, 96, 0, 3.4f, 70, 2, 2, 0, 1, 0f, 1f, reloadTime),
                             player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 100, 0, 3.0f, 53, 3, 2, 0, 1, 0f, 1f, reloadTime),
+                        return new ShipInventory(new StartShipParams(shipType, config, 106, 0, 3.0f, 53, 3, 2, 0, 1, 0f, 1f, reloadTime),
                             player, pilot);
                     case ShipType.Heavy:
-                        var ship3 = new ShipInventory(new StartShipParams(shipType, config, 136, 0, 2.8f, 45, 3, 3, 0, 1, 0f, 1f, reloadTime), player, pilot);
+                        var ship3 = new ShipInventory(new StartShipParams(shipType, config, 142, 0, 2.8f, 45, 3, 3, 0, 1, 0f, 1f, reloadTime), player, pilot);
                         ship3.BodyArmor = 1;
                         return ship3;
                     case ShipType.Base:
@@ -742,4 +740,40 @@ public static class Library
 
 
     #endregion
+
+    public const int BASE_SHIP_EXP = 100;
+    public const int BASE_DROID_SHIP_EXP = 50;
+    public const int BASE_CONTROL_SHIP_EXP = 50;
+    public const int BASE_TURRET_SHIP_EXP = 50;
+    public const int KILL_EXP = 25;
+
+    public static Dictionary<PilotRank, int> PilotRankExp = new Dictionary<PilotRank, int>()
+    {
+        {PilotRank.Private,500 },
+        {PilotRank.Lieutenant,750 },
+        {PilotRank.Captain,900 },
+        {PilotRank.Major,1200 },
+    };
+
+    public static int DROID_SUPPORTS_PER_SHOOT = 3;
+
+    public static int GetExp(ShipType startParamsShipType, ShipConfig startParamsShipConfig)
+    {
+        if (startParamsShipConfig == ShipConfig.droid)
+        {
+            return BASE_DROID_SHIP_EXP;
+        }
+
+        switch (startParamsShipType)
+        {
+            case ShipType.Base:
+                return BASE_CONTROL_SHIP_EXP;
+            case ShipType.Turret:
+                return BASE_TURRET_SHIP_EXP;
+            default:
+                return BASE_SHIP_EXP;
+        }
+
+
+    }
 }

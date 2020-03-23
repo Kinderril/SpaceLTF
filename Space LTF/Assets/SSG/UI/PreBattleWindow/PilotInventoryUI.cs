@@ -8,8 +8,8 @@ public class PilotInventoryUI : MonoBehaviour
     private ShipInventory _ship;
     //    public SliderWithTextMeshPro DelaySlider;
     public ParameterWithLevelUp HealthField;
-    public MoneySlotUI MoneyField;
-    public Slider LevelUpSlider;
+    public TextMeshProUGUI MoneyField;
+    // public Slider LevelUpSlider;
     public ParameterWithLevelUp ShieldField;
     public ParameterWithLevelUp SpeedField;
     //    public TextMeshProUGUI TacticField;
@@ -19,9 +19,15 @@ public class PilotInventoryUI : MonoBehaviour
     public Image TacticSideIcon;
     public ImageWithTooltip RankIcon;
     public ParameterWithLevelUp TurnField;
-    public Button LevelUpButton;
+    // public Button LevelUpButton;
     public PriorityTooltipInfo PriorityTooltipInfo;
     public SideAttackTooltipInfo SideAttackTooltipInfo;
+    public Slider ExpirienceSlider;
+    public UIElementWithTooltipCache ExpirienceToolitip;
+    public TrickPilotButton TrickTrun;
+    public TrickPilotButton TrickTwist;
+    public TrickPilotButton TrickLoop;
+    public TrickPilotButton TrickStrike;
 
     //    public GameObject LevelUpObject;
     //    public TextMeshProUGUI LevelUpField;
@@ -40,8 +46,24 @@ public class PilotInventoryUI : MonoBehaviour
         RankUpdate();
         SetParamsAndMoney();
         UpdateTacticField();
+        SetTricks();
     }
 
+    private void SetTricks()
+    {
+        TrickTrun.Init(EPilotTricks.turn, _ship.PilotParameters.Stats);
+        TrickTwist.Init(EPilotTricks.twist, _ship.PilotParameters.Stats);
+        TrickLoop.Init(EPilotTricks.loop, _ship.PilotParameters.Stats);
+        TrickStrike.Init(EPilotTricks.frontStrike, _ship.PilotParameters.Stats);
+    }
+
+    private void DisposeTricks()
+    {
+        TrickTrun.Dispose();
+        TrickTwist.Dispose();
+        TrickLoop.Dispose();
+        TrickStrike.Dispose();
+    }
 
     private void OnTacticSideChange(ESideAttack obj)
     {
@@ -57,40 +79,39 @@ public class PilotInventoryUI : MonoBehaviour
     {
         SetInfoParams();
     }
-
-    private void RankUpdate()
+    public void SoftRefresh()
     {
-        string tricksInfo = "";
-        var tricks = Library.PosibleTricks[_pilot.Stats.CurRank];
-        for (int i = 0; i < tricks.Count; i++)
+        RankUpdate();
+        TrickTrun.SoftRefresh();
+        TrickTwist.SoftRefresh();
+        TrickLoop.SoftRefresh();
+        TrickStrike.SoftRefresh();
+    }
+
+    private void RefreshExpSlider()
+    {
+        if (_pilot.Stats.CurRank != PilotRank.Major)
         {
-            var ePilotTrickse = tricks[i];
-            var name = Namings.Tag($"Trick{ePilotTrickse.ToString()}");
-            if (i == 0)
-            {
-                tricksInfo = name;
-            }
-            else
-            {
-                tricksInfo = $" ,{name}";
-            }
-        }
-        //        var rankName = Namings.Tag(_pilot.Stats.CurRank.ToString());
-        var reloadTime = Namings.Format(Namings.Tag("reloadBoost"), Library.CalcTrickReload(_pilot.Stats.CurRank, _ship.ShipType));
-        var tooltipInfo = $"{tricksInfo}\n{reloadTime}";
-        RankIcon.Init(DataBaseController.Instance.DataStructPrefabs.GetRankSprite(_pilot.Stats.CurRank), tooltipInfo);
-        RankField.text = _pilot.Stats.CurRank.ToString();
-        var kills = _pilot.Stats.Kills;
-        var nextKills = (((int)(kills / Library.RANK_ERIOD)) + 1) * Library.RANK_ERIOD;
-        string info;
-        if (_pilot.Stats.CurRank == PilotRank.Major)
-        {
-            info = Namings.Format(Namings.Tag("KillUIPilotMini"), kills);
+            var nextRankExp = Library.PilotRankExp[_pilot.Stats.CurRank];
+            ExpirienceToolitip.Cache = $"{_pilot.Stats.Exp}/{nextRankExp}";
+            var coef = ((float)(_pilot.Stats.Exp)) / ((float)(nextRankExp));
+            ExpirienceSlider.value = coef;
         }
         else
         {
-            info = Namings.Format(Namings.Tag("KillUIPilot"), kills, nextKills);
+            ExpirienceToolitip.Cache = Namings.Tag("MaxLevel");
+            ExpirienceSlider.value = 1;
         }
+    }
+
+    private void RankUpdate()
+    {
+        RefreshExpSlider();
+        var reloadTime = Namings.Format(Namings.Tag("reloadBoost"), Library.CalcTrickReload(_pilot.Stats.CurRank, _ship.ShipType));
+        RankIcon.Init(DataBaseController.Instance.DataStructPrefabs.GetRankSprite(_pilot.Stats.CurRank), reloadTime);
+        RankField.text = _pilot.Stats.CurRank.ToString();
+        var kills = _pilot.Stats.Kills;
+        string info = Namings.Format(Namings.Tag("KillUIPilotMini"), kills);
         KillsField.text = info;
     }
 
@@ -101,9 +122,9 @@ public class PilotInventoryUI : MonoBehaviour
 
     private void SetParamsAndMoney()
     {
-        MoneyField.Init(_pilot.Money);
+        var needToLvl = (float)Library.PilotLvlUpCost(_pilot.CurLevel);
+        MoneyField.text = $"{_pilot.Money}/{needToLvl}";
         SetInfoParams();
-        LevelUpSlider.value = _pilot.PercentLevel;
     }
 
     private void UpdateTacticField()
@@ -147,7 +168,7 @@ public class PilotInventoryUI : MonoBehaviour
         var speedInfo = LevelInfo(Namings.Tag("Speed"), _pilot.SpeedLevel, Info(pilotParams.MaxSpeed, _pilot.SpeedLevel));
         var turnInfo = LevelInfo(Namings.Tag("TurnSpeed"), _pilot.TurnSpeedLevel, Info(pilotParams.TurnSpeed, _pilot.TurnSpeedLevel));
         var curHp = pilotParams.MaxHealth * _ship.HealthPercent;
-        var hpTxt = Namings.Format("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel));
+        var hpTxt = Namings.Format("{0}/{1}", curHp.ToString("0"), Info(pilotParams.MaxHealth, _pilot.HealthLevel,false));
         var txt = LevelInfo(Namings.Tag("Health"), _pilot.HealthLevel, hpTxt);
 
         ShieldField.SetData(shiledInfo, _pilot.ShieldLevel, _pilot, LibraryPilotUpgradeType.shield);
@@ -161,11 +182,11 @@ public class PilotInventoryUI : MonoBehaviour
         return Namings.Format("{0}:{2}", name, level, info);
     }
 
-    public static string Info(float p, int level)
+    public static string Info(float p, int level,bool withFloatFormat = true)
     {
         var drob = p - (int)p;
         string format = "0";
-        if (drob > 0f)
+        if (drob > 0f && withFloatFormat)
         {
             format = "0.0";
         }
@@ -175,12 +196,7 @@ public class PilotInventoryUI : MonoBehaviour
 
     public void Dispose()
     {
-        //#if UNITY_EDITOR
-        //    if (_pilot == null)
-        //    {
-        //        Debug.LogError("id of pilot Ui is NULL pilot " + id);
-        //    }
-        //#endif
+        DisposeTricks();
         if (_pilot != null)
         {
             _pilot.Tactic.OnPriorityChange -= OnTacticPriorityChange;
@@ -246,4 +262,5 @@ public class PilotInventoryUI : MonoBehaviour
     {
         _pilot.Tactic.ChangeTo(ECommanderPriority1.Base);
     }
+
 }

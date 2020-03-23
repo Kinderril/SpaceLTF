@@ -416,6 +416,7 @@ public class MapWindow : BaseWindow
     {
         if (val)
         {
+            playerArmyUI.SoftRefresh();
             WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.WindowOpen);
             ArmyInfoContainer.transform.position = _stablePos;
             InventoryUI.RefreshPosition();

@@ -155,8 +155,8 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                 return new AttackAction(_owner, _owner.Enemies[target]);
             case ActionType.support:
                 return new SupportAction(_owner, _owner.Commander.GetSameSide(target, _owner));
-            case ActionType.attackHalfLoop:
-                return new AttackTrickAction(_owner, _owner.Enemies[target]);
+            // case ActionType.attackHalfLoop:
+            //     return new AttackTrickAction(_owner, _owner.Enemies[target]);
             case ActionType.moveToBase:
                 return (new GoToBaseAction(_owner, target, false));
             case ActionType.returnToBattle:
@@ -248,15 +248,15 @@ public abstract class ShipDesicionDataBase : IShipDesicion
 
     protected ActionType AttackOrAttackSide(ShipBase target)
     {
-        if (_owner.Boost.IsReady && !_owner.Boost.IsActive && _owner.Boost.BoostHalfLoop.CanUse)
-        {
-            var enemy = _owner.Enemies[target];
-            var isBack = enemy.IsInBack();
-            if (isBack && enemy.Dist > 10)
-            {
-                return ActionType.attackHalfLoop;
-            }
-        }
+        // if (_owner.Boost.IsReady && !_owner.Boost.IsActive && _owner.Boost.BoostHalfLoop.CanUse)
+        // {
+        //     var enemy = _owner.Enemies[target];
+        //     // var isBack = enemy.IsInBack();
+        //     // if (isBack && enemy.Dist > 10)
+        //     // {
+        //     //     return ActionType.attackHalfLoop;
+        //     // }
+        // }
 
         switch (SideAttack)
         {

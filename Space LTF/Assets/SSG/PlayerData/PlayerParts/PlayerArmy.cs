@@ -94,7 +94,8 @@ public class PlayerArmy
         if (delta < 0.95f)
         {
             srt = Namings.Tag("Risky");
-        }else if (delta > 1.15f)
+        }
+        else if (delta > 1.15f)
         {
             srt = Namings.Tag("Easily");
         }
@@ -131,6 +132,14 @@ public class PlayerArmy
     public float GetPower()
     {
         return ArmyCreator.CalcArmyPower(Army);
+    }
+
+    public void DebugAddAllExp()
+    {
+        foreach (var pilotData in Army)
+        {
+            pilotData.Pilot.Stats.AddExp(111);
+        }
     }
 }
 

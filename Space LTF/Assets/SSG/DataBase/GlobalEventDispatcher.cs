@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+public delegate void ShipShootDelegate(ShipBase shooter, ShipBase target);
 
 public static class GlobalEventDispatcher
 {
     public static event Action<ShipBase, ShipBase> OnShipDeath;
-    public static event Action<ShipBase,float, float, WeaponType> OnShipDamage;
+    public static event Action<ShipBase, float, float, WeaponType> OnShipDamage;
     public static event Action<ShipConfig> OnWinBattle;
     public static event Action<ActionModulInGame> OnSellModul;
     public static event Action<WeaponInv> OnUpgradeWeapon;
+    public static ShipShootDelegate OnShipShootDelegate;
 
-    public static void ShipDeath(ShipBase target,ShipBase killer)
+    public static void ShipDeath(ShipBase target, ShipBase killer)
     {
         if (OnShipDeath != null && target != null && killer != null)
         {
             OnShipDeath(target, killer);
         }
-    }    
+    }
     public static void SellModul(ActionModulInGame s)
     {
         if (OnSellModul != null)
@@ -27,7 +25,7 @@ public static class GlobalEventDispatcher
             OnSellModul(s);
         }
     }
-    public static void ShipDamage(ShipBase s,float shield,float body,WeaponType weaponType)
+    public static void ShipDamage(ShipBase s, float shield, float body, WeaponType weaponType)
     {
         if (OnShipDamage != null)
         {
@@ -49,6 +47,11 @@ public static class GlobalEventDispatcher
         {
             OnUpgradeWeapon(weaponInv);
         }
+    }
+
+    public static void ShipShoot(ShipBase shooter, ShipBase target)
+    {
+        OnShipShootDelegate?.Invoke(shooter, target);
     }
 }
 

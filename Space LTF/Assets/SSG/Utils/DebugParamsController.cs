@@ -11,6 +11,7 @@ public class DebugParamsController
     public static bool FastRecharge;
     public static bool AllModuls = false;
     public static bool AnyWay = false;
+    public static bool AllTricks = false;
 
     //#endif
 
@@ -19,6 +20,7 @@ public class DebugParamsController
         Debug.LogError("DebugParamsController INITED");
 
     }
+
 
     public static void TestHire()
     {

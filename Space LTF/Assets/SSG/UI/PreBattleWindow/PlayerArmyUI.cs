@@ -124,6 +124,13 @@ public class PlayerArmyUI : MonoBehaviour
         }
         playerInfoList.Clear();
     }
+    public void SoftRefresh()
+    {
+        foreach (var inventoryUi in playerInfoList)
+        {
+            inventoryUi.SoftRefresh();
+        }
+    }
 
     public void Disable()
     {
@@ -148,5 +155,6 @@ public class PlayerArmyUI : MonoBehaviour
             mainShipInfo.Enable();
         }
     }
+
 }
 

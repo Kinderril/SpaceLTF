@@ -55,12 +55,19 @@ public struct PilotGlobalTacticIconSide
     public Sprite Icon;
     public EGlobalTactics Tactic;
 }
+[Serializable]
+public struct PilotTrickIcon
+{
+    public Sprite Icon;
+    public EPilotTricks Trick;
+}
 
 public class DataStructPrefabs : MonoBehaviour
 {
     public List<Bullet> Bullets = new List<Bullet>();
     public List<ShipStruct> Ships = new List<ShipStruct>();
-    public List<ShipStruct> Turrets = new List<ShipStruct>();
+    public List<ShipStruct>
+        Turrets = new List<ShipStruct>();
 
     public DebugRationInfo DebugRationInfo;
     public ShipUIOnMap ShipUIOnMap;
@@ -97,8 +104,10 @@ public class DataStructPrefabs : MonoBehaviour
     private Dictionary<ECommanderPriority1, Sprite> ShipTacticIconsDic = new Dictionary<ECommanderPriority1, Sprite>();
     public List<PilotTacticIconSide> ShipTacticSideIcons = new List<PilotTacticIconSide>();
     public List<PilotGlobalTacticIconSide> GlobalTacticsIconsSide = new List<PilotGlobalTacticIconSide>();
+    public List<PilotTrickIcon> PilotTricksIconsSide = new List<PilotTrickIcon>();
     private Dictionary<ESideAttack, Sprite> ShipTacticIconsSideDic = new Dictionary<ESideAttack, Sprite>();
     private Dictionary<EGlobalTactics, Sprite> GlobalTacticsIconsSideDic = new Dictionary<EGlobalTactics, Sprite>();
+    private Dictionary<EPilotTricks, Sprite> PilotTricksIconsSideDic = new Dictionary<EPilotTricks, Sprite>();
 
     public List<ShipTypeIcon> ShipTypeIcons = new List<ShipTypeIcon>();
     private Dictionary<ShipType, Sprite> ShipTypeIconsDic = new Dictionary<ShipType, Sprite>();
@@ -214,6 +223,17 @@ public class DataStructPrefabs : MonoBehaviour
         if (values9 != GlobalTacticsIconsSideDic.Count)
         {
             Debug.LogError("not enought pilot GlobalTactics tactics");
+        }
+
+        //----------
+        foreach (var actionIcon in PilotTricksIconsSide)
+        {
+            PilotTricksIconsSideDic.Add(actionIcon.Trick, actionIcon.Icon);
+        }
+        var values10 = Enum.GetValues(typeof(EPilotTricks)).Length;
+        if (values10 != PilotTricksIconsSideDic.Count)
+        {
+            Debug.LogError("not enought pilot tricks");
         }
 
     }
@@ -344,6 +364,17 @@ public class DataStructPrefabs : MonoBehaviour
 #endif
 
         return GlobalTacticsIconsSideDic[actionType];
+    }
+    public Sprite GetTrickIcon(EPilotTricks trickType)
+    {
+#if UNITY_EDITOR
+        if (!PilotTricksIconsSideDic.ContainsKey(trickType))
+        {
+            Debug.LogError("have no pilot trick icon" + trickType.ToString());
+        }
+#endif
+
+        return PilotTricksIconsSideDic[trickType];
     }
 
     public Sprite GetSpellIcon(SpellType actionType)

@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class AttackAction : AbstractAttackAction
 {
+
     protected bool _isDogFight;
     protected bool _isShootEnd;
     private readonly float _minAttackDist;
     private readonly float _minAttackDistToEnd;
     private readonly float _minAttackDistToStart;
     protected float _nextRecalTime;
+    protected float _nextCheckTwist;
+    protected float _nextCheckRam;
+    protected float _nextCheckTurn;
     public IShipData Target;
 
     public AttackAction([NotNull] ShipBase owner, [NotNull] IShipData target,
         ActionType actionType = ActionType.attack)
         : base(owner, actionType)
     {
+        GlobalEventDispatcher.OnShipShootDelegate += OnShipShootDelegate;
         _isDogFight = false;
         Target = target;
         Target.ShipLink.AttackersData.ShipStartsAttack(owner);
@@ -41,18 +46,35 @@ public class AttackAction : AbstractAttackAction
     {
         MoveToTarget();
     }
+    private void OnShipShootDelegate(ShipBase shooter1, ShipBase target)
+    {
+        if (target == _owner && shooter1.TeamIndex != _owner.TeamIndex)
+        {
+            CheckBoostTwistByShoot(shooter1);
+        }
+    }
+    private void CheckBoostTwistByShoot(ShipBase shooter)
+    {
+        if (!_owner.Boost.IsReady)
+        {
+            return;
+        }
+
+        if (_nextCheckTwist < Time.time)
+        {
+            _nextCheckTwist = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
+            if (_owner.Enemies.TryGetValue(shooter, out var data))
+            {
+                _owner.Boost.BoostTwist.Activate(data);
+            }
+        }
+    }
 
     protected void MoveToTarget()
     {
-        if (Target.Dist < _minAttackDistToStart)
-        {
-            if (_owner.Boost.IsReady) _owner.Boost.ActivateTurn(Target.DirNorm);
-        }
-        else if (Target.IsInBack() && Target.Dist < 14)
-        {
-            if (_owner.Boost.IsReady) _owner.Boost.ActivateBack();
-        }
-
+        CheckBoostTurn();
+        CheckBoostTwist();
+        CheckBoostRam();
         if (_isDogFight)
         {
             ShallEndDogFight();
@@ -71,7 +93,6 @@ public class AttackAction : AbstractAttackAction
         else
         {
             ShallStartDogFight();
-            //            bool tooClose = false;
             if (Target.ShipLink.CurSpeed <= 0.1f && Target.Dist < _owner.MaxTurnRadius * 2)
             {
                 var pp = AIUtility.GetByWayDirection(_owner.Position, Target.ShipLink.Position,
@@ -94,6 +115,56 @@ public class AttackAction : AbstractAttackAction
                 _owner.MoveByWay(pp1.Right);
             else
                 _owner.MoveByWay(Target);
+        }
+    }
+
+    private void CheckBoostTwist()
+    {
+        if (!_owner.Boost.IsReady)
+        {
+            return;
+        }
+
+        if (_nextCheckTwist < Time.time)
+        {
+            _nextCheckTwist = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD); ;
+            if (_owner.Boost.BoostTwist.ShallStartUse(Target))
+            {
+                _owner.Boost.BoostTwist.Activate(Target);
+            }
+        }
+    }
+    private void CheckBoostRam()
+    {
+        if (!_owner.Boost.IsReady)
+        {
+            return;
+        }
+
+        if (_nextCheckRam < Time.time)
+        {
+            _nextCheckRam = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
+            if (_owner.Boost.BoostRam.ShallStartUse(Target))
+            {
+                _owner.Boost.BoostRam.Activate(Target);
+            }
+        }
+    }
+
+    private void CheckBoostTurn()
+    {
+        if (!_owner.Boost.IsReady)
+        {
+            return;
+        }
+
+        if (_nextCheckTurn < Time.time)
+        {
+            _nextCheckTurn = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
+            if (_owner.Boost.BoostTurn.ShallStartUse(Target))
+            {
+                _owner.Boost.BoostTurn.Activate(Target.DirNorm);
+            }
         }
     }
 
@@ -127,6 +198,7 @@ public class AttackAction : AbstractAttackAction
 
     protected override void Dispose()
     {
+        GlobalEventDispatcher.OnShipShootDelegate -= OnShipShootDelegate;
         Target.ShipLink.AttackersData.ShipEndsAttack(_owner);
         foreach (var weapon in _owner.WeaponsController.GelAllWeapons())
             weapon.OnShootEnd -= OnShootEnd;

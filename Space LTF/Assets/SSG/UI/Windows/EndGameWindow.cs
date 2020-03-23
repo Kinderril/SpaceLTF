@@ -247,6 +247,7 @@ public class EndGameWindow : BaseWindow
         {
             var money = myShip.MoneyToAdd;
             myShip.StartShipPilotData.Pilot.AddMoney(money);
+            myShip.StartShipPilotData.Pilot.Stats.AddExp(myShip.StartShipPilotData.Ship.LastBattleData.GetTotalExp());
             myShip.StartShipPilotData.Pilot.Stats.AddKills(myShip.StartShipPilotData.Ship.LastBattleData.Kills);
             myShip.StartShipPilotData.Pilot.Stats.AddHeathDamage(myShip.StartShipPilotData.Ship.LastBattleData.HealthDamage);
             myShip.StartShipPilotData.Pilot.Stats.AddShieldDamage(myShip.StartShipPilotData.Ship.LastBattleData.ShieldhDamage);
