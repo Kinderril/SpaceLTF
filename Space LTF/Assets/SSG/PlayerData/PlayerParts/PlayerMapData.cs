@@ -181,7 +181,7 @@ public class PlayerMapData
         return isConnected;
     }
 
-    public List<GlobalMapCell> ConnectedCellsToCurrent()
+    public HashSet<GlobalMapCell> ConnectedCellsToCurrent()
     {
         return CurrentCell.GetCurrentPosibleWays();
     }

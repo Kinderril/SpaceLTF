@@ -48,6 +48,7 @@ public class DebugAtGlobalMap : MonoBehaviour
     public void OnDebugAddMoney()
     {
         MainController.Instance.MainPlayer.MoneyData.AddMoney(100);
+        MainController.Instance.MainPlayer.MoneyData.AddMicrochips(1);
 
     }
 

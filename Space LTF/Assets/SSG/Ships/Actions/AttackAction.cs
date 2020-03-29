@@ -146,7 +146,7 @@ public class AttackAction : AbstractAttackAction
             _nextCheckRam = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
             if (_owner.Boost.BoostRam.ShallStartUse(Target))
             {
-                _owner.Boost.BoostRam.Activate(Target);
+                _owner.Boost.BoostRam.Activate();
             }
         }
     }

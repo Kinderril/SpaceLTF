@@ -52,10 +52,7 @@ public class AfterAttackAction : BaseAction
         if (_nextCheckTwist < Time.time)
         {
             _nextCheckTwist = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
-            if (_owner.Enemies.TryGetValue(shooter, out var data))
-            {
-                _owner.Boost.BoostTwist.Activate(data);
-            }
+            _owner.Boost.BoostTwist.Activate();
         }
     }
 

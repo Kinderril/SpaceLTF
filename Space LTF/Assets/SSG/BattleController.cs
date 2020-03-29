@@ -400,7 +400,7 @@ public class BattleController : Singleton<BattleController>
     {
         Debug.Log("End battle 1:" + LastWinner.ToString());
         State = BattleState.preEnd;
-        DataBaseController.Instance.Pool.Clear();
+        DataBaseController.Instance.Pool.ClearAfterBattle();
         InGameMainUI.EndBattle(LastWinner);
         foreach (var activeBulletKiller in ActiveBulletKillers.ToList())
         {

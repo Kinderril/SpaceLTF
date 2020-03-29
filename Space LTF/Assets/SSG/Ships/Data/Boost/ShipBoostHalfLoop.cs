@@ -19,7 +19,7 @@ public class ShipBoostHalfLoop : ShipBoostAbstract
     private float _side = 1;
 
     public ShipBoostHalfLoop(ShipBase ship, float halfLoopTimeSec, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMoveCallback)
-        : base(ship, activateCallback, endCallback, setAddMoveCallback)
+        : base(ship, ship.MoveBoostEffect, activateCallback, endCallback, setAddMoveCallback)
     {
         _halfLoopTimeSec = halfLoopTimeSec;
     }

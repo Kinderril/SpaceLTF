@@ -18,7 +18,7 @@ public class HookShotSpell : BaseSpellModulInv
     //    private const float CenterCoef = 1 / (MainCoef * MainCoef);
 
     //    private float TotalDamage => DAMAGE_BASE + Level * 2;
-    private float powerThrow => 3;
+    private float powerThrow => 0.84f;//3 * 0.28f;
 
     private float CalcPower(float x)
     {
@@ -176,7 +176,7 @@ public class HookShotSpell : BaseSpellModulInv
                     var dir = aiAsteroidPredata.Position - posToHook;
                     dir.y = 0f;
                     var dist = dir.magnitude;
-                    var power = dist * powerThrow * 0.28f;
+                    var power = dist * powerThrow;
                     power = MyExtensions.GreateRandom(power);
                     var effert = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.HookShot, aiAsteroidPredata.Position, 3f);
                     TurnToDir(effert, -dir);

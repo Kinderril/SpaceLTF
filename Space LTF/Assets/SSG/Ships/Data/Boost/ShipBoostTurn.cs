@@ -13,7 +13,7 @@ public class ShipBoostTurn : ShipBoostAbstract
 
 
     public ShipBoostTurn(ShipBase owner, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMoveCallback)
-        : base(owner, activateCallback, endCallback, setAddMoveCallback)
+        : base(owner, owner.MoveBoostEffect, activateCallback, endCallback, setAddMoveCallback)
     {
         _turnSpeed = _owner.ShipParameters.TurnSpeed * 1.5f;
         var minAttackDist = float.MaxValue;

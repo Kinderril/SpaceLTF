@@ -16,8 +16,8 @@ public class SectorDungeon : SectorData
     private bool _removeOnlyOne;
     private bool _oneRemoved;
     public SectorDungeon(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-        ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, bool upSide)
-        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn)
+        ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, bool upSide, DeleteWayDelegeate removeWayCallback)
+        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback)
     {
         _upSide = upSide;
         _exitCreated = false;
@@ -138,19 +138,11 @@ public class SectorDungeon : SectorData
 
     }
 
-    private void RemoveWays(GlobalMapCell c1, GlobalMapCell c2)
-    {
-        c1.RemoveWayTo(c2);
-        c2.RemoveWayTo(c1);
-    }
     private void AddWays(GlobalMapCell c1, GlobalMapCell c2)
     {
         c1.AddWay(c2);
         c2.AddWay(c1);
     }
-
-
-
     private ArmyGlobalMapCell PopulateCell(int j, int i)
     {
         ArmyGlobalMapCell armyCellcell = null;
@@ -187,8 +179,8 @@ public class SectorDungeon : SectorData
         {
             armyCellcell = new ArmyDungeonGlobalMapCell(_power, _shipConfig, Utils.GetId(),
                 StartX + cellContainer.indX, StartZ + cellContainer.indZ, this);
-            armyCellcell.OnComeToCell += OnComeToCell;
         }
+        armyCellcell.OnComeToCell += OnComeToCell;
         cellContainer.SetData(armyCellcell);
         _listCells.Add(cellContainer);
         return armyCellcell;
@@ -207,7 +199,10 @@ public class SectorDungeon : SectorData
         }
         else
         {
-            RemoveWays(to, @from);
+            if (to is ArmyDungeonEnterGlobalMapCell)
+            {
+                RemoveWayCallback(to);
+            }
         }
 
     }

@@ -23,6 +23,14 @@ public class ListBaseEffectAbsorber : BaseEffectAbsorber
             absorber.Stop();
         }
         base.Stop();
+    }    
+    public override void StopEmmision()
+    {
+        foreach (var absorber in list)
+        {
+            absorber.StopEmmision();
+        }
+        base.StopEmmision();
     }
 }
 

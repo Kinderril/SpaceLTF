@@ -126,6 +126,14 @@ public class CameraController : MonoBehaviour
         GameCameraHolderY.transform.localPosition = new Vector3(p.x, nextPos, p.z);
     }
 
+    public void SetYHolderToMid()
+    {
+        var p = GameCameraHolderY.transform.localPosition;
+        var delta = MAX_Y - MIN_Y;
+        var nextPos = MIN_Y + delta * 0.25f;
+        GameCameraHolderY.transform.localPosition = new Vector3(p.x, nextPos, p.z);
+    }
+
     public void Stop()
     {
         _targetPos = null;

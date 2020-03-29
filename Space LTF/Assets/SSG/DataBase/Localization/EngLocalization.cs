@@ -303,7 +303,7 @@ public static class EngLocalization
         {"DistShotNameA1", "Engine lock"},
         {"DistShotNameB2", "AOE"},
         {"DistShotDescA1", "Damage engine when hit. Engine stops for {0} sec"},
-        {"DistShotDescB2", "Add damage to all closest enemies at radius {0}"},
+        {"DistShotDescB2", "Increase area of damage on {0}"},
 
         {"LineShotNameA1", "Penetraiting"},
         {"LineShotNameB2", "Termit"},
@@ -523,8 +523,8 @@ public static class EngLocalization
         {"DescWeaponDistModul", "Increase aim radius by {0}% per level"},
 
         {"MachineGunSpellDesc", "Series  of {0} fast bullets. Damage: {1}/{2}"},
-        {"DistShotSpell", "Single bullet. Only hull damage {0}. Additional damage dependence on distance."},
-        {"DistShotSpellSpecial", "Single bullet.  Only hull damage {0}. Additional damage dependence on distance. If target have no shield destroy engine for {1} sec."},
+        {"DistShotSpell", "Single bullet. Only hull damage {0}."},
+        {"DistShotSpellSpecial", "Single bullet.  Only hull damage {0}. If target have no shield destroy engine for {1} sec."},
 
         {"rep_adv_friend", "You are friends. Maybe they can help you."},
         {"rep_adv_neutral", "Fleets will fight, but you can trade with them."},

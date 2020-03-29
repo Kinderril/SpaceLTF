@@ -12,7 +12,7 @@ public class ShipBoostLoop : ShipBoostAbstract
 
 
     public ShipBoostLoop(ShipBase ship, float turnSpeed, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMoveCallback)
-        : base(ship, activateCallback, endCallback, setAddMoveCallback)
+        : base(ship, ship.MoveBoostEffect, activateCallback, endCallback, setAddMoveCallback)
     {
         _turnSpeed = turnSpeed;
     }

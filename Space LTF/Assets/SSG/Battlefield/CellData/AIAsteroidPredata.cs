@@ -36,10 +36,7 @@ public class AIAsteroidPredata
     public void Death()
     {
         OnMove = null;
-        if (OnDeath != null)
-        {
-            OnDeath();
-        }
+        OnDeath?.Invoke();
 
     }
 

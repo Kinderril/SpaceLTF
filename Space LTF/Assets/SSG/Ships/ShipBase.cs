@@ -54,10 +54,12 @@ public class ShipBase : MovingObject
     public ShipDamageData DamageData { get; private set; }
 
     public IPilotParameters PilotParameters;
-    public BaseEffectAbsorber ModulEffectDestroy;
+//    public BaseEffectAbsorber ModulEffectDestroy;
     public BaseEffectAbsorber ShipEngineStop;
     public BaseEffectAbsorber RepairEffect;
     public BaseEffectAbsorber PeriodDamageEffect;
+    public MeshTimeAbsorber RamBoostEffect;
+    public BaseEffectAbsorber MoveBoostEffect;
 
     private BaseEffectAbsorber _lastMoveEffect;
     // public BaseEffectAbsorber WeaponCrashEffect;
@@ -171,12 +173,12 @@ public class ShipBase : MovingObject
             ShipEngineStop.Stop();
         if (RepairEffect != null)
             RepairEffect.Stop();
-        if (ModulEffectDestroy != null)
-            ModulEffectDestroy.Stop();
+        if (RamBoostEffect != null)
+            RamBoostEffect.Stop();
         if (PeriodDamageEffect != null)
             PeriodDamageEffect.Stop();
-        // if (WeaponCrashEffect != null)
-        //     WeaponCrashEffect.Stop();
+        if (MoveBoostEffect != null)
+            MoveBoostEffect.Stop();
         PathController = new ShipPathController2(this, 1.25f);
         BuffData = new ShipBuffData(this);
         Boost = new ShipBoost(this, ShipParameters.StartParams.BoostChargeTime, Commander.TeamIndex == TeamIndex.green);
@@ -260,6 +262,7 @@ public class ShipBase : MovingObject
         }
 
         ShipVisual.gameObject.SetActive(false);
+        InitDeathParts();
         IsDead = true;
         _dealthCallback(this);
         if (OnDeath != null)
@@ -268,6 +271,23 @@ public class ShipBase : MovingObject
         }
         EffectController.Instance.Create(DataBaseController.Instance.DataStructPrefabs.OnShipDeathEffect, transform.position, 5f);
         Dispose();
+    }
+
+
+    private void InitDeathParts()
+    {
+        var pool = DataBaseController.Instance.Pool;
+        int cnt = MyExtensions.Random(2, 5);
+        var p = gameObject.transform.position;
+        float partOffset = .3f;
+        for (int i = 0; i < cnt; i++)
+        {
+            var partShip = pool.GetPartShip();
+            partShip.Init();
+            var xx = p.x + MyExtensions.Random(-partOffset, partOffset);
+            var zz = p.z + MyExtensions.Random(-partOffset, partOffset);
+            partShip.transform.position = new Vector3(xx, p.y, zz);
+        }
     }
 
     public override void Dispose()

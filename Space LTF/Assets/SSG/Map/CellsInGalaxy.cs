@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.Linq;
+using UnityEngine;
 
 [System.Serializable]
 public class CellsInGalaxy
@@ -13,7 +12,7 @@ public class CellsInGalaxy
     public int SizeX { get; private set; }
     public int SizeZ { get; private set; }
 
-    public CellsInGalaxy(int sizeX,int sizeZ)
+    public CellsInGalaxy(int sizeX, int sizeZ)
     {
         SizeX = sizeX;
         SizeZ = sizeZ;
@@ -30,6 +29,7 @@ public class CellsInGalaxy
         cells[x, z] = cell;
         cellsList.Add(cell);
     }
+
 
     public void SetCell(GlobalMapCell cell)
     {

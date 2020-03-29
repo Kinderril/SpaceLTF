@@ -90,7 +90,7 @@ public class MapWindow : BaseWindow
         InitMyArmy();
         GlobalMap.SingleInit(player.MapData.GalaxyData, this, MouseNearObject);
         GlobalMap.Open();
-        List<GlobalMapCell> connectedCells = player.MapData.ConnectedCellsToCurrent();
+        var connectedCells = player.MapData.ConnectedCellsToCurrent();
         GlobalMap.SingleReset(player.MapData.CurrentCell, connectedCells);
         InventoryUI.Init(player.Inventory, null);
         GlobalMap.UnBlock();

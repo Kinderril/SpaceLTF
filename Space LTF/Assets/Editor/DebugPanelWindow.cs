@@ -16,7 +16,7 @@ public class DebugPanelWindow : EditorWindow
 {
     
     public static List<NavMeshSurface> navMeshSurfaceSelected = new List<NavMeshSurface>();
-    public static ShipBase SelectedShip;
+//    public static ShipBase SelectedShip => BattleController.Instance.
     public static bool EngineOff;
     public static bool NoDamage;
 //    public static bool NoMouseMove;
@@ -53,10 +53,10 @@ public class DebugPanelWindow : EditorWindow
             //        
             //        EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Find first AI"))
-            {
-                FindAnyAI();
-            }
+//            if (GUILayout.Button("Find first AI"))
+//            {
+//                FindAnyAI();
+//            }
             if (GUILayout.Button("Kill all enemies"))
             {
                 DebugUtils.KillAllEnemies();
@@ -141,20 +141,31 @@ public class DebugPanelWindow : EditorWindow
             EditorGUILayout.EndHorizontal();
             if (BattleController.Instance != null && BattleController.Instance.InGameMainUI != null)
             {
+                
                 var ss = BattleController.Instance.InGameMainUI.SelectedShip;
-                if (ss != null)
+                if (ss != null )
                 {
                     EditorGUILayout.BeginHorizontal();
                     float externalPower = 14;
                     float externalTime = 0.4f;
-                    if (GUILayout.Button("External force"))
+                    var selectedShip = ss;
+                    if (GUILayout.Button("Twist"))
                     {
-                        SelectedShip.ExternalForce.Init(externalPower, externalTime, SelectedShip.LookDirection);
-                    }
-                    if (GUILayout.Button("External left"))
+                        selectedShip.Boost.BoostTwist.Activate();
+                    }  
+                    if (GUILayout.Button("Ram"))
                     {
-                        SelectedShip.ExternalForce.Init(externalPower, externalTime, SelectedShip.LookLeft);
+                        selectedShip.Boost.BoostRam.Activate();
                     }
+
+//                    if (GUILayout.Button("External force"))
+//                    {
+//                        SelectedShip.ExternalForce.Init(externalPower, externalTime, SelectedShip.LookDirection);
+//                    }
+//                    if (GUILayout.Button("External left"))
+//                    {
+//                        SelectedShip.ExternalForce.Init(externalPower, externalTime, SelectedShip.LookLeft);
+//                    }
                     if (GUILayout.Button("Do damage"))
                     {
                         DoDamageToSelected();
@@ -431,21 +442,21 @@ public class DebugPanelWindow : EditorWindow
         PrefabUtility.UnloadPrefabContents(editable_prefab);
     }
               */
-    private void FindAnyAI()
-    {
-        var bots = GameObject.FindObjectsOfType<ShipBase>();
-        if (bots != null)
-        {
-            foreach (var shipBase in bots)
-            {
-                if (!shipBase.IsDead && shipBase.ShipParameters.StartParams.ShipType != ShipType.Base)
-                {
-                    SelectedShip = shipBase;
-                    return;
-                }
-            }
-        }
-    }
+//    private void FindAnyAI()
+//    {
+//        var bots = GameObject.FindObjectsOfType<ShipBase>();
+//        if (bots != null)
+//        {
+//            foreach (var shipBase in bots)
+//            {
+//                if (!shipBase.IsDead && shipBase.ShipParameters.StartParams.ShipType != ShipType.Base)
+//                {
+//                    SelectedShip = shipBase;
+//                    return;
+//                }
+//            }
+//        }
+//    }
 
     private void ResetBulletsIds()
     {

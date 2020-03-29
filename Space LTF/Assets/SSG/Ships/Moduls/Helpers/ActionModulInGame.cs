@@ -197,10 +197,10 @@ public abstract class ActionModulInGame
             Debug.LogError("can't delete twise");
             return;
         }
-        if (_owner.ModulEffectDestroy != null)
-        {
-            _owner.ModulEffectDestroy.Play();
-        }
+//        if (_owner.ModulEffectDestroy != null)
+//        {
+//            _owner.ModulEffectDestroy.Play();
+//        }
         IsApply = false;
     }
 

@@ -28,6 +28,7 @@ public class MainController : Singleton<MainController>
         CamerasController.Instance.StartCheck();
         Library.Init();
         DataBase.Init();
+        LibraryChecker.DoCheck();
         ShipNames.Init();
         TutorialController.Init();
         Statistics = PlayerStatistics.Load();

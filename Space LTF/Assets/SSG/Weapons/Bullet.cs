@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 public enum BulletAffectType
@@ -25,6 +22,7 @@ public enum BulletType
     upDown = 4,
     nextFrame = 5,
     delayHoming = 6,
+    beamNoTarget = 7,
 }
 
 [System.Serializable]
@@ -70,7 +68,7 @@ public abstract class Bullet : MovingObject
     public BulletAffectType AffectTypeHit;
     //    private float _endTime;
     public IWeapon Weapon { get; private set; }
-    public bool IsAcive { get;private set; }
+    public bool IsAcive { get; private set; }
 
     public ShipBase Target;
     protected bool _homing = false;
@@ -89,7 +87,7 @@ public abstract class Bullet : MovingObject
     {
         return _turnSpeed;
     }
-    
+
     public override float MaxSpeed()
     {
         return _maxSpeed;
@@ -119,7 +117,7 @@ public abstract class Bullet : MovingObject
         {
             HitEffect.Stop();
         }
-    }   
+    }
 
     public abstract BulletType GetType { get; }
 
@@ -144,8 +142,11 @@ public abstract class Bullet : MovingObject
         var bullet = DataBaseController.Instance.Pool.GetBullet(origin.ID);
         switch (origin.GetType)
         {
+            case BulletType.beamNoTarget:
+                bullet.InitBeamNoTarget(weapon, position, dir, bulletSpeed, distanceShoot);
+                break;  
             case BulletType.beam:
-                bullet.InitBeam(weapon,  position,target, bulletSpeed);
+                bullet.InitBeam(weapon, position, target, bulletSpeed);
                 break;
             case BulletType.upDown:
                 bullet.InitLinear(weapon, dir, position, distanceShoot, bulletSpeed);
@@ -168,7 +169,7 @@ public abstract class Bullet : MovingObject
             default:
                 throw new ArgumentOutOfRangeException();
         }
-//        var isLinear = origin is LinearBullet;
+        //        var isLinear = origin is LinearBullet;
         bullet.LateInit();
         var par = BattleController.Instance.BulletContainer;
         bullet.transform.SetParent(par);
@@ -177,11 +178,11 @@ public abstract class Bullet : MovingObject
         return bullet;
     }
 
-    private void InitBeam(IWeapon weapon,  Vector3 position, ShipBase target, float bulletSpeed)
+    private void InitBeam(IWeapon weapon, Vector3 position, ShipBase target, float bulletSpeed)
     {
         _curSpeed = weapon.CurOwnerSpeed / 2f;
         _startTime = Time.time;
-//        _turnSpeed = turnSpeed;
+        //        _turnSpeed = turnSpeed;
         _curSpeed = 0f;
         _maxSpeed = bulletSpeed * (1 + (weapon.Level - 1) * 0.1f);
         _homing = true;
@@ -192,7 +193,24 @@ public abstract class Bullet : MovingObject
         _startTime = Time.time;
         _isActive = true;
         //        if (dir != Vector3.zero)
-//        Rotation = Quaternion.LookRotation(dir);
+        //        Rotation = Quaternion.LookRotation(dir);
+    }     
+    private void InitBeamNoTarget(IWeapon weapon, Vector3 position, Vector3 dir ,float bulletSpeed,float distanceShoot)
+    {
+        _curSpeed = weapon.CurOwnerSpeed / 2f;
+        _startTime = Time.time;
+        //        _turnSpeed = turnSpeed;
+        _curSpeed = 0f;
+        _maxSpeed = bulletSpeed * (1 + (weapon.Level - 1) * 0.1f);
+        _homing = true;
+        Weapon = weapon;
+        _startPos = position;
+        _endPos = _startPos + Utils.NormalizeFastSelf(dir) * distanceShoot;
+        Position = position;
+        _startTime = Time.time;
+        _isActive = true;
+        //        if (dir != Vector3.zero)
+        //        Rotation = Quaternion.LookRotation(dir);
     }
 
     private void InitStay(IWeapon weapon, Vector3 dir, Vector3 position, float distanceShoot, float bulletSpeed)
@@ -264,7 +282,7 @@ public abstract class Bullet : MovingObject
     {
         _curTime = 0;
         _curSpeed = _maxSpeed = bulletSpeed;
-//        _turnSpeed = turnSpeed;
+        //        _turnSpeed = turnSpeed;
 #if UNITY_EDITOR
         if (_curSpeed <= 0)
         {
@@ -283,9 +301,9 @@ public abstract class Bullet : MovingObject
         _homing = false;
         Weapon = weapon;
         _startTime = Time.time;
-//        _endTime = _startTime + _lifeTimeSec;
+        //        _endTime = _startTime + _lifeTimeSec;
         _startPos = position;
-        _endPos = _startPos + Utils.NormalizeFastSelf(dir)*distanceShoot;
+        _endPos = _startPos + Utils.NormalizeFastSelf(dir) * distanceShoot;
         _distanceShoot = distanceShoot;
         _isActive = true;
         Rotation = Quaternion.LookRotation(dir);
@@ -300,11 +318,11 @@ public abstract class Bullet : MovingObject
             return;
         }
 #endif
-        _curSpeed = weapon.CurOwnerSpeed/2f;
+        _curSpeed = weapon.CurOwnerSpeed / 2f;
         _startTime = Time.time;
         _turnSpeed = turnSpeed;
         _curSpeed = 0f;
-        _maxSpeed = bulletSpeed * (1 + (weapon.Level-1)*0.1f);
+        _maxSpeed = bulletSpeed * (1 + (weapon.Level - 1) * 0.1f);
         _homing = true;
         Weapon = weapon;
         Target = target;
@@ -367,7 +385,7 @@ public abstract class Bullet : MovingObject
                         {
                             return;
                         }
-//                        PlayHitEffect(other);
+                        //                        PlayHitEffect(other);
                         ship.GetHit(Weapon, this);
                         if (DeathOnHit)
                         {
@@ -380,7 +398,7 @@ public abstract class Bullet : MovingObject
                             return;
                         }
 
-//                        PlayHitEffect(other);
+                        //                        PlayHitEffect(other);
                         ship.GetHit(Weapon, this);
                         if (DeathOnHit)
                         {
@@ -414,7 +432,7 @@ public abstract class Bullet : MovingObject
         IsAcive = false;
         Weapon.BulletDestroyed(transform.position, this);
         EndUse(delay);
-//        GameObject.Destroy(gameObject);
+        //        GameObject.Destroy(gameObject);
     }
 
 

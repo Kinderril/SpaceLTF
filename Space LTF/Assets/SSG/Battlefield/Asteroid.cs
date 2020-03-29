@@ -39,10 +39,10 @@ public class Asteroid : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         //        Debug.LogError($"Asteroid DEAD {gameObject.name}. {transform.position}. {other.gameObject.name}");
-        OnBulletHit(other);
+        OnHit(other);
     }
 
-    private void OnBulletHit(Collider other)
+    private void OnHit(Collider other)
     {
         if (other.CompareTag(TagController.OBJECT_MOVER_TAG))
         {
@@ -50,8 +50,17 @@ public class Asteroid : MonoBehaviour
 
             if (ship != null)
             {
-                ship.ShipBase.ShipParameters.Damage(ShieldDamage, BodyDamage, null, null);
-                Death(true);
+                if (ship.ShipBase.Boost.BoostRam.IsActive)
+                {
+                    var dir = _aiAsteroidPredata.Position - ship.ShipBase.Position;
+                    _aiAsteroidPredata.Push(dir, 20);
+                }
+                else
+                {
+                    ship.ShipBase.ShipParameters.Damage(ShieldDamage, BodyDamage, null, null);
+                    _aiAsteroidPredata.Death();
+                }
+
             }
         }
         if (other.CompareTag(TagController.BULLET_TAG))
@@ -60,7 +69,7 @@ public class Asteroid : MonoBehaviour
             if (bullet != null)
             {
                 bullet.Death();
-                Death(true);
+                _aiAsteroidPredata.Death();
             }
         }
     }
@@ -88,15 +97,43 @@ public class Asteroid : MonoBehaviour
             PlaySound();
         subDeath();
         _aiAsteroidPredata.OnMove -= OnMove;
-        _aiAsteroidPredata.Death();
+        _aiAsteroidPredata.OnDeath -= OnDeathLogic;
     }
 
     protected void subDeath()
     {
+        PlayEffect();
+        InitAsteroidsPart();
+        gameObject.transform.position = new Vector3(9999, 9999, 9999);
+    }
+
+    private void PlayEffect()
+    {
         EffectOnHit.gameObject.SetActive(true);
         EffectController.Instance.LeaveEffect(EffectOnHit, transform, 1.5f);
         EffectOnHit.Play();
-        gameObject.transform.position = new Vector3(9999, 9999, 9999);
+    }
+    private void InitAsteroidsPart()
+    {
+        var pool = DataBaseController.Instance.Pool;
+        int cnt = MyExtensions.Random(3, 5);
+        var p = gameObject.transform.position;
+        float asteroidPartOffset = .3f;
+        float quaterRnd = 1f;
+        for (int i = 0; i < cnt; i++)
+        {
+            var asteroidPart = pool.GetPartAsteroid();
+            asteroidPart.Init();
+            var xx = p.x + MyExtensions.Random(-asteroidPartOffset, asteroidPartOffset);
+            var zz = p.z + MyExtensions.Random(-asteroidPartOffset, asteroidPartOffset);
+
+            var xxQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+            var yyQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+            var zzQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+            var wwQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+            asteroidPart.transform.position = new Vector3(xx, p.y, zz);
+            asteroidPart.transform.rotation = new Quaternion(xxQ, yyQ, zzQ, wwQ);
+        }
     }
 
     protected void PlaySound()
@@ -119,8 +156,14 @@ public class Asteroid : MonoBehaviour
     {
         _aiAsteroidPredata = aiAsteroidPredata;
         _aiAsteroidPredata.OnMove += OnMove;
+        _aiAsteroidPredata.OnDeath += OnDeathLogic;
         Rad = aiAsteroidPredata.Rad / AIAsteroidPredata.SHIP_SIZE_COEF;
 
+    }
+
+    private void OnDeathLogic()
+    {
+        Death(true);
     }
 
     private void OnMove(AIAsteroidPredata data, Vector3 obj)

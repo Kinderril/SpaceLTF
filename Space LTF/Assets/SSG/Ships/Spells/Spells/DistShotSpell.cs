@@ -8,10 +8,11 @@ public class DistShotSpell : BaseSpellModulInv
     //B2 - AOE
 
     private const int DIST_BASE_DAMAGE = 8;
-    private const int BASE_DAMAGE = 18;
+    private const int BASE_DAMAGE = 12;
     private const int LEVEL_DAMAGE = 8;
-    private const int RAD_B2 = 8;
-    private const float DIST_COEF = 0.8f;
+
+    private const int RAD_B2 = 4;
+//    private const float DIST_COEF = 0.8f;
     private const float ENGINE_OFF_DELTA = 3f;
     private const float ENGINE_OFF_LEVEL = 1f;
 
@@ -20,7 +21,7 @@ public class DistShotSpell : BaseSpellModulInv
 
     private const float BULLET_SPEED = 12f;
     private const float BULLET_TURN_SPEED = .2f;
-    private const float DIST_SHOT = 34f;
+    private const float DIST_SHOT = 54f;
     public DistShotSpell()
         : base(SpellType.distShot, 5, 7, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
     {
@@ -33,7 +34,21 @@ public class DistShotSpell : BaseSpellModulInv
 
     private void DistShotCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var b = Bullet.Create(origin, weapon, target.Position - shootpos, shootpos, null, bullestartparameters);
+        var dir = target.Position - shootpos;
+        Debug.LogError($"dir:{dir}    target.Position:{target.Position}");
+        var b = Bullet.Create(origin, weapon, dir, shootpos, null, bullestartparameters);
+        var beamNoTrg = b as BeamBulletNoTarget;
+        if (beamNoTrg != null)
+        {
+            if (UpgradeType == ESpellUpgradeType.B2)
+            {
+                beamNoTrg.coefWidth = RAD_B2;
+            }
+            else
+            {
+                beamNoTrg.coefWidth = 1f;
+            }
+        }
     }
 
     public int BASE_damage => BASE_DAMAGE + LEVEL_DAMAGE * Level;
@@ -42,9 +57,8 @@ public class DistShotSpell : BaseSpellModulInv
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         var dist = (target.Position - bullet1.Weapon.Owner.Position).magnitude;
-        var totalDistDamage = dist * DIST_COEF;
+        var totalDistDamage = dist;// * DIST_COEF;
         int damage = BASE_damage + Mathf.Clamp((int)totalDistDamage, 0, DIST_BASE_DAMAGE);
-        //        int baseSpDamage = (int)(BASE_DAMAGE / c);
 
         target.ShipParameters.Damage(0, damage, bullet1.Weapon.DamageDoneCallback, target);
         switch (UpgradeType)
@@ -52,25 +66,25 @@ public class DistShotSpell : BaseSpellModulInv
             case ESpellUpgradeType.A1:
                 target.DamageData.ApplyEffect(ShipDamageType.engine, Engine_Off);
                 break;
-            case ESpellUpgradeType.B2:
-                var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position,
-                    target.TeamIndex, RAD_B2);
-                closestsShips.Remove(target);
-                if (closestsShips.Count > 0)
-                {
-                    foreach (var ship in closestsShips)
-                    {
-                        ship.ShipParameters.Damage(0, totalDistDamage, bullet1.Weapon.DamageDoneCallback, target);
-                    }
-                }
-                break;
+//            case ESpellUpgradeType.B2:
+//                var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position,
+//                    target.TeamIndex, RAD_B2);
+//                closestsShips.Remove(target);
+//                if (closestsShips.Count > 0)
+//                {
+//                    foreach (var ship in closestsShips)
+//                    {
+//                        ship.ShipParameters.Damage(0, totalDistDamage, bullet1.Weapon.DamageDoneCallback, target);
+//                    }
+//                }
+//                break;
         }
     }
 
 
     public override Bullet GetBulletPrefab()
     {
-        var bullet = DataBaseController.Instance.GetBullet(WeaponType.distShot);
+        var bullet = DataBaseController.Instance.GetBullet(WeaponType.beamNoTarget);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
     }

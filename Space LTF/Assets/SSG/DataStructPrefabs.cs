@@ -66,8 +66,10 @@ public class DataStructPrefabs : MonoBehaviour
 {
     public List<Bullet> Bullets = new List<Bullet>();
     public List<ShipStruct> Ships = new List<ShipStruct>();
-    public List<ShipStruct>
-        Turrets = new List<ShipStruct>();
+    public List<ShipStruct> Turrets = new List<ShipStruct>();
+
+    public List<PoolElement> AsteroidParts = new List<PoolElement>();
+    public List<PoolElement> DestroyedShipParts = new List<PoolElement>();
 
     public DebugRationInfo DebugRationInfo;
     public ShipUIOnMap ShipUIOnMap;

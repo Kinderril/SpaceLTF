@@ -33,7 +33,7 @@ public class CamerasController : Singleton<CamerasController>
 
     public void CheckNoMouseMoveOnStart()
     {
-        var key = PlayerPrefs.GetInt(KEY_NO_MOUSE_MOVE, 1);
+        var key = PlayerPrefs.GetInt(KEY_NO_MOUSE_MOVE, 0);
         _noMouseMove = key == 1;
     }
 
@@ -235,6 +235,7 @@ public class CamerasController : Singleton<CamerasController>
         MusicControl.StopMenuAudio();
         MusicControl.StartGlobalAudio();
         CloseGameCamera();
+        GlobalMapCamera.SetYHolderToMid();
         GlobalMapCamera.gameObject.SetActive(true);
         _activeCamera = GlobalMapCamera;
         UICamera.gameObject.SetActive(false);
@@ -245,6 +246,7 @@ public class CamerasController : Singleton<CamerasController>
         MusicControl.StopGlobalAudio();
         CloseGlobalCamera();
         GameCamera.gameObject.SetActive(true);
+        GameCamera.SetYHolderToMid();
         _activeCamera = GameCamera;
         UICamera.gameObject.SetActive(false);
     }
@@ -308,6 +310,7 @@ public class CamerasController : Singleton<CamerasController>
     public void SetNoMouseMove(bool isOn)
     {
         _noMouseMove = isOn;
+        PlayerPrefs.SetInt(KEY_NO_MOUSE_MOVE, _noMouseMove?1:0);
     }
 }
 

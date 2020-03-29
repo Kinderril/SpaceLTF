@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -12,16 +8,23 @@ public class GlobalMapCellConnector : MonoBehaviour
     private Vector3 _from;
     private Vector3 _to;
     public bool IsDestroyed = false;
+    public int FromId { get; private set; }
+    public int ToId { get; private set; }
 
-    public void Init(Vector3 from, Vector3 to)
+    public void Init(GlobalMapCellObject from, GlobalMapCellObject to)
     {
-        _from = from;
-        _to = to;
+        FromId = from.Cell.Id;
+        ToId = to.Cell.Id;
+        _from = from.ModifiedPosition;
+        _to = to.ModifiedPosition;
         gameObject.SetActive(true);
         var list = new List<Vector3>();
-        list.Add(from);
-        list.Add((from+to)/2f);
-        list.Add(to);
+        var p1 = _from;
+        var p3 = _to;//(_from + _to) * .5f;
+        var p2 = (p3+ p1) * .5f;
+        list.Add(p1);
+        list.Add(p2);
+        list.Add(p3);
         ParticleAttractor.CreateByPoints(list);
     }
 
@@ -39,8 +42,8 @@ public class GlobalMapCellConnector : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(_from,0.5f);
-        Gizmos.DrawSphere(_to,0.5f);
+        Gizmos.DrawSphere(_from, 0.5f);
+        Gizmos.DrawSphere(_to, 0.5f);
     }
 }
 

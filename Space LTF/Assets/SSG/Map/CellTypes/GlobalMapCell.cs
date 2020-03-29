@@ -9,7 +9,7 @@ public abstract class GlobalMapCell
     protected SectorData _sector;
 
     public SectorData Sector => _sector;
-    private List<GlobalMapCell> _ways = new List<GlobalMapCell>();
+    private HashSet<GlobalMapCell> _ways = new HashSet<GlobalMapCell>();
     public MovingArmy CurMovingArmy = null;
 
     public int ConnectedGates = -1;
@@ -229,7 +229,7 @@ public abstract class GlobalMapCell
         }
     }
 
-    public List<GlobalMapCell> GetCurrentPosibleWays()
+    public HashSet<GlobalMapCell> GetCurrentPosibleWays()
     {
         return _ways;
     }

@@ -8,7 +8,6 @@ public abstract class MovingObject : PoolElement
     const float MAX_ACCELERATION = 1.5f;
     const float ACCELERATION_POWER = 2f;
     public const float BANK_MAX = 0.7f;
-    public const float BANK_SPEED = 0.45f;
     public float EulerY = 0f;
     public bool EngineWork = true;
     public Vector3 LookDirection = Vector3.forward;
@@ -39,7 +38,7 @@ public abstract class MovingObject : PoolElement
     public Transform RotatableObject;
     private float _curBank = 0f;
     protected virtual float BankMax => BANK_MAX;
-    protected virtual float BankSpeed => BANK_SPEED;
+//    protected virtual float BankSpeed => BANK_SPEED;
 
     public event Action<MovingObject, bool> OnStop;
     public event Action<MovingObject> OnMainDispose;
@@ -191,7 +190,7 @@ public abstract class MovingObject : PoolElement
             return;
         }
 
-        var bSpeed = BankSpeed * Time.deltaTime;
+        var bSpeed = _banking.BankSpeed * Time.deltaTime;
         float nextBank;
         if (!_banking.ImplementedXZ)
         {

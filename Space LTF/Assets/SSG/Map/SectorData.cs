@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public delegate void DeleteWayDelegeate(GlobalMapCell to);
+
 [System.Serializable]
 public class SectorData
 {
@@ -28,10 +30,12 @@ public class SectorData
     protected ShipConfig _shipConfig;
     public ShipConfig ShipConfig => _shipConfig;
     private Dictionary<GlobalMapEventType, int> _maxCount;
+    protected DeleteWayDelegeate RemoveWayCallback;
 
     public SectorData(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-         ShipConfig shipConfig, int index, int xIndex, float powerPerTurn)
+         ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, DeleteWayDelegeate removeWayCallback)
     {
+        RemoveWayCallback = removeWayCallback;
         XIndex = xIndex;
         _powerPerTurn = powerPerTurn;
         Id = index;
@@ -87,7 +91,7 @@ public class SectorData
     public static int CalcCellPower(int visited, int Size, int startPowerGalaxy, int additionalPower)
     {
         var sectorPowerCoef = Library.SECTOR_COEF_POWER + startPowerGalaxy * Library.SECTOR_POWER_START_COEF;
-        var additional = (int)((visited+1) * Size * sectorPowerCoef);
+        var additional = (int)((visited + 1) * Size * sectorPowerCoef);
         var power = startPowerGalaxy + additional + additionalPower;
 
         var underLog = power * power * Library.SECTOR_POWER_LOG2;
@@ -389,7 +393,22 @@ public class SectorData
     {
         foreach (var cell in _listCells)
         {
+            if (cell.Data is GlobalMapNothing)
+            {
+                continue;
+            } 
             var ways = ConnectedCellsToCurrent(cell.indX, cell.indZ);
+//#if UNITY_EDITOR
+//            foreach (var globalMapCell in ways)
+//            {
+//                if (globalMapCell is GlobalMapNothing)
+//                {
+//                    Debug.LogError("sss");
+//                }
+//            }
+//#endif
+
+            ways.RemoveAll(x => x is GlobalMapNothing);
             var data = cell.Data;
 #if UNITY_EDITOR
 
@@ -417,7 +436,7 @@ public class SectorData
             if (allWays.Count > 3)
             {
                 int waysToCut = allWays.Count > 5 ? 2 : 1;
-                var wayToCut = allWays.RandomElement(waysToCut);
+                var wayToCut = allWays.ToList().RandomElement(waysToCut);
                 foreach (var mapCell in wayToCut)
                 {
                     cell.Data.RemoveWayTo(mapCell);
@@ -467,7 +486,7 @@ public class SectorData
             if (z >= 0 && z < Size)
             {
                 var cell = Cells[x, z];
-                if (cell.Data != null)
+                if (cell.Data != null && !(cell.Data is GlobalMapNothing))
                     list.Add(cell.Data);
             }
         }

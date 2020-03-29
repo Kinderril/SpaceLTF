@@ -25,10 +25,7 @@ public class ShipHitCatcher : HitCatcher
 #endif
     }
 
-    public TeamIndex TeamIndex
-    {
-        get { return ShipBase.TeamIndex; }
-    }
+    public TeamIndex TeamIndex => ShipBase.TeamIndex;
 
     public override void GetHit(IWeapon weapon,Bullet bullet)
     {

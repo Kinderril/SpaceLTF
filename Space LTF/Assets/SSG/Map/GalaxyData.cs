@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,13 +26,11 @@ public class GalaxyData
     public int CellsDestroyed { get; private set; }
     public GalaxyEnemiesArmyController GalaxyEnemiesArmyController { get; private set; }
     public string Name;
-    //    public int startIndexX { get; private set; }
-    //    public int startIndexZ { get; private set; }
-    // private const int zoneCount = 5;
     public const int VERTICAL_COUNT = 4;
-    // private bool _prevStepDestroy = false;
     private float _powerPerTurn = 0f;
     public List<SectorData> AllSectors = new List<SectorData>();
+    [field: NonSerialized]
+    public event Action<int, int> OnWayDelete;
 
     private int _sectorsCount;
 
@@ -81,14 +80,14 @@ public class GalaxyData
                     {
                         bool isUp = upper;
                         subSector = new SectorDungeon(xx, zz, sizeSector,
-                            _eventsCount, shipConfig, id, i, _powerPerTurn, isUp);
+                            _eventsCount, shipConfig, id, i, _powerPerTurn, isUp, DeletedWays);
                     }
                 }
                 else
                 {
 
                     subSector = new SectorData(xx, zz, sizeSector,
-                        _eventsCount, shipConfig, id, i, _powerPerTurn);
+                        _eventsCount, shipConfig, id, i, _powerPerTurn, DeletedWays);
                 }
 
                 id++;
@@ -211,6 +210,32 @@ public class GalaxyData
         //        }
         return startCell;
     }
+    public void RemoveAllWaysFromAnotherSectorToCell(GlobalMapCell cell)
+    {
+        Debug.LogError($"RemoveAllWaysFromAnotherSectorToCell start  {cell.Id} indX:{cell.indX} indz:{cell.indZ}");
+        List<GlobalMapCell> waysToRemove = new List<GlobalMapCell>();
+        var cells = GetAllList();
+        foreach (var globalMapCell in cells)
+        {
+            var ways = globalMapCell.GetCurrentPosibleWays();
+            if (ways.Contains(cell) && globalMapCell.SectorId != cell.SectorId)
+            {
+                Debug.LogError($"RemoveAllWaysFromAnotherSectorToCell waysToRemove.Add(cell):{globalMapCell.Id}  indX:{globalMapCell.indX} indz:{globalMapCell.indZ}");
+                waysToRemove.Add(globalMapCell);
+            }
+        }
+
+        foreach (var globalMapCell in waysToRemove)
+        {
+            globalMapCell.RemoveWayTo(cell);
+            OnWayDelete?.Invoke(globalMapCell.Id, cell.Id);
+        }
+    }
+
+    private void DeletedWays(GlobalMapCell to)
+    {
+        RemoveAllWaysFromAnotherSectorToCell(to);
+    }
 
     private float ConfigurePowerPerTurn(int powerPerTurn)
     {
@@ -224,15 +249,15 @@ public class GalaxyData
         var xCell = coreSector.StartX + RndIndex(sizeSector);
         var zCell = coreSector.StartZ + RndIndex(sizeSector);
 
-//#if UNITY_EDITOR      
-//        var s = _sectorsCount * (sizeSector + 1) - 1;
-//
-//        if (zCell >= s)
-//        {
-//            Debug.LogError($"How it posible core:{ coreSector.StartZ}  s:{s}");
-//            return;
-//        }
-//#endif
+        //#if UNITY_EDITOR      
+        //        var s = _sectorsCount * (sizeSector + 1) - 1;
+        //
+        //        if (zCell >= s)
+        //        {
+        //            Debug.LogError($"How it posible core:{ coreSector.StartZ}  s:{s}");
+        //            return;
+        //        }
+        //#endif
         var coreId = Utils.GetId();
         var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, startSector);
         coreSector.Populate(startPower);
@@ -724,24 +749,24 @@ public class GalaxyData
         return cells1;
     }
 
-    private void TryDestroyCell(GlobalMapCell curCell)
-    {
-        var rnds = cells.GetAllList().Where(x => x.SectorId == curCell.SectorId && x.CanCellDestroy()).ToList();
-        if (rnds.Count > 0)
-        {
-            var rnd = rnds.RandomElement();
-            CellsDestroyed++;
-            rnd.DestroyCell();
-            var ways = rnd.GetCurrentPosibleWays();
-            foreach (var globalMapCell in ways)
-            {
-                globalMapCell.RemoveWayTo(rnd);
-            }
-            MainController.Instance.MainPlayer.MessagesToConsole.AddMsg("Cell destroyed");
-
-
-        }
-    }
+    // private void TryDestroyCell(GlobalMapCell curCell)
+    // {
+    //     var rnds = cells.GetAllList().Where(x => x.SectorId == curCell.SectorId && x.CanCellDestroy()).ToList();
+    //     if (rnds.Count > 0)
+    //     {
+    //         var rnd = rnds.RandomElement();
+    //         CellsDestroyed++;
+    //         rnd.DestroyCell();
+    //         var ways = rnd.GetCurrentPosibleWays();
+    //         foreach (var globalMapCell in ways)
+    //         {
+    //             globalMapCell.RemoveWayTo(rnd);
+    //         }
+    //         MainController.Instance.MainPlayer.MessagesToConsole.AddMsg("Cell destroyed");
+    //
+    //
+    //     }
+    // }
 
 
     //    public List<GlobalMapCell> ConnectedCellsToCurrent(GlobalMapCell CurrentCell)
@@ -760,6 +785,17 @@ public class GalaxyData
     public void Dispose()
     {
         GalaxyEnemiesArmyController.Dispose();
+    }
+
+    public int GetAllWaysCount()
+    {
+        int logic = 0;
+        foreach (var globalMapCell in GetAllList())
+        {
+            logic += globalMapCell.GetCurrentPosibleWays().Count;
+        }
+
+        return logic;
     }
 }
 

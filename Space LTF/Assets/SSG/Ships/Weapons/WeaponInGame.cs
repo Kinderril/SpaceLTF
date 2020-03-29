@@ -36,6 +36,7 @@ public enum WeaponType
     healBodySupport = 25,
     healShieldSupport = 26,
     ramStrike = 27,
+    beamNoTarget = 28,
 }
 
 public class WeaponAffectionAdditionalParams

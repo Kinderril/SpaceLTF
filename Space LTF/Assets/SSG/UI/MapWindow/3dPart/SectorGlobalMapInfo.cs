@@ -36,8 +36,10 @@ public class SectorGlobalMapInfo : MonoBehaviour
         var scl = sectorSize * 0.11f;
         //        var sclVect = new Vector3(scl, 0, scl);
         ScaledHolder.localScale = new Vector3(scl, 0, scl);
-        HorizontalLine.transform.localScale = new Vector3(HorizontalLine.transform.localScale.x, 0, scl);
-        VerticalLine.transform.localScale = new Vector3(VerticalLine.transform.localScale.x, 0, scl);
+        HorizontalLine.SetActive(false);
+        VerticalLine.SetActive(false);
+        //        HorizontalLine.transform.localScale = new Vector3(HorizontalLine.transform.localScale.x, 0, scl);
+        //        VerticalLine.transform.localScale = new Vector3(VerticalLine.transform.localScale.x, 0, scl);
         var halfOffse = new Vector3(offset / 2f, 0, offset / 2f);
         var min = new Vector3(sector.StartX * offset, 0, sector.StartZ * offset);
         var max = new Vector3(sector.StartX * offset + sectorSize, 0, sector.StartZ * offset + sectorSize);
@@ -53,8 +55,8 @@ public class SectorGlobalMapInfo : MonoBehaviour
         Utils.CopyMaterials(BackgroundRenderer, color, "_TintColor");
         color.a = 1f;
         Field.color = color;
-        HorizontalLine.SetActive(false);
-        VerticalLine.SetActive(false);
+//        HorizontalLine.SetActive(false);
+//        VerticalLine.SetActive(false);
 
         _minHorizontal = center - new Vector3(sectorSize / 2f, 0, 0);
         _maxHorizontal = center + new Vector3(sectorSize / 2f, 0, 0);
@@ -103,8 +105,8 @@ public class SectorGlobalMapInfo : MonoBehaviour
         CloseEffect.enabled = false;
         OpenEffect.enabled = true;
         OpenEffect.Play();
-        HorizontalLine.SetActive(true);
-        VerticalLine.SetActive(true);
+//        HorizontalLine.SetActive(true);
+//        VerticalLine.SetActive(true);
     }
 
     public void UnSelect()
