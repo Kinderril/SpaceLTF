@@ -23,7 +23,7 @@
     {
         ThisLauchOpened = true;
     }
-
+          
     public override void Dispose()
     {
         WindowManager.Instance.OnWindowSetted -= OnWindowSetted;

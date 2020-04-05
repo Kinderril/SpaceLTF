@@ -14,6 +14,7 @@ public class GlobalMapController : MonoBehaviour
         = new Dictionary<GlobalMapCell, List<GlobalMapCellConnector>>();
 
     private readonly List<GlobalMapCellConnector> _connectors = new List<GlobalMapCellConnector>();
+    private readonly List<GameObject> _pointers = new List<GameObject>();
     List<GlobalMapCellConnector> _waysList = new List<GlobalMapCellConnector>();
 
     //    public float OffsetSector;
@@ -31,8 +32,9 @@ public class GlobalMapController : MonoBehaviour
     private Action<GlobalMapCellObject> CallbackNearObjec;
     public GlobalMapCellObject CellPrefab;
     public Transform ConnectionsContainer;
-    public GlobalMapCellConnector GlobalMapCellBorderPrefab;
+//    public GlobalMapCellConnector GlobalMapCellBorderPrefab;
     public GlobalMapCellConnector GlobalMapCellConnectorPrefab;
+    public GameObject GlobalMapCellPointerPrefab;
     public GlobalMapCellConnector GlobalMapCellWayPrefab;
     private bool isBlock = false;
     private bool isInited;
@@ -81,6 +83,11 @@ public class GlobalMapController : MonoBehaviour
             _connectors.Add(con);
             con.transform.SetParent(ConnectionsContainer);
             con.gameObject.SetActive(false);
+            
+            var pointer = DataBaseController.GetItem(GlobalMapCellPointerPrefab);
+            _pointers.Add(pointer);
+            pointer.transform.SetParent(ConnectionsContainer);
+            pointer.gameObject.SetActive(false);
         }
 //var usedCells = new HashSet<GlobalMapCell>();
 //        if (startCell != null)
@@ -163,6 +170,7 @@ public class GlobalMapController : MonoBehaviour
         _cellsWaysObjects.Clear();
         _allSectros.Clear();
         _connectors.Clear();
+        _pointers.Clear();
         _allCells = new GlobalMapCellObject[0, 0];
         _data.OnWayDelete -= OnWayDelete;
         _data = null;
@@ -346,7 +354,8 @@ public class GlobalMapController : MonoBehaviour
             foreach (var globalMapCell in posibleWays)
             {
                 var canDraw = !(globalMapCell is GlobalMapNothing) && !globalMapCell.IsDestroyed;
-                if (canDraw) DrawConnecttion(myCEll, globalMapCell, ref connectd);
+                if (canDraw)
+                    DrawConnecttion(myCEll, globalMapCell, ref connectd);
             }
     }
 
@@ -361,10 +370,11 @@ public class GlobalMapController : MonoBehaviour
                     var toConnect = cell.Cell == globalMapCell;
                     if (toConnect)
                     {
-                        var c = _connectors[connectd];
+                        var connector = _connectors[connectd];
+                        var pointer = _pointers[connectd];
                         connectd++;
                         //                        Debug.Log("Draw connector " + connectd);
-                        SetConnectionObject(myCEll, cell, c);
+                        SetConnectionObject(myCEll, cell, connector, pointer);
                     }
                 }
             }
@@ -373,13 +383,17 @@ public class GlobalMapController : MonoBehaviour
         {
             var c = _connectors[i];
             c.gameObject.SetActive(false);
-        }
+            var pointer = _pointers[i];
+            pointer.gameObject.SetActive(false);
+        }  
     }
 
     private void SetConnectionObject(GlobalMapCellObject myCEll, GlobalMapCellObject target,
-        GlobalMapCellConnector connector)
+        GlobalMapCellConnector connector,GameObject pointer)
     {
         connector.Init(myCEll, target);
+        pointer.SetActive(true);
+        pointer.transform.position = target.ModifiedPosition;
     }
 
     public void Open()

@@ -75,6 +75,27 @@ public static class Namings
 
     }
 
+    public static string TagByType(ELocTag t,string tag)
+    {
+        switch (t)
+        {
+            case ELocTag.English:
+                if (EngLocalization._locals.TryGetValue(tag, out var tag1))
+                {
+                    return tag1;
+                }
+                break;
+            case ELocTag.Russian:
+                if (RusLocalization._locals.TryGetValue(tag, out var tag2))
+                {
+                    return tag2;
+                }
+                break;
+        }
+        return $"Error:{tag}";
+
+    }   
+
     public static void English()
     {
         PlayerPrefs.SetInt(LANG_KEY, 1);

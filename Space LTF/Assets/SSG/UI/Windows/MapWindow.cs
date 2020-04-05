@@ -471,7 +471,7 @@ public class MapWindow : BaseWindow
     }
     public void OnClickSettings()
     {
-        WindowManager.Instance.OpenSettingsSettings(true);
+        WindowManager.Instance.OpenSettingsSettings(true,false);
     }
 
     private void StartDialog(MessageDialogData dialog, DialogEndsCallback callbackOnEnd)

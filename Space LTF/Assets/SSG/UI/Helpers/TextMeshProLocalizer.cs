@@ -9,8 +9,14 @@ public class TextMeshProLocalizer : MonoBehaviour
 
     void Awake()
     {
-        var txt = GetComponent<TextMeshProUGUI>();
-        txt.text = Namings.Tag(Tag);
+        Refresh();
     }
 
+    public void Refresh()
+    {
+
+        var txt = GetComponent<TextMeshProUGUI>();
+        txt.text = Namings.Tag(Tag);
+
+    }
 }

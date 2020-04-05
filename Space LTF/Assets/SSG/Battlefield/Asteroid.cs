@@ -35,6 +35,14 @@ public class Asteroid : MonoBehaviour
         var zz = MyExtensions.Random(0f, 1f);
         _rotateDir = new Vector3(xx, yy, zz);
     }
+    public virtual void Init(AIAsteroidPredata aiAsteroidPredata)
+    {
+        _aiAsteroidPredata = aiAsteroidPredata;
+        _aiAsteroidPredata.OnMove += OnMove;
+        _aiAsteroidPredata.OnDeath += OnDeathLogic;
+        Rad = aiAsteroidPredata.Rad / AIAsteroidPredata.SHIP_SIZE_COEF;
+
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -152,14 +160,6 @@ public class Asteroid : MonoBehaviour
         Rad = midVal;
     }
 
-    public void Init(AIAsteroidPredata aiAsteroidPredata)
-    {
-        _aiAsteroidPredata = aiAsteroidPredata;
-        _aiAsteroidPredata.OnMove += OnMove;
-        _aiAsteroidPredata.OnDeath += OnDeathLogic;
-        Rad = aiAsteroidPredata.Rad / AIAsteroidPredata.SHIP_SIZE_COEF;
-
-    }
 
     private void OnDeathLogic()
     {

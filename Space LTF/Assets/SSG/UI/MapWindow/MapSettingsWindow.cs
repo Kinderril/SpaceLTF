@@ -13,7 +13,9 @@ public class MapSettingsWindow : MonoBehaviour
     private Action _closeCallback;
     public GameObject ButtonHolder;
     public WindowKeys Keys;
-    public GameObject LangChanged;
+//    public GameObject LangChanged;
+    public VideoTutorialElement BattleTutorial;
+    public GameObject BattleTutorialButton;
 
     public void OnSound()
     {
@@ -31,9 +33,10 @@ public class MapSettingsWindow : MonoBehaviour
         CamerasController.Instance.FXAASwitch();
     }
 
-    public void Init(bool withButtons)
+    public void Init(bool withButtons,bool isBattle)
     {
-        LangChanged.gameObject.SetActive(false);
+        BattleTutorialButton.gameObject.SetActive(isBattle);
+//        LangChanged.gameObject.SetActive(false);
         ButtonHolder.SetActive(withButtons);
         Keys.gameObject.SetActive(false);
         NoMouseMoveSoundToggle.isOn = (CamerasController.Instance.IsNoMouseMove);
@@ -59,17 +62,54 @@ public class MapSettingsWindow : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    public void OnBattleTutorialClick()
+    {
+        OnClickClose();
+        BattleTutorial.Open();
+    }
+
+
+    void ChangeConfirm(Action callback,ELocTag tag)
+    {
+        WindowManager.Instance.ConfirmWindow.Init(callback, null, Namings.TagByType(tag,"WantChangeLang"));
+    }
+
+
     public void OnClickEng()
     {
         if (EngToggle.isOn)
-            Namings.English();
-        LangChanged.gameObject.SetActive(true);
+        {
+            ChangeConfirm(() =>
+            {
+                Namings.English();
+                RefreshAllTags();
+            },ELocTag.English);
+        }
+
+//        LangChanged.gameObject.SetActive(true);
     }
     public void OnClickRus()
     {
         if (RusToggle.isOn)
-            Namings.Rus();
-        LangChanged.gameObject.SetActive(true);
+        {
+            ChangeConfirm(() =>
+            {
+                Namings.Rus();
+                RefreshAllTags();
+            },ELocTag.Russian);
+
+        }
+
+//        LangChanged.gameObject.SetActive(true);
+    }
+
+    private void RefreshAllTags()
+    {
+        var tags = GameObject.FindObjectsOfType<TextMeshProLocalizer>();
+        foreach (var textMeshProLocalizer in tags)
+        {
+            textMeshProLocalizer.Refresh();
+        }
     }
 
     public void OnClickClose()

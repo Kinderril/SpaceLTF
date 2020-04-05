@@ -280,11 +280,18 @@ public class ShipBase : MovingObject
         int cnt = MyExtensions.Random(2, 5);
         var p = gameObject.transform.position;
         float partOffset = .3f;
+        float velocity  = .6f;
         for (int i = 0; i < cnt; i++)
         {
             var partShip = pool.GetPartShip();
             partShip.Init();
-            var xx = p.x + MyExtensions.Random(-partOffset, partOffset);
+
+            var xxV = MyExtensions.Random(-velocity, velocity);
+            var zzV = MyExtensions.Random(-velocity, velocity);
+
+            partShip.Rigidbody.velocity = new Vector3(xxV,0,zzV);
+
+           var xx = p.x + MyExtensions.Random(-partOffset, partOffset);
             var zz = p.z + MyExtensions.Random(-partOffset, partOffset);
             partShip.transform.position = new Vector3(xx, p.y, zz);
         }

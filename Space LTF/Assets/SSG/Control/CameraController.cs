@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour
 {
     public Transform GameCameraHolder;
     public Transform GameCameraHolderY;
+    public Transform RotateHolder;
     private float SpeedXZ = 0.5f;
     private float SpeedY = 1.5f;
     private float SpeedYByKey = 0.3f;
@@ -30,10 +31,19 @@ public class CameraController : MonoBehaviour
     }
 
 
+    public void ReturnCamera()
+    {
+
+        Camera.transform.SetParent(RotateHolder, false);
+        Camera.transform.localRotation = Quaternion.identity;
+        Camera.transform.localPosition = Vector3.zero;
+    }
 
     public void Enable(bool val)
     {
         _isEnable = val;
+        if (_isEnable)
+            ReturnCamera();
     }
 
     void Update()

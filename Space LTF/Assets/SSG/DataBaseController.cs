@@ -20,6 +20,7 @@ public class DataBaseController : Singleton<DataBaseController>
     public BackgroundsDatabase Backgrounds;
     public Pool Pool;
     public Transform BulletContainer;
+    public Transform AsteroidContainer;
     public SelectedElement SelectedElement;
     public GameObject PriorityTarget;
     public GameObject BaitPriorityTarget;
@@ -30,7 +31,7 @@ public class DataBaseController : Singleton<DataBaseController>
     {
         DataStructPrefabs.Init();
         PoolRenderTextures.Init();
-        Pool = new Pool(Instance, BulletContainer, CanvasContainer);
+        Pool = new Pool(Instance, BulletContainer, CanvasContainer, AsteroidContainer);
         foreach (var bullet in DataStructPrefabs.Bullets)
         {
             Pool.RegisterBullet(bullet);

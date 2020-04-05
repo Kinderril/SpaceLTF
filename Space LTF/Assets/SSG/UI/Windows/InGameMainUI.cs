@@ -12,12 +12,13 @@ public class InGameMainUI : BaseWindow
     //    public HoldClearCoinUI HoldClearCoinUI;
     public BattleCoinUI BattleCoinUI;
     private ShipBase _selectedShip;
-    private bool _paused = false;
+//    private bool _paused = false;
     private SpellInGame _spellSelected;
     public Transform ShipsInfoContainer;
     public ArrowTarget ArrowTarget;
+    public ShipPursuitCameraHolder ShipPursuitCameraHolder;
     public Transform FlyingInfosContainer;
-    public Camera MainCamera { get; set; }
+    public CameraController MainCamera { get; set; }
     public Toggle debugToggle;
     public Commander MyCommander { get; private set; }
     private BattleController _battle;
@@ -65,6 +66,8 @@ public class InGameMainUI : BaseWindow
                 ShipModulsUI.Init(value);
                 _selectedShip.Select(true);
                 ArrowTarget.SetOwner(_selectedShip);
+                ShipPursuitCameraHolder.Init(value,MainCamera.RotateHolder.position,ShipPursuitDeath);
+//                LinkCamera();
             }
             else
             {
@@ -74,6 +77,18 @@ public class InGameMainUI : BaseWindow
 
             //            UpdateModuls();
         }
+    }
+
+    private void LinkCamera()
+    {
+        MainCamera.Camera.transform.SetParent(ShipPursuitCameraHolder.transform);
+        MainCamera.Camera.transform.localPosition = Vector3.zero;
+        MainCamera.Camera.transform.localRotation = Quaternion.identity;
+    }
+
+    private void ShipPursuitDeath()
+    {
+        MainCamera.ReturnCamera();
     }
 
     // public void CanFastEnd()
@@ -113,7 +128,7 @@ public class InGameMainUI : BaseWindow
         DebugUiControl.Init();
         //        HoldClearCoinUI.Init(HoldComplete);
         CreditController.Init(MyCommander);
-        MainCamera = CamerasController.Instance.GameCamera.Camera;
+        MainCamera = CamerasController.Instance.GameCamera;
         GreenTeamInfoContainer.Init(battle.GreenCommander, ActionShipSelected);
         RedTeamInfoContainer.Init(battle.RedCommander, ActionShipSelected);
         int weaponsIndex = 0;
@@ -180,8 +195,13 @@ public class InGameMainUI : BaseWindow
 
     public void OnClickSettings()
     {
-        OnPause();
-        WindowManager.Instance.OpenSettingsSettings(true, OnPause);
+        BattleController.Instance.PauseData.Pause();
+
+        void UnPause()
+        {
+            BattleController.Instance.PauseData.Unpase(1f);
+        }
+        WindowManager.Instance.OpenSettingsSettings(true, true, UnPause);
     }
 
     public void ActionShipSelected(ShipBase obj)
@@ -317,7 +337,7 @@ public class InGameMainUI : BaseWindow
 
         if (_spellSelected != null)
         {
-            if (!_paused)
+            if (!BattleController.Instance.PauseData.IsPause)
             {
                 if (left)
                 {
@@ -409,6 +429,7 @@ public class InGameMainUI : BaseWindow
         {
             _spellSelected.EndShowCast();
         }
+        MainCamera.ReturnCamera();
         //        WindowKeys.gameObject.SetActive(false);
         FlyingNumbersController.Dispose();
         UnselectSpell();
@@ -425,14 +446,6 @@ public class InGameMainUI : BaseWindow
         SelectedShip = MyCommander.GetNextShip(SelectedShip);
     }
 
-    public void OnPause()
-    {
-        _paused = !_paused;
-        Time.timeScale = _paused ? 0f : 1f;
-        //        MyCommander.GetNextShip(SelectedShip);
-    }
-
-
     public void OnClickDebugShip()
     {
         DebugUiControl.Enable(debugToggle.isOn);
@@ -443,6 +456,7 @@ public class InGameMainUI : BaseWindow
         GreenTeamInfoContainer.Dispose();
         RedTeamInfoContainer.Dispose();
         BattleCoinUI.Dispose();
+        ShipPursuitCameraHolder.Dispose();
         ArrowTarget.Disable();
         PreFinish.Activate(_battle, endBattleType);
     }

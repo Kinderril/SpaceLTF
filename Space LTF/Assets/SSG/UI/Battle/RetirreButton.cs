@@ -56,8 +56,15 @@ public class RetirreButton : MonoBehaviour
         if (!IsReady)
         {
             return;
+            
         }
-        _mainUI.OnPause();
+        BattleController.Instance.PauseData.Pause();
+
+        void Unpause()
+        {
+            BattleController.Instance.PauseData.Unpase(1f);
+        }
+
         WindowManager.Instance.ConfirmWindow.Init(() =>
         {
             StartCooldown(2f);
@@ -76,8 +83,8 @@ public class RetirreButton : MonoBehaviour
                 }
             }
 
-            _mainUI.OnPause();
-        }, _mainUI.OnPause,
+            Unpause();
+        }, Unpause,
             Namings.Format(Namings.Tag("DoWantRetire")));
     }
 }

@@ -417,10 +417,14 @@ public static class EngLocalization
         {"AttackHalfLoop", "Trick attack"},
         {"Evade", "Evade"},
         {"Level", "Level"},
+        {"Start game", "Start game"},
+        {"Randomize", "Randomize"},
+        {"Resume", "Resume"},
         {"NotEnoughtBattries", "Battries are not ready!"},
         {"reloadBoost", "Trick reload time:{0}"},
         {"PointsToOpen", "Points to unlock start options:"},
         {"SpellMaxLevel", "Max level reached: {0}"},
+        {"WantChangeLang", "Restart game to update localization."},
 
 
         {"descWinner", "Win at 1 battle"},
@@ -803,6 +807,21 @@ public static class EngLocalization
         {"endBattle", "Choose a way to split bonus credits.\n If you want to level up battle ships choose \"to pilots\".\nIf you want to buy weapons or upgrade something choose \"to main\" "},
 
         {"TutorCloseForever", "Do not show this tip again"},
+
+        {"Tutorial", "Tutorial"},
+
+        {"TutorMoveGlobal", "To move camera use mouse or WSAD"},
+        {"TutorHomeButton", "To find your fleet press home button"},
+        {"TutorDifferentTypesCells", "Different types of cells contains different events.\nYou can move only to closest cells.\nChoose target wisely"},
+        {"TutorDialog", "At dialogs you can choose different ways."},
+
+        {"TutorMove", "Click right mouse button to move commander ship.\nDo it to find good position for shooting."},
+        {"TutorRecharge", "Help your ships with recharge shield.\nIf one of your ships are damaged - help him."},
+        {"TutorMachineGun", "Use machine gun to destroy enemies.\nIf you have good chances to damage enemy use it."},
+        {"TutorEngineLock", "Use engine locker to disable enemies.\nUse it to help battle ships hit enemies."},
+        {"TutorChangeTactics", "Change battle ship tactics.\nIf your ship if better against special types of enemy you can change priority targets of it."},
+
+        {"ConfirmCloseTutor", "You closing tutorial.\nIf you want repeat, you can find it at menu."},
         // {"TutorEnemyFleet", "Enemies fleet"},
         // {"TutorEndBattle", "You win battle. Now you must choose what is better now. Increase ship levels, or take credits to other thhings"},
         // {"TutorMyFleet", "Your fleet. You can't control it directly.\nOnly choose tactics."},

@@ -4,6 +4,10 @@
     public LateBattleMapTutorial battleStartLate;
     public BattleMapTutorial battleStart3;
     public BattleMapTutorial battleStartEnemy;
+
+    public BattleTutorialVideo VideoBattleTutorial;
+    public GlobalMapTutorialVideo GlobalMapTutorialVideo;
+
     public LevelUpMapTutorial mapUpgrade;
     public StartMapTutorial mapMain;
     public StartMapTutorial mapMain2;
@@ -17,24 +21,30 @@
     {
         if (EnableTutor)
         {
+            #region DISABLED
+
+            if (battleStart != null)
+                battleStart.gameObject.SetActive(false);
+            if (battleStartLate != null)
+                battleStartLate.gameObject.SetActive(false);
+            if (battleStart3 != null)
+                battleStart3.gameObject.SetActive(false);
+            if (battleStartEnemy != null)
+                battleStartEnemy.gameObject.SetActive(false);
+            if (mapMain != null)
+                mapMain.gameObject.SetActive(false);
+            if (mapMain2 != null)
+                mapMain2.gameObject.SetActive(false);
+
+            #endregion
+
+            GlobalMapTutorialVideo.Init();
+            VideoBattleTutorial.Init();
+
             if (preBattle != null)
                 preBattle.Init();
             if (endBattle != null)
                 endBattle.Init();
-            if (battleStart != null)
-                battleStart.Init();
-            if (battleStartLate != null)
-                battleStartLate.Init();
-            if (battleStart3 != null)
-                battleStart3.Init();
-            if (battleStartEnemy != null)
-                battleStartEnemy.Init();
-
-            if (mapMain != null)
-                mapMain.Init();
-            if (mapMain2 != null)
-                mapMain2.Init();
-
             if (mapUpgrade != null)
                 mapUpgrade.Init();
             if (mapInventory != null)

@@ -44,7 +44,7 @@ public class Player
         MapData = new PlayerMapData();
         MapData.Init(data, ByStepDamage);
         MapData.GalaxyData.GalaxyEnemiesArmyController.InitQuests(QuestData);
-        Army.SetArmy(CreateStartArmy(data.shipConfig, data.posibleStartWeapons, data.posibleSpell));
+        Army.SetArmy(CreateStartArmy(data.shipConfig, data.posibleStartWeapons));
         RepairData.Init(Army, MapData, Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
         ReputationData.AddReputation(data.shipConfig, Library.START_REPUTATION);
@@ -144,8 +144,7 @@ public class Player
 
     }
 
-    private List<StartShipPilotData> CreateStartArmy(ShipConfig config, List<WeaponType> posibleStartWeapons,
-        List<SpellType> posibleSpell)
+    private List<StartShipPilotData> CreateStartArmy(ShipConfig config, List<WeaponType> posibleStartWeapons)
     {
         ArmyCreatorLogs logs = new ArmyCreatorLogs();
         float r = 1000;
@@ -160,19 +159,56 @@ public class Player
         r += Library.BASE_SHIP_VALUE;
         var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), t2, config, this, logs);
 
+//        if (MainController.Instance.Statistics.CollectedPoints < 5)
+        if (true)
+        {
+            NewGameAddSpellsBasic(bShip);
+        }
+        else
+        {
+            NewGameAddSpellsRandom(bShip);
+        }
+
+        AddWeaponsToShips(ref r, ship1, posibleStartWeapons);
+        AddWeaponsToShips(ref r, ship2, posibleStartWeapons);
+
+        ship1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
+        ship2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
+
+        List<StartShipPilotData> army = new List<StartShipPilotData>();
+        army.Add(bShip);
+        army.Add(ship1);
+        army.Add(ship2);
+        MainShip = bShip;
+        return army;
+    }
+
+    private void NewGameAddSpellsBasic(StartShipPilotData bShip)
+    {
         int simpleIndex;
-        //        foreach (var spellType in posibleSpell)
-        //        {
-        //            if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        //            {
-        //                var m1 = Library.CreateSpell(spellType);
-        //                bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        //            }
-        //        }
+        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        {
+            var m1 = Library.CreateSpell(SpellType.rechargeShield);
+            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+        }
+        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        {
+            var m1 = Library.CreateSpell(SpellType.engineLock);
+            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+        }
+        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        {
+            var m1 = Library.CreateSpell(SpellType.machineGun);
+            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+        }
+    }
+    private void NewGameAddSpellsRandom(StartShipPilotData bShip)
+    {
         List<SpellType> healSpells = new List<SpellType>() { SpellType.rechargeShield, SpellType.repairDrones };
         List<SpellType> controlSpells = new List<SpellType>() { SpellType.engineLock, SpellType.hookShot, SpellType.throwAround, SpellType.shildDamage };
         List<SpellType> damageSpells = new List<SpellType>() { SpellType.artilleryPeriod, SpellType.distShot, SpellType.lineShot, SpellType.machineGun, SpellType.mineField };
 
+        int simpleIndex;
         if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
         {
             var m1 = Library.CreateSpell(healSpells.RandomElement());
@@ -189,18 +225,6 @@ public class Player
             bShip.Ship.TryAddSpellModul(m1, simpleIndex);
         }
 
-        AddWeaponsToShips(ref r, ship1, posibleStartWeapons);
-        AddWeaponsToShips(ref r, ship2, posibleStartWeapons);
-
-        ship1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
-        ship2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
-
-        List<StartShipPilotData> army = new List<StartShipPilotData>();
-        army.Add(bShip);
-        army.Add(ship1);
-        army.Add(ship2);
-        MainShip = bShip;
-        return army;
     }
 
     private void AddWeaponsToShips(ref float r, StartShipPilotData ship, List<WeaponType> list)

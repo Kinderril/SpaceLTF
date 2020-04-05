@@ -429,7 +429,32 @@ ModelImporter:
     2186277476908879412: ImportLogs
     6000828045688606266: Camera01
     6000828045688606268: Camera02
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 3 - Default
+    second: {fileID: 2100000, guid: 09777393e064e514bb4d109435120b7d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 5 - Default
+    second: {fileID: 2100000, guid: c2d7c4e3c1517cd4a841ad92f0a63dfc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal_Wall2
+    second: {fileID: 2100000, guid: 6b6cf115d61155f428f4579e1a6e18b9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal_Wall9
+    second: {fileID: 2100000, guid: 119a82863a2e1af40954fabcc29ea4a3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: e950117b3be34654dba7664111d02828, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

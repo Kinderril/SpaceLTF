@@ -21,7 +21,7 @@ public class PauseData
         }
     }
 
-    private bool IsPause = false;
+    public bool IsPause { get; private set; }
 
     public void ChangeCoreSpeed(float coreSpeed)
     {

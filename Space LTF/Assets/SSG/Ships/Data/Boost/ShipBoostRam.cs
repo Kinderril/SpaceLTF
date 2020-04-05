@@ -31,7 +31,7 @@ public class ShipBoostRam : ShipBoostAbstract
     public ShipBoostRam(ShipBase owner, float turnSpeed, Action<bool> activateCallback, Action endCallback, Action<Vector3> setAddMoveCallback)
         : base(owner, owner.RamBoostEffect, activateCallback, endCallback, setAddMoveCallback)
     {
-        // _minDistToAttack = owner.WeaponsController.MaxAttackRadius * 1.3f;
+
     }
     public void Activate()
     {
@@ -39,7 +39,7 @@ public class ShipBoostRam : ShipBoostAbstract
         {
             return;
         }
-        Debug.LogError($"Ram activated {_owner.Id}");
+//        Debug.LogError($"Ram activated {_owner.Id}");
         _damagePower = _owner.ShipParameters.MaxHealth * DAMAGE_HEALTH_COEF;
         _hitted.Clear();
         _maxSpeed = _owner.MaxSpeed();
@@ -54,10 +54,6 @@ public class ShipBoostRam : ShipBoostAbstract
     private void ActivateTime()
     {
         _period = Time.time + WORK_PERIOD;
-        // _period = 0f;
-        //        _endLastPeriod = Time.time + WORK_PERIOD + START_PERIOD + END_PERIOD;
-        //        _startLastPeriod = Time.time + WORK_PERIOD + START_PERIOD;
-        //        _endStartPeriod = Time.time + START_PERIOD;
     }
 
     public bool ShallStartUse(IShipData target)
@@ -87,25 +83,12 @@ public class ShipBoostRam : ShipBoostAbstract
         {
             return;
         }
-
-//        if (_target.IsDead || _target == null)
-//        {
-//            Stop();
-//            return;
-//        }
-
-        float nextSpeed;
         if (Time.time > _period)
         {
             Stop();
             return;
         }
         CheckEnemies();
-        //
-        //        nextSpeed = nextSpeed * COEF_SPEED;
-        //        _lastMoveSpeedCoef = _lastMoveSpeedCoef * c1 + nextSpeed * c2;
-        //        var ownerCurSpeed = _lookDirOnStart * _owner.CurSpeed * Time.deltaTime * _lastMoveSpeedCoef;
-        //        SetAddMoveCallback(ownerCurSpeed);
     }
 
     private void CheckEnemies()
@@ -149,7 +132,7 @@ public class ShipBoostRam : ShipBoostAbstract
     private void Stop()
     {
         IsActive = false;
-        Debug.LogError($"Ram stop {_owner.Id}");
+//        Debug.LogError($"Ram stop {_owner.Id}");
         SetAddMoveCallback(Vector3.zero);
     }
 }

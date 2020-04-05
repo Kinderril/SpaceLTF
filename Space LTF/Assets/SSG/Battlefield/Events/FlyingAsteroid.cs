@@ -12,8 +12,9 @@ public class FlyingAsteroid : Asteroid
     private float _sDistToDestroy;
 
 
-    public void Init(Action<FlyingAsteroid> callbackDeath, Vector3 center, Vector3 rad, float distToDestroy)
+    public  void Init(Action<FlyingAsteroid> callbackDeath, Vector3 center, Vector3 rad, float distToDestroy)
     {
+        base.Init(new AIAsteroidPredata(center));
         _sDistToDestroy = distToDestroy * distToDestroy;
         _callbackDeath = callbackDeath;
         var speed = MyExtensions.Random(MinSpeed, MaxSpeed);

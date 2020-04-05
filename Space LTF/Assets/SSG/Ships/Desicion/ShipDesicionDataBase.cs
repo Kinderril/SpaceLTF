@@ -42,18 +42,21 @@ public abstract class ShipDesicionDataBase : IShipDesicion
     {
         this.SideAttack = SideAttack;
         OnChagePriority?.Invoke();
+        _owner.EndAction();
     }
 
     public void ChangePriority(EGlobalTactics globalTactics)
     {
         this.GlobalTactics = globalTactics;
         OnChagePriority?.Invoke();
+        _owner.EndAction();
     }
 
     public void ChangePriority(ECommanderPriority1 CommanderPriority1)
     {
         this.CommanderPriority1 = CommanderPriority1;
         OnChagePriority?.Invoke();
+        _owner.EndAction();
     }
 
     public event Action OnChagePriority;
@@ -499,7 +502,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                     }
                     break;
                 case ECommanderPriority1.Fast:
-                    curHp = target.Key.ShipParameters.MaxSpeed + target.Key.ShipParameters.TurnSpeed;
+                    curHp = target.Key.ShipParameters.MaxSpeed + target.Key.ShipParameters.TurnSpeed * .008f;
                     if (curHp > curPercent)
                     {
                         curPercent = curHp;
@@ -507,7 +510,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                     }
                     break;
                 case ECommanderPriority1.Slow:
-                    curHp = target.Key.ShipParameters.MaxSpeed + target.Key.ShipParameters.TurnSpeed;
+                    curHp = target.Key.ShipParameters.MaxSpeed + target.Key.ShipParameters.TurnSpeed * .008f;
                     if (curHp < curPercent)
                     {
                         curPercent = curHp;

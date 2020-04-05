@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SideShipInfo : MonoBehaviour
 {
     public const string PREFS_KEY = "SideShipInfo{0}";
+    private const float TACTIC_CHANGE_PERIOD = 3f;
 
     public ShipSlidersInfo ShipSlidersInfo;
     //    public Image ActionIcon;
@@ -30,11 +31,17 @@ public class SideShipInfo : MonoBehaviour
     public Image TacticPriorityIcon;
     public Image TacticSideIcon;
     public Image GlobalTacticsIcon;
+    public CanvasGroup TacticCanvas;
+//    private bool _isTaticReady;
+
+
     public PriorityTooltipInfo PriorityTooltipInfo;
     public SideAttackTooltipInfo SideAttackTooltipInfo;
     public GlobaltacticsTooltipInfo GlobaltacticsTooltipInfo;
     public Slider BoostSlider;
-
+    private float _nextPosibleChangeTactics;
+    public Image TacticDelayLoad;
+                                        
     private ShipBase _ship;
     private Action<ShipBase> _shipSelectedAction;
     private Action<SideShipInfo> _toggleCallback;
@@ -44,6 +51,7 @@ public class SideShipInfo : MonoBehaviour
 
     public void Init(ShipBase ship, Action<ShipBase> shipSelectedAction, Action<SideShipInfo> toggleCallback, bool shallOpen)
     {
+//        _isTaticReady = true;
         FireDamage.gameObject.SetActive(false);
         ShiedDamage.gameObject.SetActive(false);
         // WeaponsDamage.gameObject.SetActive(false);
@@ -69,11 +77,14 @@ public class SideShipInfo : MonoBehaviour
         ToggleOpen.isOn = shallOpen;
         UpdateToggle(shallOpen);
         UpdateTacticField();
+        TacticCanvas.interactable = true;
 
     }
 
     private void OnChagePriority()
     {
+        _nextPosibleChangeTactics = Time.time + TACTIC_CHANGE_PERIOD;
+        TacticCanvas.interactable = false;
         UpdateTacticField();
     }
 
@@ -87,6 +98,24 @@ public class SideShipInfo : MonoBehaviour
         else
         {
             BoostSlider.value = _ship.Boost.LoadPercent;
+        }
+
+        if (!TacticCanvas.interactable)
+        {
+            if (!TacticDelayLoad.gameObject.activeSelf)
+                TacticDelayLoad.gameObject.SetActive(true);
+
+            var pecnet = (_nextPosibleChangeTactics - Time.time) / TACTIC_CHANGE_PERIOD;
+            if (pecnet <= 0)
+            {
+                TacticCanvas.interactable = true;
+            }
+            TacticDelayLoad.fillAmount = Mathf.Clamp01(pecnet);
+        }
+        else
+        {
+            if (TacticDelayLoad.gameObject.activeSelf)
+                TacticDelayLoad.gameObject.SetActive(false);
         }
     }
     private void UpdateTacticField()
@@ -153,6 +182,7 @@ public class SideShipInfo : MonoBehaviour
         //        }
 
     }
+
 
     public void ToggleViaCode()
     {

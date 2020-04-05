@@ -16,16 +16,14 @@ public class TutorialElement : MonoBehaviour
     {
         gameObject.SetActive(false);
         _isCompleted = PlayerPrefs.GetInt(Id, 0) == 1;
-        Field.text = LocalizationTutorial.GetKey(Id);
-        ShallCloseForever.text = Namings.Tag("TutorCloseForever");
     }
 
     protected void OpenIfNotCompleted()
     {
         if (!_isCompleted)
         {
-            //            Debug.LogError($"Open tutor:{gameObject.name}  _isCompleted:{_isCompleted}");
-            //            WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = false;
+            Field.text = LocalizationTutorial.GetKey(Id);
+            ShallCloseForever.text = Namings.Tag("TutorCloseForever");
             gameObject.SetActive(true);
             foreach (var element in elements)
             {
@@ -35,8 +33,6 @@ public class TutorialElement : MonoBehaviour
     }
     public void OnClose()
     {
-        //        Debug.LogError($"Close tutor:{gameObject.name}");
-        //        WindowManager.Instance.CurrentWindow.CanvasGroup.interactable = true;
         gameObject.SetActive(false);
         subClose();
         if (DontShowNoreToggle.isOn)

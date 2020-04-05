@@ -28,10 +28,12 @@ public class Pool
 
     private DataBaseController dataBaseController;
     private Transform _bulletContainer;
+    private Transform _asteroidContainer;
     private Transform _canvasContainer;
 
-    public Pool(DataBaseController dataBaseController, Transform bulletContainer, Transform canvasContainer)
+    public Pool(DataBaseController dataBaseController, Transform bulletContainer, Transform canvasContainer, Transform asteroidContainer)
     {
+        _asteroidContainer = asteroidContainer;
         _bulletContainer = bulletContainer;
         _canvasContainer = canvasContainer;
         //        _bulletContainer = Map.Instance.bulletContainer;
@@ -58,7 +60,7 @@ public class Pool
             {
                 var element = DataBaseController.GetItem(dataStructAsteroidPart);
                 _asteroidPartsPool.Add(element);
-                element.SetBaseParent(_bulletContainer);
+                element.SetBaseParent(_asteroidContainer);
                 element.EndUse();
             }
         }
@@ -69,7 +71,7 @@ public class Pool
             {
                 var element = DataBaseController.GetItem(part);
                 _asteroidPartsPool.Add(element);
-                element.SetBaseParent(_bulletContainer);
+                element.SetBaseParent(_asteroidContainer);
                 element.EndUse();
             }
         }
@@ -150,7 +152,7 @@ public class Pool
         }
         return partAsteroid;
     }
-    public PoolElement GetPartShip()
+    public PoolElementRigitBody GetPartShip()
     {
         var pool = _shipPartsPool;
         var partShip = pool.FirstOrDefault(x => !x.IsUsing);
@@ -159,7 +161,7 @@ public class Pool
             partShip = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.DestroyedShipParts.RandomElement());
             pool.Add(partShip);
         }
-        return partShip;
+        return partShip as PoolElementRigitBody;
     }
 
     public BaseEffectAbsorber GetEffect(BaseEffectAbsorber example)
