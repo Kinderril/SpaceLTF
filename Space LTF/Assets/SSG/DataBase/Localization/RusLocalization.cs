@@ -419,6 +419,7 @@ public static class RusLocalization
         {"reloadBoost", "Время перезарядки трюков:{0}"},
         {"PointsToOpen", "Очков для открытия стартовых опций:"},
         {"SpellMaxLevel", "Максимальный уровень: {0}"},
+        {"NoMouseMove", "Мышь не двигает камеру."},
 
         {"descWinner", "Выиграйте 1 битву"},
         {"descCaptain", "Выиграйте 10 битв"},
@@ -465,6 +466,7 @@ public static class RusLocalization
         {"ReinforcmentsCalled", "Подкрепление недоступно"},
         {"Retreat", "Сбежать"},
 
+        {"MaxArmyCount", "Размер флота:{0}/{1}"},
         {"Health", "Корпус"},
         {"Shield", "Щит"},
         {"TurnSpeed", "Поворот"},
@@ -473,6 +475,7 @@ public static class RusLocalization
         {"Continue", "Продолжить"},
         {"Exit", "Выход"},
         {"ScoutsFind", "Разведчики нашли что то!"},
+        {"Start point", "Начало"},
 
         {"Laser", "Лазер"},
         {"Rocket", "Ракеты"},
@@ -617,6 +620,7 @@ public static class RusLocalization
         {"dialog_changeitem_ok","Хорошо. Меняемся." },
         {"dialog_changeitem_no","Нет, спасибо." },
         {"dialog_changeitem_nothing","У вас нет ничего, что было бы им интересно" },
+        {"dialog_sectorClear","Здесь пусто. Возможно вам стоит вернуться позже." },
 
         {"dialog_armySectorEvent","Событие:{0}\n" },
         {"dialog_armyFrendly", "Этот флот выглядит дружелюбно.\n {0}"},

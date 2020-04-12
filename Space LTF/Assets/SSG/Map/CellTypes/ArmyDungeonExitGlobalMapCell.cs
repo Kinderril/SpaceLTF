@@ -35,8 +35,8 @@ public class ArmyDungeonExitGlobalMapCell : ArmyGlobalMapCell
     protected override MessageDialogData GetDialog()
     {
         var myPlaer = MainController.Instance.MainPlayer;
-        var status = myPlaer.ReputationData.GetStatus(ConfigOwner);
-        bool isFriends = status == EReputationStatus.friend;
+//        var status = myPlaer.ReputationData.GetStatus(ConfigOwner);
+//        bool isFriends = status == EReputationStatus.friend;
 
         var ans = new List<AnswerDialogData>();
         var scoutData = GetArmy().ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);

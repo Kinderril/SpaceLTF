@@ -59,7 +59,7 @@ public static class EngLocalization
         {"StatisticLastResult", "Last result:"},
         {"Sacrifice", "Sacrifice ship {0} the {1} of {2}"},
 
-
+        {"MaxArmyCount", "Fleet count:{0}/{1}"},
         {"EndGameDays", "Days:{0}"},
         {"BattleWinsStat", "Wins:{0}"},
         {"OpenWeaponsEndGame","New weapons for start open {0} and {1}"},
@@ -81,7 +81,7 @@ public static class EngLocalization
         {"EMI mine", "EMI mine"},
         {"Power mine", "Power mine"},
         {"Fire mine", "Fire mine"},
-        {"Front shield", "Meag-shield"},
+        {"Front shield", "Mega-shield"},
         {"Body armor", "Hull armor"},
         {"Teleportation", "Teleportation"},
         {"Laser power", "Laser power"},
@@ -425,6 +425,7 @@ public static class EngLocalization
         {"PointsToOpen", "Points to unlock start options:"},
         {"SpellMaxLevel", "Max level reached: {0}"},
         {"WantChangeLang", "Restart game to update localization."},
+        {"NoMouseMove", "Camera have no move by mouse."},
 
 
         {"descWinner", "Win at 1 battle"},
@@ -473,6 +474,7 @@ public static class EngLocalization
         {"Continue", "Continue"},
         {"Exit", "Exit"},
         {"ScoutsFind", "Scouts find something!"},
+        {"Start point", "Start point"},
 
         {"ReinforcmentsCallNo", "No reinforcements"},
         {"ReinforcmentsCallConfig", "Call reinforcements:{0}"},
@@ -634,6 +636,7 @@ public static class EngLocalization
         {"dialog_armyRunFail", "Fail! Now you must fight."},
         {"dialog_armyBuyoutComplete","Buyout complete. You lose {0} credits." },
         {"dialog_Attack","Attack" },
+        {"dialog_sectorClear","Nobody here. maybe you should return here later" },
 
         {"dialog_coreAttack","Attack." },
         {"dialog_coreTargetProtect","Target is under protection." },
@@ -762,7 +765,7 @@ public static class EngLocalization
         {"dialog_dungeonExitFinalWin","This military base completly destoyed"},
         {"dialog_dungeonExitGo","Grab all items and go"},
         {"dialog_dungeonExitFinalBattle","This is main militaly base at this sector"},
-        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there? This sector have only one exit on the other side. You can find here some unique items."},
+        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there?\nThis sector have only one exit on the other side. You can find here some unique items."},
         {"dialog_dungeogArmyFriendGoIn","Ask your friend to go in."},
 
         {"dialog_Trader","Trader"},

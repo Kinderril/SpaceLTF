@@ -96,7 +96,7 @@ public class BattleController : Singleton<BattleController>
         CanFastEnd = false;
         State = BattleState.preStart;
         WindowManager.Instance.OpenWindow(MainState.play);
-        Battlefield.BackgroundSpace.Init();
+//        Battlefield.BackgroundSpace.Init();
 
         CellController = Battlefield.CellController;
 
@@ -131,6 +131,7 @@ public class BattleController : Singleton<BattleController>
         GroundParticles.Init(CellController.Data.CenterZone, 10);
         var posTeam1 = d.StartPosition1;
         var posTeam2 = d.StartPosition2;
+        Battlefield.BackgroundSpace.Init(CellController.Data.CenterZone);
 
         List<Vector3> positionsToClear = new List<Vector3>();
         var shipsA = GreenCommander.InitShips(posTeam1, posTeam2, positionsToClear);

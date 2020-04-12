@@ -1,11 +1,26 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+public struct ResolutionData
+{
+    public string Name;
+    public int Width;
+    public int Height;
 
+    public ResolutionData(int w, int h)
+    {
+        Width = w;
+        Height = h;
+        Name = $"{w.ToString()}x{h.ToString()}";
+    }
+
+}
 
 public class CamerasController : Singleton<CamerasController>
 {
     private const string KEY_FXAA = "KEY_FXAA";
     private const string KEY_SOUND = "SoundKey";
     private const string KEY_NO_MOUSE_MOVE = "KEY_NO_MOUSE_MOVE";
+    private const string KEY_RESOLUTION = "KEY_RESOLUTION";
     public CameraController GameCamera;
     public BackgroundCamera BackgroundCamera;
     public CameraController GlobalMapCamera;
@@ -14,6 +29,15 @@ public class CamerasController : Singleton<CamerasController>
     private bool _noMouseMove = false;
     private bool _isAudioEnabled = true;
     public AudioSourceMusicControl MusicControl;
+    public List<ResolutionData>  _resolutionDatas = new List<ResolutionData>()
+    {
+        new ResolutionData(1280,800),
+        new ResolutionData(1680,1050),
+        new ResolutionData(1920,1200),
+        new ResolutionData(1280,720),
+        new ResolutionData(1600,900),
+        new ResolutionData(1920,1080),
+    };
     public Camera UICamera;
 
     public Vector3 keybordDir;
@@ -23,7 +47,7 @@ public class CamerasController : Singleton<CamerasController>
     public bool IsNoMouseMove => _noMouseMove;
     public bool IsAudioEnable => _isAudioEnabled;
     private bool _fxaaEnable;
-
+    public int CurIndexResolution { get; private set; }
     public bool FxaaEnable => _fxaaEnable;
 
     void Awake()
@@ -278,6 +302,7 @@ public class CamerasController : Singleton<CamerasController>
 
     public void StartCheck()
     {
+        StartCheckResolution();
         StartCheckAA();
         CheckSoundOnStart();
         CheckNoMouseMoveOnStart();
@@ -301,7 +326,32 @@ public class CamerasController : Singleton<CamerasController>
         var isEnableFxaa = PlayerPrefs.GetInt(KEY_FXAA, 0) == 1;
         _fxaaEnable = isEnableFxaa;
         CheckAntiAlysing(_fxaaEnable);
+    }    
+    public void StartCheckResolution()
+    {
+        var resoulutionIndex = PlayerPrefs.GetInt(KEY_RESOLUTION, 0);
+        ChangeResolutionToIndex(resoulutionIndex);
     }
+
+    public void ChangeResolutionToIndex(int index)
+    {
+        if (index < _resolutionDatas.Count)
+        {
+            var curRes = _resolutionDatas[index];
+            var c = Screen.currentResolution;
+            var lastMode = Screen.fullScreenMode;
+            if (c.width != curRes.Width || c.height != curRes.Height)
+            {
+                Debug.LogError($"Set resolution {curRes.Width}  <>  {curRes.Height}");
+                Screen.SetResolution(curRes.Width, curRes.Height, lastMode);
+            }
+            PlayerPrefs.SetInt(KEY_RESOLUTION, index);
+            CurIndexResolution = index;
+
+        }
+    }
+
+
     public void FXAASwitch()
     {
         EnableAA(!_fxaaEnable);

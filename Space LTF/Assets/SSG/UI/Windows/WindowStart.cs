@@ -15,12 +15,13 @@ public class WindowStart : BaseWindow
         CamerasController.Instance.MusicControl.StartMenuAudio();
         var mainTxt = Namings.Tag("DemoStart");
 
-#if UNITY_EDITOR || Develop
         AchievementsButton.interactable = (true);
-#else                                                     
-        AchievementsButton.interactable = (false);
-
-#endif
+//#if UNITY_EDITOR || Develop
+//        AchievementsButton.interactable = (true);
+//#else                                                     
+//        AchievementsButton.interactable = (false);
+//
+//#endif
 #if Demo
         DemoField.gameObject.SetActive(true);  
       mainTxt = $"{mainTxt}{Namings.Tag("DemoStart2")}";

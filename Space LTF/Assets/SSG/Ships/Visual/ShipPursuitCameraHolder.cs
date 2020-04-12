@@ -15,7 +15,8 @@ public class ShipPursuitCameraHolder : MonoBehaviour
         transform.position = startPosition;
         _haveShip = true;
         _ship = ship;
-        _prevLookAt = ship.PredictionPos();
+
+        _prevLookAt = ship.PredictionPos();//rework
         _ship.OnDeath += OnDispose;
         _ship.OnDispose += OnDispose;
     }
@@ -43,9 +44,9 @@ public class ShipPursuitCameraHolder : MonoBehaviour
         if (_haveShip)
         {
             var trgPos = GetTargetPos();
-            _prevLookAt = Vector3.Lerp(_prevLookAt,_ship.PredictionPos(),  .05f);
+            _prevLookAt = Vector3.Lerp(_prevLookAt,_ship.PredictionPos(),  .02f);
             transform.LookAt(_prevLookAt, Vector3.up);
-            var posTo = Vector3.Lerp(transform.position, trgPos, .05f);
+            var posTo = Vector3.Lerp(transform.position, trgPos, .03f);
             transform.position = posTo;
         }
     }

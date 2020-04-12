@@ -13,7 +13,7 @@ public class StartGlobalCell : GlobalMapCell
 
     public override string Desc()
     {
-        return "Start point";
+        return Namings.Tag("Start point");
     }
 
     public override void Take()

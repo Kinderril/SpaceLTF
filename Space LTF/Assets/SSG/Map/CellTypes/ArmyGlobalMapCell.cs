@@ -12,9 +12,12 @@ public class ArmyGlobalMapCell : GlobalMapCell
     protected BattlefildEventType? _eventType = null;
     public BattlefildEventType? EventType => _eventType;
 
-    public virtual int Power => _power;
-
     protected int _power;
+    public virtual int Power {
+        get { return _power; }
+        set { _power = value; }
+    }
+
     protected int _additionalPower;
 
 
@@ -53,7 +56,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         : base(id, Xind, Zind, sector, config)
     {
         // _armyType = type;
-        _power = power;
+        Power = power;
         if (Xind > 5)
         //        if (true)
         {
@@ -73,10 +76,10 @@ public class ArmyGlobalMapCell : GlobalMapCell
     public override void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
     {
         _additionalPower = additionalPower;
-        var nextPower = SectorData.CalcCellPower(visitedSectors + 1, _sector.Size, startPower, _additionalPower);
+        var nextPower = SectorData.CalcCellPower(visitedSectors, _sector.Size, startPower, _additionalPower);
         _player = null;
         // Debug.Log($"Army power sector updated prev:{_power}. next:{nextPower}");
-        _power = nextPower;
+        Power = nextPower;
     }
 
     protected override MessageDialogData GetDialog()

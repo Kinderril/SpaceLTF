@@ -21,12 +21,19 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     private Player _cachedArmy = null;
 
     private PlayerQuestData Quest => MainController.Instance.MainPlayer.QuestData;
-    public override int Power => (int)(_power * Library.COEF_CORE_ARMY);
+
+    public override int Power
+    {
+        get { return (int)(_power * Library.COEF_CORE_ARMY); }
+
+    }
+
+//    public override int Power => (int)(_power * Library.COEF_CORE_ARMY);
 
     public CoreGlobalMapCell(int power, int id, int intX, int intZ, SectorData sector)
         : base(power, ShipConfig.mercenary, id, intX, intZ, sector)
     {
-        _power = power;
+        Power = power;
         //        Debug.LogError($"CoreGlobalMapCell:{intX}  {intZ}");
         WDictionary<GlobalCellType> chances = new WDictionary<GlobalCellType>(new Dictionary<GlobalCellType, float>()
         {
@@ -190,7 +197,7 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
         }
         else
         {
-            _power = (int)(Power * 1.26f);
+            Power = (int)(Power * 1.26f);
             List<AnswerDialogData> answerDialog = new List<AnswerDialogData>();
             answerDialog.Add(new AnswerDialogData(Namings.DialogTag("coreFight"), Fight));
             var mesData = new MessageDialogData(Namings.DialogTag("coreFailSteal"), answerDialog);

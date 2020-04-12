@@ -209,27 +209,32 @@ public class SectorData
         Name = Namings.ShipConfig(_shipConfig);
     }
 
-    public bool ComeToSector(int visitedSectors, int step)
+    public bool ComeToSector()
     {
         if (!_isVisited)
         {
             _isVisited = true;
-            for (int i = 0; i < Size; i++)
-            {
-                for (int j = 0; j < Size; j++)
-                {
-                    var cell = Cells[i, j];
-                    if (cell.Data != null)
-                    {
-                        cell.Data.UpdatePowers(visitedSectors, StartPowerGalaxy, (int)(_powerPerTurn * step));
-                    }
-                }
-            }
-
+//            RecalculateAllCells(visitedSectors, step);
             return true;
         }
 
         return false;
+    }
+
+    public void RecalculateAllCells(int visitedSectors, int step)
+    {
+
+        for (int i = 0; i < Size; i++)
+        {
+            for (int j = 0; j < Size; j++)
+            {
+                var cell = Cells[i, j];
+                if (cell.Data != null)
+                {
+                    cell.Data.UpdatePowers(visitedSectors, StartPowerGalaxy, (int)(_powerPerTurn * step));
+                }
+            }
+        }
     }
 
     protected ShipConfig IsDroids(ShipConfig coreConfig)

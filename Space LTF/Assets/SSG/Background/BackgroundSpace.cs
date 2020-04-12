@@ -8,7 +8,7 @@ using UnityEngine;
 public class BackgroundSpace : MonoBehaviour
 {
     public MeshRenderer MainRenderer;
-    public ParticleSystem MainParticleSystem;
+//    public ParticleSystem MainParticleSystem;
     public List<ParticleSystem> effects;
     public List<SpaceObject> Stars;   //prefabs 
     public List<SpaceObject> Planets;//prefabs 
@@ -18,11 +18,13 @@ public class BackgroundSpace : MonoBehaviour
 
     public BoxCollider StartsContainer;
     public Transform Container;
+    public Transform StarsTransform;
     
 //    public 
 
-    public void Init()
+    public void Init(Vector3 center)
     {
+        StarsTransform.position = new Vector3(center.x,StarsTransform.position.y,center.z);
         Container.ClearTransform();
         var color = Colors.RandomElement();
         var backMats = DataBaseController.Instance.Backgrounds.BackMaterials;
@@ -30,8 +32,8 @@ public class BackgroundSpace : MonoBehaviour
         {
             var rnd = backMats.RandomElement();
             MainRenderer.material = rnd.MainMetarial;
-            var renderParticle = MainParticleSystem.GetComponent<ParticleSystemRenderer>();
-            renderParticle.material = rnd.ParticleMetarial;
+//            var renderParticle = MainParticleSystem.GetComponent<ParticleSystemRenderer>();
+//            renderParticle.material = rnd.ParticleMetarial;
         }
 
         int starsCount = (int)MyExtensions.Random(50, 90);

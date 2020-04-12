@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Toggle = UnityEngine.UI.Toggle;
+
+
 
 public class MapSettingsWindow : MonoBehaviour
 {
@@ -12,10 +17,14 @@ public class MapSettingsWindow : MonoBehaviour
     public Toggle RusToggle;
     private Action _closeCallback;
     public GameObject ButtonHolder;
+    public GameObject ExitButtonMenu;
     public WindowKeys Keys;
 //    public GameObject LangChanged;
     public VideoTutorialElement BattleTutorial;
     public GameObject BattleTutorialButton;
+    public TMP_Dropdown ResolutionDropdown;
+
+
 
     public void OnSound()
     {
@@ -35,9 +44,12 @@ public class MapSettingsWindow : MonoBehaviour
 
     public void Init(bool withButtons,bool isBattle)
     {
+        InitDropDown();
+        ResolutionDropdown.value = CamerasController.Instance.CurIndexResolution;
         BattleTutorialButton.gameObject.SetActive(isBattle);
 //        LangChanged.gameObject.SetActive(false);
         ButtonHolder.SetActive(withButtons);
+        ExitButtonMenu.SetActive(!withButtons);
         Keys.gameObject.SetActive(false);
         NoMouseMoveSoundToggle.isOn = (CamerasController.Instance.IsNoMouseMove);
         SoundToggle.isOn = (CamerasController.Instance.IsAudioEnable);
@@ -53,6 +65,30 @@ public class MapSettingsWindow : MonoBehaviour
                 EngToggle.isOn = false;
                 break;
         }
+    }
+
+    private bool _isDropDownInited = false;
+    private void InitDropDown()
+    {
+        if (_isDropDownInited)
+        {
+            return;
+        }
+
+        _isDropDownInited = true;
+
+        var lisOptions = new List<TMP_Dropdown.OptionData>();
+        foreach (var resolutionData in CamerasController.Instance._resolutionDatas)
+        {
+            lisOptions.Add(new TMP_Dropdown.OptionData(resolutionData.Name));
+
+        }
+        ResolutionDropdown.AddOptions(lisOptions);
+    }
+
+    public void OnResolutionChange()
+    {
+        CamerasController.Instance.ChangeResolutionToIndex(ResolutionDropdown.value);
     }
 
     public void Open(Action closeCallback)

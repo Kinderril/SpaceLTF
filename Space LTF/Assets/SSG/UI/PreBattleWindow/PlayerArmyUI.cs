@@ -73,7 +73,7 @@ public class PlayerArmyUI : MonoBehaviour
         {
             mainShipInfo = DataBaseController.GetItem(ShipBasePrefabUI);
             mainShipInfo.transform.SetParent(ShipsLayout);
-            mainShipInfo.Init(_player.Parameters, shipPilotData.Ship, true, _connectedInventory);
+            mainShipInfo.Init(_player,shipPilotData.Ship, true, _connectedInventory);
         }
         else
         {

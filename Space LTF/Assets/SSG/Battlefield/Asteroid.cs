@@ -138,9 +138,9 @@ public class Asteroid : MonoBehaviour
             var xxQ = MyExtensions.Random(-quaterRnd, quaterRnd);
             var yyQ = MyExtensions.Random(-quaterRnd, quaterRnd);
             var zzQ = MyExtensions.Random(-quaterRnd, quaterRnd);
-            var wwQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+//            var wwQ = MyExtensions.Random(-quaterRnd, quaterRnd);
             asteroidPart.transform.position = new Vector3(xx, p.y, zz);
-            asteroidPart.transform.rotation = new Quaternion(xxQ, yyQ, zzQ, wwQ);
+            asteroidPart.transform.rotation = new Quaternion(xxQ, yyQ, zzQ, 1f);
         }
     }
 

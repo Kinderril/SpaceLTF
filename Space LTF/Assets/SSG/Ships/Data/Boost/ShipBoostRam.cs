@@ -74,6 +74,13 @@ public class ShipBoostRam : ShipBoostAbstract
         if (!target.IsInFrontSector())
             return false;
 
+
+        var isGood = Utils.IsAngLessNormazied(target.DirNorm, _owner.LookDirection, UtilsCos.COS_30_RAD);
+        if (!isGood)
+        {
+            return false;
+        }
+
         return true;
     }
 

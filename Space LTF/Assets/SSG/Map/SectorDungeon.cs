@@ -38,6 +38,7 @@ public class SectorDungeon : SectorData
                 {
                     _lastCell.AddWay(cell);
                     cell.AddWay(_lastCell);
+//                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
                 }
                 _lastCell = cell;
             }
@@ -54,8 +55,9 @@ public class SectorDungeon : SectorData
                 {
                     _lastCell.AddWay(cell);
                     cell.AddWay(_lastCell);
-                }
-                _lastCell = cell;
+//                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
+                    _lastCell = cell;
+                }      
                 if (thisLevel)
                 {
                     i--;
@@ -197,13 +199,13 @@ public class SectorDungeon : SectorData
             _oneRemoved = true;
             // to.RemoveWayTo(@from);
         }
-        else
-        {
-            if (to is ArmyDungeonEnterGlobalMapCell)
-            {
-                RemoveWayCallback(to);
-            }
-        }
+//        else
+//        {
+//            if (to is ArmyDungeonEnterGlobalMapCell)
+//            {
+//                RemoveWayCallback(to);
+//            }
+//        }
 
     }
 

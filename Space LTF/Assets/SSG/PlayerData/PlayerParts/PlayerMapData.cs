@@ -88,6 +88,10 @@ public class PlayerMapData
         {
             if (target != CurrentCell)
             {
+                if (CurrentCell != null)
+                {
+                    CurrentCell.LeaveFromCell();
+                }
                 WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.ShipGlobalMapMove);
                 globalMap.MoveToCell(target, () =>
                  {

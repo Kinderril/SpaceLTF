@@ -32,11 +32,11 @@ public enum LibraryPilotUpgradeType
 
 public static class Library
 {
-    public const float SECTOR_COEF_POWER = 0.4f;
+    public const float SECTOR_COEF_POWER = 0.47f;
     public const float COEF_CORE_ARMY = 1.3f;
     public static float SECTOR_POWER_START_COEF = 0.048f;
     public static float SECTOR_POWER_LOG1 = 14f;
-    public static float SECTOR_POWER_LOG2 = 0.145f;
+    public static float SECTOR_POWER_LOG2 = 0.162f;
     public static float SECTOR_POWER_LOG3 = 34f;
 
     public const int MAX_WEAPON_LVL = 5;
@@ -702,13 +702,13 @@ public static class Library
     public const float MAX_GLOBAL_MAP_DEATHSTART = 10;
     public const float MIN_GLOBAL_MAP_CORES = 2;
     public const float MAX_GLOBAL_MAP_CORES = 5;
-    public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 0;
-    public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 10;
+    public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 2;
+    public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 12;
 
-    public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 10;
-    public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 11;
-    public const int MIN_GLOBAL_MAP_NORMAL_BASE_POWER = 12;
-    public const int MIN_GLOBAL_MAP_HARD_BASE_POWER = 14;
+    public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 8;
+    public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 9;
+    public const int MIN_GLOBAL_MAP_NORMAL_BASE_POWER = 11;
+    public const int MIN_GLOBAL_MAP_HARD_BASE_POWER = 13;
     public const int MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER = 15;
 
 

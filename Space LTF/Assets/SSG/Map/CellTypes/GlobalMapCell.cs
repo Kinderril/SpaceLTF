@@ -106,7 +106,7 @@ public abstract class GlobalMapCell
 
     }
 
-    public void Complete()
+    public virtual void Complete()
     {
         Completed = true;
         Scouted();
@@ -168,12 +168,10 @@ public abstract class GlobalMapCell
 
     public virtual void Scouted()
     {
-        //        Debug.LogError($"Scouted {Id}");
-        //UnconnectAll();
         IsScouted = true;
-        if (!Completed) MainController.Instance.MainPlayer.LastScoutsData.SetLastScout(this);
-
-        if (OnScouted != null) OnScouted(this);
+        if (!Completed)
+            MainController.Instance.MainPlayer.LastScoutsData.SetLastScout(this);
+        OnScouted?.Invoke(this);
     }
 
     public void UnconnectAll()
@@ -241,15 +239,24 @@ public abstract class GlobalMapCell
 
     public void VisitCell(PlayerMapData mapData, int step)
     {
-        if (_sector.ComeToSector(mapData.VisitedSectors, step)) mapData.VisitedSectors++;
+        if (_sector.ComeToSector())
+        {
+            mapData.VisitedSectors++;
+        }
+        _sector.RecalculateAllCells(mapData.VisitedSectors, step);
     }
 
     public virtual void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
     {
+    }
+    public  virtual void LeaveFromCell()
+    {
+
     }
 
     public override string ToString()
     {
         return $"CEll: X:{indX} Z:{indZ}";
     }
+
 }

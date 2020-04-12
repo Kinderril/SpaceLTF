@@ -281,6 +281,7 @@ public class ShipBase : MovingObject
         var p = gameObject.transform.position;
         float partOffset = .3f;
         float velocity  = .6f;
+        float quaterRnd = 1f;
         for (int i = 0; i < cnt; i++)
         {
             var partShip = pool.GetPartShip();
@@ -294,6 +295,13 @@ public class ShipBase : MovingObject
            var xx = p.x + MyExtensions.Random(-partOffset, partOffset);
             var zz = p.z + MyExtensions.Random(-partOffset, partOffset);
             partShip.transform.position = new Vector3(xx, p.y, zz);
+
+            var xxQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+            var yyQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+            var zzQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+//            var wwQ = MyExtensions.Random(-quaterRnd, quaterRnd);
+            partShip.transform.position = new Vector3(xx, p.y, zz);
+            partShip.transform.rotation = new Quaternion(xxQ, yyQ, zzQ, 1f);
         }
     }
 

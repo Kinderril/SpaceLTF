@@ -16,7 +16,6 @@ public class InGameMainUI : BaseWindow
     private SpellInGame _spellSelected;
     public Transform ShipsInfoContainer;
     public ArrowTarget ArrowTarget;
-    public ShipPursuitCameraHolder ShipPursuitCameraHolder;
     public Transform FlyingInfosContainer;
     public CameraController MainCamera { get; set; }
     public Toggle debugToggle;
@@ -33,6 +32,7 @@ public class InGameMainUI : BaseWindow
     public event Action<SpellInGame> OnSelectSpell;
     public RetirreButton RetireButton;
     public ReinforsmentsButton ReinforsmentsButton;
+    public CamerasLinkButtons CamerasLinkButtons;
 
     public TimeScaleBattleUI TimeScaleBattle;
     //    public Button DebugKillAllEnemies;
@@ -66,30 +66,18 @@ public class InGameMainUI : BaseWindow
                 ShipModulsUI.Init(value);
                 _selectedShip.Select(true);
                 ArrowTarget.SetOwner(_selectedShip);
-                ShipPursuitCameraHolder.Init(value,MainCamera.RotateHolder.position,ShipPursuitDeath);
-//                LinkCamera();
             }
             else
             {
                 ShipModulsUI.gameObject.SetActive(false);
             }
+            CamerasLinkButtons.SelectedShip(_selectedShip);
             //Debug.Log("Ship selected " + _selectedShip.Id);
 
             //            UpdateModuls();
         }
     }
 
-    private void LinkCamera()
-    {
-        MainCamera.Camera.transform.SetParent(ShipPursuitCameraHolder.transform);
-        MainCamera.Camera.transform.localPosition = Vector3.zero;
-        MainCamera.Camera.transform.localRotation = Quaternion.identity;
-    }
-
-    private void ShipPursuitDeath()
-    {
-        MainCamera.ReturnCamera();
-    }
 
     // public void CanFastEnd()
     // {
@@ -129,6 +117,7 @@ public class InGameMainUI : BaseWindow
         //        HoldClearCoinUI.Init(HoldComplete);
         CreditController.Init(MyCommander);
         MainCamera = CamerasController.Instance.GameCamera;
+        CamerasLinkButtons.Init(MainCamera);
         GreenTeamInfoContainer.Init(battle.GreenCommander, ActionShipSelected);
         RedTeamInfoContainer.Init(battle.RedCommander, ActionShipSelected);
         int weaponsIndex = 0;
@@ -456,7 +445,7 @@ public class InGameMainUI : BaseWindow
         GreenTeamInfoContainer.Dispose();
         RedTeamInfoContainer.Dispose();
         BattleCoinUI.Dispose();
-        ShipPursuitCameraHolder.Dispose();
+        CamerasLinkButtons.Dispose();
         ArrowTarget.Disable();
         PreFinish.Activate(_battle, endBattleType);
     }

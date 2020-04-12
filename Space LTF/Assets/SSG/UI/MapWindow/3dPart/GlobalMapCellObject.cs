@@ -151,7 +151,7 @@ public class GlobalMapCellObject : MonoBehaviour
                 ExitObject.gameObject.gameObject.SetActive(true);
                 ObjectPainted = ExitObject;
             }
-            else  if (Cell is ArmyDungeonEnterGlobalMapCell)
+            else  if (Cell is ArmyDungeonEnterGlobalMapCell || Cell is ArmyDungeonExitGlobalMapCell || Cell is ArmyDungeonGlobalMapCell)
             {
                 StartDungeon.gameObject.SetActive(true);
                 ObjectPainted = StartDungeon;
