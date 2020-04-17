@@ -41,7 +41,7 @@ public class ShipPathController2
     }
     public Vector3 Target { get; private set; }
     private float _timeSpends = 0;
-    private const float _maxTimeSpends = 0.25f;
+    private const float _maxTimeSpends = 0.75f;
     private Vector3 _lastDirection;
 
     public Vector3 GetCurentDirection(IShipData target, out bool exactlyPoint, out bool goodDir, out float speed)
@@ -64,6 +64,9 @@ public class ShipPathController2
 
     public Vector3 GetCurentDirection(Vector3 vector3, out bool exactlyPoint, out bool goodDir, out float speed)
     {
+#if UNITY_EDITOR
+        Debug.DrawRay(_owner.Position,_owner.LookDirection,Color.yellow);
+#endif
         var fromCenter = _owner.Position - _owner.CellController.Data.CenterZone;
         var distFromCnter = fromCenter.magnitude;
         var delta = RadiusToBeSafe - distFromCnter;
@@ -118,6 +121,9 @@ public class ShipPathController2
         {
             speed = _owner.MaxSpeed();
             goodDir = Utils.IsAngLessNormazied(normalizedDir, _owner.LookDirection, UtilsCos.COS_2_RAD);
+#if UNITY_EDITOR
+            Debug.DrawRay(_owner.Position, dirToTarget,Color.blue);
+#endif
             return dirToTarget;
         }
 

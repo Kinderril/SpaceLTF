@@ -200,12 +200,15 @@ public static class EngLocalization
         {"EMIUpgrade", "Increase power of all EMI weapons for +1/+1 per level."},
         {"impulseUpgrade","Increase power of all impulse weapons for +1/+1 per level." },
         {"bombUpgrade","Increase power of all bomb weapons for +1/+1 per level." },
+
         {"WeaponSpeed", "Increase speed of all bullets."},
+        {"ArmyAdditionalPower", "Every turn enemies fleets will be upgraded."},
 
         {"questKills", "{0} kills"},
         {"Fleet", "Fleet"},
-        {"RusLang", "Russian (Not full)"},
+        {"RusLang", "Russian"},
         {"EngLang", "English"},
+        {"EspLang", "Spanish"},
         {"ReloadToLoc", "Restart game to update localization"},
         {"SettingsWindow", "Settings Window"},
         {"RechargeButton","Recharge Shield.\nCost[{0}/{1}]" },
@@ -274,6 +277,13 @@ public static class EngLocalization
         {"DamageTimeEffectEngine","Turn off engine {0}"},
         {"DamageTimeEffectShield","Off all shield {0}"},
         {"DamageTimeEffectFire","Start fire {0}"},
+        {"ResistDamages","Reflects all negative effects"},
+
+        {"wantSell","Do you want sell item for {0}?"},
+        {"wantBuyItem","Do you want buy item for {0}?"},
+
+        {"valuable goods","valuable goods"},
+        {"invaluable goods","invaluable goods"},
 
 
 
@@ -282,11 +292,18 @@ public static class EngLocalization
         {"ReputationChanges", "{2} reputation change {0} => {1}."},
         {"ReputationData", "{0} reputation: {1}"},
 
+        {"HirePilot","You hired a new pilot. Type:{0}  Config:{1}"},
+
         {"Destroyed", "Destroyed" },
         {"Completed", "Completed"},
         {"StartNewGameFieldSize", "Sector size"},
         {"StartNewGameCoresCount","Keys count" },
         {"StartNewGameSectorsCount", "Sectors count"},
+
+        {"All to me", "To fleet"},
+        {"Equal", "Equal"},
+        {"All to ship", "To battleships"},
+        {"To Map", "To Map"},
 
 
 
@@ -480,6 +497,7 @@ public static class EngLocalization
         {"ReinforcmentsCallConfig", "Call reinforcements:{0}"},
         {"ReinforcmentsCalled", "Reinforcements unavailable"},
         {"Retreat", "Retreat"},
+        {"Upgrade", "Upgrade"},
 
         {"Laser", "Laser"},
         {"Rocket", "Rocket"},
@@ -521,12 +539,24 @@ public static class EngLocalization
         {"scout_spells", "No big guns info"},
         {"targteFar", "Target is too far"},
 
+        {"Battle reward", "Battle reward:"},
+        {"Fleet money", "Fleet money:"},
+
+        {"armyCount", "Army count is {0}"},
+        {"armyCountBetween", "Army count between {0} and {1}"},
+        {"armyWeaponsContains","Weapons types contains {0}"},
+        {"armyHaveMotherShip","Have commander ship"},
+        {"armyJustFleet","Just fleet"},
+        {"armyWeaponsCount","Weapons count:{0}. Moduls count:{1}"},
+        {"armyUsingWeapons","Using weapons:{0}"},
+
         {"DescVacuumSpell", "Creates a vacuum over the target area that sucks in enemy units. Power:{0}. Shield damage:{1}"},
         {"ChainModulDesc", "Shoot to all targets in radius. Decrease damage on {0}%"},
         {"FireNearModulDesc", "Can fire nearby enemies for {0} sec when shoot."},
         {"SprayModulDesc", "Shoot with {0} bullets instead on one. Increase reload time by {1}%."},
         {"WeaponSpeedModulDesc", "Increase bullet speed by {0}% per level"},
         {"DescWeaponDistModul", "Increase aim radius by {0}% per level"},
+        {"WeaponEngine", "Lock enemy engine for some period"},
 
         {"MachineGunSpellDesc", "Series  of {0} fast bullets. Damage: {1}/{2}"},
         {"DistShotSpell", "Single bullet. Only hull damage {0}."},
@@ -765,7 +795,7 @@ public static class EngLocalization
         {"dialog_dungeonExitFinalWin","This military base completly destoyed"},
         {"dialog_dungeonExitGo","Grab all items and go"},
         {"dialog_dungeonExitFinalBattle","This is main militaly base at this sector"},
-        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there?\nThis sector have only one exit on the other side. You can find here some unique items."},
+        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there?\nReinforcements will come immediately.\nHere you can find some special items."},
         {"dialog_dungeogArmyFriendGoIn","Ask your friend to go in."},
 
         {"dialog_Trader","Trader"},
@@ -792,6 +822,24 @@ public static class EngLocalization
         {"dialog_teacherNo","No, thanks."},
         {"dialog_Science ship","Science ship"},
         {"dialog_teacherStartSience", "This is science ship. They can improve your fleet [credits:{0}]. Do you want to upgrade {1}?"},
+
+        {"Anomaly", "Anomaly"},
+        {"dialog_anomalySendScouts", "Send scouts and try to get some info."},
+        {"dialog_anomalyBeliveMysielf", "I believe at myself. Come close to it."},
+        {"dialog_anomalyGoAway","No. Go away." },
+        {"dialog_anomalyStart","You find a strange anomaly. Looks like it will go away soon. Do you want to investigate it?"},
+        {"dialog_anomalyFreeze","Use freezing gun"},
+        {"dialog_anomalyExplosive","Use explosive"},
+        {"dialog_anomalyImpulse","Use impulse"},
+        {"dialog_anomalyFire","Use fire"},
+        {"dialog_anomalyChange","Something change."},
+        {"dialog_anomalyRight","Looks like you doing right."},
+        {"dialog_anomalyWrong","Wrong."},
+        {"dialog_anomalyNoInfo","No info from scouts .Choose next move. Tries remain:{0}."},
+        {"dialog_anomalyInfo","{0}{1}/{2} parts unlocked. Choose next move. Tries remain:{3}."},
+        {"dialog_anomalyDeactivated","You successfully deactivate anomaly. {0} of your ships improved."},
+        {"dialog_anomalyNotDay","Not my day."},
+        {"dialog_anomalyDestroyed","Anomaly gone away."},
 
 
       /*P2*/  {"battleSpells", "Commander ship special options.\nAny shot will take some batteries for a period.\nYou must catch the moment to use them successfully."},

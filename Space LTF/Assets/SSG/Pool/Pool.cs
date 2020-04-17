@@ -53,7 +53,7 @@ public class Pool
         RegisterEffect(Utils.GetId(), dataStruct.ShieldChagedEffect);
         RegisterEffect(Utils.GetId(), dataStruct.WeaponWaveStrike);
 
-        int partsCount = 30;
+        int partsCount = 230;
         foreach (var dataStructAsteroidPart in dataStruct.AsteroidParts)
         {
             for (int i = 0; i < partsCount; i++)
@@ -70,13 +70,13 @@ public class Pool
             for (int i = 0; i < partsCount; i++)
             {
                 var element = DataBaseController.GetItem(part);
-                _asteroidPartsPool.Add(element);
+                _shipPartsPool.Add(element);
                 element.SetBaseParent(_asteroidContainer);
                 element.EndUse();
             }
         }
 
-        _asteroidPartsPool.Suffle();
+        _shipPartsPool.Suffle();
 
         //        var baseT = _canvasContainer;
         for (int i = 0; i < 10; i++)
@@ -143,23 +143,23 @@ public class Pool
 
     public PoolElement GetPartAsteroid()
     {
-        var pool = _asteroidPartsPool;
-        var partAsteroid = pool.FirstOrDefault(x => !x.IsUsing);
+//        var pool = _asteroidPartsPool;
+        var partAsteroid = _asteroidPartsPool.FirstOrDefault(x => !x.IsUsing);
         if (partAsteroid == null)
         {
             partAsteroid = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.AsteroidParts.RandomElement());
-            pool.Add(partAsteroid);
+            _asteroidPartsPool.Add(partAsteroid);
         }
         return partAsteroid;
     }
     public PoolElementRigitBody GetPartShip()
     {
-        var pool = _shipPartsPool;
-        var partShip = pool.FirstOrDefault(x => !x.IsUsing);
+//        var pool = _shipPartsPool;
+        var partShip = _shipPartsPool.FirstOrDefault(x => !x.IsUsing);
         if (partShip == null)
         {
             partShip = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.DestroyedShipParts.RandomElement());
-            pool.Add(partShip);
+            _shipPartsPool.Add(partShip);
         }
         return partShip as PoolElementRigitBody;
     }

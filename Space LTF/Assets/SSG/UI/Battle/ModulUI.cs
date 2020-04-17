@@ -21,7 +21,7 @@ public class ModulUI : MonoBehaviour
         var s = (_baseModul.IsReady());
         if (s)
         {
-            Background.fillAmount = 0f;
+            Background.fillAmount = 1f;
         }
         if (!s)
         {
@@ -43,11 +43,11 @@ public class ModulUI : MonoBehaviour
         {
             if (s)
             {
-                Background.fillAmount = 0f;
+                Background.fillAmount = 1f;
             }
             else
             {
-                Background.fillAmount = 1f;
+                Background.fillAmount = 0f;
             }
         }
         if (!s)

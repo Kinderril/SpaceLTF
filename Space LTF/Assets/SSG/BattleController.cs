@@ -415,6 +415,7 @@ public class BattleController : Singleton<BattleController>
 
     public void EndPart2Battle()
     {
+        EffectController.Instance.ResetEffects();
         CamerasController.Instance.GameCamera.SourceAmbient.Stop();
         Debug.Log("End battle 2 LastWinner:" + LastWinner.ToString());
         GlobalEventDispatcher.WinBattle(RedCommander.FirstShipConfig);

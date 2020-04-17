@@ -198,7 +198,7 @@ public class EndGameWindow : BaseWindow
             {
                 var remain = forPilots - spendedMoneys;
                 int index = 0;
-                while (remain > 0)
+                while (remain > 0 && index < _allMyShips.Count)
                 {
                     var field = _allMyShips[index];
                     spendedMoneys++;

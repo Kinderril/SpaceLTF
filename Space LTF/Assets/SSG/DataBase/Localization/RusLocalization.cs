@@ -126,6 +126,17 @@ public static class RusLocalization
         {"Wait", "Ожидание"},
         {"Hiding", "Прячется"},
 
+        {"Battle reward", "Награда за сражение:"},
+        {"Fleet money", "Общие средства:"},
+
+        {"armyCount", "Размер флота {0}"},
+        {"armyCountBetween", "Размер флота от {0} до {1}"},
+        {"armyWeaponsContains","Возможное вооружение {0}"},
+        {"armyHaveMotherShip","Есть командный корабль"},
+        {"armyJustFleet","Без командного корабля"},
+        {"armyWeaponsCount","Количество вооружения:{0}. Количество модулей:{1}"},
+        {"armyUsingWeapons","Используемое вооружение:{0}"},
+
         {"engineLock", "Поломщик"},
         {"lineShot", "Огненный залп"},
         {"throwAround", "Разбрасыватель"},
@@ -269,12 +280,14 @@ public static class RusLocalization
         {"DoWantRetire","Вы хотите сбежать?" },
         {"NoSafeGame","Не сохраненных игр" },
         {"MaxLevel", "Максимальный"},
-        {"RusLang", "Русский (Не полностью)"},
+        {"RusLang", "Русский"},
         {"EngLang", "Англисский"},
+        {"EspLang", "Испанский"},
         {"ReloadToLoc", "Перезапустите игру что бы использовать выбранный язык"},
         {"SettingsWindow", "Настройки"},
         {"Microchips", "Микрочипы"},
         {"AddMicrochips", "Получено микрочипов {0}"},
+        {"ArmyAdditionalPower", "Каждый ход вражеские флоты будут улучшаться."},
 
         {"DamageInfoUI", "Урон: {0}/{1}" },
         {"KillsInfoUI", "Убийства: {0}"},
@@ -381,6 +394,7 @@ public static class RusLocalization
         {"ESideAttackBaseDefence", "Атаковать только рядом с командным центром"},
         {"BaseDefenceYes", "Защита базы"},
         {"BaseDefenceNo", "Нет"},
+        {"Upgrade", "Улучшить"},
 
         {"ECommanderPriority1Base","Атакует базу" },
         {"ECommanderPriority1Fast","Выбирать корабли для атаки с максимальной маневренностью"  },
@@ -449,6 +463,7 @@ public static class RusLocalization
 
 
         {"ShipsRepaired", "Ships Repaired"},
+        {"ResistDamages","Отражает все негативные эффекты"},
 
         {"MercGlobal", "Убежище наемников"},
         {"NotEnoughtMoney", "Недостаточно денег"},
@@ -498,6 +513,12 @@ public static class RusLocalization
         {"healBodySupport",  "Рем. дрон"},
         {"healShieldSupport",  "Энерг. дрон"},
 
+        {"wantSell","Вы хотите продать за {0}?"},
+        {"wantBuyItem","Вы хотите купить за {0}?"},
+
+        {"valuable goods","Ценные товары"},
+        {"invaluable goods","Не ценные товары"},
+
         {"Demo", "Это демо версия игры. Пока что мы не готовы показать вам больше. Максимальное количество посещенных секторов:{0}. Максимум ходов:{1}"},
 
         {"RecievePoints", "Вы будите получать очки за победы. Количество зависит от сложности. Также можно получить очки выигрывая битвы."},
@@ -523,6 +544,13 @@ public static class RusLocalization
         {"SprayModulDesc", "Выстреливает {0} зарядами вместо одного. Увеличивает время перезарядки на {1}%."},
         {"WeaponSpeedModulDesc", "Увеличивает скорость зарядов на {0}% за уровень"},
         {"DescWeaponDistModul", "Увеличивает радиус прицеливания на {0}% за уровень"},
+        {"WeaponEngine", "Выключает двигатели противника на некоторое время"},
+
+        {"HirePilot","Пилот нанят. Тип:{0} Конфигурация:{1}"},
+        {"All to me", "Флоту"},
+        {"Equal", "Поровну"},
+        {"All to ship", "Боевым корблям"},
+        {"To Map", "На карту"},
 
         {"MachineGunSpellDesc", "Серия из {0} быстрых зарядов. Урон: {1}/{2}"},
         {"DistShotSpell", "Один заряд. Урон только по корпусу {0}."},
@@ -767,7 +795,7 @@ public static class RusLocalization
         {"dialog_afterBattleBuyoutConfirm","Выкуп совершен:{0} кредитов"},
         {"dialog_afterBattleBuyoutFail","Выкуп не получился"},
         {"dialog_afterBattleSearchOk","Кредитов добавлено: {0}."},
-        {"dialog_afterBattleSearchFail","Нечего."},
+        {"dialog_afterBattleSearchFail","Ничего."},
         {"dialog_afterBattleKillOk","Деньги не пахнут. {0} кредитов"},
         {"dialog_afterBattleKillFail","Он сбежал."},
         {"dialog_afterBattleHireOk","Найм совершен. Тип:{0}  Фракция:{1}"},
@@ -777,10 +805,28 @@ public static class RusLocalization
         {"dialog_afterBattleMircochipOk","Чип получен"},
         {"dialog_afterBattleMircochipFail","Ничего не найдено"} ,
 
+        {"Anomaly", "Аномалия"},
+        {"dialog_anomalySendScouts", "Отправить разведчиков"},
+        {"dialog_anomalyBeliveMysielf", "Мне кажеться я сумею сделать все сам"},
+        {"dialog_anomalyGoAway","Уйти." },
+        {"dialog_anomalyStart","Вы встретили странную аномалию. Кажется что она скоро пропадет. Желаете исследовать?"},
+        {"dialog_anomalyFreeze","Заморозить"},
+        {"dialog_anomalyExplosive","Взорвать"},
+        {"dialog_anomalyImpulse","Подействовать импульсом"},
+        {"dialog_anomalyFire","Поджечь"},
+        {"dialog_anomalyChange","Что то изменилось."},
+        {"dialog_anomalyRight","Похоже вы действуете верно."},
+        {"dialog_anomalyWrong","Неверно."},
+        {"dialog_anomalyNoInfo","Не информации от разведки. Что делать далее? Попыток осталось:{0}."},
+        {"dialog_anomalyInfo","{0}{1}/{2} вскрыто. Что делать далее? Попыток осталось:{3}."},
+        {"dialog_anomalyDeactivated","Аномалия успешно деактивирована. {0} кораблей улучшено."},
+        {"dialog_anomalyNotDay","Не мой день."},
+        {"dialog_anomalyDestroyed","Анамолия исчезла."},
+
         {"dialog_dungeonExitFinalWin","Военная база полностью разрушена"},
         {"dialog_dungeonExitGo","Забрать все и улететь"},
         {"dialog_dungeonExitFinalBattle","Это военная база."},
-        {"dialog_dungeogArmyEnterStart","Это военный сектор. Вы действительно хотите отправится туда?\nВыход будет только на другой стороне. Вы можете найти здесь некоторые уникальные предметы."},
+        {"dialog_dungeogArmyEnterStart","Это военный сектор. Вы действительно хотите отправится туда?\nПодкрепления к противнику прибудут незамедлительнл.\nВы можете найти здесь некоторые уникальные предметы."},
         {"dialog_dungeogArmyFriendGoIn","Попросить ваших друзей впустить вас."},
 
         {"dialog_teacherImproved","Корабль {0} улучшен. Уровень:{1}"},

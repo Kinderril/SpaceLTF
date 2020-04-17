@@ -92,11 +92,11 @@ public class WindowManager : Singleton<WindowManager>
         OpenWindow<object>(state, null);
     }
 
-    public void OpenSettingsSettings(bool withCloseButtons, bool isBattle, Action closeCallback = null)
+    public void OpenSettingsSettings(EWindowSettingsLauch settingsLauche, Action closeCallback = null)
     {
         WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.WindowOpen);
         CurrentWindow.CanvasGroup.interactable = false;
-        WindowSettings.Init(withCloseButtons, isBattle);
+        WindowSettings.Init(settingsLauche);
         WindowSettings.Open(() =>
         {
             closeCallback?.Invoke();

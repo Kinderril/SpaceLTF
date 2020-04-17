@@ -139,14 +139,14 @@ public class ShipBoostTwist : ShipBoostAbstract
             var debugMovData = new DebugMovingData();
             var qRotation = MovingObject.ApplyRotationXZ(dirToLook,
                 _owner.LookDirection, _owner.LookLeft, () => _owner.ShipParameters.TurnSpeed,
-                debugMovData, _owner.Position, out var steps);
-            _owner.Rotation = qRotation;
+                debugMovData, _owner.Position, new TurnResult());
+            _owner.Rotation = qRotation.Quaternion;
 
             SetAddMoveCallback(lerpedMove);
             var bankSteps = Time.time > _startLastPeriod ? 0f : Time.time < _middlePeriod ? 1f : -1f;
             _owner.BankingData.SetNewData(_dirToMoveToSide, bankSteps, 2f);
 
-            _owner.Rotation = qRotation;
+            _owner.Rotation = qRotation.Quaternion;
         }
         else
         {

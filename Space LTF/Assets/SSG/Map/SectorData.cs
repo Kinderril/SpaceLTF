@@ -13,6 +13,7 @@ public class SectorData
     public int Size { get; private set; }
     public bool IsCore { get; private set; }
     public bool IsFinal { get; private set; }
+    public bool IsStart { get; private set; }
     public string Name { get; protected set; }
     public int XIndex { get; private set; }
     public int Id { get; private set; }
@@ -64,6 +65,11 @@ public class SectorData
     public void ChangeSectorOwner(ShipConfig shipConfig)
     {
         _shipConfig = shipConfig;
+    }
+
+    public void MarkAsStart()
+    {
+        IsStart = true;
     }
 
     public void SetCell(GlobalMapCell cell, int subSectotId)
@@ -239,6 +245,10 @@ public class SectorData
 
     protected ShipConfig IsDroids(ShipConfig coreConfig)
     {
+        if (IsStart)
+        {
+            return ShipConfig.droid;
+        }
         float doirdChance = -1f;
         switch (coreConfig)
         {

@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Networking;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
@@ -287,21 +291,85 @@ public class DebugPanelWindow : EditorWindow
 
         }
 
+        if (GUILayout.Button("Create localization"))
+        {
+            var locEng = EngLocalization._locals;
+            var locRus = RusLocalization._locals;
+
+//            Debug.Log($"locEng:{locEng.Count} locRus:{locRus.Count} ");
+
+             Dictionary<string,string> nextLoc = new Dictionary<string, string>();
+            foreach (var upload in locEng)
+            {
+                var key = upload.Key;
+                var isGood= GetTranslate( upload.Value,out var translation);
+                if (isGood)
+                {
+                    nextLoc.Add(key,translation);
+                }
+                else
+                {
+                    Debug.LogError($"can't translate:{upload.Key}  {upload.Value}");
+                }
+            }
+            CreateTxtFile(nextLoc, "esp");
+        }
+
+
         _aimingBox = EditorGUILayout.ObjectField(_aimingBox, typeof(GameObject), true) as GameObject;
-//        if (GUILayout.Button("Update aiming Box"))
-//        {
-//            List<GameObject> prefabs = new List<GameObject>();
-//            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
-//            var aimingBox = _aimingBox.GetComponent<AimingBox>();
-//            if (aimingBox != null)
-//            {
-//                foreach (var gameObject in prefabs)
-//                {
-//                    AddAimingBox(gameObject, aimingBox);
-//                }
-//            }
-//
-//        }
+    }
+
+    private void CreateTxtFile(Dictionary<string, string> locEng,string fileSubName)
+    {
+        string fileName = $"{fileSubName}locCreated.txt";
+        StringBuilder builder = new StringBuilder();
+        foreach (var d in locEng)
+        {
+            builder.Append("{\"");
+            builder.Append(d.Key);
+            builder.Append("\",\"");
+            var replaces = Regex.Replace(d.Value, "\n", "");
+            builder.Append(replaces);
+            builder.Append("\"},\n");
+        }
+
+        var fullPath = Application.persistentDataPath + "/" + fileName;
+        Debug.LogError($"Path: {fullPath}");
+
+        if (File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
+        }
+
+        var result = builder.ToString();
+        File.Create(fullPath).Dispose();
+        File.AppendAllText(fullPath,result);
+
+    }
+
+    bool GetTranslate(string word,out string translate)
+    {
+//        var result = "<?xml version=\"1.0\" encoding=\"utf-8\"?><Translation code =\"200\" lang=\"en-ru\" ><text> название </text></Translation>";
+
+        try
+        {
+
+            var webClient = new WebClient();
+            var result = webClient.DownloadString("https://translate.yandex.net/api/v1.5/tr/translate?" +
+                                                  "key=trnsl.1.1.20200415T103235Z.360c509a1082cd01.a1a4ec75dc21cc1c43154616c4f401618af8ebec" +
+                                                  $"&text={word}" +
+                                                  "&lang=en-es");
+//            Debug.Log(result);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(result);
+            translate = doc.InnerText;
+            return true;
+        }
+        catch (Exception e)
+        {
+            translate = "";
+            return false;
+        }
     }
 
     public static void LoadAllPrefabsAt(string path, List<GameObject> prefabs)

@@ -120,7 +120,7 @@ public class ShipBase : MovingObject
     {
         if (Audio != null)
         {
-            Audio.volume = .45f;
+            Audio.volume = .28f;
         }
         //        gameObject.SetActive(false);
         SelfCamera = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.SelfCameraPrefab);
@@ -473,13 +473,16 @@ public class ShipBase : MovingObject
 
     }
 
+    private Vector3 _lastDirection;
     public void MoveByWay(IShipData target)
     {
         DebugTurnData = null;
         var direction4 = PathController.GetCurentDirection(target, out var exactlyPoint, out var goodDir, out var speedRecommended);
         if (!goodDir)
         {
-            var speed = ApplyRotation(direction4, exactlyPoint);
+            var dirToMove = Vector3.Lerp(_lastDirection, direction4, .5f);
+            var speed = ApplyRotation(dirToMove, exactlyPoint);
+            _lastDirection = dirToMove;
             SetTargetSpeed(speed);
         }
         else
@@ -612,10 +615,15 @@ public class ShipBase : MovingObject
         Allies[mover].SetParams(dirFromAtoB, dist);
     }
 
+    private float _nextPosibleHitClip;
     public void GetHit(IWeapon weapon, Bullet bullet)
     {
-        var hitClip = DataBaseController.Instance.AudioDataBase.GetHit();
-        Audio.PlayOneShot(hitClip);
+        if (_nextPosibleHitClip < Time.time)
+        {
+            _nextPosibleHitClip = Time.time + 0.1f;
+            var hitClip = DataBaseController.Instance.AudioDataBase.GetHit();
+            Audio.PlayOneShot(hitClip);
+        }
         //        Debug.LogError($"playt hit {hitClip.name}");
         if (ShipParameters.ShieldParameters.ShiledIsActive)
         {

@@ -34,6 +34,7 @@ public class Asteroid : MonoBehaviour
         var yy = MyExtensions.Random(0f, 1f);
         var zz = MyExtensions.Random(0f, 1f);
         _rotateDir = new Vector3(xx, yy, zz);
+        Source.volume = .23f;
     }
     public virtual void Init(AIAsteroidPredata aiAsteroidPredata)
     {

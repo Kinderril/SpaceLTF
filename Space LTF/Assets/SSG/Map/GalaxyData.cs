@@ -113,6 +113,7 @@ public class GalaxyData
         var zCell = startSector.StartZ + sizeSector / 2;
         var startCell = new StartGlobalCell(Utils.GetId(), xCell, zCell, startSector, playerShipConfig);
         startSector.SetCell(startCell, id);
+        startSector.MarkAsStart();
         unPopulatedSectors.Remove(startSector);
         startSector.Populate(startPower);
         startSector.MarkAsVisited();

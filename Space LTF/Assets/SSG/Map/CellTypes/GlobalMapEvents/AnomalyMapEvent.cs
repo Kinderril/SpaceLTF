@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public enum AnomalyTypeUnlock
 {
@@ -24,7 +25,7 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
 
     public override string Desc()
     {
-        return "Anomaly";
+        return Namings.Tag("Anomaly");
     }
 
     public override MessageDialogData GetDialog()
@@ -39,11 +40,11 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
 
         var mianAnswers = new List<AnswerDialogData>();
 
-        mianAnswers.Add(new AnswerDialogData($"Send scouts and try to get some info.", null, scouts));
-        mianAnswers.Add(new AnswerDialogData($"I believe at myself. Come close to it.", null, comeClose));
-        mianAnswers.Add(new AnswerDialogData("No. Go away.", null));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("anomalySendScouts"), null, scouts));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("anomalyBeliveMysielf"), null, comeClose));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("anomalyGoAway"), null));
 
-        var mesData = new MessageDialogData("You find a strange anomaly. Do you want to investigate it?", mianAnswers);
+        var mesData = new MessageDialogData(Namings.DialogTag("anomalyStart"), mianAnswers);
         return mesData;
     }
 
@@ -64,27 +65,30 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
     public MessageDialogData UnlockDialog()
     {
         var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData($"Use freezing gun", null, freezing));
-        mianAnswers.Add(new AnswerDialogData($"Use explosive", null, explosive));
-        mianAnswers.Add(new AnswerDialogData("Use impulse", null, impulse));
-        mianAnswers.Add(new AnswerDialogData("Use fire", null, fire));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("anomalyFreeze"), null, freezing));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("anomalyExplosive"), null, explosive));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("anomalyImpulse"), null, impulse));
+        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("anomalyFire"), null, fire));
         string move = "";
         if (_withInfo)
         {
             switch (_lastPlus)
             {
                 case 2:
-                    move = "Something change.";
+                    move = Namings.DialogTag("anomalyChange");
                     break;
                 case 1:
-                    move = "Looks like you doing right.";
+                    move = Namings.DialogTag("anomalyRight");
                     break;
                 case 0:
-                    move = "Wrong.";
+                    move = Namings.DialogTag("anomalyWrong");
                     break;
             }
         }
-        string ifno = _withInfo ? $"No info from scouts .Choose next move. Tries remain:{remainTryies}." : $"{move}{_curPoints}/{COUNT_TO_UNLOCK} parts unlocked. Choose next move. Tries remain:{remainTryies}.";
+        string ifno = _withInfo ? Namings.Format(Namings.DialogTag("anomalyNoInfo"),
+                remainTryies)
+            : Namings.Format(Namings.DialogTag("anomalyInfo"), move, _curPoints,
+                COUNT_TO_UNLOCK, remainTryies);
         var mesData = new MessageDialogData(ifno, mianAnswers);
         return mesData;
     }
@@ -146,16 +150,16 @@ public class AnomalyMapEvent : BaseGlobalMapEvent
                     shipPilotData.Pilot.UpgradeRandomLevel(false, true);
                 }
             }
-            mianAnswers.Add(new AnswerDialogData($"Yes.", null, null));
-            var mesData = new MessageDialogData($"You successfully deactivate anomaly. {improved} of your ships improved.", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.Tag("Yes"), null, null));
+            var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("anomalyDeactivated"), improved), mianAnswers);
             return mesData;
         }
         else
         {
 
             var mianAnswers = new List<AnswerDialogData>();
-            mianAnswers.Add(new AnswerDialogData($"Not my day.", null, null));
-            var mesData = new MessageDialogData("Anomaly was destroyed.", mianAnswers);
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("anomalyNotDay"), null, null));
+            var mesData = new MessageDialogData(Namings.DialogTag("anomalyDestroyed"), mianAnswers);
             return mesData;
         }
     }

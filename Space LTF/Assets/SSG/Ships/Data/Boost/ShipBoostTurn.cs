@@ -48,7 +48,7 @@ public class ShipBoostTurn : ShipBoostAbstract
         {
             return;
         }
-        Debug.LogError($"Turn activated {_owner.Id}");
+//        Debug.LogError($"Turn activated {_owner.Id}");
         _targetDir = dir;
         ActivateTime();
     }
@@ -121,7 +121,7 @@ public class ShipBoostTurn : ShipBoostAbstract
             return;
         }
 
-        Debug.LogError($"Turn stop {_owner.Id}");
+//        Debug.LogError($"Turn stop {_owner.Id}");
         IsActive = false;
         _angle = 90f;
         SetAddMoveCallback(Vector3.zero);

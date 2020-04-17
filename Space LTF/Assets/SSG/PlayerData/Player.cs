@@ -159,8 +159,8 @@ public class Player
         r += Library.BASE_SHIP_VALUE;
         var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), t2, config, this, logs);
 
-//        if (MainController.Instance.Statistics.CollectedPoints < 5)
-        if (true)
+        if (MainController.Instance.Statistics.CollectedPoints < 5)
+//        if (true)
         {
             NewGameAddSpellsBasic(bShip);
         }

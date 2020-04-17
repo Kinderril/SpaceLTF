@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public enum StartMode
 {
@@ -8,7 +9,7 @@ public enum StartMode
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "031a";
+    public static string VERSION = "003b";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
@@ -21,20 +22,30 @@ public class MainController : Singleton<MainController>
 
     void Awake()
     {
-        LogHandler.Instance.Init();
-        SteamManager.Instance.Init();
+        try
+        {
+            LogHandler.Instance.Init();
+//            Debug.LogError("FIRST ERROR TEST MESSAGE");
+            SteamManager.Instance.Init();
 
-        LocalizationManager.Instance.Init();
-        CamerasController.Instance.StartCheck();
-        Library.Init();
-        DataBase.Init();
-        LibraryChecker.DoCheck();
-        ShipNames.Init();
-        TutorialController.Init();
-        Statistics = PlayerStatistics.Load();
-        WindowManager.Instance.Init();
-        DataBase.DataStructPrefabs.CheckShipsWeaponsPosition();
-        SteamStatsAndAchievements.Instance.RequestStats();
+            LocalizationManager.Instance.Init();
+            CamerasController.Instance.StartCheck();
+            Library.Init();
+            DataBase.Init();
+            LibraryChecker.DoCheck();
+            ShipNames.Init();
+            TutorialController.Init();
+            Statistics = PlayerStatistics.Load();
+            WindowManager.Instance.Init();
+            DataBase.DataStructPrefabs.CheckShipsWeaponsPosition();
+            SteamStatsAndAchievements.Instance.RequestStats();
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Start error {e}");
+            throw;
+        }
     }
 
     void Start()

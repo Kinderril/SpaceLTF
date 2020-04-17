@@ -37,7 +37,7 @@ public class WeaponCritModul : BaseSupportModul
         }
         else
         {
-            return Namings.Tag("WeaponCritSupport");
+            return Namings.Format(Namings.Tag("WeaponCritSupport"), Utils.FloatToChance(ChanceLevel()), Damage);
         }
 
     }

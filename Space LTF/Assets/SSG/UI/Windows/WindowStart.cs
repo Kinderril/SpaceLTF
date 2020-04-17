@@ -43,7 +43,7 @@ public class WindowStart : BaseWindow
     }
     public void OnClickSettings()
     {
-        WindowManager.Instance.OpenSettingsSettings(false,false);
+        WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.menu);
     }
     private void StartNewGame()
     {

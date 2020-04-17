@@ -34,11 +34,11 @@ public class WeaponDamageTimeEffect : BaseSupportModul
         switch (_damageType)
         {
             case ShipDamageType.engine:
-                return Namings.Format("DamageTimeEffectEngine", period);
+                return Namings.Format(Namings.Tag("DamageTimeEffectEngine"), period);
             case ShipDamageType.shiled:
-                return Namings.Format("DamageTimeEffectShield", period);
+                return Namings.Format(Namings.Tag("DamageTimeEffectShield"), period);
             case ShipDamageType.fire:
-                return Namings.Format("DamageTimeEffectFire", period);
+                return Namings.Format(Namings.Tag("DamageTimeEffectFire"), period);
             default:
                 return "Error";
         }

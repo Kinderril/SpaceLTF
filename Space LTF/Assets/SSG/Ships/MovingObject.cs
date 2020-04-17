@@ -1,6 +1,31 @@
 ﻿using System;
 using UnityEngine;
 
+public struct TurnResult
+{
+    public bool Exaxtly;
+    public bool SideLeft;
+    public float PTime;
+    public float BankSteps;
+    public Quaternion Quaternion;
+
+    public TurnResult(Quaternion rotation)
+    {
+        Quaternion = rotation;
+        Exaxtly = true;
+        SideLeft = false;
+        PTime = Time.time;
+        BankSteps = 0f;
+    }  
+    public TurnResult(Quaternion rotation, bool sideLeft,float bankSteps)
+    {
+        Quaternion = rotation;
+        Exaxtly = false;
+        SideLeft = sideLeft;
+        PTime = Time.time;
+        BankSteps = bankSteps;
+    }
+}
 
 
 public abstract class MovingObject : PoolElement
@@ -119,20 +144,23 @@ public abstract class MovingObject : PoolElement
             return 1f;
         }
 
-        var quatern = ApplyRotationXZ(dir, LookDirection, LookLeft, TurnSpeed, DebugMovingData, Position, out var steps);
-        BankingData.SetNewData(dir, steps);
-        Rotation = quatern;
+        var turnResult = ApplyRotationXZ(dir, LookDirection, LookLeft, TurnSpeed, DebugMovingData, Position, _lastTurnResult);
+        BankingData.SetNewData(dir, turnResult.BankSteps);
+        _lastTurnResult = turnResult;
+        Rotation = turnResult.Quaternion;
         return 1f;
     }
 
-    public static Quaternion ApplyRotationXZ(Vector3 targetDir, Vector3 lookDir, Vector3 lookLeft,
-        Func<float> TurnSpeed, DebugMovingData debugData, Vector3 position, out float steps)
+    private TurnResult _lastTurnResult;
+
+    public static TurnResult ApplyRotationXZ(Vector3 targetDir, Vector3 lookDir, Vector3 lookLeft,
+        Func<float> TurnSpeed, DebugMovingData debugData, Vector3 position,TurnResult prevTurn)
     {
         Quaternion Rotation;
         var ang = Vector3.Angle(targetDir, lookDir);
         var turnSpeed = TurnSpeed();
         var angPerFrameTurn = (turnSpeed * Time.deltaTime);
-        steps = ang / angPerFrameTurn;
+        var steps = ang / angPerFrameTurn;
         if (steps <= 1f) // && exactlyPoint)
         {
 #if UNITY_EDITOR
@@ -140,10 +168,24 @@ public abstract class MovingObject : PoolElement
                 debugData.AddDir(lookDir, true, lookDir, position);
 #endif
             Rotation = Quaternion.FromToRotation(Vector3.forward, targetDir);
-            return Rotation;
+            var result = new TurnResult(Rotation);
+            return result;
         }
         Vector3 lerpRes;
-        var isLeft = Vector3.Dot(targetDir, lookLeft) > 0;
+#if UNITY_EDITOR
+        //        var nmorTgr = Utils.NormalizeFastSelf(targetDir);
+        //        var normLookLeft = Utils.NormalizeFastSelf(lookLeft);
+#endif
+        bool isLeft;
+        if (ang > 150 && !prevTurn.Exaxtly && (Time.time - prevTurn.PTime < 0.1f))
+        {
+            isLeft = prevTurn.SideLeft;
+        }
+        else
+        {
+
+            isLeft = Vector3.Dot(targetDir, lookLeft) > 0;
+        }
         if (isLeft)
         {
             lerpRes = Utils.RotateOnAngUp(lookDir, angPerFrameTurn);
@@ -153,11 +195,17 @@ public abstract class MovingObject : PoolElement
             lerpRes = Utils.RotateOnAngUp(lookDir, -angPerFrameTurn);
         }
 #if UNITY_EDITOR
+
+        //        Debug.DrawRay(position,lookDir* 10f,Color.magenta,1f);
+        //        Debug.DrawRay(position,nmorTgr* 10f,Color.red,1f);
+        //        Debug.DrawRay(position, normLookLeft * 10f,Color.green,1f);
+        //        Debug.DrawRay(position, lerpRes * 10f,Color.yellow,1f);
         if (debugData != null)
             debugData.AddDir(lookDir, true, lookDir, position);
 #endif                 
         var qRotation = Quaternion.FromToRotation(Vector3.forward, lerpRes);
-        return qRotation;
+        var result1 = new TurnResult(qRotation, isLeft, steps);
+        return result1;
     }
 
 

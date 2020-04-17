@@ -190,7 +190,7 @@ public class InGameMainUI : BaseWindow
         {
             BattleController.Instance.PauseData.Unpase(1f);
         }
-        WindowManager.Instance.OpenSettingsSettings(true, true, UnPause);
+        WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.battle, UnPause);
     }
 
     public void ActionShipSelected(ShipBase obj)

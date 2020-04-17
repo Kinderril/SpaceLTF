@@ -60,5 +60,12 @@ public class EffectController : Singleton<EffectController>
         }
     }
 
+    public void ResetEffects()
+    {
+
+        var effect = DataBaseController.Instance.Pool.GetEffect(DataBaseController.Instance.SpellDataBase.GoPlaceOk);
+        effect.transform.localScale = Vector3.one;
+        
+    }
 }
 

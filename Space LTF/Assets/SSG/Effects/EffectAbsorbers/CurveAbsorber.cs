@@ -9,6 +9,7 @@ public class CurveAbsorber : BaseEffectAbsorber
 {
     public NcCurveAnimation uvAnimation;
     private MeshRenderer renderer;
+    
 
     void Awake()
     {

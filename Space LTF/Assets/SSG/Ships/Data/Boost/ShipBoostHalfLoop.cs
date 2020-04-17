@@ -90,8 +90,8 @@ public class ShipBoostHalfLoop : ShipBoostAbstract
         {
             var targetDir = target.Value - _owner.Position;
             var q = MovingObject.ApplyRotationXZ(targetDir, _owner.LookDirection, _owner.LookLeft, () => 1f, null,
-                _owner.Position, out var steps);
-            _quaternion = q;
+                _owner.Position,new TurnResult());
+            _quaternion = q.Quaternion;
         }
         else
         {

@@ -342,7 +342,7 @@ public class CamerasController : Singleton<CamerasController>
             var lastMode = Screen.fullScreenMode;
             if (c.width != curRes.Width || c.height != curRes.Height)
             {
-                Debug.LogError($"Set resolution {curRes.Width}  <>  {curRes.Height}");
+//                Debug.LogError($"Set resolution {curRes.Width}  <>  {curRes.Height}");
                 Screen.SetResolution(curRes.Width, curRes.Height, lastMode);
             }
             PlayerPrefs.SetInt(KEY_RESOLUTION, index);

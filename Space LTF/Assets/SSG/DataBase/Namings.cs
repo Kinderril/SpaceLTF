@@ -5,7 +5,8 @@ using UnityEngine;
 public enum ELocTag
 {
     English,
-    Russian
+    Russian ,
+    Spain ,
 }
 
 public static class Namings
@@ -38,6 +39,9 @@ public static class Namings
         {
             case 2:
                 Rus();
+                break;   
+            case 3:
+                Esp();
                 break;
             default:
                 English();
@@ -51,9 +55,10 @@ public static class Namings
     {
         var eng = EngLocalization._locals;
         var rus = RusLocalization._locals;
+        var esp = EspLocalization._locals;
 
 #if UNITY_EDITOR
-        if (eng.Count != rus.Count)
+        if (eng.Count != rus.Count || eng.Count != esp.Count)
         {
             foreach (var v in eng)
             {
@@ -90,6 +95,12 @@ public static class Namings
                 {
                     return tag2;
                 }
+                break;  
+            case ELocTag.Spain:
+                if (EspLocalization._locals.TryGetValue(tag, out var tag3))
+                {
+                    return tag3;
+                }
                 break;
         }
         return $"Error:{tag}";
@@ -107,6 +118,12 @@ public static class Namings
         PlayerPrefs.SetInt(LANG_KEY, 2);
         LocTag = ELocTag.Russian;
         _curLocalization = RusLocalization._locals;
+    }   
+    public static void Esp()
+    {
+        PlayerPrefs.SetInt(LANG_KEY, 3);
+        LocTag = ELocTag.Spain;
+        _curLocalization = EspLocalization._locals;
     }
 
     public static string DialogTag(string tag)
