@@ -13,6 +13,8 @@ public class EndGameWindow : BaseWindow
     public MoneySlotUI MyMoneyField;
     public MoneySlotUI TotalMoneyRewardField;
     public MoneySlotUI TotalMicroChipsField;
+    public Button ToBattleShips;
+    public Button EqualShips;
     public Button GoToMapButton;
     public Image ToMy;
     public Image ToMiddle;
@@ -36,17 +38,20 @@ public class EndGameWindow : BaseWindow
         MyMoneyField.Init(player.MoneyData.MoneyCount);
         float baseSum = 0;
         DrawShipsRewards();
+        bool haveBattleShip = false;
         foreach (var shipStart in player.Army.Army)
         {
             if (shipStart.Ship.ShipType != ShipType.Base)
             {
+                haveBattleShip = true;
                 percents.Add(shipStart, 0f);
                 var s = shipStart.Ship.LastBattleData.GetTotalExp();
                 baseSum += s;
             }
         }
 
-        sum = baseSum;
+        EqualShips.interactable = ToBattleShips.interactable = haveBattleShip;
+      sum = baseSum;
         if (sum <= 1f)
         {
             sum = 1f;

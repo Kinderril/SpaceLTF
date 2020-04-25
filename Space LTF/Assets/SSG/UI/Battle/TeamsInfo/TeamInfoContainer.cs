@@ -18,9 +18,11 @@ public class TeamInfoContainer : MonoBehaviour
 //    private int _openCount;
     private int max_open = 2;
     private SideShipInfo _lastToggle = null;
+    private InGameMainUI _mainUi;
 
-    public void Init(Commander commander,Action<ShipBase> shipSelectedAction)
+    public void Init(InGameMainUI mainUi,Commander commander,Action<ShipBase> shipSelectedAction)
     {
+        _mainUi = mainUi;
         _infosGreen.Clear();
         _layoutRect = Layout.GetComponent<RectTransform>();
         Layout.ClearTransform();
@@ -63,7 +65,7 @@ public class TeamInfoContainer : MonoBehaviour
 
             var pref = DataBaseController.Instance.DataStructPrefabs.SideShipInfoLeft;
             var s1 = DataBaseController.GetItem(pref);
-            s1.Init(obj, _shipSelectedAction, ToggleChanges, shallOpen);
+            s1.Init(obj, _shipSelectedAction, ToggleChanges, shallOpen, _mainUi);
             if (shallOpen)
             {
                 _lastToggle = s1;

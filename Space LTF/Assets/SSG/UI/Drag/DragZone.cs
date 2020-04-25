@@ -24,6 +24,7 @@ public class DragZone : MonoBehaviour
     private bool _enabled = false;
     private bool _subcribed = false;
     private int _zoneId;
+//    public bool CanDrop = true;
 
 
     protected void Init(IInventory inventory, bool usable , List<DragableItemSlot> slots, ConnectInventory connectedInventory)

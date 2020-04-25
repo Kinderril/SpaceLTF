@@ -7,6 +7,7 @@ public class PlayerParameter
     public string Name;
     public bool IsBattle;
     public virtual int Level { get; set; }
+    public virtual PlayerParameterType ParameterType { get; set; }
     protected Player _player;
 
     [field: NonSerialized]

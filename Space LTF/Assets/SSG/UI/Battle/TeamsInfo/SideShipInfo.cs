@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
@@ -45,12 +46,18 @@ public class SideShipInfo : MonoBehaviour
     private ShipBase _ship;
     private Action<ShipBase> _shipSelectedAction;
     private Action<SideShipInfo> _toggleCallback;
+    public Image SelctedObject;
 
     public bool IsOpen => FullInfoContainer.gameObject.activeInHierarchy;
     public int Id => _ship.Id;
+    private InGameMainUI _mainUI;
 
-    public void Init(ShipBase ship, Action<ShipBase> shipSelectedAction, Action<SideShipInfo> toggleCallback, bool shallOpen)
+    public void Init(ShipBase ship, Action<ShipBase> shipSelectedAction,
+        Action<SideShipInfo> toggleCallback, bool shallOpen,InGameMainUI mainUI)
     {
+        UnSelect();
+        _mainUI = mainUI;
+        _mainUI.OnShipSelected += OnShipSelected;
 //        _isTaticReady = true;
         FireDamage.gameObject.SetActive(false);
         ShiedDamage.gameObject.SetActive(false);
@@ -79,6 +86,36 @@ public class SideShipInfo : MonoBehaviour
         UpdateTacticField();
         TacticCanvas.interactable = true;
 
+    }
+
+    private void OnShipSelected(ShipBase obj)
+    {
+        if (obj == null)
+        {
+            UnSelect();
+        }
+        else
+        {
+            if (obj == _ship)
+            {
+                Select();
+            }
+            else
+            {
+
+                UnSelect();
+            }
+        }
+    }
+
+    private void UnSelect()
+    {
+        SelctedObject.color = Color.white;
+    }
+
+    private void Select()
+    {
+        SelctedObject.color = Color.green;
     }
 
     private void OnChagePriority()
@@ -279,6 +316,7 @@ public class SideShipInfo : MonoBehaviour
 
     public void Dispose()
     {
+        _mainUI.OnShipSelected -= OnShipSelected;
         _ship.DamageData.OnDamageDone -= OnDamageDone;
         _ship.ShipInventory.LastBattleData.OnStatChanged -= OnStatChanged;
         _ship.OnShipDesicionChange -= OnShipDesicionChange;

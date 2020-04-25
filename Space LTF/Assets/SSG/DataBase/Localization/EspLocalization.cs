@@ -226,6 +226,12 @@ public static class EspLocalization
 {"EngineDest","Motor destruido"},
 {"ShieldDest","Escudo destruido"},
 {"FireDest","Fuego a bordo"},
+{"Loading", "Cargando"},
+{"CantDropNow", "No puedes vender artículos ahora."},
+
+{"Back", "Atrás"},
+{"Battle", "Batalla"},
+
 {"DoWantRetire","¿Quieres huir?"},
 {"NoSafeGame","No guardar la partida"},
 {"MaxLevel","Max"},
@@ -733,6 +739,7 @@ public static class EspLocalization
 {"dialog_teacherFail","Error."},
 {"dialog_teacherStartPilots","Esta es la ciencia de la nave. Ellos pueden enseñar a algunos de sus pilotos [créditos:{0}]."},
 {"dialog_teacherNo","No, gracias."},
+{"dialog_CantAttack", "No puedes atacar ahora. Ve a comprar y comprar armas."},
 {"dialog_Science ship","La ciencia de la nave"},
 {"dialog_teacherStartSience","Esta es la ciencia de la nave. Se puede mejorar su flota [créditos:{0}]. ¿Quieres actualizar {1}?"},
 {"Anomaly","Anomalía"},
@@ -777,7 +784,28 @@ public static class EspLocalization
 {"TutorEngineLock","Utilice el motor de armario para deshabilitar los enemigos.Usarlo para ayudar a los barcos de batalla golpear a los enemigos."},
 {"TutorChangeTactics","Cambio de nave de batalla táctica.Si su barco si mejor contra los tipos especiales de enemigo usted puede cambiar la prioridad de los objetivos de la misma."},
 {"ConfirmCloseTutor","Usted cierre tutorial.Si quieres repetir, usted lo puede encontrar en el menú."},
+{"TutorShootMainShip", "Usa ametralladora para destruir la torreta enemiga."},
 
+{"dialog_tutorEnds", "Entrenamiento completado"},
+{"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click right mouse button to place you want to move"},
+{"startGameNoTutor", "Pase TUTORIAL primero."},
+{"toGame", "Jugar"},
+{"toTutor", "Regreso"},
+{"Cancel", "Cancelar"},
+{"Galaxy gate", "Puerta galaxia"},
+{"wantStartTutor", "Este es un breve tutorial. Pásalo para entender lo básico del juego."},
+{"TutorPreBattle", "Equipa tu flota."},
+{"TutorStartShop", "Compra armas para tu acorazado."},
+{"resolutionTooLow", "La resolución de la pantalla es demasiado baja. Quizás tengas algunos problemas. El mínimo es de 1280 y 720."},
+
+{"Move camera", "Mover cámara"},
+{"Commander Guns", "Comandante Guns"},
+
+{"ParameterTypeScouts", "Cantidad de información que obtienes antes de la batalla. Uso en algunos diálogos"},
+{"ParameterTypeRepair", "Cada turno de reparación de batalla envía puntos de casco en {0} por ciento"},
+{"ParameterTypeChanrgeCount", "Recuento de baterías que puedes usar en la batalla {0}"},
+{"ParameterTypeChanrgeSpeed", "Disminuir el período de recarga de baterías en {0}%"},
+{"ParameterTypeEngine", "Radio de teletransportación {0}. Período de recarga {1}"},
     };
 
 }

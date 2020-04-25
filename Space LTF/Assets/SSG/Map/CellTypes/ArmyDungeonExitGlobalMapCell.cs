@@ -29,7 +29,7 @@ public class ArmyDungeonExitGlobalMapCell : ArmyGlobalMapCell
     private void RewardPlayer()
     {
         var human = MainController.Instance.MainPlayer;
-        human.ReputationData.WinBattleAgainst(_player.Army.BaseShipConfig, 3f);
+        human.ReputationData.WinBattleAgainst(_enemyPlayer.Army.BaseShipConfig, 3f);
 
     }
     protected override MessageDialogData GetDialog()
@@ -54,9 +54,9 @@ public class ArmyDungeonExitGlobalMapCell : ArmyGlobalMapCell
 
     protected override Player GetArmy()
     {
-        if (_player != null)
+        if (_enemyPlayer != null)
         {
-            return _player;
+            return _enemyPlayer;
         }
 
         List<Func<float, List<StartShipPilotData>>> posibleArmies = new List<Func<float, List<StartShipPilotData>>>();
@@ -109,7 +109,7 @@ public class ArmyDungeonExitGlobalMapCell : ArmyGlobalMapCell
 #endif
             army.AddRange(turrets);
             player.Army.SetArmy(army);
-            _player = player;
+            _enemyPlayer = player;
             CacheReward();
 #if UNITY_EDITOR
             var armyPower = player.Army.GetPower();
@@ -120,12 +120,12 @@ public class ArmyDungeonExitGlobalMapCell : ArmyGlobalMapCell
             }
 #endif
 
-            return _player;
+            return _enemyPlayer;
         }
 
-        _player = base.GetArmy();
+        _enemyPlayer = base.GetArmy();
         CacheReward();
-        return _player;
+        return _enemyPlayer;
     }
 
     private void CacheReward()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class BattleTutorialVideo : VideoTutorialElement
@@ -7,25 +8,25 @@ public class BattleTutorialVideo : VideoTutorialElement
     {
         base.Init();
 
-        if (!_isCompleted)
-            WindowManager.Instance.OnWindowSetted += OnWindowSetted;
+//        if (!_isCompleted)
+//            WindowManager.Instance.OnWindowSetted += OnWindowSetted;
     }
 
-    public override void Open()
+    public override void Open(Action callback)
     {
-        base.Open();
+        base.Open(callback);
         BattleController.Instance.PauseData.Pause();
     }
 
     private void OnWindowSetted(BaseWindow obj)
     {
-        var imGameWindow = obj as InGameMainUI;
-        if (imGameWindow != null)
-        {
-            OpenIfNotCompleted();
-            if (!_isCompleted)
-                BattleController.Instance.PauseData.Pause();
-        }
+//        var imGameWindow = obj as InGameMainUI;
+//        if (imGameWindow != null)
+//        {
+//            OpenIfNotCompleted();
+//            if (!_isCompleted)
+//                BattleController.Instance.PauseData.Pause();
+//        }
     }
 
     protected override void OnClose()
@@ -36,7 +37,7 @@ public class BattleTutorialVideo : VideoTutorialElement
 
     public override void Dispose()
     {
-        WindowManager.Instance.OnWindowSetted -= OnWindowSetted;
+//        WindowManager.Instance.OnWindowSetted -= OnWindowSetted;
         base.Dispose();
     }
 }

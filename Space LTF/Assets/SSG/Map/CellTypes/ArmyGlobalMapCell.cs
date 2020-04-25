@@ -8,7 +8,7 @@ public delegate void OnComeToDelegate(GlobalMapCell to, GlobalMapCell from);
 public class ArmyGlobalMapCell : GlobalMapCell
 {
     public float HIRE_CHANCE = 0.01f;
-    protected Player _player;
+    protected Player _enemyPlayer;
     protected BattlefildEventType? _eventType = null;
     public BattlefildEventType? EventType => _eventType;
 
@@ -26,12 +26,12 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
     protected virtual Player GetArmy()
     {
-        if (_player == null)
+        if (_enemyPlayer == null)
         {
             CacheArmy();
         }
 
-        return _player;
+        return _enemyPlayer;
     }
 
     protected virtual void CacheArmy()
@@ -40,7 +40,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
         var player = new PlayerAI(name);
         var army = ArmyCreator.CreateSimpleEnemyArmy(Power, data, player);
         player.Army.SetArmy(army);
-        _player = player;
+        _enemyPlayer = player;
     }
 
     public override bool CanCellDestroy()
@@ -77,7 +77,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
     {
         _additionalPower = additionalPower;
         var nextPower = SectorData.CalcCellPower(visitedSectors, _sector.Size, startPower, _additionalPower);
-        _player = null;
+        _enemyPlayer = null;
         // Debug.Log($"Army power sector updated prev:{_power}. next:{nextPower}");
         Power = nextPower;
     }

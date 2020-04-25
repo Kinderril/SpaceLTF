@@ -33,10 +33,15 @@ public class InGameMainUI : BaseWindow
     public RetirreButton RetireButton;
     public ReinforsmentsButton ReinforsmentsButton;
     public CamerasLinkButtons CamerasLinkButtons;
+    private bool _isTutor;
 
     public TimeScaleBattleUI TimeScaleBattle;
     //    public Button DebugKillAllEnemies;
     private FlyingNumbersController FlyingNumbersController = new FlyingNumbersController();
+    public SimpleTutorialVideo TutorSimple1;
+    public SimpleTutorialVideo TutorSimple2;
+    public Button TutorButton;
+    public event Action<ShipBase> OnShipSelected;
 
     public ShipBase SelectedShip
     {
@@ -71,6 +76,7 @@ public class InGameMainUI : BaseWindow
             {
                 ShipModulsUI.gameObject.SetActive(false);
             }
+            OnShipSelected?.Invoke(_selectedShip);
             CamerasLinkButtons.SelectedShip(_selectedShip);
             //Debug.Log("Ship selected " + _selectedShip.Id);
 
@@ -108,18 +114,28 @@ public class InGameMainUI : BaseWindow
         ShipModulsUI.gameObject.SetActive(false);
         this._battle = battle;
         UnselectSpell();
+        _isTutor = battle.RedCommander.Player is PlayerAITutor;
+        TutorSimple1.Init();
+        TutorSimple2.Init();
+
         MyCommander = battle.GreenCommander;
         BattleCoinUI.Init(MyCommander.CoinController);
         battle.OnShipAdd += OnShipAdd;
-        RetireButton.Init(this, 15f, battle.CanRetire);
+        var canRetire = battle.CanRetire;
+        if (_isTutor)
+        {
+            canRetire = false;
+
+        }
+        RetireButton.Init(this, 15f, canRetire);
         ReinforsmentsButton.Init(this);
         DebugUiControl.Init();
         //        HoldClearCoinUI.Init(HoldComplete);
         CreditController.Init(MyCommander);
         MainCamera = CamerasController.Instance.GameCamera;
         CamerasLinkButtons.Init(MainCamera);
-        GreenTeamInfoContainer.Init(battle.GreenCommander, ActionShipSelected);
-        RedTeamInfoContainer.Init(battle.RedCommander, ActionShipSelected);
+        GreenTeamInfoContainer.Init(this,battle.GreenCommander, ActionShipSelected);
+        RedTeamInfoContainer.Init(this, battle.RedCommander, ActionShipSelected);
         int weaponsIndex = 0;
         //        WindowKeys.gameObject.SetActive(false);
         TimeScaleBattle.Init(_battle);
@@ -128,6 +144,36 @@ public class InGameMainUI : BaseWindow
         {
             SpellModulsContainer.Init(this, MyCommander.SpellController, mainShip, OnSpellClicked, MyCommander.CoinController);
         }
+        TutorButton.gameObject.SetActive(_isTutor);
+        ActivateCurrentTutor();
+    }
+
+    public void OnClickOpenLastTutor()
+    {
+        ActivateCurrentTutor();
+    }
+
+    private void ActivateCurrentTutor()
+    {
+
+        if (_isTutor)
+        {
+            BattleController.Instance.PauseData.Pause();
+            if (_battle.RedCommander.Ships.Count <= 1)
+            {
+                TutorSimple1.Open(Unpause);
+            }
+            else
+            {
+                TutorSimple2.Open(Unpause);
+            }
+        }
+    }
+
+    private void Unpause()
+    {
+
+        BattleController.Instance.PauseData.Unpase(1f);
     }
 
     private void OnSpellClicked(SpellInGame spellToCast)
@@ -418,6 +464,8 @@ public class InGameMainUI : BaseWindow
         {
             _spellSelected.EndShowCast();
         }
+
+        OnShipSelected = null;
         MainCamera.ReturnCamera();
         //        WindowKeys.gameObject.SetActive(false);
         FlyingNumbersController.Dispose();

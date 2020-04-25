@@ -5,11 +5,26 @@ using UnityEngine;
 [Serializable]
 public class ShopGlobalMapCell : GlobalMapCell
 {
-    private readonly ShopInventory _shopInventory;
+    protected ShopInventory _shopInventory;
     public ShopGlobalMapCell(float power, int id, int intX, int intZ, SectorData sector, ShipConfig config) : base(id, intX, intZ, sector, config)
     {
+        InitShop(power,sector,config);
+    }
+
+    protected virtual void InitShop(float power, SectorData sector, ShipConfig config)
+    {
         _shopInventory = new ShopInventory(null);
-        _shopInventory.FillItems(power, config);
+        _shopInventory.FillItems(power, config, sector.XIndex);
+    }
+
+    public void ClearShop()
+    {
+        _shopInventory.ClearShop();
+
+    }
+    public void AddItem(WeaponType type)
+    {
+        _shopInventory.AddItem(type);
     }
 
     public override bool CanCellDestroy()
@@ -60,4 +75,5 @@ public class ShopGlobalMapCell : GlobalMapCell
     {
         WindowManager.Instance.OpenWindow(MainState.shop, _shopInventory);
     }
+
 }

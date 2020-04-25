@@ -19,17 +19,18 @@ public class TutorialPages : MonoBehaviour
     public List<TutorPage> Pages;
     public TextMeshProUGUI Name;
     public Button NextButton;
-//    public Button PrevButton;
+    public Button PrevButton;
     public Button CloseButton;
     public GameObject ExitConfirm;
     public TextMeshProUGUI ConfirmText;
     public TextMeshProUGUI ToggleText;
     private Action _closeCallback;
+    public bool WithConfirm;
 
-//    void Start()
-//    {
-//        Init();
-//    }
+    //    void Start()
+    //    {
+    //        Init();
+    //    }
 
     public void Init(Action closeCallback)
     {
@@ -71,6 +72,18 @@ public class TutorialPages : MonoBehaviour
 
         }
 
+        if (PrevButton != null)
+        {
+            if (Pages.Count <= 1)
+            {
+                PrevButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                PrevButton.gameObject.SetActive(true);
+            }
+        }
+
         if (index == Pages.Count - 1)
         {
             NextButton.gameObject.SetActive(false);
@@ -85,7 +98,15 @@ public class TutorialPages : MonoBehaviour
 
     public void OnExit()
     {
-        ExitConfirm.gameObject.SetActive(true);
+        if (WithConfirm)
+        {
+            ExitConfirm.gameObject.SetActive(true);
+        }
+        else
+        {
+            if (_closeCallback != null)
+                _closeCallback();
+        }
     }
 
     public void OnCloseConfirmClick()

@@ -62,7 +62,8 @@ public class Commander
         _paramsOfShips = player.Army.GetShipsToBattle();
         Battlefield = battlefield;
         _teamIndex = teamIndex;
-        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(), player.Parameters.ChargesSpeed.Level);
+        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(), 
+            player.Parameters.ChargesSpeed.Level);
         //        RewardController= new CommanderRewardController(this);
         SpellController = new CommanderSpells(this);
         Priority = new CommanderPriority(this);
@@ -471,7 +472,7 @@ public class Commander
         Player.WinBattleReward(enemyCommander);
     }
 
-    private void ApplyBattleDamage()
+    public void ApplyBattleDamage()
     {
 
         var baseRepairPercent = Player.Parameters.RepairPercentPerStep();

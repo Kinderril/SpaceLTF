@@ -19,20 +19,26 @@ public class WindowShop : BaseWindow
     public Transform NotValuableLayout;
     public ObjectWithTextMeshPro ValuableIteMeshProPrefab;
     public ObjectWithTextMeshPro NotValuableIteMeshProPrefab;
-
+    public SimpleTutorialVideo SimpleTutorialVideo;
+    private bool _isTutor;
 
     public override void Init<T>(T obj)
     {
+        SimpleTutorialVideo.Init();
         _shopInventory = obj as ShopInventory;
         _greenPlayer = MainController.Instance.MainPlayer;
-        
+        _isTutor = _shopInventory.GetAllItems().Count(x=>x!=null) <= 1;
+        if (_isTutor)
+        {
+            SimpleTutorialVideo.Open();
+        }
         MoneyField.Init(_greenPlayer.MoneyData.MoneyCount);
         _greenPlayer.MoneyData.OnMoneyChange += OnMoneyChange;
         _greeArmyUi = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.PlayerArmyUIPrefab);
         _greeArmyUi.Init(_greenPlayer, MyPlayersLayout, true, new ConnectInventory(_greenPlayer.Inventory));
         base.Init(obj);
-        PlayersInventory.Init(_greenPlayer.Inventory, null);
-        ShoInventoryUI.Init(_shopInventory, new ConnectInventory(_greenPlayer.Inventory));
+        PlayersInventory.Init(_greenPlayer.Inventory, null, true);
+        ShoInventoryUI.Init(_shopInventory, new ConnectInventory(_greenPlayer.Inventory),false);
         InitValuables();
     }
 
@@ -85,6 +91,31 @@ public class WindowShop : BaseWindow
 //    {
 //        base.Init();
 //    }
+
+    public override void OnToMap()
+    {
+        if (_isTutor)
+        {
+            _greenPlayer = MainController.Instance.MainPlayer;
+            var haveWeapons = _greenPlayer.Inventory.Weapons.Count > 0;
+            var battleShip =
+                _greenPlayer.Army.Army.FirstOrDefault(x => x != null && x.Ship.ShipType != ShipType.Base);
+            bool shipHaveWeapon = false;
+            if (battleShip != null)
+            {
+                shipHaveWeapon = battleShip.Ship.WeaponsModuls.Where(x => x != null).ToList().Count > 0;
+            }
+
+            var weaponOk = shipHaveWeapon || haveWeapons;
+            if (!weaponOk)
+            {
+                SimpleTutorialVideo.Open();
+                return;
+            }
+        }
+
+        base.OnToMap();
+    }
 
     public void OnClickEnd()
     {

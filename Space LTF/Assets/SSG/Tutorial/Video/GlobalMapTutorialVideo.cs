@@ -7,17 +7,17 @@ public class GlobalMapTutorialVideo : VideoTutorialElement
     {
         base.Init();
 
-        if (!_isCompleted)
-            WindowManager.Instance.OnWindowSetted += OnWindowSetted;
+//        if (!_isCompleted)
+//            WindowManager.Instance.OnWindowSetted += OnWindowSetted;
     }
 
     private void OnWindowSetted(BaseWindow obj)
     {
-        var imGameWindow = obj as MapWindow;
-        if (imGameWindow != null)
-        {
-            OpenIfNotCompleted();
-        }
+//        var imGameWindow = obj as MapWindow;
+//        if (imGameWindow != null)
+//        {
+//            OpenIfNotCompleted();
+//        }
     }
 
     protected override void OnClose()
@@ -27,7 +27,7 @@ public class GlobalMapTutorialVideo : VideoTutorialElement
 
     public override void Dispose()
     {
-        WindowManager.Instance.OnWindowSetted -= OnWindowSetted;
+//        WindowManager.Instance.OnWindowSetted -= OnWindowSetted;
         base.Dispose();
     }
 }

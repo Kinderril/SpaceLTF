@@ -30,10 +30,10 @@ public class EndBattleShipPllotInfoUI : MonoBehaviour
         FieldDamageHealth.text = Namings.Tag("DamageBody") + ":" + info.Ship.LastBattleData.HealthDamage.ToString("0");
         FieldDamageShield.text = Namings.Tag("DamageShield") + ":" + info.Ship.LastBattleData.ShieldhDamage.ToString("0");
         var MaxHealth = ShipParameters.ParamUpdate(info.Ship.MaxHealth, info.Pilot.HealthLevel, ShipParameters.MaxHealthCoef);
-        var hp = MaxHealth;
+//        var hp = MaxHealth;
         MoneyToAdd = 0;
         var cur = info.Ship.HealthPercent * MaxHealth;
-        HealedHpField.text = Namings.Tag("Health") + ":" + cur + "(:+" + info.Ship.LastBattleData.SelfDamage.ToString("0") + ")/" + hp.ToString("0");
+        HealedHpField.text = Namings.Tag("Health") + $":{cur}/{MaxHealth}";
     }
 
     public void SetMoneyAdd(int addMoney)

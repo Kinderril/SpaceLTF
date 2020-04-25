@@ -9,7 +9,7 @@ public enum StartMode
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "003b";
+    public static string VERSION = "007b";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
@@ -39,6 +39,7 @@ public class MainController : Singleton<MainController>
             WindowManager.Instance.Init();
             DataBase.DataStructPrefabs.CheckShipsWeaponsPosition();
             SteamStatsAndAchievements.Instance.RequestStats();
+
 
         }
         catch (Exception e)

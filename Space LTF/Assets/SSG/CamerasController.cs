@@ -302,7 +302,7 @@ public class CamerasController : Singleton<CamerasController>
 
     public void StartCheck()
     {
-        StartCheckResolution();
+//        StartCheckResolution();
         StartCheckAA();
         CheckSoundOnStart();
         CheckNoMouseMoveOnStart();

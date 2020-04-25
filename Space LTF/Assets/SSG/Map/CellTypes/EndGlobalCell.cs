@@ -28,12 +28,12 @@ public class EndGlobalCell : ArmyGlobalMapCell
         var army = ArmyCreator.CreateSimpleEnemyArmy(power, armyType, player);
         // ArmyCreator.cre
         player.Army.SetArmy(army);
-        _player = player;
+        _enemyPlayer = player;
     }
 
     public override string Desc()
     {
-        return "Galaxy gate";
+        return Namings.Tag("Galaxy gate");
     }
 
     public override void Take()

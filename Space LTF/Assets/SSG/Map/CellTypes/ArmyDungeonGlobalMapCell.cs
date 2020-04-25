@@ -72,7 +72,7 @@ public class ArmyDungeonGlobalMapCell : ArmyGlobalMapCell
         var player = new PlayerAIMilitary(name);
         var army = ArmyCreator.CreateSimpleEnemyArmy(Power, data, player);
         player.Army.SetArmy(army);
-        _player = player;
+        _enemyPlayer = player;
     }
 
     public override bool OneTimeUsed()

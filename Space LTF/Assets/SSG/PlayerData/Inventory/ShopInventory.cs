@@ -9,7 +9,7 @@ public class ShopInventory : PlayerInventory
 {
     private const int MIN_WEAPONS = 3;
     private const int MAX_WEAPONS = 6;
-    private const int MIN_MODULS = 1;
+    private const int MIN_MODULS = 3;
     private const int Max_MODULS = 4;
     private const int MIN_SPELLS = 1;
     private const int Max_SPELLS = 2;
@@ -173,7 +173,7 @@ public class ShopInventory : PlayerInventory
         return true;
     }
 
-    public void FillItems(float power, ShipConfig config)
+    public void FillItems(float power, ShipConfig config, int intdex)
     {
         try
         {
@@ -181,9 +181,13 @@ public class ShopInventory : PlayerInventory
             //        int totalItems = (int)((power + 5) / 2);
             //        totalItems = Mathf.Clamp(totalItems, MIN_ITEMS, MAX_ITEMS);
             var weaponsCount = MyExtensions.Random(MIN_WEAPONS, MAX_WEAPONS);
-            var countModuls = MyExtensions.Random(MIN_MODULS, Max_MODULS);
-            var spells = MyExtensions.Random(MIN_SPELLS, Max_SPELLS);
+            var clampedIndex = Mathf.Clamp(intdex * 1.5f,0, 7 );
+            var baseModuls = MyExtensions.Random(MIN_MODULS, Max_MODULS);
 
+            var countModuls = baseModuls + clampedIndex;
+//            Debug.LogError($"Moduls;{countModuls}    baseModuls:{baseModuls}   intdex:{clampedIndex}    intdex:{intdex}");
+
+            var spells = MyExtensions.Random(MIN_SPELLS, Max_SPELLS);
             bool goodPower = power > 22;
             for (var i = 0; i < weaponsCount; i++)
             {
@@ -232,6 +236,18 @@ public class ShopInventory : PlayerInventory
             Debug.LogError($"Fill itesm error: {e}");
         }
     }
+    public void ClearShop()
+    {
+        Weapons.Clear();
+        Moduls.Clear();
+        Spells.Clear();
+    }
+    public void AddItem(WeaponType type)
+    {
+        var w = Library.CreateWeaponByType(type);
+        w.CurrentInventory = this;
+        Weapons.Add(w);
+    }
 
 
 
@@ -279,5 +295,6 @@ public class ShopInventory : PlayerInventory
 
         return 1f;
     }
+
 }
 

@@ -22,6 +22,7 @@ public class DragableItemSlot : MonoBehaviour
 
     public DragableItem CurrentItem;
     private bool _usage = false;
+    public bool CanDrop = true;
     public IInventory _inventory { get; private set; }
 
     public int id;
@@ -80,6 +81,11 @@ public class DragableItemSlot : MonoBehaviour
     }
     public bool CanPutHere(DragableItem element)
     {
+        if (!CanDrop)
+        {
+            WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("CantDropNow"));
+            return false;
+        }
 #if UNITY_EDITOR
         if (_inventory == null)
         {

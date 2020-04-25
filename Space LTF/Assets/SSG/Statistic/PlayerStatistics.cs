@@ -52,6 +52,7 @@ public class PlayerStatistics
     private int _openedWeapons = 0;
     private int _openedConfigs = 0;
     public int CollectedPoints { get; private set; }
+    public int AllTimeCollectedPoints { get; private set; }
     public EndBattleType LastBattle = EndBattleType.win;
     public EndGameStatistics EndGameStatistics = new EndGameStatistics();
     private int _lastDifficulty;
@@ -231,6 +232,7 @@ public class PlayerStatistics
 
     public void AddOpenPoints(int val)
     {
+        AllTimeCollectedPoints += val;
         CollectedPoints += val;
         SaveGame();
     }
@@ -273,11 +275,20 @@ public class PlayerStatistics
         SaveGame();
     }
 
+    public const int TUTORIAL_POINTS = 5;
+
     public void PlayNewGame(StartNewGameData data)
     {
         _pointsOnStart = CollectedPoints;
         var d = data.CalcDifficulty();
-        _lastDifficulty = (int)(d * 100);
+        if (data.IsTutorial)
+        {
+            _lastDifficulty = TUTORIAL_POINTS;
+        }
+        else
+        {
+            _lastDifficulty = (int)(d * 100);
+        }
     }
 
     public void AddWinFinal(ShipConfig config)

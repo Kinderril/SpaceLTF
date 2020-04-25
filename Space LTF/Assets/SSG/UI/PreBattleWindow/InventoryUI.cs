@@ -23,7 +23,7 @@ public class InventoryUI : DragZone
 //    public ScrollView Scroll;
 //    private InventorySlots SlotsController;
 
-    public void Init(PlayerInventory player, ConnectInventory connectedInventory)
+    public void Init(PlayerInventory player, ConnectInventory connectedInventory,bool canDrop)
     {
 //        Scroll.contentViewport = transform.parent;
         _inventory = player;
@@ -33,8 +33,8 @@ public class InventoryUI : DragZone
         Weapons = player.Weapons;
         Moduls = player.Moduls;
         Spells = player.Spells;
-        InitCurrentItems();
-        InitFreeSlots();
+        InitCurrentItems(canDrop);
+        InitFreeSlots(canDrop);
 //        InitMoney();
         base.Init(player, true, _allSLots, connectedInventory);
         RefreshPosition();
@@ -55,7 +55,7 @@ public class InventoryUI : DragZone
     
 
 
-    private void InitCurrentItems()
+    private void InitCurrentItems(bool canDrop)
     {
         for (int i = 0; i < Weapons.Count; i++)
         {
@@ -63,6 +63,7 @@ public class InventoryUI : DragZone
             var itemSlot = AttachToLayout();
             itemSlot.Init(_inventory,true);
             SetStartItem(itemSlot,weapon);
+            itemSlot.CanDrop = canDrop;
             _allSLots.Add(itemSlot);
         }
         for (int i = 0; i < Moduls.Count; i++)
@@ -73,6 +74,7 @@ public class InventoryUI : DragZone
             //            var item = DragableItem.Create(weapon, true);
             _allSLots.Add(itemSlot);
             SetStartItem(itemSlot,weapon);
+            itemSlot.CanDrop = canDrop;
         }
         for (int i = 0; i < Spells.Count; i++)
         {
@@ -82,6 +84,7 @@ public class InventoryUI : DragZone
             //            var item = DragableItem.Create(weapon, true);
             SetStartItem(itemSlot,weapon);
             _allSLots.Add(itemSlot);
+            itemSlot.CanDrop = canDrop;
         }
     }
 
@@ -93,7 +96,7 @@ public class InventoryUI : DragZone
         return slot;
     }
     
-    private void InitFreeSlots()
+    private void InitFreeSlots(bool canDrop)
     {
         var delta = _inventory.SlotsCount - _allSLots.Count;
         for (int i = 0; i < delta; i++)
@@ -102,6 +105,7 @@ public class InventoryUI : DragZone
 
             itemSlot.Init(_inventory, true);
             itemSlot.transform.SetAsLastSibling();
+            itemSlot.CanDrop = canDrop;
             //            itemSlot.OnItemImplemented += OnItemImplemented;
             _allSLots.Add(itemSlot);
         }

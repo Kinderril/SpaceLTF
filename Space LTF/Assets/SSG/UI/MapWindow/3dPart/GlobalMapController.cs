@@ -197,8 +197,9 @@ public class GlobalMapController : MonoBehaviour
 
 #endif
         GlobalMapCell startCell = null;
+        var vertical = _data.VerticalCount * data.SizeOfSector - 1;
         for (var i = 0; i < data.SizeX; i++)
-            for (var j = 0; j < GalaxyData.VERTICAL_COUNT * data.SizeOfSector - 1; j++)
+            for (var j = 0; j < vertical; j++)
             {
                 var cell = allCells2[i, j];
                 if (cell == null) continue;
@@ -314,7 +315,7 @@ public class GlobalMapController : MonoBehaviour
     public void Dispsoe()
     {
         for (var i = 0; i < _data.SizeX; i++)
-            for (var j = 0; j < GalaxyData.VERTICAL_COUNT * _data.SizeOfSector - 1; j++)
+            for (var j = 0; j < _data.VerticalCount * _data.SizeOfSector - 1; j++)
             {
                 var cell = _allCells[i, j];
                 if (cell != null)

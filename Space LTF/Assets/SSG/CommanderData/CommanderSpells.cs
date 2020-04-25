@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class CommanderSpells
 {
+    public const float COMMANDER_BLINK_BASE_PERIOD = 20;
+    public const float COMMANDER_BLINK_LEVEL_PERIOD = 2;
+    public const float COMMANDER_BLINK_BASE_DIST = 7;
+    public const float COMMANDER_BLINK_LEVEL_DIST = 3;
+
     private Commander _commander;
     private const float DistToBlock = 10f;
     public List<SpellInGame> AllSpells = new List<SpellInGame>();
@@ -17,8 +22,8 @@ public class CommanderSpells
 
     public void AddMainShipBlink()
     {
-        var radius = 7 + _commander.Player.Parameters.EnginePower.Level * 3;
-        var delay = 20 - _commander.Player.Parameters.EnginePower.Level * 2;
+        var radius = COMMANDER_BLINK_BASE_DIST + _commander.Player.Parameters.EnginePower.Level * COMMANDER_BLINK_LEVEL_DIST;
+        var delay = COMMANDER_BLINK_BASE_PERIOD - _commander.Player.Parameters.EnginePower.Level * COMMANDER_BLINK_LEVEL_PERIOD;
 
         ShipBase mainShip = _commander.MainShip;
 

@@ -204,8 +204,12 @@ public static class EngLocalization
         {"WeaponSpeed", "Increase speed of all bullets."},
         {"ArmyAdditionalPower", "Every turn enemies fleets will be upgraded."},
 
+        {"Back", "Back"},
+        {"Battle", "Battle"},
+
         {"questKills", "{0} kills"},
         {"Fleet", "Fleet"},
+        {"Loading", "Loading"},
         {"RusLang", "Russian"},
         {"EngLang", "English"},
         {"EspLang", "Spanish"},
@@ -866,17 +870,37 @@ public static class EngLocalization
         {"TutorDifferentTypesCells", "Different types of cells contains different events.\nYou can move only to closest cells.\nChoose target wisely"},
         {"TutorDialog", "At dialogs you can choose different ways."},
 
-        {"TutorMove", "Click right mouse button to move commander ship.\nDo it to find good position for shooting."},
+        {"dialog_tutorEnds", "Tutorial ends. You are ready."},
+        {"dialog_CantAttack", "You can't attack now. Go to shop and buy weapons."},
+        {"TutorMove", "You can control ONLY commander ship\nClick right mouse button to move commander ship."},
         {"TutorRecharge", "Help your ships with recharge shield.\nIf one of your ships are damaged - help him."},
         {"TutorMachineGun", "Use machine gun to destroy enemies.\nIf you have good chances to damage enemy use it."},
         {"TutorEngineLock", "Use engine locker to disable enemies.\nUse it to help battle ships hit enemies."},
         {"TutorChangeTactics", "Change battle ship tactics.\nIf your ship if better against special types of enemy you can change priority targets of it."},
 
         {"ConfirmCloseTutor", "You closing tutorial.\nIf you want repeat, you can find it at menu."},
-        // {"TutorEnemyFleet", "Enemies fleet"},
-        // {"TutorEndBattle", "You win battle. Now you must choose what is better now. Increase ship levels, or take credits to other thhings"},
-        // {"TutorMyFleet", "Your fleet. You can't control it directly.\nOnly choose tactics."},
-        // {"TutorSpells", "Commander ship special options.\nAny shot will take some batteries for a period.\nYou must catch the moment to use them successfully."},
+
+        {"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click right mouse button to place you want to move"},
+        {"TutorShootMainShip", "Use machine gun to destroy enemy turret."},
+        {"CantDropNow", "You can't sell items now."},
+        {"startGameNoTutor", "Pass TUTORIAL first."},
+        {"toGame", "Play"},
+        {"toTutor", "Return"},
+        {"Cancel", "Cancel"},
+        {"Galaxy gate", "Galaxy gate"},
+        {"wantStartTutor", "This is short tutorial. Pass it to understand basic of game."},
+        {"TutorPreBattle", "Equip your fleet."},
+        {"TutorStartShop", "Buy weapons for your battle ship."},
+        {"resolutionTooLow", "Screen resolution is too low. Maybe you will have some problems. Minimum is 1280 and 720"},
+        {"Move camera", "Move camera"},
+        {"Commander Guns", "Commander Guns"},
+
+        {"ParameterTypeScouts", "Amount of information you get before battle. Using at some dialogs"},
+        {"ParameterTypeRepair", "Each turn repair battle ships hull points on {0} percent."},
+        {"ParameterTypeChanrgeCount", "Count of batteries you can use at battle {0}"},
+        {"ParameterTypeChanrgeSpeed", "Decrease reload batteries period on {0}%"},
+        {"ParameterTypeEngine", "Radius of teleportation {0}. Reload period {1}"},
+
 
     };
 

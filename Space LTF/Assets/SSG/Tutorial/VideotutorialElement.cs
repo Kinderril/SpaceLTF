@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ public class VideoTutorialElement : MonoBehaviour
 {
 
     public string Id;
+    private Action _callback;
     public bool _isCompleted;
     public TutorialPages TutorialPages;
     public Toggle DontShowNoreToggle;
@@ -24,8 +26,9 @@ public class VideoTutorialElement : MonoBehaviour
         }
     }
 
-    public virtual void Open()
+    public virtual void Open(Action callback = null)
     {
+        _callback = callback;
         TutorialPages.gameObject.SetActive(true);
         TutorialPages.Init(OnClose);
     }
@@ -38,6 +41,7 @@ public class VideoTutorialElement : MonoBehaviour
             _isCompleted = true;
             Dispose();
         }
+        _callback?.Invoke();
 
         TutorialPages.gameObject.SetActive(false);
     }

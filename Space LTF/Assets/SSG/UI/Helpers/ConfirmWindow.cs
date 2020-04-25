@@ -8,10 +8,30 @@ public class ConfirmWindow : MonoBehaviour
     private Action onConfirm;
     private Action onReject;
     public TextMeshProUGUI labelField;
-    public virtual void Init(Action onConfirm, Action onReject, string ss)
+    public TextMeshProUGUI OkField;
+    public TextMeshProUGUI CancelField;
+    public virtual void Init(Action onConfirm, Action onReject, string ss,string okField = null,string cancelField = null)
     {
         WindowManager.Instance.WindowMainCanvas.interactable = false;
         WindowManager.Instance.WindowSubCanvas.interactable = true;
+        if (okField != null)
+        {
+            OkField.text = okField;
+        }
+        else
+        {
+            OkField.text = Namings.Tag("Ok");
+
+        }
+        if (cancelField != null)
+        {
+            CancelField.text = cancelField;
+        }
+        else
+        {
+            CancelField.text = Namings.Tag("Cancel");
+
+        }
         this.onConfirm = onConfirm;
         this.onReject = onReject;
         labelField.text = ss;

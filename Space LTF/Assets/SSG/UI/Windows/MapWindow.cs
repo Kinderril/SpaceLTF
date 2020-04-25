@@ -46,12 +46,17 @@ public class MapWindow : BaseWindow
     //    public MapSettingsWindow WindowSettings;
     public QuestOnStartControllerUI QuestsOnStartController;
     public MovingArmyUIController MovingArmyUIController;
+    public VideoTutorialElement Tutorial;
+    public VideoTutorialElement OptionalTutorial;
+    private bool _isTutor;
 
     public event Action<bool> OnOpenInventory;
 
     public override void Init()
     {
         base.Init();
+        Tutorial.Init();
+        OptionalTutorial.Init();
 
         CellIinfoObject.Disable();
         MapConsoleUI.Appear();
@@ -67,13 +72,7 @@ public class MapWindow : BaseWindow
         player = MainController.Instance.MainPlayer;
         player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
         //        Cataclysm.Init(player.MapData);
-        bool showFirstInfo = player.MapData.Step == 0;
-        StartInfo.gameObject.SetActive(showFirstInfo);
-        if (showFirstInfo)
-        {
-            var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
-            field.text = Namings.Tag("StartInfo");
-        }
+        
         //        ReputationMapUI.Init();
         PlayerByStepUI.Init(player.ByStepDamage);
         //        player.MapData.OnCellChanged += OnCellChanged;
@@ -92,7 +91,7 @@ public class MapWindow : BaseWindow
         GlobalMap.Open();
         var connectedCells = player.MapData.ConnectedCellsToCurrent();
         GlobalMap.SingleReset(player.MapData.CurrentCell, connectedCells);
-        InventoryUI.Init(player.Inventory, null);
+        InventoryUI.Init(player.Inventory, null,true);
         GlobalMap.UnBlock();
         player.QuestData.OnElementFound += OnElementFound;
 
@@ -103,6 +102,22 @@ public class MapWindow : BaseWindow
         InitSideShip();
         QuestsOnStartController.Init(player.QuestsOnStartController);
         CheckLeaveDialog();
+        _isTutor = (player.MapData.GalaxyData is TutorialGalaxyData);
+        bool showFirstInfo = player.MapData.Step == 0;
+        if (_isTutor)
+        {
+            showFirstInfo = false;
+            if (player.MapData.Step == 0)
+            {
+                Tutorial.Open();
+            }
+        }
+        if (showFirstInfo)
+        {
+            var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
+            field.text = Namings.Tag("StartInfo");
+        }
+        StartInfo.gameObject.SetActive(showFirstInfo);
         MovingArmyUIController.Init(MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController, GlobalMap);
     }
 
@@ -472,6 +487,11 @@ public class MapWindow : BaseWindow
     public void OnClickSettings()
     {
         WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.map);
+    }
+
+    public void OnTutorialClick()
+    {
+        Tutorial.Open();
     }
 
     private void StartDialog(MessageDialogData dialog, DialogEndsCallback callbackOnEnd)

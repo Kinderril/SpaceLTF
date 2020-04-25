@@ -419,10 +419,18 @@ public class BattleController : Singleton<BattleController>
         CamerasController.Instance.GameCamera.SourceAmbient.Stop();
         Debug.Log("End battle 2 LastWinner:" + LastWinner.ToString());
         GlobalEventDispatcher.WinBattle(RedCommander.FirstShipConfig);
-        if (LastWinner == EndBattleType.win)
+        switch (LastWinner)
         {
-            GreenCommander.WinEndBattle(RedCommander);
+            case EndBattleType.win:
+                GreenCommander.WinEndBattle(RedCommander);
+                break;
+            case EndBattleType.lose:
+                break;
+            case EndBattleType.runAway:
+                GreenCommander.ApplyBattleDamage();
+                break;
         }
+
         foreach (var shipBase in SideGreen)
         {
             GameObject.DestroyImmediate(shipBase.gameObject);

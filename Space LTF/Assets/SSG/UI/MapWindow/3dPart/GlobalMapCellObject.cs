@@ -145,7 +145,7 @@ public class GlobalMapCellObject : MonoBehaviour
         if (_isArmy)
         {
             ActiveRenderer = Fleet.GetComponent<Renderer>();
-            if (Cell is EndGlobalCell)
+            if (Cell is EndGlobalCell || Cell is EndTutorGlobalCell)
             {
                 Unknown.gameObject.gameObject.SetActive(false);
                 ExitObject.gameObject.gameObject.SetActive(true);
@@ -177,6 +177,12 @@ public class GlobalMapCellObject : MonoBehaviour
             else if (Cell is EventGlobalMapCell)
             {
                 ObjectPainted = Event;
+            }
+            else if (Cell is EndTutorGlobalCell)
+            {
+                Unknown.gameObject.gameObject.SetActive(false);
+                ExitObject.gameObject.gameObject.SetActive(true);
+                ObjectPainted = Unknown;
             }
             else
             {

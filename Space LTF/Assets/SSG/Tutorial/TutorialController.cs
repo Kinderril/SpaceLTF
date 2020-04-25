@@ -35,14 +35,14 @@
                 mapMain.gameObject.SetActive(false);
             if (mapMain2 != null)
                 mapMain2.gameObject.SetActive(false);
-
-            #endregion
+            if (preBattle != null)
+                preBattle.gameObject.SetActive(false);
 
             GlobalMapTutorialVideo.Init();
             VideoBattleTutorial.Init();
+            #endregion
 
-            if (preBattle != null)
-                preBattle.Init();
+
             if (endBattle != null)
                 endBattle.Init();
             if (mapUpgrade != null)

@@ -25,12 +25,15 @@ public class MapSettingsWindow : MonoBehaviour
     public WindowKeys Keys;
 //    public GameObject LangChanged;
     public VideoTutorialElement BattleTutorial;
+    public VideoTutorialElement MapTutorial;
     public GameObject BattleTutorialButton;
     public TMP_Dropdown ResolutionDropdown;
 
     public GameObject MapButtons;
     public GameObject ExitButtonMenu;
     public GameObject BattleButtons;
+
+    private EWindowSettingsLauch _settingsLauch;
 
 
 
@@ -52,6 +55,7 @@ public class MapSettingsWindow : MonoBehaviour
 
     public void Init(EWindowSettingsLauch settingsLauch)
     {
+        _settingsLauch = settingsLauch;
         InitDropDown();
         ResolutionDropdown.value = CamerasController.Instance.CurIndexResolution;
         switch (settingsLauch)
@@ -63,7 +67,7 @@ public class MapSettingsWindow : MonoBehaviour
                 BattleButtons.gameObject.SetActive(true);
                 break;
             case EWindowSettingsLauch.map:
-                BattleTutorialButton.gameObject.SetActive(false);
+                BattleTutorialButton.gameObject.SetActive(true);
                 MapButtons.gameObject.SetActive(true);
                 ExitButtonMenu.gameObject.SetActive(false);
                 BattleButtons.gameObject.SetActive(false);
@@ -132,10 +136,20 @@ public class MapSettingsWindow : MonoBehaviour
 
     public void OnBattleTutorialClick()
     {
-        OnClickClose();
-        BattleTutorial.Open();
+        switch (_settingsLauch)
+        {
+            case EWindowSettingsLauch.battle:
+                OnClickClose();
+                BattleTutorial.Open();
+                break;
+            case EWindowSettingsLauch.map:
+                OnClickClose();
+                MapTutorial.Open();
+                break;
+            case EWindowSettingsLauch.menu:
+                break;
+        }
     }
-
 
     void ChangeConfirm(Action callback,ELocTag tag)
     {

@@ -79,16 +79,12 @@ public class WindowNewGame : BaseWindow
 
     public void OnClickStart()
     {
-        // if (PlayerStartParametersUI.CheckFreePoints())
-        // {
-        //     PlayerStartParametersUI.OnParamClick(PlayerParameterType.repair, true);
-        //     PlayerStartParametersUI.OnParamClick(PlayerParameterType.scout, true);
-        // }
-        //#if UNITY_EDITOR
-        //        posibleStartSpells = new List<SpellType>();
-        //        posibleStartSpells.Add(SpellType.engineLock);
-        //
-        //#endif
+        UpdateStartData();
+        MainController.Instance.CreateNewPlayerAndStartGame(gameData);
+
+    }    
+    public void OnClickStartTutorial()
+    {
         UpdateStartData();
         MainController.Instance.CreateNewPlayerAndStartGame(gameData);
 
@@ -121,7 +117,7 @@ public class WindowNewGame : BaseWindow
         gameData = new StartNewGameData(new Dictionary<PlayerParameterType, int>(),
             ArmyTypeSelectorUI.Selected, posibleStartWeapons,
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), /*StartDeathTime.GetValueInt()*/999, CoresCount.GetValueInt(),
-            DifficultyNewGame.CurDifficulty, posibleSpells, GetPowerPerTurn());
+            DifficultyNewGame.CurDifficulty, posibleSpells, GetPowerPerTurn(), false);
         var dif = Utils.FloatToChance(gameData.CalcDifficulty());
         DifficultyFIeld.text = Namings.Format(Namings.Tag("StatisticDifficulty"), dif);
     }
@@ -129,6 +125,11 @@ public class WindowNewGame : BaseWindow
     private int GetPowerPerTurn()
     {
         return AdditionalPower.GetValueInt();
+    }
+
+    public void OnGoBack()
+    {
+        WindowManager.Instance.OpenWindow(MainState.start);
     }
 
     public void OnClickRandomStart()

@@ -51,9 +51,18 @@ public class PlayerMapData
         _stepDamage = stepDamage;
         Step = 0;
         var sectorIndex = MyExtensions.Random(10 * data.SectorSize, 100 * data.SectorSize);
-        var sector = new GalaxyData("Sector " + sectorIndex.ToString());
-        var startCell = sector.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
-        GalaxyData = sector;
+        GalaxyData galaxyData;
+        if (data.IsTutorial)
+        {
+            data.SectorSize = 10;
+            galaxyData = new TutorialGalaxyData("TutorialGalaxyData " + sectorIndex.ToString());
+        }
+        else
+        {
+            galaxyData = new GalaxyData("GalaxyData " + sectorIndex.ToString());
+        }
+        var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
+        GalaxyData = galaxyData;
         CurrentCell = startCell;
         OpenAllNear();
     }

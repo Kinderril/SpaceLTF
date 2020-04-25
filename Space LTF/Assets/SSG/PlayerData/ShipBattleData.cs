@@ -8,17 +8,13 @@ public class ShipBattleData
     //    public int DamageDone;
     public float HealthDamage;
     public float ShieldhDamage;
-    public float SelfDamage;
+//    public float SelfDamage;
     private float _expCollected = 0;
     public int Kills { get; private set; }
 
     [field: NonSerialized]
     public event Action<ShipBattleData> OnStatChanged;
 
-    public ShipBattleData()
-    {
-
-    }
 
     public void AddDamage(float healthdelta, float shielddelta, float expCoef)
     {
@@ -47,9 +43,9 @@ public class ShipBattleData
         return Mathf.Clamp((int)_expCollected, 1, 999999);
     }
 
-    public void SetDamageCount(float countHealed)
-    {
-        SelfDamage = countHealed;
-    }
+//    public void SetDamageCount(float countHealed)
+//    {
+//        SelfDamage = countHealed;
+//    }
 }
 

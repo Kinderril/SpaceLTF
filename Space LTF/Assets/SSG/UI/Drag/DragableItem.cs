@@ -131,7 +131,9 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
             WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.InventoryMove);
             var p = transform.position;
             DragableItemSlot findedSlot = TryFindSlot(p);
-            Debug.Log($"Release findedSlot:{findedSlot != null}");
+//            Debug.Log($"Release findedSlot:{findedSlot != null}");
+//if (findedSlot.CanPutHere())
+
             TestSlot(findedSlot, b =>
             {
                 if (!b)

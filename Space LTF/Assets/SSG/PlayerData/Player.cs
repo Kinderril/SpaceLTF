@@ -44,7 +44,17 @@ public class Player
         MapData = new PlayerMapData();
         MapData.Init(data, ByStepDamage);
         MapData.GalaxyData.GalaxyEnemiesArmyController.InitQuests(QuestData);
-        Army.SetArmy(CreateStartArmy(data.shipConfig, data.posibleStartWeapons));
+        List<StartShipPilotData> startArmy;
+        if (data.IsTutorial)
+        {
+            startArmy = CreateStartArmyTutor();
+        }
+        else
+        {
+            startArmy = CreateStartArmy(data.shipConfig, data.posibleStartWeapons);
+        }
+        
+        Army.SetArmy(startArmy);
         RepairData.Init(Army, MapData, Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
         ReputationData.AddReputation(data.shipConfig, Library.START_REPUTATION);
@@ -144,6 +154,24 @@ public class Player
 
     }
 
+    private List<StartShipPilotData> CreateStartArmyTutor()
+    {
+
+        ArmyCreatorLogs logs = new ArmyCreatorLogs();
+        float r = 1000;
+        int simpleIndex;
+        var bShip = ArmyCreator.CreateBaseShip(new ArmyRemainPoints(r), ShipConfig.mercenary, this);
+        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        {
+            var m1 = Library.CreateSpell(SpellType.machineGun);
+            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+        }
+        List<StartShipPilotData> army = new List<StartShipPilotData>();
+        army.Add(bShip);
+        MainShip = bShip;
+        return army;
+
+    }
     private List<StartShipPilotData> CreateStartArmy(ShipConfig config, List<WeaponType> posibleStartWeapons)
     {
         ArmyCreatorLogs logs = new ArmyCreatorLogs();
@@ -159,8 +187,7 @@ public class Player
         r += Library.BASE_SHIP_VALUE;
         var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), t2, config, this, logs);
 
-        if (MainController.Instance.Statistics.CollectedPoints < 5)
-//        if (true)
+        if (MainController.Instance.Statistics.AllTimeCollectedPoints < 15)
         {
             NewGameAddSpellsBasic(bShip);
         }
