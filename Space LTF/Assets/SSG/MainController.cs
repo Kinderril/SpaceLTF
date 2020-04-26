@@ -9,7 +9,7 @@ public enum StartMode
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "007b";
+    public static string VERSION = "008b";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;

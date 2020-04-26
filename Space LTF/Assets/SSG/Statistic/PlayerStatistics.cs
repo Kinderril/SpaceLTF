@@ -43,7 +43,8 @@ public class PlayerStatistics
 {
     public const int OPEN_FOR_END_GAME = 3;
     public const int POINTS_TO_OPEN = 125;
-    private static string mainPlayer = $"/stats_{MainController.VERSION}.stat";
+    private static string mainPlayer = $"/stats_.stat";
+//    private static string mainPlayer = $"/stats_{MainController.VERSION}.stat";
 
     [field: NonSerialized] public List<OpenShipConfig> OpenShipsTypes;
 
