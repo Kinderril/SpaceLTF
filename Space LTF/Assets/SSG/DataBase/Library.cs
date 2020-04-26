@@ -781,7 +781,71 @@ public static class Library
     {
         var list  = new List<ItemType>(){ItemType.cocpit,ItemType.engine,ItemType.wings};
         var type = list.RandomElement();
-        var item = new ParameterItem(type, level, middle);
+
+        var data = new Dictionary<EParameterShip, float>();
+        switch (type)
+        {
+            case ItemType.cocpit:
+                switch (middle)
+                {
+                    case EParameterItemSubType.light:
+                        //                        data.Add(EParameterShip.bodyPoints,10); 
+                        data.Add(EParameterShip.turn, 18);
+                        data.Add(EParameterShip.speed,.10f);
+                        break;
+                    case EParameterItemSubType.middle:
+                        //                        data.Add(EParameterShip.bodyPoints, 5);  
+                        data.Add(EParameterShip.turn, 12);
+                        data.Add(EParameterShip.speed, -.7f);
+                        data.Add(EParameterShip.modulsSlots, 1);
+                        break;
+                    case EParameterItemSubType.heavy:
+//                        data.Add(EParameterShip.bodyPoints, -18);
+                        data.Add(EParameterShip.turn, -10);
+                        data.Add(EParameterShip.speed, -.10f);
+                        data.Add(EParameterShip.modulsSlots, 2);
+                        break;
+                }
+                break;
+            case ItemType.engine:
+                switch (middle)
+                {
+                    case EParameterItemSubType.light:
+                        data.Add(EParameterShip.bodyPoints, -5);
+                        data.Add(EParameterShip.speed, .20f);
+                        break;
+                    case EParameterItemSubType.middle:
+                        data.Add(EParameterShip.bodyPoints, 5);
+                        data.Add(EParameterShip.speed, .15f);
+                        break;
+                    case EParameterItemSubType.heavy:
+                        data.Add(EParameterShip.bodyPoints, 10);
+                        data.Add(EParameterShip.speed, .10f);
+                        break;
+                }
+                break;
+            case ItemType.wings:
+                switch (middle)
+                {
+                    case EParameterItemSubType.light:
+                        data.Add(EParameterShip.bodyPoints, -5);
+                        data.Add(EParameterShip.turn, 40);
+//                        data.Add(EParameterShip.armor, 0);
+                        break;
+                    case EParameterItemSubType.middle:
+                        data.Add(EParameterShip.bodyPoints, 0);
+                        data.Add(EParameterShip.turn, 30);
+                        data.Add(EParameterShip.armor, 1);
+                        break;
+                    case EParameterItemSubType.heavy:
+                        data.Add(EParameterShip.bodyPoints, 5);
+                        data.Add(EParameterShip.turn, 20);
+                        data.Add(EParameterShip.armor, 2);
+                        break;
+                }
+                break;
+        }
+        var item = new ParameterItem(type, level, middle, data);
         return item;
     }
 }

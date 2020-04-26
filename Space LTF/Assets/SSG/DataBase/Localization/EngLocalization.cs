@@ -901,6 +901,22 @@ public static class EngLocalization
         {"ParameterTypeChanrgeSpeed", "Decrease reload batteries period on {0}%"},
         {"ParameterTypeEngine", "Radius of teleportation {0}. Reload period {1}"},
 
+        {"cocpit", "Cockpit"},
+        {"engine", "Engine"},
+        {"wings", "Wings"},
+        {"EParameterItemRaritynormal", "Normal"},
+        {"EParameterItemRarityimproved", "Improved"},
+        {"EParameterItemRarityperfect", "Special"},
+
+
+        {"EParameterShipspeed", "Speed"},
+        {"EParameterShipturn", "Turn Speed"},
+        {"EParameterShipbodyPoints", "Hull points"},
+        {"EParameterShipshieldPoints", "Shield points"},
+        {"EParameterShiparmor", "Armor"},
+        {"EParameterShipmodulsSlots", "Modules slots"},
+
+
 
     };
 

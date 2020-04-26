@@ -236,11 +236,7 @@ public class ShipInventory : IStartShipParams, IInventory
 
     public void TransferItem(IItemInv item, bool val)
     {
-        //        Debug.Log("Transfer item complete:" + item);
-        if (OnItemAdded != null)
-        {
-            OnItemAdded(item, val);
-        }
+        OnItemAdded?.Invoke(item, val);
     }
 
     public Player Owner

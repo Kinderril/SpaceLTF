@@ -889,6 +889,20 @@ public static class RusLocalization
         {"ParameterTypeChanrgeCount", "Количество батарей в битве {0}"},
         {"ParameterTypeChanrgeSpeed", "Уменьшение времени перезарядки батарей {0}%"},
         {"ParameterTypeEngine", "Радиус телепортации {0}. Перезарядка телепортации {1}"},
+
+        {"cocpit", "Кабина"},
+        {"engine", "Двигатель"},
+        {"wings", "Крылья"},
+        {"EParameterItemRaritynormal", "Обычный"},
+        {"EParameterItemRarityimproved", "Улучшеный"},
+        {"EParameterItemRarityperfect", "Особый"},
+
+        {"EParameterShipspeed", "Скорость"},
+        {"EParameterShipturn", "Поворот"},
+        {"EParameterShipbodyPoints", "Корпус"},
+        {"EParameterShipshieldPoints", "Щит"},
+        {"EParameterShiparmor", "Броня"},
+        {"EParameterShipmodulsSlots", "Слоты модулей"},
     };
 
 }

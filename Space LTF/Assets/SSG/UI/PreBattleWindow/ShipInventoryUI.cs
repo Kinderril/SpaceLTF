@@ -11,7 +11,6 @@ public class ShipInventoryUI : DragZone
     public TextMeshProUGUI ConfigType;
     public TextMeshProUGUI NameField;
     public TextMeshProUGUI LevelField;
-    public TextMeshProUGUI ArmorField;
 
 
     public Transform WeaponsLayout;
@@ -80,31 +79,21 @@ public class ShipInventoryUI : DragZone
             Debug.LogError($"Wrong count of critical damages must be {Library.CRITICAL_DAMAGES_TO_DEATH}");
         }
 
-        UpdateHealth();
-        UpdateArmor();
+        RefreshParameters();
 
     }
 
     private void OnItemAdded(IItemInv item, bool val)
     {
-        UpdateArmor();
+        RefreshParameters();
     }
 
-    private void UpdateArmor()
+    private void RefreshParameters()
     {
-        float bArmor = _shipInventory.BodyArmor;
-        float sArmor = _shipInventory.ShiledArmor;
-        foreach (var modul in _shipInventory.Moduls.SimpleModuls)   //Это пздц костыль. Если будут еще подобный модули то переделать все это!
-        {
-            if (modul != null && modul.Type == SimpleModulType.armor)
-            {
-                bArmor += modul.Level;
-                // sArmor += modul.Level;
-            }
-        }
+        UpdateHealth();
 
-        ArmorField.text = Namings.Format(Namings.Tag("ArmorField"), bArmor, sArmor);
     }
+
 
     public void OnClickDismiss()
     {

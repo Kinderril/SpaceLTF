@@ -806,6 +806,20 @@ public static class EspLocalization
 {"ParameterTypeChanrgeCount", "Recuento de baterías que puedes usar en la batalla {0}"},
 {"ParameterTypeChanrgeSpeed", "Disminuir el período de recarga de baterías en {0}%"},
 {"ParameterTypeEngine", "Radio de teletransportación {0}. Período de recarga {1}"},
+
+{"cocpit", "Cabaña"},
+{"engine", "Motor"},
+{"wings", "Alas"},
+{"EParameterItemRaritynormal", "Ordinario"},
+{"EParameterItemRarityimproved", "Superior"},
+{"EParameterItemRarityperfect", "Especial"},
+
+{"EParameterShipspeed", "Velocidad"},
+{"EParameterShipturn", "Velocidad de giro"},
+{"EParameterShipbodyPoints", "Puntos de casco"},
+{"EParameterShipshieldPoints", "Puntos de escudo"},
+{"EParameterShiparmor", "Armadura"},
+{"EParameterShipmodulsSlots", "Ranuras de módulos"},
     };
 
 }

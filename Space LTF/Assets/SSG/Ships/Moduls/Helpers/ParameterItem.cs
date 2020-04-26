@@ -1,13 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
-public enum EParameterItemRarity
+public enum EParameterShip
+{
+    speed,
+    turn,
+    bodyPoints,
+    shieldPoints,
+    armor,
+    modulsSlots,
+
+}    public enum EParameterItemRarity
 {
     normal,
     improved,
     perfect
-}public enum EParameterItemSubType
+}
+
+public enum EParameterItemSubType
 {
     light,
     middle,
@@ -23,10 +35,14 @@ public class ParameterItem : IItemInv
     private ItemType _itemType;
     public IInventory CurrentInventory { get; set; }
     public int CostValue { get; }
-    public string Name => "TODOname";        //TODO LOCALIZTION
+    //    public string Name => "TODOname";        //TODO LOCALIZTION
 
-    public ParameterItem(ItemType ItemType, EParameterItemRarity rarity, EParameterItemSubType subType)
+    public Dictionary<EParameterShip, float> ParametersAffection = new Dictionary<EParameterShip, float>();
+
+    public ParameterItem(ItemType ItemType, EParameterItemRarity rarity,
+        EParameterItemSubType subType, Dictionary<EParameterShip, float> parametersAffection)
     {
+        this.ParametersAffection = parametersAffection;
         SubType = subType;
         Rarity = rarity;
         _itemType = ItemType;
@@ -39,7 +55,8 @@ public class ParameterItem : IItemInv
 
     public string GetInfo()
     {
-        return $"{Namings.Tag($"itemType_ItemType.ToString(")}({Namings.Tag(Rarity.ToString())})";  //TODO LOCALIZTION
+        var name = Namings.Tag($"{_itemType.ToString()}");
+        return $"{name}({Namings.Tag($"EParameterItemRarity{Rarity.ToString()}")})";  //TODO LOCALIZTION
     }
 
     public string WideInfo()
