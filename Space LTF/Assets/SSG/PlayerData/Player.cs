@@ -11,7 +11,8 @@ public delegate void ItemTransfer(IInventory from, IInventory to, IItemInv item)
 [System.Serializable]
 public class Player
 {
-    public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
+    public static string mainPlayer = $"myPlayerData_.data";
+//    public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
     //    public int CoinsCount = 7;
     public PlayerInventory Inventory;
     public PlayerParameters Parameters;
