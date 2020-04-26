@@ -32,6 +32,44 @@ public static class InventoryOperation
         int index;
         switch (item.ItemType)
         {
+            case ItemType.engine:
+            case ItemType.cocpit:
+            case ItemType.wings:
+                var itemParam = item as ParameterItem;
+                if (itemParam == null)
+                {
+                    callback(false);
+                    return;
+                }
+                if (to.GetFreeSlot(out index,itemParam.ItemType))
+                {
+                    CanDo(() =>
+                    {
+                        if (to.TryAddItem(itemParam))
+                        {
+                            from.RemoveItem(itemParam);
+                            if (OnItemTransfer != null)
+                            {
+                                OnItemTransfer(from, to, itemParam);
+                            }
+                            callback(true);
+                        }
+                        else
+                        {
+                            callback(false);
+                        }
+
+                    }, () =>
+                    {
+                        callback(false);
+                    }, to, item);
+                }
+                else
+                {
+                    callback(false);
+                }
+
+                break;
             case ItemType.weapon:
                 var w = item as WeaponInv;
                 if (to.GetFreeWeaponSlot(out index))

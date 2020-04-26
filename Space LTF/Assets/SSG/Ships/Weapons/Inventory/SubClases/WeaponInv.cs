@@ -110,10 +110,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
 
     private float BodyDamage => _bodyDamage + (Level - 1) * _bodyPreLevelDamage;
 
-    public ItemType ItemType
-    {
-        get { return ItemType.weapon; }
-    }
+    public ItemType ItemType => ItemType.weapon;
 
     public IInventory CurrentInventory { get; set; }
 

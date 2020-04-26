@@ -598,7 +598,27 @@ public static class Namings
     }
 
 
+    public static string ParameterModulName(ItemType modulItemType)
+    {
+        switch (modulItemType)
+        {
+            case ItemType.weapon:
+                break;
+            case ItemType.modul:
+                break;
+            case ItemType.spell:
+                break;
+            case ItemType.cocpit:
+                return Namings.Tag("cocpit");
+                break;
+            case ItemType.engine:
+                return Namings.Tag("engine");
+                break;
+            case ItemType.wings:
+                return Namings.Tag("wings");
+                break;
+        }
 
-
-
+        return $"error:{modulItemType.ToString()}";
+    }
 }

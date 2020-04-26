@@ -241,6 +241,7 @@ public class ShopInventory : PlayerInventory
         Weapons.Clear();
         Moduls.Clear();
         Spells.Clear();
+        ParamItems.Clear();
     }
     public void AddItem(WeaponType type)
     {

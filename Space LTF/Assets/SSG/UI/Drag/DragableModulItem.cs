@@ -7,10 +7,7 @@ using UnityEngine;
 
 public class DragableModulItem : DragableItem
 {
-    public BaseModulInv Modul
-    {
-        get { return ContainerItem as BaseModulInv; }
-    }
+    public BaseModulInv Modul => ContainerItem as BaseModulInv;
 
     public override Sprite GetIcon()
     {

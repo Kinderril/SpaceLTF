@@ -10,7 +10,10 @@ public enum DragItemType
     free,
     weapon,
     modul,
-    spell
+    spell,
+    cocpit,
+    engine,
+    wings,
 }
 
 [RequireComponent(typeof(GraphicRaycaster))]
@@ -32,23 +35,50 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
 
     public static DragableItem Create(IItemInv item, bool usable)
     {
-        DragableItem slotPrefab;
+        DragableItem itemPrefab;
         switch (item.ItemType)
         {
             case ItemType.weapon:
-                slotPrefab = DataBaseController.Instance.DataStructPrefabs.DragableItemWeaponPrefab;
+                itemPrefab = DataBaseController.Instance.DataStructPrefabs.DragableItemWeaponPrefab;
                 break;
             case ItemType.modul:
-                slotPrefab = DataBaseController.Instance.DataStructPrefabs.DragableItemModulPrefab;
+                itemPrefab = DataBaseController.Instance.DataStructPrefabs.DragableItemModulPrefab;
                 break;
             case ItemType.spell:
-                slotPrefab = DataBaseController.Instance.DataStructPrefabs.DragableItemSpellPrefab;
+                itemPrefab = DataBaseController.Instance.DataStructPrefabs.DragableItemSpellPrefab;
+                break;   
+            case ItemType.engine:
+            case ItemType.wings:
+            case ItemType.cocpit:
+                itemPrefab = DataBaseController.Instance.DataStructPrefabs.DragableItemParameterPrefab;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        var daragbleElement = DataBaseController.GetItem(slotPrefab);
+        var daragbleElement = DataBaseController.GetItem(itemPrefab);
+        switch (item.ItemType)
+        {
+            case ItemType.weapon:
+                daragbleElement.DragItemType = DragItemType.weapon;
+                break;
+            case ItemType.modul:
+                daragbleElement.DragItemType = DragItemType.modul;
+                break;
+            case ItemType.spell:
+                daragbleElement.DragItemType = DragItemType.spell;
+                break; 
+            case ItemType.cocpit:
+                daragbleElement.DragItemType = DragItemType.cocpit;
+                break;
+            case ItemType.engine:
+                daragbleElement.DragItemType = DragItemType.engine;
+                break;
+            case ItemType.wings:
+                daragbleElement.DragItemType = DragItemType.wings;
+                break;
+        }
+
         daragbleElement.ContainerItem = item;
         daragbleElement.Usable = usable;
         daragbleElement.id = Utils.GetId();

@@ -77,9 +77,9 @@ public class BaseShipInventoryUI : DragZone
         base.Dispose();
     }
 
-    private List<DragableItemSlot> InitSpells()
+    private HashSet<DragableItemSlot> InitSpells()
     {
-        List<DragableItemSlot> allslots = new List<DragableItemSlot>();
+        HashSet<DragableItemSlot> allslots = new HashSet<DragableItemSlot>();
         for (int i = 0; i < _shipInventory.SpellModulsCount; i++)
         {
             var spellSlot = InventoryOperation.GetDragableItemSlot();

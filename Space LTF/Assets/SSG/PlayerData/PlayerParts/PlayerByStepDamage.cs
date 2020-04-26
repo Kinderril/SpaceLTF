@@ -43,7 +43,7 @@ public class PlayerByStepDamage
                 else if (_curRemainSteps >= -9)
                 {
                     BrokeShipWithRandom();
-                    BrokeRandomItem();
+//                    BrokeRandomItem();
                     //                    WindowManager.Instance.InfoWindow.Init(null, Namings.UnstableCore2);
 
                 }
@@ -57,37 +57,37 @@ public class PlayerByStepDamage
         }
     }
 
-    private void BrokeRandomItem()
-    {
-        var player = MainController.Instance.MainPlayer;
-        foreach (var data in player.Army.Army.Suffle())
-        {
-            var items = data.Ship.GetAllItems().Where(x => x != null).ToList();
-            if (items.Count > 0)
-            {
-                var itemToDel = items.RandomElement();
-                switch (itemToDel.ItemType)
-                {
-                    case ItemType.weapon:
-                        var item = itemToDel as WeaponInv;
-                        data.Ship.RemoveWeaponModul(item);
-                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), Namings.Weapon(item.WeaponType)));
-                        break;
-                    case ItemType.modul:
-                        var item1 = itemToDel as BaseModulInv;
-                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), (item1.Name)));
-                        data.Ship.RemoveSimpleModul(item1);
-                        break;
-                    case ItemType.spell:
-                        var item2 = itemToDel as BaseSpellModulInv;
-                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), item2.Name));
-                        data.Ship.RemoveSpellModul(item2);
-                        break;
-                }
-                return;
-            }
-        }
-    }
+//    private void BrokeRandomItem()
+//    {
+//        var player = MainController.Instance.MainPlayer;
+//        foreach (var data in player.Army.Army.Suffle())
+//        {
+//            var items = data.Ship.GetAllItems().Where(x => x != null).ToList();
+//            if (items.Count > 0)
+//            {
+//                var itemToDel = items.RandomElement();
+//                switch (itemToDel.ItemType)
+//                {
+//                    case ItemType.weapon:
+//                        var item = itemToDel as WeaponInv;
+//                        data.Ship.RemoveWeaponModul(item);
+//                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), Namings.Weapon(item.WeaponType)));
+//                        break;
+//                    case ItemType.modul:
+//                        var item1 = itemToDel as BaseModulInv;
+//                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), (item1.Name)));
+//                        data.Ship.RemoveSimpleModul(item1);
+//                        break;
+//                    case ItemType.spell:
+//                        var item2 = itemToDel as BaseSpellModulInv;
+//                        player.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("BrokenItem"), item2.Name));
+//                        data.Ship.RemoveSpellModul(item2);
+//                        break;
+//                }
+//                return;
+//            }
+//        }
+//    }
 
     private void BrokeShipWithRandom()
     {

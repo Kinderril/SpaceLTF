@@ -11,6 +11,7 @@ public class ItemInfosController :MonoBehaviour
     public WeaponBigInfoUI Weapon;
     public SpellBigInfoUI Spell;
     public ModulBigInfoUI Modul;
+    public ParameterItemBigInfoUI ParamItem;
     public CoreSpellBigInfo CoreSpell;
     
 
@@ -36,6 +37,12 @@ public class ItemInfosController :MonoBehaviour
         //        WindowManager.Instance.WindowSubCanvas.interactable = true;
         transform.SetAsLastSibling();
         Modul.Init(modul, OnSubWindowClose);
+    }     
+    public void Init(ParameterItem paramItem, bool canChange)
+    {
+        WindowManager.Instance.WindowMainCanvas.interactable = true;
+        transform.SetAsLastSibling();
+        ParamItem.Init(paramItem, OnSubWindowClose);  
     }
     public void Init(BaseSpellModulInv spell, bool canChange)
     {

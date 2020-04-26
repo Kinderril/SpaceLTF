@@ -20,6 +20,9 @@ public class ShipInventoryUI : DragZone
     private ShipInventory _shipInventory;
     public CriticalDamageObject[] CriticalDamages;
     public SliderWithTextMeshPro HealthSlider;
+    public DragableItemSlot CocpitSlot;
+    public DragableItemSlot EngineSlot;
+    public DragableItemSlot WingSlot;
 
     public TextMeshProUGUI RepairCost;
     public Button RepairButton;
@@ -40,6 +43,9 @@ public class ShipInventoryUI : DragZone
         //            }
         //        }
         //#endif
+        CocpitSlot.DragItemType = DragItemType.cocpit;
+        EngineSlot.DragItemType = DragItemType.engine;
+        WingSlot.DragItemType = DragItemType.wings;
         _shipData = shipData;
         _pilot = _shipData.Pilot;
         _shipInventory = _shipData.Ship;
@@ -57,6 +63,9 @@ public class ShipInventoryUI : DragZone
         ModulsLayout.gameObject.SetActive(_shipInventory.SimpleModulsCount > 0);
         //        SpellsLayout.gameObject.SetActive(_shipInventory.SpellModulsCount > 0);
         var allSlots = InitFreeSlots();
+        allSlots.Add(CocpitSlot);
+        allSlots.Add(EngineSlot);
+        allSlots.Add(WingSlot);
         base.Init(_shipInventory, usable, allSlots, connectedInventory);
         InitCurrentItems();
         NameField.text = _shipInventory.Name;
@@ -154,9 +163,9 @@ public class ShipInventoryUI : DragZone
         LevelField.text = _pilot.CurLevel.ToString();
     }
 
-    private List<DragableItemSlot> InitFreeSlots()
+    private HashSet<DragableItemSlot> InitFreeSlots()
     {
-        List<DragableItemSlot> allslots = new List<DragableItemSlot>();
+        HashSet<DragableItemSlot> allslots = new HashSet<DragableItemSlot>();
         for (int i = 0; i < _shipInventory.WeaponModulsCount; i++)
         {
             var weaponSlot = InventoryOperation.GetDragableItemSlot();
@@ -181,6 +190,14 @@ public class ShipInventoryUI : DragZone
 
     private void InitCurrentItems()
     {
+        CocpitSlot.Init(_shipInventory, true);
+        EngineSlot.Init(_shipInventory, true);
+        WingSlot.Init(_shipInventory, true);
+
+        InitCurrent(_shipInventory.CocpitSlot, CocpitSlot);
+        InitCurrent(_shipInventory.EngineSlot, EngineSlot);
+        InitCurrent(_shipInventory.WingSlot, WingSlot);
+        
         for (int i = 0; i < _shipInventory.WeaponsModuls.Length; i++)
         {
             var weapon = _shipInventory.WeaponsModuls[i];
@@ -207,6 +224,14 @@ public class ShipInventoryUI : DragZone
         //            slot.Init(_shipInventory, _usable);
         //            SetStartItem(slot,spell);
         //        }
+    }
+
+    private void InitCurrent(ParameterItem parameterItem,DragableItemSlot slot)
+    {
+        if (parameterItem != null)
+        {
+            SetStartItem(slot, parameterItem);
+        }
     }
 
     public override void Dispose()

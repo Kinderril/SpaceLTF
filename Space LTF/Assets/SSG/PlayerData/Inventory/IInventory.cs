@@ -8,6 +8,7 @@ public delegate void ItemTransferedTo(IItemInv item,bool val);
 
 public interface IInventory
 {
+    bool GetFreeSlot(out int index,ItemType type);
     bool GetFreeSimpleSlot(out int index);
 
     bool GetFreeSpellSlot(out int index);
@@ -38,5 +39,7 @@ public interface IInventory
 
     bool IsShop();
     bool CanMoveToByLevel(IItemInv item,int posibleLevel);
+    bool TryAddItem(ParameterItem itemParam);
+    bool RemoveItem(ParameterItem itemParam);
 }
 

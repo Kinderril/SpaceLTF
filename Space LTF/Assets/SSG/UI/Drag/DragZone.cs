@@ -17,7 +17,7 @@ public class ConnectInventory
 public class DragZone : MonoBehaviour
 {
     protected IInventory _inventory;
-    protected List<DragableItemSlot> _slots = new List<DragableItemSlot>();
+    protected HashSet<DragableItemSlot> _slots = new HashSet<DragableItemSlot>();
     protected bool _usable;
     private ConnectInventory _connectedInventory;
     private bool _inited = false;
@@ -27,7 +27,7 @@ public class DragZone : MonoBehaviour
 //    public bool CanDrop = true;
 
 
-    protected void Init(IInventory inventory, bool usable , List<DragableItemSlot> slots, ConnectInventory connectedInventory)
+    protected void Init(IInventory inventory, bool usable , HashSet<DragableItemSlot> slots, ConnectInventory connectedInventory)
     {
         _zoneId = Utils.GetId();
         _connectedInventory = connectedInventory;
@@ -90,30 +90,11 @@ public class DragZone : MonoBehaviour
 
     protected static bool FindSlotForItem(IItemInv item,IInventory inventory, out int slot)
     {
-//        int slot;
-        switch (item.ItemType)
+        if (inventory.GetFreeSlot(out slot, item.ItemType))
         {
-            case ItemType.weapon:
-                if (inventory.GetFreeWeaponSlot(out slot))
-                {
-                    return true;
-                }
-                break;
-            case ItemType.modul:
-                if (inventory.GetFreeSimpleSlot(out slot))
-                {
-                    return true;
-                }
-                break;
-            case ItemType.spell:
-                if (inventory.GetFreeSpellSlot(out slot))
-                {
-                    return true;
-                }
-                break;
+            return true;
         }
 
-        slot = -1;
         return false;
     }
 
@@ -197,7 +178,13 @@ public class DragZone : MonoBehaviour
             case DragItemType.modul:
                 return a == ItemType.modul;
             case DragItemType.spell:
-                return a == ItemType.spell;
+                return a == ItemType.spell;  
+            case DragItemType.cocpit:
+                return a == ItemType.cocpit;
+            case DragItemType.engine:
+                return a == ItemType.engine;
+            case DragItemType.wings:
+                return a == ItemType.wings;
         }
         return false;
     }

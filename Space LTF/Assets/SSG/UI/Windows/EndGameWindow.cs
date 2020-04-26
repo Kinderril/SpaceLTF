@@ -75,20 +75,20 @@ public class EndGameWindow : BaseWindow
                 itemSlot.StartItemSet(moduls);
             }
 
-            foreach (var moduls in lastReward.Weapons)
+            foreach (var weaponInv in lastReward.Weapons)
             {
                 var itemSlot = InventoryOperation.GetDragableItemSlot();
                 itemSlot.transform.SetParent(LayoutRewards, false);
-                itemSlot.Init(moduls.CurrentInventory, false);
-                itemSlot.StartItemSet(moduls);
+                itemSlot.Init(weaponInv.CurrentInventory, false);
+                itemSlot.StartItemSet(weaponInv);
             }
 
-            foreach (var moduls in lastReward.Spells)
+            foreach (var spellModulInv in lastReward.Spells)
             {
                 var itemSlot = InventoryOperation.GetDragableItemSlot();
                 itemSlot.transform.SetParent(LayoutRewards, false);
-                itemSlot.Init(moduls.CurrentInventory, false);
-                itemSlot.StartItemSet(moduls);
+                itemSlot.Init(spellModulInv.CurrentInventory, false);
+                itemSlot.StartItemSet(spellModulInv);
             }
         }
 

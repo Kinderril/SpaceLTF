@@ -136,7 +136,13 @@ public class DragableItemSlot : MonoBehaviour
             case ItemType.modul:
                 return DragItemType == DragItemType.modul;
             case ItemType.spell:
-                return DragItemType == DragItemType.spell;
+                return DragItemType == DragItemType.spell;  
+            case ItemType.cocpit:
+                return DragItemType == DragItemType.cocpit;
+            case ItemType.engine:
+                return DragItemType == DragItemType.engine;
+            case ItemType.wings:
+                return DragItemType == DragItemType.wings;
         }
         return false;
     }

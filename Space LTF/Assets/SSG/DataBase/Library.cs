@@ -776,4 +776,12 @@ public static class Library
 
 
     }
+
+    public static ParameterItem CreateParameterItem(EParameterItemSubType middle, EParameterItemRarity level)
+    {
+        var list  = new List<ItemType>(){ItemType.cocpit,ItemType.engine,ItemType.wings};
+        var type = list.RandomElement();
+        var item = new ParameterItem(type, level, middle);
+        return item;
+    }
 }

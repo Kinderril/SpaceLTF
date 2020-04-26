@@ -40,6 +40,9 @@ public class ShipInventory : IStartShipParams, IInventory
     public ShipModulsInventory Moduls;
     public WeaponInv[] WeaponsModuls;
     public BaseSpellModulInv[] SpellsModuls;
+    public ParameterItem CocpitSlot;
+    public ParameterItem EngineSlot;
+    public ParameterItem WingSlot;
 
     private readonly Player _player;
     private PilotParameters _pilot;
@@ -82,6 +85,28 @@ public class ShipInventory : IStartShipParams, IInventory
         return list;
     }
 
+    public bool GetFreeSlot(out int index, ItemType type)
+    {
+        index = -1;
+        switch (type)
+        {
+            case ItemType.weapon:
+                return GetFreeWeaponSlot(out index);
+            case ItemType.modul:
+                return Moduls.GetFreeSimpleSlot(out index);
+            case ItemType.spell:
+                return GetFreeSpellSlot(out index);
+            case ItemType.cocpit:
+                return CocpitSlot == null;
+            case ItemType.engine:
+                return EngineSlot == null;
+            case ItemType.wings:
+                return WingSlot == null;
+        }
+
+        return false;
+    }
+
     public bool GetFreeSimpleSlot(out int index)
     {
         return Moduls.GetFreeSimpleSlot(out index);
@@ -91,16 +116,17 @@ public class ShipInventory : IStartShipParams, IInventory
     {
         return 1f;
     }
-    public bool GetFreeSpellSlot(out int index)
+
+    private bool GetFreeItemSlot<T>(out int index,T[] list)
     {
-        if (SpellsModuls == null)
+        if (list == null)
         {
             index = -1;
             return false;
         }
-        for (int i = 0; i < SpellsModuls.Length; i++)
+        for (int i = 0; i < list.Length; i++)
         {
-            var m = SpellsModuls[i];
+            var m = list[i];
             if (m == null)
             {
                 index = i;
@@ -111,19 +137,14 @@ public class ShipInventory : IStartShipParams, IInventory
         return false;
     }
 
+    public bool GetFreeSpellSlot(out int index)
+    {
+        return GetFreeItemSlot(out index, SpellsModuls);
+    }
+
     public bool GetFreeWeaponSlot(out int index)
     {
-        for (int i = 0; i < WeaponsModuls.Length; i++)
-        {
-            var m = WeaponsModuls[i];
-            if (m == null)
-            {
-                index = i;
-                return true;
-            }
-        }
-        index = -1;
-        return false;
+        return GetFreeItemSlot(out index, WeaponsModuls);
     }
 
     public bool TryAddSpellModul(BaseSpellModulInv spellModul, int fieldIndex)
@@ -244,6 +265,73 @@ public class ShipInventory : IStartShipParams, IInventory
         {
             return item.RequireLevel(posibleLevel) <= _pilot.CurLevel;
         }
+    }
+
+    public bool TryAddItem(ParameterItem itemParam)
+    {
+
+        if (itemParam == null)
+        {
+            return false;
+        }
+
+        switch (itemParam.ItemType)
+        {
+            case ItemType.cocpit:
+                if (CocpitSlot == null)
+                {
+                    CocpitSlot = itemParam;
+                    itemParam.CurrentInventory = this;
+                    TransferItem(itemParam, true);
+                    return true;
+                }
+                break;
+            case ItemType.engine:
+                if (EngineSlot == null)
+                {
+                    EngineSlot = itemParam;
+                    itemParam.CurrentInventory = this;
+                    TransferItem(itemParam, true);
+                    return true;
+                }
+                break;
+            case ItemType.wings:
+                if (WingSlot == null)
+                {
+                    WingSlot = itemParam;
+                    itemParam.CurrentInventory = this;
+                    TransferItem(itemParam, true);
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    public bool RemoveItem(ParameterItem itemParam)
+    {
+
+        if (itemParam == null)
+        {
+            return false;
+        }
+
+        switch (itemParam.ItemType)
+        {
+            case ItemType.cocpit:
+                CocpitSlot= null;
+                TransferItem(itemParam, false);
+                return true;
+            case ItemType.engine:
+                EngineSlot = null;
+                TransferItem(itemParam, false);
+                return true;
+            case ItemType.wings:
+                WingSlot = null;
+                TransferItem(itemParam, false);
+                return true;
+        }
+        return false;
     }
 
     public int HealthPointToRepair()
