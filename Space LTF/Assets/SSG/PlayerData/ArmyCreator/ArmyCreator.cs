@@ -358,7 +358,8 @@ public static class ArmyCreator
             return null;
         }
         var rndWeapon = data.MainWeapon;
-        var weaponSlots = shipWithWeapons.Ship.WeaponsModuls.Length;
+        var weapon = shipWithWeapons.Ship.WeaponsModuls.GetNonNullActiveSlots();
+        var weaponSlots = weapon.Count;
         var moreHalf = 1 + (int)(weaponSlots / 2f);
         moreHalf = Mathf.Clamp(moreHalf, 1, weaponSlots);
         bool weaponCreated = false;
@@ -398,7 +399,7 @@ public static class ArmyCreator
             WDictionary<LibraryShipUpgradeType> chances = null;
 
             var chancesInner = new Dictionary<LibraryShipUpgradeType, float>();
-            if (startData.Ship.WeaponsModuls.All(x => x == null))
+            if (startData.Ship.WeaponsModuls.GetNonNullActiveSlots().All(x => x == null))
             {
                 chancesInner.Add(LibraryShipUpgradeType.addWeapon, 3f);
             }
@@ -409,7 +410,7 @@ public static class ArmyCreator
                 chancesInner.Add(LibraryShipUpgradeType.levelUpPilot, 3f);
             }
 
-            if (startData.Ship.WeaponsModuls.Any(x => x != null))
+            if (startData.Ship.WeaponsModuls.GetNonNullActiveSlots().Any())
             {
                 chancesInner.Add(LibraryShipUpgradeType.upgradeWeapon, 2f);
             }
@@ -434,21 +435,22 @@ public static class ArmyCreator
         {
             case LibraryShipUpgradeType.addWeapon:
                 WeaponType rndWeapon;
-                if (startData.Ship.WeaponsModuls.Length > 0)
+                var weapons = startData.Ship.WeaponsModuls.GetNonNullActiveSlots();
+                if (weapons.Count > 0)
                 {
                     try
                     {
-                        rndWeapon = startData.Ship.WeaponsModuls[0].WeaponType;
+                        rndWeapon = weapons[0].WeaponType;
                     }
                     catch (Exception e)
                     {
                         string dataInfoDEbug = "";
-                        foreach (var shipWeaponsModul in startData.Ship.WeaponsModuls)
+                        foreach (var shipWeaponsModul in weapons)
                         {
                             var weap = (shipWeaponsModul == null) ? "null" : "weap";
                             dataInfoDEbug += "  " + weap;
                         }
-                        Debug.LogError($"UpgradeShip no weapon Length:{startData.Ship.WeaponsModuls.Length}  ShipType:{startData.Ship.ShipType}   dataInfoDEbug:{dataInfoDEbug}");
+                        Debug.LogError($"UpgradeShip no weapon Length:{weapons.Count}  ShipType:{startData.Ship.ShipType}   dataInfoDEbug:{dataInfoDEbug}");
 
                         rndWeapon = data.MainWeapon;
                     }
@@ -549,7 +551,7 @@ public static class ArmyCreator
         var val = Library.WEAPON_LEVEL_COEF;//* Library.ShipPowerCoef(ship.ShipType);
         if (v.Points >= val)
         {
-            var rndWeapons = ship.WeaponsModuls.Where(x => x != null && x.Level < Library.MAX_WEAPON_LVL).ToList();
+            var rndWeapons = ship.WeaponsModuls.GetNonNullActiveSlots().Where(x => x.Level < Library.MAX_WEAPON_LVL).ToList();
             if (rndWeapons.Count > 0)
             {
                 v.Points -= val;
@@ -606,7 +608,7 @@ public static class ArmyCreator
             if (ship.GetFreeWeaponSlot(out weaponIndex))
             {
                 WeaponInv a1 = Library.CreateWeaponByType(weapon);
-                ship.TryAddWeaponModul(a1, weaponIndex);
+                ship.WeaponsModuls.TryAddWeaponModul(a1, weaponIndex);
                 v.Points -= val;
                 logs.AddLog(v.Points, "add weapon");
                 return true;

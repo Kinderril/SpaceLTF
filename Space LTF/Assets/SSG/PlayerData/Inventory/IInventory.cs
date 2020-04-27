@@ -42,5 +42,6 @@ public interface IInventory
     bool TryAddItem(ParameterItem itemParam);
     bool RemoveItem(ParameterItem itemParam);
     bool CanRemoveModulSlots(int slotsInt);
+    bool CanRemoveWeaponSlots(int slotsInt);
 }
 

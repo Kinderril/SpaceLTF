@@ -26,6 +26,7 @@ public class ShipInventoryUI : DragZone
     public TextMeshProUGUI RepairCost;
     public Button RepairButton;
     private StartShipPilotData _shipData;
+    public UIElementWithTooltipCache _cofigBonus;
 
 
     public void Init(StartShipPilotData shipData, bool usable, ConnectInventory connectedInventory)
@@ -54,6 +55,8 @@ public class ShipInventoryUI : DragZone
         _shipInventory.OnItemAdded += OnItemAdded;
         _shipInventory.Moduls.OnSlotsRemove += OnSlotsRemove;
         _shipInventory.Moduls.OnSlotsAdd += OnSlotsAdd;
+        _shipInventory.WeaponsModuls.OnSlotsAdd += OnSlotsAddWeapon;
+        _shipInventory.WeaponsModuls.OnSlotsRemove += OnSlotsRemoveWeapon;
         //        _weaponsSlots.Clear();
         //        _modulsSlots.Clear();
         //        _spellsSlots.Clear();
@@ -82,6 +85,7 @@ public class ShipInventoryUI : DragZone
         }
 
         RefreshParameters();
+        _cofigBonus.Cache = Namings.TooltipConfigProsConsCalc(_shipData.Ship.ShipConfig);
 
     }
 
@@ -180,6 +184,10 @@ public class ShipInventoryUI : DragZone
         }
         return allslots;
     }
+    private void OnSlotsRemoveWeapon(ShipWeaponsInventory arg1, DragItemType type)
+    {
+        RemoveSlot(type);
+    }     
     private void OnSlotsRemove(ShipModulsInventory arg1, DragItemType type)
     {
         RemoveSlot(type);
@@ -188,6 +196,10 @@ public class ShipInventoryUI : DragZone
     private void OnSlotsAdd(ShipModulsInventory arg1,DragItemType type)
     {
         AddModulSlot(type);
+    }   
+    private void OnSlotsAddWeapon(ShipWeaponsInventory arg1,DragItemType type)
+    {
+        AddWeaponSlot(type);
     }
 
     private void AddModulSlot(DragItemType type)
@@ -195,6 +207,15 @@ public class ShipInventoryUI : DragZone
         var itemSlot = InventoryOperation.GetDragableItemSlot();
         itemSlot.Init(_shipInventory, true);
         itemSlot.transform.SetParent(ModulsLayout, false);
+        itemSlot.DragItemType = type;
+        AddSlot(itemSlot);
+    }   
+
+    private void AddWeaponSlot(DragItemType type)
+    {
+        var itemSlot = InventoryOperation.GetDragableItemSlot();
+        itemSlot.Init(_shipInventory, true);
+        itemSlot.transform.SetParent(WeaponsLayout, false);
         itemSlot.DragItemType = type;
         AddSlot(itemSlot);
     }
@@ -218,12 +239,12 @@ public class ShipInventoryUI : DragZone
         InitCurrent(_shipInventory.CocpitSlot, CocpitSlot);
         InitCurrent(_shipInventory.EngineSlot, EngineSlot);
         InitCurrent(_shipInventory.WingSlot, WingSlot);
-        
-        for (int i = 0; i < _shipInventory.WeaponsModuls.Length; i++)
+
+        var weapon = _shipInventory.WeaponsModuls.GetNonNullActiveSlots();
+        foreach (var weaponInv in weapon)
         {
-            var weapon = _shipInventory.WeaponsModuls[i];
             var slot = GetFreeSlot(ItemType.weapon);
-            SetStartItem(slot, weapon);
+            SetStartItem(slot, weaponInv);
         }
 
         foreach (var modulInv in _shipInventory.Moduls.GetNonNullActiveSlots())
@@ -245,6 +266,8 @@ public class ShipInventoryUI : DragZone
     {
         _shipInventory.Moduls.OnSlotsRemove -= OnSlotsRemove;
         _shipInventory.Moduls.OnSlotsAdd -= OnSlotsAdd;
+        _shipInventory.WeaponsModuls.OnSlotsAdd -= OnSlotsAddWeapon;
+        _shipInventory.WeaponsModuls.OnSlotsRemove -= OnSlotsRemoveWeapon;
         _shipInventory.OnShipRepaired -= OnShipRepaired;
         _shipInventory.OnItemAdded -= OnItemAdded;
         _shipInventory.OnShipCriticalChange -= OnShipCriticalChange;

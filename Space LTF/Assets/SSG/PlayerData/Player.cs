@@ -132,7 +132,7 @@ public class Player
 
         if (Inventory.GetFreeSlot(out var index021, ItemType.cocpit))
         {
-            var paramItem = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.improved,new List<ItemType>(){ItemType.cocpit});
+            var paramItem = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.improved, ItemType.cocpit);
             Inventory.TryAddItem(paramItem);
         }
         CreateRndParameterItem();

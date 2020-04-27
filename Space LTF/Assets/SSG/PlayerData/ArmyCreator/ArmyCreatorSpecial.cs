@@ -287,7 +287,7 @@ public static class ArmyCreatorSpecial
         var pilotH = Library.CreateDebugPilot();
         var shipHeavy = Library.CreateShip(type, config, player, pilotH);
         var shipMainStartDataH = new StartShipPilotData(pilotH, shipHeavy);
-        var weaponSlots = shipHeavy.WeaponsModuls.Length;
+        var weaponSlots = shipHeavy.WeaponsModuls.WeaponsCount;
         for (int i = 0; i < weaponSlots; i++)
         {
             TryAddWeapon(shipHeavy, weaponType);

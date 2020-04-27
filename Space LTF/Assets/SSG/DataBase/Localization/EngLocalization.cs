@@ -379,6 +379,13 @@ public static class EngLocalization
         {"OcronsProCons", "Pros: Perfect hull health. Many slots for modules.\nCons: No shied. No shield regeneration."},
         {"KriosProCons", "Pros: Good shield. Perfect shield regeneration.\nCons: Low hull health."},
 
+
+        {"RaidersProConsCalc", "Speed bonus {0}%. Turn speed bonus {1}%"},
+        {"MercenaryProConsCalc", "Speed bonus {0}%. Turn speed bonus {1}%"},
+        {"FederationProConsCalc", "Nothing"},
+        {"OcronsProConsCalc", "Hull points bonus {0}%. No shield"},
+        {"KriosProConsCalc", "Shield points bonus {0}%. Hull points coefficient {1}%"},
+
         {"WeaponsStart","On start your ships will have one of {0} or {1} complect."},
 
         {"Paramscout", "Scout can provide you information about enemies army.\nAnd sometimes can try steal something."},
@@ -389,6 +396,7 @@ public static class EngLocalization
 
         {"asteroidsEvent", "Asteroid vortex"},
         {"shieldsOffEvent", "EMP surge"},
+        {"loaderror", "Load error"},
 
         {"ShipsRepaired", "Ships Repaired"},
         {"Raiders", "Raiders"},

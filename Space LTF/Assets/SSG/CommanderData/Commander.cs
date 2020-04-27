@@ -266,7 +266,7 @@ public class Commander
         ShipBase shipPrefab;
         if (v.Ship.ShipType == ShipType.Turret)
         {
-            var weapon = v.Ship.WeaponsModuls.FirstOrDefault(x => x != null);
+            var weapon = v.Ship.WeaponsModuls.GetNonNullActiveSlots().FirstOrDefault();
             WeaponType? type = null;
             if (weapon != null)
             {

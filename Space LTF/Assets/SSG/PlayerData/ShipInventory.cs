@@ -28,7 +28,7 @@ public class ShipInventory : IStartShipParams, IInventory
     public ShipType ShipType { get; private set; }
     public ShipConfig ShipConfig { get; private set; }
     public int WeaponModulsCount { get; private set; }
-    public int SimpleModulsCount { get; private set; }
+    public int SimpleModulsCount => Moduls.SimpleModulsCount;
     public PilotParameters PilotParameters => _pilot;
     public int SpellModulsCount { get; private set; }
     public int CriticalDamages { get; private set; }
@@ -38,7 +38,7 @@ public class ShipInventory : IStartShipParams, IInventory
 
     public int Id { get; private set; }
     public ShipModulsInventory Moduls;
-    public WeaponInv[] WeaponsModuls;
+    public ShipWeaponsInventory WeaponsModuls;
     public BaseSpellModulInv[] SpellsModuls;
     public ParameterItem CocpitSlot { get; private set; }
     public ParameterItem EngineSlot { get; private set; }
@@ -64,22 +64,54 @@ public class ShipInventory : IStartShipParams, IInventory
         BodyArmor = pParams.BodyArmor;
         ShiledArmor = pParams.ShiledArmor;
         WeaponModulsCount = pParams.WeaponModulsCount;
-        WeaponsModuls = new WeaponInv[WeaponModulsCount];
-        SimpleModulsCount = pParams.SimpleModulsCount;
-        Moduls = new ShipModulsInventory(SimpleModulsCount, this);
+        WeaponsModuls = new ShipWeaponsInventory(WeaponModulsCount,this);
+//        SimpleModulsCount = pParams.SimpleModulsCount;
+        Moduls = new ShipModulsInventory(pParams.SimpleModulsCount, this);
         SpellModulsCount = pParams.SpellModulsCount;
         SpellsModuls = new BaseSpellModulInv[SpellModulsCount];
         Name = pParams.Name;
         BoostChargeTime = pParams.BoostChargeTime;
         //        Debug.Log("ShipInventory create:" + pParams.Name);
         Id = Utils.GetId();
+        CreateBaseItems(ShipType);
         //        BodyVisualType = pParams.BodyVisualType;
+    }
+
+    private void CreateBaseItems(ShipType shipType)
+    {
+        switch (shipType)
+        {
+            case ShipType.Light:
+                var cocpit = Library.CreateParameterItem(EParameterItemSubType.light, EParameterItemRarity.normal, ItemType.cocpit);
+                TryAddItem(cocpit);
+                var engineSlot = Library.CreateParameterItem(EParameterItemSubType.light, EParameterItemRarity.normal, ItemType.engine);
+                TryAddItem(engineSlot);
+                var wingSlot = Library.CreateParameterItem(EParameterItemSubType.light, EParameterItemRarity.normal, ItemType.wings);
+                TryAddItem(wingSlot);
+                break;
+            case ShipType.Middle:
+                var cocpit1 = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.normal, ItemType.cocpit);
+                TryAddItem(cocpit1);
+                var engineSlot1 = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.normal, ItemType.engine);
+                TryAddItem(engineSlot1);
+                var wingSlot1 = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.normal, ItemType.wings);
+                TryAddItem(wingSlot1);
+                break;
+            case ShipType.Heavy:
+                var cocpit2 = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.normal, ItemType.cocpit);
+                TryAddItem(cocpit2);
+                var engineSlot2 = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.normal, ItemType.engine);
+                TryAddItem(engineSlot2);
+                var wingSlot2 = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.normal, ItemType.wings);
+                TryAddItem(wingSlot2);
+                break;
+        }
     }
 
     public List<IItemInv> GetAllItems()
     {
         var list = new List<IItemInv>();
-        list.AddRange(WeaponsModuls);
+        list.AddRange(WeaponsModuls.GetNonNullActiveSlots());
         list.AddRange(SpellsModuls);
         list.AddRange(Moduls.GetNonNullActiveSlots());
         return list;
@@ -144,7 +176,7 @@ public class ShipInventory : IStartShipParams, IInventory
 
     public bool GetFreeWeaponSlot(out int index)
     {
-        return GetFreeItemSlot(out index, WeaponsModuls);
+        return WeaponsModuls.GetFreeSimpleSlot(out index);
     }
 
     public bool TryAddSpellModul(BaseSpellModulInv spellModul, int fieldIndex)
@@ -175,47 +207,21 @@ public class ShipInventory : IStartShipParams, IInventory
         return Moduls.TryAddSimpleModul(simpleModul, fieldIndex);
     }
 
-    public bool TryAddWeaponModul(WeaponInv weaponModul, int fieldIndex)
-    {
-        if (weaponModul == null)
-        {
-            return false;
-        }
-        if (WeaponsModuls.Length <= fieldIndex)
-        {
-            Debug.LogError("Too big index weapon");
-            return false;
-        }
-        var field = WeaponsModuls[fieldIndex];
-        if (field == null)
-        {
-            WeaponsModuls[fieldIndex] = weaponModul;
-            weaponModul.CurrentInventory = this;
-            TransferItem(weaponModul, true);
-            return true;
-        }
-        Debug.LogError("Slot not free");
-        return false;
-    }
 
-    public bool RemoveWeaponModul(WeaponInv weaponModul)
-    {
-        for (int i = 0; i < WeaponsModuls.Length; i++)
-        {
-            var m = WeaponsModuls[i];
-            if (m == weaponModul)
-            {
-                WeaponsModuls[i] = null;
-                TransferItem(m, false);
-                return true;
-            }
-        }
-        return false;
-    }
 
     public bool RemoveSimpleModul(BaseModulInv simpleModul)
     {
         return Moduls.RemoveSimpleModul(simpleModul);
+    }
+
+    public bool TryAddWeaponModul(WeaponInv weaponModul, int fieldIndex)
+    {
+        return WeaponsModuls.TryAddWeaponModul(weaponModul, fieldIndex);
+    }
+
+    public bool RemoveWeaponModul(WeaponInv weaponModul)
+    {
+        return WeaponsModuls.RemoveWeaponModul(weaponModul);
     }
 
     public bool RemoveSpellModul(BaseSpellModulInv spell)
@@ -308,12 +314,21 @@ public class ShipInventory : IStartShipParams, IInventory
 
     private void CheckerRefreshSlots(ParameterItem itemParam)
     {
-        if (itemParam.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out float val))
+        float val;
+        if (itemParam.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out val))
         {
             var intSlots = (int)(val + 0.1f);
             for (int i = 0; i < intSlots; i++)
             {
                 Moduls.AddSlots(DragItemType.modul);
+            }
+        }  
+        if (itemParam.ParametersAffection.TryGetValue(EParameterShip.weaponSlots, out val))
+        {
+            var intSlots = (int)(val + 0.1f);
+            for (int i = 0; i < intSlots; i++)
+            {
+                WeaponsModuls.AddSlots(DragItemType.weapon);
             }
         }
     }
@@ -349,12 +364,24 @@ public class ShipInventory : IStartShipParams, IInventory
 
     private void CheckRemoveSlots(ParameterItem itemParam)
     {
-        if (itemParam.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out float val))
+        float val;
+        if (itemParam.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out val))
         {
             var intSlots = (int)(val + 0.1f);
             for (int i = 0; i < intSlots; i++)
             {
                 if (!Moduls.RemoveSlot(DragItemType.modul))
+                {
+                    Debug.LogError($"Can't remove modules:{intSlots}");
+                }
+            }
+        }    
+        if (itemParam.ParametersAffection.TryGetValue(EParameterShip.weaponSlots, out val))
+        {
+            var intSlots = (int)(val + 0.1f);
+            for (int i = 0; i < intSlots; i++)
+            {
+                if (!WeaponsModuls.RemoveSlot(DragItemType.weapon))
                 {
                     Debug.LogError($"Can't remove modules:{intSlots}");
                 }
@@ -365,6 +392,10 @@ public class ShipInventory : IStartShipParams, IInventory
     public bool CanRemoveModulSlots(int slotsInt)
     {
         return Moduls.CanRemoveSlots(slotsInt);
+    }    
+    public bool CanRemoveWeaponSlots(int slotsInt)
+    {
+        return WeaponsModuls.CanRemoveSlots(slotsInt);
     }
 
     public int HealthPointToRepair()

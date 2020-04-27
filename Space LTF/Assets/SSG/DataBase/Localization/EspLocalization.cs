@@ -845,6 +845,13 @@ public static class EspLocalization
 {"YourRartMoney", "Te las arreglaste para encontrar algo. Tu parte:{0}."},
 {"OKgo5050", "Ok, vamos de 50 a 50"},
 
+{"RaidersProConsCalc", "Bonificación de velocidad {0}%. Bonificación de velocidad de giro {1}%"},
+{"MercenaryProConsCalc", "Bonificación de velocidad {0}%. Bonificación de velocidad de giro {1}%"},
+{"FederationProConsCalc", "Nada"},
+{"OcronsProConsCalc", "Bonificación de puntos de casco {0}%. Sin escudo"},
+{"KriosProConsCalc", "Bonificación de puntos de escudo {0}%. Coeficiente de puntos de casco {1}%"},
+{"loaderror", "Error de carga"},
+
     };
 
 }

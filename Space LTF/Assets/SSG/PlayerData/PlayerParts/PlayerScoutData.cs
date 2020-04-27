@@ -28,7 +28,7 @@ public class ShipScoutData
     {
         var dInfo = new Dictionary<EShipScoutType, float>();
         ShipType = data.Ship.ShipType;
-        var notNull = data.Ship.WeaponsModuls.FirstOrDefault(x => x != null);
+        var notNull = data.Ship.WeaponsModuls.GetNonNullActiveSlots().FirstOrDefault();
         if (notNull != null)
         {
             WeaponType = notNull.WeaponType;
@@ -125,14 +125,11 @@ public class PlayerScoutData
         HashSet<WeaponType> allTypes = new HashSet<WeaponType>();
         foreach (var startShipPilotData in _player.Army.Army)
         {
-            foreach (var weaponsModul in startShipPilotData.Ship.WeaponsModuls)
+            foreach (var weaponsModul in startShipPilotData.Ship.WeaponsModuls.GetNonNullActiveSlots())
             {
-                if (weaponsModul != null)
-                {
-                    firstWeaponType = weaponsModul.WeaponType;
-                    allTypes.Add(firstWeaponType);
-                    weaponsCount++;
-                }
+                firstWeaponType = weaponsModul.WeaponType;
+                allTypes.Add(firstWeaponType);
+                weaponsCount++;
             }
             modulsCount = startShipPilotData.Ship.Moduls.GetNonNullActiveSlots().Count;
         }

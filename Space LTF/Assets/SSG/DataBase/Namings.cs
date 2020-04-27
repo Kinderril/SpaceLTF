@@ -497,20 +497,42 @@ public static class Namings
             Weapon(weaponsPair.Part2));
     }
 
-    public static string Tooltip(ShipConfig config)
+    public static string TooltipConfigProsCons(ShipConfig config)
     {
         switch (config)
         {
             case global::ShipConfig.raiders:
-                return Tag("RaidersProCons");
+                return Namings.Format(Tag("RaidersProCons"));
             case global::ShipConfig.federation:
-                return Tag("FederationProCons");
+                return Format(Tag("FederationProCons"));
             case global::ShipConfig.mercenary:
-                return Tag("MercenaryProCons");
+                return Format(Tag("MercenaryProCons"));
             case global::ShipConfig.ocrons:
-                return Tag("OcronsProCons");
+                return Format(Tag("OcronsProCons"));
             case global::ShipConfig.krios:
-                return Tag("KriosProCons");
+                return Format(Tag("KriosProCons"));
+            case global::ShipConfig.droid:
+                return "";
+        }
+
+        return "null";
+
+    }
+
+    public static string TooltipConfigProsConsCalc(ShipConfig config)
+    {
+        switch (config)
+        {
+            case global::ShipConfig.raiders:
+                return Namings.Format(Tag("RaidersProConsCalc"),Utils.FloatToChance(Library.RAIDER_SPEED_COEF -1f),Utils.FloatToChance(Library.RAIDER_TURNSPEED_COEF -1f));
+            case global::ShipConfig.federation:
+                return Format(Tag("FederationProConsCalc"));
+            case global::ShipConfig.mercenary:
+                return Format(Tag("MercenaryProConsCalc"), Utils.FloatToChance(Library.MERC_SPEED_COEF - 1f), Utils.FloatToChance(Library.MERC_TURNSPEED_COEF - 1f));
+            case global::ShipConfig.ocrons:
+                return Format(Tag("OcronsProConsCalc"),Utils.FloatToChance(Library.OCRONS_HP_COEF -1f));
+            case global::ShipConfig.krios:
+                return Format(Tag("KriosProConsCalc"), Utils.FloatToChance(Library.KRIOS_SHIELD_COEF - 1f), Utils.FloatToChance(Library.KRIOS_HP_COEF - 1f));
             case global::ShipConfig.droid:
                 return "";
         }

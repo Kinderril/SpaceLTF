@@ -84,6 +84,15 @@ public class PlayerInventory : IInventory
         }
         return false;
 
+    }      
+    public bool CanRemoveWeaponSlots(int slotsInt)
+    {
+        if (totalSlots() + slotsInt < MAX_SLOTS)
+        {
+            return true;
+        }
+        return false;
+
     }
 
     public List<IItemInv> GetAllItems()

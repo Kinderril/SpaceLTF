@@ -9,7 +9,6 @@ using UnityEngine;
 [Serializable]
 public class ShipModulsInventory
 {
-//    public BaseModulInv[] SimpleModuls => _simpleModuls;
     private BaseModulInv[] _simpleModuls;
      public int SimpleModulsCount => _startSlots + _additionalSlost;
     private int _startSlots;

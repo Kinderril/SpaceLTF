@@ -29,7 +29,9 @@ public class StartArmyChooserUI : UIElementWithTooltip
     }
     protected override string TextToTooltip()
     {
-        return Namings.Tooltip(Config);
+        var p = Namings.TooltipConfigProsCons(Config);
+        var p2 = Namings.TooltipConfigProsConsCalc(Config);
+        return $"{p}\n{p2}";
     }
 }
 

@@ -11,6 +11,7 @@ public enum EParameterShip
     shieldPoints,
     armor,
     modulsSlots,
+    weaponSlots,
 
 }    public enum EParameterItemRarity
 {

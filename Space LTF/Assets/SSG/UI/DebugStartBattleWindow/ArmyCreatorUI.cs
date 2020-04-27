@@ -127,7 +127,7 @@ public class ArmyCreatorUI : MonoBehaviour
             {
                 p.TryAddSimpleModul(simple);
             }
-            foreach (var simple in ship.Ship.WeaponsModuls)
+            foreach (var simple in ship.Ship.WeaponsModuls.GetNonNullActiveSlots())
             {
                 p.TryAddWeapon(simple);
             }

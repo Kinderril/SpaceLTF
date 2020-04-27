@@ -96,7 +96,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
         weaponTryies++;
         var player = MainController.Instance.MainPlayer;
         var rockectWeapons = player.Army.Army.Where(x =>
-            x.Ship.WeaponsModuls.FirstOrDefault(y => y != null && (y.WeaponType == WeaponType.rocket || y.WeaponType == WeaponType.casset)) != null);
+            x.Ship.WeaponsModuls.GetNonNullActiveSlots().FirstOrDefault(y => (y.WeaponType == WeaponType.rocket || y.WeaponType == WeaponType.casset)) != null);
         if (rockectWeapons.Any())
         {
             var ans = new List<AnswerDialogData>()

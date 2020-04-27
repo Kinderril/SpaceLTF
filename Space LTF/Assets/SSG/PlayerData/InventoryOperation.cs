@@ -168,10 +168,21 @@ public static class InventoryOperation
         var paramItem = item as ParameterItem;
         if (paramItem != null)
         {
-            if (paramItem.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out var slots))
+            float slots;
+            if (paramItem.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out slots))
             {
                 var slotsInt = (int) (slots + 0.1f);
                 if (!paramItem.CurrentInventory.CanRemoveModulSlots(slotsInt))
+                {
+                    failCallback();
+                    WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("cantRemoveCauseSlots"));
+                    return;
+                }
+            }  
+            if (paramItem.ParametersAffection.TryGetValue(EParameterShip.weaponSlots, out slots))
+            {
+                var slotsInt = (int) (slots + 0.1f);
+                if (!paramItem.CurrentInventory.CanRemoveWeaponSlots(slotsInt))
                 {
                     failCallback();
                     WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("cantRemoveCauseSlots"));

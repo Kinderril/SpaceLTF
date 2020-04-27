@@ -20,7 +20,7 @@ public class WeaponsController
     private WeaponsAimSectorController AimSectorController;
 
     public WeaponsController(List<WeaponPlace> weaponPosition,
-        ShipBase owner, WeaponInv[] weapons, List<BaseModulInv> moduls)
+        ShipBase owner, List<WeaponInv> weapons, List<BaseModulInv> moduls)
     {
         MaxAttackRadius = -1f;
         SupportWeaponsBuffPosibilities = new SupportWeaponsBuffPosibilities();

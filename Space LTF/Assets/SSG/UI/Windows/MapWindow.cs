@@ -54,71 +54,82 @@ public class MapWindow : BaseWindow
 
     public override void Init()
     {
-        base.Init();
-        Tutorial.Init();
-        OptionalTutorial.Init();
-
-        CellIinfoObject.Disable();
-        MapConsoleUI.Appear();
-        NavigationList.Init(GlobalMap);
-        //        ShipRepairedObject.gameObject.SetActive(false);
-        DialogWindow.Dispose();
-        GlobalMap.gameObject.SetActive(true);
-        //        WindowSettings.gameObject.SetActive(false);
-        ReputationMapUI.gameObject.SetActive(false);
-        CamerasController.Instance.StartGlobalMap();
-        GlobalMap.UnBlock();
-        //        ArmyInfoContainer.gameObject.SetActive(false);
-        player = MainController.Instance.MainPlayer;
-        player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
-        //        Cataclysm.Init(player.MapData);
-        
-        //        ReputationMapUI.Init();
-        PlayerByStepUI.Init(player.ByStepDamage);
-        //        player.MapData.OnCellChanged += OnCellChanged;
-        //        player.MapData.OnSectorChanged += OnSectorChanged;
-        //        _selectedCell = data.GetNextCell(player.MapData.CurrentCell);
-        MoneyField.Init(player.MoneyData.MoneyCount);
-        MicrochipField.Init(player.MoneyData.MicrochipsCount);
-        player.MoneyData.OnMoneyChange += OnMoneyChange;
-        player.MoneyData.OnUpgradeChange += OnMicrochipChange;
-        player.MapData.OnCellChanged += OnCellChanged;
-        player.Army.OnAddShip += OnAddShip;
-        // player.ReputationData.OnReputationNationChange += OnReputationChange;
-        CellsOfSector();
-        InitMyArmy();
-        GlobalMap.SingleInit(player.MapData.GalaxyData, this, MouseNearObject);
-        GlobalMap.Open();
-        var connectedCells = player.MapData.ConnectedCellsToCurrent();
-        GlobalMap.SingleReset(player.MapData.CurrentCell, connectedCells);
-        InventoryUI.Init(player.Inventory, null,true);
-        GlobalMap.UnBlock();
-        player.QuestData.OnElementFound += OnElementFound;
-
-        EnableModif(false);
-        EnableArmy(false);
-        UpdateMainQuestelements();
-        // UpdateReputation();
-        InitSideShip();
-        QuestsOnStartController.Init(player.QuestsOnStartController);
-        CheckLeaveDialog();
-        _isTutor = (player.MapData.GalaxyData is TutorialGalaxyData);
-        bool showFirstInfo = player.MapData.Step == 0;
-        if (_isTutor)
+        try
         {
-            showFirstInfo = false;
-            if (player.MapData.Step == 0)
+
+            base.Init();
+            Tutorial.Init();
+            OptionalTutorial.Init();
+
+            CellIinfoObject.Disable();
+            MapConsoleUI.Appear();
+            NavigationList.Init(GlobalMap);
+            //        ShipRepairedObject.gameObject.SetActive(false);
+            DialogWindow.Dispose();
+            GlobalMap.gameObject.SetActive(true);
+            //        WindowSettings.gameObject.SetActive(false);
+            ReputationMapUI.gameObject.SetActive(false);
+            CamerasController.Instance.StartGlobalMap();
+            GlobalMap.UnBlock();
+            //        ArmyInfoContainer.gameObject.SetActive(false);
+            player = MainController.Instance.MainPlayer;
+            player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
+            //        Cataclysm.Init(player.MapData);
+
+            //        ReputationMapUI.Init();
+            PlayerByStepUI.Init(player.ByStepDamage);
+            //        player.MapData.OnCellChanged += OnCellChanged;
+            //        player.MapData.OnSectorChanged += OnSectorChanged;
+            //        _selectedCell = data.GetNextCell(player.MapData.CurrentCell);
+            MoneyField.Init(player.MoneyData.MoneyCount);
+            MicrochipField.Init(player.MoneyData.MicrochipsCount);
+            player.MoneyData.OnMoneyChange += OnMoneyChange;
+            player.MoneyData.OnUpgradeChange += OnMicrochipChange;
+            player.MapData.OnCellChanged += OnCellChanged;
+            player.Army.OnAddShip += OnAddShip;
+            // player.ReputationData.OnReputationNationChange += OnReputationChange;
+            CellsOfSector();
+            InitMyArmy();
+            GlobalMap.SingleInit(player.MapData.GalaxyData, this, MouseNearObject);
+            GlobalMap.Open();
+            var connectedCells = player.MapData.ConnectedCellsToCurrent();
+            GlobalMap.SingleReset(player.MapData.CurrentCell, connectedCells);
+            InventoryUI.Init(player.Inventory, null, true);
+            GlobalMap.UnBlock();
+            player.QuestData.OnElementFound += OnElementFound;
+
+            EnableModif(false);
+            EnableArmy(false);
+            UpdateMainQuestelements();
+            // UpdateReputation();
+            InitSideShip();
+            QuestsOnStartController.Init(player.QuestsOnStartController);
+            CheckLeaveDialog();
+            _isTutor = (player.MapData.GalaxyData is TutorialGalaxyData);
+            bool showFirstInfo = player.MapData.Step == 0;
+            if (_isTutor)
             {
-                Tutorial.Open();
+                showFirstInfo = false;
+                if (player.MapData.Step == 0)
+                {
+                    Tutorial.Open();
+                }
             }
+            if (showFirstInfo)
+            {
+                var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
+                field.text = Namings.Tag("StartInfo");
+            }
+            StartInfo.gameObject.SetActive(showFirstInfo);
+            MovingArmyUIController.Init(MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController, GlobalMap);
         }
-        if (showFirstInfo)
+        catch (Exception e)
         {
-            var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
-            field.text = Namings.Tag("StartInfo");
+              WindowManager.Instance.InfoWindow.Init(() =>
+              {
+                  WindowManager.Instance.OpenWindow(MainState.start);
+              },Namings.Tag("loaderror"));
         }
-        StartInfo.gameObject.SetActive(showFirstInfo);
-        MovingArmyUIController.Init(MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController, GlobalMap);
     }
 
     private void CheckLeaveDialog()

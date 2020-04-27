@@ -891,6 +891,14 @@ public static class RusLocalization
         {"ParameterTypeEngine", "Радиус телепортации {0}. Перезарядка телепортации {1}"},
 
 
+        {"RaidersProConsCalc", "Бонус к скорости {0}%. Бонус к скорости поворота {1}%"},
+        {"MercenaryProConsCalc", "Бонус к скорости {0}%. Бонус к скорости поворота {1}%"},
+        {"FederationProConsCalc", "Ничего"},
+        {"OcronsProConsCalc", "Бонусы к корпусу {0}%. Щитов нет"},
+        {"KriosProConsCalc", "Бонус к щиту {0}%. Коэфициент корпуса {1}%"},
+        {"loaderror", "Ошибка загрузки"},
+
+
         {"cocpit", "Кабина"},
         {"engine", "Двигатель"},
         {"wings", "Крылья"},
