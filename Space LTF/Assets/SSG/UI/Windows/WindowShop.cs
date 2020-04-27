@@ -38,7 +38,8 @@ public class WindowShop : BaseWindow
         _greeArmyUi.Init(_greenPlayer, MyPlayersLayout, true, new ConnectInventory(_greenPlayer.Inventory));
         base.Init(obj);
         PlayersInventory.Init(_greenPlayer.Inventory, null, true);
-        ShoInventoryUI.Init(_shopInventory, new ConnectInventory(_greenPlayer.Inventory),false);
+        bool canDrop = !_isTutor;
+        ShoInventoryUI.Init(_shopInventory, new ConnectInventory(_greenPlayer.Inventory), canDrop);
         InitValuables();
     }
 
