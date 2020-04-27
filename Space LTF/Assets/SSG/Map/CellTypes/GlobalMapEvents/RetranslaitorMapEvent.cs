@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-
 [System.Serializable]
 public class RetranslaitorMapEvent : BaseGlobalMapEvent
 {
@@ -11,7 +10,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
     private bool _doFight;
     public override string Desc()
     {
-        return "Energy storage.";
+        return Namings.Tag("Energy storage");
     }
 
     public RetranslaitorMapEvent(ShipConfig _shipConfig)
@@ -24,11 +23,11 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
     {
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * 1.9f;
         _credits = (int)MyExtensions.GreateRandom(myArmyPower);
-        var mesData = new MessageDialogData(Namings.Format("Power fleet of {0} protect storage of energy.", Namings.ShipConfig(_config)), new List<AnswerDialogData>()
+        var mesData = new MessageDialogData(Namings.Format(Namings.Tag("StoragePower"), Namings.ShipConfig(_config)), new List<AnswerDialogData>()
         {
-            new AnswerDialogData("Fight",null,Figth),
+            new AnswerDialogData(Namings.Tag("Fight"),null,Figth),
 //            new AnswerDialogData("Send fail message",null,FailMessage),
-            new AnswerDialogData("Steal",null,Steal),
+            new AnswerDialogData(Namings.Tag("Steal"),null,Steal),
             new AnswerDialogData(Namings.Tag("leave"),null),
         });
         return mesData;
@@ -44,7 +43,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
     {
         if (SkillWork(3, ScoutsLevel))
         {
-            var mesData = new MessageDialogData(Namings.Format("{0} credits are yours.", _credits), new List<AnswerDialogData>()
+            var mesData = new MessageDialogData(Namings.Format( Namings.Tag("creditYours"), _credits), new List<AnswerDialogData>()
             {
                 new AnswerDialogData(Namings.Tag("Take"),() =>
                     MainController.Instance.MainPlayer.MoneyData.AddMoney(_credits)
@@ -54,9 +53,9 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
         }
         else
         {
-            var mesData = new MessageDialogData("Your scouts failed. And all protectors will fight you.", new List<AnswerDialogData>()
+            var mesData = new MessageDialogData(Namings.Tag("scoutsFailed"), new List<AnswerDialogData>()
             {
-                new AnswerDialogData("Fight",() =>
+                new AnswerDialogData(Namings.Tag("Fight"),() =>
                     DoFight(1.3f)
                 ),
             });
@@ -66,9 +65,9 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
 
     private MessageDialogData Figth()
     {
-        var mesData = new MessageDialogData("You destroy several enemy ship before battle. And now you should fight other.", new List<AnswerDialogData>()
+        var mesData = new MessageDialogData( Namings.Tag("destrySeveralEnemies"), new List<AnswerDialogData>()
         {
-            new AnswerDialogData("Fight",() =>
+            new AnswerDialogData(Namings.Tag("Fight"),() =>
                 DoFight(1f)
             ),
         });
@@ -80,7 +79,7 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
         if (_doFight)
         {
             _doFight = false;
-            var mesData = new MessageDialogData(Namings.Format("{0} credits are yours.", _credits), new List<AnswerDialogData>()
+            var mesData = new MessageDialogData(Namings.Format(Namings.Tag("creditYours"), _credits), new List<AnswerDialogData>()
             {
                 new AnswerDialogData(Namings.Tag("Take"),() =>
                     MainController.Instance.MainPlayer.MoneyData.AddMoney(_credits)

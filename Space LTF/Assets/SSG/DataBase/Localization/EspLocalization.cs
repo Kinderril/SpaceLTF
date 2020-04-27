@@ -806,6 +806,31 @@ public static class EspLocalization
 {"ParameterTypeChanrgeCount", "Recuento de baterías que puedes usar en la batalla {0}"},
 {"ParameterTypeChanrgeSpeed", "Disminuir el período de recarga de baterías en {0}%"},
 {"ParameterTypeEngine", "Radio de teletransportación {0}. Período de recarga {1}"},
+
+{"Energy storage", "Almacenamiento de energía"},
+{"Steal", "Robar"},
+{"destrySeveralEnemies","Has logrado destruir un par de naves enemigas antes del comienzo de la batalla, ahora tienes que luchar contra el resto."},
+{"scoutsFailed", "Inteligencia fallida. Todos los defensores ahora te atacarán."},
+{"StoragePower", "Fuerza de la flota de defensa {0}"},
+{"creditYours", "Has encontrado {0} créditos"},
+{"Excavations", "Excavaciones"},
+{"ExcavationStart", "Antes de cavar Una pequeña flota ha llegado antes que usted. \nPero todo se extrae aquí. Debes tener cuidado."},
+{"Try attack.", "Intenta atacar."},
+{"Come closer.","Acércate." },
+{"Start search at other side","Comienza a buscar en el otro lado" },
+{"BlowUpAlmost","Se las arreglaron para hacer estallar casi todo. Pero un par de módulos pudieron sobrevivir:{0}" },
+{"They blow up","Todos explotaron y huyeron." },
+{"TheySearching","Estan buscando algo" },
+{"Threaten", "Intimidar"},
+{"Offer assistance", "Ofrecer para ayudar"},
+{"TheyHaveNothing","No tienen nada Y todos explotaron. Algunas de tus naves están dañadas." },
+{"nobodyFind", "Nadie pudo encontrar nada"},
+{"foundLotCreditsThey", "Primero encontraron préstamos {0}"},
+{"NotYourDayNothung","Esta vacio" },
+{"foundLotCredits","Encontraste un montón de préstamos {0}" },
+{"YourRartMoney", "Te las arreglaste para encontrar algo. Tu parte:{0}."},
+{"OKgo5050", "Ok, vamos de 50 a 50"},
+
     };
 
 }
