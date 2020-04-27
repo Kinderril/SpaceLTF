@@ -890,6 +890,7 @@ public static class RusLocalization
         {"ParameterTypeChanrgeSpeed", "Уменьшение времени перезарядки батарей {0}%"},
         {"ParameterTypeEngine", "Радиус телепортации {0}. Перезарядка телепортации {1}"},
 
+
         {"cocpit", "Кабина"},
         {"engine", "Двигатель"},
         {"wings", "Крылья"},
@@ -903,6 +904,31 @@ public static class RusLocalization
         {"EParameterShipshieldPoints", "Щит"},
         {"EParameterShiparmor", "Броня"},
         {"EParameterShipmodulsSlots", "Слоты модулей"},
+
+        {"Energy storage", "Хранилище энергии"},
+        {"Steal", "Украсть"},
+        {"destrySeveralEnemies","Вам удалось уничтожить пару кораблей врага до начала битвы.Теперь придеться сражаться с остальными."},
+        {"scoutsFailed", "Разведка неудалась.Все защитники теперь будут атаковать вас."},
+        {"StoragePower", "Сила защищающего флота {0}"},
+        {"creditYours", "Вы нашли {0} кредитов"},
+        {"Excavations", "Раскопки"},
+        {"ExcavationStart", "Перед вами раскопки. Небольшой флот прибыл до вас.\nНо тут все заминированно. Вам следует быть осторожным."},
+        {"Try attack.", "Попытаться атаковать."},
+        {"Come closer.","Приблизиться." },
+        {"Start search at other side","Начать поиски на другой стороне" },
+        {"BlowUpAlmost","Им удалось почти все взорвать. Но пара модулей смогли уцелеть:{0}" },
+        {"They blow up","Они все взорвали и убежали." },
+        {"TheySearching","Они что то ищут" },
+        {"Threaten", "Запугать"},
+        {"Offer assistance", "Предложить помочь"},
+        {"TheyHaveNothing","У них ничего нет. И они все взорвали. Часть ваших кораблей повреждена." },
+        {"nobodyFind", "Никто ничего несмог найти"},
+        {"foundLotCreditsThey", "Они нашли кредиты первыми {0}"},
+        {"NotYourDayNothung","Пусто. Не ваш день" },
+        {"foundLotCredits","Вы нашли кучу кредитов {0}" },
+        {"YourRartMoney", "Вам удалось что то найти. Ваша часть:{0}."},
+        {"OKgo5050", "Ок, давай 50 на 50"},
+
     };
 
 }

@@ -918,6 +918,31 @@ public static class EngLocalization
 
 
 
+        {"Energy storage", "Energy storage"},
+        {"Steal", "Steal"},
+        {"destrySeveralEnemies","You destroy several enemy ships before battle. And now you should fight other."},
+        {"scoutsFailed", "Your scouts failed. And all protectors will fight you."},
+        {"StoragePower", "Power fleet of {0} protect storage of energy"},
+        {"creditYours", "{0} credits are yours."},
+        {"Excavations", "Excavations"},
+        {"ExcavationStart", "You see excavations. Small fleet searching something at this place.\nBut every piece of this place is mined. You should be very careful."},
+        {"Try attack.", "Try attack."},
+        {"Come closer.","Come closer." },
+        {"Start search at other side","Start search at other side" },
+        {"BlowUpAlmost","They blow up almost all. But your fast ship safe some modules:{0}" },
+        {"They blow up","They blow up all and run away." },
+        {"TheySearching","They are searching for something" },
+        {"Threaten", "Threaten"},
+        {"Offer assistance", "Offer assistance"},
+        {"TheyHaveNothing","They have nothing. And simply blow up everything. Some of your ships damaged." },
+        {"nobodyFind", "No one can't find anything"},
+        {"foundLotCreditsThey", "They found credits first {0}"},
+        {"NotYourDayNothung","Nothing. This isn't your day" },
+        {"foundLotCredits","You found a lot of credits {0}" },
+        {"YourRartMoney", "All fine, you found some credits. Your part:{0}."},
+        {"OKgo5050", "Ok, lets go 50/50"},
+
+
     };
 
 }
