@@ -39,7 +39,6 @@ public class WindowShop : BaseWindow
         base.Init(obj);
         PlayersInventory.Init(_greenPlayer.Inventory, null, true);
         bool canDrop = !_isTutor;
-
         ShoInventoryUI.Init(_shopInventory, new ConnectInventory(_greenPlayer.Inventory), canDrop);
         InitValuables();
     }
