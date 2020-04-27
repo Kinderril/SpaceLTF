@@ -76,6 +76,16 @@ public class PlayerInventory : IInventory
         return b;
     }
 
+    public bool CanRemoveModulSlots(int slotsInt)
+    {
+        if (totalSlots() + slotsInt < MAX_SLOTS)
+        {
+            return true;
+        }
+        return false;
+
+    }
+
     public List<IItemInv> GetAllItems()
     {
         var list = new List<IItemInv>();

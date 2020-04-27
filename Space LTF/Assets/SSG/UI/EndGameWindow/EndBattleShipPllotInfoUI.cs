@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +30,15 @@ public class EndBattleShipPllotInfoUI : MonoBehaviour
         FieldAddMoney.Init(0);
         FieldDamageHealth.text = Namings.Tag("DamageBody") + ":" + info.Ship.LastBattleData.HealthDamage.ToString("0");
         FieldDamageShield.text = Namings.Tag("DamageShield") + ":" + info.Ship.LastBattleData.ShieldhDamage.ToString("0");
-        var MaxHealth = ShipParameters.ParamUpdate(info.Ship.MaxHealth, info.Pilot.HealthLevel, ShipParameters.MaxHealthCoef);
+
+
+        var calulatedParams = ShipParameters.CalcParams(info.Ship, info.Pilot, new List<EParameterShip>()
+        {
+            EParameterShip.bodyPoints
+        });
+        var MaxHealth = calulatedParams[EParameterShip.bodyPoints];
+
+//        var MaxHealth = ShipParameters.ParamUpdate(info.Ship.MaxHealth, info.Pilot.HealthLevel, ShipParameters.MaxHealthCoef);
 //        var hp = MaxHealth;
         MoneyToAdd = 0;
         var cur = info.Ship.HealthPercent * MaxHealth;

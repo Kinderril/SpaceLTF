@@ -41,5 +41,6 @@ public interface IInventory
     bool CanMoveToByLevel(IItemInv item,int posibleLevel);
     bool TryAddItem(ParameterItem itemParam);
     bool RemoveItem(ParameterItem itemParam);
+    bool CanRemoveModulSlots(int slotsInt);
 }
 

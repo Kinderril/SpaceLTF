@@ -36,10 +36,9 @@ public class ShipScoutData
         }
 
         PilotLevel = data.Pilot.CurLevel;
-        foreach (var modul in data.Ship.Moduls.SimpleModuls)
+        foreach (var modul in data.Ship.Moduls.GetNonNullActiveSlots())
         {
-            if (modul != null)
-                Moduls.Add(modul.Type);
+            Moduls.Add(modul.Type);
         }
         foreach (var modul in data.Ship.SpellsModuls)
         {
@@ -135,13 +134,7 @@ public class PlayerScoutData
                     weaponsCount++;
                 }
             }
-            foreach (var baseModulInv in startShipPilotData.Ship.Moduls.SimpleModuls)
-            {
-                if (baseModulInv != null)
-                {
-                    modulsCount++;
-                }
-            }
+            modulsCount = startShipPilotData.Ship.Moduls.GetNonNullActiveSlots().Count;
         }
         string ssWeapons = allTypes.Aggregate("", (current, weaponType) => current + (current.Length > 0 ? "," : "") + weaponType.ToString());
 

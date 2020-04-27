@@ -40,9 +40,9 @@ public class ShipInventory : IStartShipParams, IInventory
     public ShipModulsInventory Moduls;
     public WeaponInv[] WeaponsModuls;
     public BaseSpellModulInv[] SpellsModuls;
-    public ParameterItem CocpitSlot;
-    public ParameterItem EngineSlot;
-    public ParameterItem WingSlot;
+    public ParameterItem CocpitSlot { get; private set; }
+    public ParameterItem EngineSlot { get; private set; }
+    public ParameterItem WingSlot { get; private set; }
 
     private readonly Player _player;
     private PilotParameters _pilot;
@@ -81,7 +81,7 @@ public class ShipInventory : IStartShipParams, IInventory
         var list = new List<IItemInv>();
         list.AddRange(WeaponsModuls);
         list.AddRange(SpellsModuls);
-        list.AddRange(Moduls.SimpleModuls);
+        list.AddRange(Moduls.GetNonNullActiveSlots());
         return list;
     }
 
@@ -191,7 +191,6 @@ public class ShipInventory : IStartShipParams, IInventory
         {
             WeaponsModuls[fieldIndex] = weaponModul;
             weaponModul.CurrentInventory = this;
-            //            field = WeaponsModuls[fieldIndex];
             TransferItem(weaponModul, true);
             return true;
         }
@@ -279,6 +278,7 @@ public class ShipInventory : IStartShipParams, IInventory
                     CocpitSlot = itemParam;
                     itemParam.CurrentInventory = this;
                     TransferItem(itemParam, true);
+                    CheckerRefreshSlots(itemParam);
                     return true;
                 }
                 break;
@@ -288,6 +288,7 @@ public class ShipInventory : IStartShipParams, IInventory
                     EngineSlot = itemParam;
                     itemParam.CurrentInventory = this;
                     TransferItem(itemParam, true);
+                    CheckerRefreshSlots(itemParam);
                     return true;
                 }
                 break;
@@ -297,11 +298,24 @@ public class ShipInventory : IStartShipParams, IInventory
                     WingSlot = itemParam;
                     itemParam.CurrentInventory = this;
                     TransferItem(itemParam, true);
+                    CheckerRefreshSlots(itemParam);
                     return true;
                 }
                 break;
         }
         return false;
+    }
+
+    private void CheckerRefreshSlots(ParameterItem itemParam)
+    {
+        if (itemParam.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out float val))
+        {
+            var intSlots = (int)(val + 0.1f);
+            for (int i = 0; i < intSlots; i++)
+            {
+                Moduls.AddSlots();
+            }
+        }
     }
 
     public bool RemoveItem(ParameterItem itemParam)
@@ -317,17 +331,40 @@ public class ShipInventory : IStartShipParams, IInventory
             case ItemType.cocpit:
                 CocpitSlot= null;
                 TransferItem(itemParam, false);
+                CheckRemoveSlots(itemParam);
                 return true;
             case ItemType.engine:
                 EngineSlot = null;
                 TransferItem(itemParam, false);
+                CheckRemoveSlots(itemParam);
                 return true;
             case ItemType.wings:
                 WingSlot = null;
                 TransferItem(itemParam, false);
+                CheckRemoveSlots(itemParam);
                 return true;
         }
         return false;
+    }
+
+    private void CheckRemoveSlots(ParameterItem itemParam)
+    {
+        if (itemParam.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out float val))
+        {
+            var intSlots = (int)(val + 0.1f);
+            for (int i = 0; i < intSlots; i++)
+            {
+                if (!Moduls.RemoveSlot())
+                {
+                    Debug.LogError($"Can't remove modules:{intSlots}");
+                }
+            }
+        }
+    }
+
+    public bool CanRemoveModulSlots(int slotsInt)
+    {
+        return Moduls.CanRemoveSlots(slotsInt);
     }
 
     public int HealthPointToRepair()

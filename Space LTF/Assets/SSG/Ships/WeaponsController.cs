@@ -20,7 +20,7 @@ public class WeaponsController
     private WeaponsAimSectorController AimSectorController;
 
     public WeaponsController(List<WeaponPlace> weaponPosition,
-        ShipBase owner, WeaponInv[] weapons, BaseModulInv[] moduls)
+        ShipBase owner, WeaponInv[] weapons, List<BaseModulInv> moduls)
     {
         MaxAttackRadius = -1f;
         SupportWeaponsBuffPosibilities = new SupportWeaponsBuffPosibilities();
@@ -105,11 +105,10 @@ public class WeaponsController
 
     }
 
-    private void UpgradeWithModuls(WeaponInGame weapon, BaseModulInv[] moduls)
+    private void UpgradeWithModuls(WeaponInGame weapon, List<BaseModulInv> moduls)
     {
-        for (int i = 0; i < moduls.Length; i++)
+        foreach (var modul in moduls)
         {
-            var modul = moduls[i];
             weapon.UpgradeWithModul(modul);
         }
     }

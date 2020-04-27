@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -183,26 +184,26 @@ var shipSpeedBase = _ship.MaxSpeed;
             }
         }
 
+        var calulatedParams = ShipParameters.CalcParams(_ship, _pilot, new List<EParameterShip>()
+        {
+            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn
+        });
+        var maxHealth = calulatedParams[EParameterShip.bodyPoints];// ShipParameters.ParamUpdate(maxHealthBase, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
 
-
-
-        var maxSpeed = ShipParameters.ParamUpdate(shipSpeedBase, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
-        var turnSpeed = ShipParameters.ParamUpdate(turnSpeedBase, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
-        var maxShiled = ShipParameters.ParamUpdate(maxShiledBase, _pilot.ShieldLevel, ShipParameters.MaxShieldCoef);
-        var maxHealth = ShipParameters.ParamUpdate(maxHealthBase, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
-
+        var maxSpeed = calulatedParams[EParameterShip.speed];// ShipParameters.ParamUpdate(shipSpeedBase, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
+        var turnSpeed = calulatedParams[EParameterShip.turn];//ShipParameters.ParamUpdate(turnSpeedBase, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
+        var maxShiled = calulatedParams[EParameterShip.shieldPoints];//ShipParameters.ParamUpdate(maxShiledBase, _pilot.ShieldLevel, ShipParameters.MaxShieldCoef);
+        
         PilotParamsInUI pilotParams = new PilotParamsInUI()
         { MaxSpeed = maxSpeed, MaxHealth = maxHealth, MaxShield = maxShiled, TurnSpeed = turnSpeed };
 
-        foreach (var modul in _ship.Moduls.SimpleModuls)
+        foreach (var modul in _ship.Moduls.GetNonNullActiveSlots())
         {
-            if (modul != null)
+        
+            var support = modul as BaseSupportModul;
+            if (support != null)
             {
-                var support = modul as BaseSupportModul;
-                if (support != null)
-                {
-                    support.ChangeParamsShip(pilotParams);
-                }
+                support.ChangeParamsShip(pilotParams);
             }
         }
 
@@ -223,9 +224,9 @@ var shipSpeedBase = _ship.MaxSpeed;
     {
         float bArmor = _ship.BodyArmor;
         float sArmor = _ship.ShiledArmor;
-        foreach (var modul in _ship.Moduls.SimpleModuls)   //Это пздц костыль. Если будут еще подобный модули то переделать все это!
+        foreach (var modul in _ship.Moduls.GetNonNullActiveSlots())   //Это пздц костыль. Если будут еще подобный модули то переделать все это!
         {
-            if (modul != null && modul.Type == SimpleModulType.armor)
+            if (modul.Type == SimpleModulType.armor)
             {
                 bArmor += modul.Level;
                 // sArmor += modul.Level;

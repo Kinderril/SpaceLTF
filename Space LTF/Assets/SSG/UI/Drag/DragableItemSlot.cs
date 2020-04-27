@@ -32,7 +32,7 @@ public class DragableItemSlot : MonoBehaviour
     public Image BlueImage;
     public Image YellowImage;
     public Image RedImage;
-    public Image ParapeteBack;
+    public DragableSlotBackParameterItems ParapeteBack;
 
     //    public event Action<DragableItemSlot, DragableItem,bool> OnItemImplemented;
 
@@ -59,28 +59,24 @@ public class DragableItemSlot : MonoBehaviour
                 BlueImage.gameObject.SetActive(false);
                 YellowImage.gameObject.SetActive(false);
                 RedImage.gameObject.SetActive(false);
-                ParapeteBack.gameObject.SetActive(false);
                 break;
             case DragItemType.weapon:
                 StandartImage.gameObject.SetActive(false);
                 BlueImage.gameObject.SetActive(false);
                 YellowImage.gameObject.SetActive(false);
                 RedImage.gameObject.SetActive(true);
-                ParapeteBack.gameObject.SetActive(false);
                 break;
             case DragItemType.modul:
                 StandartImage.gameObject.SetActive(false);
                 BlueImage.gameObject.SetActive(true);
                 YellowImage.gameObject.SetActive(false);
                 RedImage.gameObject.SetActive(false);
-                ParapeteBack.gameObject.SetActive(false);
                 break;
             case DragItemType.spell:
                 StandartImage.gameObject.SetActive(false);
                 BlueImage.gameObject.SetActive(false);
                 YellowImage.gameObject.SetActive(true);
                 RedImage.gameObject.SetActive(false);
-                ParapeteBack.gameObject.SetActive(false);
                 break;   
             case DragItemType.cocpit:
             case DragItemType.engine:
@@ -89,9 +85,9 @@ public class DragableItemSlot : MonoBehaviour
                 BlueImage.gameObject.SetActive(false);
                 YellowImage.gameObject.SetActive(false);
                 RedImage.gameObject.SetActive(false);
-                ParapeteBack.gameObject.SetActive(true);
                 break;
         }
+        ParapeteBack.Init(DragItemType);
     }
     public bool CanPutHere(DragableItem element)
     {

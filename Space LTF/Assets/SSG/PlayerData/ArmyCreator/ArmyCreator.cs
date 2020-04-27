@@ -413,7 +413,7 @@ public static class ArmyCreator
             {
                 chancesInner.Add(LibraryShipUpgradeType.upgradeWeapon, 2f);
             }
-            if (startData.Ship.Moduls.SimpleModuls.Any(x => x != null))
+            if (startData.Ship.Moduls.GetNonNullActiveSlots().Any())
             {
                 chancesInner.Add(LibraryShipUpgradeType.upgradeModul, 2f);
             }
@@ -567,7 +567,7 @@ public static class ArmyCreator
         var val = Library.BASE_SIMPLE_MODUL_VALUE_UPGRADE;//* Library.ShipPowerCoef(ship.ShipType);
         if (v.Points >= val)
         {
-            var rndModuls = ship.Moduls.SimpleModuls.Where(x => x != null && x.CanUpgradeLevel()).ToList();
+            var rndModuls = ship.Moduls.GetNonNullActiveSlots().Where(x => x.CanUpgradeLevel()).ToList();
             if (rndModuls.Count > 0)
             {
                 v.Points -= val;

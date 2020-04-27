@@ -26,7 +26,11 @@ public class ShipRunAwayUI : MonoBehaviour
 
     private void SetCurHealths(ShipInventory shipInventory,IPilotParameters pilot)
     {
-        var MaxHealth = ShipParameters.ParamUpdate(shipInventory.MaxHealth, pilot.HealthLevel, ShipParameters.MaxHealthCoef);
+        var calulatedParams = ShipParameters.CalcParams(shipInventory, pilot, new List<EParameterShip>()
+        {
+            EParameterShip.bodyPoints
+        });
+        var MaxHealth = calulatedParams[EParameterShip.bodyPoints];
         var curHp = MaxHealth * shipInventory.HealthPercent;
         Health.text = Namings.Tag("Health") + ":" + curHp.ToString("0") + "/" + PilotInventoryUI.Info(MaxHealth, pilot.HealthLevel);
     }

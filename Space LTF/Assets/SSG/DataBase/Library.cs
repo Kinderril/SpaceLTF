@@ -44,6 +44,23 @@ public static class Library
     public const int SPECIAL_SPELL_LVL = 4;
     public const int MAX_MOUDL_LEVEL = 3;
 
+    #region CONFIGS COEF
+
+    public const float RAIDER_SPEED_COEF = 1.15f;
+    public const float RAIDER_TURNSPEED_COEF = 1.05f; 
+    
+    public const float MERC_SPEED_COEF = 1.15f;
+    public const float MERC_TURNSPEED_COEF = 1.05f;    
+    
+    public const float OCRONS_SHIELD_COEF = 0f;
+    public const float OCRONS_HP_COEF = 1.6f;    
+    
+    public const float KRIOS_SHIELD_COEF = 1.4f;
+    public const float KRIOS_HP_COEF = 0.5f;
+
+
+    #endregion
+
     public const float MIN_WORKING_SHIP = 6;
     public const float MAX_ARMY_POWER_MAP = 70;
 
@@ -639,7 +656,7 @@ public static class Library
     {
         var sum = ship.WeaponsModuls.Where(weaponsModul => weaponsModul != null).Sum(weaponsModul =>
                       BASE_WEAPON_VALUE + (weaponsModul.Level - 1) * WEAPON_LEVEL_COEF) +
-                  ship.Moduls.SimpleModuls.Where(simple => simple != null).Sum(simple =>
+                  ship.Moduls.GetNonNullActiveSlots().Sum(simple =>
                       BASE_SIMPLE_MODUL_VALUE + (simple.Level - 1) * BASE_SIMPLE_MODUL_VALUE_UPGRADE) +
                   ship.SpellsModuls.Where(spell => spell != null)
                       .Sum(spell => BASE_SPELL_VALUE + +(spell.Level - 1) * BASE_SPELL_VALUE_LEVEL);
@@ -777,9 +794,17 @@ public static class Library
 
     }
 
-    public static ParameterItem CreateParameterItem(EParameterItemSubType middle, EParameterItemRarity level)
+    public static ParameterItem CreateParameterItem(EParameterItemSubType middle, EParameterItemRarity level, List<ItemType> types = null)
     {
-        var list  = new List<ItemType>(){ItemType.cocpit,ItemType.engine,ItemType.wings};
+        List<ItemType> list;
+        if (types == null)
+        {
+            list = new List<ItemType>() { ItemType.cocpit, ItemType.engine, ItemType.wings };
+        }
+        else
+        {
+            list = types;
+        }
         var type = list.RandomElement();
 
         var data = new Dictionary<EParameterShip, float>();

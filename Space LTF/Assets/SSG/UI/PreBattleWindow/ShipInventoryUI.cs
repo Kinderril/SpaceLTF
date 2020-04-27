@@ -52,6 +52,8 @@ public class ShipInventoryUI : DragZone
         _shipInventory.OnShipCriticalChange += OnShipCriticalChange;
         _shipInventory.OnShipRepaired += OnShipRepaired;
         _shipInventory.OnItemAdded += OnItemAdded;
+        _shipInventory.Moduls.OnSlotsRemove += OnSlotsRemove;
+        _shipInventory.Moduls.OnSlotsAdd += OnSlotsAdd;
         //        _weaponsSlots.Clear();
         //        _modulsSlots.Clear();
         //        _spellsSlots.Clear();
@@ -82,6 +84,7 @@ public class ShipInventoryUI : DragZone
         RefreshParameters();
 
     }
+
 
     private void OnItemAdded(IItemInv item, bool val)
     {
@@ -117,7 +120,11 @@ public class ShipInventoryUI : DragZone
         var shallRepair = _shipInventory.HealthPointToRepair() > 0;
         RepairButton.gameObject.SetActive(shallRepair);
         RepairCost.text = repairCost.ToString();
-        var MaxHealth = ShipParameters.ParamUpdate(_shipInventory.MaxHealth, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
+        var calulatedParams = ShipParameters.CalcParams(_shipInventory, _pilot, new List<EParameterShip>()
+        {
+            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn
+        });
+        var MaxHealth = calulatedParams[EParameterShip.bodyPoints];
         HealthSlider.InitBorders(0, MaxHealth, true);
         HealthSlider.Slider.value = _shipInventory.HealthPercent * MaxHealth;
     }
@@ -162,7 +169,6 @@ public class ShipInventoryUI : DragZone
             weaponSlot.Init(_shipInventory, true);
             weaponSlot.transform.SetParent(WeaponsLayout, false);
             weaponSlot.DragItemType = DragItemType.weapon;
-            //            _allSlots.Add(weaponSlot);
         }
         for (int i = 0; i < _shipInventory.SimpleModulsCount; i++)
         {
@@ -171,10 +177,36 @@ public class ShipInventoryUI : DragZone
             itemSlot.Init(_shipInventory, true);
             itemSlot.transform.SetParent(ModulsLayout, false);
             itemSlot.DragItemType = DragItemType.modul;
-            //            _allSlots.Add(itemSlot);
+        }
+        return allslots;
+    }
+    private void OnSlotsRemove(ShipModulsInventory arg1)
+    {
+        RemoveSlot();
+    }
+
+    private void OnSlotsAdd(ShipModulsInventory arg1)
+    {
+        AddModulSlot();
+    }
+
+    private void AddModulSlot()
+    {
+        var itemSlot = InventoryOperation.GetDragableItemSlot();
+        itemSlot.Init(_shipInventory, true);
+        itemSlot.transform.SetParent(ModulsLayout, false);
+        itemSlot.DragItemType = DragItemType.modul;
+        AddSlot(itemSlot);
+    }
+
+    private void RemoveSlot()
+    {
+        var slot = FindSlotToRemove();
+        if (slot != null)
+        {
+            RemoveSlot(slot);
         }
 
-        return allslots;
     }
 
     private void InitCurrentItems()
@@ -191,28 +223,14 @@ public class ShipInventoryUI : DragZone
         {
             var weapon = _shipInventory.WeaponsModuls[i];
             var slot = GetFreeSlot(ItemType.weapon);
-            //            slot.Init(_shipInventory, _usable);
             SetStartItem(slot, weapon);
         }
-        //        Debug.Log("Moduls of ship:" + _shipInventory.Name + "   " + _shipInventory.Moduls.SimpleModuls.Count(x =>x!=null));
-        for (int i = 0; i < _shipInventory.Moduls.SimpleModuls.Length; i++)
+
+        foreach (var modulInv in _shipInventory.Moduls.GetNonNullActiveSlots())
         {
-            var modul = _shipInventory.Moduls.SimpleModuls[i];
-            //            if (modul != null)
-            //            {
-            //                Debug.Log("Modul of ship:" + _shipInventory.Name + "   " + modul.Type.ToString());
-            //            }
             var slot = GetFreeSlot(ItemType.modul);
-            //            slot.Init(_shipInventory, _usable);
-            SetStartItem(slot, modul);
+            SetStartItem(slot, modulInv);
         }
-        //        for (int i = 0; i < _shipInventory.SpellsModuls.Length; i++)
-        //        {
-        //            var spell = _shipInventory.SpellsModuls[i];
-        //            var slot = GetFreeSlot(ItemType.spell);
-        //            slot.Init(_shipInventory, _usable);
-        //            SetStartItem(slot,spell);
-        //        }
     }
 
     private void InitCurrent(ParameterItem parameterItem,DragableItemSlot slot)
@@ -225,6 +243,8 @@ public class ShipInventoryUI : DragZone
 
     public override void Dispose()
     {
+        _shipInventory.Moduls.OnSlotsRemove -= OnSlotsRemove;
+        _shipInventory.Moduls.OnSlotsAdd -= OnSlotsAdd;
         _shipInventory.OnShipRepaired -= OnShipRepaired;
         _shipInventory.OnItemAdded -= OnItemAdded;
         _shipInventory.OnShipCriticalChange -= OnShipCriticalChange;

@@ -34,6 +34,9 @@ public interface IStartShipParams
     int SpellModulsCount { get; }
     string Name { get; }
     float BoostChargeTime { get; }
+    ParameterItem CocpitSlot { get; }
+    ParameterItem EngineSlot { get;  }
+    ParameterItem WingSlot { get;}
 
     //    PilotTactic Tactic { get; }
 }

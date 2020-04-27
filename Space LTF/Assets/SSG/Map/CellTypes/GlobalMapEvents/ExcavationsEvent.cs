@@ -53,6 +53,9 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         MessageDialogData mesData;
         List<AnswerDialogData> ans;
         var army = MainController.Instance.MainPlayer.Army;
+
+
+
         var speeddShip = army.Army.FirstOrDefault(x => ShipParameters.ParamUpdate(x.Ship.MaxSpeed, x.Pilot.SpeedLevel, ShipParameters.MaxSpeedCoef) > speedToWin);
         if (speeddShip != null)
         {

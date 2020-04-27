@@ -165,6 +165,21 @@ public static class InventoryOperation
 
     private static void CanDo(Action CallbackSuccsess, Action failCallback, IInventory to, IItemInv item)
     {
+        var paramItem = item as ParameterItem;
+        if (paramItem != null)
+        {
+            if (paramItem.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out var slots))
+            {
+                var slotsInt = (int) (slots + 0.1f);
+                if (!paramItem.CurrentInventory.CanRemoveModulSlots(slotsInt))
+                {
+                    failCallback();
+                    WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("cantRemoveCauseSlots"));
+                    return;
+                }
+            }
+        }
+
         if (to.IsShop())         //Игрок продает в магазин
         {
             //Selling item to shop

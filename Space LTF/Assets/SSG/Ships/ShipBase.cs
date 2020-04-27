@@ -161,8 +161,8 @@ public class ShipBase : MovingObject
         ShipParameters = new ShipParameters(shipInventory, shipInventory.SpellsModuls,
             Death, Id, this, ShieldCollider, pilotParams);
         WeaponsController = new WeaponsController(WeaponPosition, this,
-            shipInventory.WeaponsModuls, shipInventory.Moduls.SimpleModuls);
-        ShipModuls = new ShipModuls(this, shipInventory.Moduls.SimpleModuls);
+            shipInventory.WeaponsModuls, shipInventory.Moduls.GetNonNullActiveSlots());
+        ShipModuls = new ShipModuls(this, shipInventory.Moduls.GetNonNullActiveSlots());
         ShipModuls.InitModuls();
         _dealthCallback = dealthCallback;
         DesicionDataInit();

@@ -163,8 +163,34 @@ public class DragZone : MonoBehaviour
         var freeSlot = _slots.FirstOrDefault(
             x => x.CurrentItem == null && Slot(x.DragItemType, type));
         return freeSlot;
+    }
 
+    protected void AddSlot(DragableItemSlot slot)
+    {
+        _slots.Add(slot);
+    }     
 
+    protected void RemoveSlot(DragableItemSlot slot)
+    {
+        if (slot.CurrentItem != null)
+        {
+            Debug.LogError("tyr to delete slot with item inside");
+        }
+        _slots.Remove(slot);
+        GameObject.Destroy(slot.gameObject);
+    }    
+
+    protected DragableItemSlot FindSlotToRemove()
+    {
+        foreach (var dragableItemSlot in _slots)
+        {
+            if (dragableItemSlot != null && dragableItemSlot.CurrentItem == null)
+            {
+                return  (dragableItemSlot);
+            }
+        }
+
+        return null;
     }
 
     private bool Slot(DragItemType v , ItemType a)

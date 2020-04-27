@@ -20,6 +20,9 @@ public class StartShipParams : IStartShipParams
     public float ShieldRegenData = 0f;
     public float BoostChargeTimeData = 0f;
     public string NameData;
+    public ParameterItem CocpitSlotData;
+    public ParameterItem EngineSlotData;
+    public ParameterItem WingSlotData;
 
     public StartShipParams(
         ShipType ShipTypeData,
@@ -34,9 +37,15 @@ public class StartShipParams : IStartShipParams
         int BodyVisualTypeData,
         float shieldRegenData,
         float HealthPercentData,
-        float trickReload
+        float trickReload  
+//        ParameterItem CocpitSlotData,
+//        ParameterItem WingSlotData,
+//        ParameterItem EngineSlotData
         )
     {
+        this.WingSlotData = null;
+        this.CocpitSlotData = null;
+        this.EngineSlotData = null;
         this.ShieldRegenData = shieldRegenData;
         this.ShipTypeData = ShipTypeData;
         this.ShipConfigData = ShipConfigData;
@@ -121,6 +130,10 @@ public class StartShipParams : IStartShipParams
     }
 
     public float BoostChargeTime => BoostChargeTimeData;
+
+    public ParameterItem CocpitSlot => CocpitSlotData;
+    public ParameterItem EngineSlot => EngineSlotData;
+    public ParameterItem WingSlot => WingSlotData;
 
     public int BodyVisualType
     {
