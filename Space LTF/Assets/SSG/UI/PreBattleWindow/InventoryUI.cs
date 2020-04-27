@@ -20,6 +20,7 @@ public class InventoryUI : DragZone
     private List<DragableItemSlot> _allSLots = new List<DragableItemSlot>();
 
     public bool ShallRefreshPos = true;
+    public bool ShallRefreshPosWithZero = false;
 //    public ScrollView Scroll;
 //    private InventorySlots SlotsController;
 
@@ -49,7 +50,16 @@ public class InventoryUI : DragZone
         }
         var rect = Layout.GetComponent<RectTransform>();
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-        Layout.gameObject.transform.localPosition = new Vector3(0, -1000, 0);
+        if (ShallRefreshPosWithZero)
+        {
+            Layout.gameObject.transform.localPosition = new Vector3(0, -1000, 0);
+        }
+        else
+        {
+            var localPos = Layout.gameObject.transform.localPosition;
+            Layout.gameObject.transform.localPosition = new Vector3(localPos.x, -1000, localPos.z);
+
+        }
 //        Debug.LogError($"RefreshPosition:{ Layout.gameObject.transform.localPosition}");
     }
     
