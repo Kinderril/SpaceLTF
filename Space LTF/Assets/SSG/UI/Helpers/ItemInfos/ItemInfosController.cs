@@ -13,10 +13,15 @@ public class ItemInfosController :MonoBehaviour
     public ModulBigInfoUI Modul;
     public ParameterItemBigInfoUI ParamItem;
     public CoreSpellBigInfo CoreSpell;
-    
+    private bool _isInited = false;
 
     public void Init(WeaponInv weapon,bool canChange,bool withSupport)
     {
+        if (!_isInited)
+        {
+            _isInited = true;
+        }
+
         WindowManager.Instance.WindowMainCanvas.interactable = true;
 //        WindowManager.Instance.WindowMainCanvas.interactable = false;
 //        WindowManager.Instance.WindowSubCanvas.interactable = true;

@@ -180,11 +180,11 @@ public class DragZone : MonoBehaviour
         GameObject.Destroy(slot.gameObject);
     }    
 
-    protected DragableItemSlot FindSlotToRemove()
+    protected DragableItemSlot FindSlotToRemove(DragItemType itemType)
     {
         foreach (var dragableItemSlot in _slots)
         {
-            if (dragableItemSlot != null && dragableItemSlot.CurrentItem == null)
+            if (dragableItemSlot != null && dragableItemSlot.CurrentItem == null && dragableItemSlot.DragItemType == itemType)
             {
                 return  (dragableItemSlot);
             }

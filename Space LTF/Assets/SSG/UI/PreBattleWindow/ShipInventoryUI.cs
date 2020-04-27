@@ -180,28 +180,28 @@ public class ShipInventoryUI : DragZone
         }
         return allslots;
     }
-    private void OnSlotsRemove(ShipModulsInventory arg1)
+    private void OnSlotsRemove(ShipModulsInventory arg1, DragItemType type)
     {
-        RemoveSlot();
+        RemoveSlot(type);
     }
 
-    private void OnSlotsAdd(ShipModulsInventory arg1)
+    private void OnSlotsAdd(ShipModulsInventory arg1,DragItemType type)
     {
-        AddModulSlot();
+        AddModulSlot(type);
     }
 
-    private void AddModulSlot()
+    private void AddModulSlot(DragItemType type)
     {
         var itemSlot = InventoryOperation.GetDragableItemSlot();
         itemSlot.Init(_shipInventory, true);
         itemSlot.transform.SetParent(ModulsLayout, false);
-        itemSlot.DragItemType = DragItemType.modul;
+        itemSlot.DragItemType = type;
         AddSlot(itemSlot);
     }
 
-    private void RemoveSlot()
+    private void RemoveSlot(DragItemType type)
     {
-        var slot = FindSlotToRemove();
+        var slot = FindSlotToRemove(type);
         if (slot != null)
         {
             RemoveSlot(slot);

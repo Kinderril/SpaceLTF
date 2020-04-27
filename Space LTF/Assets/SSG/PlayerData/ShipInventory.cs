@@ -313,7 +313,7 @@ public class ShipInventory : IStartShipParams, IInventory
             var intSlots = (int)(val + 0.1f);
             for (int i = 0; i < intSlots; i++)
             {
-                Moduls.AddSlots();
+                Moduls.AddSlots(DragItemType.modul);
             }
         }
     }
@@ -354,7 +354,7 @@ public class ShipInventory : IStartShipParams, IInventory
             var intSlots = (int)(val + 0.1f);
             for (int i = 0; i < intSlots; i++)
             {
-                if (!Moduls.RemoveSlot())
+                if (!Moduls.RemoveSlot(DragItemType.modul))
                 {
                     Debug.LogError($"Can't remove modules:{intSlots}");
                 }

@@ -18,9 +18,9 @@ public class ShipModulsInventory
     private int _id;
 
     [field: NonSerialized]
-    public event Action<ShipModulsInventory> OnSlotsAdd;
+    public event Action<ShipModulsInventory, DragItemType> OnSlotsAdd;
     [field: NonSerialized]
-    public event Action<ShipModulsInventory> OnSlotsRemove;
+    public event Action<ShipModulsInventory,DragItemType> OnSlotsRemove;
 
     public ShipModulsInventory(int simpleModulsCount, IInventory inventory)
     {
@@ -49,10 +49,10 @@ public class ShipModulsInventory
         return slots;
     }
 
-    public void AddSlots()
+    public void AddSlots(DragItemType type)
     {
         _additionalSlost = Mathf.Clamp(_additionalSlost + 1, 0, 90);
-        OnSlotsAdd?.Invoke(this);
+        OnSlotsAdd?.Invoke(this, type);
     }
 
     public bool CanRemoveSlots(int count)
@@ -71,14 +71,14 @@ public class ShipModulsInventory
         return false;
     }
 
-    public bool RemoveSlot()
+    public bool RemoveSlot(DragItemType type)
     {
         if (!CanRemoveSlots(1))
         {
             return false;
         }
         _additionalSlost = Mathf.Clamp(_additionalSlost - 1,0,90);
-        OnSlotsRemove?.Invoke(this);
+        OnSlotsRemove?.Invoke(this, type);
         return true;
     }
 
