@@ -156,10 +156,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         //_levelUpDependences = CreateLevelUpDependences();
     }
 
-    public int CostValue
-    {
-        get { return MoneyConsts.BASE_WEAPON_MONEY_COST + MoneyConsts.LEVEL_WEAPON_MONEY_COST * (Level - 1); }
-    }
+    public int CostValue => MoneyConsts.BASE_WEAPON_MONEY_COST + MoneyConsts.LEVEL_WEAPON_MONEY_COST * (Level - 1);
 
     public int RequireLevel(int posibleLevel = -1)
     {

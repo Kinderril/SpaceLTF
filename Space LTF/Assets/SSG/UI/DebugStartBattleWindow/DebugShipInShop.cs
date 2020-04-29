@@ -127,7 +127,7 @@ public class DebugShipInShop : MonoBehaviour
         }
         var calulatedParams = ShipParameters.CalcParams(_shipInv, PilotParameters, new List<EParameterShip>()
         {
-            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn
+            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn,EParameterShip.bodyArmor
         });
         var maxSpeed = calulatedParams[EParameterShip.speed];// ShipParameters.ParamUpdate(shipSpeedBase, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
         var turnSpeed = calulatedParams[EParameterShip.turn];//ShipParameters.ParamUpdate(turnSpeedBase, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);

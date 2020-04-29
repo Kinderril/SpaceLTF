@@ -732,6 +732,7 @@ public static class EspLocalization
 {"dialog_scDive","Buceo profundo. [Scouts:{0}]"},
 {"dialog_nothing","Nada"},
 {"dialog_scAmbush","Emboscada!"},
+{"dialog_nothingToRepair", "Esta es la estación de reparación. Todos tus barcos ya están arreglados." },
 {"dialog_scWeapon","Esta es la nueva arma de {0}"},
 {"dialog_scScouted","{0} puntos en el mapa mundial explorado."},
 {"dialog_scMap","Este es el galaxy mapa! {0}"},
@@ -819,7 +820,9 @@ public static class EspLocalization
 {"EParameterShipbodyPoints", "Puntos de casco"},
 {"EParameterShipshieldPoints", "Puntos de escudo"},
 {"EParameterShiparmor", "Armadura"},
+{"EParameterShipbodyArmor", "Armadura de casco"},
 {"EParameterShipmodulsSlots", "Ranuras de módulos"},
+{"Goal", "Objetivo"},
 
 {"Energy storage", "Almacenamiento de energía"},
 {"Steal", "Robar"},
@@ -851,6 +854,8 @@ public static class EspLocalization
 {"OcronsProConsCalc", "Bonificación de puntos de casco {0}%. Sin escudo"},
 {"KriosProConsCalc", "Bonificación de puntos de escudo {0}%. Coeficiente de puntos de casco {1}%"},
 {"loaderror", "Error de carga"},
+{"EParameterShipweaponSlots", "Ranuras para armas"},
+{"BonusParamField", "Primo {0}%"},
 
     };
 

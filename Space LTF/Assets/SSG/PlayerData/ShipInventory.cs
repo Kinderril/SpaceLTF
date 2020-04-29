@@ -27,7 +27,7 @@ public class ShipInventory : IStartShipParams, IInventory
     public ShipBattleData LastBattleData;
     public ShipType ShipType { get; private set; }
     public ShipConfig ShipConfig { get; private set; }
-    public int WeaponModulsCount { get; private set; }
+    public int WeaponModulsCount => WeaponsModuls.WeaponsCount;
     public int SimpleModulsCount => Moduls.SimpleModulsCount;
     public PilotParameters PilotParameters => _pilot;
     public int SpellModulsCount { get; private set; }
@@ -63,8 +63,7 @@ public class ShipInventory : IStartShipParams, IInventory
         ShipConfig = pParams.ShipConfig;
         BodyArmor = pParams.BodyArmor;
         ShiledArmor = pParams.ShiledArmor;
-        WeaponModulsCount = pParams.WeaponModulsCount;
-        WeaponsModuls = new ShipWeaponsInventory(WeaponModulsCount,this);
+        WeaponsModuls = new ShipWeaponsInventory(pParams.WeaponModulsCount, this);
 //        SimpleModulsCount = pParams.SimpleModulsCount;
         Moduls = new ShipModulsInventory(pParams.SimpleModulsCount, this);
         SpellModulsCount = pParams.SpellModulsCount;

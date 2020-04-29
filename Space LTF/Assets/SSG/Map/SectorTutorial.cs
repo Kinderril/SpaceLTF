@@ -37,20 +37,20 @@ public class SectorTutorial : SectorData
 
     private void PopulateToSide()
     {
-        _listCells = new HashSet<SectorCellContainer>();
+        ListCells = new HashSet<SectorCellContainer>();
 
         //START CELL
         var startCEll = new StartGlobalCell(1,StartX,0,this,ShipConfig);
         var cellContainer = Cells[StartX, 1];
         cellContainer.SetData(startCEll);
-        _listCells.Add(cellContainer);
+        ListCells.Add(cellContainer);
         _startGlobalCell = startCEll;
 
       //BATTLE CELL     
       var battle1CEll = new ArmyTutorGlobalCell(1,true,1, ShipConfig,2,StartX + 1, 0, this );
         var cellContainerBattle1 = Cells[StartX + 1, 1];
         cellContainerBattle1.SetData(battle1CEll);
-        _listCells.Add(cellContainerBattle1);
+        ListCells.Add(cellContainerBattle1);
 
         AddWays(battle1CEll, startCEll);
 
@@ -60,7 +60,7 @@ public class SectorTutorial : SectorData
         shopCEll.ClearShop();
         shopCEll.AddItem(WeaponType.laser);
         cellContainerShop.SetData(shopCEll);
-        _listCells.Add(cellContainerShop);
+        ListCells.Add(cellContainerShop);
 
         AddWays(battle1CEll, shopCEll);
 
@@ -68,7 +68,7 @@ public class SectorTutorial : SectorData
         var battle2CEll = new ArmyTutorGlobalCell(2,false,1, ShipConfig, 4, StartX + 3, 0, this);
         var cellContainerBattle2 = Cells[StartX + 3, 1];
         cellContainerBattle2.SetData(battle2CEll);
-        _listCells.Add(cellContainerBattle2);
+        ListCells.Add(cellContainerBattle2);
 
         AddWays(battle2CEll, shopCEll);
 
@@ -76,7 +76,7 @@ public class SectorTutorial : SectorData
         var end = new EndTutorGlobalCell(1, 5, 0,  this);
         var cellContainerEnd = Cells[StartX + 4, 1];
         cellContainerEnd.SetData(end);
-        _listCells.Add(cellContainerEnd);
+        ListCells.Add(cellContainerEnd);
 
 
         AddWays(battle2CEll, end);

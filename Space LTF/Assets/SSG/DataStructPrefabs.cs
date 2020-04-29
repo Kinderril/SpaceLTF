@@ -99,6 +99,8 @@ public class DataStructPrefabs : MonoBehaviour
     public DragableItemSlot DragableItemSlotPrefab;
     public DragableParameterItem DragableItemParameterPrefab;
 
+    public LightUpObject LightUpObject;
+
     //    public BaseEffectAbsorber ModulEffectDestroyPrefab;
     //    public BaseEffectAbsorber ShipEngineStopPrefab;
     //    public BaseEffectAbsorber RepairEffectPrefab;

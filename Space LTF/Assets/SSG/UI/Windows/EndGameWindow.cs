@@ -64,7 +64,7 @@ public class EndGameWindow : BaseWindow
             TotalMoneyRewardField.Init(_totalMoney);
             TotalMicroChipsField.Init(microChips);
 
-            var showScotsFind = lastReward.Moduls.Count > 0 || lastReward.Weapons.Count > 0 || lastReward.Spells.Count > 0;
+            var showScotsFind = lastReward.Moduls.Count > 0 || lastReward.Weapons.Count > 0 || lastReward.Spells.Count > 0 || lastReward.ParamItems.Count > 0;
             ScoutsFindField.gameObject.SetActive(showScotsFind);
             ScoutsFindField.text = Namings.Format(Namings.Tag("ScoutsFind"));
             foreach (var moduls in lastReward.Moduls)
@@ -84,6 +84,14 @@ public class EndGameWindow : BaseWindow
             }
 
             foreach (var spellModulInv in lastReward.Spells)
+            {
+                var itemSlot = InventoryOperation.GetDragableItemSlot();
+                itemSlot.transform.SetParent(LayoutRewards, false);
+                itemSlot.Init(spellModulInv.CurrentInventory, false);
+                itemSlot.StartItemSet(spellModulInv);
+            } 
+
+            foreach (var spellModulInv in lastReward.ParamItems)
             {
                 var itemSlot = InventoryOperation.GetDragableItemSlot();
                 itemSlot.transform.SetParent(LayoutRewards, false);

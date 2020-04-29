@@ -42,7 +42,7 @@ public class EndBattleShipPllotInfoUI : MonoBehaviour
 //        var hp = MaxHealth;
         MoneyToAdd = 0;
         var cur = info.Ship.HealthPercent * MaxHealth;
-        HealedHpField.text = Namings.Tag("Health") + $":{cur}/{MaxHealth}";
+        HealedHpField.text = Namings.Tag("Health") + $":{cur.ToString("0")}/{MaxHealth.ToString("0")}";
     }
 
     public void SetMoneyAdd(int addMoney)

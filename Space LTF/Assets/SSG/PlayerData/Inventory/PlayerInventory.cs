@@ -11,7 +11,7 @@ using UnityEngine;
 public class PlayerInventory : IInventory
 {
 
-    public static int MAX_SLOTS = 50;
+    public static int MAX_SLOTS = 48;
     public List<BaseModulInv> Moduls = new List<BaseModulInv>();
     public List<WeaponInv> Weapons = new List<WeaponInv>();
     public List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();

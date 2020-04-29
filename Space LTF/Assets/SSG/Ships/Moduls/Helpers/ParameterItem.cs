@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ public enum EParameterShip
     turn,
     bodyPoints,
     shieldPoints,
-    armor,
+    bodyArmor,
     modulsSlots,
     weaponSlots,
 
@@ -35,8 +36,24 @@ public class ParameterItem : IItemInv
     public EParameterItemSubType SubType { get; private set; }
     private ItemType _itemType;
     public IInventory CurrentInventory { get; set; }
-    public int CostValue { get; }
-    //    public string Name => "TODOname";        //TODO LOCALIZTION
+
+    public int CostValue
+    {
+        get
+        {
+            switch (Rarity)
+            {
+                case EParameterItemRarity.normal:
+                    return Library.PARAMETER_ITEM_COST_NORMAL;
+                case EParameterItemRarity.improved:
+                    return Library.PARAMETER_ITEM_COST_IMPROVED;
+                case EParameterItemRarity.perfect:
+                    return Library.PARAMETER_ITEM_COST_PERFECT;
+                default:
+                    return 1;
+            }
+        }
+    }
 
     public Dictionary<EParameterShip, float> ParametersAffection = new Dictionary<EParameterShip, float>();
 

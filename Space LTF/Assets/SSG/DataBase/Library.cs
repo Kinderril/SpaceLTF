@@ -44,6 +44,10 @@ public static class Library
     public const int SPECIAL_SPELL_LVL = 4;
     public const int MAX_MOUDL_LEVEL = 3;
 
+    public static int PARAMETER_ITEM_COST_NORMAL = 8;
+    public static int PARAMETER_ITEM_COST_IMPROVED = 25;
+    public static int PARAMETER_ITEM_COST_PERFECT = 50;
+
     #region CONFIGS COEF
 
     public const float RAIDER_SPEED_COEF = 1.05f;
@@ -320,13 +324,13 @@ public static class Library
                 {
                     case ShipType.Light:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 30, 10, 3.2f, 89, 1, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 19, 2, 0.2f, 29, 1, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 36, 14, 2.8f, 71, 1, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 13, 16, 2.6f, 33, 1, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 44, 16, 2.1f, 69, 2, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 1, 26, 2.2f, 53, 2, 0, 0, 1, 0.0f, 1f, reloadTime), player, pilot);
                     case ShipType.Base:
                         return new ShipInventory(
                             new StartShipParams(shipType, config, 66, 20, 0.51f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
@@ -369,10 +373,10 @@ public static class Library
                             new StartShipParams(shipType, config, 70, 22, 0.8f, 5, 2, 2, 0, 1, 0.2f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 67, 24, 2.2f, 10, 2, 2, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 63, 24, 2.2f, 10, 2, 2, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 64, 34, 2.5f, 33, 3, 1, 0, 1, 0.4f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 57, 34, 2.5f, 33, 3, 1, 0, 1, 0.4f, 1f, reloadTime), player, pilot);
                     case ShipType.Base:
                         return new ShipInventory(
                             new StartShipParams(shipType, config, 92, 56, 0.81f, 40, 0, 0, 5, 1, 0f, 1f, reloadTime), player, pilot);
@@ -387,10 +391,10 @@ public static class Library
                             new StartShipParams(shipType, config, 30, 32, 0.7f, 7, 3, 1, 0, 1, 0.2f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 55, 42, 1.9f, 13, 3, 1, 0, 1, 0.25f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 54, 42, 1.9f, 13, 3, 1, 0, 1, 0.25f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 86, 48, 1.6f, 38, 4, 0, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 78, 48, 1.6f, 38, 4, 0, 0, 1, 0.3f, 1f, reloadTime), player, pilot);
                     case ShipType.Base:
                         return new ShipInventory(
                             new StartShipParams(shipType, config, 70, 70, 0.71f, 40, 0, 0, 6, 1, 0f, 1f, reloadTime), player, pilot);
@@ -404,10 +408,10 @@ public static class Library
                         return new ShipInventory(new StartShipParams(shipType, config, 70, 0, 0.4f, 12, 2, 2, 0, 1, 0f, 1f, reloadTime),
                             player, pilot);
                     case ShipType.Middle:
-                        return new ShipInventory(new StartShipParams(shipType, config, 61, 0, 2.2f, 11, 3, 1, 0, 1, 0f, 1f, reloadTime),
+                        return new ShipInventory(new StartShipParams(shipType, config, 57, 0, 2.2f, 11, 3, 1, 0, 1, 0f, 1f, reloadTime),
                             player, pilot);
                     case ShipType.Heavy:
-                        var ship3 = new ShipInventory(new StartShipParams(shipType, config, 69, 0, 2.8f, 35, 3, 1, 0, 1, 0f, 1f, reloadTime), player, pilot);
+                        var ship3 = new ShipInventory(new StartShipParams(shipType, config, 63, 0, 2.8f, 35, 3, 1, 0, 1, 0f, 1f, reloadTime), player, pilot);
                         ship3.BodyArmor = 1;
                         return ship3;
                     case ShipType.Base:
@@ -424,10 +428,10 @@ public static class Library
                             new StartShipParams(shipType, config, 53, 30, 0.7f, 29, 2, 2, 0, 1, 0.5f, 1f, reloadTime), player, pilot);
                     case ShipType.Middle:
                         return new ShipInventory(
-                            new StartShipParams(shipType, config, 50, 50, 2.6f, 33, 2, 2, 0, 1, 0.6f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 41, 50, 2.6f, 33, 2, 2, 0, 1, 0.6f, 1f, reloadTime), player, pilot);
                     case ShipType.Heavy:
                         var ship = new ShipInventory(
-                            new StartShipParams(shipType, config, 42, 62, 2.2f, 53, 2, 1, 0, 1, 0.7f, 1f, reloadTime), player, pilot);
+                            new StartShipParams(shipType, config, 31, 62, 2.2f, 53, 2, 1, 0, 1, 0.7f, 1f, reloadTime), player, pilot);
                         ship.ShiledArmor = 1;
                         return ship;
                     case ShipType.Base:
@@ -820,19 +824,19 @@ public static class Library
                 {
                     case EParameterItemSubType.light:
                         //                        data.Add(EParameterShip.bodyPoints,10); 
-                        data.Add(EParameterShip.turn, 18);
-                        data.Add(EParameterShip.speed,1.0f);
+                        data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(18f));
+                        data.Add(EParameterShip.speed, MyExtensions.MinorRandom(1.0f));
                         break;
                     case EParameterItemSubType.middle:
                         //                        data.Add(EParameterShip.bodyPoints, 5);  
-                        data.Add(EParameterShip.turn, 12);
-                        data.Add(EParameterShip.speed, -0.7f);
+                        data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(12f));
+                        data.Add(EParameterShip.speed, MyExtensions.MinorRandom(-0.7f));
                         data.Add(EParameterShip.modulsSlots, 1);
                         break;
                     case EParameterItemSubType.heavy:
 //                        data.Add(EParameterShip.bodyPoints, -18);
-                        data.Add(EParameterShip.turn, -10);
-                        data.Add(EParameterShip.speed, -1.0f);
+                        data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(-10f));
+                        data.Add(EParameterShip.speed, MyExtensions.MinorRandom(-1.0f));
                         data.Add(EParameterShip.modulsSlots, 2);
                         break;
                 }
@@ -841,15 +845,15 @@ public static class Library
                 switch (middle)
                 {
                     case EParameterItemSubType.light:
-                        data.Add(EParameterShip.bodyPoints, -5);
-                        data.Add(EParameterShip.speed, 2.0f);
+                        data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(-5f));
+                        data.Add(EParameterShip.speed, MyExtensions.MinorRandom(2.0f));
                         break;
                     case EParameterItemSubType.middle:
-                        data.Add(EParameterShip.bodyPoints, 5);
-                        data.Add(EParameterShip.speed, 1.5f);
+                        data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(5f));
+                        data.Add(EParameterShip.speed, MyExtensions.MinorRandom(1.5f));
                         break;
                     case EParameterItemSubType.heavy:
-                        data.Add(EParameterShip.bodyPoints, 15);
+                        data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(15f));
                         data.Add(EParameterShip.speed, 1f);
                         break;
                 }
@@ -858,65 +862,96 @@ public static class Library
                 switch (middle)
                 {
                     case EParameterItemSubType.light:
-                        data.Add(EParameterShip.bodyPoints, -5);
-                        data.Add(EParameterShip.turn, 40);
-//                        data.Add(EParameterShip.armor, 0);
+                        data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(-5f));
+                        data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(40f));
                         break;
                     case EParameterItemSubType.middle:
-                        data.Add(EParameterShip.bodyPoints, 0);
-                        data.Add(EParameterShip.turn, 30);
-                        data.Add(EParameterShip.armor, 1);
+//                        data.Add(EParameterShip.bodyPoints, 0);
+                        data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(30f));
+                        data.Add(EParameterShip.bodyArmor, 1);
                         break;
                     case EParameterItemSubType.heavy:
-                        data.Add(EParameterShip.bodyPoints, 5);
-                        data.Add(EParameterShip.turn, 20);
-                        data.Add(EParameterShip.armor, 2);
+                        data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(5f));
+                        data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(20f));
+                        data.Add(EParameterShip.bodyArmor, 2);
                         break;
                 }
                 break;
         }
+        List<EParameterShip> rndPoints = new List<EParameterShip>()
+        {
+            EParameterShip.bodyArmor,EParameterShip.bodyPoints,EParameterShip.shieldPoints,EParameterShip.speed,EParameterShip.turn
+        };
+        foreach (var f in data)
+        {
+            rndPoints.Remove(f.Key);
+        }
+        void AddRndPoint()
+        {
+            if (rndPoints.Count > 0)
+            {
+                var rnd = rndPoints.RandomElement();
+                float val = 0f;
+                switch (rnd)
+                {
+                    case EParameterShip.speed:
+                        val = MyExtensions.Random(4, 8);
+                        break;
+                    case EParameterShip.turn:
+                        val = MyExtensions.Random(5, 9);
+                        break;
+                    case EParameterShip.bodyPoints:
+                        val = MyExtensions.Random(8, 16);
+                        break;
+                    case EParameterShip.shieldPoints:
+                        val = MyExtensions.Random(6, 14);
+                        break;
+                    case EParameterShip.bodyArmor:
+                        val = 1f;
+                        break;
+                }
+
+                rndPoints.Remove(rnd);
+                data.Add(rnd, val);
+            }
+        }
         switch (rarity)
         {
             case EParameterItemRarity.improved:
-                List< EParameterShip > rndPoints = new List<EParameterShip>()
-                {
-                    EParameterShip.armor,EParameterShip.bodyPoints,EParameterShip.shieldPoints,EParameterShip.speed,EParameterShip.turn
-                };
-                foreach (var f in data)
-                {
-                    rndPoints.Remove(f.Key);
-                }
-
-                if (rndPoints.Count > 0)
-                {
-                    var rnd = rndPoints.RandomElement();
-                    float val = 0f;
-                    switch (rnd)
-                    {
-                        case EParameterShip.speed:
-                            val = MyExtensions.Random(4, 8);
-                            break;
-                        case EParameterShip.turn:
-                            val = MyExtensions.Random(5, 9);
-                            break;
-                        case EParameterShip.bodyPoints:
-                            val = MyExtensions.Random(8, 16);
-                            break;
-                        case EParameterShip.shieldPoints:
-                            val = MyExtensions.Random(6, 14);
-                            break;
-                        case EParameterShip.armor:
-                            val = 1f;
-                            break;
-                    }
-                    data.Add(rnd, val);
-                }
+                AddRndPoint();
                 break;
             case EParameterItemRarity.perfect:
-                data.Add(EParameterShip.weaponSlots,1);
+                if (MyExtensions.IsTrue01(.5f))
+                {
+                    AddRndPoint();
+                    AddRndPoint();
+                }
+                else
+                {
+                    if (MyExtensions.IsTrue01(.4f) && !data.ContainsKey(EParameterShip.modulsSlots))
+                    {                      
+                        data.Add(EParameterShip.modulsSlots, 1);
+                    }
+                    else
+                    {
+                        data.Add(EParameterShip.weaponSlots, 1);
+                    }
+                }
                 break;
         }
         var item = new ParameterItem(type.Value, rarity, middle, data);
         return item;
     }
+    public static  List<EParameterItemSubType> ParameterItemTypes = new List<EParameterItemSubType>() { EParameterItemSubType.heavy, EParameterItemSubType.light, EParameterItemSubType.middle };
+
+
+    public static WDictionary<EParameterItemRarity> GetParitiesCacheShop = new WDictionary<EParameterItemRarity>( 
+        new Dictionary<EParameterItemRarity, float>()
+    {
+        {EParameterItemRarity.perfect,5},
+        {EParameterItemRarity.normal,20},
+        {EParameterItemRarity.improved,8},
+    });
+
+    public static float PARAMETER_LEVEL_COEF = 0.05f;
 }

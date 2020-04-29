@@ -126,7 +126,7 @@ public class ShipInventoryUI : DragZone
         RepairCost.text = repairCost.ToString();
         var calulatedParams = ShipParameters.CalcParams(_shipInventory, _pilot, new List<EParameterShip>()
         {
-            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn
+            EParameterShip.bodyPoints
         });
         var MaxHealth = calulatedParams[EParameterShip.bodyPoints];
         HealthSlider.InitBorders(0, MaxHealth, true);

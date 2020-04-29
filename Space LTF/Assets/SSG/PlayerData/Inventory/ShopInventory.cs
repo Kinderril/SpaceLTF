@@ -10,7 +10,9 @@ public class ShopInventory : PlayerInventory
     private const int MIN_WEAPONS = 3;
     private const int MAX_WEAPONS = 6;
     private const int MIN_MODULS = 3;
-    private const int Max_MODULS = 4;
+    private const int Max_MODULS = 4; 
+    private const int MIN_PARAMETER = 2;
+    private const int Max_PARAMETER = 4;
     private const int MIN_SPELLS = 1;
     private const int Max_SPELLS = 2;
     private const float CHANCE_SUPPORT_1 = .4f;
@@ -183,10 +185,20 @@ public class ShopInventory : PlayerInventory
             var weaponsCount = MyExtensions.Random(MIN_WEAPONS, MAX_WEAPONS);
             var clampedIndex = Mathf.Clamp(intdex * 1.5f,0, 7 );
             var baseModuls = MyExtensions.Random(MIN_MODULS, Max_MODULS);
+            var parameterItems = MyExtensions.Random(MIN_PARAMETER, Max_PARAMETER);
 
             var countModuls = baseModuls + clampedIndex;
 //            Debug.LogError($"Moduls;{countModuls}    baseModuls:{baseModuls}   intdex:{clampedIndex}    intdex:{intdex}");
-
+            List<EParameterItemSubType> itemsTypes = Library.ParameterItemTypes;
+            WDictionary<EParameterItemRarity> rarities = Library.GetParitiesCacheShop;
+            for (int i = 0; i < parameterItems; i++)
+            {
+                var paramType = itemsTypes.RandomElement();
+                var raruty = rarities.Random();
+                var paramItem = Library.CreateParameterItem(paramType, raruty);
+                paramItem.CurrentInventory = this;
+                ParamItems.Add(paramItem);
+            }
             var spells = MyExtensions.Random(MIN_SPELLS, Max_SPELLS);
             bool goodPower = power > 22;
             for (var i = 0; i < weaponsCount; i++)

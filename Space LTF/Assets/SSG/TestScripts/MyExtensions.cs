@@ -19,6 +19,10 @@ public static class MyExtensions
         return @string.Length > count ? @string.Substring(0, count - 2) + "..." : @string;
     }
 
+    public static float MinorRandom(float val)
+    {
+        return val * Random(0.9f, 1.12f);
+    }   
     public static float GreateRandom(float val)
     {
         return val * Random(0.8f, 1.2f);

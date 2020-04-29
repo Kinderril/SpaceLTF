@@ -147,8 +147,7 @@ public class PilotInventoryUI : MonoBehaviour
 
     private void SetInfoParams()
     {
-        UpdateArmor();
-var shipSpeedBase = _ship.MaxSpeed;
+        var shipSpeedBase = _ship.MaxSpeed;
         var turnSpeedBase = _ship.TurnSpeed;
         var maxShiledBase = _ship.MaxShiled;
         var maxHealthBase = _ship.MaxHealth;
@@ -177,7 +176,7 @@ var shipSpeedBase = _ship.MaxSpeed;
                         case EParameterShip.shieldPoints:
                             maxShiledBase += affection.Value;
                             break;
-                        case EParameterShip.armor:
+                        case EParameterShip.bodyArmor:
                             break;
                     }
                 }
@@ -186,14 +185,15 @@ var shipSpeedBase = _ship.MaxSpeed;
 
         var calulatedParams = ShipParameters.CalcParams(_ship, _pilot, new List<EParameterShip>()
         {
-            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn
+            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn ,EParameterShip.bodyArmor
         });
         var maxHealth = calulatedParams[EParameterShip.bodyPoints];// ShipParameters.ParamUpdate(maxHealthBase, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
 
         var maxSpeed = calulatedParams[EParameterShip.speed];// ShipParameters.ParamUpdate(shipSpeedBase, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
         var turnSpeed = calulatedParams[EParameterShip.turn];//ShipParameters.ParamUpdate(turnSpeedBase, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
         var maxShiled = calulatedParams[EParameterShip.shieldPoints];//ShipParameters.ParamUpdate(maxShiledBase, _pilot.ShieldLevel, ShipParameters.MaxShieldCoef);
-        
+
+        UpdateArmor(calulatedParams[EParameterShip.bodyArmor]);
         PilotParamsInUI pilotParams = new PilotParamsInUI()
         { MaxSpeed = maxSpeed, MaxHealth = maxHealth, MaxShield = maxShiled, TurnSpeed = turnSpeed };
 
@@ -220,9 +220,9 @@ var shipSpeedBase = _ship.MaxSpeed;
         HealthField.SetData(txt, _pilot.HealthLevel, _pilot, LibraryPilotUpgradeType.health);
     }
 
-    private void UpdateArmor()
+    private void UpdateArmor(float bodyArmor)
     {
-        float bArmor = _ship.BodyArmor;
+        float bArmor = bodyArmor;
         float sArmor = _ship.ShiledArmor;
         foreach (var modul in _ship.Moduls.GetNonNullActiveSlots())   //Это пздц костыль. Если будут еще подобный модули то переделать все это!
         {

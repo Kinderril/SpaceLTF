@@ -88,7 +88,7 @@ public class ShipParameters : IShipAffectableParams
 
         var calulatedParams = ShipParameters.CalcParams(startParams, pilotParams, new List<EParameterShip>()
         {
-            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn
+            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn, EParameterShip.bodyArmor
         });
         MaxSpeed = calulatedParams[EParameterShip.speed];// ShipParameters.ParamUpdate(shipSpeedBase, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
         TurnSpeed = calulatedParams[EParameterShip.turn];//ShipParameters.ParamUpdate(turnSpeedBase, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
@@ -96,7 +96,7 @@ public class ShipParameters : IShipAffectableParams
         MaxHealth = calulatedParams[EParameterShip.bodyPoints];// ShipParameters.ParamUpdate(maxHealthBase, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
 
 
-
+                
         CurHealth = CurHealthWIthPercent;
         _deathCallback = dealthCallback;
         HealthRegen = new HealthRegenParameter(this);
@@ -110,7 +110,9 @@ public class ShipParameters : IShipAffectableParams
 
     public static float ParamUpdate(float startValue, int paramLevel, float levelCoef)
     {
-        return startValue + (paramLevel - 1) * levelCoef;
+        levelCoef = Library.PARAMETER_LEVEL_COEF; 
+        var val = startValue * (1 + (paramLevel - 1) * levelCoef);
+        return Mathf.Clamp(val,1f,99999f);
     }
 
     public static Dictionary<EParameterShip, float> CalcParams(IStartShipParams ship, IPilotParameters pilot,List<EParameterShip> listToCalc)
@@ -142,6 +144,9 @@ public class ShipParameters : IShipAffectableParams
                     coef = ShipParameters.MaxShieldCoef;
                     baseParam = ship.MaxShiled;
                     levelPilot = pilot.ShieldLevel;
+                    break;
+                case EParameterShip.bodyArmor:
+                    baseParam = ship.BodyArmor;
                     break;
                 default:
 
@@ -208,8 +213,25 @@ public class ShipParameters : IShipAffectableParams
             baseParam = ApplySlot(ship.EngineSlot, baseParam, eParameterShip);
             baseParam = ApplySlot(ship.WingSlot, baseParam, eParameterShip);
 
-            var param = ParamUpdate(baseParam, levelPilot, coef);
-            param *= cofigCoef;
+            float param;
+            switch (eParameterShip)
+            {
+                case EParameterShip.speed:
+                case EParameterShip.turn:
+                case EParameterShip.bodyPoints:
+                case EParameterShip.shieldPoints:
+                    param = ParamUpdate(baseParam, levelPilot, coef); 
+                    param *= cofigCoef;
+                    break;
+                default:
+                case EParameterShip.bodyArmor:
+                case EParameterShip.modulsSlots:
+                case EParameterShip.weaponSlots:
+                    param = baseParam;
+                    break;
+            }
+
+
             paramsOut.Add(eParameterShip,param);
         }
 

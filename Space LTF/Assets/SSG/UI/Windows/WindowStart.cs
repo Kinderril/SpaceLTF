@@ -116,7 +116,7 @@ public class WindowStart : BaseWindow
         // posibleSpells.Add(SpellType.roundWave);
         // gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
         var gameData = new StartNewGameData(new Dictionary<PlayerParameterType, int>(),
-            ShipConfig.mercenary, posibleStartWeapons, 4, 1, 2, 1, 1, posibleSpells, 0, true);
+            ShipConfig.mercenary, posibleStartWeapons, 4, 1, 2, 0, 1, posibleSpells, 0, true);
         var dif = Utils.FloatToChance(gameData.CalcDifficulty());
         return gameData;
     }

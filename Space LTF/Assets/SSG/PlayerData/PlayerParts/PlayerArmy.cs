@@ -141,5 +141,18 @@ public class PlayerArmy
             pilotData.Pilot.Stats.AddExp(111);
         }
     }
+
+    public bool HaveSmtToRepair()
+    {
+        foreach (var startShipPilotData in Army)
+        {
+            if (startShipPilotData.Ship.HealthPercent < 0.99999f)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 

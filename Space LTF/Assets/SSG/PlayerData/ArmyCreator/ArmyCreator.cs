@@ -358,8 +358,8 @@ public static class ArmyCreator
             return null;
         }
         var rndWeapon = data.MainWeapon;
-        var weapon = shipWithWeapons.Ship.WeaponsModuls.GetNonNullActiveSlots();
-        var weaponSlots = weapon.Count;
+        var weapon = shipWithWeapons.Ship.WeaponsModuls.WeaponsCount;
+        var weaponSlots = weapon;
         var moreHalf = 1 + (int)(weaponSlots / 2f);
         moreHalf = Mathf.Clamp(moreHalf, 1, weaponSlots);
         bool weaponCreated = false;

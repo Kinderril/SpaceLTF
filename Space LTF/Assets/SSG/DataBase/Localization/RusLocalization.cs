@@ -583,6 +583,7 @@ public static class RusLocalization
         {"dialog_shopEnemy", "Перед вами магазин. С вами никто торговать не будет. Вы враг." },
         {"dialog_shopTrade", "Перед вами магазин. Желате обменяться товарами?" },
         {"dialog_repairEnemy", "Это ремонтная станция. Они не будут помогать вам." },
+        {"dialog_nothingToRepair", "Это ремонтная станция. Ваш флот не нуждается в ремонте." },
         {"dialog_repairStart", "Это ремонтная станция. Здесь мы можем оремонтировать свой флот." },
         {"dialog_fixCrit", "Починить все критичесие повреждения. Стоимость:{0}." },
         {"dialog_repairCritFixed", "Критические повреждения устранены" },
@@ -831,7 +832,7 @@ public static class RusLocalization
         {"dialog_dungeonExitFinalWin","Военная база полностью разрушена"},
         {"dialog_dungeonExitGo","Забрать все и улететь"},
         {"dialog_dungeonExitFinalBattle","Это военная база."},
-        {"dialog_dungeogArmyEnterStart","Это военный сектор. Вы действительно хотите отправится туда?\nПодкрепления к противнику прибудут незамедлительнл.\nВы можете найти здесь некоторые уникальные предметы."},
+        {"dialog_dungeogArmyEnterStart","Это военный сектор с сильными формированиями. Вы действительно хотите отправится туда?\nПодкрепления к противнику прибудут незамедлительно.\nВы можете найти здесь некоторые уникальные предметы."},
         {"dialog_dungeogArmyFriendGoIn","Попросить ваших друзей впустить вас."},
 
         {"dialog_teacherImproved","Корабль {0} улучшен. Уровень:{1}"},
@@ -878,7 +879,7 @@ public static class RusLocalization
         {"Cancel", "Отмена"},
         {"Galaxy gate", "Врата галактики"},
         {"wantStartTutor", "Это короткое обучение. Для понимания основ игры."},
-        {"TutorPreBattle", "Укипируйте ваш флот"},
+        {"TutorPreBattle", "Оснастите ваш флот"},
         {"TutorStartShop", "Купить оружие для боевого корабля."},
         {"resolutionTooLow", "Малое разрешение экрана . Возможно у вас будут проблемы. Минимум: 1280 и 720"},
         {"Move camera", "Двигать камеру"},
@@ -911,7 +912,10 @@ public static class RusLocalization
         {"EParameterShipbodyPoints", "Корпус"},
         {"EParameterShipshieldPoints", "Щит"},
         {"EParameterShiparmor", "Броня"},
+        {"EParameterShipbodyArmor", "Броня корпуса"},
         {"EParameterShipmodulsSlots", "Слоты модулей"},
+        {"EParameterShipweaponSlots", "Оружейные слоты"},
+        {"Goal", "Цель"},
 
         {"Energy storage", "Хранилище энергии"},
         {"Steal", "Украсть"},
@@ -936,6 +940,7 @@ public static class RusLocalization
         {"foundLotCredits","Вы нашли кучу кредитов {0}" },
         {"YourRartMoney", "Вам удалось что то найти. Ваша часть:{0}."},
         {"OKgo5050", "Ок, давай 50 на 50"},
+        {"BonusParamField", "Бонус {0}%"},
 
     };
 

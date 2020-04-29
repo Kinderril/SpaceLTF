@@ -252,7 +252,7 @@ public class GalaxyData
         //        }
         //#endif
         var coreId = Utils.GetId();
-        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, startSector);
+        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, coreSector);
         coreSector.Populate(startPower);
         coreSector.SetCell(coreCell, id);
         unPopulatedSectors.Remove(coreSector);

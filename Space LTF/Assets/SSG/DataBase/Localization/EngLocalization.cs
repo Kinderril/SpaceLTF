@@ -594,6 +594,7 @@ public static class EngLocalization
 
         {"dialog_shopEnemy", "You see shop. Nobody wants to trade with you." },
         {"dialog_shopTrade", "You see shop. Maybe you want buy something?" },
+        {"dialog_nothingToRepair", "This is repair station. All your ships already fixed." },
         {"dialog_repairEnemy", "This is repair station. They won't help you." },
         {"dialog_repairStart", "This is repair station. We can repair our fleet here." },
         {"dialog_fixCrit", "Fix all critical damages. Cost{0}" },
@@ -807,7 +808,7 @@ public static class EngLocalization
         {"dialog_dungeonExitFinalWin","This military base completly destoyed"},
         {"dialog_dungeonExitGo","Grab all items and go"},
         {"dialog_dungeonExitFinalBattle","This is main militaly base at this sector"},
-        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there?\nReinforcements will come immediately.\nHere you can find some special items."},
+        {"dialog_dungeogArmyEnterStart","This is military sector with strong enemies. Do you really want to go there?\nReinforcements will come immediately.\nHere you can find some special items."},
         {"dialog_dungeogArmyFriendGoIn","Ask your friend to go in."},
 
         {"dialog_Trader","Trader"},
@@ -888,7 +889,8 @@ public static class EngLocalization
 
         {"ConfirmCloseTutor", "You closing tutorial.\nIf you want repeat, you can find it at menu."},
 
-        {"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click right mouse button to place you want to move"},
+        {"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click right mouse button to place you want to move."},
+        {"StartTutorTargetGlobal", "To find your fleet press 'Home'. To find closest goal press 'Goal'."},
         {"TutorShootMainShip", "Use machine gun to destroy enemy turret."},
         {"CantDropNow", "You can't sell items now."},
         {"startGameNoTutor", "Pass TUTORIAL first."},
@@ -922,7 +924,10 @@ public static class EngLocalization
         {"EParameterShipbodyPoints", "Hull points"},
         {"EParameterShipshieldPoints", "Shield points"},
         {"EParameterShiparmor", "Armor"},
+        {"EParameterShipbodyArmor", "Hull armor"},
         {"EParameterShipmodulsSlots", "Modules slots"},
+        {"EParameterShipweaponSlots", "Weapon slots"},
+        {"BonusParamField", "Bonus {0}%"},
 
 
 
@@ -949,6 +954,7 @@ public static class EngLocalization
         {"foundLotCredits","You found a lot of credits {0}" },
         {"YourRartMoney", "All fine, you found some credits. Your part:{0}."},
         {"OKgo5050", "Ok, lets go 50/50"},
+        {"Goal", "Goal"},
 
 
     };
