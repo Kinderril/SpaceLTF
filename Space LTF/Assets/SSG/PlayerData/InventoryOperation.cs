@@ -32,6 +32,44 @@ public static class InventoryOperation
         int index;
         switch (item.ItemType)
         {
+            case ItemType.engine:
+            case ItemType.cocpit:
+            case ItemType.wings:
+                var itemParam = item as ParameterItem;
+                if (itemParam == null)
+                {
+                    callback(false);
+                    return;
+                }
+                if (to.GetFreeSlot(out index,itemParam.ItemType))
+                {
+                    CanDo(() =>
+                    {
+                        if (to.TryAddItem(itemParam))
+                        {
+                            from.RemoveItem(itemParam);
+                            if (OnItemTransfer != null)
+                            {
+                                OnItemTransfer(from, to, itemParam);
+                            }
+                            callback(true);
+                        }
+                        else
+                        {
+                            callback(false);
+                        }
+
+                    }, () =>
+                    {
+                        callback(false);
+                    }, to, item);
+                }
+                else
+                {
+                    callback(false);
+                }
+
+                break;
             case ItemType.weapon:
                 var w = item as WeaponInv;
                 if (to.GetFreeWeaponSlot(out index))
@@ -127,6 +165,32 @@ public static class InventoryOperation
 
     private static void CanDo(Action CallbackSuccsess, Action failCallback, IInventory to, IItemInv item)
     {
+        var paramItem = item as ParameterItem;
+        if (paramItem != null)
+        {
+            float slots;
+            if (paramItem.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out slots))
+            {
+                var slotsInt = (int) (slots + 0.1f);
+                if (!paramItem.CurrentInventory.CanRemoveModulSlots(slotsInt))
+                {
+                    failCallback();
+                    WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("cantRemoveCauseSlots"));
+                    return;
+                }
+            }  
+            if (paramItem.ParametersAffection.TryGetValue(EParameterShip.weaponSlots, out slots))
+            {
+                var slotsInt = (int) (slots + 0.1f);
+                if (!paramItem.CurrentInventory.CanRemoveWeaponSlots(slotsInt))
+                {
+                    failCallback();
+                    WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("cantRemoveCauseSlots"));
+                    return;
+                }
+            }
+        }
+
         if (to.IsShop())         //Игрок продает в магазин
         {
             //Selling item to shop

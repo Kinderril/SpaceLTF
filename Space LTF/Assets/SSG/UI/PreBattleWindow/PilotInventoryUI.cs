@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +11,7 @@ public class PilotInventoryUI : MonoBehaviour
     //    public SliderWithTextMeshPro DelaySlider;
     public ParameterWithLevelUp HealthField;
     public TextMeshProUGUI MoneyField;
+    public TextMeshProUGUI ArmorField;
     // public Slider LevelUpSlider;
     public ParameterWithLevelUp ShieldField;
     public ParameterWithLevelUp SpeedField;
@@ -144,23 +147,63 @@ public class PilotInventoryUI : MonoBehaviour
 
     private void SetInfoParams()
     {
-        var maxSpeed = ShipParameters.ParamUpdate(_ship.MaxSpeed, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
-        var turnSpeed = ShipParameters.ParamUpdate(_ship.TurnSpeed, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
-        var maxShiled = ShipParameters.ParamUpdate(_ship.MaxShiled, _pilot.ShieldLevel, ShipParameters.MaxShieldCoef);
-        var maxHealth = ShipParameters.ParamUpdate(_ship.MaxHealth, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
+        var shipSpeedBase = _ship.MaxSpeed;
+        var turnSpeedBase = _ship.TurnSpeed;
+        var maxShiledBase = _ship.MaxShiled;
+        var maxHealthBase = _ship.MaxHealth;
 
+        ApplySlot(_ship.CocpitSlot);
+        ApplySlot(_ship.EngineSlot);
+        ApplySlot(_ship.WingSlot);
+
+        void ApplySlot(ParameterItem item)
+        {
+            if (item != null)
+            {
+                foreach (var affection in item.ParametersAffection)
+                {
+                    switch (affection.Key)
+                    {
+                        case EParameterShip.speed:
+                            shipSpeedBase += affection.Value;
+                            break;
+                        case EParameterShip.turn:
+                            turnSpeedBase += affection.Value;
+                            break;
+                        case EParameterShip.bodyPoints:
+                            maxHealthBase += affection.Value;
+                            break;
+                        case EParameterShip.shieldPoints:
+                            maxShiledBase += affection.Value;
+                            break;
+                        case EParameterShip.bodyArmor:
+                            break;
+                    }
+                }
+            }
+        }
+
+        var calulatedParams = ShipParameters.CalcParams(_ship, _pilot, new List<EParameterShip>()
+        {
+            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn ,EParameterShip.bodyArmor
+        });
+        var maxHealth = calulatedParams[EParameterShip.bodyPoints];// ShipParameters.ParamUpdate(maxHealthBase, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
+
+        var maxSpeed = calulatedParams[EParameterShip.speed];// ShipParameters.ParamUpdate(shipSpeedBase, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
+        var turnSpeed = calulatedParams[EParameterShip.turn];//ShipParameters.ParamUpdate(turnSpeedBase, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
+        var maxShiled = calulatedParams[EParameterShip.shieldPoints];//ShipParameters.ParamUpdate(maxShiledBase, _pilot.ShieldLevel, ShipParameters.MaxShieldCoef);
+
+        UpdateArmor(calulatedParams[EParameterShip.bodyArmor]);
         PilotParamsInUI pilotParams = new PilotParamsInUI()
         { MaxSpeed = maxSpeed, MaxHealth = maxHealth, MaxShield = maxShiled, TurnSpeed = turnSpeed };
 
-        foreach (var modul in _ship.Moduls.SimpleModuls)
+        foreach (var modul in _ship.Moduls.GetNonNullActiveSlots())
         {
-            if (modul != null)
+        
+            var support = modul as BaseSupportModul;
+            if (support != null)
             {
-                var support = modul as BaseSupportModul;
-                if (support != null)
-                {
-                    support.ChangeParamsShip(pilotParams);
-                }
+                support.ChangeParamsShip(pilotParams);
             }
         }
 
@@ -177,6 +220,21 @@ public class PilotInventoryUI : MonoBehaviour
         HealthField.SetData(txt, _pilot.HealthLevel, _pilot, LibraryPilotUpgradeType.health);
     }
 
+    private void UpdateArmor(float bodyArmor)
+    {
+        float bArmor = bodyArmor;
+        float sArmor = _ship.ShiledArmor;
+        foreach (var modul in _ship.Moduls.GetNonNullActiveSlots())   //Это пздц костыль. Если будут еще подобный модули то переделать все это!
+        {
+            if (modul.Type == SimpleModulType.armor)
+            {
+                bArmor += modul.Level;
+                // sArmor += modul.Level;
+            }
+        }
+
+        ArmorField.text = Namings.Format(Namings.Tag("ArmorField"), bArmor, sArmor);
+    }
     private static string LevelInfo(string name, int level, string info)
     {
         return Namings.Format("{0}:{2}", name, level, info);

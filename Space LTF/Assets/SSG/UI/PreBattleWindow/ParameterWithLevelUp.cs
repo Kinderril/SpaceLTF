@@ -16,14 +16,18 @@ public class ParameterWithLevelUp : MonoBehaviour
 
     private LibraryPilotUpgradeType _type;
     public GameObject LevelUpButton;
+    public UIElementWithTooltipCache TooltipCache;
+    private int _level;
 
     public void SetData(string txt,int level,IPilotParameters pilot,LibraryPilotUpgradeType type)
     {
+        _level = level;
         _pilot = pilot;
         LevelField.text = level.ToString();
         Field.text = txt;
         _type = type;
         LevelUpButton.SetActive(_pilot.CanUpgradeAnyParameter(0));
+        UpdateTooltip();
     }
 
     public void OnLevelUpClicked()
@@ -31,7 +35,15 @@ public class ParameterWithLevelUp : MonoBehaviour
         if (_pilot.CanUpgradeAnyParameter(0))
         {
             _pilot.UpgradeLevel(true, _type,true);
+            UpdateTooltip();
         }
+    }
+
+    public void UpdateTooltip()
+    {
+        var levelCoef = Library.PARAMETER_LEVEL_COEF;
+        var val =  (_level - 1) * levelCoef; 
+        TooltipCache.Cache = Namings.Format(Namings.Tag("BonusParamField"),Utils.FloatToChance(val));
     }
 
 }

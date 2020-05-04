@@ -91,7 +91,8 @@ public class ArmyTutorGlobalCell : ArmyGlobalMapCell
             var battleShip = myPlaer.Army.Army.FirstOrDefault(x => x.Ship.ShipType != ShipType.Base);
             if (battleShip != null)
             {
-                var weapon = battleShip.Ship.WeaponsModuls.FirstOrDefault(x => x != null);
+                var weapons = battleShip.Ship.WeaponsModuls.GetNonNullActiveSlots();
+                var weapon = weapons.FirstOrDefault();
                 if (weapon == null)
                 {
                       weapon = myPlaer.Inventory.Weapons.FirstOrDefault(x => x != null);

@@ -14,6 +14,7 @@ public class LastReward
     public List<WeaponInv> Weapons = new List<WeaponInv>();
     public List<BaseModulInv> Moduls = new List<BaseModulInv>();
     public List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();
+    public List<ParameterItem> ParamItems = new List<ParameterItem>();
 
 
     public LastReward()
@@ -25,7 +26,7 @@ public class LastReward
         var power = losePLayer.Army.GetPower();
         var scoutsLevel = winner.Parameters.Scouts.Level;
         var powerPlayer = winner.Army.GetPower();
-        var coef = power * 0.1f;
+//        var coef = power * 0.1f;
         var weaponCoef = power * 0.55f;
         WDictionary<int> modulsLevels;
         WDictionary<BattleRewardType> rewardRnd;
@@ -82,7 +83,6 @@ public class LastReward
         float lowMoneyCoef = 0.7f;
         var weaponsCount = MyExtensions.Random(minWeapons, maxLowItems);
         var modulesCount = maxLowItems - weaponsCount;
-
         if (powerPlayer < 20)
         {
             lowMoneyCoef = 0.5f;
@@ -135,9 +135,100 @@ public class LastReward
                 }
                 break;
         }
+
+        AddParameterItems(winner,power);
+
+
+
         int moneyToReward = (int)(moneyCoef * power * Library.BATTLE_REWARD_WIN_MONEY_COEF);
         Money = moneyToReward;
         winner.MoneyData.AddMoney(moneyToReward);
+    }
+
+    private void AddParameterItems(Player winner,float power)
+    {
+        List<EParameterItemSubType> itemsTypes = Library.ParameterItemTypes;
+        if (power < 20)
+        {
+            var paramItem2 = Library.CreateParameterItem(itemsTypes.RandomElement(), EParameterItemRarity.normal);
+            winner.Inventory.TryAddItem(paramItem2);
+            ParamItems.Add(paramItem2);
+        }
+        else if (power < 30)
+        {
+
+            var paramItem = Library.CreateParameterItem(itemsTypes.RandomElement(), EParameterItemRarity.normal);
+            winner.Inventory.TryAddItem(paramItem);
+            ParamItems.Add(paramItem);
+            var paramItem3 = Library.CreateParameterItem(itemsTypes.RandomElement(), MyExtensions.IsTrue01(0.5f) ? EParameterItemRarity.improved : EParameterItemRarity.normal);
+            winner.Inventory.TryAddItem(paramItem3);
+            ParamItems.Add(paramItem3);
+            if (MyExtensions.IsTrueEqual())
+            {
+                var paramItem2 = Library.CreateParameterItem(itemsTypes.RandomElement(), EParameterItemRarity.normal);
+                winner.Inventory.TryAddItem(paramItem2);
+                ParamItems.Add(paramItem2);
+            } 
+            
+        }
+        else if (power < 38)
+        {
+
+            var paramItem = Library.CreateParameterItem(itemsTypes.RandomElement(), EParameterItemRarity.normal);
+            winner.Inventory.TryAddItem(paramItem);
+            ParamItems.Add(paramItem);
+            var paramItem2 = Library.CreateParameterItem(itemsTypes.RandomElement(), MyExtensions.IsTrue01(0.5f) ? EParameterItemRarity.improved : EParameterItemRarity.normal);
+            winner.Inventory.TryAddItem(paramItem2);
+            ParamItems.Add(paramItem2);
+            if (MyExtensions.IsTrueEqual())
+            {
+                var paramItem3 = Library.CreateParameterItem(itemsTypes.RandomElement(),
+                    MyExtensions.IsTrue01(0.3f) ? EParameterItemRarity.improved : EParameterItemRarity.normal);
+                winner.Inventory.TryAddItem(paramItem3);
+                ParamItems.Add(paramItem3);
+            }
+        }
+        else if (power < 45)
+        {
+
+            var paramItem = Library.CreateParameterItem(itemsTypes.RandomElement(), EParameterItemRarity.normal);
+            winner.Inventory.TryAddItem(paramItem);
+            ParamItems.Add(paramItem);
+            var paramItem2 = Library.CreateParameterItem(itemsTypes.RandomElement(), MyExtensions.IsTrue01(0.3f) ? EParameterItemRarity.improved : EParameterItemRarity.normal);
+            winner.Inventory.TryAddItem(paramItem2);
+            ParamItems.Add(paramItem2);
+            if (MyExtensions.IsTrueEqual())
+            {
+                var paramItem3 = Library.CreateParameterItem(itemsTypes.RandomElement(),
+                    MyExtensions.IsTrue01(0.5f) ? EParameterItemRarity.improved : EParameterItemRarity.perfect);
+                winner.Inventory.TryAddItem(paramItem3);
+                ParamItems.Add(paramItem3);
+            }
+        }
+        else if (power < 50)
+        {
+            var paramItem = Library.CreateParameterItem(itemsTypes.RandomElement(), MyExtensions.IsTrue01(0.5f) ? EParameterItemRarity.improved : EParameterItemRarity.normal);
+            winner.Inventory.TryAddItem(paramItem);
+            ParamItems.Add(paramItem);
+            var paramItem2 = Library.CreateParameterItem(itemsTypes.RandomElement(), MyExtensions.IsTrue01(0.5f) ? EParameterItemRarity.improved : EParameterItemRarity.perfect);
+            winner.Inventory.TryAddItem(paramItem2);
+            ParamItems.Add(paramItem2);
+            var paramItem3 = Library.CreateParameterItem(itemsTypes.RandomElement(), MyExtensions.IsTrue01(0.5f) ? EParameterItemRarity.improved : EParameterItemRarity.perfect);
+            winner.Inventory.TryAddItem(paramItem3);
+            ParamItems.Add(paramItem3);
+        }
+//
+//        var parameterItemsCount = MyExtensions.Random(0, 2);
+//        WDictionary<EParameterItemRarity> rarities = Library.GetParitiesCache;
+//        for (int i = 0; i < parameterItemsCount; i++)
+//        {
+//            var paramType = itemsTypes.RandomElement();
+//            var raruty = rarities.Random();
+//            var paramItem = Library.CreateParameterItem(paramType, raruty);
+//            winner.Inventory.TryAddItem(paramItem);
+//            ParamItems.Add(paramItem);
+//        }
+
     }
 }
 

@@ -316,7 +316,10 @@ public static class Utils
         return v;
     }
 
-
+    public static Color CreateColor(float r,float g,float b)
+    {
+        return new Color(r/255f,g/255f,b/255);
+    }
     public static void Sort<T>(List<T> list, Func<T, int> GetPriority) where T : MonoBehaviour
     {
         list.Sort((x, y) =>

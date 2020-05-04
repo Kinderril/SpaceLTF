@@ -23,7 +23,7 @@ public class SectorData
     private bool _isVisited;
     public SectorCellContainer[,] Cells;
     private float _powerPerTurn;
-    protected HashSet<SectorCellContainer> _listCells = new HashSet<SectorCellContainer>();
+    public HashSet<SectorCellContainer> ListCells = new HashSet<SectorCellContainer>();
 
     Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
 
@@ -39,7 +39,7 @@ public class SectorData
         RemoveWayCallback = removeWayCallback;
         XIndex = xIndex;
         _powerPerTurn = powerPerTurn;
-        Id = index;
+        Id = Guid.NewGuid().GetHashCode();
         Cells = new SectorCellContainer[size, size];
         _shipConfig = shipConfig;
         _maxCount = maxCountEvents;
@@ -57,7 +57,7 @@ public class SectorData
             {
                 var cell = new SectorCellContainer(i, j);
                 Cells[i, j] = cell;
-                _listCells.Add(cell);
+                ListCells.Add(cell);
             }
         }
     }
@@ -113,7 +113,7 @@ public class SectorData
         StartPowerGalaxy = startPowerGalaxy;
         _power = CalcCellPower(0, Size, startPowerGalaxy, 0);
         RandomizeBorders();
-        var remainFreeCells = _listCells.Where(x => x.IsFreeToPopulate()).ToList();
+        var remainFreeCells = ListCells.Where(x => x.IsFreeToPopulate()).ToList();
         //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");
         //Shop cells
         int shopsCount;
@@ -204,7 +204,7 @@ public class SectorData
 
         //        Debug.Log($"Sector populated: {Id}");
 #if UNITY_EDITOR
-        foreach (var cell in _listCells)
+        foreach (var cell in ListCells)
         {
             if (cell.IsFreeToPopulate())
             {
@@ -406,7 +406,7 @@ public class SectorData
 
     public virtual void CacheWays()
     {
-        foreach (var cell in _listCells)
+        foreach (var cell in ListCells)
         {
             if (cell.Data is GlobalMapNothing)
             {
@@ -445,7 +445,7 @@ public class SectorData
 
     private void CutSomeWays()
     {
-        foreach (var cell in _listCells)
+        foreach (var cell in ListCells)
         {
             var allWays = cell.Data.GetCurrentPosibleWays();
             if (allWays.Count > 3)

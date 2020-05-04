@@ -85,10 +85,18 @@ public class ShipParameters : IShipAffectableParams
         _shipOwner = shipOwner;
         Spells = spells;
         StartParams = startParams;
-        MaxSpeed = ParamUpdate(startParams.MaxSpeed, pilotParams.SpeedLevel, ShipParameters.MaxSpeedCoef);
-        TurnSpeed = ParamUpdate(startParams.TurnSpeed, pilotParams.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
-        MaxHealth = ParamUpdate(startParams.MaxHealth, pilotParams.HealthLevel, ShipParameters.MaxHealthCoef);
-        var maxShiled = ParamUpdate(startParams.MaxShiled, pilotParams.ShieldLevel, ShipParameters.MaxShieldCoef);
+
+        var calulatedParams = ShipParameters.CalcParams(startParams, pilotParams, new List<EParameterShip>()
+        {
+            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn, EParameterShip.bodyArmor
+        });
+        MaxSpeed = calulatedParams[EParameterShip.speed];// ShipParameters.ParamUpdate(shipSpeedBase, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
+        TurnSpeed = calulatedParams[EParameterShip.turn];//ShipParameters.ParamUpdate(turnSpeedBase, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
+        var maxShiled = calulatedParams[EParameterShip.shieldPoints];//ShipParameters.ParamUpdate(maxShiledBase, _pilot.ShieldLevel, ShipParameters.MaxShieldCoef);
+        MaxHealth = calulatedParams[EParameterShip.bodyPoints];// ShipParameters.ParamUpdate(maxHealthBase, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
+
+
+                
         CurHealth = CurHealthWIthPercent;
         _deathCallback = dealthCallback;
         HealthRegen = new HealthRegenParameter(this);
@@ -102,7 +110,148 @@ public class ShipParameters : IShipAffectableParams
 
     public static float ParamUpdate(float startValue, int paramLevel, float levelCoef)
     {
-        return startValue + (paramLevel - 1) * levelCoef;
+        levelCoef = Library.PARAMETER_LEVEL_COEF; 
+        var val = startValue * (1 + (paramLevel - 1) * levelCoef);
+        return Mathf.Clamp(val,1f,99999f);
+    }
+
+    public static Dictionary<EParameterShip, float> CalcParams(IStartShipParams ship, IPilotParameters pilot,List<EParameterShip> listToCalc)
+    {
+        Dictionary<EParameterShip, float> paramsOut = new Dictionary<EParameterShip, float>();
+        foreach (var eParameterShip in listToCalc)
+        {
+            float coef = 1f;
+            float baseParam = 1f;
+            int levelPilot = 0;
+            switch (eParameterShip)
+            {
+                case EParameterShip.speed:
+                    coef = ShipParameters.MaxSpeedCoef;
+                    baseParam = ship.MaxSpeed;
+                    levelPilot = pilot.SpeedLevel;
+                    break;
+                case EParameterShip.turn:
+                    coef = ShipParameters.TurnSpeedCoef;
+                    baseParam = ship.TurnSpeed;
+                    levelPilot = pilot.TurnSpeedLevel;
+                    break;
+                case EParameterShip.bodyPoints:
+                    coef = ShipParameters.MaxHealthCoef;
+                    baseParam = ship.MaxHealth;
+                    levelPilot = pilot.HealthLevel;
+                    break;
+                case EParameterShip.shieldPoints:
+                    coef = ShipParameters.MaxShieldCoef;
+                    baseParam = ship.MaxShiled;
+                    levelPilot = pilot.ShieldLevel;
+                    break;
+                case EParameterShip.bodyArmor:
+                    baseParam = ship.BodyArmor;
+                    break;
+                default:
+
+                    break;
+            }
+
+            var cofigCoef = 1f;
+            switch (ship.ShipConfig)
+            {
+                case ShipConfig.raiders:
+                    if (eParameterShip == EParameterShip.speed)
+                    {
+                        cofigCoef = Library.RAIDER_SPEED_COEF;
+                    }
+
+                    if (eParameterShip == EParameterShip.turn)
+                    {
+
+                        cofigCoef = Library.RAIDER_TURNSPEED_COEF;
+                    }
+                    break;
+                case ShipConfig.federation:
+                    break;
+                case ShipConfig.mercenary:
+                    if (eParameterShip == EParameterShip.speed)
+                    {
+                        cofigCoef = Library.MERC_SPEED_COEF;
+
+                    }
+
+                    if (eParameterShip == EParameterShip.turn)
+                    {
+
+                        cofigCoef = Library.MERC_TURNSPEED_COEF;
+                    }
+                    break;
+                case ShipConfig.ocrons:
+                    if (eParameterShip == EParameterShip.shieldPoints)
+                    {
+                        cofigCoef = Library.OCRONS_SHIELD_COEF;
+                    }
+
+                    if (eParameterShip == EParameterShip.bodyPoints)
+                    {
+
+                        cofigCoef = Library.OCRONS_HP_COEF;
+                    }
+                    break;
+                case ShipConfig.krios:
+                    if (eParameterShip == EParameterShip.shieldPoints)
+                    {
+                        cofigCoef = Library.KRIOS_SHIELD_COEF;
+                    }
+
+                    if (eParameterShip == EParameterShip.bodyPoints)
+                    {
+
+                        cofigCoef = Library.KRIOS_HP_COEF;
+                    }
+                    break;
+            }
+
+            baseParam = ApplySlot(ship.CocpitSlot, baseParam,eParameterShip);
+            baseParam = ApplySlot(ship.EngineSlot, baseParam, eParameterShip);
+            baseParam = ApplySlot(ship.WingSlot, baseParam, eParameterShip);
+
+            float param;
+            switch (eParameterShip)
+            {
+                case EParameterShip.speed:
+                case EParameterShip.turn:
+                case EParameterShip.bodyPoints:
+                case EParameterShip.shieldPoints:
+                    param = ParamUpdate(baseParam, levelPilot, coef); 
+                    param *= cofigCoef;
+                    break;
+                default:
+                case EParameterShip.bodyArmor:
+                case EParameterShip.modulsSlots:
+                case EParameterShip.weaponSlots:
+                    param = baseParam;
+                    break;
+            }
+
+
+            paramsOut.Add(eParameterShip,param);
+        }
+
+        float ApplySlot(ParameterItem item, float curVal, EParameterShip paramType)
+        {
+            if (item != null)
+            {
+                foreach (var affection in item.ParametersAffection)
+                {
+                    if (affection.Key == paramType)
+                    {
+                        curVal += affection.Value;
+                    }
+                }
+            }
+
+            return curVal;
+        }
+
+        return paramsOut;
     }
 
     public void Update()

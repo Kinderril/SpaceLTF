@@ -14,10 +14,11 @@ public class InventoryUI : DragZone
     private List<BaseModulInv> Moduls = new List<BaseModulInv>();
     private List<WeaponInv> Weapons = new List<WeaponInv>();
     private List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();
+    private List<ParameterItem> ParamItems = new List<ParameterItem>();
     
     public Transform Layout;
     private Player _player;                                           
-    private List<DragableItemSlot> _allSLots = new List<DragableItemSlot>();
+    private HashSet<DragableItemSlot> _allSLots = new HashSet<DragableItemSlot>();
 
     public bool ShallRefreshPos = true;
     public bool ShallRefreshPosWithZero = false;
@@ -33,6 +34,7 @@ public class InventoryUI : DragZone
 //        _inventory = player;
         Weapons = player.Weapons;
         Moduls = player.Moduls;
+        ParamItems = player.ParamItems;
         Spells = player.Spells;
         InitCurrentItems(canDrop);
         InitFreeSlots(canDrop);
@@ -67,6 +69,15 @@ public class InventoryUI : DragZone
 
     private void InitCurrentItems(bool canDrop)
     {
+        for (int i = 0; i < ParamItems.Count; i++)
+        {
+            var paramItem = ParamItems[i];
+            var itemSlot = AttachToLayout();
+            itemSlot.Init(_inventory,true);
+            SetStartItem(itemSlot,paramItem);
+            itemSlot.CanDrop = canDrop;
+            _allSLots.Add(itemSlot);
+        }  
         for (int i = 0; i < Weapons.Count; i++)
         {
             var weapon = Weapons[i];

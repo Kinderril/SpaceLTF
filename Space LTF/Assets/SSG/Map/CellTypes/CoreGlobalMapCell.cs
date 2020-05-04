@@ -62,9 +62,9 @@ public class CoreGlobalMapCell : ArmyGlobalMapCell
     {
         if (Taken)
         {
-            return "Base (Taken)";
+            return $"{Namings.Tag("Base")}({Namings.Tag("Completed")})" ;
         }
-        return "Base";
+        return Namings.Tag("Base");
     }
 
     public override void Take()

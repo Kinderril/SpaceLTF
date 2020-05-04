@@ -25,6 +25,14 @@ public struct ShipTypeIcon
 //}
 
 [Serializable]
+public struct ParameterItemIcon
+{
+    public Sprite Icon;
+    public EParameterItemSubType SubType;
+    public ItemType ItemType;
+}
+
+[Serializable]
 public struct WeaponIcon
 {
     public Sprite Icon;
@@ -89,6 +97,9 @@ public class DataStructPrefabs : MonoBehaviour
     public DragableModulItem DragableItemModulPrefab;
     public DragableSpellItem DragableItemSpellPrefab;
     public DragableItemSlot DragableItemSlotPrefab;
+    public DragableParameterItem DragableItemParameterPrefab;
+
+    public LightUpObject LightUpObject;
 
     //    public BaseEffectAbsorber ModulEffectDestroyPrefab;
     //    public BaseEffectAbsorber ShipEngineStopPrefab;
@@ -118,6 +129,7 @@ public class DataStructPrefabs : MonoBehaviour
     private Dictionary<SimpleModulType, Sprite> ModulsIconsDic = new Dictionary<SimpleModulType, Sprite>();
     private Dictionary<PilotRank, Sprite> PilotRankIconsDic = new Dictionary<PilotRank, Sprite>();
 
+    public List<ParameterItemIcon> ParametersItemsIcons = new List<ParameterItemIcon>();
     public List<WeaponIcon> WeaponTypeIcons = new List<WeaponIcon>();
     private Dictionary<WeaponType, Sprite> WeaponTypeIconsDic = new Dictionary<WeaponType, Sprite>();
     private Dictionary<string, Sprite> SpritesByName = new Dictionary<string, Sprite>();
@@ -443,6 +455,19 @@ public class DataStructPrefabs : MonoBehaviour
             return spr;
         }
         return null;
+    }
+
+    public Sprite GetParameterItemIcon(ItemType parameterItemItemType, EParameterItemSubType subType)
+    {
+        ParameterItemIcon? itemIcon = ParametersItemsIcons.FirstOrDefault(x =>
+            x.ItemType == parameterItemItemType && x.SubType == subType);
+        if (itemIcon.HasValue)
+        {
+            return itemIcon.Value.Icon;
+        }
+
+        return null;
+
     }
 }
 

@@ -9,28 +9,83 @@ using UnityEngine;
 [Serializable]
 public class ShipModulsInventory
 {
-    public BaseModulInv[] SimpleModuls;
-//    private int simpleModulsCount;
+    private BaseModulInv[] _simpleModuls;
+     public int SimpleModulsCount => _startSlots + _additionalSlost;
+    private int _startSlots;
+    private int _additionalSlost;
     private IInventory _inventory;
     private int _id;
+
+    [field: NonSerialized]
+    public event Action<ShipModulsInventory, DragItemType> OnSlotsAdd;
+    [field: NonSerialized]
+    public event Action<ShipModulsInventory,DragItemType> OnSlotsRemove;
 
     public ShipModulsInventory(int simpleModulsCount, IInventory inventory)
     {
         _id = Utils.GetId();
         _inventory = inventory;
-//        this.simpleModulsCount = simpleModulsCount;
-        SimpleModuls = new BaseModulInv[simpleModulsCount];
-        for (int i = 0; i < simpleModulsCount; i++)
+        _startSlots = simpleModulsCount;
+        _simpleModuls = new BaseModulInv[100];
+        for (int i = 0; i < SimpleModulsCount; i++)
         {
-            SimpleModuls[i] = null;
+            _simpleModuls[i] = null;
         }
+    }
+
+    public List<BaseModulInv> GetNonNullActiveSlots()
+    {
+        List < BaseModulInv > slots = new List<BaseModulInv>();
+        for (int i = 0; i < SimpleModulsCount && i < _simpleModuls.Length; i++)
+        {
+            var slot = _simpleModuls[i];
+            if (slot != null)
+            {
+                slots.Add(slot);
+            }
+        }
+
+        return slots;
+    }
+
+    public void AddSlots(DragItemType type)
+    {
+        _additionalSlost = Mathf.Clamp(_additionalSlost + 1, 0, 90);
+        OnSlotsAdd?.Invoke(this, type);
+    }
+
+    public bool CanRemoveSlots(int count)
+    {
+        int canRemove = 0;
+        for (int i = 0; i < SimpleModulsCount; i++)
+        {
+            var slot = _simpleModuls[i];
+            if (slot == null)
+            {
+                canRemove++;
+                if (canRemove >= count)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public bool RemoveSlot(DragItemType type)
+    {
+        if (!CanRemoveSlots(1))
+        {
+            return false;
+        }
+        _additionalSlost = Mathf.Clamp(_additionalSlost - 1,0,90);
+        OnSlotsRemove?.Invoke(this, type);
+        return true;
     }
 
     public bool GetFreeSimpleSlot(out int index)
     {
-        for (int i = 0; i < SimpleModuls.Length; i++)
+        for (int i = 0; i < SimpleModulsCount; i++)
         {
-            var m = SimpleModuls[i];
+            var m = _simpleModuls[i];
             if (m == null)
             {
                 index = i;
@@ -47,15 +102,15 @@ public class ShipModulsInventory
         {
             return false;
         }
-        if (SimpleModuls.Length <= fieldIndex)
+        if (SimpleModulsCount <= fieldIndex)
         {
             Debug.LogError("Too big index slot");
             return false;
         }
-        var field = SimpleModuls[fieldIndex];
+        var field = _simpleModuls[fieldIndex];
         if (field == null)
         {
-            SimpleModuls[fieldIndex] = simpleModul;
+            _simpleModuls[fieldIndex] = simpleModul;
             simpleModul.CurrentInventory = _inventory;
             _inventory.TransferItem(simpleModul, true);
             Debug.Log("Simple modul add to ship " + _id + "  " + simpleModul.Type.ToString());
@@ -67,12 +122,12 @@ public class ShipModulsInventory
 
     public bool RemoveSimpleModul(BaseModulInv simpleModul)
     {
-        for (int i = 0; i < SimpleModuls.Length; i++)
+        for (int i = 0; i < SimpleModulsCount; i++)
         {
-            var m = SimpleModuls[i];
+            var m = _simpleModuls[i];
             if (m == simpleModul)
             {
-                SimpleModuls[i] = null;
+                _simpleModuls[i] = null;
                 _inventory.TransferItem(m, false);
                 return true;
             }

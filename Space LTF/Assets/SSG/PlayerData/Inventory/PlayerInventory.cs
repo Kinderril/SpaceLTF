@@ -11,10 +11,11 @@ using UnityEngine;
 public class PlayerInventory : IInventory
 {
 
-    public static int MAX_SLOTS = 50;
+    public static int MAX_SLOTS = 48;
     public List<BaseModulInv> Moduls = new List<BaseModulInv>();
     public List<WeaponInv> Weapons = new List<WeaponInv>();
     public List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();
+    public List<ParameterItem> ParamItems = new List<ParameterItem>();
 
 
     [field: NonSerialized]
@@ -27,6 +28,7 @@ public class PlayerInventory : IInventory
         Moduls.Clear();
         Weapons.Clear();
         Spells.Clear();
+        ParamItems.Clear();
     }
 
     public void TransferItem(IItemInv item, bool val)
@@ -59,14 +61,60 @@ public class PlayerInventory : IInventory
         return true;
     }
 
+    public bool TryAddItem(ParameterItem itemParam)
+    {
+        ParamItems.Add(itemParam);
+        TransferItem(itemParam, true);
+        return true;
+
+    }
+
+    public bool RemoveItem(ParameterItem itemParam)
+    {
+        var b = ParamItems.Remove(itemParam);
+        TransferItem(itemParam, false);
+        return b;
+    }
+
+    public bool CanRemoveModulSlots(int slotsInt)
+    {
+        if (totalSlots() + slotsInt < MAX_SLOTS)
+        {
+            return true;
+        }
+        return false;
+
+    }      
+    public bool CanRemoveWeaponSlots(int slotsInt)
+    {
+        if (totalSlots() + slotsInt < MAX_SLOTS)
+        {
+            return true;
+        }
+        return false;
+
+    }
+
     public List<IItemInv> GetAllItems()
     {
         var list = new List<IItemInv>();
         list.AddRange(Weapons);
         list.AddRange(Moduls);
         list.AddRange(Spells);
+        list.AddRange(ParamItems);
         return list;
     }
+
+    public bool GetFreeSlot(out int index, ItemType type)
+    {
+        index = Moduls.Count;
+        if (totalSlots() < MAX_SLOTS)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public bool GetFreeSimpleSlot(out int index)
     {
         index = Moduls.Count;
@@ -127,7 +175,6 @@ public class PlayerInventory : IInventory
     public bool TryAddWeaponModul(WeaponInv weaponModul, int fieldIndex)
     {
         Weapons.Add(weaponModul);
-        //        weaponModul.CurrentInventory = this;
         TransferItem(weaponModul, true);
         return true;
     }
@@ -148,7 +195,7 @@ public class PlayerInventory : IInventory
 
     private int totalSlots()
     {
-        return Moduls.Count + Spells.Count + Weapons.Count;
+        return Moduls.Count + Spells.Count + Weapons.Count + ParamItems.Count;
     }
 
 }

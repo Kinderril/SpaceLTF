@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 public struct ResolutionData
 {
     public string Name;
@@ -209,9 +211,23 @@ public class CamerasController : Singleton<CamerasController>
                 //                     return;
                 //                 }
                 // #endif
-                _activeCamera.MoveMainCamToDir(keybordDir);
+                if (true || !MouseUnderUI())
+                {
+                    _activeCamera.MoveMainCamToDir(keybordDir);
+                }
+
             }
         }
+    }
+
+    private bool MouseUnderUI()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     void Update()

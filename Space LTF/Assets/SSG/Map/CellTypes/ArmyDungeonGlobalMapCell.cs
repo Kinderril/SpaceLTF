@@ -6,21 +6,19 @@ public class ArmyDungeonGlobalMapCell : ArmyGlobalMapCell
 {
     protected int _constanctPowerPower;
     protected int _stepPowerCoef = 3;
-    public ArmyDungeonGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind, SectorData sector) : base(
+//    public override int Power => (int)(_power * _coefPower);
+    private float _coefPower;
+    public ArmyDungeonGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind, SectorData sector, float coefPower) : base(
         power, config, id, Xind, Zind, sector)
     {
-
+        _coefPower =1f + coefPower;
     }
 //    public ov void Complete()
 //    {
 //        Scouted();
 //    }
 
-    public override int Power
-    {
-        get { return base.Power + _constanctPowerPower; }
-    }
-
+    public override int Power => (int)((_power + _constanctPowerPower) * _coefPower);
     protected override MessageDialogData GetDialog()
     {
 

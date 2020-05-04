@@ -110,11 +110,40 @@ public class Player
             }
         }
 #endif
+#if UNITY_EDITOR     
+        void CreateRndParameterItem()
+        {
 
-#if UNITY_EDITOR
+            var rnd1 = new List<EParameterItemSubType>()
+                {EParameterItemSubType.middle, EParameterItemSubType.heavy, EParameterItemSubType.light};
+
+            var rnd2 = new List<EParameterItemRarity>()
+            {
+                EParameterItemRarity.normal, EParameterItemRarity.improved, EParameterItemRarity.perfect
+            };
+
+            if (Inventory.GetFreeSlot(out var index01, ItemType.cocpit))
+            {
+                var paramItem = Library.CreateParameterItem(rnd1.RandomElement(), rnd2.RandomElement());
+                Inventory.TryAddItem(paramItem);
+            }
+        }
+
+
         if (DebugParamsController.AllModuls)
         {
 
+            if (Inventory.GetFreeSlot(out var index021, ItemType.cocpit))
+            {
+                var paramItem = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.improved, ItemType.cocpit);
+                Inventory.TryAddItem(paramItem);
+            }
+            CreateRndParameterItem();
+            CreateRndParameterItem();
+            CreateRndParameterItem();
+            CreateRndParameterItem();
+            CreateRndParameterItem();
+            CreateRndParameterItem();
             var allVals = (SimpleModulType[])Enum.GetValues(typeof(SimpleModulType));
             foreach (var type in allVals)
             {

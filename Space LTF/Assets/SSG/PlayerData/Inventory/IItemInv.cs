@@ -7,7 +7,11 @@ public enum ItemType
 {
     weapon,
     modul,
-    spell
+    spell,
+    cocpit,
+    engine,
+    wings,
+
 }
 
 public interface IItemInv

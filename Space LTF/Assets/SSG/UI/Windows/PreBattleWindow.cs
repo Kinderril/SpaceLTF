@@ -135,7 +135,7 @@ public class PreBattleWindow : BaseWindow
         else
         {
             var ship = battleShips.First();
-            var lisWeapons = ship.Ship.WeaponsModuls.Where(x => x != null).ToList();
+            var lisWeapons = ship.Ship.WeaponsModuls.GetNonNullActiveSlots();
             isBattleShipHaveWeapons = lisWeapons.Count > 0;
         }
 

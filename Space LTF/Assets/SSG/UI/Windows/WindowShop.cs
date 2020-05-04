@@ -104,7 +104,7 @@ public class WindowShop : BaseWindow
             bool shipHaveWeapon = false;
             if (battleShip != null)
             {
-                shipHaveWeapon = battleShip.Ship.WeaponsModuls.Where(x => x != null).ToList().Count > 0;
+                shipHaveWeapon = battleShip.Ship.WeaponsModuls.GetNonNullActiveSlots().Count > 0;
             }
 
             var weaponOk = shipHaveWeapon || haveWeapons;

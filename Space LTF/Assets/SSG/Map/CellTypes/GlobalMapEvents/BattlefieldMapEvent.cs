@@ -112,7 +112,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     {
         var player = MainController.Instance.MainPlayer;
         var rockectWeapons = player.Army.Army.Where(x =>
-            x.Ship.WeaponsModuls.FirstOrDefault(y => y != null && (y.WeaponType == WeaponType.rocket || y.WeaponType == WeaponType.casset)) != null);
+            x.Ship.WeaponsModuls.GetNonNullActiveSlots().FirstOrDefault(y => (y.WeaponType == WeaponType.rocket || y.WeaponType == WeaponType.casset)) != null);
         if (rockectWeapons.Any() && MyExtensions.IsTrue01(.8f))
         {
             var mianAnswers = new List<AnswerDialogData>();

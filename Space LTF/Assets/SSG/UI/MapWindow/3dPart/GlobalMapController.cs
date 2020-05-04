@@ -43,6 +43,7 @@ public class GlobalMapController : MonoBehaviour
     private Vector3 min;
     public Transform MovingArmyContainer;
     private GlobalMapCellObject myCEll;
+    public GlobalMapLighterUpCells LighterUpCells;
     public float OffsetCell;
     public Transform PointsContainer;
     public Transform SectorsContainer;
@@ -63,6 +64,7 @@ public class GlobalMapController : MonoBehaviour
     {
         if (isInited)
             return;
+        LighterUpCells.Init(this);
         _waysList.Clear();
         _logicToVisualObjects.Clear();
         SectorsContainer.ClearTransform();
@@ -159,7 +161,7 @@ public class GlobalMapController : MonoBehaviour
     public void ClearAll()
     {
         isInited = false;
-        Dispsoe();
+        Dispose();
         CallbackNearObjec = null;
         _lastNearObject = null;
         _lastSelectedSector = null;
@@ -312,7 +314,7 @@ public class GlobalMapController : MonoBehaviour
         _waysList.Add(connector);
     }
 
-    public void Dispsoe()
+    public void Dispose()
     {
         for (var i = 0; i < _data.SizeX; i++)
             for (var j = 0; j < _data.VerticalCount * _data.SizeOfSector - 1; j++)
@@ -322,6 +324,7 @@ public class GlobalMapController : MonoBehaviour
                     cell.Cell.OnDestoyedCell -= OnDestoyedCell;
             }
 
+        LighterUpCells.Dispose();
         foreach (var moverObject in _enemiesObjects) DestroyImmediate(moverObject.gameObject);
         _data.GalaxyEnemiesArmyController.OnAddMovingArmy -= OnAddMovingArmy;
         _enemiesObjects.Clear();
@@ -566,7 +569,34 @@ public class GlobalMapController : MonoBehaviour
     public void SetCameraToCellHome(GlobalMapCell cell)
     {
         var cellToNavigate = GetCellObjectByCell(cell);
-        if (cellToNavigate != null) CamerasController.Instance.SetCameraTo(cellToNavigate.ModifiedPosition);
+        if (cellToNavigate != null)
+            CamerasController.Instance.SetCameraTo(cellToNavigate.ModifiedPosition + new Vector3(0, 0, -10));
+    }   
+    public void SetCameraToPosition(Vector3 cell)
+    {
+            CamerasController.Instance.SetCameraTo(cell + new Vector3(0, 0, -10));
+    }
+
+    public void SetCameraToPosition(HashSet<GlobalMapCell> cell)
+    {
+        Vector3 midPos = Vector3.zero;
+        int cnt = 0;
+        foreach (var globalMapCell in cell)
+        {
+
+            var cellToNavigate = GetCellObjectByCell(globalMapCell);
+            if (cellToNavigate != null)
+            {
+                cnt++;
+                midPos += cellToNavigate.ModifiedPosition;
+            }
+        }
+
+        if (cnt > 0)
+        {
+            var center = midPos / cnt;
+            CamerasController.Instance.SetCameraTo(center + new Vector3(0, 0, -10));
+        }
     }
 
     [CanBeNull]
@@ -697,4 +727,5 @@ public class GlobalMapController : MonoBehaviour
             WindowManager.Instance.WindowSubCanvas.interactable = true;
         UnBlock();
     }
+
 }

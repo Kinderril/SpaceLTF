@@ -19,30 +19,56 @@ public class WeaponsController
     public event Action<WeaponInGame> OnWeaponShootStart;
     private WeaponsAimSectorController AimSectorController;
 
-    public WeaponsController(List<WeaponPlace> weaponPosition,
-        ShipBase owner, WeaponInv[] weapons, BaseModulInv[] moduls)
+    public WeaponsController(List<WeaponPlace> weaponPositionInc,
+        ShipBase owner, List<WeaponInv> weapons, List<BaseModulInv> moduls)
     {
         MaxAttackRadius = -1f;
         SupportWeaponsBuffPosibilities = new SupportWeaponsBuffPosibilities();
         AimSectorController = new WeaponsAimSectorController();
         Dictionary<string, WeaponAimedType> weaponsAims = new Dictionary<string, WeaponAimedType>();
         _owner = owner;
-        this.weaponPosition = weaponPosition;
+        this.weaponPosition = weaponPositionInc;
         int slotIndex = 0;
         bool haveDamageWeapons = false, haveSupportWeapons = false;
-        foreach (var weapon1 in weapons)
-        {
-            if (weapon1 == null)
-            {
-                continue;
-            }
-            WeaponInGame weapon = weapon1.CreateForBattle();
 
-            if (slotIndex < this.weaponPosition.Count)
+        var notNullWeapons = weapons.Where(x => x != null).ToList();
+        if (notNullWeapons.Count > this.weaponPosition.Count)
+        {
+            var slotsToCreate = notNullWeapons.Count - weaponPosition.Count;
+            for (int i = 0; i < slotsToCreate; i++)
             {
+                var slotToClone = weaponPosition.RandomElement();
+                var slotsClone = DataBaseController.GetItem(slotToClone);
+                Vector3 posForWeapon;
+                if (weaponPositionInc.Count > 1)
+                {
+                    var p1 = weaponPositionInc[0].transform.localPosition;
+                    var p2 = weaponPositionInc[1].transform.localPosition;
+                    posForWeapon = (p1 + p2) / 2f;
+                }
+                else
+                {
+                    posForWeapon = slotToClone.transform.localPosition - new Vector3(0, -.04f, 0);
+                }
+
+                slotsClone.transform.SetParent(slotToClone.transform.parent);
+                slotsClone.transform.rotation = slotToClone.transform.rotation;
+                slotsClone.transform.localPosition = posForWeapon;
+                weaponPosition.Add(slotsClone);
+            }
+        }
+
+
+        foreach (var weapon1 in notNullWeapons)
+        {
+            try
+            {
+                WeaponInGame weapon = weapon1.CreateForBattle();
+
                 var slot = weaponPosition[slotIndex];
                 slot.SetWeapon(weapon);
                 slotIndex++;
+
                 weapon.Init(owner);
                 UpgradeWithModuls(weapon, moduls);
                 _allWeapons.Add(weapon);
@@ -75,24 +101,25 @@ public class WeaponsController
                 };
                 weapon.CacheAngCos();
 
-            }
-            else
-            {
-                Debug.LogError("ship have low weapons position " + _owner.name + " " + weaponPosition.Count);
-            }
-
-            if (haveSupportWeapons && haveDamageWeapons)
-            {
-                foreach (var weaponInGame in _allWeapons)
+                if (haveSupportWeapons && haveDamageWeapons)
                 {
-                    weaponInGame.IncreaseReload(Library.RELOAD_COEF_DIF_WEAPONS);
+                    foreach (var weaponInGame in _allWeapons)
+                    {
+                        weaponInGame.IncreaseReload(Library.RELOAD_COEF_DIF_WEAPONS);
+                    }
                 }
+
+                if (weapon.AimRadius >= MaxAttackRadius)
+                {
+                    MaxAttackRadius = weapon.AimRadius;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Can't find slot  for weapon notNullWeapons:{notNullWeapons.Count}   weaponPosition:{weaponPosition.Count}");
             }
 
-            if (weapon.AimRadius >= MaxAttackRadius)
-            {
-                MaxAttackRadius = weapon.AimRadius;
-            }
         }
 
         foreach (var weaponAimedType in weaponsAims)
@@ -105,11 +132,10 @@ public class WeaponsController
 
     }
 
-    private void UpgradeWithModuls(WeaponInGame weapon, BaseModulInv[] moduls)
+    private void UpgradeWithModuls(WeaponInGame weapon, List<BaseModulInv> moduls)
     {
-        for (int i = 0; i < moduls.Length; i++)
+        foreach (var modul in moduls)
         {
-            var modul = moduls[i];
             weapon.UpgradeWithModul(modul);
         }
     }

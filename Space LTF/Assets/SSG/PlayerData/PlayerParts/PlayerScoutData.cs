@@ -28,7 +28,7 @@ public class ShipScoutData
     {
         var dInfo = new Dictionary<EShipScoutType, float>();
         ShipType = data.Ship.ShipType;
-        var notNull = data.Ship.WeaponsModuls.FirstOrDefault(x => x != null);
+        var notNull = data.Ship.WeaponsModuls.GetNonNullActiveSlots().FirstOrDefault();
         if (notNull != null)
         {
             WeaponType = notNull.WeaponType;
@@ -36,10 +36,9 @@ public class ShipScoutData
         }
 
         PilotLevel = data.Pilot.CurLevel;
-        foreach (var modul in data.Ship.Moduls.SimpleModuls)
+        foreach (var modul in data.Ship.Moduls.GetNonNullActiveSlots())
         {
-            if (modul != null)
-                Moduls.Add(modul.Type);
+            Moduls.Add(modul.Type);
         }
         foreach (var modul in data.Ship.SpellsModuls)
         {
@@ -126,22 +125,13 @@ public class PlayerScoutData
         HashSet<WeaponType> allTypes = new HashSet<WeaponType>();
         foreach (var startShipPilotData in _player.Army.Army)
         {
-            foreach (var weaponsModul in startShipPilotData.Ship.WeaponsModuls)
+            foreach (var weaponsModul in startShipPilotData.Ship.WeaponsModuls.GetNonNullActiveSlots())
             {
-                if (weaponsModul != null)
-                {
-                    firstWeaponType = weaponsModul.WeaponType;
-                    allTypes.Add(firstWeaponType);
-                    weaponsCount++;
-                }
+                firstWeaponType = weaponsModul.WeaponType;
+                allTypes.Add(firstWeaponType);
+                weaponsCount++;
             }
-            foreach (var baseModulInv in startShipPilotData.Ship.Moduls.SimpleModuls)
-            {
-                if (baseModulInv != null)
-                {
-                    modulsCount++;
-                }
-            }
+            modulsCount = startShipPilotData.Ship.Moduls.GetNonNullActiveSlots().Count;
         }
         string ssWeapons = allTypes.Aggregate("", (current, weaponType) => current + (current.Length > 0 ? "," : "") + weaponType.ToString());
 

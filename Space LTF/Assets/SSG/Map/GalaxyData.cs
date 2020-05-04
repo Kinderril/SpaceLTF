@@ -147,11 +147,12 @@ public class GalaxyData
         xIndexs.Add(1);
         var goodCorePositions = xIndexs.Count;
         //        var goodCorePositions = Mathf.Clamp(coreCells, 0, sectorsCount - 2);
+        int createdCoreSector = 0;
         for (var i = 0; i < xIndexs.Count; i++)
         {
             var secrosDist = xIndexs[i];
             List<SectorData> possibleSectors;
-            if (MyExtensions.IsTrue01(.3f) && allSubSectors.Count > verticalCount - 2)
+            if (createdCoreSector > 1 && MyExtensions.IsTrue01(.3f) && allSubSectors.Count > verticalCount - 2)
                 //Only dungeons
                 possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && x is SectorDungeon).ToList();
             else
@@ -162,7 +163,10 @@ public class GalaxyData
             if (coreSector == null)
                 Debug.LogError($"can't find sector with dist:{secrosDist}");
             else
+            {
+                createdCoreSector++;
                 CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
+            }
         }
 
         var notGoodCores = coreCells - goodCorePositions;
@@ -252,7 +256,7 @@ public class GalaxyData
         //        }
         //#endif
         var coreId = Utils.GetId();
-        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, startSector);
+        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, coreSector);
         coreSector.Populate(startPower);
         coreSector.SetCell(coreCell, id);
         unPopulatedSectors.Remove(coreSector);

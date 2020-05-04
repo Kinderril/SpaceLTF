@@ -110,12 +110,12 @@ public class DebugShipInShop : MonoBehaviour
         LayoutWeapons.ClearTransformImmediate();
         LayoutSpells.ClearTransformImmediate();
         LayoutParameters.ClearTransformImmediate();
-        foreach (var sm in _shipInv.Moduls.SimpleModuls)
+        foreach (var sm in _shipInv.Moduls.GetNonNullActiveSlots())
         {
             var msg = (sm == null) ? "null" : sm.GetInfo();
             CreatAndText(msg, LayoutModuls);
         }
-        foreach (var sm in _shipInv.WeaponsModuls)
+        foreach (var sm in _shipInv.WeaponsModuls.GetNonNullActiveSlots())
         {
             var msg = (sm == null)?"null": sm.GetInfo();
             CreatAndText(msg, LayoutWeapons);
@@ -125,18 +125,22 @@ public class DebugShipInShop : MonoBehaviour
             var msg = (sm == null) ? "null" : sm.GetInfo();
             CreatAndText(msg, LayoutSpells);
         }
+        var calulatedParams = ShipParameters.CalcParams(_shipInv, PilotParameters, new List<EParameterShip>()
+        {
+            EParameterShip.bodyPoints, EParameterShip.shieldPoints, EParameterShip.speed, EParameterShip.turn,EParameterShip.bodyArmor
+        });
+        var maxSpeed = calulatedParams[EParameterShip.speed];// ShipParameters.ParamUpdate(shipSpeedBase, _pilot.SpeedLevel, ShipParameters.MaxSpeedCoef);
+        var turnSpeed = calulatedParams[EParameterShip.turn];//ShipParameters.ParamUpdate(turnSpeedBase, _pilot.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
+        var maxShiled = calulatedParams[EParameterShip.shieldPoints];//ShipParameters.ParamUpdate(maxShiledBase, _pilot.ShieldLevel, ShipParameters.MaxShieldCoef);
+        var maxHealth = calulatedParams[EParameterShip.bodyPoints];// ShipParameters.ParamUpdate(maxHealthBase, _pilot.HealthLevel, ShipParameters.MaxHealthCoef);
 
-        var MaxSpeed = ShipParameters.ParamUpdate(_shipInv.MaxSpeed, PilotParameters.SpeedLevel, ShipParameters.MaxSpeedCoef);
-        var TurnSpeed = ShipParameters.ParamUpdate(_shipInv.TurnSpeed, PilotParameters.TurnSpeedLevel, ShipParameters.TurnSpeedCoef);
-        var MaxHealth = ShipParameters.ParamUpdate(_shipInv.MaxHealth, PilotParameters.HealthLevel, ShipParameters.MaxHealthCoef);
-        var MaxShiled = ShipParameters.ParamUpdate(_shipInv.MaxShiled, PilotParameters.ShieldLevel, ShipParameters.MaxShieldCoef);
 
         string f = "{0}:" + "{1}".ToString() + "(" + "{2}" + ")";
         CreatAndText("ShipType:" + _shipInv.ShipType.ToString(), LayoutParameters);
-        CreatAndText(Namings.Format(f, "MaxHealth", MaxHealth, PilotParameters.HealthLevel), LayoutParameters);
-        CreatAndText(Namings.Format(f, "MaxShiled", MaxShiled, PilotParameters.ShieldLevel), LayoutParameters);
-        CreatAndText(Namings.Format(f, "TurnSpeed", TurnSpeed, PilotParameters.TurnSpeedLevel), LayoutParameters);
-        CreatAndText(Namings.Format(f, "MaxSpeed", MaxSpeed, PilotParameters.SpeedLevel), LayoutParameters);
+        CreatAndText(Namings.Format(f, "MaxHealth", maxHealth, PilotParameters.HealthLevel), LayoutParameters);
+        CreatAndText(Namings.Format(f, "MaxShiled", maxShiled, PilotParameters.ShieldLevel), LayoutParameters);
+        CreatAndText(Namings.Format(f, "TurnSpeed", turnSpeed, PilotParameters.TurnSpeedLevel), LayoutParameters);
+        CreatAndText(Namings.Format(f, "MaxSpeed", maxSpeed, PilotParameters.SpeedLevel), LayoutParameters);
 
 //        CreatAndText("MaxHealth:" + MaxHealth.ToString("0"), LayoutParameters);
 //        CreatAndText("MaxShiled:" + MaxShiled.ToString("0"), LayoutParameters);

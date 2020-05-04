@@ -568,7 +568,7 @@ public static class RusLocalization
         {"rep_neutral", "Нейтральное"},
         {"rep_negative", "Негативное"},
         {"rep_enemy", "Враг"},
-        {"DemoStart", "Это демо версия игры. Пока что мы не готовы показать вам больше."},
+        {"DemoStart", "Ранний доступ\nЭто не финальная версия игры\nПочта: Kinderril@gmail.com"},
         {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
         {"RepairCompete","Ремонт выполнен"},
         {"RepairStation","Станция тех. обслуживания."},
@@ -583,6 +583,7 @@ public static class RusLocalization
         {"dialog_shopEnemy", "Перед вами магазин. С вами никто торговать не будет. Вы враг." },
         {"dialog_shopTrade", "Перед вами магазин. Желате обменяться товарами?" },
         {"dialog_repairEnemy", "Это ремонтная станция. Они не будут помогать вам." },
+        {"dialog_nothingToRepair", "Это ремонтная станция. Ваш флот не нуждается в ремонте." },
         {"dialog_repairStart", "Это ремонтная станция. Здесь мы можем оремонтировать свой флот." },
         {"dialog_fixCrit", "Починить все критичесие повреждения. Стоимость:{0}." },
         {"dialog_repairCritFixed", "Критические повреждения устранены" },
@@ -831,7 +832,7 @@ public static class RusLocalization
         {"dialog_dungeonExitFinalWin","Военная база полностью разрушена"},
         {"dialog_dungeonExitGo","Забрать все и улететь"},
         {"dialog_dungeonExitFinalBattle","Это военная база."},
-        {"dialog_dungeogArmyEnterStart","Это военный сектор. Вы действительно хотите отправится туда?\nПодкрепления к противнику прибудут незамедлительнл.\nВы можете найти здесь некоторые уникальные предметы."},
+        {"dialog_dungeogArmyEnterStart","Это военный сектор с сильными формированиями. Вы действительно хотите отправится туда?\nПодкрепления к противнику прибудут незамедлительно.\nВы можете найти здесь некоторые уникальные предметы."},
         {"dialog_dungeogArmyFriendGoIn","Попросить ваших друзей впустить вас."},
 
         {"dialog_teacherImproved","Корабль {0} улучшен. Уровень:{1}"},
@@ -870,15 +871,16 @@ public static class RusLocalization
         {"ConfirmCloseTutor", "Вы закрываете обучение.\nЕсли вы хотите повторить, вы сможете найти это в меню игры."},
         {"TutorShootMainShip", "Используйте пулемет что бы уничтожить турель."},
         {"dialog_tutorEnds", "Обучение закончено"},
+        {"ChanceAfterBattle", "[Успех {0}%]"},
 
-        {"StartTutorMoveGlobal", "Что бы двигать камеру используйте мышь или WSAD. Кликните правой кнопкой мыши туда куда вы хотите переместить корабль"},
+        {"StartTutorMoveGlobal", "Что бы двигать камеру используйте мышь или WSAD. Кликните левой кнопкой мыши туда куда вы хотите переместить корабль"},
         {"startGameNoTutor", "Советуем пройти обучение."},
         {"toGame", "Играть"},
         {"toTutor", "Вернуться"},
         {"Cancel", "Отмена"},
         {"Galaxy gate", "Врата галактики"},
         {"wantStartTutor", "Это короткое обучение. Для понимания основ игры."},
-        {"TutorPreBattle", "Укипируйте ваш флот"},
+        {"TutorPreBattle", "Оснастите ваш флот"},
         {"TutorStartShop", "Купить оружие для боевого корабля."},
         {"resolutionTooLow", "Малое разрешение экрана . Возможно у вас будут проблемы. Минимум: 1280 и 720"},
         {"Move camera", "Двигать камеру"},
@@ -889,6 +891,32 @@ public static class RusLocalization
         {"ParameterTypeChanrgeCount", "Количество батарей в битве {0}"},
         {"ParameterTypeChanrgeSpeed", "Уменьшение времени перезарядки батарей {0}%"},
         {"ParameterTypeEngine", "Радиус телепортации {0}. Перезарядка телепортации {1}"},
+
+
+        {"RaidersProConsCalc", "Бонус к скорости {0}%. Бонус к скорости поворота {1}%"},
+        {"MercenaryProConsCalc", "Бонус к скорости {0}%. Бонус к скорости поворота {1}%"},
+        {"FederationProConsCalc", "Ничего"},
+        {"OcronsProConsCalc", "Бонусы к корпусу {0}%. Щитов нет"},
+        {"KriosProConsCalc", "Бонус к щиту {0}%. Коэфициент корпуса {1}%"},
+        {"loaderror", "Ошибка загрузки"},
+
+
+        {"cocpit", "Кабина"},
+        {"engine", "Двигатель"},
+        {"wings", "Крылья"},
+        {"EParameterItemRaritynormal", "Обычный"},
+        {"EParameterItemRarityimproved", "Улучшеный"},
+        {"EParameterItemRarityperfect", "Особый"},
+
+        {"EParameterShipspeed", "Скорость"},
+        {"EParameterShipturn", "Поворот"},
+        {"EParameterShipbodyPoints", "Корпус"},
+        {"EParameterShipshieldPoints", "Щит"},
+        {"EParameterShiparmor", "Броня"},
+        {"EParameterShipbodyArmor", "Броня корпуса"},
+        {"EParameterShipmodulsSlots", "Слоты модулей"},
+        {"EParameterShipweaponSlots", "Оружейные слоты"},
+        {"Goal", "Цель"},
 
         {"Energy storage", "Хранилище энергии"},
         {"Steal", "Украсть"},
@@ -913,7 +941,9 @@ public static class RusLocalization
         {"foundLotCredits","Вы нашли кучу кредитов {0}" },
         {"YourRartMoney", "Вам удалось что то найти. Ваша часть:{0}."},
         {"OKgo5050", "Ок, давай 50 на 50"},
-
+        {"BonusParamField", "Бонус {0}%"},
+        {"StartTutorTargetGlobal", "Что бы переместить камеру к вашему флоту нажмите 'Домой'. Для поиска цели нажмите 'Цель'."},
+        {"CollectAll", "Соберите нужное количество энергетических элементов\nКнопка 'Цель' поможет найти их\nЗатем выдвигайтесь к вратам галактики что бы активировать их"},
 
     };
 

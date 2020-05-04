@@ -9,6 +9,7 @@ public static class EspLocalization
 {"Yes","Sí"},
 {"No","No"},
 {"Ok","Ok"},
+{"ChanceAfterBattle", "[El éxito {0}%]"},
 {"Reflected","Efecto se refleja"},
 {"CriticalDamage","Crítica de daños y perjuicios. Si los daños más de {0} nave sea destruida"},
 {"Event","Evento"},
@@ -513,7 +514,8 @@ public static class EspLocalization
 {"rep_neutral","Neutral"},
 {"rep_negative","Negativo"},
 {"rep_enemy","Enemigo"},
-{"DemoStart","Esta no es la versión final del juego, algo que se puede cambiar más tarde."},
+{"StartTutorTargetGlobal", "Para encontrar su ejército, presione 'Inicio'. Para encontrar el objetivo más cercano, presione 'Objetivo'."},
+{"DemoStart","Acceso temprano\nEsta no es la versión final del juego\nContacto: Kinderril@gmail.com"},
 {"DemoStart2","Usted tendrá sólo 25 vueltas. Y algunos mecánicos serán bloqueados."},
 {"dialog_Ok","Ok"},
 {"dialog_MovingArmyStart","Usted ha sido ocupado por la fuerza especial. Usted no tiene chanse a ejecutar."},
@@ -732,6 +734,7 @@ public static class EspLocalization
 {"dialog_scDive","Buceo profundo. [Scouts:{0}]"},
 {"dialog_nothing","Nada"},
 {"dialog_scAmbush","Emboscada!"},
+{"dialog_nothingToRepair", "Esta es la estación de reparación. Todos tus barcos ya están arreglados." },
 {"dialog_scWeapon","Esta es la nueva arma de {0}"},
 {"dialog_scScouted","{0} puntos en el mapa mundial explorado."},
 {"dialog_scMap","Este es el galaxy mapa! {0}"},
@@ -787,7 +790,7 @@ public static class EspLocalization
 {"TutorShootMainShip", "Usa ametralladora para destruir la torreta enemiga."},
 
 {"dialog_tutorEnds", "Entrenamiento completado"},
-{"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click right mouse button to place you want to move"},
+{"StartTutorMoveGlobal", "Para mover la cámara use el mouse o WSAD. Haga clic con el botón izquierdo del mouse para colocar el lugar donde desea mover"},
 {"startGameNoTutor", "Pase TUTORIAL primero."},
 {"toGame", "Jugar"},
 {"toTutor", "Regreso"},
@@ -806,6 +809,22 @@ public static class EspLocalization
 {"ParameterTypeChanrgeCount", "Recuento de baterías que puedes usar en la batalla {0}"},
 {"ParameterTypeChanrgeSpeed", "Disminuir el período de recarga de baterías en {0}%"},
 {"ParameterTypeEngine", "Radio de teletransportación {0}. Período de recarga {1}"},
+
+{"cocpit", "Cabaña"},
+{"engine", "Motor"},
+{"wings", "Alas"},
+{"EParameterItemRaritynormal", "Ordinario"},
+{"EParameterItemRarityimproved", "Superior"},
+{"EParameterItemRarityperfect", "Especial"},
+
+{"EParameterShipspeed", "Velocidad"},
+{"EParameterShipturn", "Velocidad de giro"},
+{"EParameterShipbodyPoints", "Puntos de casco"},
+{"EParameterShipshieldPoints", "Puntos de escudo"},
+{"EParameterShiparmor", "Armadura"},
+{"EParameterShipbodyArmor", "Armadura de casco"},
+{"EParameterShipmodulsSlots", "Ranuras de módulos"},
+{"Goal", "Objetivo"},
 
 {"Energy storage", "Almacenamiento de energía"},
 {"Steal", "Robar"},
@@ -831,7 +850,16 @@ public static class EspLocalization
 {"YourRartMoney", "Te las arreglaste para encontrar algo. Tu parte:{0}."},
 {"OKgo5050", "Ok, vamos de 50 a 50"},
 
-    };
+{"RaidersProConsCalc", "Bonificación de velocidad {0}%. Bonificación de velocidad de giro {1}%"},
+{"MercenaryProConsCalc", "Bonificación de velocidad {0}%. Bonificación de velocidad de giro {1}%"},
+{"FederationProConsCalc", "Nada"},
+{"OcronsProConsCalc", "Bonificación de puntos de casco {0}%. Sin escudo"},
+{"KriosProConsCalc", "Bonificación de puntos de escudo {0}%. Coeficiente de puntos de casco {1}%"},
+{"loaderror", "Error de carga"},
+{"EParameterShipweaponSlots", "Ranuras para armas"},
+{"BonusParamField", "Primo {0}%"},
+{"CollectAll", "Reúna la cantidad correcta de elementos de energía\nEl botón 'Objetivo' lo ayudará a encontrarlos\nLuego muévase a las puertas de la galaxia para activarlos."},
+                                                                                                                        };
 
 }
 

@@ -7,6 +7,9 @@ using UnityEngine;
 public class SectorDungeon : SectorData
 {
     private ArmyDungeonEnterGlobalMapCell _enterCell;
+    private const float EXIT_POWER_COEF = 0.3f;
+    private const float OTHER_POWER_COEF = 0.15f;
+
     public ArmyDungeonExitGlobalMapCell ExitCell { get; private set; }
     private bool _entered;
     private bool _upSide;
@@ -25,7 +28,7 @@ public class SectorDungeon : SectorData
 
     private void PopulateToSide()
     {
-        _listCells = new HashSet<SectorCellContainer>();
+        ListCells = new HashSet<SectorCellContainer>();
         ArmyGlobalMapCell _lastCell = null;
         bool prevThisLevel = false;
         for (int i = 0; i < Size; i++)
@@ -80,7 +83,7 @@ public class SectorDungeon : SectorData
         if (!_exitCreated)
         {
             var armyCellcell = new ArmyDungeonExitGlobalMapCell(_power, _shipConfig, Utils.GetId(),
-                StartX + cellContainer.indX, StartZ + cellContainer.indZ, this);
+                StartX + cellContainer.indX, StartZ + cellContainer.indZ, this, EXIT_POWER_COEF);
             _exitCreated = true;
             armyCellcell.OnComeToCell += OnComeToCellExit;
             ExitCell = armyCellcell;
@@ -94,7 +97,7 @@ public class SectorDungeon : SectorData
         if (!_enterCreated)
         {
             var armyCellcell = new ArmyDungeonEnterGlobalMapCell(_power, _shipConfig, Utils.GetId(),
-                StartX + cellContainer.indX, StartZ + cellContainer.indZ, this);
+                StartX + cellContainer.indX, StartZ + cellContainer.indZ, this, OTHER_POWER_COEF);
             armyCellcell.OnComeToCell += OnComeToCellEnter;
             _enterCell = armyCellcell;
             _enterCreated = true;
@@ -123,7 +126,7 @@ public class SectorDungeon : SectorData
     {
         _removeOnlyOne = true;
         base.MarkAsCore(coreId, coreCell);
-        var middleCells = _listCells.Where(x => x.Data is ArmyDungeonGlobalMapCell).ToList();
+        var middleCells = ListCells.Where(x => x.Data is ArmyDungeonGlobalMapCell).ToList();
         var rndCellToConnect = middleCells.RandomElement(2);
         foreach (var container in rndCellToConnect)
         {
@@ -180,11 +183,11 @@ public class SectorDungeon : SectorData
         if (armyCellcell == null)
         {
             armyCellcell = new ArmyDungeonGlobalMapCell(_power, _shipConfig, Utils.GetId(),
-                StartX + cellContainer.indX, StartZ + cellContainer.indZ, this);
+                StartX + cellContainer.indX, StartZ + cellContainer.indZ, this, OTHER_POWER_COEF);
         }
         armyCellcell.OnComeToCell += OnComeToCell;
         cellContainer.SetData(armyCellcell);
-        _listCells.Add(cellContainer);
+        ListCells.Add(cellContainer);
         return armyCellcell;
     }
 

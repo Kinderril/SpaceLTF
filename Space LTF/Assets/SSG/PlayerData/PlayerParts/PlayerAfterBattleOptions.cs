@@ -103,7 +103,10 @@ public class PlayerAfterBattleOptions
         switch (type)
         {
             case EAfterBattleAnswers.afterBattleBuyout:
-                return new AnswerDialogData(Namings.DialogTag("afterBattleBuyout"), IncCallback,
+                var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[config];
+                var chance = GetPercent(15, rep);
+                var strChance = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance.ToString("0"));
+                return new AnswerDialogData($"{Namings.DialogTag("afterBattleBuyout")} {strChance}", IncCallback,
                     () => Buyout(power, config));
             case EAfterBattleAnswers.afterBattleTeachPilots:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleTeachPilots"), IncCallback,
@@ -112,21 +115,28 @@ public class PlayerAfterBattleOptions
                 return new AnswerDialogData(Namings.DialogTag("afterBattleUpgradeSpell"), IncCallback,
                     () => UpgradeSpell());
             case EAfterBattleAnswers.afterBattleOpenCells:
-                return new AnswerDialogData(Namings.DialogTag("afterBattleOpenCells"), IncCallback, () => OpenCells());
+                return new AnswerDialogData(Namings.DialogTag("afterBattleOpenCells"), IncCallback, 
+                    () => OpenCells());
             case EAfterBattleAnswers.afterBattleHireAction:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleHireAction"), IncCallback,
                     () => HireAction(config));
             case EAfterBattleAnswers.afterBattleSearchFor:
-                return new AnswerDialogData(Namings.DialogTag("afterBattleSearchFor"), IncCallback,
+                var chance3 = GetPercent(2, MainController.Instance.MainPlayer.Parameters.Scouts.Level);
+                var strChance3 = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance3.ToString("0"));
+                return new AnswerDialogData($"{Namings.DialogTag("afterBattleSearchFor")} {strChance3}", IncCallback,
                     () => SearchFor(power, config));
             case EAfterBattleAnswers.afterBattleKillAction:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleKillAction"), IncCallback,
                     () => KillAction(power, config));
             case EAfterBattleAnswers.afterBattleRepairAction:
-                return new AnswerDialogData(Namings.DialogTag("afterBattleRepairAction"), IncCallback,
+                var chance1 = GetPercent(2, MainController.Instance.MainPlayer.Parameters.Repair.Level);
+                var strChance1 = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance1.ToString("0"));
+                return new AnswerDialogData($"{Namings.DialogTag("afterBattleRepairAction")} {strChance1}", IncCallback,
                     () => RepairAction(power, config));
             case EAfterBattleAnswers.afterBattleMicrochip:
-                return new AnswerDialogData(Namings.DialogTag("afterBattleMicrochip"), IncCallback,
+                var chance2 = GetPercent(1, MainController.Instance.MainPlayer.Parameters.Repair.Level);
+                var strChance2 = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance2.ToString("0"));
+                return new AnswerDialogData($"{Namings.DialogTag("afterBattleMicrochip")} {strChance2}", IncCallback,
                     () => GetMicrochip(power, config));
             default:
                 return null;
@@ -204,6 +214,11 @@ public class PlayerAfterBattleOptions
         msg = Namings.DialogTag("afterBattleCellOpen");
         var dialog = new MessageDialogData(msg, ans);
         return dialog;
+    }
+
+    private float GetPercent(float baseVal,float curVal)
+    {
+        return (curVal / (baseVal + curVal))*100;
     }
 
     private MessageDialogData Buyout(float power, ShipConfig config)

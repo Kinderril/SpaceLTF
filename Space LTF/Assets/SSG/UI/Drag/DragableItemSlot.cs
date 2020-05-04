@@ -32,6 +32,7 @@ public class DragableItemSlot : MonoBehaviour
     public Image BlueImage;
     public Image YellowImage;
     public Image RedImage;
+    public DragableSlotBackParameterItems ParapeteBack;
 
     //    public event Action<DragableItemSlot, DragableItem,bool> OnItemImplemented;
 
@@ -76,8 +77,17 @@ public class DragableItemSlot : MonoBehaviour
                 BlueImage.gameObject.SetActive(false);
                 YellowImage.gameObject.SetActive(true);
                 RedImage.gameObject.SetActive(false);
+                break;   
+            case DragItemType.cocpit:
+            case DragItemType.engine:
+            case DragItemType.wings:
+                StandartImage.gameObject.SetActive(false);
+                BlueImage.gameObject.SetActive(false);
+                YellowImage.gameObject.SetActive(false);
+                RedImage.gameObject.SetActive(false);
                 break;
         }
+        ParapeteBack.Init(DragItemType);
     }
     public bool CanPutHere(DragableItem element)
     {
@@ -136,7 +146,13 @@ public class DragableItemSlot : MonoBehaviour
             case ItemType.modul:
                 return DragItemType == DragItemType.modul;
             case ItemType.spell:
-                return DragItemType == DragItemType.spell;
+                return DragItemType == DragItemType.spell;  
+            case ItemType.cocpit:
+                return DragItemType == DragItemType.cocpit;
+            case ItemType.engine:
+                return DragItemType == DragItemType.engine;
+            case ItemType.wings:
+                return DragItemType == DragItemType.wings;
         }
         return false;
     }

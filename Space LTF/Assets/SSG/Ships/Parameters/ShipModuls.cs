@@ -12,34 +12,30 @@ public class ShipModuls
     private ShipBase _owner;
     private ActionModulInGame UpdatableModul;
 
-    public ShipModuls(ShipBase owner, BaseModulInv[] moduls)
+    public ShipModuls(ShipBase owner, List<BaseModulInv> moduls)
     {
         _owner = owner;
         Moduls = new List<ActionModulInGame>();
         SupportModuls = new List<BaseSupportModul>();
-        for (int i = 0; i < moduls.Length; i++)
+        for (int i = 0; i < moduls.Count; i++)
         {
             var m = moduls[i];
-            if (m != null)
+            var isSupport = m.IsSupport;
+            if (isSupport)
             {
-                var isSupport = m.IsSupport;
-                if (isSupport)
+                if (m is BaseSupportModul sup)
                 {
-                    if (m is BaseSupportModul sup)
-                    {
-                        SupportModuls.Add(sup);
-                    }
-
-                    continue;
-                }
-                var modul = ActionModulInGame.Create(m);
-                Moduls.Add(modul);
-                var mine = modul as MineAbstractModul;
-                if (mine != null)
-                {
-                    UpdatableModul = mine;
+                    SupportModuls.Add(sup);
                 }
 
+                continue;
+            }
+            var modul = ActionModulInGame.Create(m);
+            Moduls.Add(modul);
+            var mine = modul as MineAbstractModul;
+            if (mine != null)
+            {
+                UpdatableModul = mine;
             }
         }
     }

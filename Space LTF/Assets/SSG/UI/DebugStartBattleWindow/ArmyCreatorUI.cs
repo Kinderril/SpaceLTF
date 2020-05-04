@@ -123,11 +123,11 @@ public class ArmyCreatorUI : MonoBehaviour
             //            _prefabDebugShipInShop.SetConfig(config);
             var p = DataBaseController.GetItem(_prefabDebugShipInShop);
             AddShip(p, ship.Ship.ShipType, config, p._shipInv, ship.Pilot);
-            foreach (var simple in ship.Ship.Moduls.SimpleModuls)
+            foreach (var simple in ship.Ship.Moduls.GetNonNullActiveSlots())
             {
                 p.TryAddSimpleModul(simple);
             }
-            foreach (var simple in ship.Ship.WeaponsModuls)
+            foreach (var simple in ship.Ship.WeaponsModuls.GetNonNullActiveSlots())
             {
                 p.TryAddWeapon(simple);
             }

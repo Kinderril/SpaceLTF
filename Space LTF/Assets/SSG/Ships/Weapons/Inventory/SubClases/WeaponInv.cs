@@ -110,10 +110,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
 
     private float BodyDamage => _bodyDamage + (Level - 1) * _bodyPreLevelDamage;
 
-    public ItemType ItemType
-    {
-        get { return ItemType.weapon; }
-    }
+    public ItemType ItemType => ItemType.weapon;
 
     public IInventory CurrentInventory { get; set; }
 
@@ -159,10 +156,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         //_levelUpDependences = CreateLevelUpDependences();
     }
 
-    public int CostValue
-    {
-        get { return MoneyConsts.BASE_WEAPON_MONEY_COST + MoneyConsts.LEVEL_WEAPON_MONEY_COST * (Level - 1); }
-    }
+    public int CostValue => MoneyConsts.BASE_WEAPON_MONEY_COST + MoneyConsts.LEVEL_WEAPON_MONEY_COST * (Level - 1);
 
     public int RequireLevel(int posibleLevel = -1)
     {

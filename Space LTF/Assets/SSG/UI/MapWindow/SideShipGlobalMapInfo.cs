@@ -98,7 +98,11 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         {
             RepairCostField.text = costRepair.ToString("0");
         }
-        var MaxHealth = ShipParameters.ParamUpdate(_ship.Ship.MaxHealth, _ship.Pilot.HealthLevel, ShipParameters.MaxHealthCoef);
+        var calulatedParams = ShipParameters.CalcParams(_ship.Ship, _ship.Pilot, new List<EParameterShip>()
+        {
+            EParameterShip.bodyPoints
+        });
+        var MaxHealth = calulatedParams[EParameterShip.bodyPoints];                                                                        
         HealthSlider.InitBorders(0, MaxHealth,true);
         HealthSlider.Slider.value = _ship.Ship.HealthPercent * MaxHealth;
         var shallRepair = _ship.Ship.HealthPointToRepair() > 0;

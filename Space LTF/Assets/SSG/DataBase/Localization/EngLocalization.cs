@@ -379,6 +379,13 @@ public static class EngLocalization
         {"OcronsProCons", "Pros: Perfect hull health. Many slots for modules.\nCons: No shied. No shield regeneration."},
         {"KriosProCons", "Pros: Good shield. Perfect shield regeneration.\nCons: Low hull health."},
 
+
+        {"RaidersProConsCalc", "Speed bonus {0}%. Turn speed bonus {1}%"},
+        {"MercenaryProConsCalc", "Speed bonus {0}%. Turn speed bonus {1}%"},
+        {"FederationProConsCalc", "Nothing"},
+        {"OcronsProConsCalc", "Hull points bonus {0}%. No shield"},
+        {"KriosProConsCalc", "Shield points bonus {0}%. Hull points coefficient {1}%"},
+
         {"WeaponsStart","On start your ships will have one of {0} or {1} complect."},
 
         {"Paramscout", "Scout can provide you information about enemies army.\nAnd sometimes can try steal something."},
@@ -389,6 +396,7 @@ public static class EngLocalization
 
         {"asteroidsEvent", "Asteroid vortex"},
         {"shieldsOffEvent", "EMP surge"},
+        {"loaderror", "Load error"},
 
         {"ShipsRepaired", "Ships Repaired"},
         {"Raiders", "Raiders"},
@@ -574,7 +582,7 @@ public static class EngLocalization
         {"rep_neutral", "Neutral"},
         {"rep_negative", "Negative"},
         {"rep_enemy", "Enemy"},
-        {"DemoStart", "This is not final version on game, something can change later."},
+        {"DemoStart", "Early Access\nThis is not final version of game\nContact: Kinderril@gmail.com"},
         {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
 
         {"dialog_Ok", "Ok"},
@@ -586,6 +594,7 @@ public static class EngLocalization
 
         {"dialog_shopEnemy", "You see shop. Nobody wants to trade with you." },
         {"dialog_shopTrade", "You see shop. Maybe you want buy something?" },
+        {"dialog_nothingToRepair", "This is repair station. All your ships already fixed." },
         {"dialog_repairEnemy", "This is repair station. They won't help you." },
         {"dialog_repairStart", "This is repair station. We can repair our fleet here." },
         {"dialog_fixCrit", "Fix all critical damages. Cost{0}" },
@@ -799,7 +808,7 @@ public static class EngLocalization
         {"dialog_dungeonExitFinalWin","This military base completly destoyed"},
         {"dialog_dungeonExitGo","Grab all items and go"},
         {"dialog_dungeonExitFinalBattle","This is main militaly base at this sector"},
-        {"dialog_dungeogArmyEnterStart","This is military sector. Do you really want to go there?\nReinforcements will come immediately.\nHere you can find some special items."},
+        {"dialog_dungeogArmyEnterStart","This is military sector with strong enemies. Do you really want to go there?\nReinforcements will come immediately.\nHere you can find some special items."},
         {"dialog_dungeogArmyFriendGoIn","Ask your friend to go in."},
 
         {"dialog_Trader","Trader"},
@@ -864,6 +873,7 @@ public static class EngLocalization
         {"TutorCloseForever", "Do not show this tip again"},
 
         {"Tutorial", "Tutorial"},
+        {"ChanceAfterBattle", "[Success {0}%]"},
 
         {"TutorMoveGlobal", "To move camera use mouse or WSAD"},
         {"TutorHomeButton", "To find your fleet press home button"},
@@ -879,8 +889,10 @@ public static class EngLocalization
         {"TutorChangeTactics", "Change battle ship tactics.\nIf your ship if better against special types of enemy you can change priority targets of it."},
 
         {"ConfirmCloseTutor", "You closing tutorial.\nIf you want repeat, you can find it at menu."},
+        {"CollectAll", "Collect all energy blocks\nUse 'Goal' button to find them.\nThen move to Galaxy gates."},
 
-        {"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click right mouse button to place you want to move"},
+        {"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click left mouse button to place you want to move."},
+        {"StartTutorTargetGlobal", "To find your fleet press 'Home'. To find closest goal press 'Goal'."},
         {"TutorShootMainShip", "Use machine gun to destroy enemy turret."},
         {"CantDropNow", "You can't sell items now."},
         {"startGameNoTutor", "Pass TUTORIAL first."},
@@ -900,6 +912,25 @@ public static class EngLocalization
         {"ParameterTypeChanrgeCount", "Count of batteries you can use at battle {0}"},
         {"ParameterTypeChanrgeSpeed", "Decrease reload batteries period on {0}%"},
         {"ParameterTypeEngine", "Radius of teleportation {0}. Reload period {1}"},
+
+        {"cocpit", "Cockpit"},
+        {"engine", "Engine"},
+        {"wings", "Wings"},
+        {"EParameterItemRaritynormal", "Normal"},
+        {"EParameterItemRarityimproved", "Improved"},
+        {"EParameterItemRarityperfect", "Special"},
+
+
+        {"EParameterShipspeed", "Speed"},
+        {"EParameterShipturn", "Turn Speed"},
+        {"EParameterShipbodyPoints", "Hull points"},
+        {"EParameterShipshieldPoints", "Shield points"},
+        {"EParameterShiparmor", "Armor"},
+        {"EParameterShipbodyArmor", "Hull armor"},
+        {"EParameterShipmodulsSlots", "Modules slots"},
+        {"EParameterShipweaponSlots", "Weapon slots"},
+        {"BonusParamField", "Bonus {0}%"},
+
 
 
         {"Energy storage", "Energy storage"},
@@ -925,6 +956,7 @@ public static class EngLocalization
         {"foundLotCredits","You found a lot of credits {0}" },
         {"YourRartMoney", "All fine, you found some credits. Your part:{0}."},
         {"OKgo5050", "Ok, lets go 50/50"},
+        {"Goal", "Goal"},
 
 
     };

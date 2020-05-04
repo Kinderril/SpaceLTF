@@ -38,7 +38,7 @@ public class RepairStationGlobalCell : GlobalMapCell
             var player = MainController.Instance.MainPlayer;
             var allShips = player.Army.Army;
             var total = 0;
-            bool haveDamages = false;
+            bool haveCriticalDamages = false;
             foreach (var startShipPilotData in allShips)
             {
                 var pointToRepair = startShipPilotData.Ship.HealthPointToRepair();
@@ -47,10 +47,18 @@ public class RepairStationGlobalCell : GlobalMapCell
                 total += thisShip;
                 if (startShipPilotData.Ship.CriticalDamages > 0)
                 {
-                    haveDamages = true;
+                    haveCriticalDamages = true;
                 }
             }
 
+            if (haveCriticalDamages)
+            {
+                float count = player.Army.Army.Sum(startShipPilotData => startShipPilotData.Ship.CriticalDamages * (5 + startShipPilotData.Pilot.CurLevel * 0.2f));
+                var critFixCost = (int)(count * Library.COST_REPAIR_CRIT);
+                answers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("fixCrit"), critFixCost), null, () => FixCrit(critFixCost)));
+            }
+
+            var haveSmtToRepair = player.Army.HaveSmtToRepair();
             string mainMsg;
             if (player.ByStepDamage.IsEnable)
             {
@@ -67,22 +75,23 @@ public class RepairStationGlobalCell : GlobalMapCell
             }
             else
             {
-                mainMsg = Namings.DialogTag("repairStart");
+                if (haveSmtToRepair)
+                {
+                    mainMsg = Namings.DialogTag("repairStart");
+                }
+                else
+                {
+                    mainMsg = Namings.DialogTag("nothingToRepair");
+                }
             }
 
 
-            if (haveDamages)
-            {
-                float count = player.Army.Army.Sum(startShipPilotData => startShipPilotData.Ship.CriticalDamages * (5 + startShipPilotData.Pilot.CurLevel * 0.2f));
-                var critFixCost = (int)(count * Library.COST_REPAIR_CRIT);
-                answers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("fixCrit"), critFixCost), null, () => FixCrit(critFixCost)));
-            }
 
             MessageDialogData mesData;
-            if (total > 0)
+            if (total > 0 )
             {
                 var canRepairFull = player.MoneyData.HaveMoney(total);
-                if (canRepairFull)
+                if (canRepairFull && haveSmtToRepair)
                 {
                     answers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("repairAll"), total), null, () =>
                     {
@@ -93,7 +102,14 @@ public class RepairStationGlobalCell : GlobalMapCell
                 }
                 else
                 {
-                    answers.Add(new AnswerDialogData(Namings.DialogTag("repairNotEnough"), null));
+                    if (haveSmtToRepair)
+                    {
+                        answers.Add(new AnswerDialogData(Namings.DialogTag("repairNotEnough"), null));
+                    }
+                    else
+                    {
+                        answers.Add(new AnswerDialogData(Namings.Tag("leave"), null));
+                    }
                 }
             }
             else
