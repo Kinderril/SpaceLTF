@@ -724,8 +724,8 @@ public static class Library
     public const float MAX_GLOBAL_MAP_DEATHSTART = 10;
     public const float MIN_GLOBAL_MAP_CORES = 2;
     public const float MAX_GLOBAL_MAP_CORES = 5;
-    public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 2;
-    public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 12;
+    public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 1;
+    public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 10;
 
     public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 8;
     public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 9;
@@ -772,9 +772,9 @@ public static class Library
     public static Dictionary<PilotRank, int> PilotRankExp = new Dictionary<PilotRank, int>()
     {
         {PilotRank.Private,500 },
-        {PilotRank.Lieutenant,750 },
-        {PilotRank.Captain,900 },
-        {PilotRank.Major,1200 },
+        {PilotRank.Lieutenant,850 },
+        {PilotRank.Captain,1050 },
+        {PilotRank.Major,1400 },
     };
 
     public static int DROID_SUPPORTS_PER_SHOOT = 3;

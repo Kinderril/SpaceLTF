@@ -8,7 +8,7 @@ public class ArmyDungeonEnterGlobalMapCell : ArmyGlobalMapCell
     public ArmyDungeonEnterGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind, SectorData sector, float coefPower)
         : base(power, config, id, Xind, Zind, sector)
     {
-                 _coefPower = coefPower;
+                 _coefPower = 1f + coefPower;
     }
 
     protected override MessageDialogData GetDialog()

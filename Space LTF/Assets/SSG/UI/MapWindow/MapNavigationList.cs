@@ -19,7 +19,7 @@ public class MapNavigationList : MonoBehaviour
         GlobalMap = globalMap;
         //        subInit();
         InitHome();
-        InitTarget();
+//        InitTarget();
     }
 
     private void subInit()
@@ -59,7 +59,7 @@ public class MapNavigationList : MonoBehaviour
     {
         Layout.ClearTransform();
         InitHome();
-        InitTarget();
+//        InitTarget();
         var player = MainController.Instance.MainPlayer;
         var map = player.MapData.GalaxyData;
         var cells = map.AllCells();
@@ -128,20 +128,20 @@ public class MapNavigationList : MonoBehaviour
         homeBtn.Field.text = Namings.Tag("Home");
         _isHomeInited = true;
     }  
-    private void InitTarget()
-    {
-        if (_isTargetInited)
-        {
-            return;
-        }
-        var trgBtn = DataBaseController.GetItem(ButtonPrefab);
-        trgBtn.gameObject.transform.SetParent(Layout, false);
-        trgBtn.Button.onClick.AddListener(SetCameraToClosestGoal);
-        trgBtn.Field.text = Namings.Tag("Goal");
-        _isTargetInited = true;
-    }
+//    private void InitTarget()
+//    {
+//        if (_isTargetInited)
+//        {
+//            return;
+//        }
+//        var trgBtn = DataBaseController.GetItem(ButtonPrefab);
+//        trgBtn.gameObject.transform.SetParent(Layout, false);
+//        trgBtn.Button.onClick.AddListener(SetCameraToClosestGoal);
+//        trgBtn.Field.text = Namings.Tag("Goal");
+//        _isTargetInited = true;
+//    }
 
-    private void SetCameraToClosestGoal()
+    public void SetCameraToClosestGoal()
     {
         var player = MainController.Instance.MainPlayer;  
 

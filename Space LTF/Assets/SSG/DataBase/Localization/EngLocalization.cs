@@ -582,7 +582,7 @@ public static class EngLocalization
         {"rep_neutral", "Neutral"},
         {"rep_negative", "Negative"},
         {"rep_enemy", "Enemy"},
-        {"DemoStart", "This is not final version on game, something can change later."},
+        {"DemoStart", "Early Access\nThis is not final version of game\nContact: Kinderril@gmail.com"},
         {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
 
         {"dialog_Ok", "Ok"},
@@ -873,6 +873,7 @@ public static class EngLocalization
         {"TutorCloseForever", "Do not show this tip again"},
 
         {"Tutorial", "Tutorial"},
+        {"ChanceAfterBattle", "[Success {0}%]"},
 
         {"TutorMoveGlobal", "To move camera use mouse or WSAD"},
         {"TutorHomeButton", "To find your fleet press home button"},
@@ -888,8 +889,9 @@ public static class EngLocalization
         {"TutorChangeTactics", "Change battle ship tactics.\nIf your ship if better against special types of enemy you can change priority targets of it."},
 
         {"ConfirmCloseTutor", "You closing tutorial.\nIf you want repeat, you can find it at menu."},
+        {"CollectAll", "Collect all energy blocks\nUse 'Goal' button to find them.\nThen move to Galaxy gates."},
 
-        {"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click right mouse button to place you want to move."},
+        {"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click left mouse button to place you want to move."},
         {"StartTutorTargetGlobal", "To find your fleet press 'Home'. To find closest goal press 'Goal'."},
         {"TutorShootMainShip", "Use machine gun to destroy enemy turret."},
         {"CantDropNow", "You can't sell items now."},

@@ -11,7 +11,7 @@ public class ArmyDungeonGlobalMapCell : ArmyGlobalMapCell
     public ArmyDungeonGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind, SectorData sector, float coefPower) : base(
         power, config, id, Xind, Zind, sector)
     {
-        _coefPower = coefPower;
+        _coefPower =1f + coefPower;
     }
 //    public ov void Complete()
 //    {

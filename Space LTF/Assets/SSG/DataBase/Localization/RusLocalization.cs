@@ -568,7 +568,7 @@ public static class RusLocalization
         {"rep_neutral", "Нейтральное"},
         {"rep_negative", "Негативное"},
         {"rep_enemy", "Враг"},
-        {"DemoStart", "Это демо версия игры. Пока что мы не готовы показать вам больше."},
+        {"DemoStart", "Ранний доступ\nЭто не финальная версия игры\nПочта: Kinderril@gmail.com"},
         {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
         {"RepairCompete","Ремонт выполнен"},
         {"RepairStation","Станция тех. обслуживания."},
@@ -871,8 +871,9 @@ public static class RusLocalization
         {"ConfirmCloseTutor", "Вы закрываете обучение.\nЕсли вы хотите повторить, вы сможете найти это в меню игры."},
         {"TutorShootMainShip", "Используйте пулемет что бы уничтожить турель."},
         {"dialog_tutorEnds", "Обучение закончено"},
+        {"ChanceAfterBattle", "[Успех {0}%]"},
 
-        {"StartTutorMoveGlobal", "Что бы двигать камеру используйте мышь или WSAD. Кликните правой кнопкой мыши туда куда вы хотите переместить корабль"},
+        {"StartTutorMoveGlobal", "Что бы двигать камеру используйте мышь или WSAD. Кликните левой кнопкой мыши туда куда вы хотите переместить корабль"},
         {"startGameNoTutor", "Советуем пройти обучение."},
         {"toGame", "Играть"},
         {"toTutor", "Вернуться"},
@@ -941,6 +942,8 @@ public static class RusLocalization
         {"YourRartMoney", "Вам удалось что то найти. Ваша часть:{0}."},
         {"OKgo5050", "Ок, давай 50 на 50"},
         {"BonusParamField", "Бонус {0}%"},
+        {"StartTutorTargetGlobal", "Что бы переместить камеру к вашему флоту нажмите 'Домой'. Для поиска цели нажмите 'Цель'."},
+        {"CollectAll", "Соберите нужное количество энергетических элементов\nКнопка 'Цель' поможет найти их\nЗатем выдвигайтесь к вратам галактики что бы активировать их"},
 
     };
 

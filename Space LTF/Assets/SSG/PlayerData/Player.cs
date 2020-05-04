@@ -130,20 +130,20 @@ public class Player
         }
 
 
-//        if (Inventory.GetFreeSlot(out var index021, ItemType.cocpit))
-//        {
-//            var paramItem = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.improved, ItemType.cocpit);
-//            Inventory.TryAddItem(paramItem);
-//        }
-//        CreateRndParameterItem();
-//        CreateRndParameterItem();
-//        CreateRndParameterItem();
-//        CreateRndParameterItem();
-//        CreateRndParameterItem();
-//        CreateRndParameterItem();
         if (DebugParamsController.AllModuls)
         {
 
+            if (Inventory.GetFreeSlot(out var index021, ItemType.cocpit))
+            {
+                var paramItem = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.improved, ItemType.cocpit);
+                Inventory.TryAddItem(paramItem);
+            }
+            CreateRndParameterItem();
+            CreateRndParameterItem();
+            CreateRndParameterItem();
+            CreateRndParameterItem();
+            CreateRndParameterItem();
+            CreateRndParameterItem();
             var allVals = (SimpleModulType[])Enum.GetValues(typeof(SimpleModulType));
             foreach (var type in allVals)
             {

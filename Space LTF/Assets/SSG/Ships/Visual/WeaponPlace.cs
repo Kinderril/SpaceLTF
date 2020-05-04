@@ -8,9 +8,6 @@ using UnityEngine;
 public class WeaponPlace : MonoBehaviour
 {
     public Transform BulletOut;
-//    public GameObject PlaceVisual;
-//    public Renderer ReloadIndicator;
-//    private Material _material;
     private bool _lastFrame = false;
     private bool setted = false;
     private WeaponInGame weapon;

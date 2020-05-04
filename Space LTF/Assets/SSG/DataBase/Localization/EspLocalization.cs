@@ -9,6 +9,7 @@ public static class EspLocalization
 {"Yes","Sí"},
 {"No","No"},
 {"Ok","Ok"},
+{"ChanceAfterBattle", "[El éxito {0}%]"},
 {"Reflected","Efecto se refleja"},
 {"CriticalDamage","Crítica de daños y perjuicios. Si los daños más de {0} nave sea destruida"},
 {"Event","Evento"},
@@ -513,7 +514,8 @@ public static class EspLocalization
 {"rep_neutral","Neutral"},
 {"rep_negative","Negativo"},
 {"rep_enemy","Enemigo"},
-{"DemoStart","Esta no es la versión final del juego, algo que se puede cambiar más tarde."},
+{"StartTutorTargetGlobal", "Para encontrar su ejército, presione 'Inicio'. Para encontrar el objetivo más cercano, presione 'Objetivo'."},
+{"DemoStart","Acceso temprano\nEsta no es la versión final del juego\nContacto: Kinderril@gmail.com"},
 {"DemoStart2","Usted tendrá sólo 25 vueltas. Y algunos mecánicos serán bloqueados."},
 {"dialog_Ok","Ok"},
 {"dialog_MovingArmyStart","Usted ha sido ocupado por la fuerza especial. Usted no tiene chanse a ejecutar."},
@@ -788,7 +790,7 @@ public static class EspLocalization
 {"TutorShootMainShip", "Usa ametralladora para destruir la torreta enemiga."},
 
 {"dialog_tutorEnds", "Entrenamiento completado"},
-{"StartTutorMoveGlobal", "To move camera use mouse or WSAD. Click right mouse button to place you want to move"},
+{"StartTutorMoveGlobal", "Para mover la cámara use el mouse o WSAD. Haga clic con el botón izquierdo del mouse para colocar el lugar donde desea mover"},
 {"startGameNoTutor", "Pase TUTORIAL primero."},
 {"toGame", "Jugar"},
 {"toTutor", "Regreso"},
@@ -856,8 +858,8 @@ public static class EspLocalization
 {"loaderror", "Error de carga"},
 {"EParameterShipweaponSlots", "Ranuras para armas"},
 {"BonusParamField", "Primo {0}%"},
-
-    };
+{"CollectAll", "Reúna la cantidad correcta de elementos de energía\nEl botón 'Objetivo' lo ayudará a encontrarlos\nLuego muévase a las puertas de la galaxia para activarlos."},
+                                                                                                                        };
 
 }
 
