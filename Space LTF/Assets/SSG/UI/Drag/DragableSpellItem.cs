@@ -40,10 +40,10 @@ public class DragableSpellItem : DragableItem
         LevelField.text = Spell.Level.ToString();
         return Spell.GetInfo();
     }
-    protected override string TextToTooltip()
-    {
-        return $"{Spell.GetInfo()} ({Spell.Level.ToString()})";
-    }
+//    protected override string TextToTooltip()
+//    {
+//        return $"{Spell.GetInfo()} ({Spell.Level.ToString()})";
+//    }
     public void OnTryUpgradeClick()
     {
         if (Usable)

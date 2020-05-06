@@ -237,7 +237,7 @@ public class PilotInventoryUI : MonoBehaviour
     }
     private static string LevelInfo(string name, int level, string info)
     {
-        return Namings.Format("{0}:{2}", name, level, info);
+        return Namings.Format("{0}: {2}", name, level, info);
     }
 
     public static string Info(float p, int level,bool withFloatFormat = true)

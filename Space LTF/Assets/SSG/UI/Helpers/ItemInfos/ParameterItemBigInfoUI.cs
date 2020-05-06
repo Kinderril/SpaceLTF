@@ -38,7 +38,7 @@ public class ParameterItemBigInfoUI : AbstractBaseInfoUI
         DescField.text = desc;
     }
 
-    private string GetVal(float v)
+    public static string GetVal(float v)
     {
         var bas = Mathf.Abs(v);
         var d = bas % (int)bas;

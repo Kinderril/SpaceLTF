@@ -169,5 +169,9 @@ public abstract class BaseGlobalMapEvent
     protected int RepairLevel { get { return MainController.Instance.MainPlayer.Parameters.Repair.Level; } }
     protected int ChargesCountLevel { get { return MainController.Instance.MainPlayer.Parameters.ChargesCount.Level; } }
 
+    public virtual bool OneTimeUsed()
+    {
+        return true;
+    }
 }
 

@@ -119,11 +119,11 @@ public class CellIinfoObjectUI : MonoBehaviour
                             desc = Namings.Tag(tag);
                         }
                         // #if UNITY_EDITOR
-                        desc += $"({isArmy.PowerDesc()})";
+                        desc += $" ({isArmy.PowerDesc()})";
                         // #endif
                         if (cell.IsScouted)
                         {
-                            desc += $"({Namings.ShipConfig(isArmy.GetConfig())})";
+                            desc += $" ({Namings.ShipConfig(isArmy.GetConfig())})";
                             if (isArmy.EventType.HasValue)
                             {
                                 var nameEvent = Namings.BattleEvent(isArmy.EventType.Value);

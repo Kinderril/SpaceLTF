@@ -135,6 +135,6 @@ public class EventGlobalMapCell : GlobalMapCell
 
     public override bool OneTimeUsed()
     {
-        return true;
+        return _mapEvent.OneTimeUsed();
     }
 }

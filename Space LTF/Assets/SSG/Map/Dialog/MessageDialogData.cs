@@ -17,7 +17,7 @@ public class MessageDialogData
         int number = 1;
         foreach (var answer in Answers)
         {
-            answer.Message = Namings.Format("{0}.{1}", number,answer.Message);
+            answer.Message = Namings.Format("{0}. {1}", number,answer.Message);
             number++;
         }
         this.Answers = Answers;

@@ -7,14 +7,14 @@ public abstract class UIElementWithTooltip : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Tooltip toolTip = DataBaseController.Instance.Pool.GetToolTip();
+        Tooltip toolTip = DataBaseController.Instance.Pool.Tooltips.GetToolTip();
         toolTip.Init(TextToTooltip(), gameObject);
         OnPointEnterSub();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        DataBaseController.Instance.Pool.CloseTooltip();
+        DataBaseController.Instance.Pool.Tooltips.CloseTooltip();
         OnPointExitSub();
     }
 

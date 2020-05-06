@@ -13,7 +13,6 @@ public enum PoolType
 
 public class Pool
 {
-    private Tooltip _tooltip;
 
     private Dictionary<PoolType, List<PoolElement>> poolOfElements = new Dictionary<PoolType, List<PoolElement>>();
     private Dictionary<int, List<Bullet>> bulletsPool = new Dictionary<int, List<Bullet>>();
@@ -27,12 +26,15 @@ public class Pool
     private List<PoolElement> _shipPartsPool = new List<PoolElement>();
 
     private DataBaseController dataBaseController;
+    private Transform _canvasContainer;
     private Transform _bulletContainer;
     private Transform _asteroidContainer;
-    private Transform _canvasContainer;
+    public PoolTooltips Tooltips;
 
     public Pool(DataBaseController dataBaseController, Transform bulletContainer, Transform canvasContainer, Transform asteroidContainer)
     {
+        Tooltips = new PoolTooltips();
+        Tooltips.Init(dataBaseController, canvasContainer);
         _asteroidContainer = asteroidContainer;
         _bulletContainer = bulletContainer;
         _canvasContainer = canvasContainer;
@@ -47,7 +49,7 @@ public class Pool
 
     private void Prewarm()
     {
-        CreateNewTooltip();
+        Tooltips.Prewarm();
         var dataStruct = DataBaseController.Instance.DataStructPrefabs;
         RegisterEffect(Utils.GetId(), dataStruct.OnShipDeathEffect);
         RegisterEffect(Utils.GetId(), dataStruct.ShieldChagedEffect);
@@ -96,15 +98,6 @@ public class Pool
         }
     }
 
-    public Tooltip CreateNewTooltip()
-    {
-
-        Tooltip element = DataBaseController.GetItem(dataBaseController.DataStructPrefabs.TooltipPrefab);
-        element.gameObject.SetActive(false);
-        element.SetBaseParent(_canvasContainer);
-        _tooltip = (element);
-        return element;
-    }
 
     public void StartLevel()
     {
@@ -312,16 +305,6 @@ public class Pool
                 Debug.LogError("pool error _shipPartsPool " + poolElement.name + "   " + ex);
             }
         }
-    }
-
-    public Tooltip GetToolTip()
-    {
-        return _tooltip;
-    }
-
-    public void CloseTooltip()
-    {
-        _tooltip.Close();
     }
 }
 

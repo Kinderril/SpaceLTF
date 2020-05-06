@@ -43,7 +43,7 @@
 		fresnel += fresnelValue * (1.0 - fresnel);
 		return fresnel;
 	}
-
+	
 	half4 LightingBumpSpecSkin(SurfaceOutput s, half3 lightDir, half3 viewDir, half atten)
 	{
 		float rimf = dot(s.Normal, viewDir);

@@ -139,6 +139,10 @@ public class DataStructPrefabs : MonoBehaviour
     public PlayerArmyUI PlayerArmyUIPrefab;
     public MoneySlotUI MoneySlotUIPrefab;
     public Tooltip TooltipPrefab;
+    public SpellBigTooltip SpellBigTooltip;
+    public WeaponBigTooltip WeaponBigTooltip;
+    public ModulBigTooltip ModulBigTooltip;
+    public ParamItemBigTooltip ParamItemBigTooltip;
     public FlyingNumberWithDependencesHoldin FlyingNumberWithDependencesHoldinPrefab;
     public SelfCamera SelfCameraPrefab;
     public ArrowTarget ArrowTargetPersonal;

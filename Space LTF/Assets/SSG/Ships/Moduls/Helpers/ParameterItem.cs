@@ -14,7 +14,9 @@ public enum EParameterShip
     modulsSlots,
     weaponSlots,
 
-}    public enum EParameterItemRarity
+}
+
+public enum EParameterItemRarity
 {
     normal,
     improved,
@@ -56,6 +58,24 @@ public class ParameterItem : IItemInv
     }
 
     public Dictionary<EParameterShip, float> ParametersAffection = new Dictionary<EParameterShip, float>();
+
+    public static Color GetColor(EParameterItemRarity rarity)
+    {
+        switch (rarity)
+        {
+            case EParameterItemRarity.normal:
+                default:
+                return Color.white;
+                break;
+            case EParameterItemRarity.improved:
+                return Utils.CreateColor(1, 176, 255);
+                break;
+            case EParameterItemRarity.perfect:
+                return Utils.CreateColor(236, 209, 37);
+                break;
+        }
+        return Color.white;
+    }
 
     public ParameterItem(ItemType ItemType, EParameterItemRarity rarity,
         EParameterItemSubType subType, Dictionary<EParameterShip, float> parametersAffection)

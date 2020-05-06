@@ -17,7 +17,7 @@ public enum DragItemType
 }
 
 [RequireComponent(typeof(GraphicRaycaster))]
-public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
+public abstract class DragableItem : MonoBehaviour, IDropHandler,
     IEndDragHandler, IDragHandler, IBeginDragHandler,
     IPointerDownHandler, IPointerUpHandler
 {
@@ -32,6 +32,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
     private Transform _prevTransform = null;
     public int id;
     private float _clickTime;
+    public UIElementWithTooltipByItem TooltipByItem;
 
     public static DragableItem Create(IItemInv item, bool usable)
     {
@@ -86,6 +87,7 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
         //        Debug.Log("Dragabale element created:" + daragbleElement.id);
         daragbleElement.Lable.text = item.GetInfo();
         daragbleElement.Init();
+        daragbleElement.TooltipByItem.Init(item,null);
         return daragbleElement;
     }
 
@@ -94,10 +96,10 @@ public abstract class DragableItem : UIElementWithTooltip, IDropHandler,
 
     }
 
-    protected override string TextToTooltip()
-    {
-        return ContainerItem.GetInfo();
-    }
+//    protected override string TextToTooltip()
+//    {
+//        return ContainerItem.GetInfo();
+//    }
 
     void Awake()
     {

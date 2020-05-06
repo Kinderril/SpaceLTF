@@ -87,7 +87,11 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     // private CurWeaponDamage _currentDamage1;
     public string Name { get; set; }
 
-    public float SetorAngle { get; set; }
+    public float SetorAngle
+    {
+        get => sectorAngle;
+        set => sectorAngle = value;
+    }
     //    float IAffectParameters.BulletSpeed { get; set; }
 
     public float BulletSpeed

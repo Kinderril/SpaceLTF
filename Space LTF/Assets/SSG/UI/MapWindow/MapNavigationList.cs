@@ -125,7 +125,7 @@ public class MapNavigationList : MonoBehaviour
         {
             GlobalMap.SetCameraHome();
         });
-        homeBtn.Field.text = Namings.Tag("Home");
+        homeBtn.Field.text = Namings.Tag("Fleet");
         _isHomeInited = true;
     }  
 //    private void InitTarget()

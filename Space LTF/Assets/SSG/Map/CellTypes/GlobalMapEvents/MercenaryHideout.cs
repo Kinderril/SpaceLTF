@@ -63,6 +63,11 @@ public class MercenaryHideout : BaseGlobalMapEvent
     {
         return Namings.Tag("MercGlobal");
     }
+    public override bool OneTimeUsed()
+    {
+        return false;
+    }
+
 
     public override MessageDialogData GetDialog()
     {
@@ -70,15 +75,23 @@ public class MercenaryHideout : BaseGlobalMapEvent
         {
             GenerateMercs();
         }
-        var mianAnswers = new List<AnswerDialogData>();
-        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("hireAttack"), TryAttack, null));
-        mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("hirePay"), null, TryPay));
-        mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null, null));
+        if (_feePayed)
+        {
+            return MercToHire();
+        }
+        else 
+        {
+            var mianAnswers = new List<AnswerDialogData>();
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("hireAttack"), TryAttack, null));
+            mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("hirePay"), null, TryPay));
+            mianAnswers.Add(new AnswerDialogData(Namings.Tag("leave"), null, null));
 
-        var msg = Namings.Format(Namings.DialogTag("hireEnter"), creditsToEnter
+            var msg = Namings.Format(Namings.DialogTag("hireEnter"), creditsToEnter
             );
-        MessageDialogData mesData = new MessageDialogData(msg, mianAnswers);
-        return mesData;
+            MessageDialogData mesData = new MessageDialogData(msg, mianAnswers);
+            return mesData;
+        }
+
     }
 
     private void TryAttack()
@@ -138,9 +151,12 @@ public class MercenaryHideout : BaseGlobalMapEvent
         return mesData;
     }
 
+    private bool _feePayed = false;
+
     private MessageDialogData MercToHire()
     {
         var mianAnswers = new List<AnswerDialogData>();
+        _feePayed = true;
         if (MainController.Instance.MainPlayer.Army.CanAddShip())
         {
 

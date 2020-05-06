@@ -15,18 +15,7 @@ public class DragableParameterItem : DragableItem
     protected override void Init()
     {
         base.Init();
-        switch (ParameterItem.Rarity)
-        {
-            case EParameterItemRarity.normal:
-                Icon.color = Color.white;
-                break;
-            case EParameterItemRarity.improved:
-                Icon.color = Utils.CreateColor(1,176,255);
-                break;
-            case EParameterItemRarity.perfect:
-                Icon.color = Utils.CreateColor(236, 209, 37);
-                break;
-        }
+        Icon.color = ParameterItem.GetColor(ParameterItem.Rarity);
     }
 
     public override Sprite GetIcon()
