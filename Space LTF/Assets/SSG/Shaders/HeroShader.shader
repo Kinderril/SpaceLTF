@@ -7,23 +7,34 @@
 		_RimPower("Rim Power", Float) = 2.5
 		_Fresnel("Fresnel Value", Float) = 0.28
 		_MainTex("Base (RGB)", 2D) = "white" {}
-	_BumpMap("Bump (RGB)", 2D) = "bump" {}
-	_SpecularTex("Specular Level (R) Gloss (G)", 2D) = "gray" {}
-	_RimTex("Rim ramp (RGB) Fresnel ramp (A)", 2D) = " grey" {}
-	_WrapTex("Wrap ramp (RGBA)", 2D) = "black" {}
-
-	_Cutoff("Alpha cutoff", Range(0,1)) = 0.5
+		_BumpMap("Bump (RGB)", 2D) = "bump" {}
+		_SpecularTex("Specular Level (R) Gloss (G)", 2D) = "gray" {}
+		_RimTex("Rim ramp (RGB) Fresnel ramp (A)", 2D) = " grey" {}
+		_WrapTex("Wrap ramp (RGBA)", 2D) = "black" {}
+		_Cutoff("Alpha cutoff", Range(0,1)) = 0.5
 	}
 
 		SubShader{
-		Tags{ "RenderType" = "Opaque" }
+			Tags{ 
+			"RenderType" = "Opaque" 
+			 //"LightMode" = "Deferred"
+			 }
 
 		AlphaTest Greater[_Cutoff]
 		Blend Off
 		Cull Off
 
+		Stencil
+		{
+			Ref 3
+			WriteMask 3
+			Pass replace
+		}
+
 		CGPROGRAM
-#pragma surface surf BumpSpecSkin
+#pragma surface surf BlinnPhong
+//#pragma surface surf BumpSpecSkin
+#pragma target 3.0
 #include "UnityCG.cginc"
 
 		float4 _Color;
