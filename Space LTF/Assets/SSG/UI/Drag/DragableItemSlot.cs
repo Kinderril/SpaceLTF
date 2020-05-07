@@ -180,6 +180,20 @@ public class DragableItemSlot : MonoBehaviour
 
             }
         }
+        else
+        {
+            var fromInventory = item.ContainerItem.CurrentInventory;
+            if (fromInventory != null)
+            {
+                if (!(fromInventory is ShopInventory) && !(_inventory is ShopInventory))
+                {
+                        InventoryOperation.ChnageItemsItemTransfered(item.ContainerItem, CurrentItem.ContainerItem,
+                            Callback);
+                        return;
+
+                }
+            }
+        }
         Callback(false);
     }
 

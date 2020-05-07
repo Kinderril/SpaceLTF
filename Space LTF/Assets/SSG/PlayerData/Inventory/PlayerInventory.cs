@@ -41,10 +41,7 @@ public class PlayerInventory : IInventory
         Debug.Log($"TransferItem {item.WideInfo()}  {val}");
         if (val)
             item.CurrentInventory = this;
-        if (OnItemAdded != null)
-        {
-            OnItemAdded(item, val);
-        }
+        OnItemAdded?.Invoke(item, val);
     }
     [CanBeNull]
     public Player Owner { get { return _player; } }

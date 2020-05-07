@@ -17,16 +17,67 @@ public static class InventoryOperation
 
     public static ItemTransfer OnItemTransfer;
 
-    public static bool TryItemChnageTransfered(IItemInv item1, IItemInv item2)
-    {
-        if (item1.CurrentInventory != item2.CurrentInventory)
-        {
 
+
+    public static void ChnageItemsItemTransfered(IItemInv item1, IItemInv item2, Action<bool> callback)
+    {
+        if (item1.CurrentInventory == item2.CurrentInventory)
+        {
+            callback(false);
+            return;
         }
-        return false;
+        if (item1.ItemType != item2.ItemType)
+        {
+            callback(false);
+            return;
+        }
+
+        if (SubCanDo(item2.CurrentInventory,item1) && SubCanDo(item1.CurrentInventory, item2))
+        {
+            RemoveItemFromSelfInventory(item1);
+            RemoveItemFromSelfInventory(item2);
+            var oldInv1 = item1.CurrentInventory;
+            var oldInv2 = item2.CurrentInventory;
+            TryItemTransfered(oldInv1, item2, b =>
+            {
+                if (!b)
+                {
+                    Debug.LogError("transfer item error");
+                }
+                TryItemTransfered(oldInv2, item1, b1 =>
+                    { callback(b); },false);
+            },false);
+            return;
+        }
+        callback(false);
+
+        //        item1.CurrentInventory.RemoveItem(item1);
+
     }
 
-    public static void TryItemTransfered(IInventory to, IItemInv item, Action<bool> callback)
+    private static void RemoveItemFromSelfInventory(IItemInv item)
+    {
+
+        switch (item.ItemType)
+        {
+            case ItemType.weapon:
+                item.CurrentInventory.RemoveWeaponModul(item as WeaponInv);
+                break;
+            case ItemType.modul:
+                item.CurrentInventory.RemoveSimpleModul(item as BaseModulInv);
+                break;
+            case ItemType.spell:
+                item.CurrentInventory.RemoveSpellModul(item as BaseSpellModulInv);
+                break;
+            case ItemType.cocpit:
+            case ItemType.engine:
+            case ItemType.wings:
+                item.CurrentInventory.RemoveItem(item as ParameterItem);
+                break;
+        }
+    }
+
+    public static void TryItemTransfered(IInventory to, IItemInv item, Action<bool> callback,bool withRemove = true)
     {
         IInventory from = item.CurrentInventory;
         int index;
@@ -47,11 +98,9 @@ public static class InventoryOperation
                     {
                         if (to.TryAddItem(itemParam))
                         {
-                            from.RemoveItem(itemParam);
-                            if (OnItemTransfer != null)
-                            {
-                                OnItemTransfer(from, to, itemParam);
-                            }
+                            if (withRemove)
+                                from.RemoveItem(itemParam);
+                            OnItemTransfer?.Invoke(@from, to, itemParam);
                             callback(true);
                         }
                         else
@@ -78,11 +127,9 @@ public static class InventoryOperation
                     {
                         if (to.TryAddWeaponModul(w, index))
                         {
-                            from.RemoveWeaponModul(w);
-                            if (OnItemTransfer != null)
-                            {
-                                OnItemTransfer(from, to, w);
-                            }
+                            if (withRemove)
+                                from.RemoveWeaponModul(w);
+                            OnItemTransfer?.Invoke(@from, to, w);
                             callback(true);
                         }
                         else
@@ -108,11 +155,9 @@ public static class InventoryOperation
                     {
                         if (to.TryAddSimpleModul(m, index))
                         {
-                            from.RemoveSimpleModul(m);
-                            if (OnItemTransfer != null)
-                            {
-                                OnItemTransfer(from, to, m);
-                            }
+                            if (withRemove)
+                                from.RemoveSimpleModul(m);
+                            OnItemTransfer?.Invoke(@from, to, m);
                             callback(true);
                         }
                         else
@@ -138,11 +183,9 @@ public static class InventoryOperation
                     {
                         if (to.TryAddSpellModul(s, index))
                         {
-                            from.RemoveSpellModul(s);
-                            if (OnItemTransfer != null)
-                            {
-                                OnItemTransfer(from, to, s);
-                            }
+                            if (withRemove)
+                                from.RemoveSpellModul(s);
+                            OnItemTransfer?.Invoke(@from, to, s);
                             callback(true);
                         }
                         else
@@ -163,6 +206,106 @@ public static class InventoryOperation
         }
     }
 
+    private static bool SubCanDo(IInventory to, IItemInv item)
+    {
+        var paramItem = item as ParameterItem;
+        if (paramItem != null)
+        {
+            float slots;
+            if (paramItem.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out slots))
+            {
+                var slotsInt = (int)(slots + 0.1f);
+                if (!paramItem.CurrentInventory.CanRemoveModulSlots(slotsInt))
+                {
+                    return false;
+                }
+            }
+            if (paramItem.ParametersAffection.TryGetValue(EParameterShip.weaponSlots, out slots))
+            {
+                var slotsInt = (int)(slots + 0.1f);
+                if (!paramItem.CurrentInventory.CanRemoveWeaponSlots(slotsInt))
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (to.IsShop()) //Игрок продает в магазин
+        {
+            return false;
+        }
+
+        if (!to.CanMoveToByLevel(item, -1))
+        {
+            return false;
+        }
+        if (item.CurrentInventory.IsShop())    //Игрок покупает у магазина
+        {
+            return false;
+        }
+
+        return true;
+    }
+    public static bool CanDo(IInventory to, IItemInv item)
+    {
+        int index;
+        switch (item.ItemType)
+        {
+            case ItemType.engine:
+            case ItemType.cocpit:
+            case ItemType.wings:
+                var itemParam = item as ParameterItem;
+                if (itemParam == null)
+                {
+                    return false;
+                }
+                if (to.GetFreeSlot(out index, itemParam.ItemType))
+                {
+                    return SubCanDo(to, item);
+                }
+                else
+                {
+                    return (false);
+                }
+
+                break;
+            case ItemType.weapon:
+                var w = item as WeaponInv;
+                if (to.GetFreeWeaponSlot(out index))
+                {
+                    return SubCanDo(to, item);
+                }
+                else
+                {
+                    return (false);
+                }
+                break;
+            case ItemType.modul:
+                var m = item as BaseModulInv;
+                if (to.GetFreeSimpleSlot(out index))
+                {
+                    return SubCanDo(to, item);
+                }
+                else
+                {
+                    return (false);
+                }
+                break;
+            case ItemType.spell:
+                var s = item as BaseSpellModulInv;
+                if (!to.GetFreeSpellSlot(out index))
+                {
+                    return SubCanDo( to, item);
+                }
+                else
+                {
+                    return (false);
+                }
+                break;
+        }
+
+        return false;
+    }     
     private static void CanDo(Action CallbackSuccsess, Action failCallback, IInventory to, IItemInv item)
     {
         var paramItem = item as ParameterItem;

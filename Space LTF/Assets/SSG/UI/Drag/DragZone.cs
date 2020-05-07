@@ -58,7 +58,7 @@ public class DragZone : MonoBehaviour
         _slots.Clear();
         Disable();
     }
-
+         /*
     private void CheckCurrentItems()
     {
         foreach (var item in _inventory.GetAllItems())
@@ -87,7 +87,7 @@ public class DragZone : MonoBehaviour
             }
         }
     }
-
+       */
     protected static bool FindSlotForItem(IItemInv item,IInventory inventory, out int slot)
     {
         if (inventory.GetFreeSlot(out slot, item.ItemType))
@@ -98,7 +98,7 @@ public class DragZone : MonoBehaviour
         return false;
     }
 
-    private void OnItem(IItemInv item, bool val)
+    private void OnItemAdded(IItemInv item, bool val)
     {
         Debug.Log("OnItem drag zone:" + _zoneId + "  " + (val?"add":"remove") + "  " + gameObject.name);
         if (val)
@@ -229,7 +229,7 @@ public class DragZone : MonoBehaviour
 //            Debug.Log("drag zone Disable:" + _zoneId + "  " + gameObject.name);
             _enabled = false;
             _subcribed = false;
-            _inventory.OnItemAdded -= OnItem;
+            _inventory.OnItemAdded -= OnItemAdded;
         }
     }
     public void Enable()
@@ -240,7 +240,7 @@ public class DragZone : MonoBehaviour
             Debug.Log("drag zone Enable:" + _zoneId + "  " + gameObject.name);
             _enabled = true;
             _subcribed = true;
-            _inventory.OnItemAdded += OnItem;
+            _inventory.OnItemAdded += OnItemAdded;
         }
     }
 
