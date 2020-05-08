@@ -29,7 +29,7 @@ public class ShipInventoryUI : DragZone
     public UIElementWithTooltipCache _cofigBonus;
 
 
-    public void Init(StartShipPilotData shipData, bool usable, ConnectInventory connectedInventory)
+    public void Init(StartShipPilotData shipData, bool usable, ConnectInventory connectedInventory,IInventory tradeInventory = null)
     {
         //#if UNITY_EDITOR
         //
@@ -43,6 +43,7 @@ public class ShipInventoryUI : DragZone
         //            }
         //        }
         //#endif
+        _tradeInventory = tradeInventory;
         CocpitSlot.DragItemType = DragItemType.cocpit;
         EngineSlot.DragItemType = DragItemType.engine;
         WingSlot.DragItemType = DragItemType.wings;
@@ -244,13 +245,13 @@ public class ShipInventoryUI : DragZone
         foreach (var weaponInv in weapon)
         {
             var slot = GetFreeSlot(ItemType.weapon);
-            SetStartItem(slot, weaponInv);
+            SetStartItem(slot, weaponInv, _tradeInventory);
         }
 
         foreach (var modulInv in _shipInventory.Moduls.GetNonNullActiveSlots())
         {
             var slot = GetFreeSlot(ItemType.modul);
-            SetStartItem(slot, modulInv);
+            SetStartItem(slot, modulInv, _tradeInventory);
         }
     }
 
@@ -258,7 +259,7 @@ public class ShipInventoryUI : DragZone
     {
         if (parameterItem != null)
         {
-            SetStartItem(slot, parameterItem);
+            SetStartItem(slot, parameterItem,_tradeInventory);
         }
     }
 

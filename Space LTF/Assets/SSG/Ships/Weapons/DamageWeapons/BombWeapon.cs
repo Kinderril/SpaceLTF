@@ -11,7 +11,7 @@ public class BombWeapon : DamageWeaponInGame
 
     public override bool IsAimed(IShipData target)
     {
-        return IsAimedStraight(target, Owner, GetShootPos, _radiusShoot);
+        return IsAimedStraight(_testTargetPosition,target, Owner, GetShootPos, _radiusShoot);
     }
 
     public override void BulletCreateByDir(ShipBase target, Vector3 dir)

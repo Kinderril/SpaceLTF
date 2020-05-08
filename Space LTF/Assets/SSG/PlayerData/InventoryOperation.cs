@@ -305,7 +305,49 @@ public static class InventoryOperation
         }
 
         return false;
-    }     
+    }
+
+    public static int CalcBuyPrice(IItemInv item)
+    {
+        var valuableCoef = item.CurrentInventory.ValuableItem(item);
+        var preBuyPrice = (int)(item.CostValue * valuableCoef);
+        int buyPrice;
+        if (item.CurrentInventory.Owner != null)
+        {
+            buyPrice = Mathf.Clamp(preBuyPrice, 1, 999999);
+            // buyPrice = item.CurrentInventory.Owner.ReputationData.ModifBuyValue(preBuyPrice);
+        }
+        else
+        {
+            buyPrice = Mathf.Clamp(preBuyPrice, 1, 999999);
+        }
+
+        return buyPrice;
+    }
+
+    public static int CalcSellPrice(IInventory to,IItemInv item)
+    {
+        var valuableCoef = to.ValuableItem(item);
+        var preSellPrice = (int)((float)item.CostValue * Library.SELL_COEF * valuableCoef);
+#if UNITY_EDITOR
+        if (preSellPrice <= 1)
+        {
+            Debug.LogError($"Sell price is bad: base:{item.CostValue}. preSellPrice:{preSellPrice}. item:{item.GetInfo()}");
+        }
+#endif
+        int sellPrice;
+        if (item.CurrentInventory.Owner != null)
+        {
+            sellPrice = Mathf.Clamp(preSellPrice, 1, 999999);
+            // sellPrice = item.CurrentInventory.Owner.ReputationData.ModifSellValue(,preSellPrice);
+        }
+        else
+        {
+            sellPrice = Mathf.Clamp(preSellPrice, 1, 999999);
+        }
+
+        return sellPrice;
+    }
     private static void CanDo(Action CallbackSuccsess, Action failCallback, IInventory to, IItemInv item)
     {
         var paramItem = item as ParameterItem;
@@ -337,24 +379,7 @@ public static class InventoryOperation
         if (to.IsShop())         //Игрок продает в магазин
         {
             //Selling item to shop
-            var valuableCoef = to.ValuableItem(item);
-            var preSellPrice = (int)((float)item.CostValue * Library.SELL_COEF * valuableCoef);
-#if UNITY_EDITOR
-            if (preSellPrice <= 1)
-            {
-                Debug.LogError($"Sell price is bad: base:{item.CostValue}. preSellPrice:{preSellPrice}. item:{item.GetInfo()}");
-            }
-#endif
-            int sellPrice;
-            if (item.CurrentInventory.Owner != null)
-            {
-                sellPrice = Mathf.Clamp(preSellPrice, 1, 999999);
-                // sellPrice = item.CurrentInventory.Owner.ReputationData.ModifSellValue(,preSellPrice);
-            }
-            else
-            {
-                sellPrice = Mathf.Clamp(preSellPrice, 1, 999999);
-            }
+            int sellPrice = CalcSellPrice(to, item);
             var msg = Namings.Format(Namings.Tag("wantSell"), sellPrice);
             WindowManager.Instance.ConfirmWindow.Init(
                 () =>
@@ -378,18 +403,7 @@ public static class InventoryOperation
         }
         if (item.CurrentInventory.IsShop())    //Игрок покупает у магазина
         {
-            var valuableCoef = item.CurrentInventory.ValuableItem(item);
-            var preBuyPrice = (int)(item.CostValue * valuableCoef);
-            int buyPrice;
-            if (item.CurrentInventory.Owner != null)
-            {
-                buyPrice = Mathf.Clamp(preBuyPrice, 1, 999999);
-                // buyPrice = item.CurrentInventory.Owner.ReputationData.ModifBuyValue(preBuyPrice);
-            }
-            else
-            {
-                buyPrice = Mathf.Clamp(preBuyPrice, 1, 999999);
-            }
+            int buyPrice = CalcBuyPrice(item);
             if (to.Owner.MoneyData.HaveMoney(buyPrice))
             {
                 //Buying item from shop

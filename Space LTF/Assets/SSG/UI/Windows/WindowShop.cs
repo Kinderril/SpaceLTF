@@ -35,11 +35,11 @@ public class WindowShop : BaseWindow
         MoneyField.Init(_greenPlayer.MoneyData.MoneyCount);
         _greenPlayer.MoneyData.OnMoneyChange += OnMoneyChange;
         _greeArmyUi = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.PlayerArmyUIPrefab);
-        _greeArmyUi.Init(_greenPlayer, MyPlayersLayout, true, new ConnectInventory(_greenPlayer.Inventory));
+        _greeArmyUi.Init(_greenPlayer, MyPlayersLayout, true, new ConnectInventory(_greenPlayer.Inventory), _shopInventory);
         base.Init(obj);
-        PlayersInventory.Init(_greenPlayer.Inventory, null, true);
+        PlayersInventory.Init(_greenPlayer.Inventory, null, true,_shopInventory);
         bool canDrop = !_isTutor;
-        ShoInventoryUI.Init(_shopInventory, new ConnectInventory(_greenPlayer.Inventory), canDrop);
+        ShoInventoryUI.Init(_shopInventory, new ConnectInventory(_greenPlayer.Inventory), canDrop , _greenPlayer.Inventory);
         InitValuables();
     }
 

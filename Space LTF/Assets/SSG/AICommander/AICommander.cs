@@ -3,109 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class AICommander
+public class AICommander : IAICommander
 {
-    private Commander _commander;
-    private bool enable = false;
-    private BaseAISpell[] _spells;
-    private AICommanderMainShip _mainShip;
-    private float _createdTime;
-    private ShipControlCenter _shipControl;
-    private const float CAST_PERIOD = 4f;
-    private bool _startAtStart;
+    protected BaseAISpell[] _spells;
+    protected AICommanderMainShip _mainShip;
 
-    public AICommander(ShipControlCenter shipControl, Commander commanderOwner)
+    protected override void CreateAllAiSpells()
     {
-        var aiPlayer = commanderOwner.Player as PlayerAI;
+        var aiPlayer = _commander.Player as PlayerAI;
         if (aiPlayer != null)
         {
             _startAtStart = aiPlayer.DoBaseDefence();
         }
-        _createdTime = Time.time;
-        _commander = commanderOwner;
-        _shipControl = shipControl;
+        _mainShip = new AICommanderMainShip(_shipControl);
         var spellTmp = new List<BaseAISpell>();
-        enable = true;
-        if (enable)
+        foreach (var baseSpellModulInv in _shipControl.ShipInventory.SpellsModuls)
         {
-            shipControl.OnDeath += OnDeath;
-            _mainShip = new AICommanderMainShip(_shipControl);
-            foreach (var baseSpellModulInv in _shipControl.ShipInventory.SpellsModuls)
+            if (baseSpellModulInv != null)
             {
-                if (baseSpellModulInv != null)
+                var v = Create(baseSpellModulInv);
+                if (v != null)
                 {
-                    var v = Create(baseSpellModulInv);
-                    if (v != null)
-                    {
-                        spellTmp.Add(v);
-                    }
+                    spellTmp.Add(v);
                 }
             }
-
-            _spells = spellTmp.ToArray();
-            if (_spells.Length == 0)
-            {
-                Debug.LogError(
-                    $"AI commander have no spells to use spell modules:{_shipControl.ShipInventory.SpellsModuls}");
-            }
-            Debug.Log("AIcommander Inited. Spells: " + _spells.Length);
         }
-
-
-    }
-
-    private void OnDeath(ShipBase obj)
-    {
-        Dispose();
-        enable = false;
-    }
-
-    [CanBeNull]
-    private BaseAISpell Create(BaseSpellModulInv baseSpellModul)
-    {
-        var mainShip = _shipControl;
-        var spellInGame = new SpellInGame(baseSpellModul, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
-            baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount, baseSpellModul.SpellType,
-            baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.DescFull(), baseSpellModul.DiscCounter, 1f);
-
-
-        switch (baseSpellModul.SpellType)
+        _spells = spellTmp.ToArray();
+        if (_spells.Length == 0)
         {
-            case SpellType.shildDamage:
-                return new ShieldDamageSpellAI(baseSpellModul as ShieldOffSpell, _shipControl, spellInGame);
-            case SpellType.engineLock:
-                return new EngineLockSpellAI(baseSpellModul as EngineLockSpell, _shipControl, spellInGame);
-            case SpellType.lineShot:
-                return new LineShotSpellAI(baseSpellModul as LineShotSpell, _shipControl, spellInGame);
-            case SpellType.distShot:
-                return new DistShotSpellAI(baseSpellModul as DistShotSpell, _shipControl, spellInGame);
-            case SpellType.mineField:
-                return new MineFieldSpellAI(baseSpellModul as MineFieldSpell, _shipControl, spellInGame);
-            // case SpellType.randomDamage:
-            //     return new RandomDamageSpellAI(baseSpellModul as RandomDamageSpell, commander, spellInGame);
-            case SpellType.artilleryPeriod:
-                return new ArtilleryAI(baseSpellModul as ArtillerySpell, _shipControl, spellInGame);
-            case SpellType.repairDrones:
-                return new RepairDropneAI(baseSpellModul as RepairDronesSpell, _shipControl, spellInGame);
-            case SpellType.rechargeShield:
-                return new RechargeShieldAI(baseSpellModul as RechargeShieldSpell, _shipControl, spellInGame);
-            // case SpellType.roundWave:
-            //
-            //     break;
-            case SpellType.machineGun:
-                return new MachineGunSpellAI(baseSpellModul as MachineGunSpell, _shipControl, spellInGame);
-            case SpellType.throwAround:
-                return new ThrowAroundAI(baseSpellModul as ThrowAroundSpell, _shipControl, spellInGame);
-            case SpellType.vacuum:
-                return new VacuumSpellAI(baseSpellModul as VacuumSpell, _shipControl, spellInGame);
-            case SpellType.hookShot:
-                return new HookShotSpellAI(baseSpellModul as HookShotSpell, _shipControl, spellInGame);
+            Debug.LogError(
+                $"AI commander have no spells to use spell modules:{_shipControl.ShipInventory.SpellsModuls}");
         }
+        Debug.Log("AIcommander Inited. Spells: " + _spells.Length);
 
-        return null;
     }
 
-    public void ManualUpdate()
+
+
+    public override void ManualUpdate()
     {
         if (enable && Time.time - _createdTime > CAST_PERIOD)
         {
@@ -122,11 +57,11 @@ public class AICommander
         }
     }
 
-    public void Dispose()
+
+
+    public AICommander(ShipControlCenter shipControl, Commander commanderOwner) 
+        : base(shipControl, commanderOwner)
     {
-        if (enable && _shipControl != null)
-        {
-            _shipControl.OnDeath -= OnDeath;
-        }
+
     }
 }

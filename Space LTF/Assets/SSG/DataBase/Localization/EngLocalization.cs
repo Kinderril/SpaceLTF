@@ -310,7 +310,7 @@ public static class EngLocalization
         {"To Map", "To Map"},
         {"BulletSpeed", "Speed"},
         {"SellItemCost", "Sell cost"},
-        {"ItemCost", "Cost"},
+        {"ItemCost", "Value"},
 
 
 

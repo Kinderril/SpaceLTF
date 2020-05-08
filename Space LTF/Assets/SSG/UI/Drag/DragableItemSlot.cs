@@ -197,7 +197,7 @@ public class DragableItemSlot : MonoBehaviour
         Callback(false);
     }
 
-    public void StartItemSet(IItemInv item)
+    public void StartItemSet(IItemInv item, IInventory tradeInventory = null)
     {
         if (item != null && item.CurrentInventory == null)
         {
@@ -235,7 +235,7 @@ public class DragableItemSlot : MonoBehaviour
         {
             Debug.LogError("setted item have wrong inventory:" + (item.CurrentInventory != null) + "  _inventory:" + _inventory);
         }
-        var element = DragableItem.Create(item, _usage);
+        var element = DragableItem.Create(item, _usage,tradeInventory);
         CurrentItem = element;
         
         element.transform.SetParent(transform);

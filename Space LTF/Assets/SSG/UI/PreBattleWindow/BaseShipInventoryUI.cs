@@ -18,8 +18,9 @@ public class BaseShipInventoryUI : DragZone
     private ShipInventory _shipInventory;
     private Player _player;
 
-    public void Init(Player player, ShipInventory shipInventory, bool usable, ConnectInventory connectedInventory)
+    public void Init(Player player, ShipInventory shipInventory, bool usable, ConnectInventory connectedInventory, IInventory tradeInventory = null)
     {
+        _tradeInventory = tradeInventory;
         _player = player;
         _curParams.Clear();
         _shipInventory = shipInventory;
@@ -98,7 +99,7 @@ public class BaseShipInventoryUI : DragZone
             var spell = _shipInventory.SpellsModuls[i];
             var slot = GetFreeSlot(ItemType.spell);
             slot.Init(_shipInventory, _usable);
-            SetStartItem(slot, spell);
+            SetStartItem(slot, spell, _tradeInventory);
         }
     }
 }

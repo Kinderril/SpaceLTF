@@ -12,11 +12,11 @@ public class ShipPilotInventoryUI : MonoBehaviour
 //    public Toggle ToggleElement;
     public StartShipPilotData ShipData { get; private set; }
 
-    public void Init(StartShipPilotData data, bool usable, ConnectInventory connectedInventory, Action ontoggleSwitched)
+    public void Init(StartShipPilotData data, bool usable, ConnectInventory connectedInventory, Action ontoggleSwitched,IInventory tradeInventory = null)
     {
         ShipData = data;
         this.ontoggleSwitched = ontoggleSwitched;
-        ShipInventory.Init(data, usable, connectedInventory);
+        ShipInventory.Init(data, usable, connectedInventory, tradeInventory);
         var openInfoPilot = true;
 //        ToggleElement.interactable = usable;
 //        ToggleElement.isOn = openInfoPilot;

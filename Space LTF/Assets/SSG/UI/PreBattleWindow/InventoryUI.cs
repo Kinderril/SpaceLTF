@@ -22,12 +22,14 @@ public class InventoryUI : DragZone
 
     public bool ShallRefreshPos = true;
     public bool ShallRefreshPosWithZero = false;
+
 //    public ScrollView Scroll;
 //    private InventorySlots SlotsController;
 
-    public void Init(PlayerInventory player, ConnectInventory connectedInventory,bool canDrop)
+    public void Init(PlayerInventory player, ConnectInventory connectedInventory,bool canDrop, IInventory tradeInventory = null)
     {
-//        Scroll.contentViewport = transform.parent;
+        _tradeInventory = tradeInventory;
+        //        Scroll.contentViewport = transform.parent;
         _inventory = player;
         _player = player.Owner;
         Layout.ClearTransform();
@@ -74,7 +76,7 @@ public class InventoryUI : DragZone
             var paramItem = ParamItems[i];
             var itemSlot = AttachToLayout();
             itemSlot.Init(_inventory,true);
-            SetStartItem(itemSlot,paramItem);
+            SetStartItem(itemSlot,paramItem,_tradeInventory);
             itemSlot.CanDrop = canDrop;
             _allSLots.Add(itemSlot);
         }  
@@ -83,7 +85,7 @@ public class InventoryUI : DragZone
             var weapon = Weapons[i];
             var itemSlot = AttachToLayout();
             itemSlot.Init(_inventory,true);
-            SetStartItem(itemSlot,weapon);
+            SetStartItem(itemSlot,weapon, _tradeInventory);
             itemSlot.CanDrop = canDrop;
             _allSLots.Add(itemSlot);
         }
@@ -94,7 +96,7 @@ public class InventoryUI : DragZone
             itemSlot.Init(_inventory, true);
             //            var item = DragableItem.Create(weapon, true);
             _allSLots.Add(itemSlot);
-            SetStartItem(itemSlot,weapon);
+            SetStartItem(itemSlot,weapon, _tradeInventory);
             itemSlot.CanDrop = canDrop;
         }
         for (int i = 0; i < Spells.Count; i++)
@@ -103,7 +105,7 @@ public class InventoryUI : DragZone
             var itemSlot = AttachToLayout();
             itemSlot.Init(_inventory, true);
             //            var item = DragableItem.Create(weapon, true);
-            SetStartItem(itemSlot,weapon);
+            SetStartItem(itemSlot,weapon, _tradeInventory);
             _allSLots.Add(itemSlot);
             itemSlot.CanDrop = canDrop;
         }

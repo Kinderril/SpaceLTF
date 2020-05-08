@@ -299,7 +299,7 @@ public static class RusLocalization
         {"Credits", "Кредиты"},
         {"BulletSpeed", "Скорость"},
         {"SellItemCost", "Цена продажи"},
-        {"ItemCost", "Стоимость"},
+        {"ItemCost", "Ценность"},
 
         {"Turret", "Турель" },
         {"Destroyed", "Уничтожены" },

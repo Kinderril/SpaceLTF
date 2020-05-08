@@ -279,7 +279,7 @@ public static class EspLocalization
 {"Destroyed","Destruido"},
 { "BulletSpeed", "Velocidad"},
 {"SellItemCost", "Precio de venta"},
-{"ItemCost", "Costo"},
+{"ItemCost", "Valor"},
 {"Completed","Completado"},
 {"StartNewGameFieldSize","El tamaño del Sector"},
 {"StartNewGameCoresCount","Elementos energéticos"},

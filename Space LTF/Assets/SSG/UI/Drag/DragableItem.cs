@@ -34,7 +34,7 @@ public abstract class DragableItem : MonoBehaviour, IDropHandler,
     private float _clickTime;
     public UIElementWithTooltipByItem TooltipByItem;
 
-    public static DragableItem Create(IItemInv item, bool usable)
+    public static DragableItem Create(IItemInv item, bool usable, IInventory tradeInventory = null)
     {
         DragableItem itemPrefab;
         switch (item.ItemType)
@@ -87,8 +87,26 @@ public abstract class DragableItem : MonoBehaviour, IDropHandler,
         //        Debug.Log("Dragabale element created:" + daragbleElement.id);
         daragbleElement.Lable.text = item.GetInfo();
         daragbleElement.Init();
-        daragbleElement.TooltipByItem.Init(item,null);
+        
+        daragbleElement.TooltipByItem.Init(item, GetSellCost(tradeInventory,item));
         return daragbleElement;
+    }
+
+    private static int? GetSellCost(IInventory tradeToInventory,IItemInv item)
+    {
+        if (tradeToInventory != null)
+        {
+            if (tradeToInventory.IsShop())
+            {
+                return InventoryOperation.CalcSellPrice(tradeToInventory, item);
+            }
+            else
+            {
+                return InventoryOperation.CalcBuyPrice(item);
+            }
+        }
+
+        return null;
     }
 
     protected virtual void Init()

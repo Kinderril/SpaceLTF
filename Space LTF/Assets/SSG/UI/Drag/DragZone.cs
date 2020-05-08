@@ -24,7 +24,8 @@ public class DragZone : MonoBehaviour
     private bool _enabled = false;
     private bool _subcribed = false;
     private int _zoneId;
-//    public bool CanDrop = true;
+    protected IInventory _tradeInventory;
+    //    public bool CanDrop = true;
 
 
     protected void Init(IInventory inventory, bool usable , HashSet<DragableItemSlot> slots, ConnectInventory connectedInventory)
@@ -39,7 +40,7 @@ public class DragZone : MonoBehaviour
         Debug.Log("Init drag zone " + _zoneId);
     }
 
-    protected void SetStartItem(DragableItemSlot slot, IItemInv item)
+    protected void SetStartItem(DragableItemSlot slot, IItemInv item,IInventory tradeInventory = null)
     {
 #if UNITY_EDITOR
         if (slot == null)
@@ -47,7 +48,7 @@ public class DragZone : MonoBehaviour
             Debug.LogError("WTF????");
         }
 #endif
-        slot.StartItemSet(item);
+        slot.StartItemSet(item, tradeInventory);
         if (_connectedInventory != null)
             slot.SetFastOthInventory(_connectedInventory.ConnectedInventory);
     }
@@ -120,7 +121,7 @@ public class DragZone : MonoBehaviour
             {
                 if (itemSlot.CanPutHere(item))
                 {
-                    SetStartItem(itemSlot,item);
+                    SetStartItem(itemSlot,item, _tradeInventory);
                     return;
                 }
             }

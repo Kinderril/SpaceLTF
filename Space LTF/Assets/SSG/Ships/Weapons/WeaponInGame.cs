@@ -79,7 +79,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     private AudioSource Source;
 
     public TargetType TargetType { get; private set; }
-    private TestTargetPosition _testTargetPosition;
+    protected TestTargetPosition _testTargetPosition;
     public Vector3? PosToAim => _testTargetPosition.PosToAim;
 
     public WeaponInGame(WeaponInv weaponInv)
@@ -213,7 +213,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
     //     // _nextShootMorePower = true;
     // }
 
-    protected bool IsAimedStraight(IShipData targInfo, ShipBase owner, Vector3 shootStartPos, float distShoot)
+    public static bool IsAimedStraight(TestTargetPosition _testTargetPosition, IShipData targInfo, ShipBase owner, Vector3 shootStartPos, float distShoot)
     {
         float distCoef = 1f;
         var dist = targInfo.Dist;
@@ -233,7 +233,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         }
 
         _testTargetPosition.TestTarget(targInfo.ShipLink.Position, targInfo.ShipLink.LookDirection,
-            targInfo.ShipLink.LookRight, shootStartPos, Owner.LookDirection, distShoot, offsetCoef);
+            targInfo.ShipLink.LookRight, shootStartPos, owner.LookDirection, distShoot, offsetCoef);
 
         return _testTargetPosition.ShallShoot;
     }

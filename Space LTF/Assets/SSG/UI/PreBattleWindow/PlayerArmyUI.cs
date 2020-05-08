@@ -18,14 +18,16 @@ public class PlayerArmyUI : MonoBehaviour
     private ConnectInventory _connectedInventory;
     private RectTransform myRectTransform;
     private RectTransform parentRectTransform;
+    private IInventory _tradeInventory = null;
 
     void Awake()
     {
         _shipsLayoutRectTransform = ShipsLayout.GetComponent<RectTransform>();
     }
 
-    public void Init(Player player, Transform parent, bool usable, ConnectInventory connectedInventory)
+    public void Init(Player player, Transform parent, bool usable, ConnectInventory connectedInventory,IInventory tradeInventory = null)
     {
+        _tradeInventory = tradeInventory;
         _usable = usable;
         _player = player;
         _connectedInventory = connectedInventory;
@@ -42,7 +44,7 @@ public class PlayerArmyUI : MonoBehaviour
         player.Army.OnAddShip += OnAddShip;
         foreach (var shipPilotData in player.Army.Army)
         {
-            AddShip(shipPilotData, false);
+            AddShip(shipPilotData, false, tradeInventory);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
         WaitLoadStart();
@@ -66,20 +68,20 @@ public class PlayerArmyUI : MonoBehaviour
     //        LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
     //    }
 
-    private void AddShip(StartShipPilotData shipPilotData, bool withRebuild)
+    private void AddShip(StartShipPilotData shipPilotData, bool withRebuild,IInventory tradeInventory = null)
     {
 
         if (shipPilotData.Ship.ShipType == ShipType.Base)
         {
             mainShipInfo = DataBaseController.GetItem(ShipBasePrefabUI);
             mainShipInfo.transform.SetParent(ShipsLayout);
-            mainShipInfo.Init(_player,shipPilotData.Ship, true, _connectedInventory);
+            mainShipInfo.Init(_player,shipPilotData.Ship, true, _connectedInventory, tradeInventory);
         }
         else
         {
             var playerInfo = DataBaseController.GetItem(MyPlayerPrefab);
             playerInfo.transform.SetParent(ShipsLayout);
-            playerInfo.Init(shipPilotData, _usable, _connectedInventory, OnToggleSwitched);
+            playerInfo.Init(shipPilotData, _usable, _connectedInventory, OnToggleSwitched, tradeInventory);
             playerInfoList.Add(playerInfo);
             if (withRebuild)
                 LayoutRebuilder.ForceRebuildLayoutImmediate(_shipsLayoutRectTransform);
@@ -95,7 +97,7 @@ public class PlayerArmyUI : MonoBehaviour
     {
         if (arg2)
         {
-            AddShip(arg1, true);
+            AddShip(arg1, true, _tradeInventory);
         }
         else
         {

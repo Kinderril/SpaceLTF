@@ -91,20 +91,25 @@ public class ArmyGlobalMapCell : GlobalMapCell
 
         var ans = new List<AnswerDialogData>();
         var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[ConfigOwner];
-        var scoutData = GetArmy().ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
-        string scoutsField;
-        if (_eventType.HasValue)
+        var army = GetArmy();
+        string scoutsField = "";
+        if (army.ScoutData != null)
         {
-            scoutsField = Namings.Format(Namings.DialogTag("armySectorEvent"), Namings.BattleEvent(_eventType.Value)); ;
-        }
-        else
-        {
-            scoutsField = "";
-        }
-        for (int i = 0; i < scoutData.Count; i++)
-        {
-            var info = scoutData[i];
-            scoutsField = $"{scoutsField}\n{info}\n";
+
+            var scoutData = army.ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
+            if (_eventType.HasValue)
+            {
+                scoutsField = Namings.Format(Namings.DialogTag("armySectorEvent"), Namings.BattleEvent(_eventType.Value)); ;
+            }
+            else
+            {
+                scoutsField = "";
+            }
+            for (int i = 0; i < scoutData.Count; i++)
+            {
+                var info = scoutData[i];
+                scoutsField = $"{scoutsField}\n{info}\n";
+            }
         }
 
         ans.Add(new AnswerDialogData(Namings.DialogTag("Attack"), Take));

@@ -68,6 +68,7 @@ public class SpellInGame : IWeapon
     public SpellType SpellType { get; private set; }
     //    float ShowCircleRadius { get; }
     bool ShowLine { get; }
+    public float MaxDist => _maxDist;
     private float _maxDist;
     public CanUseDelayedAction DelayedAction;
     public bool ShowCircle { get; private set; }

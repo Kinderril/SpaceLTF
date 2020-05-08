@@ -145,6 +145,11 @@ public class PlayerAfterBattleOptions
 
     protected bool SkillWork(int baseVal, int skillVal)
     {
+        if (skillVal < 0f)
+        {
+            return false;
+        }
+
         var wd = new WDictionary<bool>(new Dictionary<bool, float>
         {
             {true, skillVal},
@@ -218,6 +223,11 @@ public class PlayerAfterBattleOptions
 
     private float GetPercent(float baseVal,float curVal)
     {
+        if (curVal < 0)
+        {
+            return 0;
+        }
+
         return (curVal / (baseVal + curVal))*100;
     }
 

@@ -7,18 +7,16 @@ public class ItemBigTooltip : BaseTooltip
 {
 
 
-    public TextMeshProUGUI SellCosField;
+    public TextMeshProUGUI CostField;
+    public TextMeshProUGUI SellCostField;
 
     protected void SetSellCost(int? sellCos,IItemInv item)
     {
+        CostField.text = $"{Namings.Tag("ItemCost")}: {item.CostValue}";
+        SellCostField.gameObject.SetActive(sellCos.HasValue);
         if (sellCos.HasValue)
         {
-
-            SellCosField.text = $"{Namings.Tag("SellItemCost")}: {sellCos} ({item.CostValue})";
-        }
-        else
-        {
-            SellCosField.text = $"{Namings.Tag("ItemCost")}: {item.CostValue}";
+            SellCostField.text = $"{Namings.Tag("SellItemCost")}: {sellCos}";
         }
     }
 
