@@ -16,9 +16,12 @@ public class SpellButton : UIElementWithTooltip
     public Image ImageSlider;
     private InGameMainUI _inGameMain;
     private KeyCode _keyCode;
+    private AutoSpellContainer _autoSpell;
 
-    public void Init(InGameMainUI inGameMain, SpellInGame spell, Action<SpellInGame> OnSpellClick, float speedCoef, int index)
+    public void Init(InGameMainUI inGameMain, SpellInGame spell, Action<SpellInGame> OnSpellClick, float speedCoef, int index, AutoSpellContainer autoSpell)
     {
+        _autoSpell = autoSpell;
+        _autoSpell.OnActive += OnAutoSpellActive;
         _inGameMain = inGameMain;
         _inGameMain.OnSelectSpell += OnSelectSpell;
         _spell = spell;
@@ -46,6 +49,11 @@ public class SpellButton : UIElementWithTooltip
                 _keyCode = KeyCode.Alpha5;
                 break;
         }
+    }
+
+    private void OnAutoSpellActive(AutoSpellContainer obj)
+    {
+        
     }
 
     private void OnSelectSpell(SpellInGame obj)
