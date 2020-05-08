@@ -32,8 +32,8 @@
 		}
 
 		CGPROGRAM
-#pragma surface surf BlinnPhong
-//#pragma surface surf BumpSpecSkin
+//#pragma surface surf BlinnPhong
+#pragma surface surf BumpSpecSkin
 #pragma target 3.0
 #include "UnityCG.cginc"
 
@@ -47,6 +47,12 @@
 	float4 _RimColor;
 	float _RimPower;
 	float _Fresnel;
+
+	struct Input {
+		float2 uv_MainTex;
+		float2 uv_BumpMap;
+		float3 viewDir;
+	};
 
 	inline float CalcFresnel(float3 viewDir, float3 h, float fresnelValue)
 	{
@@ -73,14 +79,8 @@
 		return c;
 	}
 
-	struct Input {
-		float2 uv_MainTex;
-		float2 uv_BumpMap;
-		float3 viewDir;
-	};
-
-
-	void surf(Input IN, inout SurfaceOutput o) {
+	void surf(Input IN, inout SurfaceOutput o) 
+	{
 		half4 texcol = tex2D(_MainTex, IN.uv_MainTex);
 		o.Albedo = texcol.rgb * _Color.rgb;
 		o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
@@ -90,13 +90,25 @@
 		half3 rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
 		o.Emission = _RimColor.rgb * pow(rim, _RimPower);
 		o.Alpha = texcol.a * _Color.a;
+		/*
+
+		//half fres = 1.0 - dot(normalize(IN.viewDir), o.Normal);
+		//fres = fres * fres * 0.5;
+		
+		float fresnelValue =  lerp(0.2, _Fresnel, o.Specular);
+		half3 h = normalize(lightDir + IN.viewDir);
+		float fresnel = pow(1.0 - dot(IN.viewDir, h), 5.0);
+		fresnel += fresnelValue * (1.0 - fresnel);
+		
+		//half specFres = (_SpecVals.x + _SpecVals.y * fres)*0.5;
+		half specFres =  (1 + 2 * fresnel)*0.5;
+		  o.Albedo *= (1 + 1 * fresnel);
+		  o.Gloss *= specFres;
+		  o.Emission *= specFres;
+		  //o.Emission += dropsFakeSpec;
+		  */
 	}
-
-
 	ENDCG
-
-
-
 	}
 
 		Fallback "VertexLit"

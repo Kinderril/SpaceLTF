@@ -10,12 +10,14 @@
 			Fog { Mode Off }
 			ZWrite Off
 			ZTest Always 
+			
 			Stencil 
 			  {
 				Ref 3
 				ReadMask 3        
 				Comp Equal
 			  }
+			  
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -41,7 +43,7 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				return float4(0,1,0,1);
+				return 1;
 			}
 			ENDCG
 		}

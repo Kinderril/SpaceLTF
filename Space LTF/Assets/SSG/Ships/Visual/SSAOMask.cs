@@ -10,7 +10,7 @@ public class SSAOMask : MonoBehaviour
     private static readonly Matrix4x4 MatrixIdentity = Matrix4x4.identity;
 
     private Camera _camera;
-    private CameraEvent _cameraEvent = CameraEvent.BeforeLighting;
+    private CameraEvent _cameraEvent = CameraEvent.AfterForwardOpaque;
     private CommandBuffer _commandBuffer;
     public OutlinePostEffect OutlinePostEffect;
 
@@ -19,7 +19,7 @@ public class SSAOMask : MonoBehaviour
     private Material _material;
     private int _prevPixelHeight;
     private int _prevPixelWidth;
-    private static readonly int _ssaoMask = Shader.PropertyToID("_SSAOMask");
+//    private static readonly int _ssaoMask = Shader.PropertyToID("_SSAOMask");
 
     private void Start()
     {
@@ -56,10 +56,11 @@ public class SSAOMask : MonoBehaviour
         OutlinePostEffect.srcrender = _maskTexture;
         OutlinePostEffect.destrender = _bluredTexture;
         _commandBuffer.SetRenderTarget(_maskTexture, BuiltinRenderTextureType.CurrentActive);
-        _commandBuffer.ClearRenderTarget(false, true, Color.white);
+        _commandBuffer.ClearRenderTarget(false, true, Color.clear);
         _commandBuffer.DrawMesh(_quadMesh, MatrixIdentity, _material);
 
-        Shader.SetGlobalTexture(_ssaoMask, _maskTexture);
+        Shader.SetGlobalTexture("_ssaoMask1", _maskTexture);
+        Shader.SetGlobalTexture("_ssaoBlur1", _bluredTexture);
     }
 
     private void OnPreCull()

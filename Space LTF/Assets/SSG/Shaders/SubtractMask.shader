@@ -1,4 +1,4 @@
-﻿Shader "p0/NightVision"
+﻿Shader "p0/SubtractMask"
 {
 	SubShader
 	{
@@ -14,13 +14,13 @@
 
 			struct v2f
 			{
-			float4 pos  : POSITION;
-			float2 uv  : TEXCOORD0;
+				float4 pos  : POSITION;
+				float2 uv  : TEXCOORD0;
 			};
 			
-            uniform sampler2D _MainTex;
-			uniform sampler2D _TexA;
-			uniform sampler2D _TexB;
+            uniform sampler2D _ssaoBlur1;
+			uniform sampler2D _ssaoMask1;
+			uniform sampler2D _MainTex;
 
 			v2f vert (appdata_img v)
 			{
@@ -32,12 +32,13 @@
 			float4 frag (v2f i) : COLOR
 			{
 				float4 color = tex2D(_MainTex, i.uv);
-				float texA = tex2D(_TexA, i.uv).r;
-				float texB = tex2D(_TexB, i.uv).r;
+				float texA = tex2D(_ssaoMask1, i.uv).r;
+				float texB = tex2D(_ssaoBlur1, i.uv).r;
 
 				float delta = texB - texA;
 
-				return lerp(color, float4(1,0,0,1), delta);
+				//return delta;
+				return lerp(color, float4(0,1,0,1), saturate(delta * 0.7));
 				
 			}
 			ENDCG

@@ -30,6 +30,8 @@ public class ShipBase : MovingObject
     public GameObject FakePriorityObject { get; protected set; }
     public GameObject SelectedObject { get; protected set; }
 
+    public List<Renderer> Renderers = new List<Renderer>();
+
     private Action<ShipBase> _dealthCallback;
     public AudioSource Audio;
 

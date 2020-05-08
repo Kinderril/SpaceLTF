@@ -77,11 +77,7 @@ public class DebugPanelWindow : EditorWindow
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
-//            if (GUILayout.Button("NoMouseMove." + NoMouseMove))
-//            {
-//                SwitchNoMouseMove();
-//            }
-
+            
             if (GUILayout.Button("FastRecharge." + FastRecharge))
             {
                 SwitchFastRecharge();
@@ -281,6 +277,16 @@ public class DebugPanelWindow : EditorWindow
             Repaint();
         }   
         if (GUILayout.Button("Set Audio"))
+        {
+            List<GameObject> prefabs = new List<GameObject>();
+            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
+            foreach (var gameObject in prefabs)
+            {
+                AddAudioTest(gameObject);
+            }
+
+        }   
+        if (GUILayout.Button("CacheRenderers"))
         {
             List<GameObject> prefabs = new List<GameObject>();
             LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
