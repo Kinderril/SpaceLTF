@@ -269,6 +269,7 @@ public class DebugPanelWindow : EditorWindow
     }
 
     private GameObject _aimingBox;
+    private GameObject shipToFindRenderer;
     private void NoInGame()
     {
         if (GUILayout.Button("Recalc bullets IDs"))
@@ -285,20 +286,31 @@ public class DebugPanelWindow : EditorWindow
                 AddAudioTest(gameObject);
             }
 
-        }   
+        }
+        shipToFindRenderer = EditorGUILayout.ObjectField(shipToFindRenderer, typeof(GameObject), true) as GameObject;
         if (GUILayout.Button("CacheRenderers"))
         {
-            List<GameObject> prefabs = new List<GameObject>();
-            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
+//            List<GameObject> prefabs = new List<GameObject>();
+//            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
             var shaderToFind = Shader.Find("Custom/HeroShader");
             if (shaderToFind == null)
             {
                 Debug.LogError($"Can't find shader to cache");
                 return;
             }
-            foreach (var gameObject in prefabs)
+
+            if (shipToFindRenderer != null)
             {
-                CheckRenderers(gameObject, shaderToFind.name);
+                CheckRenderers(shipToFindRenderer, shaderToFind.name);
+
+            }
+            else
+            {
+                var allSHips = GameObject.FindObjectsOfType<ShipBase>();
+                foreach (var shipBase in allSHips)
+                {
+                    CheckRenderers(shipBase.gameObject, shaderToFind.name);
+                }
             }
 
         }
@@ -333,10 +345,10 @@ public class DebugPanelWindow : EditorWindow
 
     private void CheckRenderers(GameObject gameObject,string nameShader)
     {
-        var asset_path = AssetDatabase.GetAssetPath(gameObject);
-        var editable_prefab = PrefabUtility.LoadPrefabContents(asset_path);
+//        var asset_path = AssetDatabase.GetAssetPath(gameObject);
+//        var editable_prefab = PrefabUtility.LoadPrefabContents(asset_path);
 
-        var ShipBase = editable_prefab.GetComponent<ShipBase>();
+        var ShipBase = gameObject.GetComponent<ShipBase>();
         if (ShipBase == null)
         {
             return;
@@ -347,8 +359,8 @@ public class DebugPanelWindow : EditorWindow
         ShipBase.Renderers = renderers.ToList();
         Debug.Log($"Shp ready:{ShipBase.name}  renderers:{renderers.Count}");
 
-        PrefabUtility.SaveAsPrefabAsset(editable_prefab, asset_path);
-        PrefabUtility.UnloadPrefabContents(editable_prefab);
+//        PrefabUtility.SaveAsPrefabAsset(editable_prefab, asset_path);
+//        PrefabUtility.UnloadPrefabContents(editable_prefab);
     }
 
     private void GetRenderers(Transform tr1, HashSet<Renderer> renderers,string nameShader)

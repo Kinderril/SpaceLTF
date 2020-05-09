@@ -18,6 +18,7 @@ public enum SideTurn
 
 public class ShipBase : MovingObject
 {
+    public const string StencilType = "_StencilType";
     private const float PREDICTION_DIST = 25;
     private const float PREDICTION_DIST_AIM = 1.5f;
     private const float MAX_Y_DELTA = 10f;
@@ -137,6 +138,27 @@ public class ShipBase : MovingObject
         SelectedElement.Init(shipInventory.ShipType);
         SelectedElement.transform.SetParent(ShipVisual.transform, false);
         InitPriorityObjects();
+        int stencil = 3;
+        switch (teamIndex)
+        {
+            case TeamIndex.red:
+                stencil = SSAOMask.STENCI_RED;
+                break;
+            case TeamIndex.green:
+                stencil = SSAOMask.STENCI_GREEN;
+                break;
+        }
+        foreach (var renderer1 in Renderers)
+        {
+            var copy = Utils.CopyMaterials(renderer1, null, null);
+            for (int i = 0; i < copy.Length; i++)
+            {
+                var material = copy[i];
+                material.SetInt(StencilType, stencil);
+
+            }
+
+        }
 
         DamageData = new ShipDamageData(this);
         HitData = new ShipHitData();

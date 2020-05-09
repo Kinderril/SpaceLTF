@@ -208,7 +208,7 @@ public static class Utils
         return listOut;
     }
 
-    public static void CopyMaterials(Renderer renderer, Color? color = null, string propName = "")
+    public static Material[] CopyMaterials(Renderer renderer, Color? color = null, string propName = "")
     {
         List<Material> materialsInside = new List<Material>();
         var mat = renderer.materials;
@@ -220,6 +220,7 @@ public static class Utils
                 newMaterial.SetColor(propName, color.Value);
         }
         renderer.materials = materialsInside.ToArray();
+        return renderer.materials;
     }
 
     public static Material CopyMaterial(Material renderer)

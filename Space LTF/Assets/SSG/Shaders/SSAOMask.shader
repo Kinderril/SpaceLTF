@@ -1,5 +1,8 @@
 ﻿Shader "Hidden/SSAOMask"
-{
+{	Properties
+	{
+		_StencilType("StencilTyper", int) = 3
+	}
 	SubShader
 	{
 		Tags { "RenderType"="Opaque" }
@@ -13,15 +16,16 @@
 			
 			Stencil 
 			  {
-				Ref 3
-				ReadMask 3        
+				Ref [_StencilType]
+				ReadMask  3       
 				Comp Equal
 			  }
 			  
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-
+			
+			float _StencilType;
 			#include "UnityCG.cginc"
 
 			struct appdata

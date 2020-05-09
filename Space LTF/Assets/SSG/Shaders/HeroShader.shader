@@ -5,6 +5,7 @@
 		_Color("Main Color", Color) = (1,1,1,1)
 		_RimColor("Rim Color", Color) = (0.97,0.88,1,0.75)
 		_RimPower("Rim Power", Float) = 2.5
+		_StencilType("StencilTyper", int) = 3
 		_Fresnel("Fresnel Value", Float) = 0.28
 		_MainTex("Base (RGB)", 2D) = "white" {}
 		_BumpMap("Bump (RGB)", 2D) = "bump" {}
@@ -26,7 +27,7 @@
 
 		Stencil
 		{
-			Ref 3
+			Ref [_StencilType]
 			WriteMask 3
 			Pass replace
 		}
