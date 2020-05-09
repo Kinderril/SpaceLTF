@@ -5,25 +5,37 @@
 		_Color("Main Color", Color) = (1,1,1,1)
 		_RimColor("Rim Color", Color) = (0.97,0.88,1,0.75)
 		_RimPower("Rim Power", Float) = 2.5
+		_StencilType("StencilTyper", int) = 3
 		_Fresnel("Fresnel Value", Float) = 0.28
 		_MainTex("Base (RGB)", 2D) = "white" {}
-	_BumpMap("Bump (RGB)", 2D) = "bump" {}
-	_SpecularTex("Specular Level (R) Gloss (G)", 2D) = "gray" {}
-	_RimTex("Rim ramp (RGB) Fresnel ramp (A)", 2D) = " grey" {}
-	_WrapTex("Wrap ramp (RGBA)", 2D) = "black" {}
-
-	_Cutoff("Alpha cutoff", Range(0,1)) = 0.5
+		_BumpMap("Bump (RGB)", 2D) = "bump" {}
+		_SpecularTex("Specular Level (R) Gloss (G)", 2D) = "gray" {}
+		_RimTex("Rim ramp (RGB) Fresnel ramp (A)", 2D) = " grey" {}
+		_WrapTex("Wrap ramp (RGBA)", 2D) = "black" {}
+		_Cutoff("Alpha cutoff", Range(0,1)) = 0.5
 	}
 
 		SubShader{
-		Tags{ "RenderType" = "Opaque" }
+			Tags{ 
+			"RenderType" = "Opaque" 
+			 //"LightMode" = "Deferred"
+			 }
 
 		AlphaTest Greater[_Cutoff]
 		Blend Off
 		Cull Off
 
+		Stencil
+		{
+			Ref [_StencilType]
+			WriteMask 3
+			Pass replace
+		}
+
 		CGPROGRAM
+//#pragma surface surf BlinnPhong
 #pragma surface surf BumpSpecSkin
+#pragma target 3.0
 #include "UnityCG.cginc"
 
 		float4 _Color;
@@ -36,6 +48,12 @@
 	float4 _RimColor;
 	float _RimPower;
 	float _Fresnel;
+
+	struct Input {
+		float2 uv_MainTex;
+		float2 uv_BumpMap;
+		float3 viewDir;
+	};
 
 	inline float CalcFresnel(float3 viewDir, float3 h, float fresnelValue)
 	{
@@ -62,14 +80,8 @@
 		return c;
 	}
 
-	struct Input {
-		float2 uv_MainTex;
-		float2 uv_BumpMap;
-		float3 viewDir;
-	};
-
-
-	void surf(Input IN, inout SurfaceOutput o) {
+	void surf(Input IN, inout SurfaceOutput o) 
+	{
 		half4 texcol = tex2D(_MainTex, IN.uv_MainTex);
 		o.Albedo = texcol.rgb * _Color.rgb;
 		o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
@@ -79,13 +91,25 @@
 		half3 rim = 1.0 - saturate(dot(normalize(IN.viewDir), o.Normal));
 		o.Emission = _RimColor.rgb * pow(rim, _RimPower);
 		o.Alpha = texcol.a * _Color.a;
+		/*
+
+		//half fres = 1.0 - dot(normalize(IN.viewDir), o.Normal);
+		//fres = fres * fres * 0.5;
+		
+		float fresnelValue =  lerp(0.2, _Fresnel, o.Specular);
+		half3 h = normalize(lightDir + IN.viewDir);
+		float fresnel = pow(1.0 - dot(IN.viewDir, h), 5.0);
+		fresnel += fresnelValue * (1.0 - fresnel);
+		
+		//half specFres = (_SpecVals.x + _SpecVals.y * fres)*0.5;
+		half specFres =  (1 + 2 * fresnel)*0.5;
+		  o.Albedo *= (1 + 1 * fresnel);
+		  o.Gloss *= specFres;
+		  o.Emission *= specFres;
+		  //o.Emission += dropsFakeSpec;
+		  */
 	}
-
-
 	ENDCG
-
-
-
 	}
 
 		Fallback "VertexLit"

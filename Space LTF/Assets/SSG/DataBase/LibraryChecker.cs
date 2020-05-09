@@ -20,6 +20,12 @@ public static class LibraryChecker
             {
                 Debug.LogError($"Ship {data.name} have no MoveBoostEffect effect");
             }
+
+            if (data.Renderers.Count == 0)
+            {
+
+                Debug.LogError($"Ship {data.name} have no Renderers");
+            }
         }
     }
 

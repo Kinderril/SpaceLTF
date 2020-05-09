@@ -77,11 +77,7 @@ public class DebugPanelWindow : EditorWindow
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
-//            if (GUILayout.Button("NoMouseMove." + NoMouseMove))
-//            {
-//                SwitchNoMouseMove();
-//            }
-
+            
             if (GUILayout.Button("FastRecharge." + FastRecharge))
             {
                 SwitchFastRecharge();
@@ -273,6 +269,7 @@ public class DebugPanelWindow : EditorWindow
     }
 
     private GameObject _aimingBox;
+    private GameObject shipToFindRenderer;
     private void NoInGame()
     {
         if (GUILayout.Button("Recalc bullets IDs"))
@@ -287,6 +284,33 @@ public class DebugPanelWindow : EditorWindow
             foreach (var gameObject in prefabs)
             {
                 AddAudioTest(gameObject);
+            }
+
+        }
+        shipToFindRenderer = EditorGUILayout.ObjectField(shipToFindRenderer, typeof(GameObject), true) as GameObject;
+        if (GUILayout.Button("CacheRenderers"))
+        {
+//            List<GameObject> prefabs = new List<GameObject>();
+//            LoadAllPrefabsAt("Assets/Resources/Prefabs", prefabs);
+            var shaderToFind = Shader.Find("Custom/HeroShader");
+            if (shaderToFind == null)
+            {
+                Debug.LogError($"Can't find shader to cache");
+                return;
+            }
+
+            if (shipToFindRenderer != null)
+            {
+                CheckRenderers(shipToFindRenderer, shaderToFind.name);
+
+            }
+            else
+            {
+                var allSHips = GameObject.FindObjectsOfType<ShipBase>();
+                foreach (var shipBase in allSHips)
+                {
+                    CheckRenderers(shipBase.gameObject, shaderToFind.name);
+                }
             }
 
         }
@@ -317,6 +341,46 @@ public class DebugPanelWindow : EditorWindow
 
 
         _aimingBox = EditorGUILayout.ObjectField(_aimingBox, typeof(GameObject), true) as GameObject;
+    }
+
+    private void CheckRenderers(GameObject gameObject,string nameShader)
+    {
+//        var asset_path = AssetDatabase.GetAssetPath(gameObject);
+//        var editable_prefab = PrefabUtility.LoadPrefabContents(asset_path);
+
+        var ShipBase = gameObject.GetComponent<ShipBase>();
+        if (ShipBase == null)
+        {
+            return;
+        }
+        HashSet<Renderer> renderers = new HashSet<Renderer>();
+
+        GetRenderers(ShipBase.transform, renderers, nameShader);
+        ShipBase.Renderers = renderers.ToList();
+        Debug.Log($"Shp ready:{ShipBase.name}  renderers:{renderers.Count}");
+
+//        PrefabUtility.SaveAsPrefabAsset(editable_prefab, asset_path);
+//        PrefabUtility.UnloadPrefabContents(editable_prefab);
+    }
+
+    private void GetRenderers(Transform tr1, HashSet<Renderer> renderers,string nameShader)
+    {
+        if (tr1 == null)
+        {
+            return;
+        }
+        foreach (Transform tr in tr1)
+        {
+            var renderer = tr.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                if (renderer.sharedMaterial != null && renderer.sharedMaterial.shader.name == nameShader)
+                {
+                    renderers.Add(renderer);
+                }
+            }
+            GetRenderers(tr,renderers,nameShader);
+        }
     }
 
     private void CreateTxtFile(Dictionary<string, string> locEng,string fileSubName)
