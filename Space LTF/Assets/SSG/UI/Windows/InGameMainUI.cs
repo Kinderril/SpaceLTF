@@ -139,13 +139,22 @@ public class InGameMainUI : BaseWindow
         int weaponsIndex = 0;
         //        WindowKeys.gameObject.SetActive(false);
         TimeScaleBattle.Init(_battle);
-        var mainShip = MyCommander.MainShip;
-        if (mainShip != null)
-        {
-            SpellModulsContainer.Init(this, MyCommander.SpellController, mainShip, OnSpellClicked, MyCommander.CoinController);
-        }
+
+
+        battle.OnBattleLoaded += InitSpells;
         TutorButton.gameObject.SetActive(_isTutor);
         ActivateCurrentTutor();
+    }
+    void InitSpells()
+    {
+        var battle = BattleController.Instance;
+        var mainShip = MyCommander.MainShip;
+        battle.OnBattleLoaded -= InitSpells;
+        if (mainShip != null)
+        {
+            SpellModulsContainer.Init(this, MyCommander.SpellController,
+                mainShip, OnSpellClicked, MyCommander.CoinController, battle.AutoAICommander);
+        }
     }
 
     public void OnClickOpenLastTutor()
@@ -465,6 +474,8 @@ public class InGameMainUI : BaseWindow
             _spellSelected.EndShowCast();
         }
 
+        var battle = BattleController.Instance;
+        battle.OnBattleLoaded -= InitSpells;
         OnShipSelected = null;
         MainCamera.ReturnCamera();
         //        WindowKeys.gameObject.SetActive(false);

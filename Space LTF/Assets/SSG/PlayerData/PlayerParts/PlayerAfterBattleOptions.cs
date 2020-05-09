@@ -40,6 +40,13 @@ public class PlayerAfterBattleOptions
 
     public MessageDialogData GetDialog(int step, float cellPower, ShipConfig config)
     {
+
+//        var msg1 = Namings.Format(Namings.DialogTag("afterBattleStart"));
+//        var list = new List<AnswerDialogData>();
+//        list.Add(GetAnswer(EAfterBattleAnswers.afterBattleBuyout, cellPower, config));
+//        var dialog1 = new MessageDialogData(msg1, list);
+//        return dialog1;
+
         var delta = step - _lastStepGetDialog;
         if (SkillWork(DialogFrequancy, delta))
         {

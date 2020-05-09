@@ -21,7 +21,6 @@ public abstract class IAICommander
         _shipControl = shipControl;
         enable = true;
         shipControl.OnDeath += OnDeath;
-        CreateAllAiSpells();
     }
 
     protected abstract void CreateAllAiSpells();

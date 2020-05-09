@@ -14,7 +14,7 @@ public class SpellModulsContainer : MonoBehaviour
     public Animator NotEnoughtBatteries;
 
     public void Init(InGameMainUI inGameMain, CommanderSpells commanderSpells,
-        ShipBase mainShip, Action<SpellInGame> buttonCallback, CommanderCoinController coinController)
+        ShipBase mainShip, Action<SpellInGame> buttonCallback, CommanderCoinController coinController,AutoAICommander autoAICommander)
     {
         // _mainShip = mainShip;
         _buttons.Clear();
@@ -30,7 +30,7 @@ public class SpellModulsContainer : MonoBehaviour
                  {
                     //                    SpellSelected(spell);
                     buttonCallback(spell);
-                 }, coinController.CoefSpeed, index);
+                 }, coinController.CoefSpeed, index, autoAICommander.GetAutoSpell(baseSpellModul));
                 index++;
                 _buttons.Add(b);
             }

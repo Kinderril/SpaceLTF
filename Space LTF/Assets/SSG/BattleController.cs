@@ -35,7 +35,7 @@ public class BattleController : Singleton<BattleController>
     public Commander GreenCommander;
     public Commander RedCommander;
 
-    public List<AICommander> AICommander = new List<AICommander>();
+    public List<IAICommander> AICommander = new List<IAICommander>();
 
     public bool CanRetire => _canRetire;
     public CellController CellController { get; private set; }
@@ -48,6 +48,7 @@ public class BattleController : Singleton<BattleController>
     public List<Color> ColorLight = new List<Color>();
 
     public event Action<ShipBase, bool> OnShipAdd;
+    public event Action OnBattleLoaded;
     public bool CanFastEnd = false;
     public BattleState State;
     //    private float _lastTimeDelta = 1f;
@@ -63,6 +64,7 @@ public class BattleController : Singleton<BattleController>
     private EndBattleType LastWinner;
     private bool _canRetire;
     public BattleEndCallback OnBattleEndCallback;
+    public AutoAICommander AutoAICommander;
 
 
     public void LaunchGame(Player greenSide, Player redSide, bool canRetire, BattlefildEventType? eventType)
@@ -173,6 +175,12 @@ public class BattleController : Singleton<BattleController>
                 AICommander.Add(aiCommander);
             }
         }
+
+        if (GreenCommander.MainShip != null)
+        {
+            AutoAICommander = new AutoAICommander(GreenCommander);
+            AICommander.Add(AutoAICommander);
+        }
         CamerasController.Instance.GameCamera.InitBorders(CellController.Min, CellController.Max);
         InputManager.Init(InGameMainUI, GreenCommander);
 
@@ -185,7 +193,7 @@ public class BattleController : Singleton<BattleController>
         await Task.Yield();
         WindowManager.Instance.LoadingScreen.gameObject.SetActive(false);
         await Task.Yield();
-
+        OnBattleLoaded?.Invoke();
         CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition, -1);
         var ambientSource = CamerasController.Instance.GameCamera.SourceAmbient;
         ambientSource.clip = DataBaseController.Instance.AudioDataBase.AmbientsClips.RandomElement();
@@ -465,6 +473,7 @@ public class BattleController : Singleton<BattleController>
 
     public void Dispose()
     {
+        OnBattleLoaded = null;
         BulletContainer.ClearTransform();
         InputManager.Dispose();
         OnShipAdd = null;

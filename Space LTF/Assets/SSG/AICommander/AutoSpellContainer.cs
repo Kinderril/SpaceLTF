@@ -28,6 +28,7 @@ public class AutoSpellContainer
 
     public AutoSpellContainer(ShipControlCenter commander, SpellInGame spellData)
     {
+        _isActive = false;
         _allAsteroids = BattleController.Instance.CellController.Data.Asteroids;
         //        _testTargetPosition = new TestTargetPosition();
         _spellData = spellData;

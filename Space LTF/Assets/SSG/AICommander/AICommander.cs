@@ -62,6 +62,6 @@ public class AICommander : IAICommander
     public AICommander(ShipControlCenter shipControl, Commander commanderOwner) 
         : base(shipControl, commanderOwner)
     {
-
+             CreateAllAiSpells();
     }
 }
