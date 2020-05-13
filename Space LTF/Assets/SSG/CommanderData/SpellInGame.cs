@@ -35,11 +35,13 @@ public class SpellDamageData
 
 public class SpellInGame : IWeapon
 {
+    public ShallCastToTaregtAI ShallCastToTaregtAIAction;
     public BulletDestroyDelegate BulletDestroyAction;
     public CreateBulletDelegate CreateBulletAction;
     public WeaponInventoryAffectTarget AffectAction;
 
-    private BulleStartParameters _bulletStartParams;
+    private BulleStartParameters _bulletStartParams;  
+    public BulleStartParameters BulletStartParams => _bulletStartParams;
 
     private SpellZoneVisualCircle CircleObjectToShow;
     private SpellZoneVisualLine LineObjectToShow;
@@ -48,6 +50,7 @@ public class SpellInGame : IWeapon
     //    private int RadiusCircle;
     private Func<Vector3> _modulPos;
     private Bullet _bulletOrigin;
+    public Bullet BulletOrigin => _bulletOrigin;
     private WeaponAffectionAdditionalParams _additionalParams = new WeaponAffectionAdditionalParams();
     private SpellDamageData _spellDamageData;
 
@@ -111,6 +114,7 @@ public class SpellInGame : IWeapon
         SubUpdateShowCast = spellData.SubUpdateShowCast;
         CanCastAtPoint = spellData.CanCastAtPoint;
         CreateBulletAction = spellData.CreateBulletAction;
+        ShallCastToTaregtAIAction = spellData.ShallCastToTaregtAIAction;
         BulletDestroyAction = spellData.BulletDestroyDelegate;
         ShowCircle = _spellDamageData.AOERad > 0;
     }

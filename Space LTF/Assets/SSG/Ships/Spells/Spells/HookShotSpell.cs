@@ -49,7 +49,7 @@ public class HookShotSpell : BaseSpellModulInv
 
     public HookShotSpell()
         : base(SpellType.hookShot, 2, _baseCostTime,
-            new BulleStartParameters(25, 36f, DIST_SHOT, DIST_SHOT), false)
+            new BulleStartParameters(25, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
     }
 
@@ -99,6 +99,18 @@ public class HookShotSpell : BaseSpellModulInv
         var bullet = DataBaseController.Instance.GetBullet(WeaponType.nextFrame);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
+    }
+
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        if (info != null && info.Dist > 4)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public override BulletDestroyDelegate BulletDestroyDelegate => BulletDestroy;

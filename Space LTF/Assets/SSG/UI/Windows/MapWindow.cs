@@ -48,7 +48,10 @@ public class MapWindow : BaseWindow
     public MovingArmyUIController MovingArmyUIController;
     public VideoTutorialElement Tutorial;
     public VideoTutorialElement OptionalTutorial;
-    private bool _isTutor;
+    public VideoTutorialElement UpgradeMainShipTutorial;
+    public VideoTutorialElement BattleShipDetailsTutor;
+    private bool _simpleTutor;
+    private bool _advTutor;
 
     public event Action<bool> OnOpenInventory;
 
@@ -59,28 +62,20 @@ public class MapWindow : BaseWindow
 
             base.Init();
             Tutorial.Init();
+            UpgradeMainShipTutorial.Init();
+            BattleShipDetailsTutor.Init();
             OptionalTutorial.Init();
-
             CellIinfoObject.Disable();
             MapConsoleUI.Appear();
             NavigationList.Init(GlobalMap);
-            //        ShipRepairedObject.gameObject.SetActive(false);
             DialogWindow.Dispose();
             GlobalMap.gameObject.SetActive(true);
-            //        WindowSettings.gameObject.SetActive(false);
             ReputationMapUI.gameObject.SetActive(false);
             CamerasController.Instance.StartGlobalMap();
             GlobalMap.UnBlock();
-            //        ArmyInfoContainer.gameObject.SetActive(false);
             player = MainController.Instance.MainPlayer;
             player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
-            //        Cataclysm.Init(player.MapData);
-
-            //        ReputationMapUI.Init();
             PlayerByStepUI.Init(player.ByStepDamage);
-            //        player.MapData.OnCellChanged += OnCellChanged;
-            //        player.MapData.OnSectorChanged += OnSectorChanged;
-            //        _selectedCell = data.GetNextCell(player.MapData.CurrentCell);
             MoneyField.Init(player.MoneyData.MoneyCount);
             MicrochipField.Init(player.MoneyData.MicrochipsCount);
             player.MoneyData.OnMoneyChange += OnMoneyChange;
@@ -105,9 +100,10 @@ public class MapWindow : BaseWindow
             InitSideShip();
             QuestsOnStartController.Init(player.QuestsOnStartController);
             CheckLeaveDialog();
-            _isTutor = (player.MapData.GalaxyData is TutorialGalaxyData);
+            _simpleTutor = (player.MapData.GalaxyData is SimpleTutorialGalaxyData);
+            _advTutor = (player.MapData.GalaxyData is AdvTutorialGalaxyData);
             bool showFirstInfo = player.MapData.Step == 0;
-            if (_isTutor)
+            if (_simpleTutor)
             {
                 showFirstInfo = false;
                 if (player.MapData.Step == 0)
@@ -115,6 +111,16 @@ public class MapWindow : BaseWindow
                     Tutorial.Open();
                 }
             }
+            else if (_advTutor)
+            {
+                showFirstInfo = false;
+                if (player.MapData.CurrentCell is UpgradeMainShipTutorGlobalCell)
+                {
+                    UpgradeMainShipTutorial.Open();
+                }
+            }
+
+
             if (showFirstInfo)
             {
                 var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
@@ -274,7 +280,7 @@ public class MapWindow : BaseWindow
                 var isNothing = obj.Cell is GlobalMapNothing;
                 if (!isNothing)
                 {
-                    if (player.MapData.CanGoTo(obj.Cell) || obj.Cell.InfoOpen || obj.Cell.IsScouted)
+                    if (player.MapData.CanGoTo(obj.Cell,false) || obj.Cell.InfoOpen || obj.Cell.IsScouted)
                     {
                         CellIinfoObject.Init(obj);
                         return;
@@ -327,7 +333,7 @@ public class MapWindow : BaseWindow
     {
         if (obj != player.MapData.CurrentCell)
         {
-            if (player.MapData.CanGoTo(obj))
+            if (player.MapData.CanGoTo(obj,true))
             {
                 TryInitsMainCellDialog(obj);
             }
@@ -495,6 +501,15 @@ public class MapWindow : BaseWindow
             }
         }
     }
+    public void WearBattleShipDetailsTutor()
+    {
+        BattleShipDetailsTutor.Open();
+    }
+    public void StartUpgradeMainShipTutor()
+    {
+        UpgradeMainShipTutorial.Open();
+    }
+
     public void OnClickSettings()
     {
         WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.map);
@@ -551,5 +566,6 @@ public class MapWindow : BaseWindow
         MapConsoleUI.ClearAll();
         QuestsOnStartController.ClearAll();
     }
+
 }
 

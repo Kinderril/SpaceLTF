@@ -33,6 +33,16 @@ public class ShipDamageData : ShipData
         }
     }
 
+    public bool HaveDamage(ShipDamageType d)
+    {
+        if (damagedDetails.TryGetValue(d, out var b))
+        {
+            return b;
+        }
+
+        return false;
+    }
+
     public void Activate()
     {
         _engineStop = _owner.EngineStop;

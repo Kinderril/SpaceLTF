@@ -21,14 +21,26 @@ public class RechargeShieldSpell : BaseSpellModulInv
     private float HealPercent => Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT + Level * 0.12f;
     public RechargeShieldSpell()
         : base(SpellType.rechargeShield, 2, 30,
-             new BulleStartParameters(15f, 46f, MINES_DIST, MINES_DIST), false)
+             new BulleStartParameters(15f, 46f, MINES_DIST, MINES_DIST), false,TargetType.Ally)
     {
 
     }
     protected override CreateBulletDelegate createBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        var p = ship.ShipParameters.CurShiled / ship.ShipParameters.MaxShield;
+
+        if (p < .5f)
+        {
+            return true;
+        }
+
+        return false;
+    }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
         if (UpgradeType == ESpellUpgradeType.A1)

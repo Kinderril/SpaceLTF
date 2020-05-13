@@ -13,7 +13,6 @@ public class InGameMainUI : BaseWindow
     public BattleCoinUI BattleCoinUI;
     private ShipBase _selectedShip;
 //    private bool _paused = false;
-    private SpellInGame _spellSelected;
     public Transform ShipsInfoContainer;
     public ArrowTarget ArrowTarget;
     public Transform FlyingInfosContainer;
@@ -29,17 +28,18 @@ public class InGameMainUI : BaseWindow
     private Dictionary<int, ShipUIOnMap> ShipsUIs = new Dictionary<int, ShipUIOnMap>();
     public CreditControllerUI CreditController;
     public SpellModulsContainer SpellModulsContainer;
-    public event Action<SpellInGame> OnSelectSpell;
     public RetirreButton RetireButton;
     public ReinforsmentsButton ReinforsmentsButton;
     public CamerasLinkButtons CamerasLinkButtons;
-    private bool _isTutor;
+    private bool _isSimpleTutor;
+    private bool _isStartAutoTutor;
 
     public TimeScaleBattleUI TimeScaleBattle;
     //    public Button DebugKillAllEnemies;
     private FlyingNumbersController FlyingNumbersController = new FlyingNumbersController();
     public SimpleTutorialVideo TutorSimple1;
     public SimpleTutorialVideo TutorSimple2;
+    public SimpleTutorialVideo TutorSimpleAutoFight;
     public Button TutorButton;
     public event Action<ShipBase> OnShipSelected;
 
@@ -113,8 +113,9 @@ public class InGameMainUI : BaseWindow
         // FastEndButton.gameObject.SetActive(false);
         ShipModulsUI.gameObject.SetActive(false);
         this._battle = battle;
-        UnselectSpell();
-        _isTutor = battle.RedCommander.Player is PlayerAITutor;
+        SpellModulsContainer.UnselectSpell();
+        _isSimpleTutor = battle.RedCommander.Player is PlayerAITutor;
+         _isStartAutoTutor = battle.RedCommander.Player is PlayerAITutorUseAutoFight;
         TutorSimple1.Init();
         TutorSimple2.Init();
 
@@ -122,10 +123,10 @@ public class InGameMainUI : BaseWindow
         BattleCoinUI.Init(MyCommander.CoinController);
         battle.OnShipAdd += OnShipAdd;
         var canRetire = battle.CanRetire;
+        var _isTutor = _isSimpleTutor || _isStartAutoTutor;
         if (_isTutor)
         {
             canRetire = false;
-
         }
         RetireButton.Init(this, 15f, canRetire);
         ReinforsmentsButton.Init(this);
@@ -153,7 +154,7 @@ public class InGameMainUI : BaseWindow
         if (mainShip != null)
         {
             SpellModulsContainer.Init(this, MyCommander.SpellController,
-                mainShip, OnSpellClicked, MyCommander.CoinController, battle.AutoAICommander);
+                mainShip,  MyCommander.CoinController, battle.GreenAutoAICommander,MyCommander);
         }
     }
 
@@ -165,7 +166,7 @@ public class InGameMainUI : BaseWindow
     private void ActivateCurrentTutor()
     {
 
-        if (_isTutor)
+        if (_isSimpleTutor)
         {
             BattleController.Instance.PauseData.Pause();
             if (_battle.RedCommander.Ships.Count <= 1)
@@ -177,6 +178,11 @@ public class InGameMainUI : BaseWindow
                 TutorSimple2.Open(Unpause);
             }
         }
+        else if (_isStartAutoTutor)
+        {
+            BattleController.Instance.PauseData.Pause();
+            TutorSimpleAutoFight.Open(Unpause);
+        }
     }
 
     private void Unpause()
@@ -185,29 +191,6 @@ public class InGameMainUI : BaseWindow
         BattleController.Instance.PauseData.Unpase(1f);
     }
 
-    private void OnSpellClicked(SpellInGame spellToCast)
-    {
-        if (spellToCast.CanCast())
-        {
-            if (_spellSelected != null)
-            {
-                _spellSelected.EndShowCast();
-            }
-
-            _spellSelected = spellToCast;
-            if (OnSelectSpell != null)
-            {
-                OnSelectSpell(_spellSelected);
-            }
-            _spellSelected.StartShowCast();
-            Debug.Log("spell select " + _spellSelected.Name);
-        }
-        else
-        {
-            SpellModulsContainer.CastFail();
-            Debug.Log("Can't cast spell " + spellToCast.Name + "   " + spellToCast.CostCount);
-        }
-    }
 
     public void OnKillOnEnemiesDebugClick()
     {
@@ -215,27 +198,7 @@ public class InGameMainUI : BaseWindow
         DebugUtils.KillAllEnemies();
 #endif
     }
-    private void UnselectSpell()
-    {
-        _spellSelected = null;
-        if (OnSelectSpell != null)
-        {
-            OnSelectSpell(_spellSelected);
-        }
-    }
 
-    void Update()
-    {
-        var ray = GetPointByClick(Input.mousePosition);
-        if (ray.HasValue)
-        {
-            if (_spellSelected != null)
-            {
-                _spellSelected.UpdateShowCast(ray.Value);
-            }
-
-        }
-    }
 
     public void OnClickSettings()
     {
@@ -379,34 +342,13 @@ public class InGameMainUI : BaseWindow
             return;
         }
 
-        if (_spellSelected != null)
+        if (SpellModulsContainer.SpellSelected != null)
         {
-            if (!BattleController.Instance.PauseData.IsPause)
-            {
-                if (left)
-                {
-                    var ray = GetPointByClick(pos);
-                    //                    Debug.LogError($"Try cast CLICK!   {ray.HasValue}");
-                    if (ray.HasValue)
-                    {
-                        if (MyCommander.SpellController.TryCastspell(_spellSelected, ray.Value))
-                        {
-                            Debug.Log("spell TryCast " + _spellSelected.Name);
-                            EndCastSpell();
-                            return;
-                        }
-                        EndCastSpell();
-                    }
-                    EndCastSpell();
-                }
-                else
-                {
-                    EndCastSpell();
-                }
-            }
+            SpellModulsContainer.TryCast(left,pos);
         }
         else
         {
+            SpellModulsContainer.ManualAutoOff();
             if (left)
             {
                 if (delta < HoldClearCoinUI.BOT_LINE)
@@ -433,16 +375,8 @@ public class InGameMainUI : BaseWindow
         }
     }
 
-    private void EndCastSpell()
-    {
-        if (_spellSelected != null)
-        {
-            _spellSelected.EndShowCast();
-        }
-        UnselectSpell();
-    }
 
-    private Vector3? GetPointByClick(Vector3 pos)
+    public Vector3? GetPointByClick(Vector3 pos)
     {
         if (MainCamera == null)
         {
@@ -467,12 +401,9 @@ public class InGameMainUI : BaseWindow
         return null;
     }
 
+
     public override void Dispose()
     {
-        if (_spellSelected != null)
-        {
-            _spellSelected.EndShowCast();
-        }
 
         var battle = BattleController.Instance;
         battle.OnBattleLoaded -= InitSpells;
@@ -480,13 +411,12 @@ public class InGameMainUI : BaseWindow
         MainCamera.ReturnCamera();
         //        WindowKeys.gameObject.SetActive(false);
         FlyingNumbersController.Dispose();
-        UnselectSpell();
+        SpellModulsContainer.Dispose(); 
         CreditController.Dispose();
         foreach (var shipUiOnMap in ShipsUIs)
         {
             Destroy(shipUiOnMap.Value);
         }
-        SpellModulsContainer.Dispose();
     }
 
     public void OnShowNextShip()

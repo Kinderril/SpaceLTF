@@ -108,8 +108,6 @@ public class BaseTooltip : UIElement
             }
         }
         Close();
-
-        //            SetPosition(Input.mousePosition);
     }
 
     public void SetBaseParent(Transform baseParent)

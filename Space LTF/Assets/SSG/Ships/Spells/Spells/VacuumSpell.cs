@@ -25,6 +25,13 @@ public class VacuumSpell : BaseSpellModulInv
         }
         return a;
     }
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        return true;
+
+    }
     public override int CostTime
     {
         get
@@ -41,7 +48,7 @@ public class VacuumSpell : BaseSpellModulInv
 
     public VacuumSpell()
         : base(SpellType.vacuum, 2, _baseCostTime,
-             new BulleStartParameters(25, 36f, DIST_SHOT, DIST_SHOT), false)
+             new BulleStartParameters(25, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
 
     }

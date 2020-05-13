@@ -14,8 +14,10 @@ public class PreBattleWindow : BaseWindow
     private Player _redPlayer;
     private PlayerArmyUI _greeArmyUi;
     private PlayerArmyUI _redArmyUi;
-    private bool _isTutor;
-    public VideoTutorialElement PreBattlTutorial;
+    private bool _isSimpleTutor;
+    private bool _isAdvTutor;
+    public VideoTutorialElement PreBattlTutorial; //Базовый тутор
+    public VideoTutorialElement AdvBattlTutorial; //Выставить модуль и орудие.
 
     public ScoutShipInfoUI ScoutShipInfoPrefab;
 
@@ -28,12 +30,18 @@ public class PreBattleWindow : BaseWindow
         ClearTransform(EnemyPlayersLayout);
         Tuple<Player, Player> data = obj as Tuple<Player, Player>;
         PreBattlTutorial.Init();
+        AdvBattlTutorial.Init();
         if (data != null)
         {
             _greenPlayer = data.val1;
             _redPlayer = data.val2;
-            _isTutor = _redPlayer is PlayerAITutor;
-            if (_isTutor)
+            _isSimpleTutor = _redPlayer is PlayerAITutor;
+            _isAdvTutor = _redPlayer is PlayerAITutorWearModuls;
+            if (_isAdvTutor)
+            {
+                AdvBattlTutorial.Open();
+            }
+            else if (_isSimpleTutor)
             {
                 if (_greenPlayer.Army.Count > 1)
                 {
@@ -96,12 +104,22 @@ public class PreBattleWindow : BaseWindow
 
     public void OnClickStart()
     {
-        if (_isTutor)
+        if (_isSimpleTutor)
         {
             bool isCHeck = CheckGreenWeapons();
             if (!isCHeck)
             {
                 PreBattlTutorial.Open();
+                return;
+            }
+        }
+        else if (_isAdvTutor)
+        {
+
+            bool isCHeck = CheckAdvWeapons();
+            if (!isCHeck)
+            {
+                AdvBattlTutorial.Open();
                 return;
             }
         }
@@ -140,6 +158,27 @@ public class PreBattleWindow : BaseWindow
         }
 
         return isBattleShipHaveWeapons && isMainShipHaveWeapons;
+
+    }   
+    private bool CheckAdvWeapons()
+    {
+        bool isBattleShipHaveWeapons = false;
+        bool isBattleShipModulesWeapons = false;
+
+
+        var battleShips = _greenPlayer.Army.Army.Where(x => x.Ship.ShipType != ShipType.Base).ToList();
+        if (battleShips.Count == 0)
+        {
+            return true;
+        }
+
+        var ship = battleShips.First();
+        var lisWeapons = ship.Ship.WeaponsModuls.GetNonNullActiveSlots();
+        var lisModuls = ship.Ship.Moduls.GetNonNullActiveSlots();
+        isBattleShipHaveWeapons = lisWeapons.Count > 0;
+        isBattleShipModulesWeapons = lisModuls.Count > 0;
+
+        return isBattleShipHaveWeapons && isBattleShipModulesWeapons;
 
     }
 }

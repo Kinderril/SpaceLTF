@@ -49,13 +49,13 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
 
 
     protected BaseSpellModulInv(SpellType spell, int costCount, int costTime,
-        BulleStartParameters bulleStartParameters, bool isHoming)
+        BulleStartParameters bulleStartParameters, bool isHoming, TargetType targetType)
     {
         Level = 1;
         IsHoming = isHoming;
         CastSpell = castActionSpell;
         BulleStartParameters = bulleStartParameters;
-        AffectAction = new WeaponInventoryAffectTarget(affectAction, TargetType.Enemy);
+        AffectAction = new WeaponInventoryAffectTarget(affectAction, targetType);
         CreateBullet = createBullet;
         SpellType = spell;
         CostCount = costCount;
@@ -77,6 +77,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
     protected abstract AffectTargetDelegate affectAction { get; }
     public WeaponInventoryAffectTarget AffectAction { get; private set; }
     public CreateBulletDelegate CreateBulletAction => CreateBullet;
+    public abstract ShallCastToTaregtAI ShallCastToTaregtAIAction { get; }
     public virtual BulletDestroyDelegate BulletDestroyDelegate => null;
 
     public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)

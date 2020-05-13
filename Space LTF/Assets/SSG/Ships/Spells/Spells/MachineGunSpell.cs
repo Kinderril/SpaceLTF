@@ -26,6 +26,12 @@ public class MachineGunSpell : BaseSpellModulInv
         }
     }
 
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        return true;
+    }
     private float DmgShield => 1 + (int)(Level * 1.5f);
 
     public int BulletsCount => ClacBulletCount(UpgradeType);
@@ -43,7 +49,7 @@ public class MachineGunSpell : BaseSpellModulInv
     }
 
     public MachineGunSpell()
-        : base(SpellType.machineGun, 1, 45, new BulleStartParameters(14f, 36f, DIST_SHOT, DIST_SHOT), false)
+        : base(SpellType.machineGun, 1, 45, new BulleStartParameters(14f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
     }
 

@@ -42,7 +42,8 @@ public class EngineLockSpell : BaseSpellModulInv
     public float CurLockPeriod => LOCK_PERIOD + LOCK_LEVEL * Level;
 
     public EngineLockSpell()
-        : base(SpellType.engineLock, 3, _baseCostTime, new BulleStartParameters(15, 36f, DIST_SHOT, DIST_SHOT), false)
+        : base(SpellType.engineLock, 3, _baseCostTime,
+            new BulleStartParameters(15, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
 
     }
@@ -50,6 +51,13 @@ public class EngineLockSpell : BaseSpellModulInv
     {
         EngineCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
 
+    }
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        var p = ship.DamageData.HaveDamage(ShipDamageType.engine);
+        return !p;
     }
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {

@@ -10,6 +10,7 @@ public class WindowStart : BaseWindow
     public Button AchievementsButton;
     public TextMeshProUGUI DemoField;
     public GameObject TutorAdditional;
+    public TutorButtonsStart TutorButtonsStart;
     public override void Init()
     {
         Statistics.Init();
@@ -79,46 +80,8 @@ public class WindowStart : BaseWindow
     }
     public void OnClickStartTutorial()
     {
-
-        void StartTutor() 
-        {
-            var gameData = UpdateStartData();
-            MainController.Instance.CreateNewPlayerAndStartGame(gameData);
-        }
-
-        WindowManager.Instance.ConfirmWindow.Init(StartTutor,null,Namings.Tag("wantStartTutor"));
-
-    }
-
-
-    private StartNewGameData UpdateStartData()
-    {
-        var posibleStartSpells = new List<SpellType>()
-        {
-            SpellType.lineShot,
-            SpellType.engineLock,
-            SpellType.shildDamage,
-            SpellType.mineField,
-            SpellType.throwAround,
-            SpellType.distShot,
-            SpellType.artilleryPeriod,
-            SpellType.repairDrones,
-            SpellType.vacuum,
-            SpellType.hookShot,
-//            SpellType.spaceWall,
-        };
-        List<WeaponType> posibleStartWeapons = new List<WeaponType>();
-        var posibleSpells = posibleStartSpells.RandomElement(2);
-#if UNITY_EDITOR
-        //        posibleSpells.Add(SpellType.repairDrones);
-#endif
-        posibleSpells.Add(SpellType.rechargeShield);
-        // posibleSpells.Add(SpellType.roundWave);
-        // gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
-        var gameData = new StartNewGameData(new Dictionary<PlayerParameterType, int>(),
-            ShipConfig.mercenary, posibleStartWeapons, 4, 1, 2, 0, 1, posibleSpells, 0, true);
-        var dif = Utils.FloatToChance(gameData.CalcDifficulty());
-        return gameData;
+        TutorButtonsStart.Init();
+        TutorButtonsStart.gameObject.transform.position = TutorAdditional.transform.position;
     }
 
     public void OnClickLoad()

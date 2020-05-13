@@ -46,15 +46,20 @@ public class Player
         MapData.Init(data, ByStepDamage);
         MapData.GalaxyData.GalaxyEnemiesArmyController.InitQuests(QuestData);
         List<StartShipPilotData> startArmy;
-        if (data.IsTutorial)
+
+        switch (data.GameNode)
         {
-            startArmy = CreateStartArmyTutor();
+            case EGameMode.simpleTutor:
+                startArmy = CreateStartArmySimpleTutor();
+                break;
+            case EGameMode.advTutor:
+                startArmy = CreateStartArmyAdvTutor();
+                break;
+            case EGameMode.sandBox:
+            default:
+                startArmy = CreateStartArmy(data.shipConfig, data.posibleStartWeapons);
+                break;
         }
-        else
-        {
-            startArmy = CreateStartArmy(data.shipConfig, data.posibleStartWeapons);
-        }
-        
         Army.SetArmy(startArmy);
         RepairData.Init(Army, MapData, Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
@@ -184,9 +189,8 @@ public class Player
 
     }
 
-    private List<StartShipPilotData> CreateStartArmyTutor()
+    private List<StartShipPilotData> CreateStartArmySimpleTutor()
     {
-
         ArmyCreatorLogs logs = new ArmyCreatorLogs();
         float r = 1000;
         int simpleIndex;
@@ -198,6 +202,28 @@ public class Player
         }
         List<StartShipPilotData> army = new List<StartShipPilotData>();
         army.Add(bShip);
+        MainShip = bShip;
+        return army;
+    }    
+    private List<StartShipPilotData> CreateStartArmyAdvTutor()
+    {
+        ArmyCreatorLogs logs = new ArmyCreatorLogs();
+        float r = 1000;
+        int simpleIndex;
+        var bShip = ArmyCreator.CreateBaseShip(new ArmyRemainPoints(r), ShipConfig.federation, this);
+        var battleShip = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), ShipConfig.federation, this, logs);
+        battleShip.Ship.RemoveItem(battleShip.Ship.CocpitSlot);
+        battleShip.Ship.RemoveItem(battleShip.Ship.EngineSlot);
+        battleShip.Ship.RemoveItem(battleShip.Ship.WingSlot);
+
+        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
+        {
+            var m1 = Library.CreateSpell(SpellType.distShot);
+            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
+        }
+        List<StartShipPilotData> army = new List<StartShipPilotData>();
+        army.Add(bShip);
+        army.Add(battleShip);
         MainShip = bShip;
         return army;
 

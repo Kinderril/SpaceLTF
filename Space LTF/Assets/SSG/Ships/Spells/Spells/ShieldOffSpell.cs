@@ -33,9 +33,22 @@ public class ShieldOffSpell : BaseSpellModulInv
 
     public ShieldOffSpell()
         : base(SpellType.shildDamage, 3, 15,
-            new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false)
+            new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
         CurrentDamage = new CurWeaponDamage(2, 0);
+    }
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        var p = ship.DamageData.HaveDamage(ShipDamageType.shiled);
+        if (!p)
+        {
+            var per = ship.ShipParameters.CurShiled / ship.ShipParameters.MaxShield;
+            return per > 0.3f;
+        }
+        return false;
+
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {

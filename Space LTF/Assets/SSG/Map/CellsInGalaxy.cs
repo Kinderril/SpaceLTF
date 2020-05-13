@@ -40,7 +40,13 @@ public class CellsInGalaxy
         }
         catch (Exception e)
         {
-            Debug.LogError("can't implement sector");
+            if (cell != null)
+                Debug.LogError($"can't implement sector  cell.indX:{cell.indX}  cell.indZ:{cell.indZ}   ");
+            else
+            {
+
+                Debug.LogError($"can't implement sector  ");
+            }
         }
     }
 

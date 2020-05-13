@@ -19,11 +19,12 @@ public class DistShotSpell : BaseSpellModulInv
     // [NonSerialized]
     // private CurWeaponDamage CurWeaponDamage;
 
-    private const float BULLET_SPEED = 12f;
+    private const float BULLET_SPEED = 50f;
     private const float BULLET_TURN_SPEED = .2f;
-    private const float DIST_SHOT = 54f;
+    private const float DIST_SHOT = 154f;
     public DistShotSpell()
-        : base(SpellType.distShot, 5, 7, new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
+        : base(SpellType.distShot, 5, 7, 
+            new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
         // CurWeaponDamage = new CurWeaponDamage(0, 12);
     }
@@ -31,11 +32,17 @@ public class DistShotSpell : BaseSpellModulInv
     {
         DistShotCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
     }
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        return true;
+    }
 
     private void DistShotCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var dir = target.Position - shootpos;
-        Debug.LogError($"dir:{dir}    target.Position:{target.Position}");
+//        Debug.LogError($"dir:{dir}    target.Position:{target.Position}");
         var b = Bullet.Create(origin, weapon, dir, shootpos, null, bullestartparameters);
         var beamNoTrg = b as BeamBulletNoTarget;
         if (beamNoTrg != null)

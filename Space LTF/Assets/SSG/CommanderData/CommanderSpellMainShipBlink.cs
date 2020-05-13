@@ -26,6 +26,14 @@ public class CommanderSpellMainShipBlink : ISpellToGame
     {
         //ADD ACTION HERE
     };
+
+    public ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        return true;
+
+    }
     public BulletDestroyDelegate BulletDestroyDelegate { get; }
 
     public CastActionSpell CastSpell => (target, origin, weapon, shootpos, bullestartparameters) =>

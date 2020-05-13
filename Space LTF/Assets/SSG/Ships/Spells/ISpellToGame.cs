@@ -3,6 +3,7 @@
     BulleStartParameters BulleStartParameters { get; }
     WeaponInventoryAffectTarget AffectAction { get; }
     CreateBulletDelegate CreateBulletAction { get; }
+    ShallCastToTaregtAI ShallCastToTaregtAIAction { get; }
     BulletDestroyDelegate BulletDestroyDelegate { get; }
     CastActionSpell CastSpell { get; }
     SpellDamageData RadiusAOE();

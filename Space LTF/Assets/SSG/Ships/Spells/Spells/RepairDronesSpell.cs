@@ -30,10 +30,24 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     public RepairDronesSpell()
         : base(SpellType.repairDrones, 3, 30,
-             new BulleStartParameters(15f, 46f, MINES_DIST, MINES_DIST), false)
+             new BulleStartParameters(15f, 46f, MINES_DIST, MINES_DIST), false,TargetType.Ally)
     {
 
     }
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        var p = ship.ShipParameters.CurHealth / ship.ShipParameters.MaxSpeed;
+
+        if (p < .5f)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     protected override CreateBulletDelegate createBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;

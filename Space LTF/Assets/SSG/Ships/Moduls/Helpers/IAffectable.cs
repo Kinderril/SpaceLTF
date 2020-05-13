@@ -26,7 +26,10 @@ public delegate void CreateBulletDelegate(BulletTarget target, Bullet origin, IW
     BulleStartParameters bulleStartParameters);
 
 [System.Serializable]
-public delegate void BulletDestroyDelegate(Bullet origin, IWeapon weapon, AICell cell);
+public delegate void BulletDestroyDelegate(Bullet origin, IWeapon weapon, AICell cell); 
+
+[System.Serializable]
+public delegate bool ShallCastToTaregtAI(ShipPersonalInfo info, ShipBase ship);
 
 public interface IAffectable
 {

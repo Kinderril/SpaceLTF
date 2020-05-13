@@ -280,6 +280,7 @@ public static class EspLocalization
 { "BulletSpeed", "Velocidad"},
 {"SellItemCost", "Precio de venta"},
 {"ItemCost", "Valor"},
+{"AutoSpellButton", "Tiro automático"},
 {"Completed","Completado"},
 {"StartNewGameFieldSize","El tamaño del Sector"},
 {"StartNewGameCoresCount","Elementos energéticos"},
@@ -852,6 +853,14 @@ public static class EspLocalization
 {"foundLotCredits","Encontraste un montón de préstamos {0}" },
 {"YourRartMoney", "Te las arreglaste para encontrar algo. Tu parte:{0}."},
 {"OKgo5050", "Ok, vamos de 50 a 50"},
+{"dialog_ArmyReputation","Reputación {0}"},
+
+{"dialog_TutorialUpgradeMainShip", "Actualizar nave de comandante"},
+{"dialog_WearDetailsTutor", "Equipar barco de batalla"},
+{"MainShipUpgradeTutor", "Actualizar"},
+{"WearDetailsTutor", "Equip"},
+{"Simple","Sencillo"},
+{"Advanced","Avanzado"},
 
 {"RaidersProConsCalc", "Bonificación de velocidad {0}%. Bonificación de velocidad de giro {1}%"},
 {"MercenaryProConsCalc", "Bonificación de velocidad {0}%. Bonificación de velocidad de giro {1}%"},
@@ -862,7 +871,17 @@ public static class EspLocalization
 {"EParameterShipweaponSlots", "Ranuras para armas"},
 {"BonusParamField", "Primo {0}%"},
 {"CollectAll", "Reúna la cantidad correcta de elementos de energía\nEl botón 'Objetivo' lo ayudará a encontrarlos\nLuego muévase a las puertas de la galaxia para activarlos."},
-                                                                                                                        };
+
+{"AdvTutorialOpenInv", "Para abrir el inventario, haga clic en este botón"},
+{"AdvTutorialUpgradeParameters", "Actualiza algunos parámetros principales de la nave para que sean más útiles en la batalla o después de ella"},
+{"AdvTutorEqupBattleShip", "Equipar el barco de batalla con detalles principales\nLos detalles pueden ser de diferente calidad"},
+{"AdvTutorEquipShip", "Equipar barco"},
+{"AdvTutorAutoUse", "Para usar automáticamente el arma de la nave principal, haga clic en el botón @Auto, luego elija el arma y el objetivo"},
+{"AdvTutorUnsetAutoUse", "Para detener el uso automático de armas, haga clic con el botón derecho del mouse en el icono de la pistola"},
+{"AdvTutorEquipShipWeaponsAndModules", "La próxima batalla será lo suficientemente difícil\nEste módulo agrega a todos los efectos de las armas de la nave 'ignorando los escudos'"},
+{"AdvTutorUpgradeLevel", "Algunos módulos requieren que el nivel de la nave esté equipado\nMejorar el nivel de la nave de batalla"},
+
+    };
 
 }
 

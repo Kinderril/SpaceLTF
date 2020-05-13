@@ -64,7 +64,7 @@ public class BattleController : Singleton<BattleController>
     private EndBattleType LastWinner;
     private bool _canRetire;
     public BattleEndCallback OnBattleEndCallback;
-    public AutoAICommander AutoAICommander;
+    public AutoAICommander GreenAutoAICommander;
 
 
     public void LaunchGame(Player greenSide, Player redSide, bool canRetire, BattlefildEventType? eventType)
@@ -178,8 +178,8 @@ public class BattleController : Singleton<BattleController>
 
         if (GreenCommander.MainShip != null)
         {
-            AutoAICommander = new AutoAICommander(GreenCommander);
-            AICommander.Add(AutoAICommander);
+            GreenAutoAICommander = new AutoAICommander(GreenCommander);
+            AICommander.Add(GreenAutoAICommander);
         }
         CamerasController.Instance.GameCamera.InitBorders(CellController.Min, CellController.Max);
         InputManager.Init(InGameMainUI, GreenCommander);

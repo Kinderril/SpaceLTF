@@ -311,6 +311,7 @@ public static class EngLocalization
         {"BulletSpeed", "Speed"},
         {"SellItemCost", "Sell cost"},
         {"ItemCost", "Value"},
+        {"AutoSpellButton", "Auto shots"},
 
 
 
@@ -574,8 +575,8 @@ public static class EngLocalization
         {"WeaponEngine", "Lock enemy engine for some period"},
 
         {"MachineGunSpellDesc", "Series  of {0} fast bullets. Damage: {1}/{2}"},
-        {"DistShotSpell", "Single bullet. Only hull damage {0}."},
-        {"DistShotSpellSpecial", "Single bullet.  Only hull damage {0}. If target have no shield destroy engine for {1} sec."},
+        {"DistShotSpell", "Single bullet. Only hull damage {0}. No shield damage!"},
+        {"DistShotSpellSpecial", "Single bullet.  Only hull damage {0}. No shield damage! If target have no shield destroy engine for {1} sec."},
 
         {"rep_adv_friend", "You are friends. Maybe they can help you."},
         {"rep_adv_neutral", "Fleets will fight, but you can trade with them."},
@@ -589,11 +590,12 @@ public static class EngLocalization
         {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
 
         {"dialog_Ok", "Ok"},
-        {"dialog_MovingArmyStart", "You have been occupied by special force. You have no chanse to run."},
+        {"dialog_MovingArmyStart", "You have been occupied by special force. You have no chance to run."},
 
         {"dialog_MovingArmyFight", "Fight"},
         {"dialog_MovingArmyWin", "Special forces destroyed."},
         {"dialog_MovingArmyGerReward", "Get all valuable items."},
+        {"dialog_armyTutorIgnoreShield", "Before battle you have found some weapons and modules. Equip them before fight."},
 
         {"dialog_shopEnemy", "You see shop. Nobody wants to trade with you." },
         {"dialog_shopTrade", "You see shop. Maybe you want buy something?" },
@@ -856,6 +858,14 @@ public static class EngLocalization
         {"dialog_anomalyDeactivated","You successfully deactivate anomaly. {0} of your ships improved."},
         {"dialog_anomalyNotDay","Not my day."},
         {"dialog_anomalyDestroyed","Anomaly gone away."},
+        {"dialog_ArmyReputation","Reputation {0}"},
+
+        {"dialog_TutorialUpgradeMainShip","Upgrade commander ship"},  
+        {"dialog_WearDetailsTutor","Equip battle ship"},  
+        {"MainShipUpgradeTutor","Upgrade"},  
+        {"WearDetailsTutor","Equip"},  
+        {"Simple","Simple"},  
+        {"Advanced","Advanced"},  
 
 
       /*P2*/  {"battleSpells", "Commander ship special options.\nAny shot will take some batteries for a period.\nYou must catch the moment to use them successfully."},
@@ -960,6 +970,15 @@ public static class EngLocalization
         {"YourRartMoney", "All fine, you found some credits. Your part:{0}."},
         {"OKgo5050", "Ok, lets go 50/50"},
         {"Goal", "Goal"},
+
+        {"AdvTutorialOpenInv", "To open inventory click this button"},
+        {"AdvTutorialUpgradeParameters", "Upgrade some main ship parameters to be more useful at battle or after it"},
+        {"AdvTutorEqupBattleShip", "Equip battle ship with main details\nDetails can be different quality"},
+        {"AdvTutorEquipShip", "Equip ship"},
+        {"AdvTutorAutoUse", "To auto use main ship gun click to @Auto button, then choose gun and target"},
+        {"AdvTutorUnsetAutoUse", "To stop auto use guns click right mouse button on gun icon"},
+        {"AdvTutorEquipShipWeaponsAndModules", "Next battle will be hard enough\nThis module adds to all ship weapons effect 'ignoring shields'"},
+        {"AdvTutorUpgradeLevel", "Some modules require level of ship to be equipped\nImprove level of battle ship"},
 
 
     };

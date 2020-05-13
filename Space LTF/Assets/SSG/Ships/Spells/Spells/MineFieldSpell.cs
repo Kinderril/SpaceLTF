@@ -22,7 +22,7 @@ public class MineFieldSpell : BaseSpellModulInv
 
     public MineFieldSpell()
         : base(SpellType.mineField, 2, 14,
-             new BulleStartParameters(8f, 36f, MINES_DIST, MINES_DIST), false)
+             new BulleStartParameters(8f, 36f, MINES_DIST, MINES_DIST), false,TargetType.Enemy)
     {
 
     }
@@ -45,7 +45,13 @@ public class MineFieldSpell : BaseSpellModulInv
             MainCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, bullestartparameters);
         }
     }
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        return true;
+
+    }
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {

@@ -17,6 +17,12 @@ public class LineShotSpell : BaseSpellModulInv
     {
         get { return FireCoefCalc(Level, UpgradeType); }
     }
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        return true;
+    }
 
     private float FireCoefCalc(int level, ESpellUpgradeType upd)
     {
@@ -51,7 +57,7 @@ public class LineShotSpell : BaseSpellModulInv
 
     public LineShotSpell()
         : base(SpellType.lineShot, 4, 11,
-             new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false)
+             new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
         CurrentDamage = new CurWeaponDamage(Damage, Damage);
     }

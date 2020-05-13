@@ -10,14 +10,14 @@ public class ThrowAroundSpell : BaseSpellModulInv
     private const float DIST_SHOT = 50;
     private const float DAMAGE_BASE = 5;
     private const float rad = 4f;
-    private const float powerAsteroidCoef = 1.5f;
+    private const float powerAsteroidCoef = 2.25f;
     private const float timerToLockEngine = 3f;
     private float shieldDmg => DAMAGE_BASE + Level * 3;
     private float powerThrow => 7 + Level * 1.5f;
 
     public ThrowAroundSpell()
         : base(SpellType.throwAround, 2, 10,
-             new BulleStartParameters(19.7f, 36f, DIST_SHOT, DIST_SHOT), false)
+             new BulleStartParameters(19.7f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
 
     }
@@ -31,6 +31,13 @@ public class ThrowAroundSpell : BaseSpellModulInv
         return new SpellDamageData(rad);
     }
 
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        return true;
+
+    }
     protected override CreateBulletDelegate createBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;

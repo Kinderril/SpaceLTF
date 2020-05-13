@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 [System.Serializable]
-public class TutorialGalaxyData : GalaxyData
+public class SimpleTutorialGalaxyData : GalaxyData
 {
-    public TutorialGalaxyData(string name) 
+    public SimpleTutorialGalaxyData(string name) 
         : base(name)
     {
 
@@ -20,16 +20,9 @@ public class TutorialGalaxyData : GalaxyData
         SizeOfSector = sizeSector;
         _sectorsCount = 1;
         Debug.Log($"global map size: {_sectorsCount} {verticalCount}");
-
-
-
         var sectors = new SectorTutorial[_sectorsCount, verticalCount];
-        var id = 0;
-        var maxDist = 0;
-
-        //Create start sector       
         var startSector = sectors[0, 0];
-        startSector= new SectorTutorial(0, 0, 10, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
+        startSector= new SectorTutorial(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
             1,0,1, to =>
             {
 

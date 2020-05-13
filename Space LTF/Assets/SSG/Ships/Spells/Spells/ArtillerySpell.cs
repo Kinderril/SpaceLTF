@@ -26,11 +26,18 @@ public class ArtillerySpell : BaseSpellModulInv
     }
 
     public ArtillerySpell()
-        : base(SpellType.artilleryPeriod, 4, 20, new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false)
+        : base(SpellType.artilleryPeriod, 4, 20,
+            new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
 
     }
 
+    public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
+    {
+        return true;
+    }
     public override SpellDamageData RadiusAOE()
     {
         return new SpellDamageData(rad / 2f, false);

@@ -67,7 +67,7 @@ public class GalaxyData
     protected virtual StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, int coreCells,
         ShipConfig playerShipConfig, int verticalCount)
     {
-        var allSubSectors = new List<SectorData>();
+        var allSubSectors = new HashSet<SectorData>();
         var unPopulatedSectors = new List<SectorData>();
         var step = sizeSector + 1;
         SizeOfSector = step;
@@ -124,7 +124,7 @@ public class GalaxyData
         unPopulatedSectors.Remove(startSector);
         startSector.Populate(startPower);
         startSector.MarkAsVisited();
-
+        allSubSectors.Add(startSector);
         //CreateEndSector   
         var endSector = sectors[_sectorsCount - 1, MyExtensions.Random(1, verticalCount - 2)];
 
@@ -133,6 +133,7 @@ public class GalaxyData
         zCell = endSector.StartZ + RndIndex(sizeSector);
         var endCell = new EndGlobalCell(startPower, Utils.GetId(), xCell, zCell, endSector);
         endSector.SetCell(endCell, id);
+        allSubSectors.Add(endSector);
         unPopulatedSectors.Remove(endSector);
         endSector.Populate(startPower);
         Debug.Log($"CreateEndSector : {xCell} {zCell}");
@@ -166,6 +167,7 @@ public class GalaxyData
             {
                 createdCoreSector++;
                 CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
+//                allSubSectors.Add(endSector);
             }
         }
 
@@ -517,9 +519,9 @@ public class GalaxyData
 
     protected void InplementSectorToGalaxy(SectorData[,] sectors, int sizeZoneSector, int sectorsCount, int verticalCount)
     {
-        //        Debug.Log(Namings.TryFormat("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}", sizeSector, sectorsCount) );
         var SizeX = sectorsCount * (sizeZoneSector + 1) - 1;
         var SizeZ = verticalCount * (sizeZoneSector + 1) - 1;
+        Debug.Log(Namings.Format("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}   SizeX:{2}   SizeZ:{3}  ", sizeZoneSector, sectorsCount, SizeX, SizeZ));
         cells = new CellsInGalaxy(SizeX, SizeZ);
         for (var i = 0; i < sectorsCount; i++)
         {

@@ -112,6 +112,8 @@ public class ArmyGlobalMapCell : GlobalMapCell
             }
         }
 
+        var reputation = Namings.Format(Namings.DialogTag("ArmyReputation"), rep);
+        scoutsField = $"{scoutsField}\n{reputation}";
         ans.Add(new AnswerDialogData(Namings.DialogTag("Attack"), Take));
         if (isFriends)
         {

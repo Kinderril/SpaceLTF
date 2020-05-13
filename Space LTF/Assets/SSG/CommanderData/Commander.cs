@@ -27,12 +27,7 @@ public class Commander
     public event Action<ShipBase> OnShipAdd;
     private Action<Commander> OnCommanderDeathCallback;
     private Action<Commander, ShipBase> OnShipInited;
-    //    private Action<ShipBase> OnShipLauched;
-
-    // private CommanderShipEnemy LastPriorityTarget;
-
     private bool _oneCoinContrInited;
-    //    private bool isRunawayComplete = false;
     public float StartPower { get; private set; }
     private Vector3 _enemyCell;
     public Player Player { get; private set; }

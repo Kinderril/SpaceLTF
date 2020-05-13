@@ -7,6 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerMapData
 {
+    public const int TUTOR_SECTOR_SIZE = 10;
     private GlobalMapCell _currentCell;
     public GlobalMapCell LastCell = null;
     public GalaxyData GalaxyData;
@@ -52,15 +53,22 @@ public class PlayerMapData
         Step = 0;
         var sectorIndex = MyExtensions.Random(10 * data.SectorSize, 100 * data.SectorSize);
         GalaxyData galaxyData;
-        if (data.IsTutorial)
+        switch (data.GameNode)
         {
-            data.SectorSize = 10;
-            galaxyData = new TutorialGalaxyData("TutorialGalaxyData " + sectorIndex.ToString());
+            default:
+            case EGameMode.sandBox:
+                galaxyData = new GalaxyData("GalaxyData " + sectorIndex.ToString());
+                break;
+            case EGameMode.simpleTutor:
+                data.SectorSize = TUTOR_SECTOR_SIZE;
+                galaxyData = new SimpleTutorialGalaxyData("SimpleTutorialGalaxyData " + sectorIndex.ToString());
+                break;
+            case EGameMode.advTutor:
+                data.SectorSize = TUTOR_SECTOR_SIZE;
+                galaxyData = new AdvTutorialGalaxyData("AdvTutorialGalaxyData " + sectorIndex.ToString());
+                break;
         }
-        else
-        {
-            galaxyData = new GalaxyData("GalaxyData " + sectorIndex.ToString());
-        }
+
         var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
         GalaxyData = galaxyData;
         CurrentCell = startCell;
@@ -93,7 +101,7 @@ public class PlayerMapData
     public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap, Action<GlobalMapCell> callback)
     {
         var lastCell = CurrentCell;
-        if (CanGoTo(target))
+        if (CanGoTo(target,true))
         {
             if (target != CurrentCell)
             {
@@ -152,7 +160,7 @@ public class PlayerMapData
         }
     }
 
-    public bool CanGoTo(GlobalMapCell target)
+    public bool CanGoTo(GlobalMapCell target,bool withActionIfCantGo)
     {
 #if Demo
         int step = Step * 200;
@@ -167,6 +175,10 @@ public class PlayerMapData
         }
 #endif
 
+        if (CurrentCell != null && !CurrentCell.CanGotFromIt(withActionIfCantGo))
+        {
+            return false;
+        }
         if (target == null)
         {
             Debug.LogError("Can't go to null target");

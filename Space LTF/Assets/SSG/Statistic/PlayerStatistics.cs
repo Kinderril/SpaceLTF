@@ -42,7 +42,7 @@ public class OpenShipConfig
 public class PlayerStatistics
 {
     public const int OPEN_FOR_END_GAME = 3;
-    public const int POINTS_TO_OPEN = 125;
+    public const int POINTS_TO_OPEN = 75;
     private static string mainPlayer = $"/stats_.stat";
 //    private static string mainPlayer = $"/stats_{MainController.VERSION}.stat";
 
@@ -282,13 +282,18 @@ public class PlayerStatistics
     {
         _pointsOnStart = CollectedPoints;
         var d = data.CalcDifficulty();
-        if (data.IsTutorial)
+        switch (data.GameNode)
         {
-            _lastDifficulty = TUTORIAL_POINTS;
-        }
-        else
-        {
-            _lastDifficulty = (int)(d * 100);
+            case EGameMode.sandBox:
+            default:
+                _lastDifficulty = (int)(d * 100);
+                break;
+            case EGameMode.simpleTutor:
+                _lastDifficulty = TUTORIAL_POINTS;
+                break;
+            case EGameMode.advTutor:
+                _lastDifficulty = TUTORIAL_POINTS;
+                break;
         }
     }
 

@@ -212,9 +212,8 @@ public class AICellDataRaound
         var distTostart2 = (ateroidPos - StartPosition2).magnitude;
         if (distTostart2 > 10 && distTostart1 > 10)
         {
-            var asteroid = new AIAsteroidPredata(ateroidPos);
+            var asteroid = AddAsteroid(ateroidPos);
             Asteroids.Add(asteroid);
-            asteroid.OnMove += OnAsteroidMove;
             //        StartX + CellSize * i
             var cellIx = (int)((ateroidPos.x - StartX) / CellSize);
             var cellIz = (int)((ateroidPos.z - StartZ) / CellSize);
@@ -227,6 +226,24 @@ public class AICellDataRaound
                 }
             }
         }
+    }
+
+    private AIAsteroidPredata AddAsteroid(Vector3 ateroidPos)
+    {
+
+        var asteroid = new AIAsteroidPredata(ateroidPos);
+        Asteroids.Add(asteroid);
+        asteroid.OnMove += OnAsteroidMove;
+
+        void OnAsteroidDeath()
+        {
+            Asteroids.Remove(asteroid);
+            asteroid.OnDeath -= OnAsteroidDeath;
+            asteroid.OnMove -= OnAsteroidMove;
+        }
+
+        asteroid.OnDeath += OnAsteroidDeath;
+        return asteroid;
     }
 
     private void OnAsteroidMove(AIAsteroidPredata data, Vector3 nextPos)
@@ -252,8 +269,7 @@ public class AICellDataRaound
             {
                 dir = Utils.RotateOnAngUp(dir, MyExtensions.GreateRandom(step));
                 var point = CenterZone + dir * MyExtensions.Random(minRad, Radius * 1.1f);
-                var asteroid = new AIAsteroidPredata(point);
-                Asteroids.Add(asteroid);
+                AddAsteroid(point);
             }
         }
 

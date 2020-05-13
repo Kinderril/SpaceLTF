@@ -1,6 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public enum EGameMode
+{
+                 sandBox,
+//                 sandBox,
+                 simpleTutor,
+                 advTutor,
+}
+
 public class StartNewGameData
 {
     public int BasePower;
@@ -13,11 +21,11 @@ public class StartNewGameData
     public List<SpellType> posibleSpell;
     public Dictionary<PlayerParameterType, int> startParametersLevels;
     public int PowerPerTurn;
-    public bool IsTutorial;
+    public EGameMode GameNode;
 
     public StartNewGameData(Dictionary<PlayerParameterType, int> startParametersLevels,
         ShipConfig shipConfig, List<WeaponType> posibleStartWeapons, int SectorSize, int SectorCount,
-        int stepsBeforeDeath, int CoreElementsCount, int BasePower, List<SpellType> posibleSpell, int PowerPerTurn,bool isTutorial)
+        int stepsBeforeDeath, int CoreElementsCount, int BasePower, List<SpellType> posibleSpell, int PowerPerTurn, EGameMode gameNode)
     {
         Debug.Log(($"StartNewGameData {shipConfig.ToString()} SectorSize:{SectorSize} " +
                   $" SectorCount:{SectorCount} StepsBeforeDeath:{stepsBeforeDeath}  CoreElementsCount:{CoreElementsCount}" +
@@ -32,7 +40,7 @@ public class StartNewGameData
         this.BasePower = BasePower;
         this.posibleSpell = posibleSpell;
         this.PowerPerTurn = PowerPerTurn;
-        IsTutorial = isTutorial;
+        GameNode = gameNode;
     }
 
 

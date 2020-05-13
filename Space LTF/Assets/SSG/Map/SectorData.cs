@@ -50,7 +50,7 @@ public class SectorData
         //            Debug.LogError("WTF");
         //        }
         Size = size;
-        //        Debug.Log(Namings.TryFormat("Sub Sector X:{0} Z:{1}.     Congif:{2}", startX, startZ, shipConfig.ToString()));
+        Debug.Log(Namings.Format("Sub Sector X:{0} Z:{1}.     Congif:{2}   Size:{3}", startX, startZ, shipConfig.ToString(), Size));
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)

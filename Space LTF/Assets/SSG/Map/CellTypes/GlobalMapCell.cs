@@ -87,6 +87,10 @@ public abstract class GlobalMapCell
         return mesData;
     }
 
+    public virtual bool CanGotFromIt(bool withAction)
+    {
+        return true;
+    }
 
     private void FightMovingArmy()
     {

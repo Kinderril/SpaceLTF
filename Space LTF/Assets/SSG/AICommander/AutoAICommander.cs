@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ using UnityEngine;
 public class AutoAICommander : IAICommander
 {
     private CommanderSpells _commanderSpells;
+    public event Action<bool, int> OnSpellActivated;
 
     Dictionary<SpellInGame,AutoSpellContainer> _spells = new Dictionary<SpellInGame, AutoSpellContainer>();
     public AutoAICommander(Commander commanderOwner)
@@ -21,7 +23,7 @@ public class AutoAICommander : IAICommander
         {
             if (spellModulInv != null)
             {
-                AutoSpellContainer spell = new AutoSpellContainer(_shipControl, spellModulInv);
+                AutoSpellContainer spell = new AutoSpellContainer(_shipControl, spellModulInv,OnSpellAutoActivated);
                 _spells.Add(spellModulInv,spell);
 
             }
@@ -29,9 +31,14 @@ public class AutoAICommander : IAICommander
 
     }
 
+    private void OnSpellAutoActivated(int shipId, bool val)
+    {
+        OnSpellActivated?.Invoke(val,shipId);
+    }        
+
     public override void ManualUpdate()
     {
-        if (enable && Time.time - _createdTime > CAST_PERIOD)
+        if (enable && Time.time - _createdTime > CAST_PERIOD && Time.timeScale > 0.0001f)
         {
             foreach (var autoSpellContainer in _spells)
             {
@@ -40,14 +47,6 @@ public class AutoAICommander : IAICommander
                     autoSpellContainer.Value.PeriodlUpdate();
                 }
             }
-//            var myArmyCount = _commander.Ships.Count;
-//            for (int i = 0; i < _spells.Length; i++)
-//            {
-//                var spell = _spells[i];
-//                spell.ManualUpdate();
-//                spell.PeriodlUpdate(myArmyCount);
-//            }
-
         }
     }
 
@@ -55,5 +54,20 @@ public class AutoAICommander : IAICommander
     public AutoSpellContainer GetAutoSpell(SpellInGame baseSpellModul)
     {
         return _spells[baseSpellModul];
+    }
+
+    public void ActivateAiSpell(SpellInGame spellSelected, ShipBase getClosest)
+    {
+        var setTarget = _spells[spellSelected];
+        setTarget.SetActive(true,getClosest);
+    }
+
+    public void Dispose()
+    {
+        foreach (var autoSpellContainer in _spells)
+        {
+            autoSpellContainer.Value.Dispose();
+        }
+        _spells.Clear();
     }
 }
