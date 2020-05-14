@@ -10,6 +10,8 @@ public class PlayerRepairData
     [field: NonSerialized]
     public event Action OnSomeShipRepaired;
 
+    private bool isInited = false;
+
     public PlayerRepairData()
     {
 
@@ -17,6 +19,12 @@ public class PlayerRepairData
 
     internal void Init(PlayerArmy army, PlayerMapData mapData, PlayerParameters repairParam)
     {
+        if (isInited)
+        {
+            return;
+        }
+
+        isInited = true;
         this.army = army;
         this.repairParam = repairParam;
         mapData.OnCellChanged += OnCellChanged;
@@ -68,4 +76,3 @@ public class PlayerRepairData
     }
 
 }
-

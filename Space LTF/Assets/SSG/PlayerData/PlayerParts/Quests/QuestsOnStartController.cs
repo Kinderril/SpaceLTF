@@ -13,11 +13,11 @@ public class QuestsOnStartController
     public QuestsOnStartController(float coef)
     {
         var allTypes = (EQuestOnStart[])Enum.GetValues(typeof(EQuestOnStart));
-//#if UNITY_EDITOR
-//        ActiveQuests.Add(BaseQuestOnStart.Create(EQuestOnStart.killDroids, 0.1f));
-//        ActiveQuests.Add(BaseQuestOnStart.Create(EQuestOnStart.winDroids, 0.1f));
-//        ActiveQuests.Add(BaseQuestOnStart.Create(EQuestOnStart.laserDamage, 0.1f));
-//#else
+        //#if UNITY_EDITOR
+        //        ActiveQuests.Add(BaseQuestOnStart.Create(EQuestOnStart.killDroids, 0.1f));
+        //        ActiveQuests.Add(BaseQuestOnStart.Create(EQuestOnStart.winDroids, 0.1f));
+        //        ActiveQuests.Add(BaseQuestOnStart.Create(EQuestOnStart.laserDamage, 0.1f));
+        //#else
         var selectedTypes = allTypes.ToList().RandomElement(QUESTS_TAKEN);
         foreach (var eQuestOnStart in selectedTypes)
         {
@@ -33,14 +33,21 @@ public class QuestsOnStartController
 
     }
 
+    private bool _isInited = false;
     public void InitQuests()
     {
+        if (_isInited)
+        {
+            return;
+        }
+
+        _isInited = true;
         foreach (var baseQuestOnStart in ActiveQuests)
         {
             baseQuestOnStart.Init();
         }
-    }     
-    
+    }
+
     public void DisposeQuests()
     {
         foreach (var baseQuestOnStart in ActiveQuests)
@@ -49,4 +56,3 @@ public class QuestsOnStartController
         }
     }
 }
-

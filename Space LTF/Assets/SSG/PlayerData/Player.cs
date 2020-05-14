@@ -12,7 +12,7 @@ public delegate void ItemTransfer(IInventory from, IInventory to, IItemInv item)
 public class Player
 {
     public static string mainPlayer = $"myPlayerData_.data";
-//    public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
+    //    public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
     //    public int CoinsCount = 7;
     public PlayerInventory Inventory;
     public PlayerParameters Parameters;
@@ -204,7 +204,7 @@ public class Player
         army.Add(bShip);
         MainShip = bShip;
         return army;
-    }    
+    }
     private List<StartShipPilotData> CreateStartArmyAdvTutor()
     {
         ArmyCreatorLogs logs = new ArmyCreatorLogs();
@@ -358,6 +358,7 @@ public class Player
             Player save = (Player)bf.Deserialize(file);
             file.Close();
             player = save;
+            player.LoadData();
             Debug.Log("Game Loaded");
             return true;
         }
@@ -365,6 +366,13 @@ public class Player
         player = null;
         return false;
     }
+
+    private void LoadData()
+    {
+        RepairData.Init(Army, MapData, Parameters);
+        QuestsOnStartController.InitQuests();
+    }
+
     public virtual ETurretBehaviour GetTurretBehaviour()
     {
         return ETurretBehaviour.stayAtPoint;
