@@ -358,6 +358,7 @@ public class Player
             Player save = (Player)bf.Deserialize(file);
             file.Close();
             player = save;
+            player.LoadData();
             Debug.Log("Game Loaded");
             return true;
         }
@@ -365,6 +366,13 @@ public class Player
         player = null;
         return false;
     }
+
+    private void LoadData()
+    {
+        RepairData.Init(Army, MapData, Parameters);
+        QuestsOnStartController.InitQuests();
+    }
+
     public virtual ETurretBehaviour GetTurretBehaviour()
     {
         return ETurretBehaviour.stayAtPoint;

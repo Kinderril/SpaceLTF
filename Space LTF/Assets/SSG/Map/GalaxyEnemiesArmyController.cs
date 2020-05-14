@@ -57,6 +57,11 @@ public class GalaxyEnemiesArmyController
         TryBornArmy(MainController.Instance.MainPlayer.MapData.CurrentCell);
     }
 
+    public void AddArmy(GlobalMapCell cellToBorn)
+    {
+
+    }
+
     private void TryBornArmy(GlobalMapCell curPlayersCell)
     {
         var posibleCells = _cells.Where(x =>
@@ -120,5 +125,57 @@ public class GalaxyEnemiesArmyController
         }
 
     }
+
+    public Dictionary<MovingArmy, GlobalMapCell> FindTargetForMovingArmies(GlobalMapCell playersCell, Func<GlobalMapCell, bool> cellHaveObject)
+    {
+        HashSet<GlobalMapCell> freeCells = new HashSet<GlobalMapCell>();
+        HashSet<GlobalMapCell> choosedCells = new HashSet<GlobalMapCell>();
+        _armies.Sort((army, movingArmy) => (army.Priority > movingArmy.Priority)?1:-1 );
+        Dictionary<MovingArmy, GlobalMapCell> _nextCell = new Dictionary<MovingArmy, GlobalMapCell>();
+
+        foreach (var globalMapCell in _cells)
+        {
+            if (globalMapCell != null)
+            {
+                if (cellHaveObject(globalMapCell))
+                {
+                    if (globalMapCell.CurMovingArmy == null)
+                    {
+                        freeCells.Add(globalMapCell);
+                    }
+                    else
+                    {
+                        choosedCells.Add(globalMapCell);
+                    }
+                }
+            }
+        }
+
+        foreach (var movingArmy in _armies)
+        {
+            if (movingArmy.CurCell != playersCell)
+            {
+                var targetCell = movingArmy.FindCellToMove(playersCell,freeCells);
+               
+                    if (targetCell != null)
+                    {
+                        _nextCell.Add(movingArmy, targetCell);
+                        freeCells.Remove(targetCell);
+                        choosedCells.Add(targetCell);
+                    }
+                
+            }
+        }
+
+        foreach (var globalMapCell in _nextCell)
+        {
+            globalMapCell.Key.PrevCell = globalMapCell.Key.CurCell;
+            globalMapCell.Key.CurCell = null;
+        }
+
+        return _nextCell;
+
+    }
+
 }
 

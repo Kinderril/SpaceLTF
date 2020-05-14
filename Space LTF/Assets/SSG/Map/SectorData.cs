@@ -200,6 +200,8 @@ public class SectorData
             var armyCellcell = new ArmyGlobalMapCell(_power, config, Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, this);
             armyContainer.SetData(armyCellcell);
             remainFreeCells.Remove(armyContainer);
+
+            
         }
 
         //        Debug.Log($"Sector populated: {Id}");

@@ -19,7 +19,7 @@ public class GlobalMapController : MonoBehaviour
 
     //    public float OffsetSector;
     private GalaxyData _data;
-    private readonly List<EnemyGlobalMapMoverObjet> _enemiesObjects = new List<EnemyGlobalMapMoverObjet>();
+    private readonly Dictionary<MovingArmy,EnemyGlobalMapMoverObjet> _enemiesObjects = new Dictionary<MovingArmy,EnemyGlobalMapMoverObjet>();
     private bool _isEnable = true;
     private GlobalMapCellObject _lastNearObject;
     private SectorGlobalMapInfo _lastSelectedSector;
@@ -138,23 +138,14 @@ public class GlobalMapController : MonoBehaviour
         {
             var army = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.MovingArmyObject);
             army.transform.SetParent(MovingArmyContainer);
-            _enemiesObjects.Add(army);
+            _enemiesObjects.Add(arg1,army);
             var start = GetCellObjectByCell(arg1.CurCell);
             army.Init(this, start, arg1);
             // CamerasController.Instance.SetCameraTo(start.ModifiedPosition);
         }
         else
         {
-            var destroyedArmy = _enemiesObjects.FirstOrDefault(x => x.Owner == arg1);
-            if (destroyedArmy != null)
-            {
-                _enemiesObjects.Remove(destroyedArmy);
-                Destroy(destroyedArmy.gameObject);
-            }
-            else
-            {
-                Debug.LogError("can't find destroyed moving army");
-            }
+            var destroyedArmy = _enemiesObjects.Remove(arg1);
         }
     }
 
@@ -325,7 +316,8 @@ public class GlobalMapController : MonoBehaviour
             }
 
         LighterUpCells.Dispose();
-        foreach (var moverObject in _enemiesObjects) DestroyImmediate(moverObject.gameObject);
+        foreach (var moverObject in _enemiesObjects)
+            DestroyImmediate(moverObject.Value.gameObject);
         _data.GalaxyEnemiesArmyController.OnAddMovingArmy -= OnAddMovingArmy;
         _enemiesObjects.Clear();
     }
@@ -602,7 +594,8 @@ public class GlobalMapController : MonoBehaviour
     [CanBeNull]
     public GlobalMapCellObject GetCellObjectByCell(GlobalMapCell cell)
     {
-        if (_logicToVisualObjects.TryGetValue(cell, out var cellObj)) return cellObj;
+        if (_logicToVisualObjects.TryGetValue(cell, out var cellObj))
+            return cellObj;
         Debug.LogError($"Can't find cell {cell}");
         return null;
     }
@@ -689,35 +682,56 @@ public class GlobalMapController : MonoBehaviour
             }
         }
 
-        var objectsCels = new Dictionary<GlobalMapCell, EnemyGlobalMapMoverObjet>();
-        foreach (var globalMapMoverObject in _enemiesObjects)
-        {
-            var place = globalMapMoverObject.FindPlace(playersCell);
-            if (place != null && !objectsCels.ContainsKey(place))
-                objectsCels.Add(place, globalMapMoverObject);
-        }
+        timeToMove = timeToMove * 0.99f;
 
-        foreach (var obj in objectsCels)
-            if (FindAndGo(timeToMove, obj.Value, obj.Key, () =>
+        var targets = MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController.FindTargetForMovingArmies(playersCell, CellHaveObject);
+
+        foreach (var globalMapCell in targets)
+        {
+            if (_enemiesObjects.TryGetValue(globalMapCell.Key,out var obj))
             {
-                completed++;
-                CheckIsAllComplete();
-            }))
-                targetCallbacks++;
-
-        if (targetCallbacks == 0)
-        {
-            isCallbackComlete = true;
-            callback();
+                obj.AndGo(globalMapCell.Value, timeToMove);
+            }
         }
+
+//        var objectsCels = new Dictionary<GlobalMapCell, EnemyGlobalMapMoverObjet>();
+//        foreach (var globalMapMoverObject in _enemiesObjects)
+//        {
+//            var place = globalMapMoverObject.FindPlace(playersCell);
+//            if (place != null && !objectsCels.ContainsKey(place))
+//                objectsCels.Add(place, globalMapMoverObject);
+//        }
+
+//        foreach (var obj in objectsCels)
+//        {
+//            if (FindAndGo(timeToMove, obj.Value, obj.Key, () =>
+//            {
+//                completed++;
+//                CheckIsAllComplete();
+//            }))
+//                targetCallbacks++;
+//        }
+
+//        if (targetCallbacks == 0)
+//        {
+//            isCallbackComlete = true;
+//            callback();
+//        }
     }
 
-    private bool FindAndGo(float timeToMove, EnemyGlobalMapMoverObjet obj, GlobalMapCell cell, Action callback)
+
+    private bool CellHaveObject(GlobalMapCell cell)
     {
-        if (obj.AndGo(callback, cell, timeToMove)) return true;
-
-        return false;
+        return GetCellObjectByCell(cell) != null;
     }
+
+//    private bool FindAndGo(float timeToMove, EnemyGlobalMapMoverObjet obj, GlobalMapCell cell, Action callback)
+//    {
+//        if (obj.AndGo(callback, cell, timeToMove))
+//            return true;
+//
+//        return false;
+//    }
 
     private void AfterAction(bool shallChange, bool shallChange2)
     {

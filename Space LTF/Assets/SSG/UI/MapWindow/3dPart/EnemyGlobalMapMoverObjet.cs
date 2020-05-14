@@ -13,13 +13,8 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
         Owner = owner;
     }
 
-    public GlobalMapCell FindPlace(GlobalMapCell playersCell)
-    {
-        var place = Owner.FindCellToMove(playersCell);
-        return place;
-    }
 
-    public bool AndGo(Action callback, GlobalMapCell place, float timeToMove)
+    public bool AndGo(/*Action callback,*/ GlobalMapCell place, float timeToMove)
     {
         var objPlace = _mapController.GetCellObjectByCell(place);
         if (objPlace != null)
@@ -31,12 +26,13 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
                  Owner.CurCell = place;
                  Owner.CurCell.CurMovingArmy = Owner;
                  Debug.Log($"Id:{Owner.Id}   Moving army come to: {Owner.CurCell.ToString()}");
-                 callback();
+//                 callback();
              });
             return true;
         }
         else
         {
+            Debug.LogError("Can't find object by cell");
             return false;
         }
     }

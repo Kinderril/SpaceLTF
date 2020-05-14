@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -9,9 +10,12 @@ public class MovingArmy
     public Player _player;
     private Action<MovingArmy> _destroyCallback;
     private bool _noStepNext;
+
     // private List<IItemInv> _getRewardsItems;
     // private bool _rewardsComplete = false;
     public int Id { get; private set; }
+    public int Priority { get; private set; }
+    public GlobalMapCell PrevCell { get; set; }
 
     public MovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback)
     {
@@ -64,7 +68,7 @@ public class MovingArmy
         }
     }
 
-    public GlobalMapCell FindCellToMove(GlobalMapCell playersCell)
+    public GlobalMapCell FindCellToMove(GlobalMapCell playersCell,HashSet<GlobalMapCell> posibleCells)
     {
         if (_noStepNext)
         {
@@ -90,7 +94,8 @@ public class MovingArmy
             case EReputationStatus.friend:
             case EReputationStatus.neutral:
                 var selectedWay = posibleWays.RandomElement();
-                return selectedWay;
+                if (posibleCells.Contains(selectedWay))
+                    return selectedWay;
                 break;
 
             case EReputationStatus.negative:
@@ -108,8 +113,12 @@ public class MovingArmy
                         cellToGo = way;
                     }
                 }
-                return cellToGo;
+                if (posibleCells.Contains(cellToGo))
+                    return cellToGo;
+                break;
         }
+
+        return null;
 
     }
 

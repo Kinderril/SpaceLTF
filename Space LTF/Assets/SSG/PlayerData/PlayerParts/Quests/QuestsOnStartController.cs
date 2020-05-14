@@ -33,8 +33,15 @@ public class QuestsOnStartController
 
     }
 
+    private bool _isInited = false;
     public void InitQuests()
     {
+        if (_isInited)
+        {
+            return;
+        }
+
+        _isInited = true;
         foreach (var baseQuestOnStart in ActiveQuests)
         {
             baseQuestOnStart.Init();
