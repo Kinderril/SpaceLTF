@@ -53,7 +53,7 @@ public class TutorButtonsStart : MonoBehaviour
         WindowManager.Instance.ConfirmWindow.Init(() =>
         {
             StartTutor(EGameMode.advTutor);
-        }, null, Namings.Tag("wantStartTutor"));
+        }, null, Namings.Tag("wantStartAdvTutor"));
     }
 
     void StartTutor(EGameMode mode)

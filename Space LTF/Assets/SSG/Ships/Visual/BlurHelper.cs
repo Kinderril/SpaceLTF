@@ -70,7 +70,7 @@ public class BlurHelper : MonoBehaviour
 
         if (_blurShader == null)
         {
-            _blurShader = Shader.Find("Hidden/FastBlur");
+            _blurShader = Shader.Find("p0/FastBlur");
             if (_blurShader == null) Debug.LogError("Can't find 'Hidden/FastBlur'");
         }
 
@@ -80,7 +80,7 @@ public class BlurHelper : MonoBehaviour
     private const string PARAMETER = "_Parameter";
     [Range(1, 4)] public static int blurIterations = 2;
     [Range(0, 2)] public static int downsample = 1;
-    [Range(0.0f, 10.0f)] public static float blurSize = 3.0f;
+  public static float blurSize = 26.0f;
 
     public static void Modify(ref RenderTexture source, ref RenderTexture myTex)
     {
@@ -109,14 +109,14 @@ public class BlurHelper : MonoBehaviour
             // vertical blur
             var rt2 = RenderTexture.GetTemporary(rtW, rtH, 0, source.format);
             rt2.filterMode = FilterMode.Bilinear;
-            Graphics.Blit(rt, rt2, blurMaterial, 1);
+            Graphics.Blit(rt, rt2, blurMaterial, 0);
             RenderTexture.ReleaseTemporary(rt);
             rt = rt2;
 
             // horizontal blur
             rt2 = RenderTexture.GetTemporary(rtW, rtH, 0, source.format);
             rt2.filterMode = FilterMode.Bilinear;
-            Graphics.Blit(rt, rt2, blurMaterial, 2);
+            Graphics.Blit(rt, rt2, blurMaterial, 0);
             RenderTexture.ReleaseTemporary(rt);
             rt = rt2;
         }

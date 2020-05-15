@@ -39,7 +39,7 @@ public static class EngLocalization
         {"Imposilbe", "Impossible"},
         {"Radius", "Radius"},
         {"Sector", "Sector"},
-        {"Reload", "Reload"},
+        {"Reload", "Reload time"},
         {"WeaponShieldPerHit", "Shield stealer"},
         {"ShootPerTime", "Bullet count"},
 
@@ -914,6 +914,7 @@ public static class EngLocalization
         {"Cancel", "Cancel"},
         {"Galaxy gate", "Galaxy gate"},
         {"wantStartTutor", "This is short tutorial. Pass it to understand basic of game."},
+        {"wantStartTutor", "Advanced tutorial. 5 steps."},
         {"TutorPreBattle", "Equip your fleet."},
         {"TutorStartShop", "Buy weapons for your battle ship."},
         {"resolutionTooLow", "Screen resolution is too low. Maybe you will have some problems. Minimum is 1280 and 720"},

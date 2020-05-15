@@ -35,7 +35,7 @@ public static class RusLocalization
         {"Imposilbe", "Невозможно"},
         {"Radius", "Радиус"},
         {"Sector", "Сектор"},
-        {"Reload", "Перезарядка"},
+        {"Reload", "Время перезарядки"},
         {"ShootPerTime", "Количество зарядов"},
 
         {"cantUpgrade", "Невозможно улучшить"},
@@ -966,6 +966,7 @@ public static class RusLocalization
         {"AdvTutorEquipShipWeaponsAndModules", "Следующее сражение будет достаточно трудным\nЭтот модуль добавляет ко всему оружию корабля эффект 'игнорирования щитов'"},
         {"AdvTutorUpgradeLevel", "Для некоторых модулей требуется уровень корабля\nУвеличьте уровень боевого корабля"},
         {"dialog_armyTutorIgnoreShield", "Перед битвой вы нашли оружие и модули. Экипируйте их до битвы"},
+        {"wantStartTutor", "Вторая часть обучения. 5 этапов."},
     };
 
 }
