@@ -9,6 +9,7 @@ public static class EspLocalization
 {"Yes","Sí"},
 {"No","No"},
 {"Ok","Ok"},
+{"dialog_armyTutorIgnoreShield", "Antes de la batalla, encontraste armas y módulos. Equípalos antes de la batalla"},
 {"ChanceAfterBattle", "[El éxito {0}%]"},
 {"Reflected","Efecto se refleja"},
 {"CriticalDamage","Crítica de daños y perjuicios. Si los daños más de {0} nave sea destruida"},
