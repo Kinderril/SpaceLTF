@@ -802,7 +802,7 @@ public static class EspLocalization
 {"toTutor", "Regreso"},
 {"Cancel", "Cancelar"},
 {"Galaxy gate", "Puerta galaxia"},
-{"wantStartTutor", "Este es un breve tutorial. Pásalo para entender lo básico del juego."},
+{"wantStartAdvTutor", "Este es un breve tutorial. Pásalo para entender lo básico del juego."},
 {"TutorPreBattle", "Equipa tu flota."},
 {"TutorStartShop", "Compra armas para tu acorazado."},
 {"resolutionTooLow", "La resolución de la pantalla es demasiado baja. Quizás tengas algunos problemas. El mínimo es de 1280 y 720."},
