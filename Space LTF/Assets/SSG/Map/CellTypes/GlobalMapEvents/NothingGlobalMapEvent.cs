@@ -10,7 +10,7 @@ public class NothingGlobalMapEvent : BaseGlobalMapEvent
 {
     public override string Desc()
     {
-        return "Nothing";
+        return Namings.Tag("Nothing");
     }
 
     public override MessageDialogData GetDialog()

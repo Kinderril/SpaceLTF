@@ -5,9 +5,8 @@ using UnityEngine;
 public delegate void OnComeToDelegate(GlobalMapCell to, GlobalMapCell from);
 
 [System.Serializable]
-public class ArmyGlobalMapCell : GlobalMapCell
+public abstract class ArmyGlobalMapCell : GlobalMapCell
 {
-    public float HIRE_CHANCE = 0.01f;
     protected Player _enemyPlayer;
     protected BattlefildEventType? _eventType = null;
     public BattlefildEventType? EventType => _eventType;
@@ -51,7 +50,7 @@ public class ArmyGlobalMapCell : GlobalMapCell
     {
         OnComeToCell?.Invoke(this, from);
     }
-    public ArmyGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind,
+    protected ArmyGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind,
         SectorData sector)
         : base(id, Xind, Zind, sector, config)
     {

@@ -197,11 +197,9 @@ public class SectorData
         foreach (var armyContainer in remainFreeCells.ToList())
         {
             var config = IsDroids(_shipConfig);
-            var armyCellcell = new ArmyGlobalMapCell(_power, config, Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, this);
+            var armyCellcell = new ArmyBornGlobalMapCell(_power, config, Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, this);
             armyContainer.SetData(armyCellcell);
             remainFreeCells.Remove(armyContainer);
-
-            
         }
 
         //        Debug.Log($"Sector populated: {Id}");

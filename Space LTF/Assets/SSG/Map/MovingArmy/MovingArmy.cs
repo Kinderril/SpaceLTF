@@ -4,17 +4,18 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class MovingArmy
+public abstract class MovingArmy
 {
     public GlobalMapCell CurCell;
     public Player _player;
     private Action<MovingArmy> _destroyCallback;
-    private bool _noStepNext;
+    protected bool _noStepNext;
 
     // private List<IItemInv> _getRewardsItems;
     // private bool _rewardsComplete = false;
     public int Id { get; private set; }
     public int Priority { get; private set; }
+    public float Power { get; private set; }
     public GlobalMapCell PrevCell { get; set; }
 
     public MovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback)
@@ -40,6 +41,7 @@ public class MovingArmy
         RewardPlayer();
     }
 
+    public abstract GlobalMapCell FindCellToMove(GlobalMapCell playersCell, HashSet<GlobalMapCell> posibleCells);
     private void RewardPlayer()
     {
         var human = MainController.Instance.MainPlayer;
@@ -68,59 +70,6 @@ public class MovingArmy
         }
     }
 
-    public GlobalMapCell FindCellToMove(GlobalMapCell playersCell,HashSet<GlobalMapCell> posibleCells)
-    {
-        if (_noStepNext)
-        {
-            _noStepNext = false;
-            return null;
-        }
-
-        if (playersCell == CurCell)
-        {
-            return null;
-        }
-        var ways = CurCell.GetCurrentPosibleWays();
-        var ststus = MainController.Instance.MainPlayer.ReputationData.GetStatus(_player.Army.BaseShipConfig);
-        var posibleWays = ways.Where(x => !(x is GlobalMapNothing) && x.CurMovingArmy == null).ToList();
-        if (posibleWays.Count == 0)
-        {
-            return null;
-        }
-
-        switch (ststus)
-        {
-            default:
-            case EReputationStatus.friend:
-            case EReputationStatus.neutral:
-                var selectedWay = posibleWays.RandomElement();
-                if (posibleCells.Contains(selectedWay))
-                    return selectedWay;
-                break;
-
-            case EReputationStatus.negative:
-            case EReputationStatus.enemy:
-                int minDelta = 999;
-                GlobalMapCell cellToGo = posibleWays[0];
-                foreach (var way in posibleWays)
-                {
-                    var a = Mathf.Abs(way.indX - playersCell.indX);
-                    var b = Mathf.Abs(way.indZ - playersCell.indZ);
-                    var c = a + b;
-                    if (c < minDelta)
-                    {
-                        minDelta = c;
-                        cellToGo = way;
-                    }
-                }
-                if (posibleCells.Contains(cellToGo))
-                    return cellToGo;
-                break;
-        }
-
-        return null;
-
-    }
 
     public void Dispose()
     {
@@ -141,6 +90,11 @@ public class MovingArmy
         var status = MainController.Instance.MainPlayer.ReputationData.GetStatus(_player.Army.BaseShipConfig);
         var txt = Namings.Format(Namings.Tag("MovingArmy"), _player.Name, Namings.ShipConfig(_player.Army.BaseShipConfig), Namings.Tag($"rep_{status.ToString()}"), desc);
         return txt;
+    }
+
+    public void UpdatePower(float power)
+    {
+        Power = power;
     }
 }
 
