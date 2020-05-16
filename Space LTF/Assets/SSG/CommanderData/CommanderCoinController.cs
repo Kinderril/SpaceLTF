@@ -95,8 +95,7 @@ public class CommanderCoinController
                 }
             }
         }
-        Debug.LogError("wrong using coins   costCount:" + costCount
-            + "   availableCount:" + availableCount + "   usedCount:" + usedCount);
+//        Debug.LogError("wrong using coins   costCount:" + costCount + "   availableCount:" + availableCount + "   usedCount:" + usedCount);
 
     }
 

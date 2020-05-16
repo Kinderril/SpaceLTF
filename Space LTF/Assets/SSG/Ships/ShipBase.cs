@@ -401,7 +401,7 @@ public class ShipBase : MovingObject
                 if (CurAction == null)
                 {
                     var task = DesicionData.CalcAction();
-                    Debug.Log(("Task2:" + Id + "  " + task.ToString()).Yellow());
+//                    Debug.Log(("Task2:" + Id + "  " + task.ToString()).Yellow());
                     SetAction(task);
                 }
             }
@@ -410,7 +410,7 @@ public class ShipBase : MovingObject
         else
         {
             var task = DesicionData.CalcAction();
-            Debug.Log(("Task1:" + Id + "  " + task.ToString()).Yellow());
+//            Debug.Log(("Task1:" + Id + "  " + task.ToString()).Yellow());
             SetAction(task);
         }
 

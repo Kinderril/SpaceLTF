@@ -182,7 +182,7 @@ public class GalaxyData
 
         foreach (var sectorData in unPopulatedSectors)
         {
-            Debug.Log($"Populate others : {sectorData.StartX} {sectorData.StartZ}");
+//            Debug.Log($"Populate others : {sectorData.StartX} {sectorData.StartZ}");
             sectorData.Populate(startPower);
         }
 

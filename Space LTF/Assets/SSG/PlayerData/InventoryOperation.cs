@@ -111,7 +111,7 @@ public static class InventoryOperation
                     }, () =>
                     {
                         callback(false);
-                    }, to, item);
+                    }, to, item, withRemove);
                 }
                 else
                 {
@@ -140,7 +140,7 @@ public static class InventoryOperation
                     }, () =>
                     {
                         callback(false);
-                    }, to, item);
+                    }, to, item, withRemove);
                 }
                 else
                 {
@@ -168,7 +168,7 @@ public static class InventoryOperation
                     }, () =>
                     {
                         callback(false);
-                    }, to, item);
+                    }, to, item, withRemove);
                 }
                 else
                 {
@@ -196,7 +196,7 @@ public static class InventoryOperation
                     }, () =>
                     {
                         callback(false);
-                    }, to, item);
+                    }, to, item,withRemove);
                 }
                 else
                 {
@@ -348,7 +348,7 @@ public static class InventoryOperation
 
         return sellPrice;
     }
-    private static void CanDo(Action CallbackSuccsess, Action failCallback, IInventory to, IItemInv item)
+    private static void CanDo(Action CallbackSuccsess, Action failCallback, IInventory to, IItemInv item,bool withRemove)
     {
         var paramItem = item as ParameterItem;
         if (paramItem != null)
@@ -357,7 +357,7 @@ public static class InventoryOperation
             if (paramItem.ParametersAffection.TryGetValue(EParameterShip.modulsSlots, out slots))
             {
                 var slotsInt = (int) (slots + 0.1f);
-                if (!paramItem.CurrentInventory.CanRemoveModulSlots(slotsInt))
+                if (withRemove && !paramItem.CurrentInventory.CanRemoveModulSlots(slotsInt))
                 {
                     failCallback();
                     WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("cantRemoveCauseSlots"));
@@ -367,7 +367,7 @@ public static class InventoryOperation
             if (paramItem.ParametersAffection.TryGetValue(EParameterShip.weaponSlots, out slots))
             {
                 var slotsInt = (int) (slots + 0.1f);
-                if (!paramItem.CurrentInventory.CanRemoveWeaponSlots(slotsInt))
+                if (withRemove && !paramItem.CurrentInventory.CanRemoveWeaponSlots(slotsInt))
                 {
                     failCallback();
                     WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("cantRemoveCauseSlots"));

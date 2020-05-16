@@ -312,7 +312,10 @@ public class ShipParameters : IShipAffectableParams
         bodyDamage = ModifDamage(bodyDamage, BodyModifications);
         shildDamage = ModifDamage(shildDamage, ShieldModifications);
 
+#if UNITY_EDITOR
         Debug.Log(Namings.Format("Damage done:{0}/{1}  to:{2}. Time:{3}", shildDamage, bodyDamage, _shipOwner.Id, Time.time).Red());
+
+#endif
         float healthDelta = 0f;
         float shieldDelta = 0f;
         if (!ShieldParameters.ShiledIsActive)

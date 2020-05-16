@@ -912,6 +912,7 @@ public static class EngLocalization
         {"toGame", "Play"},
         {"toTutor", "Return"},
         {"Cancel", "Cancel"},
+        {"cantRemoveCauseSlots", "Can't remove. Remove modules first"},
         {"Galaxy gate", "Galaxy gate"},
         {"wantStartTutor", "This is short tutorial. Pass it to understand basic of game."},
         {"wantStartAdvTutor", "Advanced tutorial. 5 steps."},
