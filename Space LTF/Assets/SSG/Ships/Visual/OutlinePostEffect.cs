@@ -15,12 +15,13 @@ public class OutlinePostEffect : MonoBehaviour
         Graphics.CopyTexture(masktexture3, blured3);
         Graphics.CopyTexture(masktexture4, blured4);
 
-        BlurHelper.Modify(ref masktexture3,ref blured3);
-        BlurHelper.Modify(ref masktexture4,ref blured4);
+        //        BlurHelper.Modify(ref masktexture3,ref blured3);
+        //        BlurHelper.Modify(ref masktexture4,ref blured4);   
 
-//        var copy = RenderTexture.GetTemporary(destrender.descriptor);
-//        BlurHelper.MakeBlur(destrender, copy, 4f);
-//        RenderTexture.ReleaseTemporary(copy);
+
+        FilterTest.Blur(masktexture3, blured3);
+        FilterTest.Blur( masktexture4, blured4);
+
 
         Graphics.Blit(src, dest, mat);
     }
