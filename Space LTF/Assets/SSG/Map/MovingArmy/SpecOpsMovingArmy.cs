@@ -4,15 +4,62 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+[System.Serializable]
 public class SpecOpsMovingArmy : MovingArmy
 {
-    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback) 
-        : base(startCell, destroyCallback)
+    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController enemiesArmyController) 
+        : base(startCell, destroyCallback, enemiesArmyController)
     {
+        var humanPlayer = MainController.Instance.MainPlayer;
+        var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
+        _player = new PlayerAIMovingArmy($"{ Namings.Tag("Destroyed")}:{MyExtensions.Random(3, 9999)}");
+        var armyPower = humanPower * Library.MOVING_ARMY_POWER_COEF;
+        Power = armyPower;
+        var armyData = ArmyCreatorLibrary.GetArmy(startCell.ConfigOwner);
+        var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, armyData, _player);
+        _player.Army.SetArmy(army);
+    }
+    public override string ShortDesc()
+    {
+        var coreTag = Namings.Tag("MovingArmy");
+        return SubStr(coreTag);
+    }
+
+    protected override void RewardPlayer()
+    {
+        var human = MainController.Instance.MainPlayer;
+        var baseRep = Library.BATTLE_REPUTATION_AFTER_FIGHT * 2;
+        human.ReputationData.WinBattleAgainst(_player.Army.BaseShipConfig, 2f);
+    }
+
+    public override Player GetArmyToFight()
+    {
+        return _player;
+    }
+
+    public override MessageDialogData MoverArmyLeaverEnd()
+    {
+        var ans = new List<AnswerDialogData>()
+        {
+            new AnswerDialogData(Namings.DialogTag("MovingArmyGerReward"), GetRewardsItems,  null,false,false),
+        };
+        var mesData = new MessageDialogData(Namings.DialogTag("MovingArmyWin"), ans);
+        return mesData;
 
     }
 
-    public GlobalMapCell FindCellToMove(GlobalMapCell playersCell, HashSet<GlobalMapCell> posibleCells)
+    public override MessageDialogData GetDialog(Action FightMovingArmy)
+    {
+        var ans = new List<AnswerDialogData>()
+        {
+            new AnswerDialogData(Namings.DialogTag("MovingArmyFight"), FightMovingArmy,  null,false,false),
+        };
+        var mesData = new MessageDialogData(Namings.DialogTag("MovingArmyStart"), ans);
+        return mesData;
+    }       
+
+
+    public override GlobalMapCell FindCellToMove(HashSet<GlobalMapCell> posibleCells)
     {
         if (_noStepNext)
         {
@@ -20,12 +67,14 @@ public class SpecOpsMovingArmy : MovingArmy
             return null;
         }
 
-        if (playersCell == CurCell)
-        {
-            return null;
-        }
+        //        if (playersCell == CurCell)
+        //        {
+        //            return null;
+        //        }
+        var player = MainController.Instance.MainPlayer;
+        var playersCell = player.MapData.CurrentCell;
         var ways = CurCell.GetCurrentPosibleWays();
-        var ststus = MainController.Instance.MainPlayer.ReputationData.GetStatus(_player.Army.BaseShipConfig);
+        var ststus = player.ReputationData.GetStatus(_player.Army.BaseShipConfig);
         var posibleWays = ways.Where(x => !(x is GlobalMapNothing) && x.CurMovingArmy == null).ToList();
         if (posibleWays.Count == 0)
         {

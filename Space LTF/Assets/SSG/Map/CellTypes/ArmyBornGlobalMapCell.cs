@@ -7,15 +7,22 @@ public class ArmyBornGlobalMapCell : GlobalMapCell
 {
     protected int _power;
     private List<MovingArmy> _connectedArmies = new List<MovingArmy>();
-
+    private GalaxyEnemiesArmyController _enemiesArmyController;
 
     protected int _additionalPower;
 
     public ArmyBornGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind,
-        SectorData sector)
+        SectorData sector, GalaxyEnemiesArmyController enemiesArmyController)
         : base(id, Xind, Zind, sector, config)
     {
         _power = power;
+        _enemiesArmyController = enemiesArmyController;
+    }
+
+    public void BornArmy()
+    {
+        var army = new StandartMovingArmy(this,_enemiesArmyController.SimpleArmyDestroyed, _power,_enemiesArmyController);
+        _enemiesArmyController.AddArmy(army);
     }
 
 

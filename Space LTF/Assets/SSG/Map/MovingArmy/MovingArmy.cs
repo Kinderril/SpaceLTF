@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class MovingArmy
 {
     public GlobalMapCell CurCell;
-    public Player _player;
+    protected Player _player;
     private Action<MovingArmy> _destroyCallback;
     protected bool _noStepNext;
 
@@ -15,38 +15,45 @@ public abstract class MovingArmy
     // private bool _rewardsComplete = false;
     public int Id { get; private set; }
     public int Priority { get; private set; }
-    public float Power { get; private set; }
+    public bool Destroyed { get; private set; }
+    public float Power { get; protected set; }
     public GlobalMapCell PrevCell { get; set; }
 
-    public MovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback)
+    public ShipConfig StartConfig { get; private set; }
+
+    private GalaxyEnemiesArmyController _armiesController;
+
+    protected MovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController armiesController)
     {
-        var humanPlayer = MainController.Instance.MainPlayer;
+        _armiesController = armiesController;
         _destroyCallback = destroyCallback;
-        var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
         Id = Utils.GetId();
+        if (startCell == null)
+        {
+            Debug.LogError("can't create moving army nowhere");
+        }
         CurCell = startCell;
-        _player = new PlayerAIMovingArmy($"{ Namings.Tag("Destroyed")}:{MyExtensions.Random(3, 9999)}");
-        var armyPower = humanPower * Library.MOVING_ARMY_POWER_COEF;
-        var armyData = ArmyCreatorLibrary.GetArmy(startCell.ConfigOwner);
-        var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, armyData, _player);
-        _player.Army.SetArmy(army);
+        StartConfig = startCell.ConfigOwner;
         startCell.CurMovingArmy = this;
+//        Power = power;
         BattleController.Instance.OnBattleEndCallback += OnBattleEndCallback;
-
-
     }
+
 
     public void GetRewardsItems()
     {
         RewardPlayer();
     }
+    public GlobalMapCell NextCell()
+    {
+        return _armiesController.GetNextTarget(this);
+    }
 
-    public abstract GlobalMapCell FindCellToMove(GlobalMapCell playersCell, HashSet<GlobalMapCell> posibleCells);
-    private void RewardPlayer()
+    public abstract GlobalMapCell FindCellToMove( HashSet<GlobalMapCell> posibleCells);
+    protected virtual void RewardPlayer()
     {
         var human = MainController.Instance.MainPlayer;
-        var baseRep = Library.BATTLE_REPUTATION_AFTER_FIGHT * 2;
-        human.ReputationData.WinBattleAgainst(_player.Army.BaseShipConfig, 2f);
+        human.ReputationData.WinBattleAgainst(StartConfig, 1f);
     }
 
     private void OnBattleEndCallback(Player human, Player ai, EndBattleType win)
@@ -54,6 +61,7 @@ public abstract class MovingArmy
         switch (win)
         {
             case EndBattleType.win:
+                Destroyed = true;
                 if (ai == _player)
                 {
                     _destroyCallback?.Invoke(this);
@@ -63,6 +71,7 @@ public abstract class MovingArmy
 
                 break;
             case EndBattleType.lose:
+                Destroyed = true;
                 break;
             case EndBattleType.runAway:
                 _noStepNext = true;
@@ -79,16 +88,18 @@ public abstract class MovingArmy
 
     public string Name()
     {
-        return Namings.Format(Namings.Tag("MovingArmyName"), Namings.ShipConfig(_player.Army.BaseShipConfig));
+        return Namings.Format(Namings.Tag("MovingArmyName"), Namings.ShipConfig(StartConfig));
     }
 
-    public string ShortDesc()
+    public abstract string ShortDesc();
+
+    protected string SubStr(string coreTag)
     {
         var playersPower = MainController.Instance.MainPlayer.Army.GetPower();
-        var thisPower = _player.Army.GetPower();
+        var thisPower = Power;
         var desc = PlayerArmy.ComparePowers(playersPower, thisPower);
-        var status = MainController.Instance.MainPlayer.ReputationData.GetStatus(_player.Army.BaseShipConfig);
-        var txt = Namings.Format(Namings.Tag("MovingArmy"), _player.Name, Namings.ShipConfig(_player.Army.BaseShipConfig), Namings.Tag($"rep_{status.ToString()}"), desc);
+        var status = MainController.Instance.MainPlayer.ReputationData.GetStatus(StartConfig);
+        var txt = Namings.Format(coreTag, _player.Name, Namings.ShipConfig(StartConfig), Namings.Tag($"rep_{status.ToString()}"), desc);
         return txt;
     }
 
@@ -96,5 +107,11 @@ public abstract class MovingArmy
     {
         Power = power;
     }
+
+    public abstract Player GetArmyToFight();
+
+    public abstract MessageDialogData GetDialog(Action FightMovingArmy);
+
+    public abstract MessageDialogData MoverArmyLeaverEnd();
 }
 

@@ -32,10 +32,13 @@ public class SectorData
     public ShipConfig ShipConfig => _shipConfig;
     private Dictionary<GlobalMapEventType, int> _maxCount;
     protected DeleteWayDelegeate RemoveWayCallback;
+    private GalaxyEnemiesArmyController _enemiesArmyController;
 
     public SectorData(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-         ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, DeleteWayDelegeate removeWayCallback)
+         ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, 
+         DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
     {
+        _enemiesArmyController = enemiesArmyController;
         RemoveWayCallback = removeWayCallback;
         XIndex = xIndex;
         _powerPerTurn = powerPerTurn;
@@ -86,8 +89,16 @@ public class SectorData
         {
             Debug.LogErrorFormat("can't put cell {0}  {1}.  {2}   {3}.", x, z, cell.indX, cell.indZ);
         }
+
+
 #endif
-        Cells[x, z].SetData(cell);
+        var oldData = Cells[x, z];
+//        if (oldData.Data != null)
+//        {
+//            Debug.LogError($"error cell: {oldData.indX} {oldData.indZ}  d:{oldData.Data.indX} {oldData.Data.indZ}");
+//            ListCells.Remove(oldData);
+//        }
+        oldData.SetData(cell);
         if (cell is EndGlobalCell)
         {
             IsFinal = true;
@@ -197,7 +208,7 @@ public class SectorData
         foreach (var armyContainer in remainFreeCells.ToList())
         {
             var config = IsDroids(_shipConfig);
-            var armyCellcell = new ArmyBornGlobalMapCell(_power, config, Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, this);
+            var armyCellcell = new ArmyBornGlobalMapCell(_power, config, Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, this,_enemiesArmyController);
             armyContainer.SetData(armyCellcell);
             remainFreeCells.Remove(armyContainer);
         }
@@ -392,16 +403,20 @@ public class SectorData
 
     public void ApplyPointsTo(CellsInGalaxy cellInGalaxy)
     {
-        //        Debug.Log(Namings.TryFormat("Start populate Sector Start:{0}_{1}",StartX,StartZ));
+        int countPopulated = 0;
         for (int i = 0; i < Size; i++)
         {
             for (int j = 0; j < Size; j++)
             {
                 var cell = Cells[i, j];
                 if (cell.Data != null)
+                {
+                    countPopulated++;
                     cellInGalaxy.SetCell(cell.Data);
+                }
             }
         }
+        Debug.Log(Namings.Format("End populate Sector Start:{0}_{1}  countPopulated:{2}", StartX, StartZ, countPopulated));
     }
 
     public virtual void CacheWays()
@@ -507,4 +522,15 @@ public class SectorData
         }
     }
 
+    public void BornArmies()
+    {
+        foreach (var cell in ListCells)
+        {
+            var born = cell.Data as ArmyBornGlobalMapCell;
+            if (born != null)
+            {
+                born.BornArmy();
+            }
+        }
+    }
 }

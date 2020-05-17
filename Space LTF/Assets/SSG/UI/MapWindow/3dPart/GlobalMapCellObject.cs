@@ -111,23 +111,20 @@ public class GlobalMapCellObject : MonoBehaviour
 
     private void TryOpenBattleEvent()
     {
-        if (Cell is ArmyGlobalMapCell army)
+        if (Cell.EventType.HasValue)
         {
-            if (army.EventType.HasValue)
+            switch (Cell.EventType)
             {
-                switch (army.EventType)
-                {
-                    case BattlefildEventType.asteroids:
-                        AsteroidsEvent.gameObject.SetActive(true);
-                        break;
-                    case BattlefildEventType.shieldsOff:
-                        EMPSurgeEvent.gameObject.SetActive(true);
-                        break;
-                    // case BattlefildEventType.engineOff:
-                    //     break;
-                    case BattlefildEventType.turrets:
-                        break;
-                }
+                case BattlefildEventType.asteroids:
+                    AsteroidsEvent.gameObject.SetActive(true);
+                    break;
+                case BattlefildEventType.shieldsOff:
+                    EMPSurgeEvent.gameObject.SetActive(true);
+                    break;
+                // case BattlefildEventType.engineOff:
+                //     break;
+                case BattlefildEventType.turrets:
+                    break;
             }
         }
     }
@@ -145,10 +142,16 @@ public class GlobalMapCellObject : MonoBehaviour
         if (_isArmy)
         {
             ActiveRenderer = Fleet.GetComponent<Renderer>();
-            if (Cell is EndGlobalCell || Cell is EndTutorGlobalCell)
+            if (Cell is CoreGlobalMapCell)
+            {
+                Unknown.gameObject.SetActive(true);
+                ObjectPainted = Unknown;
+//                Unknown = StartDungeon;
+            }
+            else if (Cell is EndGlobalCell || Cell is EndTutorGlobalCell)
             {
                 Unknown.gameObject.gameObject.SetActive(false);
-                ExitObject.gameObject.gameObject.SetActive(true);
+                ExitObject.gameObject.SetActive(true);
                 ObjectPainted = ExitObject;
             }
             else  if (Cell is ArmyDungeonEnterGlobalMapCell || Cell is ArmyDungeonExitGlobalMapCell || Cell is ArmyDungeonGlobalMapCell)

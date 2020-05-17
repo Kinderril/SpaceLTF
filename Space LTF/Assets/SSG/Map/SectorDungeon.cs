@@ -19,8 +19,8 @@ public class SectorDungeon : SectorData
     private bool _removeOnlyOne;
     private bool _oneRemoved;
     public SectorDungeon(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-        ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, bool upSide, DeleteWayDelegeate removeWayCallback)
-        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback)
+        ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, bool upSide, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
+        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
     {
         _upSide = upSide;
         _exitCreated = false;

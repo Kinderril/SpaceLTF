@@ -23,7 +23,7 @@ public class GlobalMapMoverObject : MonoBehaviour
     public float MoveTo(float calculatedTime, GlobalMapCellObject target, Action callback)
     {
         MoveTo(target, callback);
-        _timeToMove = calculatedTime - 1f;
+        _timeToMove = calculatedTime * .99f;
         _endTimeToMove = Time.time + _timeToMove;
         return _timeToMove;
     }

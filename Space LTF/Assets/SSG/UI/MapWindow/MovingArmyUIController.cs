@@ -27,22 +27,26 @@ public class MovingArmyUIController : MonoBehaviour
 
     private void OnAddMovingArmy(MovingArmy arg1, bool arg2)
     {
-        if (arg2)
+        if (arg1 is SpecOpsMovingArmy)
         {
-            var element = DataBaseController.GetItem(MovingArmyElementPrefab);
-            element.transform.SetParent(Layout);
-            _armyElements.Add(element);
-            element.Init(_globalMap, arg1);
-        }
-        else
-        {
-            var toDel = _armyElements.FirstOrDefault(x => x.Army == arg1);
-            if (toDel != null)
+            if (arg2)
             {
-                _armyElements.Remove(toDel);
-                GameObject.Destroy(toDel.gameObject);
+                var element = DataBaseController.GetItem(MovingArmyElementPrefab);
+                element.transform.SetParent(Layout);
+                _armyElements.Add(element);
+                element.Init(_globalMap, arg1);
+            }
+            else
+            {
+                var toDel = _armyElements.FirstOrDefault(x => x.Army == arg1);
+                if (toDel != null)
+                {
+                    _armyElements.Remove(toDel);
+                    GameObject.Destroy(toDel.gameObject);
+                }
             }
         }
+
 
     }
 

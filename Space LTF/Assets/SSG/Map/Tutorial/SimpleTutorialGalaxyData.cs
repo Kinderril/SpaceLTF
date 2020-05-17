@@ -12,7 +12,7 @@ public class SimpleTutorialGalaxyData : GalaxyData
 
     }
     protected override StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, int coreCells,
-  ShipConfig playerShipConfig, int verticalCount)
+  ShipConfig playerShipConfig, int verticalCount, GalaxyEnemiesArmyController enemiesArmyController)
     {
         _verticalCount = 1;
         verticalCount = 1;
@@ -26,7 +26,7 @@ public class SimpleTutorialGalaxyData : GalaxyData
             1,0,1, to =>
             {
 
-            });
+            },enemiesArmyController);
         startSector.Populate(startPower);
         sectors[0, 0] = startSector;
         foreach (var sectorData in allSubSectors)
@@ -37,7 +37,7 @@ public class SimpleTutorialGalaxyData : GalaxyData
 
 
 
-        InplementSectorToGalaxy(sectors, sizeSector, _sectorsCount, verticalCount);
+        ImplementSectorToGalaxy(sectors, sizeSector, _sectorsCount, verticalCount);
 
         Debug.Log("Population end");
 

@@ -48,7 +48,11 @@ public class PlayerAfterBattleOptions
 //        return dialog1;
 
         var delta = step - _lastStepGetDialog;
-        if (SkillWork(DialogFrequancy, delta))
+        var isWork = SkillWork(DialogFrequancy, delta);
+//#if UNITY_EDITOR
+//        isWork = true;
+//#endif
+        if (isWork)
         {
             _lastStepGetDialog = step;
             var ans = InitPosibleAnswers(cellPower, config);

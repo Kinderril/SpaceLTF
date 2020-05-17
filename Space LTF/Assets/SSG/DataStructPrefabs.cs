@@ -150,7 +150,8 @@ public class DataStructPrefabs : MonoBehaviour
     public List<FlyingAsteroid> FlyingAsteroids;
     public Sprite MoneyIcon;
     public QuestOnStartElement QuestOnStartElement;
-    public EnemyGlobalMapMoverObjet MovingArmyObject;
+    public EnemyGlobalMapMoverObjet SpecOpsMovingArmyObject;
+    public EnemyGlobalMapMoverObjet SimpleMovingArmyObject;
     public ImageWithTooltip NoScoutData;
     public Material GreenFlare;
     public Material RedFlare;

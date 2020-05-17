@@ -522,6 +522,7 @@ public static class EngLocalization
         {"EMI", "EMI"},
         {"Beam", "Beam"},
         {"MovingArmy", "Special forces of {1}\nStatus:{2}. Power:{3}"},
+        {"SimpleMovingArmy", "Fleet of {1}\nStatus:{2}. Power:{3}"},
         {"MovingArmyBorn", "Special forces of {0} appear. Coordinates:{1}"},
         {"AdditionalPower", "Enemies upgrades"},
 

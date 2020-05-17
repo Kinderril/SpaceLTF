@@ -21,16 +21,26 @@ public class GalaxyEnemiesArmyController
     private PlayerQuestData _questData;
 
     private const float DELTA_STEP = 3.4f;
+    private Dictionary<MovingArmy, GlobalMapCell> _nextTargets = new Dictionary<MovingArmy, GlobalMapCell>();
 
-    public GalaxyEnemiesArmyController(List<GlobalMapCell> cells, int armiesToMove = 3)
+    public GalaxyEnemiesArmyController(int armiesToMove = 3)
     {
-        _cells = cells;
         if (armiesToMove > 0)
         {
             int startStep = MyExtensions.Random(4, 8);
             // _lastAddedStep = startStep;
             stepsToBorn.Add(startStep);
         }
+    }
+
+    public List<MovingArmy> GetCurrentArmies()
+    {
+        return _armies;
+    }
+
+    public void SetCells(List<GlobalMapCell> cells)
+    {
+        _cells = cells;
     }
 
     public void CheckEnemiesMovingArmies(int step, GlobalMapCell curCell)
@@ -57,9 +67,21 @@ public class GalaxyEnemiesArmyController
         TryBornArmy(MainController.Instance.MainPlayer.MapData.CurrentCell);
     }
 
-    public void AddArmy(GlobalMapCell cellToBorn)
+    public void AddArmy(MovingArmy movingArmy)
     {
 
+        if (movingArmy == null)
+        {
+            Debug.LogError($"Try add null army");
+            return;
+        }
+        _armies.Add(movingArmy);
+        OnAddMovingArmy?.Invoke(movingArmy, true);
+
+    }
+    public void SimpleArmyDestroyed(MovingArmy army)
+    {
+        DestroyArmy(army);
     }
 
     private void TryBornArmy(GlobalMapCell curPlayersCell)
@@ -72,14 +94,13 @@ public class GalaxyEnemiesArmyController
         {
             if (_armies.Count < MAX_ARMIES)
             {
-                var movingArmy = new MovingArmy(posibleCell, DestroyCallback);
-                _armies.Add(movingArmy);
-                OnAddMovingArmy?.Invoke(movingArmy, true);
+                var movingArmy = new SpecOpsMovingArmy(posibleCell, DestroySpecOpsCallback,this);
+                AddArmy(movingArmy);
                 _totalBornArmies++;
                 var coordinates = $"{movingArmy.CurCell.indX},{movingArmy.CurCell.indZ}";
                 WindowManager.Instance.InfoWindow.Init(null,
                     Namings.Format(Namings.Tag("MovingArmyBorn"),
-                        Namings.ShipConfig(movingArmy._player.Army.BaseShipConfig), coordinates));
+                        Namings.ShipConfig(movingArmy.StartConfig), coordinates));
             }
             else
             {
@@ -88,13 +109,18 @@ public class GalaxyEnemiesArmyController
         }
     }
 
-    private void DestroyCallback(MovingArmy movingArmy)
+    private void DestroySpecOpsCallback(MovingArmy movingArmy)
     {
         AddNewStepToBorn();
         if (MyExtensions.IsTrue01(0.75f))
         {
             AddNewStepToBorn();
         }
+        DestroyArmy(movingArmy);
+    }
+
+    public void DestroyArmy(MovingArmy movingArmy)
+    {
         OnAddMovingArmy?.Invoke(movingArmy, false);
         _armies.Remove(movingArmy);
     }
@@ -125,17 +151,44 @@ public class GalaxyEnemiesArmyController
         }
 
     }
+    public void CacheTargets(Func<GlobalMapCell, bool> cellHaveObject)
+    {
+        _nextTargets = FindTargetForMovingArmies(cellHaveObject);
+    }
 
-    public Dictionary<MovingArmy, GlobalMapCell> FindTargetForMovingArmies(GlobalMapCell playersCell, Func<GlobalMapCell, bool> cellHaveObject)
+    public Dictionary<MovingArmy, GlobalMapCell> GetTargets(Func<GlobalMapCell, bool> cellHaveObject)
+    {
+        if (_nextTargets != null)
+        {
+            Dictionary<MovingArmy, GlobalMapCell> trgs = new Dictionary<MovingArmy, GlobalMapCell>();
+            foreach (var globalMapCell in _nextTargets)
+            {
+                if (!globalMapCell.Key.Destroyed)
+                {
+                    trgs.Add(globalMapCell.Key,globalMapCell.Value);
+                }
+            }
+            return trgs;
+        }
+        _nextTargets = FindTargetForMovingArmies(cellHaveObject);
+        return _nextTargets;
+    }
+
+    public Dictionary<MovingArmy, GlobalMapCell> FindTargetForMovingArmies(Func<GlobalMapCell, bool> cellHaveObject)
     {
         HashSet<GlobalMapCell> freeCells = new HashSet<GlobalMapCell>();
         HashSet<GlobalMapCell> choosedCells = new HashSet<GlobalMapCell>();
-        _armies.Sort((army, movingArmy) => (army.Priority > movingArmy.Priority)?1:-1 );
         Dictionary<MovingArmy, GlobalMapCell> _nextCell = new Dictionary<MovingArmy, GlobalMapCell>();
+        if (_armies.Count == 0)
+        {
+            return _nextCell;
+        }
+
+//        _armies.Sort((army, movingArmy) => (army.Priority > movingArmy.Priority) ? 1 : -1);
 
         foreach (var globalMapCell in _cells)
         {
-            if (globalMapCell != null)
+            if (globalMapCell != null && !(globalMapCell is GlobalMapNothing))
             {
                 if (cellHaveObject(globalMapCell))
                 {
@@ -153,9 +206,9 @@ public class GalaxyEnemiesArmyController
 
         foreach (var movingArmy in _armies)
         {
-            if (movingArmy.CurCell != playersCell)
-            {
-                var targetCell = movingArmy.FindCellToMove(playersCell,freeCells);
+//            if (movingArmy.CurCell != playersCell)
+//            {
+                var targetCell = movingArmy.FindCellToMove(freeCells);
                
                     if (targetCell != null)
                     {
@@ -164,18 +217,30 @@ public class GalaxyEnemiesArmyController
                         choosedCells.Add(targetCell);
                     }
                 
-            }
-        }
-
-        foreach (var globalMapCell in _nextCell)
-        {
-            globalMapCell.Key.PrevCell = globalMapCell.Key.CurCell;
-            globalMapCell.Key.CurCell = null;
+//            }
         }
 
         return _nextCell;
 
     }
 
+    public void LeaveCells(Dictionary<MovingArmy, GlobalMapCell> targets)
+    {
+        foreach (var globalMapCell in targets)
+        {
+            globalMapCell.Key.PrevCell = globalMapCell.Key.CurCell;
+            globalMapCell.Key.CurCell.CurMovingArmy = null;
+            globalMapCell.Key.CurCell = null;
+        }
+    }
+
+    public GlobalMapCell GetNextTarget(MovingArmy movingArmy)
+    {
+        if (_nextTargets.TryGetValue(movingArmy, out var target))
+        {
+            return target;
+        }
+        return null;
+    }
 }
 

@@ -11,6 +11,8 @@ public abstract class GlobalMapCell
     public SectorData Sector => _sector;
     private HashSet<GlobalMapCell> _ways = new HashSet<GlobalMapCell>();
     public MovingArmy CurMovingArmy = null;
+    protected BattlefildEventType? _eventType = null;
+    public BattlefildEventType? EventType => _eventType;
 
     public int ConnectedGates = -1;
     public int indX;
@@ -31,6 +33,20 @@ public abstract class GlobalMapCell
         ConfigOwner = config;
         indZ = iZ;
         Id = id;
+        if (indX > 5)
+            //        if (true)
+        {
+            if (MyExtensions.IsTrue01(0.25f))
+            {
+                WDictionary<BattlefildEventType> chance = new WDictionary<BattlefildEventType>(
+                    new Dictionary<BattlefildEventType, float>()
+                    {
+                        {BattlefildEventType.asteroids, 1f},
+                        {BattlefildEventType.shieldsOff, 1f},
+                    });
+                _eventType = chance.Random();
+            }
+        }
         //        if (indZ == 12)
         //        {
         //            Debug.LogError("sas");
@@ -70,45 +86,28 @@ public abstract class GlobalMapCell
         if (CurMovingArmy != null)
         {
             activateAnyway = true;
-            return DialogMovingArmy();
+            return DialogMovingArmy(CurMovingArmy);
         }
 
         activateAnyway = false;
         return GetDialog();
     }
 
-    private MessageDialogData DialogMovingArmy()
+    private MessageDialogData DialogMovingArmy(MovingArmy army)
     {
-        var ans = new List<AnswerDialogData>()
-        {
-            new AnswerDialogData(Namings.DialogTag("MovingArmyFight"), FightMovingArmy,  null,false,false),
-        };
-        var mesData = new MessageDialogData(Namings.DialogTag("MovingArmyStart"), ans);
-        return mesData;
+        return army.GetDialog(FightMovingArmy);
     }
 
     public virtual bool CanGotFromIt(bool withAction)
     {
         return true;
     }
-
     private void FightMovingArmy()
     {
-        _leaverDialogData = MoverArmyLeaverEnd();
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, CurMovingArmy._player, false, true);
+        _leaverDialogData = CurMovingArmy.MoverArmyLeaverEnd();
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, CurMovingArmy.GetArmyToFight(), false, true);
     }
 
-    private MessageDialogData MoverArmyLeaverEnd()
-    {
-        var movingArmy = CurMovingArmy;
-        var ans = new List<AnswerDialogData>()
-        {
-            new AnswerDialogData(Namings.DialogTag("MovingArmyGerReward"), movingArmy.GetRewardsItems,  null,false,false),
-        };
-        var mesData = new MessageDialogData(Namings.DialogTag("MovingArmyWin"), ans);
-        return mesData;
-
-    }
 
     public virtual void Complete()
     {
@@ -260,7 +259,7 @@ public abstract class GlobalMapCell
 
     public override string ToString()
     {
-        return $"CEll: X:{indX} Z:{indZ}";
+        return $"CEll:{base.ToString()} X:{indX} Z:{indZ}";
     }
 
 }

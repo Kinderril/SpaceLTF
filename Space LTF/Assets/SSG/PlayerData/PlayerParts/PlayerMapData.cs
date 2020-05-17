@@ -98,7 +98,7 @@ public class PlayerMapData
         ScoutAllAround(CurrentCell);
     }
 
-    public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap, Action<GlobalMapCell> callback)
+    public bool GoToTarget(GlobalMapCell target, GlobalMapController globalMap,bool armiesCanMove, Action<GlobalMapCell> callback)
     {
         var lastCell = CurrentCell;
         if (CanGoTo(target,true))
@@ -110,7 +110,7 @@ public class PlayerMapData
                     CurrentCell.LeaveFromCell();
                 }
                 WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.ShipGlobalMapMove);
-                globalMap.MoveToCell(target, () =>
+                globalMap.MoveToCell(target, armiesCanMove,() =>
                  {
                      callback(target);
                      GoNextAfterDialog(target);

@@ -57,15 +57,16 @@ public class GalaxyData
         _powerPerTurn = ConfigurePowerPerTurn(powerPerTurn);
         StartDeathStep = startDeathStep;
 
+        GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController();
         var startCell = ImpletemtSectors(sectorCount, sizeSector, startPower, coreCells, playerShipConfig,
-            _verticalCount);
-        GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController(GetAllList());
+            _verticalCount, GalaxyEnemiesArmyController);
+        GalaxyEnemiesArmyController.SetCells(GetAllList());
         return startCell;
     }
 
 
     protected virtual StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, int coreCells,
-        ShipConfig playerShipConfig, int verticalCount)
+        ShipConfig playerShipConfig, int verticalCount, GalaxyEnemiesArmyController enemiesArmyController)
     {
         var allSubSectors = new HashSet<SectorData>();
         var unPopulatedSectors = new List<SectorData>();
@@ -92,13 +93,13 @@ public class GalaxyData
                 {
                     var isUp = upper;
                     subSector = new SectorDungeon(xx, zz, sizeSector,
-                        _eventsCount, shipConfig, id, i, _powerPerTurn, isUp, DeletedWays);
+                        _eventsCount, shipConfig, id, i, _powerPerTurn, isUp, DeletedWays,enemiesArmyController);
                 }
             }
             else
             {
                 subSector = new SectorData(xx, zz, sizeSector,
-                    _eventsCount, shipConfig, id, i, _powerPerTurn, DeletedWays);
+                    _eventsCount, shipConfig, id, i, _powerPerTurn, DeletedWays,enemiesArmyController);
             }
 
             id++;
@@ -194,8 +195,8 @@ public class GalaxyData
 
         AddPortals(_sectorsCount, sectors, verticalCount);
         AddExitsFromDungeons(sectorCount, sectors, verticalCount);
-        InplementSectorToGalaxy(sectors, sizeSector, _sectorsCount, verticalCount);
-
+        ImplementSectorToGalaxy(sectors, sizeSector, _sectorsCount, verticalCount);
+        BornArmies(sectors, sizeSector, _sectorsCount, verticalCount);
         Debug.Log("Population end");
 #if UNITY_EDITOR
         var list = cells.GetAllList();
@@ -228,6 +229,7 @@ public class GalaxyData
             globalMapCell.RemoveWayTo(cell);
             OnWayDelete?.Invoke(globalMapCell.Id, cell.Id);
         }
+
     }
 
     private void DeletedWays(GlobalMapCell to)
@@ -517,11 +519,11 @@ public class GalaxyData
         }
     }
 
-    protected void InplementSectorToGalaxy(SectorData[,] sectors, int sizeZoneSector, int sectorsCount, int verticalCount)
+    protected void ImplementSectorToGalaxy(SectorData[,] sectors, int sizeZoneSector, int sectorsCount, int verticalCount)
     {
         var SizeX = sectorsCount * (sizeZoneSector + 1) - 1;
         var SizeZ = verticalCount * (sizeZoneSector + 1) - 1;
-        Debug.Log(Namings.Format("InplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}   SizeX:{2}   SizeZ:{3}  ", sizeZoneSector, sectorsCount, SizeX, SizeZ));
+        Debug.Log(Namings.Format("ImplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}   SizeX:{2}   SizeZ:{3}  ", sizeZoneSector, sectorsCount, SizeX, SizeZ));
         cells = new CellsInGalaxy(SizeX, SizeZ);
         for (var i = 0; i < sectorsCount; i++)
         {
@@ -532,6 +534,25 @@ public class GalaxyData
                 {
                     SetNullsTo(cells, subSector, sizeZoneSector);
                     subSector.ApplyPointsTo(cells);
+                }
+            }
+        }
+        Debug.Log($"Implementing end");
+    }
+
+    protected void BornArmies(SectorData[,] sectors, int sizeZoneSector, int sectorsCount, int verticalCount)
+    {
+        var SizeX = sectorsCount * (sizeZoneSector + 1) - 1;
+        var SizeZ = verticalCount * (sizeZoneSector + 1) - 1;
+        Debug.Log(Namings.Format("ImplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}   SizeX:{2}   SizeZ:{3}  ", sizeZoneSector, sectorsCount, SizeX, SizeZ));
+        for (var i = 0; i < sectorsCount; i++)
+        {
+            for (var j = 0; j < verticalCount; j++)
+            {
+                var subSector = sectors[i, j];
+                if (subSector != null)
+                {
+                    subSector.BornArmies();
                 }
             }
         }

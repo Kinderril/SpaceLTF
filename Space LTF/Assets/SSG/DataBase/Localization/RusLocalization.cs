@@ -506,6 +506,7 @@ public static class RusLocalization
         {"EMI", "ЭМИ"},
         {"Beam", "Луч"},
         {"MovingArmy", "Спец флот {1}\nСтатус:{2}. Мощь:{3}"},
+        {"SimpleMovingArmy", "Флот {1}\nСтатус:{2}. Мощь:{3}"},
         {"MovingArmyBorn", "Спец флот {0} появился. Координаты:{1}"},
         {"AdditionalPower", "Улучшения флотов"},
 

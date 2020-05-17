@@ -465,6 +465,7 @@ public static class EspLocalization
 {"EMI","EMI"},
 {"Beam","Haz"},
 {"MovingArmy","Las fuerzas especiales de {1}Estado:{2}. Potencia:{3}"},
+{"SimpleMovingArmy", "Flota de {1} \nEstado: {2}. Poder: {3}"},
 {"MovingArmyBorn","Las fuerzas especiales de {0} aparecer. Coordenadas:{1}"},
 {"AdditionalPower","Enemigos actualizaciones"},
 {"AddCredits","Añadir créditos:{0}"},

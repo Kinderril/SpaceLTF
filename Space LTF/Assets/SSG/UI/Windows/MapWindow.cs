@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -57,6 +58,16 @@ public class MapWindow : BaseWindow
 
     public override void Init()
     {
+        Debug.Log("map window int");
+        RunTask();
+    }
+    async void RunTask()
+    {
+        await InitMap();
+    }
+
+    private async Task InitMap()
+    {
         try
         {
 
@@ -85,7 +96,9 @@ public class MapWindow : BaseWindow
             // player.ReputationData.OnReputationNationChange += OnReputationChange;
             CellsOfSector();
             InitMyArmy();
-            GlobalMap.SingleInit(player.MapData.GalaxyData, this, MouseNearObject);
+            Debug.Log("SingleInit map");
+            await GlobalMap.SingleInit(player.MapData.GalaxyData, this, MouseNearObject);
+            Debug.Log("SingleInit map finish");
             GlobalMap.Open();
             var connectedCells = player.MapData.ConnectedCellsToCurrent();
             GlobalMap.SingleReset(player.MapData.CurrentCell, connectedCells);
@@ -131,10 +144,10 @@ public class MapWindow : BaseWindow
         }
         catch (Exception e)
         {
-              WindowManager.Instance.InfoWindow.Init(() =>
-              {
-                  WindowManager.Instance.OpenWindow(MainState.start);
-              },Namings.Tag("loaderror"));
+            WindowManager.Instance.InfoWindow.Init(() =>
+            {
+                WindowManager.Instance.OpenWindow(MainState.start);
+            }, Namings.Tag("loaderror"));
         }
     }
 
@@ -170,8 +183,9 @@ public class MapWindow : BaseWindow
             Debug.LogError($"can't return to last cell  lastCell:{lastCell}");
         }
 
-        player.MapData.GoToTarget(lastCell, GlobalMap, (comeToTarget) =>
+        player.MapData.GoToTarget(lastCell, GlobalMap,false, (comeToTarget) =>
         {
+            ActivateDialog(lastCell);
             GlobalMap.SingleReset(comeToTarget, player.MapData.ConnectedCellsToCurrent());
             GlobalMap.UnBlock();
         });
@@ -350,40 +364,41 @@ public class MapWindow : BaseWindow
             TryInitsMainCellDialog(obj);
         }
     }
-
-    private void TryInitsMainCellDialog(GlobalMapCell obj)
+    void ActivateDialog(GlobalMapCell cell)
     {
-        void ActivateDialog()
-        {
-            var dialog = obj.GetDialogMain(out var activateAnyway);
+        var dialog = cell.GetDialogMain(out var activateAnyway);
 
-            if (dialog != null)
+        if (dialog != null)
+        {
+            if (activateAnyway || !(cell.Completed && cell.OneTimeUsed()))
             {
-                if (activateAnyway || !(obj.Completed && obj.OneTimeUsed()))
-                {
-                    StartDialog(dialog, OnMainDialogEnds);
-                }
-                else
-                {
-                    OnMainDialogEnds(true, false);
-                }
+                StartDialog(dialog, OnMainDialogEnds);
             }
             else
             {
                 OnMainDialogEnds(true, false);
             }
         }
-
-        if (player.MapData.GoToTarget(obj, GlobalMap, (target) =>
+        else
         {
-            ActivateDialog();
+            OnMainDialogEnds(true, false);
+        }
+    }
+
+    private void TryInitsMainCellDialog(GlobalMapCell obj)
+    {
+       
+
+        if (player.MapData.GoToTarget(obj, GlobalMap,true, (target) =>
+        {
+            ActivateDialog(obj);
         }))
         {
 
         }
         else
         {
-            ActivateDialog();
+            ActivateDialog(obj);
 
         }
     }
