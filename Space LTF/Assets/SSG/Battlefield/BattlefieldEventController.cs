@@ -4,7 +4,9 @@ public class BattlefieldEventController
 {
     private List<BattlefildEventType> _posibleTypes = new List<BattlefildEventType>()
     {
-        BattlefildEventType.asteroids,BattlefildEventType.shieldsOff
+        BattlefildEventType.asteroids,BattlefildEventType.shieldsOff  ,
+        BattlefildEventType.fireVortex,BattlefildEventType.Vortex     ,
+        BattlefildEventType.IceZone,BattlefildEventType.BlackHole     ,
     };
 
     private BattleFieldEvent _event = null;
@@ -32,9 +34,19 @@ public class BattlefieldEventController
                     break;
                 case BattlefildEventType.shieldsOff:
                     _event = new ShieldOffEvent(battleController);
+                    break;    
+                case BattlefildEventType.fireVortex:
+                    _event = new FireVortexBattleEvent(battleController);
                     break;
-                    // case BattlefildEventType.engineOff:
-                    //     break;
+                case BattlefildEventType.Vortex:
+                    _event = new VortexBattleEvent(battleController);
+                    break;    
+                case BattlefildEventType.IceZone:
+                    _event = new ZoneIceBattleEvent(battleController);
+                    break;
+                case BattlefildEventType.BlackHole:
+                    _event = new BlackHoleBattleEvent(battleController);
+                    break;
             }
             if (_event != null)
             {

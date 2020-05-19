@@ -18,12 +18,13 @@ public abstract class MovingArmy
     public bool Destroyed { get; private set; }
     public float Power { get; protected set; }
     public GlobalMapCell PrevCell { get; set; }
-
+    protected float _startPower;
     public ShipConfig StartConfig { get; private set; }
 
     private GalaxyEnemiesArmyController _armiesController;
 
-    protected MovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController armiesController)
+    protected MovingArmy(GlobalMapCell startCell,
+        Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController armiesController)
     {
         _armiesController = armiesController;
         _destroyCallback = destroyCallback;
@@ -106,6 +107,7 @@ public abstract class MovingArmy
     public void UpdatePower(float power)
     {
         Power = power;
+//        Debug.Log($"power updated to:{Power}");
     }
 
     public abstract Player GetArmyToFight();
@@ -113,5 +115,10 @@ public abstract class MovingArmy
     public abstract MessageDialogData GetDialog(Action FightMovingArmy);
 
     public abstract MessageDialogData MoverArmyLeaverEnd();
+
+    public virtual void UpdateAllPowers(int visitedSectors, int step,int sectorSize)
+    {
+
+    }
 }
 

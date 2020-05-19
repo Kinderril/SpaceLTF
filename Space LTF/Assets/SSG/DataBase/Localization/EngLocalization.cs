@@ -973,6 +973,10 @@ public static class EngLocalization
         {"YourRartMoney", "All fine, you found some credits. Your part:{0}."},
         {"OKgo5050", "Ok, lets go 50/50"},
         {"Goal", "Goal"},
+        {"fireVortexEvent", "Fire vortex"},
+        {"VortexEvent", "Vortex"},
+        {"BlackHoleEvent", "Black holes"},
+        {"IceZoneEvent", "Frozen"},
 
         {"AdvTutorialOpenInv", "To open inventory click this button"},
         {"AdvTutorialUpgradeParameters", "Upgrade some main ship parameters to be more useful at battle or after it"},

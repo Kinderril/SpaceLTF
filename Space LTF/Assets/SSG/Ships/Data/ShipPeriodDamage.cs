@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShipPeriodDamage : ShipData
 {
     private const float DAMAGE_IGNORE_SHIELD = 2f;
+    private const float CONSTANT_FIRE_PERIOD = 0.5f;
     private bool _using = false;
     private float _endTime;
     private float _nextDamageTime;
@@ -19,6 +20,7 @@ public class ShipPeriodDamage : ShipData
 
     public void ManualUpdate()
     {
+        UpdateConstantFire();
         if (_using)
         {
             if (_ticksRemain <= 0)
@@ -31,6 +33,23 @@ public class ShipPeriodDamage : ShipData
                 Damage();
             }
         }
+    }
+
+    private float _nextConstantFire;
+
+    private void UpdateConstantFire()
+    {
+        if (_constantFire)
+        {
+            if (_nextConstantFire < Time.time)
+            {
+                _nextConstantFire = Time.time + CONSTANT_FIRE_PERIOD;
+                var damage = DAMAGE_IGNORE_SHIELD * _constantPowerCoef;
+                _owner.ShipParameters.DamageIgnoreShield(damage, null);
+
+            }
+        }
+
     }
 
     private void Damage()
@@ -70,9 +89,33 @@ public class ShipPeriodDamage : ShipData
     {
         _coef = 1f;
         //        Debug.LogError("Stop period damage");
-        if (_owner.PeriodDamageEffect != null)
-            _owner.PeriodDamageEffect.Stop();
+        if (!_constantFire)
+        {
+            if (_owner.PeriodDamageEffect != null)
+                _owner.PeriodDamageEffect.Stop();
+        }
         _using = false;
+    }
+
+    private bool _constantFire;
+    private float _constantPowerCoef;
+
+    public void StartConstantFire(float f)
+    {
+        if (_owner.PeriodDamageEffect != null)
+            _owner.PeriodDamageEffect.Play();
+        _constantFire = true;
+        _constantPowerCoef = f;
+    }
+
+    public void StopConstantFire(float f)
+    {
+        if (!_using)
+        {
+            if (_owner.PeriodDamageEffect != null)
+                _owner.PeriodDamageEffect.Stop();
+        }
+        _constantFire = false;
     }
 }
 

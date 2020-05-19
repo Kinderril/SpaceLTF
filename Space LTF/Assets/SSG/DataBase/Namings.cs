@@ -570,8 +570,14 @@ public static class Namings
                 return Tag("shieldsOffEvent");
             // case BattlefildEventType.engineOff:
             //     return Tag("engineOffEvent");
-            case BattlefildEventType.turrets:
-                break;
+            case BattlefildEventType.fireVortex:
+                return Tag("fireVortexEvent");
+            case BattlefildEventType.Vortex:
+                return Tag("VortexEvent");   
+            case BattlefildEventType.BlackHole:
+                return Tag("BlackHoleEvent");     
+            case BattlefildEventType.IceZone:
+                return Tag("IceZoneEvent");
             case null:
                 break;
         }

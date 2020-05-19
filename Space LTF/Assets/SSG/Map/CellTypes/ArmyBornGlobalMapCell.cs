@@ -8,20 +8,22 @@ public class ArmyBornGlobalMapCell : GlobalMapCell
     protected int _power;
     private List<MovingArmy> _connectedArmies = new List<MovingArmy>();
     private GalaxyEnemiesArmyController _enemiesArmyController;
+    private float _powerPerTurn;
 
-    protected int _additionalPower;
+//    protected int _additionalPower;
 
     public ArmyBornGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind,
-        SectorData sector, GalaxyEnemiesArmyController enemiesArmyController)
+        SectorData sector, GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn)
         : base(id, Xind, Zind, sector, config)
     {
+        _powerPerTurn = powerPerTurn;
         _power = power;
         _enemiesArmyController = enemiesArmyController;
     }
 
     public void BornArmy()
     {
-        var army = new StandartMovingArmy(this,_enemiesArmyController.SimpleArmyDestroyed, _power,_enemiesArmyController);
+        var army = new StandartMovingArmy(this,_enemiesArmyController.SimpleArmyDestroyed, _power,_enemiesArmyController, _powerPerTurn);
         _enemiesArmyController.AddArmy(army);
     }
 
@@ -35,22 +37,20 @@ public class ArmyBornGlobalMapCell : GlobalMapCell
     {
 
     }
-    public override void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
-    {
-        _additionalPower = additionalPower;
-        var nextPower = SectorData.CalcCellPower(visitedSectors, _sector.Size, startPower, _additionalPower);
-        //        _enemyPlayer = null;
-        // Debug.Log($"Army power sector updated prev:{_power}. next:{nextPower}");
-        SetPower(nextPower);
-    }
+//    public override void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
+//    {
+//        _additionalPower = additionalPower;
+//        var nextPower = SectorData.CalcCellPower(visitedSectors, _sector.Size, startPower, _additionalPower);
+//        SetPower(nextPower);
+//    }
 
-    private void SetPower(float power)
-    {
-        foreach (var connectedArmy in _connectedArmies)
-        {
-            connectedArmy.UpdatePower(power);
-        }
-    }
+//    private void SetPower(float power)
+//    {
+//        foreach (var connectedArmy in _connectedArmies)
+//        {
+//            connectedArmy.UpdatePower(power);
+//        }
+//    }
 
     public override bool CanCellDestroy()
     {

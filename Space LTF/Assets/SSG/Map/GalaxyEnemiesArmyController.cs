@@ -242,5 +242,13 @@ public class GalaxyEnemiesArmyController
         }
         return null;
     }
+
+    public void UpdateAllPowers(int mapDataVisitedSectors, int step, int sectorSize)
+    {
+        foreach (var movingArmy in _armies)
+        {
+            movingArmy.UpdateAllPowers(mapDataVisitedSectors, step, sectorSize);
+        }
+    }
 }
 

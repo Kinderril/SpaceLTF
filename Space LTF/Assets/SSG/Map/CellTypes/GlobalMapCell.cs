@@ -42,9 +42,16 @@ public abstract class GlobalMapCell
                     new Dictionary<BattlefildEventType, float>()
                     {
                         {BattlefildEventType.asteroids, 1f},
-                        {BattlefildEventType.shieldsOff, 1f},
+                        {BattlefildEventType.shieldsOff, 1f},     
+                        {BattlefildEventType.IceZone, 1f},
+                        {BattlefildEventType.BlackHole, 1f},
+                        {BattlefildEventType.fireVortex, 1f},
+                        {BattlefildEventType.Vortex, 1f},
                     });
                 _eventType = chance.Random();
+#if UNITY_EDITOR
+                _eventType = BattlefildEventType.fireVortex;
+#endif
             }
         }
         //        if (indZ == 12)
@@ -246,6 +253,8 @@ public abstract class GlobalMapCell
         {
             mapData.VisitedSectors++;
         }
+
+        mapData.GalaxyData.GalaxyEnemiesArmyController.UpdateAllPowers(mapData.VisitedSectors,step,_sector.Size);
         _sector.RecalculateAllCells(mapData.VisitedSectors, step);
     }
 

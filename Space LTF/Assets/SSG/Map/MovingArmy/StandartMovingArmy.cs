@@ -6,10 +6,14 @@ using System.Collections.Generic;
 [System.Serializable]
 public class StandartMovingArmy : MovingArmy
 {
-    public StandartMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback,float startPower,GalaxyEnemiesArmyController enemiesArmyController) 
+    private float _powerPerTurn;
+    public StandartMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback
+        ,float startPower,GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn) 
         : base(startCell, destroyCallback, enemiesArmyController)
     {
         Power = startPower;
+        _powerPerTurn = powerPerTurn;
+        _startPower = Power;
         //        var humanPlayer = MainController.Instance.MainPlayer;
         //        var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
         CurCell = startCell;
@@ -76,7 +80,12 @@ public class StandartMovingArmy : MovingArmy
         var rnd = waysToRandom.RandomElement();
         return rnd;
     }
-
+    public override void UpdateAllPowers(int visitedSectors, int step, int sectorSize)
+    {
+        var _additionalPower = (int)(_powerPerTurn * step);
+        var nextPower = SectorData.CalcCellPower(visitedSectors, sectorSize, (int)_startPower, _additionalPower);
+        Power = nextPower;
+    }
     public override Player GetArmyToFight()
     {
         if (_player.Army.Army.Count == 0)

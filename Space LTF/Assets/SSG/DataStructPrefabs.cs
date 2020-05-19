@@ -157,6 +157,7 @@ public class DataStructPrefabs : MonoBehaviour
     public Material RedFlare;
     public RoadMeshCreator ConnectorTurrets;
     public TurretConnectorContainer TurretConnector;
+    public List<GameObject> FireVortexs;
 
 
     public void Init()

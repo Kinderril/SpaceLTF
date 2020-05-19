@@ -208,7 +208,9 @@ public class SectorData
         foreach (var armyContainer in remainFreeCells.ToList())
         {
             var config = IsDroids(_shipConfig);
-            var armyCellcell = new ArmyBornGlobalMapCell(_power, config, Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, this,_enemiesArmyController);
+            var armyCellcell = new ArmyBornGlobalMapCell(_power, config, 
+                Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, 
+                this,_enemiesArmyController, _powerPerTurn);
             armyContainer.SetData(armyCellcell);
             remainFreeCells.Remove(armyContainer);
         }

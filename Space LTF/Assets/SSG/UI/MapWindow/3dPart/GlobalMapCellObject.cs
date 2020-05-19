@@ -15,6 +15,10 @@ public class GlobalMapCellObject : MonoBehaviour
     public GameObject StartObject;
     public GameObject AsteroidsEvent;
     public GameObject EMPSurgeEvent;
+    public GameObject FireVortexEvent;
+    public GameObject VortexEvent;
+    public GameObject IceZoneEvent;
+    public GameObject BlackHoleEvent;
     public GameObject StartDungeon;
     public Renderer ActiveRenderer;
 
@@ -47,6 +51,13 @@ public class GlobalMapCellObject : MonoBehaviour
         AsteroidsEvent.gameObject.SetActive(false);
         EMPSurgeEvent.gameObject.SetActive(false);
         StartDungeon.gameObject.SetActive(false);
+
+        FireVortexEvent.SetActive(false);
+        VortexEvent.SetActive(false);
+        IceZoneEvent.SetActive(false);
+        BlackHoleEvent.SetActive(false);
+
+
     }
 
     public void Init(GlobalMapCell cell, float cellSize)
@@ -123,7 +134,17 @@ public class GlobalMapCellObject : MonoBehaviour
                     break;
                 // case BattlefildEventType.engineOff:
                 //     break;
-                case BattlefildEventType.turrets:
+                case BattlefildEventType.fireVortex:
+                    FireVortexEvent.gameObject.SetActive(true);
+                    break;              
+                case BattlefildEventType.Vortex:
+                    VortexEvent.gameObject.SetActive(true);
+                    break;              
+                case BattlefildEventType.IceZone:
+                    IceZoneEvent.gameObject.SetActive(true);
+                    break;              
+                case BattlefildEventType.BlackHole:
+                    BlackHoleEvent.gameObject.SetActive(true);
                     break;
             }
         }
