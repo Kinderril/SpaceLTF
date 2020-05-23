@@ -6,7 +6,7 @@ public class NextBattleData
 {
     private bool _isFinalBattle;
     private bool _canRetire;
-    private BattlefildEventType? _battleEvent;
+    private EBattlefildEventType? _battleEvent;
     private Player MainPlayer;
     private PlayerStatistics Statistics;
     public NextBattleData(Player mainPlayer, PlayerStatistics statistics)
@@ -15,20 +15,20 @@ public class NextBattleData
         Statistics = statistics;
     }
 
-    public void PreBattle(Player player1, Player player2, bool isFinalBattle, bool canRetire, BattlefildEventType? battleEvent)
+    public void PreBattle(Player player1, Player player2, bool isFinalBattle, bool canRetire)
     {
         _isFinalBattle = isFinalBattle;
         _canRetire = canRetire;
-        _battleEvent = battleEvent;
+        _battleEvent = MainPlayer.MapData.CurrentCell.EventType;//  battleEvent;
         WindowManager.Instance.OpenWindow(MainState.preBattle, new Tuple<Player, Player>(player1, player2));
     }
 
-    public void LaunchBattle(Player greenSide, Player redSide)
+    public void LaunchBattle(Player greenSide, Player redSide, EBattleType battleType)
     {
-        BattleController.Instance.LaunchGame(greenSide, redSide, _canRetire, _battleEvent);
+        BattleController.Instance.LaunchGame(greenSide, redSide, _canRetire, _battleEvent, battleType);
     }
 
-    public void EndGameWin()
+    public void EndGameWin(EndBattleType winStatus)
     {
         Statistics.AddWin(MainPlayer.Army.BaseShipConfig);
         if (_isFinalBattle)
@@ -39,7 +39,7 @@ public class NextBattleData
         else
         {
             WindowManager.Instance.OpenWindow(MainState.endBattle);
-            Statistics.EndBattle(EndBattleType.win);
+            Statistics.EndBattle(winStatus);
             MainPlayer.MessagesToConsole.AddMsg("Battle won!");
         }
     }

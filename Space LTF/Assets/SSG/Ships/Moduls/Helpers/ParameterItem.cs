@@ -91,9 +91,15 @@ public class ParameterItem : IItemInv
         return 1;
     }
 
+    public string GetName()
+    {
+        return Namings.Tag($"{_itemType.ToString()}");
+
+    }
+
     public string GetInfo()
     {
-        var name = Namings.Tag($"{_itemType.ToString()}");
+        var name = GetName();
         return $"{name}({Namings.Tag($"EParameterItemRarity{Rarity.ToString()}")})";  //TODO LOCALIZTION
     }
 

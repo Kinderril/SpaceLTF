@@ -16,7 +16,7 @@ public class AsteroidEvent : BattleFieldEvent
 
     }
 
-    public override BattlefildEventType Type => BattlefildEventType.asteroids;
+    public override EBattlefildEventType Type => EBattlefildEventType.asteroids;
     public override void Init()
     {
         var rndX = MyExtensions.Random(-1f, 1f);

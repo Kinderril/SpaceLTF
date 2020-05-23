@@ -1,4 +1,4 @@
-﻿public enum BattlefildEventType
+﻿public enum EBattlefildEventType
 {
     asteroids,
     shieldsOff,
@@ -16,7 +16,7 @@ public abstract class BattleFieldEvent
         _battle = battle;
     }
 
-    public abstract BattlefildEventType Type
+    public abstract EBattlefildEventType Type
     {
         get;
     }

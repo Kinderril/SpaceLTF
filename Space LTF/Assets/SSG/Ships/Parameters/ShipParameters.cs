@@ -46,7 +46,6 @@ public class ShipParameters : IShipAffectableParams
     public int BodyArmor = 0;
     public int ShieldArmor = 0;
 
-
     public float CurHealth
     {
         get { return _curHealth; }

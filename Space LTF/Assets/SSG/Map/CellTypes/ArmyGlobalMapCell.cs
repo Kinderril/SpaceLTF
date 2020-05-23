@@ -91,7 +91,7 @@ public abstract class ArmyGlobalMapCell : GlobalMapCell
 
     public override void Take()
     {
-        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(), false, true, _eventType);
+        MainController.Instance.PreBattle(MainController.Instance.MainPlayer, GetArmy(), false, true);
     }
 
     protected override MessageDialogData GetLeavedActionInner()
@@ -103,10 +103,11 @@ public abstract class ArmyGlobalMapCell : GlobalMapCell
             var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power, ConfigOwner);
             return msg;
         }
-        else
+        if (MainController.Instance.Statistics.LastBattle == EndBattleType.winFull)
         {
             return null;
         }
+        return null;
     }
 
     public ShipConfig GetConfig()

@@ -38,6 +38,7 @@ public abstract class MovingArmy
         startCell.CurMovingArmy = this;
 //        Power = power;
         BattleController.Instance.OnBattleEndCallback += OnBattleEndCallback;
+     
     }
 
 
@@ -62,9 +63,10 @@ public abstract class MovingArmy
         switch (win)
         {
             case EndBattleType.win:
-                Destroyed = true;
+            case EndBattleType.winFull:
                 if (ai == _player)
                 {
+                    Destroyed = true;
                     _destroyCallback?.Invoke(this);
                     Dispose();
 
@@ -72,7 +74,8 @@ public abstract class MovingArmy
 
                 break;
             case EndBattleType.lose:
-                Destroyed = true;
+                if (ai == _player)
+                    Destroyed = true;
                 break;
             case EndBattleType.runAway:
                 _noStepNext = true;

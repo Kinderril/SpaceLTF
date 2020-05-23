@@ -3,6 +3,16 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EBattleType
+{
+    standart,
+    defenceWaves,
+    destroyShipPeriod,
+    defenceOfShip,
+    baseDefence,
+
+}
+
 [Serializable]
 public abstract class GlobalMapCell
 {
@@ -11,8 +21,8 @@ public abstract class GlobalMapCell
     public SectorData Sector => _sector;
     private HashSet<GlobalMapCell> _ways = new HashSet<GlobalMapCell>();
     public MovingArmy CurMovingArmy = null;
-    protected BattlefildEventType? _eventType = null;
-    public BattlefildEventType? EventType => _eventType;
+    protected EBattlefildEventType? _eventType = null;
+    public EBattlefildEventType? EventType => _eventType;
 
     public int ConnectedGates = -1;
     public int indX;
@@ -23,7 +33,7 @@ public abstract class GlobalMapCell
     protected string name;
 
     [System.NonSerialized]
-    private MessageDialogData _leaverDialogData = null;
+    private Func<MessageDialogData> _leaverDialogData = null;
 
 
     protected GlobalMapCell(int id, int iX, int iZ, SectorData sector, ShipConfig config)
@@ -33,27 +43,29 @@ public abstract class GlobalMapCell
         ConfigOwner = config;
         indZ = iZ;
         Id = id;
+        //        if (true)
         if (indX > 5)
-            //        if (true)
         {
-            if (MyExtensions.IsTrue01(0.25f))
+            if (MyExtensions.IsTrue01(0.5f))
             {
-                WDictionary<BattlefildEventType> chance = new WDictionary<BattlefildEventType>(
-                    new Dictionary<BattlefildEventType, float>()
+                WDictionary<EBattlefildEventType> chance = new WDictionary<EBattlefildEventType>(
+                    new Dictionary<EBattlefildEventType, float>()
                     {
-                        {BattlefildEventType.asteroids, 1f},
-                        {BattlefildEventType.shieldsOff, 1f},     
-                        {BattlefildEventType.IceZone, 1f},
-                        {BattlefildEventType.BlackHole, 1f},
-                        {BattlefildEventType.fireVortex, 1f},
-                        {BattlefildEventType.Vortex, 1f},
+                        {EBattlefildEventType.asteroids, 1f},
+                        {EBattlefildEventType.shieldsOff, 1f},     
+                        {EBattlefildEventType.IceZone, 1f},
+//                        {EBattlefildEventType.BlackHole, 1f},
+                        {EBattlefildEventType.fireVortex, 1f},
+                        {EBattlefildEventType.Vortex, 1f},
                     });
                 _eventType = chance.Random();
-#if UNITY_EDITOR
-                _eventType = BattlefildEventType.fireVortex;
-#endif
+
             }
+
         }
+#if UNITY_EDITOR
+//        _eventType = EBattlefildEventType.Vortex;
+#endif
         //        if (indZ == 12)
         //        {
         //            Debug.LogError("sas");
@@ -111,9 +123,10 @@ public abstract class GlobalMapCell
     }
     private void FightMovingArmy()
     {
-        _leaverDialogData = CurMovingArmy.MoverArmyLeaverEnd();
+        _leaverDialogData = CurMovingArmy.MoverArmyLeaverEnd;
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer, CurMovingArmy.GetArmyToFight(), false, true);
     }
+
 
 
     public virtual void Complete()
@@ -152,7 +165,7 @@ public abstract class GlobalMapCell
         {
             var dialog = _leaverDialogData;
             _leaverDialogData = null;
-            return dialog;
+            return dialog();
         }
         return GetLeavedActionInner();
     }

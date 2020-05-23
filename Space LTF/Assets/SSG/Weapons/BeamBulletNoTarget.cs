@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 public class BeamBulletNoTarget : Bullet
@@ -153,14 +154,20 @@ public class BeamBulletNoTarget : Bullet
 
         var asteroids = bc.CellController.Data.Asteroids;
 
+        List<AIAsteroidPredata> toDelete = new List<AIAsteroidPredata>();
         foreach (var aiAsteroidPredata in asteroids)
         {
             var p = aiAsteroidPredata.Position;
             var projectDist = CalcDist(p);
             if (projectDist < 1f)
             {
-                aiAsteroidPredata.Death();
+                toDelete.Add(aiAsteroidPredata);
             }
+        }
+
+        foreach (var aiAsteroidPredata in toDelete)
+        {
+            aiAsteroidPredata.Death();
         }
 
     }

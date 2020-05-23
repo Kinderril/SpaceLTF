@@ -116,7 +116,7 @@ public class ShipBase : MovingObject
 
     private DebugTurnData DebugTurnData;
 
-    public float MaxTurnRadius => Mathf.Rad2Deg * (ShipParameters.MaxSpeed / ShipParameters.TurnSpeed);
+    public float MaxTurnRadius => Mathf.Rad2Deg * (MaxSpeed() / TurnSpeed());
 
     public virtual void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos,
         IPilotParameters pilotParams, Commander commander, Action<ShipBase> dealthCallback)
@@ -519,12 +519,12 @@ public class ShipBase : MovingObject
 
     protected override float TurnSpeed()
     {
-        return ShipParameters.TurnSpeed;
+        return ShipParameters.TurnSpeed * BuffData.TurnCoef;
     }
 
     public override float MaxSpeed()
     {
-        return ShipParameters.MaxSpeed;
+        return ShipParameters.MaxSpeed * BuffData.SpeedCoef;
     }
 
     public bool IsInFromt(ShipBase target)

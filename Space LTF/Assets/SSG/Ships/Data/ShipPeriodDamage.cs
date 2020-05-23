@@ -102,6 +102,7 @@ public class ShipPeriodDamage : ShipData
 
     public void StartConstantFire(float f)
     {
+        Debug.LogError($"StartConstantFire");
         if (_owner.PeriodDamageEffect != null)
             _owner.PeriodDamageEffect.Play();
         _constantFire = true;
@@ -110,6 +111,7 @@ public class ShipPeriodDamage : ShipData
 
     public void StopConstantFire(float f)
     {
+        Debug.LogError($"StopConstantFire");
         if (!_using)
         {
             if (_owner.PeriodDamageEffect != null)

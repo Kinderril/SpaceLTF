@@ -47,6 +47,8 @@ public class ShipInventory : IStartShipParams, IInventory
     private readonly Player _player;
     private PilotParameters _pilot;
 
+    public bool Marked { get; set; } = false;
+
 
     public ShipInventory(IStartShipParams pParams, Player player, PilotParameters pilot)
     {

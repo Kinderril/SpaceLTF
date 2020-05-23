@@ -6,7 +6,7 @@ public class BlackHoleBattleEvent : SetterElementBattleEvent
 {
     public BlackHoleBattleEvent(BattleController battle) :
         base(battle, 2, 2,
-            DataBaseController.Instance.DataStructPrefabs.FireVortexs, BattlefildEventType.BlackHole)
+            DataBaseController.Instance.DataStructPrefabs.BlackHole, EBattlefildEventType.BlackHole)
     {
 
     }

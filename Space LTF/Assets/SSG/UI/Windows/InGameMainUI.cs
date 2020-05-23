@@ -30,6 +30,7 @@ public class InGameMainUI : BaseWindow
     public SpellModulsContainer SpellModulsContainer;
     public RetirreButton RetireButton;
     public ReinforsmentsButton ReinforsmentsButton;
+    public BattleEventTimerContainer BattleEventTimer;
     public CamerasLinkButtons CamerasLinkButtons;
     private bool _isSimpleTutor;
     private bool _isStartAutoTutor;
@@ -140,6 +141,7 @@ public class InGameMainUI : BaseWindow
         int weaponsIndex = 0;
         //        WindowKeys.gameObject.SetActive(false);
         TimeScaleBattle.Init(_battle);
+        BattleEventTimer.Init(_battle.BattleTypeEvent);
 
 
         battle.OnBattleLoaded += InitSpells;
@@ -413,6 +415,7 @@ public class InGameMainUI : BaseWindow
         FlyingNumbersController.Dispose();
         SpellModulsContainer.Dispose(); 
         CreditController.Dispose();
+        BattleEventTimer.Dispose();
         foreach (var shipUiOnMap in ShipsUIs)
         {
             Destroy(shipUiOnMap.Value);

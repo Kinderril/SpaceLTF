@@ -53,13 +53,11 @@ public class LineShotSpell : BaseSpellModulInv
     private int FirePeriod => FIRE_PERIOD + Level;
     private int Damage => 5 + Level;
 
-    private static CurWeaponDamage CurrentDamage { get; set; }
-
     public LineShotSpell()
         : base(SpellType.lineShot, 4, 11,
              new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-        CurrentDamage = new CurWeaponDamage(Damage, Damage);
+
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
@@ -87,7 +85,8 @@ public class LineShotSpell : BaseSpellModulInv
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        shipparameters.Damage(CurrentDamage.ShieldDamage, CurrentDamage.BodyDamage, damagedone, target);
+
+        shipparameters.Damage(Damage, Damage, damagedone, target);
         target.DamageData.ApplyEffect(ShipDamageType.fire, FirePeriod, FireCoef);
     }
 
@@ -119,7 +118,7 @@ public class LineShotSpell : BaseSpellModulInv
     {
         var totalFireDamage = FirePeriod * FireCoef;
         var damageStr = totalFireDamage.ToString("0");
-        return Namings.Format(Namings.Tag("LineSHotSpell"), CurrentDamage.BodyDamage, CurrentDamage.ShieldDamage, FirePeriod, damageStr);
+        return Namings.Format(Namings.Tag("LineSHotSpell"), Damage, Damage, FirePeriod, damageStr);
     }
     public override string GetUpgradeName(ESpellUpgradeType type)
     {

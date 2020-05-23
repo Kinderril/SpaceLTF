@@ -20,6 +20,7 @@ public class ExternalSideForce
 
     public void Init(float power,float delay, SideTurn side)
     {
+        IsActive = true;
         this._side = side;
         Power = power;
         EndTime = Time.time + delay;
@@ -50,5 +51,19 @@ public class ExternalSideForce
 
 
         return EulerLerp.LerpVectorByY(ship.LookDirection, dir, p);
+    }
+
+    public Vector3 GetLerpPercent(Vector3 dirOld)
+    {
+        var delta = EndTime - Time.time;
+        if (delta <= 0)
+        {
+            IsActive = false;
+            return dirOld;
+        }
+        var d = delta / Period;
+        var p = Power * d;
+        var dir = Utils.Rotate90(dirOld, _side);
+        return EulerLerp.LerpVectorByY(dirOld, dir, p);
     }
 }

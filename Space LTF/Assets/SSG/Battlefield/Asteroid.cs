@@ -7,7 +7,7 @@ public class Asteroid : MonoBehaviour
     private bool _wannaRotate = false;
     private float _rotateSpeed;
     private Vector3 _rotateDir;
-    private AIAsteroidPredata _aiAsteroidPredata;
+    public AIAsteroidPredata AiAsteroidPredata;
     public AudioSource Source;
 
     private float _rad;
@@ -38,9 +38,9 @@ public class Asteroid : MonoBehaviour
     }
     public virtual void Init(AIAsteroidPredata aiAsteroidPredata)
     {
-        _aiAsteroidPredata = aiAsteroidPredata;
-        _aiAsteroidPredata.OnMove += OnMove;
-        _aiAsteroidPredata.OnDeath += OnDeathLogic;
+        AiAsteroidPredata = aiAsteroidPredata;
+        AiAsteroidPredata.OnMove += OnMove;
+        AiAsteroidPredata.OnDeath += OnDeathLogic;
         Rad = aiAsteroidPredata.Rad / AIAsteroidPredata.SHIP_SIZE_COEF;
 
     }
@@ -61,13 +61,13 @@ public class Asteroid : MonoBehaviour
             {
                 if (ship.ShipBase.Boost.BoostRam.IsActive)
                 {
-                    var dir = _aiAsteroidPredata.Position - ship.ShipBase.Position;
-                    _aiAsteroidPredata.Push(dir, 20);
+                    var dir = AiAsteroidPredata.Position - ship.ShipBase.Position;
+                    AiAsteroidPredata.Push(dir, 20);
                 }
                 else
                 {
                     ship.ShipBase.ShipParameters.Damage(ShieldDamage, BodyDamage, null, null);
-                    _aiAsteroidPredata.Death();
+                    AiAsteroidPredata.Death();
                 }
 
             }
@@ -78,7 +78,7 @@ public class Asteroid : MonoBehaviour
             if (bullet != null)
             {
                 bullet.Death();
-                _aiAsteroidPredata.Death();
+                AiAsteroidPredata.Death();
             }
         }
     }
@@ -91,7 +91,7 @@ public class Asteroid : MonoBehaviour
             return;
         }
         RotateUpdate();
-        _aiAsteroidPredata.UpdateFromUnity();
+        AiAsteroidPredata.UpdateFromUnity();
     }
 
     protected void RotateUpdate()
@@ -105,8 +105,8 @@ public class Asteroid : MonoBehaviour
         if (withSound)
             PlaySound();
         subDeath();
-        _aiAsteroidPredata.OnMove -= OnMove;
-        _aiAsteroidPredata.OnDeath -= OnDeathLogic;
+        AiAsteroidPredata.OnMove -= OnMove;
+        AiAsteroidPredata.OnDeath -= OnDeathLogic;
     }
 
     protected void subDeath()

@@ -158,6 +158,9 @@ public class DataStructPrefabs : MonoBehaviour
     public RoadMeshCreator ConnectorTurrets;
     public TurretConnectorContainer TurretConnector;
     public List<GameObject> FireVortexs;
+    public List<GameObject> Vortexs;
+    public List<GameObject> IceZone;
+    public List<GameObject> BlackHole;
 
 
     public void Init()

@@ -47,7 +47,7 @@ public class EvadeAction : BaseAction
         var acceleration = false;
         if (danger != null)
         {
-            if (_owner.ShipParameters.MaxSpeed > danger.ShipLink.ShipParameters.MaxSpeed)
+            if (_owner.MaxSpeed() > danger.ShipLink.MaxSpeed())
             {
                 //GO STRAIGHT
                 // _owner.SetTargetSpeed(1f);

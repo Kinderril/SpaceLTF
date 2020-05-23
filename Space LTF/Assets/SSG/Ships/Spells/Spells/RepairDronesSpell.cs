@@ -38,7 +38,7 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
     {
-        var p = ship.ShipParameters.CurHealth / ship.ShipParameters.MaxSpeed;
+        var p = ship.ShipParameters.CurHealth / ship.MaxSpeed();
 
         if (p < .5f)
         {

@@ -560,23 +560,23 @@ public static class Namings
         return "null";
     }
 
-    public static string BattleEvent(BattlefildEventType? eventType)
+    public static string BattleEvent(EBattlefildEventType? eventType)
     {
         switch (eventType)
         {
-            case BattlefildEventType.asteroids:
+            case EBattlefildEventType.asteroids:
                 return Tag("asteroidsEvent");
-            case BattlefildEventType.shieldsOff:
+            case EBattlefildEventType.shieldsOff:
                 return Tag("shieldsOffEvent");
-            // case BattlefildEventType.engineOff:
+            // case EBattlefildEventType.engineOff:
             //     return Tag("engineOffEvent");
-            case BattlefildEventType.fireVortex:
+            case EBattlefildEventType.fireVortex:
                 return Tag("fireVortexEvent");
-            case BattlefildEventType.Vortex:
+            case EBattlefildEventType.Vortex:
                 return Tag("VortexEvent");   
-            case BattlefildEventType.BlackHole:
+            case EBattlefildEventType.BlackHole:
                 return Tag("BlackHoleEvent");     
-            case BattlefildEventType.IceZone:
+            case EBattlefildEventType.IceZone:
                 return Tag("IceZoneEvent");
             case null:
                 break;

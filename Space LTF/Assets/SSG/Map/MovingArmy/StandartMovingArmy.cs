@@ -13,11 +13,11 @@ public class StandartMovingArmy : MovingArmy
     {
         Power = startPower;
         _powerPerTurn = powerPerTurn;
-        _startPower = Power;
+        _startPower = startPower;
         //        var humanPlayer = MainController.Instance.MainPlayer;
         //        var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
         CurCell = startCell;
-                _player = new PlayerAI($"{ Namings.Tag("SimpleMovingArmy")}:{MyExtensions.Random(3, 9999)}");
+                _player = new PlayerAIWithBattleEvent($"{ Namings.Tag("SimpleMovingArmy")}:{MyExtensions.Random(3, 9999)}");
 //        var armyPower = humanPower * Library.MOVING_ARMY_POWER_COEF;
 //        var armyData = ArmyCreatorLibrary.GetArmy(startCell.ConfigOwner);
 //        var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, armyData, _player);
@@ -84,7 +84,25 @@ public class StandartMovingArmy : MovingArmy
     {
         var _additionalPower = (int)(_powerPerTurn * step);
         var nextPower = SectorData.CalcCellPower(visitedSectors, sectorSize, (int)_startPower, _additionalPower);
-        Power = nextPower;
+        var battleTypePowerCoef = 1f;
+        var playerAi = _player as IPlayerAIWithBattleEvent;
+        if (playerAi != null)
+        {
+            switch (playerAi.EBattleType)
+            {
+                case EBattleType.defenceWaves:
+                    battleTypePowerCoef = 1.15f;
+                    break;
+                case EBattleType.defenceOfShip:
+                    battleTypePowerCoef = 1.1f;
+                    break;
+                case EBattleType.baseDefence:
+                    battleTypePowerCoef = 1.4f;
+                    break;
+            }
+        }
+        
+        Power = nextPower * battleTypePowerCoef;
     }
     public override Player GetArmyToFight()
     {
@@ -107,7 +125,7 @@ public class StandartMovingArmy : MovingArmy
         var myPlaer = MainController.Instance.MainPlayer;
         var status = myPlaer.ReputationData.GetStatus(StartConfig);
         bool isFriends = status == EReputationStatus.friend;
-        string masinMsg;
+//        string masinMsg;
 
         var ans = new List<AnswerDialogData>();
         var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[StartConfig];
@@ -115,7 +133,7 @@ public class StandartMovingArmy : MovingArmy
         string scoutsField = "";
         if (army.ScoutData != null)
         {
-            BattlefildEventType? _eventType = CurCell.EventType;
+            EBattlefildEventType? _eventType = CurCell.EventType;
             var scoutData = army.ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
             if (_eventType.HasValue)
             {
@@ -128,7 +146,7 @@ public class StandartMovingArmy : MovingArmy
             for (int i = 0; i < scoutData.Count; i++)
             {
                 var info = scoutData[i];
-                scoutsField = $"{scoutsField}\n{info}\n";
+                scoutsField = $"{scoutsField}\n{info}";
             }
         }
 
@@ -137,51 +155,31 @@ public class StandartMovingArmy : MovingArmy
         ans.Add(new AnswerDialogData(Namings.DialogTag("Attack"), FightMovingArmy));
         if (isFriends)
         {
-            masinMsg = Namings.Format(Namings.DialogTag("armyFrendly"), scoutsField); ;
+            ans.Add(new AnswerDialogData(Namings.Tag("leave"), null));
             ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyAskHelp"), rep), null, DimlomatyOption));
         }
         else
         {
             int buyoutCost = (int)Power;
-            var playersPower = ArmyCreator.CalcArmyPower(myPlaer.Army);
 
             if (myPlaer.MoneyData.HaveMoney(buyoutCost) && (StartConfig == ShipConfig.mercenary || StartConfig == ShipConfig.raiders))
             {
                 ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
                     () => BuyOutOption(buyoutCost)));
             }
-            if (status == EReputationStatus.neutral)
-            {
-                masinMsg = Namings.Format(Namings.DialogTag("armyNeutral"), scoutsField);
-            }
-            else
-            {
-                if (playersPower < Power)
-                {
-                    masinMsg = Namings.Format(Namings.DialogTag("armyStronger"), scoutsField);
-                }
-                else
-                {
-                    masinMsg = Namings.Format(Namings.DialogTag("armyShallFight"), scoutsField);
-                }
-            }
-        }
-
-
-        if (isFriends || status == EReputationStatus.neutral)
-        {
-            ans.Add(new AnswerDialogData(Namings.Tag("leave"), null));
-        }
-        else
-        {
             ans.Add(new AnswerDialogData(
                 Namings.Format(Namings.DialogTag("armyRun"), scoutsField),
                 () =>
                 {
                 }, null, false, true));
+
+
         }
 
-        var mesData = new MessageDialogData(masinMsg, ans);
+        var masinMsg = GetBaseFightStartMessage();
+        masinMsg = $"{masinMsg}\n{scoutsField}";
+
+       var mesData = new MessageDialogData(masinMsg, ans);
         return mesData;
     }
     private MessageDialogData BuyOutOption(int buyoutCost)
@@ -192,6 +190,55 @@ public class StandartMovingArmy : MovingArmy
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("armyBuyoutComplete"), buyoutCost), ans);
         return mesData;
+    }
+
+    private string GetBaseFightStartMessage()
+    {
+        var myPlaer = MainController.Instance.MainPlayer;
+        var status = myPlaer.ReputationData.GetStatus(StartConfig);
+        var playersPower = ArmyCreator.CalcArmyPower(myPlaer.Army);
+        string masinMsg;
+        var playerAi = _player as IPlayerAIWithBattleEvent;
+        EBattleType battleType = EBattleType.standart;
+        if (playerAi != null)
+        {
+            battleType = playerAi.EBattleType;
+        }
+        switch (battleType)
+        {
+            case EBattleType.defenceWaves:
+                masinMsg = Namings.Tag("defenceWavesStart");
+                break;
+            case EBattleType.destroyShipPeriod:
+                masinMsg = Namings.Tag("destroyShipPeriodStart");
+                break;
+            case EBattleType.defenceOfShip:
+                masinMsg = Namings.Tag("defenceOfShipStart");
+                break;
+            case EBattleType.baseDefence:
+                masinMsg = Namings.Tag("baseDefenceStart");
+                break;
+            case EBattleType.standart:
+            default:
+                if (status == EReputationStatus.neutral)
+                {
+                    masinMsg = Namings.DialogTag("armyNeutral");
+                }
+                else
+                {
+                    if (playersPower < Power)
+                    {
+                        masinMsg = Namings.DialogTag("armyStronger");
+                    }
+                    else
+                    {
+                        masinMsg = Namings.DialogTag("armyShallFight");
+                    }
+                }
+                break;
+        }
+
+        return masinMsg;
     }
 
     private MessageDialogData DimlomatyOption()
@@ -276,16 +323,29 @@ public class StandartMovingArmy : MovingArmy
 
     public override MessageDialogData MoverArmyLeaverEnd()
     {
-        if (MainController.Instance.Statistics.LastBattle == EndBattleType.win)
+        var playerAI = _player as IPlayerAIWithBattleEvent;
+        EBattleType type = EBattleType.standart;
+        if (playerAI != null)
         {
-            var player = MainController.Instance.MainPlayer;
-            player.ReputationData.WinBattleAgainst(StartConfig);
-            var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power, StartConfig);
-            return msg;
+            type = playerAI.EBattleType;
+        }
+
+        if (type == EBattleType.standart)
+        {
+            if (MainController.Instance.Statistics.LastBattle == EndBattleType.win)
+            {
+                var player = MainController.Instance.MainPlayer;
+                player.ReputationData.WinBattleAgainst(StartConfig);
+                var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power, StartConfig);
+                return msg;
+            }
         }
         else
         {
-            return null;
+            var fullWin = MainController.Instance.Statistics.LastBattle == EndBattleType.winFull;
+            return BattleEventsDialogsLib.GetDialog(type, fullWin, Power);
         }
+
+        return null;
     }
 }

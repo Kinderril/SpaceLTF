@@ -5,6 +5,7 @@
 [System.Serializable]
 public class PlayerAI : Player
 {
+
     public PlayerAI(string name, Dictionary<PlayerParameterType, int> startData = null)
         :
         base(name, startData)
@@ -16,6 +17,10 @@ public class PlayerAI : Player
     {
         MainController.Instance.Statistics.AddOpenPoints(1);
         return new LastReward(this, winner);
+    }
+    public override ETurretBehaviour GetTurretBehaviour()
+    {
+        return ETurretBehaviour.stayAtPoint;
     }
 
     public virtual bool DoBaseDefence()

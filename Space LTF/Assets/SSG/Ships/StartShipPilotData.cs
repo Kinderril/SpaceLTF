@@ -5,7 +5,7 @@ public class StartShipPilotData
 {
     public IPilotParameters Pilot;
     public ShipInventory Ship;
-    public float TimeToLaunch = 0f;
+//    public float TimeToLaunch = 0f;
 
     public StartShipPilotData(IPilotParameters Pilot,
         ShipInventory Ship)

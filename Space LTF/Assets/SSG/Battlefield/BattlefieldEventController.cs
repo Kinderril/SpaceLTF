@@ -2,16 +2,16 @@
 
 public class BattlefieldEventController
 {
-    private List<BattlefildEventType> _posibleTypes = new List<BattlefildEventType>()
+    private List<EBattlefildEventType> _posibleTypes = new List<EBattlefildEventType>()
     {
-        BattlefildEventType.asteroids,BattlefildEventType.shieldsOff  ,
-        BattlefildEventType.fireVortex,BattlefildEventType.Vortex     ,
-        BattlefildEventType.IceZone,BattlefildEventType.BlackHole     ,
+        EBattlefildEventType.asteroids,EBattlefildEventType.shieldsOff  ,
+        EBattlefildEventType.fireVortex,EBattlefildEventType.Vortex     ,
+        EBattlefildEventType.IceZone,EBattlefildEventType.BlackHole     ,
     };
 
     private BattleFieldEvent _event = null;
 
-    public void Init(BattleController battleController, BattlefildEventType? type, bool canRerandom)
+    public void Init(BattleController battleController, EBattlefildEventType? type, bool canRerandom)
     {
         _event = null;
         if (type == null && canRerandom)
@@ -23,29 +23,29 @@ public class BattlefieldEventController
         }
 
         //#if UNITY_EDITOR    
-        //        type = BattlefildEventType.asteroids;
+        //        type = EBattlefildEventType.asteroids;
         //#endif
         if (type != null)
         {
             switch (type.Value)
             {
-                case BattlefildEventType.asteroids:
+                case EBattlefildEventType.asteroids:
                     _event = new AsteroidEvent(battleController);
                     break;
-                case BattlefildEventType.shieldsOff:
+                case EBattlefildEventType.shieldsOff:
                     _event = new ShieldOffEvent(battleController);
                     break;    
-                case BattlefildEventType.fireVortex:
+                case EBattlefildEventType.fireVortex:
                     _event = new FireVortexBattleEvent(battleController);
                     break;
-                case BattlefildEventType.Vortex:
+                case EBattlefildEventType.Vortex:
                     _event = new VortexBattleEvent(battleController);
                     break;    
-                case BattlefildEventType.IceZone:
+                case EBattlefildEventType.IceZone:
                     _event = new ZoneIceBattleEvent(battleController);
                     break;
-                case BattlefildEventType.BlackHole:
-                    _event = new BlackHoleBattleEvent(battleController);
+                case EBattlefildEventType.BlackHole:
+//                    _event = new BlackHoleBattleEvent(battleController);
                     break;
             }
             if (_event != null)

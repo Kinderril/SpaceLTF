@@ -18,7 +18,7 @@ public class SpecOpsMovingArmy : MovingArmy
         var armyData = ArmyCreatorLibrary.GetArmy(startCell.ConfigOwner);
         var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, armyData, _player);
         _player.Army.SetArmy(army);
-        _startPower = Power;
+        _startPower = armyPower;
     }
     public override string ShortDesc()
     {

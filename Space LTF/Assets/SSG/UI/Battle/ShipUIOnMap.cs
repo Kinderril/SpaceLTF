@@ -13,12 +13,14 @@ public class ShipUIOnMap : MonoBehaviour
     public ShipSlidersInfo ShipSlidersInfo;
     private bool _withWeapons = true;
     public GameObject AutoActive;
+    public GameObject ISMarked;
 
     private ShipBase _ship;
 
     public void Init(ShipBase ship,bool withWeaons)
     {
         AutoActive.SetActive(false);
+        ISMarked.SetActive(ship.ShipInventory.Marked);
         _withWeapons = withWeaons;
         //        AttackIcon.gameObject.SetActive(false);
         //        DefenceIcon.gameObject.SetActive(false);

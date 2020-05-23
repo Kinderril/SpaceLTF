@@ -22,6 +22,7 @@ public class PreFinishWindow : MonoBehaviour
         switch (winner)
         {
             case EndBattleType.win:
+            case EndBattleType.winFull:
                 color = Color.green;
                 Field.text = Namings.Tag("Win");
                 break;

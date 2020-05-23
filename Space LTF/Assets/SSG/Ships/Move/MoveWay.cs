@@ -163,7 +163,7 @@ public class MoveWay
         {
             var p01 = points[i];
             var p02 = points[i + 1];
-            lastDir = CalcPoints(data2move, p01, p02, turnRad, shipBase.ShipParameters.MaxSpeed, lastDir);
+            lastDir = CalcPoints(data2move, p01, p02, turnRad, shipBase.MaxSpeed(), lastDir);
 #if UNITY_EDITOR
             Debug.DrawLine(p01 + Vector3.up, p02 + Vector3.up, Color.yellow, 10f);
 #endif

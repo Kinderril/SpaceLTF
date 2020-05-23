@@ -55,6 +55,7 @@ public class Commander
         }
         Player = player;
         _paramsOfShips = player.Army.GetShipsToBattle();
+        _paramsOfShips = battleController.BattleTypeEvent.RebuildArmy(teamIndex, _paramsOfShips,player);
         Battlefield = battlefield;
         _teamIndex = teamIndex;
         CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(), 
@@ -63,6 +64,11 @@ public class Commander
         SpellController = new CommanderSpells(this);
         Priority = new CommanderPriority(this);
         //        CommanderShipBlink = new CommanderShipBlink(player.Parameters.EnginePower.Level);
+    }
+
+    public void CallReinforcments(StartShipPilotData data, Action<ShipBase> OnShipLauched)
+    {
+        LaunchReinforsmentShip(data, OnShipLauched);
     }
 
     public void CallReinforcments(ShipConfig config, Action<ShipBase> OnShipLauched)
@@ -76,6 +82,11 @@ public class Commander
         var dat = ArmyCreatorLibrary.GetArmy(config);
         var shipData = ArmyCreator.CreateShipByValue(armyPoints, dat, Player, logs);
 
+        LaunchReinforsmentShip(shipData, OnShipLauched);
+    }
+
+    private void LaunchReinforsmentShip(StartShipPilotData shipData,Action<ShipBase> OnShipLauched)
+    {
         var enemyCommander = _battleController.GetCommander(BattleController.OppositeIndex(TeamIndex));
         var center = Battlefield.CellController.Data.CenterZone;
         var dirToOffset = Utils.NormalizeFast(enemyCommander.StartMyPosition - center);
@@ -461,10 +472,10 @@ public class Commander
         OnShipAdd = null;
     }
 
-    public void WinEndBattle(Commander enemyCommander)
+    public void WinEndBattle(Commander enemyCommander,bool winFull)
     {
         ApplyBattleDamage();
-        Player.WinBattleReward(enemyCommander);
+        Player.WinBattleReward(enemyCommander, winFull);
     }
 
     public void ApplyBattleDamage()
@@ -506,17 +517,19 @@ public class Commander
         shipsREmain.Remove(owner);
 
         Debug.Log($"ShipRunAway complete {owner.Id}  remainCount:{shipsREmain.Count}");
-        if (shipsREmain.Count == 1 && shipsREmain[0].ShipParameters.StartParams.ShipType == ShipType.Base)
+        if (TeamIndex == TeamIndex.green)
         {
-            BattleController.Instance.RunAway();
-        }
+            if (shipsREmain.Count == 1 && shipsREmain[0].ShipParameters.StartParams.ShipType == ShipType.Base)
+            {
+                BattleController.Instance.RunAway();
+            }
 
-        if (shipsREmain.Count == 1 || shipsREmain.Count == 0)
-        {
-            Debug.LogError($"WRONG RUN AWAY Ships.Count {Ships.Count}");
-            BattleController.Instance.RunAway();
-        }
-
+            if (shipsREmain.Count == 1 || shipsREmain.Count == 0)
+            {
+                Debug.LogError($"WRONG RUN AWAY Ships.Count {Ships.Count}");
+                BattleController.Instance.RunAway();
+            }
+        } 
     }
 
     public ShipBase GetClosestShip(Vector3 targetPosition, bool withBase)

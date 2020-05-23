@@ -375,9 +375,9 @@ public class Player
 
     public virtual ETurretBehaviour GetTurretBehaviour()
     {
-        return ETurretBehaviour.stayAtPoint;
+        return ETurretBehaviour.nearBase;
     }
-    public void WinBattleReward(Commander enemyCommander)
+    public void WinBattleReward(Commander enemyCommander, bool winFull)
     {
         if (enemyCommander.Player is PlayerAI enemyPlayer)
         {

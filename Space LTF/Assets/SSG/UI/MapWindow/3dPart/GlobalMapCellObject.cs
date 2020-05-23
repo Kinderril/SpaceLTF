@@ -126,24 +126,24 @@ public class GlobalMapCellObject : MonoBehaviour
         {
             switch (Cell.EventType)
             {
-                case BattlefildEventType.asteroids:
+                case EBattlefildEventType.asteroids:
                     AsteroidsEvent.gameObject.SetActive(true);
                     break;
-                case BattlefildEventType.shieldsOff:
+                case EBattlefildEventType.shieldsOff:
                     EMPSurgeEvent.gameObject.SetActive(true);
                     break;
-                // case BattlefildEventType.engineOff:
+                // case EBattlefildEventType.engineOff:
                 //     break;
-                case BattlefildEventType.fireVortex:
+                case EBattlefildEventType.fireVortex:
                     FireVortexEvent.gameObject.SetActive(true);
                     break;              
-                case BattlefildEventType.Vortex:
+                case EBattlefildEventType.Vortex:
                     VortexEvent.gameObject.SetActive(true);
                     break;              
-                case BattlefildEventType.IceZone:
+                case EBattlefildEventType.IceZone:
                     IceZoneEvent.gameObject.SetActive(true);
                     break;              
-                case BattlefildEventType.BlackHole:
+                case EBattlefildEventType.BlackHole:
                     BlackHoleEvent.gameObject.SetActive(true);
                     break;
             }

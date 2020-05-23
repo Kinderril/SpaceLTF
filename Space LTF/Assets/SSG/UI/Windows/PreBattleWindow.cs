@@ -64,12 +64,24 @@ public class PreBattleWindow : BaseWindow
                 }
                 else
                 {
-                    var scouts = _redPlayer.ScoutData.GetShipScouts(_greenPlayer.Parameters.Scouts.Level);
-                    foreach (var shipScoutData in scouts)
+                    if (_redPlayer != null)
                     {
-                        var scoutInfo = DataBaseController.GetItem(ScoutShipInfoPrefab);
-                        scoutInfo.transform.SetParent(EnemyPlayersLayout,false);
-                        scoutInfo.Init(shipScoutData);
+                        if (_redPlayer.ScoutData == null)
+                        {
+                            _redPlayer.ScoutData = new PlayerScoutData(_redPlayer);
+                        }
+
+                        if (_redPlayer.ScoutData != null)
+                        {
+                            var scouts = _redPlayer.ScoutData.GetShipScouts(_greenPlayer.Parameters.Scouts.Level);
+                            foreach (var shipScoutData in scouts)
+                            {
+                                var scoutInfo = DataBaseController.GetItem(ScoutShipInfoPrefab);
+                                scoutInfo.transform.SetParent(EnemyPlayersLayout, false);
+                                scoutInfo.Init(shipScoutData);
+                            }
+                        }
+
                     }
                 }
             }

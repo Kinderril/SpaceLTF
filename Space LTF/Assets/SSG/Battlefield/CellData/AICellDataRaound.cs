@@ -40,7 +40,7 @@ public class AICellDataRaound
     {
         Radius = size * cellSize / 2f - cellSize;
         //        Debug.Log(Namings.TryFormat("Cells inited. SizeX:{0}  SizeZ:{1}",sizeX,sizeZ).Red());
-        Debug.Log($"Cells inited. SizeX:{size}  ".Red());
+        Debug.Log($"Cells inited. SizeX:{size}  startPos:{startPos}".Red());
         CellSize = cellSize;
         StartX = startPos.x;
         StartZ = startPos.z;

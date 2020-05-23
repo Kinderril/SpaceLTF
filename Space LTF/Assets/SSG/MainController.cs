@@ -9,7 +9,7 @@ public enum StartMode
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "012b.0";
+    public static string VERSION = "013b.0";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
@@ -91,14 +91,20 @@ public class MainController : Singleton<MainController>
 
     }
 
-    public void PreBattle(Player player1, Player player2, bool isFinalBattle = false, bool canRetire = true, BattlefildEventType? battleEvent = null)
+    public void PreBattle(Player player1, Player player2, bool isFinalBattle = false, bool canRetire = true)
     {
-        BattleData.PreBattle(player1, player2, isFinalBattle, canRetire, battleEvent);
+        BattleData.PreBattle(player1, player2, isFinalBattle, canRetire);
     }
 
     public void LaunchBattle(Player greenSide, Player redSide)
     {
-        BattleData.LaunchBattle(greenSide, redSide);
+        var predAsAi = redSide as IPlayerAIWithBattleEvent;
+        EBattleType battle = EBattleType.standart;
+        if (predAsAi != null)
+        {
+            battle = predAsAi.EBattleType;
+        }
+        BattleData.LaunchBattle(greenSide, redSide, battle);
     }
 
     public void ReturnToMapFromCell()

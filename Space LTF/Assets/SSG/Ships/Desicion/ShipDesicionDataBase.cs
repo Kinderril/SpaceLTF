@@ -287,10 +287,10 @@ public abstract class ShipDesicionDataBase : IShipDesicion
         return false;
     }
 
-    protected bool IsEnemySlower(ShipPersonalInfo enemy)
-    {
-        return enemy.ShipLink.ShipParameters.MaxSpeed < _owner.ShipParameters.MaxSpeed;
-    }
+//    protected bool IsEnemySlower(ShipPersonalInfo enemy)
+//    {
+//        return enemy.ShipLink.ShipParameters.MaxSpeed() < _owner.ShipParameters.MaxSpeed;
+//    }
 
     protected bool HaveEnemyClose(out ShipBase ship, float closeDist)
     {
@@ -502,7 +502,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                     }
                     break;
                 case ECommanderPriority1.Fast:
-                    curHp = target.Key.ShipParameters.MaxSpeed + target.Key.ShipParameters.TurnSpeed * .008f;
+                    curHp = target.Key.MaxSpeed() + target.Key.ShipParameters.TurnSpeed * .008f;
                     if (curHp > curPercent)
                     {
                         curPercent = curHp;
@@ -510,7 +510,7 @@ public abstract class ShipDesicionDataBase : IShipDesicion
                     }
                     break;
                 case ECommanderPriority1.Slow:
-                    curHp = target.Key.ShipParameters.MaxSpeed + target.Key.ShipParameters.TurnSpeed * .008f;
+                    curHp = target.Key.MaxSpeed() + target.Key.ShipParameters.TurnSpeed * .008f;
                     if (curHp < curPercent)
                     {
                         curPercent = curHp;

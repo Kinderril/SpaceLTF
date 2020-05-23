@@ -21,6 +21,7 @@ public enum TeamIndex
 
 public enum EndBattleType
 {
+    winFull,
     win,
     lose,
     runAway
@@ -36,11 +37,13 @@ public class BattleController : Singleton<BattleController>
     public Commander RedCommander;
 
     public List<IAICommander> AICommander = new List<IAICommander>();
+    public BattleTypeEvent BattleTypeEvent => _battleType;
 
     public bool CanRetire => _canRetire;
     public CellController CellController { get; private set; }
     public Battlefield Battlefield;
     private BattlefieldEventController _eventController = new BattlefieldEventController();
+    private BattleTypeEvent _battleType;
 
     public InGameMainUI InGameMainUI;
     public InputManager InputManager;
@@ -67,21 +70,36 @@ public class BattleController : Singleton<BattleController>
     public AutoAICommander GreenAutoAICommander;
 
 
-    public void LaunchGame(Player greenSide, Player redSide, bool canRetire, BattlefildEventType? eventType)
+    public void LaunchGame(Player greenSide, Player redSide, bool canRetire, EBattlefildEventType? eventType, EBattleType eBattleType)
     {
         AICommander.Clear();
         _canRetire = canRetire;
         ActiveBullet.Clear();
         ActiveBulletKillers.Clear();
         PreLaunchGame(greenSide, redSide, eventType);
+        switch (eBattleType)
+        {
+            case EBattleType.defenceWaves:
+                _battleType = new WaveBattleType();
+                break;
+            case EBattleType.destroyShipPeriod:
+                _battleType = new DestroyShipByTimeBattle();
+                break;
+            case EBattleType.defenceOfShip:
+                _battleType = new DefenceShipBattle();
+                break;
+            case EBattleType.baseDefence:
+                _battleType = new DefenceBaseEvent();
+                break;
+        }
     }
 
-    public async void PreLaunchGame(Player greenSide, Player redSide, BattlefildEventType? eventType)
+    public async void PreLaunchGame(Player greenSide, Player redSide, EBattlefildEventType? eventType)
     {
         await LoadGameTask(greenSide, redSide, eventType);
     }
 
-    private async Task LoadGameTask(Player greenSide, Player redSide, BattlefildEventType? eventType)
+    private async Task LoadGameTask(Player greenSide, Player redSide, EBattlefildEventType? eventType)
     {
         WindowManager.Instance.LoadingScreen.gameObject.SetActive(true);
         await Task.Yield();
@@ -92,7 +110,6 @@ public class BattleController : Singleton<BattleController>
         {
             PauseData = new PauseData();
         }
-        _eventController.Init(this, eventType, false);
         PauseData.Unpase(1f);
         CamerasController.Instance.StartBattle();
         CanFastEnd = false;
@@ -118,6 +135,7 @@ public class BattleController : Singleton<BattleController>
         }
 
         CellController.Init(coef);
+        _eventController.Init(this, eventType, false);
 
 #if UNITY_EDITOR
         var greeArmyPower = ArmyCreator.CalcArmyPower(greenSide.Army);
@@ -194,6 +212,7 @@ public class BattleController : Singleton<BattleController>
         WindowManager.Instance.LoadingScreen.gameObject.SetActive(false);
         await Task.Yield();
         OnBattleLoaded?.Invoke();
+        _battleType.Init(this);
         CamerasController.Instance.SetCameraTo(GreenCommander.StartMyPosition, -1);
         var ambientSource = CamerasController.Instance.GameCamera.SourceAmbient;
         ambientSource.clip = DataBaseController.Instance.AudioDataBase.AmbientsClips.RandomElement();
@@ -246,6 +265,10 @@ public class BattleController : Singleton<BattleController>
     public void CallReinforcments(ShipConfig config)
     {
         GreenCommander.CallReinforcments(config, ShipInited);
+    }    
+    public void CallReinforcments(StartShipPilotData data,Commander commander)
+    {
+        commander.CallReinforcments(data, ShipInited);
     }
 
     private void OnShipDestroy(ShipBase ship)
@@ -274,8 +297,21 @@ public class BattleController : Singleton<BattleController>
 
         if (SideGreen.Count == 0 || SideRed.Count == 0)
         {
-            LastWinner = (SideGreen.Count >= 1) ? EndBattleType.win : EndBattleType.lose;
-            WaitEndBattle();
+            bool isEnd = true;
+            if (SideRed.Count == 0 && BattleTypeEvent != null)
+            {
+                isEnd = BattleTypeEvent.CanEnd();
+            }
+
+            if (isEnd)
+            {
+                LastWinner = (SideGreen.Count >= 1) ? EndBattleType.win : EndBattleType.lose;
+                if (LastWinner == EndBattleType.win && BattleTypeEvent != null)
+                {
+                    LastWinner = BattleTypeEvent.WinCondition(LastWinner);
+                }
+                WaitEndBattle();
+            }
         }
     }
 
@@ -283,8 +319,15 @@ public class BattleController : Singleton<BattleController>
     {
         if (SideRed.Count == 0)
         {
-            WaitEndBattle();
-            return;
+            bool isEnd = true;
+            if (BattleTypeEvent != null)
+            {
+                isEnd = BattleTypeEvent.CanEnd();
+            }
+            if (isEnd)
+            {
+                WaitEndBattle();
+            }
         }
         // if (SideRed.Count == 1 && SideRed[0].ShipParameters.StartParams.ShipType == ShipType.Base)
         // {
@@ -328,6 +371,10 @@ public class BattleController : Singleton<BattleController>
             //Manual Ships update
             GreenCommander.UpdateManual();
             RedCommander.UpdateManual();
+            if (_battleType != null)
+            {
+                _battleType.ManualUpdate();
+            }
         }
     }
 
@@ -428,9 +475,10 @@ public class BattleController : Singleton<BattleController>
         Debug.Log("End battle 2 LastWinner:" + LastWinner.ToString());
         GlobalEventDispatcher.WinBattle(RedCommander.FirstShipConfig);
         switch (LastWinner)
-        {
-            case EndBattleType.win:
-                GreenCommander.WinEndBattle(RedCommander);
+        {     
+            case EndBattleType.win:  
+            case EndBattleType.winFull:
+                GreenCommander.WinEndBattle(RedCommander,LastWinner == EndBattleType.winFull);
                 break;
             case EndBattleType.lose:
                 break;
@@ -460,7 +508,8 @@ public class BattleController : Singleton<BattleController>
         switch (LastWinner)
         {
             case EndBattleType.win:
-                battleData.EndGameWin();
+            case EndBattleType.winFull:
+                battleData.EndGameWin(LastWinner);
                 break;
             case EndBattleType.lose:
                 battleData.EndGameLose();

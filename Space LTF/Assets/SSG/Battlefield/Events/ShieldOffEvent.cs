@@ -10,7 +10,7 @@ public class ShieldOffEvent : BattleFieldEvent
     private const float MAX_OFF_TIME = 7f;
     private const float VisualEffectPeriod = 1.5f;
     private float _offTime;
-    public override BattlefildEventType Type => BattlefildEventType.shieldsOff;
+    public override EBattlefildEventType Type => EBattlefildEventType.shieldsOff;
     
 
     public ShieldOffEvent(BattleController battle) : base(battle)

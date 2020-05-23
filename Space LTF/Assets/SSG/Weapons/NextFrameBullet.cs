@@ -30,7 +30,10 @@ public class NextFrameBullet : Bullet
         remainFrames--;
         if (remainFrames <= 0)
         {
-            Target.GetHit(Weapon,this);
+            if (Target != null)
+            {
+                Target.GetHit(Weapon, this);
+            }
             Death();
         }
     }

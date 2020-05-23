@@ -6,7 +6,7 @@ public class ZoneIceBattleEvent : SetterElementBattleEvent
 {
     public ZoneIceBattleEvent(BattleController battle) :
         base(battle, 1, 2,
-            DataBaseController.Instance.DataStructPrefabs.FireVortexs, BattlefildEventType.IceZone)
+            DataBaseController.Instance.DataStructPrefabs.IceZone, EBattlefildEventType.IceZone)
     {
 
     }

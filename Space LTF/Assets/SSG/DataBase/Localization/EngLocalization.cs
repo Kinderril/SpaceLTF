@@ -563,7 +563,7 @@ public static class EngLocalization
         {"armyCountBetween", "Army count between {0} and {1}"},
         {"armyWeaponsContains","Weapons types contains {0}"},
         {"armyHaveMotherShip","Have commander ship"},
-        {"armyJustFleet","Just fleet"},
+        {"armyJustFleet","No commander ship"},
         {"armyWeaponsCount","Weapons count:{0}. Moduls count:{1}"},
         {"armyUsingWeapons","Using weapons:{0}"},
 
@@ -676,9 +676,25 @@ public static class EngLocalization
         {"dialog_armySectorEvent","Sector event:{0}\n" },
         {"dialog_armyFrendly", "This fleet looks friendly.\n {0}"},
         {"dialog_armyBuyOut","Try to buy out. [Cost :{0}]" },
-        {"dialog_armyStronger", "You see enemies. They look stronger than you. Shall we fight? \n {0}"},
-        {"dialog_armyShallFight","You see enemies. Shall we fight? \n {0}" },
-        {"dialog_armyNeutral", "This fleet won't attack you first. \n {0}" },
+        {"dialog_armyStronger", "You see enemies. They look stronger than you. Shall we fight?"},
+        {"dialog_armyShallFight","You see enemies. Shall we fight?" },
+        {"dialog_armyNeutral", "This fleet won't attack you first." },
+        {"defenceWavesStart", "Many small fleets are coming to this sector" },
+        {"destroyShipPeriodStart", "Looks like this ship have something useful for use. Try to destroy them before he run away" },
+        {"defenceOfShipStart", "Some ships try to pursuit ship without ammo" },
+        {"baseDefenceStart", "This station will be attacked soon. We can try to defend it." },
+
+        {"defenceWavesWin", "You successfully defend this sector. And your allies send you credits:{0}" },
+        {"destroyShipPeriodWin", "Ship was destroyed: microchips:{0}" },
+        {"defenceOfShipWin", "You successfully protect this ship. Your gift:{0}" },
+        {"noFreeSpace", "No free space for gift" },
+        {"baseDefenceWin", "All fine. after battle station provides you microchips:{0}" },
+        {"defenceWavesFail", "Defence fail." },
+        {"destroyShipPeriodFail", "Ship run away" },
+        {"defenceOfShipFail", "Ship was destroyed" },
+        {"baseDefenceFail", "Defence fail." },
+
+
         {"dialog_armyAskHelp",  "Ask for help. [Reputation:{0}]"},
         {"dialog_armyRun","Runaway" },
         {"dialog_armyRunComplete","Running away complete." },
@@ -867,6 +883,7 @@ public static class EngLocalization
         {"WearDetailsTutor","Equip"},  
         {"Simple","Simple"},  
         {"Advanced","Advanced"},  
+        {"remainTime","Remain Time"},  
 
 
       /*P2*/  {"battleSpells", "Commander ship special options.\nAny shot will take some batteries for a period.\nYou must catch the moment to use them successfully."},
@@ -977,6 +994,7 @@ public static class EngLocalization
         {"VortexEvent", "Vortex"},
         {"BlackHoleEvent", "Black holes"},
         {"IceZoneEvent", "Frozen"},
+        {"nextWave", "Next Wave"},
 
         {"AdvTutorialOpenInv", "To open inventory click this button"},
         {"AdvTutorialUpgradeParameters", "Upgrade some main ship parameters to be more useful at battle or after it"},

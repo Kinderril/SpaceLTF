@@ -1,43 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FireVortex : MonoBehaviour
+public class FireVortex : ObjectElementBattleEvent
 {
-
-    void OnTriggerEnter(Collider other)
+    protected override void Init()
     {
-        OnBulletHit(other);
-    }     
-    void OnTriggerExit(Collider other)
-    {
-        OnBulletExit(other);
+        _applyShip = true;
     }
 
-    private void OnBulletExit(Collider other)
+    protected override void ExitEvent(ShipHitCatcher ship)
     {
-
-        if (other.CompareTag(TagController.OBJECT_MOVER_TAG))
-        {
-            var ship = other.GetComponent<ShipHitCatcher>();
-
-            if (ship != null)
-            {
-                ship.ShipBase.PeriodDamage.StopConstantFire(1f);
-            }
-        }
-
+        ship.ShipBase.PeriodDamage.StopConstantFire(1f);
     }
 
-    private void OnBulletHit(Collider other)
+    protected override void EnterEvent(ShipHitCatcher ship)
     {
-        if (other.CompareTag(TagController.OBJECT_MOVER_TAG))
-        {
-            var ship = other.GetComponent<ShipHitCatcher>();
-
-            if (ship != null)
-            {
-                ship.ShipBase.PeriodDamage.StartConstantFire(1f);
-            }
-        }
+        ship.ShipBase.PeriodDamage.StartConstantFire(1f);
     }
 }

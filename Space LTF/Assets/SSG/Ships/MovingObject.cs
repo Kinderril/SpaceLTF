@@ -91,6 +91,7 @@ public abstract class MovingObject : PoolElement
             LookDirection = v;
             LookLeft = Utils.Rotate90(LookDirection, SideTurn.left);
             LookRight = Utils.Rotate90(LookDirection, SideTurn.right);
+
         }
     }
 
