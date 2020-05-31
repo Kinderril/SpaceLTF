@@ -32,6 +32,8 @@ public class MapSettingsWindow : MonoBehaviour
     public GameObject MapButtons;
     public GameObject ExitButtonMenu;
     public GameObject BattleButtons;
+    public SliderWithTextMeshPro MouseSensivity;
+    private float _lastSens =1f;
 
     private EWindowSettingsLauch _settingsLauch;
 
@@ -53,8 +55,17 @@ public class MapSettingsWindow : MonoBehaviour
         CamerasController.Instance.FXAASwitch();
     }
 
+    public void OnSensivityChange()
+    {
+        _lastSens = MouseSensivity.GetValue();
+        CamerasController.Instance.SetSens(_lastSens);
+    }
     public void Init(EWindowSettingsLauch settingsLauch)
     {
+        MouseSensivity.InitBorders(CamerasController.MIN_CAM_MOVE_SENS, 
+            CamerasController.MAX_CAM_MOVE_SENS,false,false);
+        MouseSensivity.InitCallback(OnSensivityChange);
+        MouseSensivity.InitName(Namings.Tag("CamMoveSens"));
         _settingsLauch = settingsLauch;
         InitDropDown();
         ResolutionDropdown.value = CamerasController.Instance.CurIndexResolution;
@@ -79,6 +90,9 @@ public class MapSettingsWindow : MonoBehaviour
                 BattleButtons.gameObject.SetActive(false);
                 break;
         }
+
+        _lastSens = CamerasController.Instance.MouseSensivity;
+        MouseSensivity.SetValue(_lastSens);
         Keys.gameObject.SetActive(false);
         NoMouseMoveSoundToggle.isOn = (CamerasController.Instance.IsNoMouseMove);
         SoundToggle.isOn = (CamerasController.Instance.IsAudioEnable);

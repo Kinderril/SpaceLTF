@@ -24,7 +24,7 @@ public class MapNavigationList : MonoBehaviour
 
     private void subInit()
     {
-        MainController.Instance.MainPlayer.QuestData.OnElementFound += OnElementFound;
+//        MainController.Instance.MainPlayer.QuestData.OnElementFound += OnElementFound;
         MainController.Instance.MainPlayer.LastScoutsData.OnLastScouts += OnLastScouts;
 
         if (!IsScoutsInited)
@@ -71,22 +71,22 @@ public class MapNavigationList : MonoBehaviour
             {
                 var c = cells[i, j];
                 NavigationButton navigButton = null;
-                var coreCell = c as CoreGlobalMapCell;
-                if (coreCell != null)
+//                var coreCell = c as CoreGlobalMapCell;
+//                if (coreCell != null)
+//                {
+//                    navigButton = InitCellButton(c);
+//                    SetTextCoreCell(navigButton, coreCell, cnt);
+//                    cnt++;
+//                }
+//                else
+//                {
+//
+//                }
+                var exitCell = c as EndGlobalCell;
+                if (exitCell != null)
                 {
-                    navigButton = InitCellButton(c);
-                    SetTextCoreCell(navigButton, coreCell, cnt);
-                    cnt++;
-                }
-                else
-                {
-                    var exitCell = c as EndGlobalCell;
-                    if (exitCell != null)
-                    {
-                        navigButton = InitCellButton(exitCell);
-                        navigButton.Field.text = Namings.Tag("Gate");
-                    }
-
+                    navigButton = InitCellButton(exitCell);
+                    navigButton.Field.text = Namings.Tag("Gate");
                 }
 
                 if (navigButton != null)
@@ -98,20 +98,20 @@ public class MapNavigationList : MonoBehaviour
         _lastSoutButton.gameObject.SetActive(player.LastScoutsData.HaveScouted);
     }
 
-    private void SetTextCoreCell(NavigationButton navigButton, CoreGlobalMapCell cell, int c)
-    {
-        string txt;
-        if (cell.Taken)
-        {
-            txt = Namings.Format(Namings.Tag("Complete"), c);
-        }
-        else
-        {
-            txt = Namings.Format(Namings.Tag("Target"), c);
-
-        }
-        navigButton.Field.text = txt;
-    }
+//    private void SetTextCoreCell(NavigationButton navigButton, CoreGlobalMapCell cell, int c)
+//    {
+//        string txt;
+//        if (cell.Taken)
+//        {
+//            txt = Namings.Format(Namings.Tag("Complete"), c);
+//        }
+//        else
+//        {
+//            txt = Namings.Format(Namings.Tag("Target"), c);
+//
+//        }
+//        navigButton.Field.text = txt;
+//    }
 
     private void InitHome()
     {
@@ -127,85 +127,126 @@ public class MapNavigationList : MonoBehaviour
         });
         homeBtn.Field.text = Namings.Tag("Fleet");
         _isHomeInited = true;
-    }  
-//    private void InitTarget()
+    }
+    //    private void InitTarget()
+    //    {
+    //        if (_isTargetInited)
+    //        {
+    //            return;
+    //        }
+    //        var trgBtn = DataBaseController.GetItem(ButtonPrefab);
+    //        trgBtn.gameObject.transform.SetParent(Layout, false);
+    //        trgBtn.Button.onClick.AddListener(SetCameraToClosestGoal);
+    //        trgBtn.Field.text = Namings.Tag("Goal");
+    //        _isTargetInited = true;
+    //    }
+
+    //    public void SetCameraToClosestGoal()
+    //    {
+    //        var player = MainController.Instance.MainPlayer;  
+    //
+    //        GlobalMapCell targetCEll = null;
+    //        HashSet<GlobalMapCell> cellsToLightUp = new HashSet<GlobalMapCell>();
+    //        Vector3 camPos;
+    //        if (player.QuestData.Completed())
+    //        {
+    //
+    //            var endCEll = player.MapData.GalaxyData.GetAllList().FirstOrDefault(x=>x is EndGlobalCell || x is EndTutorGlobalCell);
+    //            if (endCEll != null)
+    //            {
+    //                targetCEll = endCEll;
+    //                cellsToLightUp.Add(endCEll);
+    //            }
+    //
+    //            if (targetCEll != null)
+    //            {
+    //                GlobalMap.SetCameraToCellHome(targetCEll);
+    //                GlobalMap.LighterUpCells.LightUpCells(cellsToLightUp);
+    //            }
+    //        }
+    //        else
+    //        {
+    //
+    //            var cells = player.MapData.GalaxyData.GetAllList();
+    //            var curPLayerCell = player.MapData.CurrentCell;
+    //            int sumDist = 9999;
+    //            
+    //            foreach (var cell in cells)
+    //            {
+    //                var coreCell = cell as CoreGlobalMapCell;
+    //                if (coreCell != null && !coreCell.Completed)
+    //                {
+    //                    var dist = Mathf.Abs(cell.indX - curPLayerCell.indX) + Mathf.Abs(cell.indZ - curPLayerCell.indZ);
+    //                    if (dist < sumDist)
+    //                    {
+    //                        sumDist = dist;
+    //                        targetCEll = cell;
+    //                    }
+    //                }
+    //            }
+    //
+    //            if (targetCEll != null)
+    //            {
+    //                cellsToLightUp.Add(targetCEll);
+    //                foreach (var cell in targetCEll.Sector.ListCells)
+    //                {
+    //                    if (cell != null && cell.Data != null && cell.Data.SectorId == targetCEll.SectorId)
+    //                    {
+    //                        var army = cell.Data as ArmyGlobalMapCell;
+    //                        if (army != null)
+    //                        {
+    //                            cellsToLightUp.Add(army);
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //
+    //            GlobalMap.SetCameraToPosition(cellsToLightUp);
+    //            GlobalMap.LighterUpCells.LightUpCells(cellsToLightUp);
+    //            
+    //        }
+    //
+    //    }
+
+//    public void SetCameraToClosestGoal()
 //    {
-//        if (_isTargetInited)
+//        var player = MainController.Instance.MainPlayer;
+//        QuestContainer quest = player.QuestData.GetCurActiveQuest();
+//        GlobalMapCell cell = null;
+//        if (quest != null)
 //        {
-//            return;
+//            cell = quest.GetCurCellTarget();
 //        }
-//        var trgBtn = DataBaseController.GetItem(ButtonPrefab);
-//        trgBtn.gameObject.transform.SetParent(Layout, false);
-//        trgBtn.Button.onClick.AddListener(SetCameraToClosestGoal);
-//        trgBtn.Field.text = Namings.Tag("Goal");
-//        _isTargetInited = true;
+//
+//        if (cell == null)
+//        {
+//            var endCEll = player.MapData.GalaxyData.GetAllList()
+//                .FirstOrDefault(x => x is EndGlobalCell || x is EndTutorGlobalCell);
+//            if (endCEll != null)
+//            {
+//                cell = endCEll;
+//            }
+//        }
+//
+//        if (cell != null)
+//        {
+//            SetAndLightPoint(cell);
+//        }
+//
 //    }
 
-    public void SetCameraToClosestGoal()
+    public void SetAndLightPoint(GlobalMapCell cell)
     {
-        var player = MainController.Instance.MainPlayer;  
-
-        GlobalMapCell targetCEll = null;
+        if (cell == null)
+        {
+            Debug.LogError($"can't navigate no null cell");
+            return;
+        }
         HashSet<GlobalMapCell> cellsToLightUp = new HashSet<GlobalMapCell>();
-        Vector3 camPos;
-        if (player.QuestData.Completed())
-        {
 
-            var endCEll = player.MapData.GalaxyData.GetAllList().FirstOrDefault(x=>x is EndGlobalCell || x is EndTutorGlobalCell);
-            if (endCEll != null)
-            {
-                targetCEll = endCEll;
-                cellsToLightUp.Add(endCEll);
-            }
-
-            if (targetCEll != null)
-            {
-                GlobalMap.SetCameraToCellHome(targetCEll);
-                GlobalMap.LighterUpCells.LightUpCells(cellsToLightUp);
-            }
-        }
-        else
-        {
-
-            var cells = player.MapData.GalaxyData.GetAllList();
-            var curPLayerCell = player.MapData.CurrentCell;
-            int sumDist = 9999;
-            
-            foreach (var cell in cells)
-            {
-                var coreCell = cell as CoreGlobalMapCell;
-                if (coreCell != null && !coreCell.Completed)
-                {
-                    var dist = Mathf.Abs(cell.indX - curPLayerCell.indX) + Mathf.Abs(cell.indZ - curPLayerCell.indZ);
-                    if (dist < sumDist)
-                    {
-                        sumDist = dist;
-                        targetCEll = cell;
-                    }
-                }
-            }
-
-            if (targetCEll != null)
-            {
-                cellsToLightUp.Add(targetCEll);
-                foreach (var cell in targetCEll.Sector.ListCells)
-                {
-                    if (cell != null && cell.Data != null && cell.Data.SectorId == targetCEll.SectorId)
-                    {
-                        var army = cell.Data as ArmyGlobalMapCell;
-                        if (army != null)
-                        {
-                            cellsToLightUp.Add(army);
-                        }
-                    }
-                }
-            }
-
-            GlobalMap.SetCameraToPosition(cellsToLightUp);
-            GlobalMap.LighterUpCells.LightUpCells(cellsToLightUp);
-            
-        }
-
+        cellsToLightUp.Add(cell);
+        GlobalMap.SetCameraToPosition(cellsToLightUp);
+        GlobalMap.LighterUpCells.LightUpCells(cellsToLightUp);
     }
 
     private NavigationButton InitCellButton(GlobalMapCell c)
@@ -238,7 +279,7 @@ public class MapNavigationList : MonoBehaviour
     public void Dispose()
     {
         MainController.Instance.MainPlayer.LastScoutsData.OnLastScouts -= OnLastScouts;
-        MainController.Instance.MainPlayer.QuestData.OnElementFound -= OnElementFound;
+//        MainController.Instance.MainPlayer.QuestData.OnElementFound -= OnElementFound;
     }
 
     public void ClearAll()

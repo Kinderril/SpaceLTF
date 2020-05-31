@@ -55,6 +55,7 @@ public class Commander
         }
         Player = player;
         _paramsOfShips = player.Army.GetShipsToBattle();
+
         _paramsOfShips = battleController.BattleTypeEvent.RebuildArmy(teamIndex, _paramsOfShips,player);
         Battlefield = battlefield;
         _teamIndex = teamIndex;
@@ -143,6 +144,7 @@ public class Commander
             Debug.LogError("Base ship not first inited big problem");
         }
 
+        var tutterBeh = Player.GetTurretBehaviour();
         var aiPlayer = Player as PlayerAI;
         foreach (var v in _paramsOfShips)
         {
@@ -179,7 +181,16 @@ public class Commander
             index++;
             if (isTurret)
             {
-                shipPosition = startPosition + side + dirToEnemyNorm * (rowDelta * rowIndex + 4);
+                switch (tutterBeh)
+                {
+                    case ETurretBehaviour.nearBase:
+                        shipPosition = startPosition;
+                        break;
+                    case ETurretBehaviour.stayAtPoint:
+                    default:
+                        shipPosition = startPosition + side + dirToEnemyNorm * (rowDelta * rowIndex + 4);
+                        break;
+                }
                 indexTurrets = index;
             }
             else
@@ -476,6 +487,7 @@ public class Commander
     {
         ApplyBattleDamage();
         Player.WinBattleReward(enemyCommander, winFull);
+        Player.MapData.UpdateCollectedPower(enemyCommander.Player);
     }
 
     public void ApplyBattleDamage()

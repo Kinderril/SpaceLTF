@@ -58,4 +58,9 @@ public class ShieldOffEvent : BattleFieldEvent
             _battleTimer.Stop();
         }
     }
+
+    public override List<Vector3> GetBlockedPosition()
+    {
+        return null;
+    }
 }

@@ -1,18 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
 [System.Serializable]
-public class ArmyBornGlobalMapCell : GlobalMapCell
+public class FreeActionGlobalMapCell : GlobalMapCell
 {
     protected int _power;
-    private List<MovingArmy> _connectedArmies = new List<MovingArmy>();
+//    private List<MovingArmy> _connectedArmies = new List<MovingArmy>();
     private GalaxyEnemiesArmyController _enemiesArmyController;
     private float _powerPerTurn;
+    private Func<MessageDialogData> _questData = null;
+
+    [field: NonSerialized]
+    public event Action<bool> OnQuestDialogChanges;
+    public bool HaveQuest => _questData != null;
 
 //    protected int _additionalPower;
 
-    public ArmyBornGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind,
+    public FreeActionGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind,
         SectorData sector, GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn)
         : base(id, Xind, Zind, sector, config)
     {
@@ -37,7 +43,13 @@ public class ArmyBornGlobalMapCell : GlobalMapCell
     {
 
     }
-//    public override void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
+
+    public void SetQuestData(Func<MessageDialogData> data)
+    {
+        _questData = data;
+        OnQuestDialogChanges?.Invoke(HaveQuest);
+    }
+//    public override void UpdateAdditionalPower(int visitedSectors, int startPower, int additionalPower)
 //    {
 //        _additionalPower = additionalPower;
 //        var nextPower = SectorData.CalcCellPower(visitedSectors, _sector.Size, startPower, _additionalPower);
@@ -59,8 +71,11 @@ public class ArmyBornGlobalMapCell : GlobalMapCell
 
     protected override MessageDialogData GetDialog()
     {
-
-        return null;
+        if (_questData == null)
+        {
+            return null;
+        }
+        return _questData();
 //        var mesData = new MessageDialogData("Nothing here.", new List<AnswerDialogData>()
 //        {
 //            new AnswerDialogData("Ok",null),

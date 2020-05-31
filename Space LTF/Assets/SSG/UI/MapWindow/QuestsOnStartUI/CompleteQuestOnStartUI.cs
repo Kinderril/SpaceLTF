@@ -9,16 +9,16 @@ using UnityEngine;
 
 public class CompleteQuestOnStartUI   : MonoBehaviour
 {
-    private BaseQuestOnStart _quest;
+    private QuestContainerReward _quest;
     public TextMeshProUGUI InfoField;
     public ImageWithTooltip WeaponTooltip;
     public ImageWithTooltip ModulTooltip;
     public ImageWithTooltip MoneyTooltip;
     private Action _closeCallback;
     public TextMeshProUGUI NameField;
-    public void Init(BaseQuestOnStart quest,Action closeCallback)
+    public void Init(QuestContainerReward quest,string questName, Action closeCallback)
     {
-        NameField.text = quest.Name;
+        NameField.text = questName;
         _closeCallback = closeCallback;
         _quest = quest;
         gameObject.SetActive(true);

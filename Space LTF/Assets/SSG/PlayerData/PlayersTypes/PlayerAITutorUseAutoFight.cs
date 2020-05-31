@@ -15,13 +15,13 @@ public class PlayerAITutorUseAutoFight : PlayerAI
         var reward = new LastReward();
 //        reward.Money = 50;
 
-        var cockpit = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.improved, ItemType.cocpit);
+        var cockpit = Library.CreateParameterItem(EParameterItemSubType.Middle, EParameterItemRarity.improved, ItemType.cocpit);
         winner.Inventory.TryAddItem(cockpit);
         reward.ParamItems.Add(cockpit);
-        var wings = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.normal, ItemType.wings);
+        var wings = Library.CreateParameterItem(EParameterItemSubType.Middle, EParameterItemRarity.normal, ItemType.wings);
         winner.Inventory.TryAddItem(wings);
         reward.ParamItems.Add(wings);
-        var engine = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.normal, ItemType.engine);
+        var engine = Library.CreateParameterItem(EParameterItemSubType.Middle, EParameterItemRarity.normal, ItemType.engine);
         winner.Inventory.TryAddItem(engine);
         reward.ParamItems.Add(engine);
 

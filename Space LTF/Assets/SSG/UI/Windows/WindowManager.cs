@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum MainState
 {
@@ -22,6 +23,7 @@ public enum MainState
     runAwayBattle = 14,
     loadinbg = 15,
     achievements = 16,
+    statistics = 17,
     //    loading,
 }
 
@@ -62,6 +64,7 @@ public class WindowManager : Singleton<WindowManager>
     public Transform TopPanel;
     public MapSettingsWindow WindowSettings;
     public AudioSource UiAudioSource;
+
 
     public BaseWindow CurrentWindow => currentWindow;
 

@@ -37,58 +37,56 @@ public enum EQuestOnStart
 }
 
 [System.Serializable]
-public  abstract class BaseQuestOnStart
+public  abstract class BaseQuestOnStart   : QuestStage
 {
     public int TargetCounter { get; private set; }
     public int CurCount { get; private set; }
     public bool IsReady { get; private set; }      //готов к получению награды
     public bool IsCompleted { get; private set; }                             //полностью завершен
-    public WeaponInv WeaponReward { get; private set; }
-    public BaseModulInv ModulReward { get; private set; }
-    public int MoneyCount { get; private set; }
+//    public WeaponInv WeaponReward { get; private set; }
+//    public BaseModulInv ModulReward { get; private set; }
+//    public int MoneyCount { get; private set; }
+    public override bool CloseWindowOnClick => false;
     public string Name => Namings.QuestName(_type);
+//    public string NameTag => _type.ToString();
+
     private EQuestOnStart _type;
+    private string _id;
 
 
-
-    [field: NonSerialized]
-    public event Action OnElementFound;
-
-    protected BaseQuestOnStart(int targetCounter,EQuestOnStart type)
+    protected BaseQuestOnStart(int targetCounter,EQuestOnStart type)  
+        :base(type.ToString())
     {
+        _id = type.ToString();
         _type = type;
         TargetCounter = targetCounter;
+#if UNITY_EDITOR
+//        TargetCounter = 1;
+#endif
 
-        WDictionary<int> levelsWeapons = new WDictionary<int>(new Dictionary<int, float>()
-        {
-            {2, 3f},
-            {3, 4f},
-            {4, 2f},
-            {5, 1f},
-            {6, 1f},
-        });
-        WeaponReward = Library.CreateDamageWeapon(levelsWeapons.Random());
-        WDictionary<int> levelsModuls = new WDictionary<int>(new Dictionary<int, float>()
-        {
-            {2, 5f},
-            {3, 4f},
-            {4, 2f},
-            {5, 1f},
-        });
-        ModulReward = Library.CreatSimpleModul(levelsModuls.Random());
 
 
 
     }
-    public virtual void Init()
+    public override void OnClick()
     {
-        CurCount = 0;
+
     }
-    public abstract void Dispose();
+
+    public override string GetDesc()
+    {
+        return $"{Name} {CurCount}/{TargetCounter}";
+    }
+    //    public virtual void Init()
+    //    {
+    //        CurCount = 0;
+    //    }
+    //    public abstract void Dispose();
 
     public void AddCount()
     {
         CurCount++;
+        TextChangeEvent();
         CheckEnd();
     }  
     
@@ -110,13 +108,9 @@ public  abstract class BaseQuestOnStart
             {
                 CurCount = TargetCounter;
                 IsReady = true;
-                Dispose();
+                _playerQuest.QuestIdComplete(_id);
+//                Dispose();
             }
-        }
-
-        if (OnElementFound != null)
-        {
-            OnElementFound();
         }
 
     }
@@ -174,32 +168,6 @@ public  abstract class BaseQuestOnStart
         }
         Debug.LogError($"BaseQuestOnStart Create {eQuestOnStart.ToString()}");
         return null;
-    }
-
-    public void TakeWeapon()
-    {
-        IsCompleted = true;
-        var inv = MainController.Instance.MainPlayer.Inventory;
-        if (inv.GetFreeWeaponSlot(out int slot))
-        {
-            inv.TryAddWeaponModul(WeaponReward,slot);
-        }
-    }
-
-    public void TakeModul()
-    {
-        IsCompleted = true;
-        var inv = MainController.Instance.MainPlayer.Inventory;
-        if (inv.GetFreeSimpleSlot(out int slot))
-        {
-            inv.TryAddSimpleModul(ModulReward, slot);
-        }
-    }
-
-    public void TakeMoney()
-    {
-        IsCompleted = true;
-        MainController.Instance.MainPlayer.MoneyData.AddMoney(MoneyCount);
     }
 }
 

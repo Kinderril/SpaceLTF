@@ -22,7 +22,7 @@ public class MapWindow : BaseWindow
     public InventoryUI InventoryUI;
     public DialogWindow DialogWindow;
 
-    public TextMeshProUGUI MainQuestELelemntField;
+//    public TextMeshProUGUI MainQuestELelemntField;
     //    public TextMeshProUGUI ReputationField;
 
     public ChangingCounter MoneyField;
@@ -45,7 +45,7 @@ public class MapWindow : BaseWindow
     private List<SideShipGlobalMapInfo> _sideInfos = new List<SideShipGlobalMapInfo>();
     public event Action OnStartInfoClose;
     //    public MapSettingsWindow WindowSettings;
-    public QuestOnStartControllerUI QuestsOnStartController;
+//    public QuestOnStartControllerUI QuestsOnStartController;
     public MovingArmyUIController MovingArmyUIController;
     public VideoTutorialElement Tutorial;
     public VideoTutorialElement OptionalTutorial;
@@ -53,6 +53,9 @@ public class MapWindow : BaseWindow
     public VideoTutorialElement BattleShipDetailsTutor;
     private bool _simpleTutor;
     private bool _advTutor;
+    public WindowQuests WindowQuests;
+    public QuestButton QuestButton;
+    public CompleteQuestOnStartUI TakeRewardObject;
 
     public event Action<bool> OnOpenInventory;
 
@@ -61,12 +64,12 @@ public class MapWindow : BaseWindow
         Debug.Log("map window int");
         RunTask();
     }
-    async void RunTask()
+    void RunTask()
     {
-        await InitMap();
+         InitMap();
     }
 
-    private async Task InitMap()
+    private void InitMap()
     {
         try
         {
@@ -80,6 +83,7 @@ public class MapWindow : BaseWindow
             MapConsoleUI.Appear();
             NavigationList.Init(GlobalMap);
             DialogWindow.Dispose();
+            TakeRewardObject.gameObject.SetActive(false);
             GlobalMap.gameObject.SetActive(true);
             ReputationMapUI.gameObject.SetActive(false);
             CamerasController.Instance.StartGlobalMap();
@@ -97,21 +101,22 @@ public class MapWindow : BaseWindow
             CellsOfSector();
             InitMyArmy();
             Debug.Log("SingleInit map");
-            await GlobalMap.SingleInit(player.MapData.GalaxyData, this, MouseNearObject);
+            GlobalMap.SingleInit(player.MapData.GalaxyData, this, MouseNearObject);
             Debug.Log("SingleInit map finish");
             GlobalMap.Open();
             var connectedCells = player.MapData.ConnectedCellsToCurrent();
             GlobalMap.SingleReset(player.MapData.CurrentCell, connectedCells);
             InventoryUI.Init(player.Inventory, null, true);
             GlobalMap.UnBlock();
-            player.QuestData.OnElementFound += OnElementFound;
+            WindowQuests.Init(player.QuestData);
+//            player.QuestData.OnElementFound += OnElementFound;
 
             EnableModif(false);
             EnableArmy(false);
-            UpdateMainQuestelements();
+//            UpdateMainQuestelements();
             // UpdateReputation();
             InitSideShip();
-            QuestsOnStartController.Init(player.QuestsOnStartController);
+//            QuestsOnStartController.Init(player.QuestsOnStartController);
             CheckLeaveDialog();
             _simpleTutor = (player.MapData.GalaxyData is SimpleTutorialGalaxyData);
             _advTutor = (player.MapData.GalaxyData is AdvTutorialGalaxyData);
@@ -139,11 +144,13 @@ public class MapWindow : BaseWindow
                 var field = StartInfo.GetComponentInChildren<TextMeshProUGUI>();
                 field.text = Namings.Tag("StartInfo");
             }
+            QuestButton.Init(player,this);
             StartInfo.gameObject.SetActive(showFirstInfo);
             MovingArmyUIController.Init(MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController, GlobalMap);
         }
         catch (Exception e)
         {
+            Debug.LogError($"loadErro:\n{e}");
             WindowManager.Instance.InfoWindow.Init(() =>
             {
                 WindowManager.Instance.OpenWindow(MainState.start);
@@ -260,17 +267,17 @@ public class MapWindow : BaseWindow
     }
 
 
-    private void OnElementFound()
-    {
-        UpdateMainQuestelements();
-    }
+//    private void OnElementFound()
+//    {
+//        UpdateMainQuestelements();
+//    }
 
-    private void UpdateMainQuestelements()
-    {
-        var player = MainController.Instance.MainPlayer.QuestData;
-        MainQuestELelemntField.text = $"{Namings.Tag("MainElements")}:{player.mainElementsFound}/{player.MaxMainElements}";
-        //        NavigationList.UpdateInfo();
-    }
+//    private void UpdateMainQuestelements()
+//    {
+//        var player = MainController.Instance.MainPlayer.QuestData;
+//        MainQuestELelemntField.text = $"{Namings.Tag("MainElements")}:{player.mainElementsFound}/{player.MaxMainElements}";
+//        //        NavigationList.UpdateInfo();
+//    }
 
     private void OnSomeShipRepaired()
     {
@@ -424,6 +431,17 @@ public class MapWindow : BaseWindow
         StartDialog(dialog, OnMainDialogEnds);
     }
 
+    public void StartExternalDialog(MessageDialogData dialog,Action callbackEnd)
+    {
+        void EndDialog(bool shallComplete,bool shallReturn)
+        {
+            OnMainDialogEnds(shallComplete, shallReturn);
+            callbackEnd();
+        }
+
+        StartDialog(dialog, EndDialog);
+    }
+
     private void OnMainDialogEnds(bool shallCompleteCell, bool shallReturnToLastCell)
     {
         if (shallCompleteCell)
@@ -530,6 +548,11 @@ public class MapWindow : BaseWindow
         WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.map);
     }
 
+    public void OnQuestsOpen()
+    {
+        WindowQuests.Open();
+    }
+
     public void OnTutorialClick()
     {
         Tutorial.Open();
@@ -549,7 +572,7 @@ public class MapWindow : BaseWindow
         _lastClosest = null;
         GlobalMap.Close();
         MapConsoleUI.Close();
-        player.QuestData.OnElementFound -= OnElementFound;
+//        player.QuestData.OnElementFound -= OnElementFound;
         player.RepairData.OnSomeShipRepaired -= OnSomeShipRepaired;
         player.MoneyData.OnMoneyChange -= OnMoneyChange;
         player.MoneyData.OnUpgradeChange -= OnMicrochipChange;
@@ -571,6 +594,8 @@ public class MapWindow : BaseWindow
     public void ClearAll()
     {
         Dispose();
+        QuestButton.ClearAll();
+        WindowQuests.ClearAll();
         MovingArmyUIController.ClearAll();
         _sideShipsInited = false;
         //        _stablePosCached = true;
@@ -579,7 +604,7 @@ public class MapWindow : BaseWindow
         _sideInfos.Clear();
         GlobalMap.ClearAll();
         MapConsoleUI.ClearAll();
-        QuestsOnStartController.ClearAll();
+//        QuestsOnStartController.ClearAll();
     }
 
 }

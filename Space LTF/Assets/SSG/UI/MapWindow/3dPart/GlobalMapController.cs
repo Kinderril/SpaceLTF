@@ -61,7 +61,7 @@ public class GlobalMapController : MonoBehaviour
     }
 
 
-    public async Task SingleInit(GalaxyData data, MapWindow mapWindow, Action<GlobalMapCellObject> CallbackNearObjec)
+    public void SingleInit(GalaxyData data, MapWindow mapWindow, Action<GlobalMapCellObject> CallbackNearObjec)
     {
         if (isInited)
             return;
@@ -73,13 +73,15 @@ public class GlobalMapController : MonoBehaviour
         _mapWindow = mapWindow;
         isInited = true;
         _data = data;
+        var player = MainController.Instance.MainPlayer;
+        player.Parameters.Scouts.OnUpgrade += OnUpgrade;
         _data.GalaxyEnemiesArmyController.OnAddMovingArmy += OnAddMovingArmy;
         _allCells = new GlobalMapCellObject[data.SizeX, data.SizeZ];
         min = Vector3.zero;
         max = new Vector3(OffsetCell * data.SizeX, 0, OffsetCell * data.SizeZ);
         _data.OnWayDelete += OnWayDelete;
         DrawSectors(_data);
-        await DrawCells(data);
+        DrawCells(data);
         Debug.Log("cells drawed");
         for (var i = 0; i < 22; i++)
         {
@@ -99,9 +101,9 @@ public class GlobalMapController : MonoBehaviour
         DrawAllWays();
         SetBorders();
         Debug.Log($"cells armies:{Time.frameCount}  {_logicToVisualObjects.Count}");
-        await Task.Yield();
+//        await Task.Yield();
         Debug.Log($"Task.Delay(2000) armies:{Time.frameCount}  {_logicToVisualObjects.Count}");
-        await DrawCurrentArmies(_data.GalaxyEnemiesArmyController);
+        DrawCurrentArmies(_data.GalaxyEnemiesArmyController);
 
         int list = data.GetAllWaysCount();
         if (_waysList.Count != list)
@@ -110,13 +112,21 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-    private async Task DrawCurrentArmies(GalaxyEnemiesArmyController dataGalaxyEnemiesArmyController)
+    private void OnUpgrade(PlayerParameter obj)
+    {
+        UpdateLookAtAllMoverObjects();
+        foreach (var logicToVisualObject in _logicToVisualObjects)
+        {
+            logicToVisualObject.Value.TryOpenBattleEvent();
+        }
+    }
+
+    private void DrawCurrentArmies(GalaxyEnemiesArmyController dataGalaxyEnemiesArmyController)
     {
         foreach (var currentArmy in dataGalaxyEnemiesArmyController.GetCurrentArmies())
         {
             CreateMovingArmy(currentArmy);
         }
-
     }
 
     private void DrawAllWays()
@@ -217,7 +227,7 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-    private async Task DrawCells(GalaxyData data)
+    private void DrawCells(GalaxyData data)
     {
         var allCells2 = data.AllCells();
 #if UNITY_EDITOR
@@ -351,6 +361,8 @@ public class GlobalMapController : MonoBehaviour
 
     public void Dispose()
     {
+        var player = MainController.Instance.MainPlayer;
+        player.Parameters.Scouts.OnUpgrade -= OnUpgrade;
         for (var i = 0; i < _data.SizeX; i++)
             for (var j = 0; j < _data.VerticalCount * _data.SizeOfSector - 1; j++)
             {
@@ -752,7 +764,9 @@ public class GlobalMapController : MonoBehaviour
         armies.LeaveCells(targets);
         foreach (var globalMapCell in targets)
         {
-            if (_enemiesObjects.TryGetValue(globalMapCell.Key,out var obj))
+            var army = globalMapCell.Key;
+//            army.DoMove();
+            if (_enemiesObjects.TryGetValue(army, out var obj))
             {
                 obj.AndGo(globalMapCell.Value, timeToMove);
             }

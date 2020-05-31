@@ -1,4 +1,7 @@
-﻿public enum EBattlefildEventType
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public enum EBattlefildEventType
 {
     asteroids,
     shieldsOff,
@@ -23,4 +26,5 @@ public abstract class BattleFieldEvent
 
     public abstract void Init();
     public abstract void Dispose();
+    public abstract List<Vector3> GetBlockedPosition();
 }

@@ -69,7 +69,7 @@ public class PlayerMapData
                 break;
         }
 
-        var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, data.BasePower, data.CoreElementsCount, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
+        var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, data.Difficulty, data.QuestsOnStart, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
         GalaxyData = galaxyData;
         CurrentCell = startCell;
         OpenAllNear();
@@ -116,6 +116,7 @@ public class PlayerMapData
                      GoNextAfterDialog(target);
                      target.OpenInfo();
                      target.VisitCell(this, Step);
+                     UpgradeAllCellByStep();
                      target.ComeTo(lastCell);
                      ScoutAllAround(target);
                  });
@@ -131,14 +132,28 @@ public class PlayerMapData
         return false;
     }
 
+    private void UpgradeAllCellByStep()
+    {
+        foreach (var sector in GalaxyData.AllSectors)
+        {
+            sector.RecalculateAllCells(Step);
+        }
+        GalaxyData.GalaxyEnemiesArmyController.UpdateAllPowersAdditional(Step);
+
+    }
+
     private void ScoutAllAround(GlobalMapCell target)
     {
         foreach (var cell in target.GetCurrentPosibleWays())
         {
-            if (!cell.IsScouted && cell is ArmyGlobalMapCell)
+            if (MainController.Instance.MainPlayer.Parameters.Scouts.Level >= 4)
             {
-                cell.Scouted();
+                if (!cell.IsScouted)
+                {
+                    cell.Scouted();
+                }
             }
+//            cell.
         }
     }
 
@@ -211,26 +226,45 @@ public class PlayerMapData
         return CurrentCell.GetCurrentPosibleWays();
     }
 
-    public void OpenRetranslatorInfo()
-    {
-        for (int i = 0; i < GalaxyData.SizeX; i++)
-        {
-            for (int j = 0; j < GalaxyData.SizeZ; j++)
-            {
-                var cell = GalaxyData.AllCells()[i, j];
-                var core = cell as CoreGlobalMapCell;
-                if (core != null && !core.InfoOpen)
-                {
-                    core.Scouted();
-                    return;
-                }
-            }
-        }
-
-    }
+//    public void OpenRetranslatorInfo()
+//    {
+//        for (int i = 0; i < GalaxyData.SizeX; i++)
+//        {
+//            for (int j = 0; j < GalaxyData.SizeZ; j++)
+//            {
+//                var cell = GalaxyData.AllCells()[i, j];
+//                var core = cell as CoreGlobalMapCell;
+//                if (core != null && !core.InfoOpen)
+//                {
+//                    core.Scouted();
+//                    return;
+//                }
+//            }
+//        }
+//
+//    }
 
     public void Dispose()
     {
         GalaxyData.Dispose();
+    }
+
+    public void UpdateCollectedPower(Player defeatedPlayer)
+    {
+        var player = MainController.Instance.MainPlayer;
+        var playerPower = player.Army.GetPower();
+        var enemyPower = defeatedPlayer.Army.GetPower();
+
+        float powerDelta = player.DifficultyPart.CalcDelta(enemyPower, playerPower);
+        foreach (var currentArmy in GalaxyData.GalaxyEnemiesArmyController.GetCurrentArmies())
+        {
+            currentArmy.UpdateAllPowersCollected(powerDelta);
+        }
+
+        foreach (var cell in GalaxyData.GetAllList())
+        {
+            cell.UpdateCollectedPower(powerDelta);
+        }
+
     }
 }

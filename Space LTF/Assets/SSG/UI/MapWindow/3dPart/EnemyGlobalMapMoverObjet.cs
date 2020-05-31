@@ -29,11 +29,18 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
         else
         {
             var target = _mapController.GetCellObjectByCell(trg);
-            if (target != null)
+            if (player.Parameters.Scouts.Level >= 2)
             {
-                _cahceDirection = target.ModifiedPosition;
-                LookObject.transform.LookAt(_cahceDirection);
-                _isLastActive = true;
+                if (target != null)
+                {
+                    _cahceDirection = target.ModifiedPosition;
+                    LookObject.transform.LookAt(_cahceDirection);
+                    _isLastActive = true;
+                }
+                else
+                {
+                    _isLastActive = false;
+                }
             }
             else
             {
@@ -46,6 +53,7 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
 
     public bool AndGo(/*Action callback,*/ GlobalMapCell place, float timeToMove)
     {
+        
         var objPlace = _mapController.GetCellObjectByCell(place);
         if (objPlace != null)
         {

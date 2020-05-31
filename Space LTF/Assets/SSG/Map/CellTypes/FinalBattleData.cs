@@ -7,14 +7,15 @@ using UnityEngine;
 [Serializable]
 public class FinalBattleData
 {
-    private PlayerQuestData mainQuest;
-    private bool _isDimplomatyUsed = false;
-    private bool _isBuyUsed = false;
-    private bool _isStealUsed = false;
-    private bool _lastFight = false;
+//    private PlayerQuestData mainQuest;
+//    private bool _isDimplomatyUsed = false;
+//    private bool _isBuyUsed = false;
+//    private bool _isStealUsed = false;
+//    private bool _lastFight = false;
     private int _power;
+    private bool _isFull;
 
-    private const int MONEY_TO_BUY = 140;
+//    private const int MONEY_TO_BUY = 140;
 
     public FinalBattleData()
     {
@@ -23,55 +24,63 @@ public class FinalBattleData
     public void Init(int power)
     {
         _power = power;
-        mainQuest = MainController.Instance.MainPlayer.QuestData;
+//        mainQuest = MainController.Instance.MainPlayer.QuestData;
+    }
+
+    public void SetReady()
+    {
+        _isFull = true;
     }
 
     public MessageDialogData GetDialog()
     {
-        int current = mainQuest.mainElementsFound;
-        int need = mainQuest.MaxMainElements;
-        var isFull = current >= need;
+//        int current = 1;//mainQuest.MainElementsFound;
+//        int need = 1;//mainQuest.MaxMainElements;
+//        var isFull = current >= need;
 
         var list = new List<AnswerDialogData>();
         MessageDialogData mesData;
-        if (isFull)
+        if (_isFull)
         {
             list.Add(new AnswerDialogData(Namings.Tag("Ok"), null, ReadyToGo));
-            mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartReady"),
-                current, need), list);
+            mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartReady")), list);
         }
         else
         {
-            var player = MainController.Instance.MainPlayer;
-            var armyCount = player.Army.Count;
-            var delta = need - current;
-            if (delta > armyCount - 1)
-            {
-                list.Add(new AnswerDialogData(Namings.Tag("Ok"), LoseGame, null));
-                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartNotReady"),
-                    current, need), list);
-            }
-            else
-            {
-                var shipsYouCanScriface = player.Army.Army.Where(x => x.Ship.ShipType != ShipType.Base).ToList();
-                foreach (var data in shipsYouCanScriface)
-                {
-                    StartShipPilotData shipToDel = data;
-                    void Sacrifice()
-                    {
-                        player.Army.RemoveShip(shipToDel);
-                        player.QuestData.AddElement();
-                    }
-                    list.Add(new AnswerDialogData(Namings.Format(Namings.Tag("Sacrifice"), shipToDel.Ship.Name,
-                        Namings.ShipType(shipToDel.Ship.ShipType), Namings.ShipConfig(shipToDel.Ship.ShipConfig)), null, () =>
-                    {
-                        Sacrifice();
-                        return GetDialog();
-                    }));
-                }
-                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalProcess"),
-                    current, need), list);
-            }
+            list.Add(new AnswerDialogData(Namings.Tag("Ok"), LoseGame, null));
+            mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartNotReady")), list);
+
+
+//            var player = MainController.Instance.MainPlayer;
+//            var armyCount = player.Army.Count;
+//            var delta = need - current;
+//            if (delta > armyCount - 1)
+//            {
+//                list.Add(new AnswerDialogData(Namings.Tag("Ok"), LoseGame, null));
+//                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartNotReady"),
+//                    current, need), list);
+//            }
+//            else
+//            {
+//                var shipsYouCanScriface = player.Army.Army.Where(x => x.Ship.ShipType != ShipType.Base).ToList();
+//                foreach (var data in shipsYouCanScriface)
+//                {
+//                    StartShipPilotData shipToDel = data;
+//                    void Sacrifice()
+//                    {
+//                        player.Army.RemoveShip(shipToDel);
+////                        player.QuestData.AddElement();
+//                    }
+//                    list.Add(new AnswerDialogData(Namings.Format(Namings.Tag("Sacrifice"), shipToDel.Ship.Name,
+//                        Namings.ShipType(shipToDel.Ship.ShipType), Namings.ShipConfig(shipToDel.Ship.ShipConfig)), null, () =>
+//                    {
+//                        Sacrifice();
+//                        return GetDialog();
+//                    }));
+//                }
+//                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalProcess"),
+//                    current, need), list);
+//            }
         }
         return mesData;
     }
@@ -152,7 +161,7 @@ public class FinalBattleData
         var conf1 = array[1].Key;
         var conf2 = array[2].Key;
         var armyType = ArmyCreatorLibrary.GetArmy(conf1, conf2);
-        armyType.MainShipCount = 2;
+        armyType.MainShipCount = 3;
         var power = Mathf.Clamp(_power, 30, 999);
         // ArmyCreator.cre
 //        player.Army.SetArmy(army);
@@ -161,7 +170,7 @@ public class FinalBattleData
 
 //        var rep = MainController.Instance.MainPlayer;
 //        ShipConfig config = rep.ReputationData.WorstFaction(rep.Army.BaseShipConfig);
-        _lastFight = true;
+//        _lastFight = true;
         var player = new PlayerAI("Final boss");
         //        var army = ArmyCreator.CreateArmy(_power, ArmyCreationMode.equalize,
         //            5, 7, ArmyCreatorLibrary.GetArmy(config),

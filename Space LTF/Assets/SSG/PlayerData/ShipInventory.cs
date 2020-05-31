@@ -83,27 +83,27 @@ public class ShipInventory : IStartShipParams, IInventory
         switch (shipType)
         {
             case ShipType.Light:
-                var cocpit = Library.CreateParameterItem(EParameterItemSubType.light, EParameterItemRarity.normal, ItemType.cocpit);
+                var cocpit = Library.CreateParameterItem(EParameterItemSubType.Light, EParameterItemRarity.normal, ItemType.cocpit);
                 TryAddItem(cocpit);
-                var engineSlot = Library.CreateParameterItem(EParameterItemSubType.light, EParameterItemRarity.normal, ItemType.engine);
+                var engineSlot = Library.CreateParameterItem(EParameterItemSubType.Light, EParameterItemRarity.normal, ItemType.engine);
                 TryAddItem(engineSlot);
-                var wingSlot = Library.CreateParameterItem(EParameterItemSubType.light, EParameterItemRarity.normal, ItemType.wings);
+                var wingSlot = Library.CreateParameterItem(EParameterItemSubType.Light, EParameterItemRarity.normal, ItemType.wings);
                 TryAddItem(wingSlot);
                 break;
             case ShipType.Middle:
-                var cocpit1 = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.normal, ItemType.cocpit);
+                var cocpit1 = Library.CreateParameterItem(EParameterItemSubType.Middle, EParameterItemRarity.normal, ItemType.cocpit);
                 TryAddItem(cocpit1);
-                var engineSlot1 = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.normal, ItemType.engine);
+                var engineSlot1 = Library.CreateParameterItem(EParameterItemSubType.Middle, EParameterItemRarity.normal, ItemType.engine);
                 TryAddItem(engineSlot1);
-                var wingSlot1 = Library.CreateParameterItem(EParameterItemSubType.middle, EParameterItemRarity.normal, ItemType.wings);
+                var wingSlot1 = Library.CreateParameterItem(EParameterItemSubType.Middle, EParameterItemRarity.normal, ItemType.wings);
                 TryAddItem(wingSlot1);
                 break;
             case ShipType.Heavy:
-                var cocpit2 = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.normal, ItemType.cocpit);
+                var cocpit2 = Library.CreateParameterItem(EParameterItemSubType.Heavy, EParameterItemRarity.normal, ItemType.cocpit);
                 TryAddItem(cocpit2);
-                var engineSlot2 = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.normal, ItemType.engine);
+                var engineSlot2 = Library.CreateParameterItem(EParameterItemSubType.Heavy, EParameterItemRarity.normal, ItemType.engine);
                 TryAddItem(engineSlot2);
-                var wingSlot2 = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.normal, ItemType.wings);
+                var wingSlot2 = Library.CreateParameterItem(EParameterItemSubType.Heavy, EParameterItemRarity.normal, ItemType.wings);
                 TryAddItem(wingSlot2);
                 break;
         }

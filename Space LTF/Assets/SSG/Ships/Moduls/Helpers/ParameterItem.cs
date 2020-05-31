@@ -25,9 +25,9 @@ public enum EParameterItemRarity
 
 public enum EParameterItemSubType
 {
-    light,
-    middle,
-    heavy
+    Light,
+    Middle,
+    Heavy
 }
 
 [System.Serializable]

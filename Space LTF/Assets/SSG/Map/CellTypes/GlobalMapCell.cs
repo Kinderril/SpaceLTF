@@ -108,8 +108,16 @@ public abstract class GlobalMapCell
             return DialogMovingArmy(CurMovingArmy);
         }
 
-        activateAnyway = false;
-        return GetDialog();
+        var dialog = GetDialog();
+        if (dialog != null)
+        {
+            activateAnyway = dialog.ActivateAnyWay();
+        }
+        else
+        {
+            activateAnyway = false;
+        }
+        return dialog;
     }
 
     private MessageDialogData DialogMovingArmy(MovingArmy army)
@@ -267,11 +275,9 @@ public abstract class GlobalMapCell
             mapData.VisitedSectors++;
         }
 
-        mapData.GalaxyData.GalaxyEnemiesArmyController.UpdateAllPowers(mapData.VisitedSectors,step,_sector.Size);
-        _sector.RecalculateAllCells(mapData.VisitedSectors, step);
     }
 
-    public virtual void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
+    public virtual void UpdateAdditionalPower(int additiopnalPower)
     {
     }
     public  virtual void LeaveFromCell()
@@ -284,4 +290,8 @@ public abstract class GlobalMapCell
         return $"CEll:{base.ToString()} X:{indX} Z:{indZ}";
     }
 
+    public virtual void UpdateCollectedPower(float powerDelta)
+    {
+        
+    }
 }

@@ -178,6 +178,32 @@ public class PlayerReputationData
         return worstConfig;
     }
 
+    public ShipConfig BestFaction()
+    {
+        ShipConfig bestFaction = ShipConfig.droid;
+        List<ShipConfig> configs = new List<ShipConfig>()
+        {
+                 ShipConfig.federation,
+                 ShipConfig.ocrons,
+                 ShipConfig.mercenary,
+                 ShipConfig.raiders,
+                 ShipConfig.krios,
+                 ShipConfig.droid,
+        };
+        int best = Int32.MinValue;
+        foreach (var shipConfig in configs)
+        {
+            var rep = ReputationFaction[shipConfig];
+            if (rep > best)
+            {
+                best = rep;
+                bestFaction = shipConfig;
+            }
+        }
+
+        return bestFaction;
+    }
+
     public bool TryCallReinforsments(out ShipConfig shipConfig)
     {
         return CanCallReinforsments(out shipConfig, true);

@@ -122,17 +122,17 @@ public class SectorDungeon : SectorData
 
     }
 
-    public override void MarkAsCore(int coreId, CoreGlobalMapCell coreCell)
-    {
-        _removeOnlyOne = true;
-        base.MarkAsCore(coreId, coreCell);
-        var middleCells = ListCells.Where(x => x.Data is ArmyDungeonGlobalMapCell).ToList();
-        var rndCellToConnect = middleCells.RandomElement(2);
-        foreach (var container in rndCellToConnect)
-        {
-            AddWays(container.Data, coreCell);
-        }
-    }
+//    public override void MarkAsCore(int coreId, CoreGlobalMapCell coreCell)
+//    {
+//        _removeOnlyOne = true;
+//        base.MarkAsCore(coreId, coreCell);
+//        var middleCells = ListCells.Where(x => x.Data is ArmyDungeonGlobalMapCell).ToList();
+//        var rndCellToConnect = middleCells.RandomElement(2);
+//        foreach (var container in rndCellToConnect)
+//        {
+//            AddWays(container.Data, coreCell);
+//        }
+//    }
 
     private void OnComeToCellExit(GlobalMapCell to, GlobalMapCell from)
     {
@@ -217,7 +217,7 @@ public class SectorDungeon : SectorData
         IsPopulated = true;
         Name = Namings.ShipConfig(_shipConfig);
         StartPowerGalaxy = startPowerGalaxy;
-        _power = CalcCellPower(0, Size, startPowerGalaxy, 0);
+        _power = startPowerGalaxy;
         // RandomizeBorders();
         PopulateToSide();
     }

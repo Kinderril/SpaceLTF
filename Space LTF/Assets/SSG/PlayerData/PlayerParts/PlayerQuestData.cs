@@ -1,54 +1,153 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public class PlayerQuestData
 {
-    public int mainElementsFound = 0;
-    public int MaxMainElements = 4;
+//    public int mainElementsFound = 0;
+//    public int MaxMainElements = 4;
     public FinalBattleData LastBattleData { get; private set; }
+    public QuestsOnStartController QuestsOnStartController;
+
+    //    [field: NonSerialized]
+    //    public event Action OnElementFound;   
 
     [field: NonSerialized]
-    public event Action OnElementFound;
+    public event Action<string> OnQuestId;  
+    [field: NonSerialized]
+    public event Action<QuestContainer> OnQuestAdd;
+    [field: NonSerialized]
+    public event Action<QuestContainer> OnReadyToComplete;
+    [field: NonSerialized]
+    public event Action<QuestContainer> OnComplete;  
+    [field: NonSerialized]
+    public event Action<QuestContainer> OnStageChange;
 
-    public PlayerQuestData(int targetElements)
+    private List<QuestContainer> _quests = new List<QuestContainer>();
+    private QuestContainer _activeQuest;
+    private Player _player;
+    private int _currentCompleteQuest = 0;
+    private int _questsToActivate = 0;
+
+    public List<QuestContainer> AllQuests => _quests;
+
+
+
+    public PlayerQuestData(Player player,int questsOnStart)
     {
-        mainElementsFound = 1;
-        MaxMainElements = targetElements + 1;
-    }
+        _player = player;
+        var mid1 = (Library.MIN_GLOBAL_SECTOR_SIZE + Library.MAX_GLOBAL_SECTOR_SIZE) * .5f;
+        var mid2 = (Library.MIN_GLOBAL_MAP_SECTOR_COUNT + Library.MAX_GLOBAL_MAP_SECTOR_COUNT) * .5f;
 
-    //    public bool CheckIfOver()
-    //    {
-    //        if (Completed())
-    //        {
-    //            MainController.Instance.BattleData.EndGameWin();
-    //            return true;
-    //        }
-    //        return false;
-    //    }
-
-    public void ComeToLastPoint()
-    {
+        var midSize = mid1 * mid2;
+        var size = ((float)(_player.MapData.GalaxyData.SizeOfSector * _player.MapData.GalaxyData.AllSectors.Count / 3f));
+        var coef = size / midSize;
+        QuestsOnStartController = new QuestsOnStartController(coef,this,player, questsOnStart);
+        //        mainElementsFound = 1;
+        //        MaxMainElements = targetElements + 1; 
         LastBattleData = new FinalBattleData();
-        //        LastBattleData.Init();
     }
 
-    public void AddElement()
+    public void SetActiveQuest(QuestContainer active)
     {
-        mainElementsFound++;
-        if (mainElementsFound > MaxMainElements)
+        _activeQuest = active;
+    }
+
+    public void StartGame()
+    {
+        var quests = QuestsOnStartController.GetStartQuests();
+        foreach (var quest in quests)
         {
-            mainElementsFound = MaxMainElements;
-            Debug.LogError("HOW CAN IT HAPPED");
+            AddQuest(quest);
         }
-        if (OnElementFound != null)
+
+        _questsToActivate = _quests.Count;
+        if (quests.Count == 0)
         {
-            OnElementFound();
+            AddFinalQuests();
         }
     }
 
-    public bool Completed()
+    public void DebugCompleteRndQuest()
     {
-        return mainElementsFound >= MaxMainElements;
+        var notCompleted = _quests.Where(x => !x.IsComplete).ToList();
+        if (notCompleted.Count > 0)
+        {
+            var rnd = notCompleted.RandomElement();
+            rnd.ReadyIsComplete = true;
+            rnd.Complete(null);
+        }
+    }
+
+    private void AddQuest(QuestContainer quest)
+    {
+        _quests.Add(quest);
+        _activeQuest = quest;
+        OnQuestAdd?.Invoke(quest);
+    }
+
+    public void AfterLoadCheck()
+    {
+        foreach (var questContainer in _quests)
+        {
+            questContainer.SafeInit();
+        }
+    }
+
+
+    public void AddFinalQuests()
+    {
+        var finalQuest = QuestsLib.GetFinalQuest(this, _player);
+        AddQuest(finalQuest);
+    }
+
+    public void QuestIdComplete(string keyComplete)
+    {
+        Debug.Log($"QuestIdComplete global {keyComplete}");
+        OnQuestId?.Invoke(keyComplete);
+    }
+
+    public QuestContainer GetCurActiveQuest()
+    {
+        if (_activeQuest != null && !_activeQuest.ReadyIsComplete)
+        {
+            return _activeQuest;
+        }
+
+        foreach (var questContainer in _quests)
+        {
+            if (!questContainer.ReadyIsComplete)
+            {
+                return questContainer;
+            }
+        }
+
+        return null;
+
+    }
+
+    public void CompleteQuest(QuestContainer questContainer)
+    {
+        _currentCompleteQuest++;
+        if (_currentCompleteQuest >= _questsToActivate)
+        {
+            AddFinalQuests();
+        }
+        OnComplete?.Invoke(questContainer);
+    }
+
+
+    
+
+    public void ReadyToCompleteQuest(QuestContainer questContainer)
+    {
+        OnReadyToComplete?.Invoke(questContainer);
+    }
+
+    public void StageChange(QuestContainer questContainer)
+    {
+        OnStageChange?.Invoke(questContainer);
     }
 }

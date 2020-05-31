@@ -21,13 +21,16 @@ public class CellController : MonoBehaviour
         get { return Data.Max; }
     }
 
-    public void Init(int coef = 0)
+    public void InitSizes1(int coef)
+    {
+        var size = 2 + MyExtensions.Random(5 + coef / 2, 7 + coef);
+        Data.InitSizes1(transform.position, size, cellSize);
+    }
+
+    public void Init2( BattlefieldEventController eventController)
     {
         gameObject.SetActive(true);
-        var size = 2 + MyExtensions.Random(5 + coef / 2, 7 + coef);
-        //        var sizeX = MyExtensions.Random(7 + coef/2, 8 + coef);
-        //        var sizeZ = MyExtensions.Random(7 + coef/2, 8 + coef);
-        Data.Init(transform.position, size, cellSize);
+        Data.Init2(eventController);
         InstantiatePrefabs();
         InstantiateBorders(Data.CenterZone);
     }

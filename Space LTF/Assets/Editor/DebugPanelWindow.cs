@@ -122,10 +122,14 @@ public class DebugPanelWindow : EditorWindow
             if (GUILayout.Button("MovArmy"))
             {
                 BornMovingArmy();
-            }
-            if (GUILayout.Button("Add core"))
+            }  
+            if (GUILayout.Button("CompQues"))
             {
-                AddCore();
+                DebugCompleteQuest();
+            }
+            if (GUILayout.Button("AddFinalQuest"))
+            {
+                AddFinalQuest();
             }
             EditorGUILayout.EndHorizontal();
             EnemyPower = EditorGUILayout.IntField("EP", EnemyPower);
@@ -180,6 +184,17 @@ public class DebugPanelWindow : EditorWindow
         }
     }
 
+    private void DebugCompleteQuest()
+    {
+        MainController.Instance.MainPlayer.QuestData.DebugCompleteRndQuest();
+
+    }
+
+    private void AddFinalQuest()
+    {
+        MainController.Instance.MainPlayer.QuestData.AddFinalQuests();
+    }
+
     private void CalcMyPower()
     {
         var army = MainController.Instance.MainPlayer.Army;
@@ -221,10 +236,10 @@ public class DebugPanelWindow : EditorWindow
        MainController.Instance.MainPlayer.Army.DebugAddAllExp();
     }
 
-    private void AddCore()
-    {
-        MainController.Instance.MainPlayer.QuestData.AddElement();
-    }
+//    private void AddCore()
+//    {
+////        MainController.Instance.MainPlayer.QuestData.AddElement();
+//    }
 
     private void GoToEnd()
     {

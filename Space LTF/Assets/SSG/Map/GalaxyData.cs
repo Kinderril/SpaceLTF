@@ -35,6 +35,7 @@ public class GalaxyData
     protected int _verticalCount;
 
     protected int _sectorsCount;
+    protected int _questsOnStart = 0;
 
     private Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
 
@@ -50,22 +51,43 @@ public class GalaxyData
         {GlobalMapEventType.secretDeal, 2},
     };
 
-    public GlobalMapCell Init2(int sectorCount, int sizeSector, int startPower, int coreCells,
-        int startDeathStep, ShipConfig playerShipConfig, int powerPerTurn)
+    public GlobalMapCell Init2(int sectorCount, int sizeSector, EStartGameDifficulty difficulty, int questsOnStart,
+        int startDeathStep, ShipConfig playerShipConfig, int powerPerTurnBaseVal)
     {
+        _questsOnStart = questsOnStart;
         _verticalCount = VERTICAL_COUNT;
-        _powerPerTurn = ConfigurePowerPerTurn(powerPerTurn);
+        _powerPerTurn = ConfigurePowerPerTurn(powerPerTurnBaseVal);
         StartDeathStep = startDeathStep;
+        int startPower = Library.MIN_GLOBAL_MAP_EASY_BASE_POWER;
 
-        GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController();
-        var startCell = ImpletemtSectors(sectorCount, sizeSector, startPower, coreCells, playerShipConfig,
+        switch (difficulty)
+        {
+            case EStartGameDifficulty.VeryEasy:
+                startPower = Library.MAX_GLOBAL_MAP_VERYEASY_BASE_POWER;
+                break;
+            case EStartGameDifficulty.Easy:
+                startPower = Library.MIN_GLOBAL_MAP_EASY_BASE_POWER;
+                break;
+            case EStartGameDifficulty.Normal:
+                startPower = Library.MIN_GLOBAL_MAP_NORMAL_BASE_POWER;
+                break;
+            case EStartGameDifficulty.Hard:
+                startPower = Library.MIN_GLOBAL_MAP_HARD_BASE_POWER;
+                break;
+            case EStartGameDifficulty.Imposilbe:
+                startPower = Library.MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER;
+                break;
+        }
+
+        GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController(_powerPerTurn);
+        var startCell = ImpletemtSectors(sectorCount, sizeSector, startPower,  playerShipConfig,
             _verticalCount, GalaxyEnemiesArmyController);
         GalaxyEnemiesArmyController.SetCells(GetAllList());
         return startCell;
     }
 
 
-    protected virtual StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, int coreCells,
+    protected virtual StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, 
         ShipConfig playerShipConfig, int verticalCount, GalaxyEnemiesArmyController enemiesArmyController)
     {
         var allSubSectors = new HashSet<SectorData>();
@@ -145,41 +167,41 @@ public class GalaxyData
 
         //        var takeThisIndex = 1;
 
-        var xIndexs = randomInts.RandomElement(coreCells - 1);
-        xIndexs.Add(1);
-        var goodCorePositions = xIndexs.Count;
-        //        var goodCorePositions = Mathf.Clamp(coreCells, 0, sectorsCount - 2);
-        int createdCoreSector = 0;
-        for (var i = 0; i < xIndexs.Count; i++)
-        {
-            var secrosDist = xIndexs[i];
-            List<SectorData> possibleSectors;
-            if (createdCoreSector > 1 && MyExtensions.IsTrue01(.3f) && allSubSectors.Count > verticalCount - 2)
-                //Only dungeons
-                possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && x is SectorDungeon).ToList();
-            else
-                //Only inner
-                possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && !(x is SectorDungeon)).ToList();
+//        var xIndexs = randomInts.RandomElement(coreCells - 1);
+//        xIndexs.Add(1);
+//        var goodCorePositions = xIndexs.Count;
+        //        var goodCorePositions = Mathf.Clamp(questsOnStart, 0, sectorsCount - 2);
+//        int createdCoreSector = 0;
+//        for (var i = 0; i < xIndexs.Count; i++)
+//        {
+//            var secrosDist = xIndexs[i];
+//            List<SectorData> possibleSectors;
+//            if (MyExtensions.IsTrue01(.3f) && allSubSectors.Count > verticalCount - 2)
+//                //Only dungeons
+//                possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && x is SectorDungeon).ToList();
+//            else
+//                //Only inner
+//                possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && !(x is SectorDungeon)).ToList();
+//
+////            var coreSector = possibleSectors.RandomElement();
+////            if (coreSector == null)
+////                Debug.LogError($"can't find sector with dist:{secrosDist}");
+////            else
+////            {
+////                createdCoreSector++;
+////                CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
+//////                allSubSectors.Add(endSector);
+////            }
+//        }
 
-            var coreSector = possibleSectors.RandomElement();
-            if (coreSector == null)
-                Debug.LogError($"can't find sector with dist:{secrosDist}");
-            else
-            {
-                createdCoreSector++;
-                CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
-//                allSubSectors.Add(endSector);
-            }
-        }
-
-        var notGoodCores = coreCells - goodCorePositions;
-        for (var i = 0; i < notGoodCores; i++)
-        {
-            var coreSector = allSubSectors.Where(x => !x.IsPopulated && x.StartX != 0 && x != null).ToList()
-                .RandomElement();
-            if (coreSector != null)
-                CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
-        }
+//        var notGoodCores = questsOnStart - goodCorePositions;
+//        for (var i = 0; i < notGoodCores; i++)
+//        {
+//            var coreSector = allSubSectors.Where(x => !x.IsPopulated && x.StartX != 0 && x != null).ToList()
+//                .RandomElement();
+//            if (coreSector != null)
+//                CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
+//        }
 
         foreach (var sectorData in unPopulatedSectors)
         {
@@ -198,13 +220,13 @@ public class GalaxyData
         ImplementSectorToGalaxy(sectors, sizeSector, _sectorsCount, verticalCount);
         BornArmies(sectors, sizeSector, _sectorsCount, verticalCount);
         Debug.Log("Population end");
-#if UNITY_EDITOR
-        var list = cells.GetAllList();
-        var cores = list.Where(x => x is CoreGlobalMapCell).ToList();
-        if (cores.Count != coreCells)
-            Debug.LogError(
-                $"Wrong count of core cells {cores.Count}/{coreCells}. goodCorePositions:{goodCorePositions}. notGoodCores:{notGoodCores}");
-#endif
+//#if UNITY_EDITOR
+//        var list = cells.GetAllList();
+//        var cores = list.Where(x => x is CoreGlobalMapCell).ToList();
+//        if (cores.Count != questsOnStart)
+//            Debug.LogError(
+//                $"Wrong count of core cells {cores.Count}/{questsOnStart}. goodCorePositions:{goodCorePositions}. notGoodCores:{notGoodCores}");
+//#endif
         return startCell;
     }
 
@@ -243,30 +265,30 @@ public class GalaxyData
         return d;
     }
 
-    private void CreateCoreSector(SectorData coreSector, SectorData startSector, int id,
-        List<SectorData> unPopulatedSectors,
-        int startPower, int sizeSector)
-    {
-        var xCell = coreSector.StartX + RndIndex(sizeSector);
-        var zCell = coreSector.StartZ + RndIndex(sizeSector);
-
-        //#if UNITY_EDITOR      
-        //        var s = _sectorsCount * (sizeSector + 1) - 1;
-        //
-        //        if (zCell >= s)
-        //        {
-        //            Debug.LogError($"How it posible core:{ coreSector.StartZ}  s:{s}");
-        //            return;
-        //        }
-        //#endif
-        var coreId = Utils.GetId();
-        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, coreSector);
-        coreSector.Populate(startPower);
-        coreSector.SetCell(coreCell, id);
-        unPopulatedSectors.Remove(coreSector);
-        coreSector.MarkAsCore(coreId, coreCell);
-        Debug.Log($"Core created {coreSector.StartX} {coreSector.StartZ}.  coreCell:{coreCell.indX} {coreCell.indZ}");
-    }
+//    private void CreateCoreSector(SectorData coreSector, SectorData startSector, int id,
+//        List<SectorData> unPopulatedSectors,
+//        int startPower, int sizeSector)
+//    {
+//        var xCell = coreSector.StartX + RndIndex(sizeSector);
+//        var zCell = coreSector.StartZ + RndIndex(sizeSector);
+//
+//        //#if UNITY_EDITOR      
+//        //        var s = _sectorsCount * (sizeSector + 1) - 1;
+//        //
+//        //        if (zCell >= s)
+//        //        {
+//        //            Debug.LogError($"How it posible core:{ coreSector.StartZ}  s:{s}");
+//        //            return;
+//        //        }
+//        //#endif
+//        var coreId = Utils.GetId();
+////        var coreCell = new CoreGlobalMapCell(xCell + zCell, coreId, xCell, zCell, coreSector);
+//        coreSector.Populate(startPower);
+////        coreSector.SetCell(coreCell, id);
+//        unPopulatedSectors.Remove(coreSector);
+////        coreSector.MarkAsCore(coreId, coreCell);
+////        Debug.Log($"Core created {coreSector.StartX} {coreSector.StartZ}.  coreCell:{coreCell.indX} {coreCell.indZ}");
+//    }
 
     public List<GlobalMapCell> GetAllList()
     {
@@ -637,24 +659,25 @@ public class GalaxyData
 
     private void OnCellScouted(GlobalMapCell obj)
     {
-        if (obj is CoreGlobalMapCell)
-        {
-            var idToUnconnect = obj.ConnectedGates;
-            for (var i = 0; i < SizeX; i++)
-            for (var j = 0; j < SizeZ; j++)
-            {
-                var cell = cells.GetCell(i, j);
-                if (cell != null)
-                {
-                    var shallUnconect = cell.ConnectedGates == idToUnconnect;
-                    //                        Debug.LogErrorFormat(" cells: {0} {1} " , cell.ConnectedGates , obj.ConnectedGates);
-                    if (shallUnconect)
-                        //                            Debug.LogError("UNCONNECTED!!!");
-                        cell.UnconnectAll();
-                }
-            }
-        }
-        else if (obj.ConnectedGates > 0)
+//        if (obj is CoreGlobalMapCell)
+//        {
+//            var idToUnconnect = obj.ConnectedGates;
+//            for (var i = 0; i < SizeX; i++)
+//            for (var j = 0; j < SizeZ; j++)
+//            {
+//                var cell = cells.GetCell(i, j);
+//                if (cell != null)
+//                {
+//                    var shallUnconect = cell.ConnectedGates == idToUnconnect;
+//                    //                        Debug.LogErrorFormat(" cells: {0} {1} " , cell.ConnectedGates , obj.ConnectedGates);
+//                    if (shallUnconect)
+//                        //                            Debug.LogError("UNCONNECTED!!!");
+//                        cell.UnconnectAll();
+//                }
+//            }
+//        }
+//        else 
+        if (obj.ConnectedGates > 0)
         {
             obj.UnconnectAll();
         }

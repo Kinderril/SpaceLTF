@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System;
 
-
+//[System.Serializable]
 public class AnswerDialogData
 {
     public string Message;

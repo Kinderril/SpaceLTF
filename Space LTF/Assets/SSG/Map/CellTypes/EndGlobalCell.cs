@@ -10,7 +10,7 @@ public class EndGlobalCell : ArmyGlobalMapCell
     public EndGlobalCell(int power, int id, int intX, int intZ, SectorData sector)
         : base(power, ShipConfig.droid, id, intX, intZ, sector)
     {
-        Power = SectorData.CalcCellPower(0, sector.Size, power, _additionalPower);
+//        Power = power;
         InfoOpen = true;
         Scouted();
     }
@@ -57,7 +57,7 @@ public class EndGlobalCell : ArmyGlobalMapCell
         if (_data == null)
         {
             var questData = MainController.Instance.MainPlayer.QuestData;
-            questData.ComeToLastPoint();
+//            questData.ComeToLastPoint();
             //            questData.CheckIfOver();
             _data = questData.LastBattleData;
             _data.Init(Power);
@@ -72,11 +72,11 @@ public class EndGlobalCell : ArmyGlobalMapCell
 
     public override void ComeTo(GlobalMapCell from)
     {
-        Power = SectorData.CalcCellPower(0, _sector.Size, _power, _additionalPower);
+//        Power = SectorData.CalcCellPower(0, _sector.Size, _power, _additionalPower);
         if (_data == null)
         {
             var questData = MainController.Instance.MainPlayer.QuestData;
-            questData.ComeToLastPoint();
+//            questData.ComeToLastPoint();
             //            questData.CheckIfOver();
             _data = questData.LastBattleData;
             _data.Init(Power);

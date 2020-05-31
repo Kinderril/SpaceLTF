@@ -10,18 +10,24 @@ public class PlayerAIWithBattleEvent : PlayerAI, IPlayerAIWithBattleEvent
     private static
         List<EBattleType> posibeRndTypes = new List<EBattleType>() { EBattleType.baseDefence, EBattleType.defenceOfShip, EBattleType.defenceWaves, EBattleType.destroyShipPeriod };
 
-    public PlayerAIWithBattleEvent(string name, Dictionary<PlayerParameterType, int> startData = null)
+    public PlayerAIWithBattleEvent(string name,bool posibleEvent,
+        Dictionary<PlayerParameterType, int> startData = null, EBattleType? eBattleType = null)
         : base(name, startData)
     {
-        //        if (startCell.indX > 4)
-        //        {
-        if (MyExtensions.IsTrue01(.33f))
+        if (eBattleType == null)
         {
-            EBattleType = posibeRndTypes.RandomElement();
+            if (posibleEvent && MyExtensions.IsTrue01(.33f))
+            {
+                EBattleType = posibeRndTypes.RandomElement();
+            }
         }
-        //        }
+        else
+        {
+            EBattleType = eBattleType.Value;
+        }
+
 #if UNITY_EDITOR
-        EBattleType = EBattleType.baseDefence;
+//        EBattleType = EBattleType.baseDefence;
 #endif
     }
 }

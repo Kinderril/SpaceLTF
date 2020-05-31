@@ -149,7 +149,7 @@ public class DataStructPrefabs : MonoBehaviour
     public GameObject ShipSelectedObject;
     public List<FlyingAsteroid> FlyingAsteroids;
     public Sprite MoneyIcon;
-    public QuestOnStartElement QuestOnStartElement;
+//    public QuestOnStartElement QuestOnStartElement;
     public EnemyGlobalMapMoverObjet SpecOpsMovingArmyObject;
     public EnemyGlobalMapMoverObjet SimpleMovingArmyObject;
     public ImageWithTooltip NoScoutData;
@@ -161,6 +161,8 @@ public class DataStructPrefabs : MonoBehaviour
     public List<GameObject> Vortexs;
     public List<GameObject> IceZone;
     public List<GameObject> BlackHole;
+    public QuestStageElement QuestStageElement;
+    public QuestContainerElement QuestContainerElement;
 
 
     public void Init()

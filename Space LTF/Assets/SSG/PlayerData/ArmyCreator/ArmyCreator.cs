@@ -43,7 +43,8 @@ public static class ArmyCreator
         ArmyRemainPoints points = new ArmyRemainPoints(remainPoints);
         ArmyCreatorLogs logs = new ArmyCreatorLogs();
         float pointsOnStart = points.Points;
-        var army = CreateShips(points, data, player, pointsOnStart, 0.1f, logs);
+        var army = CreateShips(points, data, player, pointsOnStart, 0.1f, logs,10);
+        UpgradeArmyToremainPoitns(remainPoints, army, points, data, logs);
         logs.LogToConsole();
         return army;
     }
@@ -53,7 +54,8 @@ public static class ArmyCreator
         Debug.Log($"Start create army {remainPoints} . {data}  {player.Name}");
         if (data.ArmyConfig == ShipConfig.droid)
         {
-            return CreateSimpleEnemyArmyDroid(remainPoints, data, player);
+            var army1 = CreateSimpleEnemyArmyDroid(remainPoints, data, player);
+            return army1;
         }
 
         ArmyCreatorLogs logger = new ArmyCreatorLogs();
@@ -88,15 +90,25 @@ public static class ArmyCreator
             }
         }
 
-        var subArmy = CreateShips(points, data, player, pointsOnStart, 0.5f, logger);
+        var subArmy = CreateShips(points, data, player, pointsOnStart, 0.5f, logger,5);
         army.AddRange(subArmy);
-        int index = 0;
-        int upgradeIterations = 100;
         if (army.Count == 0)
         {
             Debug.LogError($"SHIT!!! ARMY IS NULLL!!! {remainPoints}");
             return army;
         }
+
+        UpgradeArmyToremainPoitns(remainPoints, army, points, data, logger);
+        Debug.LogFormat("Simple army create. RemainPoints:{0}", remainPoints);
+        logger.LogToConsole();
+        return army;
+    }
+
+    private static void UpgradeArmyToremainPoitns(float remainPoints,List<StartShipPilotData> army
+        ,ArmyRemainPoints points,ArmyCreatorData data,ArmyCreatorLogs logger)
+    {
+        int upgradeIterations = 100;
+        int index = 0;
         while (upgradeIterations > 0 && remainPoints > 0)
         {
             if (index >= army.Count)
@@ -111,27 +123,24 @@ public static class ArmyCreator
                 continue;
             }
             WDictionary<LibraryShipUpgradeType> upgrades = new WDictionary<LibraryShipUpgradeType>(
-             new Dictionary<LibraryShipUpgradeType, float>()
-            {
-             {LibraryShipUpgradeType.addModul ,2} ,
-             {LibraryShipUpgradeType.addWeapon  ,2} ,
-             {LibraryShipUpgradeType.levelUpPilot ,5} ,
-             {LibraryShipUpgradeType.upgradeWeapon ,5} ,
-             {LibraryShipUpgradeType.upgradeModul ,3} ,
-            });
+                new Dictionary<LibraryShipUpgradeType, float>()
+                {
+                    {LibraryShipUpgradeType.addModul ,2} ,
+                    {LibraryShipUpgradeType.addWeapon  ,2} ,
+                    {LibraryShipUpgradeType.levelUpPilot ,5} ,
+                    {LibraryShipUpgradeType.upgradeWeapon ,5} ,
+                    {LibraryShipUpgradeType.upgradeModul ,3} ,
+                });
             var rnd = upgrades.Random();
             UpgradeShip(points, rnd, ship, upgrades, data, logger);
         }
-        Debug.LogFormat("Simple army create. RemainPoints:{0}", remainPoints);
-        logger.LogToConsole();
-        return army;
     }
 
     private static List<StartShipPilotData> CreateShips(ArmyRemainPoints remainPoints, ArmyCreatorData data,
-        Player player, float pointsOnStart, float percentsToEnd, ArmyCreatorLogs logs)
+        Player player, float pointsOnStart, float percentsToEnd, ArmyCreatorLogs logs,int maxShips)
     {
         List<StartShipPilotData> army = new List<StartShipPilotData>();
-        int maxRemainShips = 5;
+        int maxRemainShips = maxShips;
         bool shallUpgrade = false;
 
         while (!shallUpgrade && maxRemainShips > 0)

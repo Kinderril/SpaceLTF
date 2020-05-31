@@ -84,7 +84,20 @@ public class TeacherMapEvent : BaseGlobalMapEvent
                 _cost = (int)(costMidLvl * MyExtensions.Random(0.5f, 0.75f));
                 if (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_cost))
                 {
-                    mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), () => DoPilotTeach(), null));
+                    foreach (var pilotData in army.Army)
+                    {
+                        if (pilotData.Ship.ShipType != ShipType.Base)
+                        {
+                            var strg = Namings.Format(Namings.Tag("TeachPilot"),
+                                pilotData.Ship.Name, Namings.ShipType(pilotData.Ship.ShipType));
+                            mianAnswers.Add(new AnswerDialogData(strg, () => DoPilotTeach(pilotData), null));
+                        }
+                    }
+
+                    if (mianAnswers.Count == 0)
+                    {
+                        mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
+                    }
                 }
                 mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("teacherNo"), null));  //
                 mesData = new MessageDialogData(
@@ -96,25 +109,19 @@ public class TeacherMapEvent : BaseGlobalMapEvent
 
     }
 
-    private MessageDialogData DoPilotTeach()
+    private MessageDialogData DoPilotTeach(StartShipPilotData pilotData)
     {
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
         MainController.Instance.MainPlayer.MoneyData.RemoveMoney(_cost);
         var army = MainController.Instance.MainPlayer.Army.Army.Suffle();
         var points = 1000f;
-        foreach (var pilotData in army)
+        if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
         {
-            if (pilotData.Ship.ShipType != ShipType.Base)
-            {
-                if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
-                {
-                    var mesData = new MessageDialogData(
-                        Namings.Format(Namings.DialogTag("teacherImproved"), pilotData.Ship.Name,  //
-                            pilotData.Pilot.CurLevel), mianAnswers);
-                    return mesData;
-                }
-            }
+            var mesData = new MessageDialogData(
+                Namings.Format(Namings.DialogTag("teacherImproved"), pilotData.Ship.Name,  //
+                    pilotData.Pilot.CurLevel), mianAnswers);
+            return mesData;
         }
         return new MessageDialogData(Namings.DialogTag("teacherFail"), mianAnswers);//
     }

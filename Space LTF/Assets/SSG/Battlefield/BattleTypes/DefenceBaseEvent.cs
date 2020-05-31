@@ -5,7 +5,7 @@ using System.Linq;
 
 public class DefenceBaseEvent : BattleTypeEvent
 {
-
+    public const float POWER_ICN = 0.7f;
     public override bool HaveActiveTime => false;
 
     public override void Init(BattleController battle)
@@ -20,7 +20,8 @@ public class DefenceBaseEvent : BattleTypeEvent
         if (teamIndex == TeamIndex.green)
         {
             var power = player.Army.GetPower();
-            var toTurrent = power * .3f;
+            var coef = POWER_ICN * 0.7f;
+            var toTurrent = power * coef;
             var tuuretsLogs = new ArmyCreatorLogs();
             var turrets = ArmyCreator.CreateTurrets(toTurrent, player, player.Army.BaseShipConfig, tuuretsLogs,out var point);
 

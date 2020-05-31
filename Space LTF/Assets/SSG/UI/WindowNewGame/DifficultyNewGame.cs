@@ -1,9 +1,18 @@
 ﻿using System;
 using UnityEngine;
 
+public enum EStartGameDifficulty
+{
+    VeryEasy,
+    Easy,
+    Normal,
+    Hard,
+    Imposilbe,
+}
+
 public class DifficultyNewGame : MonoBehaviour
 {
-    public int CurDifficulty { get; private set; }
+    public EStartGameDifficulty CurDifficulty { get; private set; }
     public ToggleWithTextMeshPro VeryEasy;
     public ToggleWithTextMeshPro Easy;
     public ToggleWithTextMeshPro Normal;
@@ -14,7 +23,7 @@ public class DifficultyNewGame : MonoBehaviour
     public void Init()
     {
         Easy.Toggle.isOn = true;
-        CurDifficulty = Library.MIN_GLOBAL_MAP_EASY_BASE_POWER;
+        CurDifficulty = EStartGameDifficulty.Easy;
         VeryEasy.Field.text = Namings.Tag("VeryEasy");
         Easy.Field.text = Namings.Tag("Easy");
         Normal.Field.text = Namings.Tag("Normal");
@@ -24,7 +33,7 @@ public class DifficultyNewGame : MonoBehaviour
 
     public void ONVeryWasyClick()
     {
-        CurDifficulty = Library.MAX_GLOBAL_MAP_VERYEASY_BASE_POWER;
+        CurDifficulty = EStartGameDifficulty.VeryEasy;
         if (_callback != null)
         {
             _callback();
@@ -32,7 +41,7 @@ public class DifficultyNewGame : MonoBehaviour
     }
     public void ONEasyClick()
     {
-        CurDifficulty = Library.MIN_GLOBAL_MAP_EASY_BASE_POWER;
+        CurDifficulty = EStartGameDifficulty.Easy;
         if (_callback != null)
         {
             _callback();
@@ -41,7 +50,7 @@ public class DifficultyNewGame : MonoBehaviour
     }
     public void ONNormalClick()
     {
-        CurDifficulty = Library.MIN_GLOBAL_MAP_NORMAL_BASE_POWER;
+        CurDifficulty = EStartGameDifficulty.Normal;
         if (_callback != null)
         {
             _callback();
@@ -50,7 +59,7 @@ public class DifficultyNewGame : MonoBehaviour
     public void ONHradClick()
     {
 
-        CurDifficulty = Library.MIN_GLOBAL_MAP_HARD_BASE_POWER;
+        CurDifficulty = EStartGameDifficulty.Hard;
         if (_callback != null)
         {
             _callback();
@@ -59,7 +68,7 @@ public class DifficultyNewGame : MonoBehaviour
     public void ONImposilbeyClick()
     {
 
-        CurDifficulty = Library.MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER;
+        CurDifficulty = EStartGameDifficulty.Imposilbe;
         if (_callback != null)
         {
             _callback();

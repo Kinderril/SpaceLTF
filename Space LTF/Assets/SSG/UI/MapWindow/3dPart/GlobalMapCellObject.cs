@@ -20,6 +20,7 @@ public class GlobalMapCellObject : MonoBehaviour
     public GameObject IceZoneEvent;
     public GameObject BlackHoleEvent;
     public GameObject StartDungeon;
+    public GameObject QuestInfo;
     public Renderer ActiveRenderer;
 
     private GameObject ObjectPainted;
@@ -56,6 +57,7 @@ public class GlobalMapCellObject : MonoBehaviour
         VortexEvent.SetActive(false);
         IceZoneEvent.SetActive(false);
         BlackHoleEvent.SetActive(false);
+        QuestInfo.SetActive(false);
 
 
     }
@@ -71,6 +73,11 @@ public class GlobalMapCellObject : MonoBehaviour
         Cell.OnComplete += OnComplete;
         InitMainObject();
         var c = cellSize * 0.3f;
+        var armyCell = Cell as FreeActionGlobalMapCell;
+        if (armyCell != null)
+        {
+            armyCell.OnQuestDialogChanges += OnQuestDialogChanges;
+        }
         Container.localPosition = new Vector3(MyExtensions.Random(-c, c), 0, MyExtensions.Random(-c, c));
 
         //        var ranDElta = MainController.Instance.TimerManager.MakeTimer(MyExtensions.Random(0, 0.3f));
@@ -82,6 +89,25 @@ public class GlobalMapCellObject : MonoBehaviour
         {
             OnDestoyedCell(cell);
         }
+
+        UpdateQuestInfo();
+
+    }
+
+    private void OnQuestDialogChanges(bool obj)
+    {
+        UpdateQuestInfo();
+    }
+
+    private void UpdateQuestInfo()
+    {
+        var armyCell = Cell as FreeActionGlobalMapCell;
+        if (armyCell != null)
+        {
+            var haevDialog = armyCell.HaveQuest;
+            QuestInfo.SetActive(haevDialog);
+        }
+
     }
 
     //    void OnEnable()
@@ -120,32 +146,35 @@ public class GlobalMapCellObject : MonoBehaviour
         TryOpenBattleEvent();
     }
 
-    private void TryOpenBattleEvent()
+    public void TryOpenBattleEvent()
     {
-        if (Cell.EventType.HasValue)
+        if (MainController.Instance.MainPlayer.Parameters.Scouts.Level >= 3)
         {
-            switch (Cell.EventType)
+            if (Cell.EventType.HasValue)
             {
-                case EBattlefildEventType.asteroids:
-                    AsteroidsEvent.gameObject.SetActive(true);
-                    break;
-                case EBattlefildEventType.shieldsOff:
-                    EMPSurgeEvent.gameObject.SetActive(true);
-                    break;
-                // case EBattlefildEventType.engineOff:
-                //     break;
-                case EBattlefildEventType.fireVortex:
-                    FireVortexEvent.gameObject.SetActive(true);
-                    break;              
-                case EBattlefildEventType.Vortex:
-                    VortexEvent.gameObject.SetActive(true);
-                    break;              
-                case EBattlefildEventType.IceZone:
-                    IceZoneEvent.gameObject.SetActive(true);
-                    break;              
-                case EBattlefildEventType.BlackHole:
-                    BlackHoleEvent.gameObject.SetActive(true);
-                    break;
+                switch (Cell.EventType)
+                {
+                    case EBattlefildEventType.asteroids:
+                        AsteroidsEvent.gameObject.SetActive(true);
+                        break;
+                    case EBattlefildEventType.shieldsOff:
+                        EMPSurgeEvent.gameObject.SetActive(true);
+                        break;
+                    // case EBattlefildEventType.engineOff:
+                    //     break;
+                    case EBattlefildEventType.fireVortex:
+                        FireVortexEvent.gameObject.SetActive(true);
+                        break;
+                    case EBattlefildEventType.Vortex:
+                        VortexEvent.gameObject.SetActive(true);
+                        break;
+                    case EBattlefildEventType.IceZone:
+                        IceZoneEvent.gameObject.SetActive(true);
+                        break;
+                    case EBattlefildEventType.BlackHole:
+                        BlackHoleEvent.gameObject.SetActive(true);
+                        break;
+                }
             }
         }
     }
@@ -163,13 +192,14 @@ public class GlobalMapCellObject : MonoBehaviour
         if (_isArmy)
         {
             ActiveRenderer = Fleet.GetComponent<Renderer>();
-            if (Cell is CoreGlobalMapCell)
-            {
-                Unknown.gameObject.SetActive(true);
-                ObjectPainted = Unknown;
-//                Unknown = StartDungeon;
-            }
-            else if (Cell is EndGlobalCell || Cell is EndTutorGlobalCell)
+//            if (Cell is CoreGlobalMapCell)
+//            {
+//                Unknown.gameObject.SetActive(true);
+//                ObjectPainted = Unknown;
+////                Unknown = StartDungeon;
+//            }
+//            else
+            if (Cell is EndGlobalCell || Cell is EndTutorGlobalCell)
             {
                 Unknown.gameObject.gameObject.SetActive(false);
                 ExitObject.gameObject.SetActive(true);

@@ -113,4 +113,9 @@ public class AsteroidEvent : BattleFieldEvent
         _asteroids.Clear();
         _battleTimers.Clear();
     }
+
+    public override List<Vector3> GetBlockedPosition()
+    {
+        return null;
+    }
 }

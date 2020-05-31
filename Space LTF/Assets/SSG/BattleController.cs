@@ -91,6 +91,9 @@ public class BattleController : Singleton<BattleController>
             case EBattleType.baseDefence:
                 _battleType = new DefenceBaseEvent();
                 break;
+            default:
+                _battleType = new DefaultBattleEvent();
+                break;
         }
     }
 
@@ -133,9 +136,11 @@ public class BattleController : Singleton<BattleController>
                 }
             }
         }
-
-        CellController.Init(coef);
-        _eventController.Init(this, eventType, false);
+        //Порядок должен быть именно таокй
+        CellController.InitSizes1(coef);
+        _eventController.Init(this, eventType, false,CellController.Data.InsideRadius);
+        CellController.Init2(_eventController);
+        //-----
 
 #if UNITY_EDITOR
         var greeArmyPower = ArmyCreator.CalcArmyPower(greenSide.Army);

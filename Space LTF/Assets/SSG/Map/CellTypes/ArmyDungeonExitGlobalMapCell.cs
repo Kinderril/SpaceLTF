@@ -9,12 +9,12 @@ public class ArmyDungeonExitGlobalMapCell : ArmyGlobalMapCell
     // private List<IItemInv> _getRewardsItems;
     // private bool _rewardsComplete;
     // private bool _rewardsCached;
-    public override int Power => (int)(_power * _coefPower);
-    private float _coefPower;
+//    public override int Power => (int)(_power * _coefPower);
+//    private float _coefPower;
     public ArmyDungeonExitGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind, SectorData sector, float coefPower)
         : base(power, config, id, Xind, Zind, sector)
     {
-        _coefPower = 1f + coefPower;
+        _powerCoef = 1f + coefPower;
     }
 
     protected override MessageDialogData GetLeavedActionInner()

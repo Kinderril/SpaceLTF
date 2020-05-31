@@ -13,7 +13,7 @@ public class SectorData
     public int Size { get; private set; }
     public bool IsCore { get; private set; }
     public bool IsFinal { get; private set; }
-    public bool IsStart { get; private set; }
+    public bool IsStart { get; private set; } = false;
     public string Name { get; protected set; }
     public int XIndex { get; private set; }
     public int Id { get; private set; }
@@ -105,24 +105,28 @@ public class SectorData
         }
     }
 
-    public static int CalcCellPower(int visited, int Size, int startPowerGalaxy, int additionalPower)
+    public static int CalcCellPower(float startCellPower, float nextPower)
     {
-        var sectorPowerCoef = Library.SECTOR_COEF_POWER + startPowerGalaxy * Library.SECTOR_POWER_START_COEF;
-        var additional = (int)((visited + 1) * Size * sectorPowerCoef);
-        var power = startPowerGalaxy + additional + additionalPower;
-
-        var underLog = power * power * Library.SECTOR_POWER_LOG2;
-        var log = Mathf.Log(underLog);
-        var modif = (int)(log * Library.SECTOR_POWER_LOG1 -
-                    Library.SECTOR_POWER_LOG3);
-        return modif;
+        return (int)(startCellPower + nextPower);
     }
+//    public static int CalcCellPower(int visited, int Size, int startPowerGalaxy, int additionalPower)
+//    {
+//        var sectorPowerCoef = Library.SECTOR_COEF_POWER + startPowerGalaxy * Library.SECTOR_POWER_START_COEF;
+//        var additional = (int)((visited + 1) * Size * sectorPowerCoef);
+//        var power = startPowerGalaxy + additional + additionalPower;
+//
+//        var underLog = power * power * Library.SECTOR_POWER_LOG2;
+//        var log = Mathf.Log(underLog);
+//        var modif = (int)(log * Library.SECTOR_POWER_LOG1 -
+//                    Library.SECTOR_POWER_LOG3);
+//        return modif;
+//    }
 
     public virtual void Populate(int startPowerGalaxy)
     {
         IsPopulated = true;
         StartPowerGalaxy = startPowerGalaxy;
-        _power = CalcCellPower(0, Size, startPowerGalaxy, 0);
+        _power = startPowerGalaxy;
         RandomizeBorders();
         var remainFreeCells = ListCells.Where(x => x.IsFreeToPopulate()).ToList();
         //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");
@@ -208,7 +212,7 @@ public class SectorData
         foreach (var armyContainer in remainFreeCells.ToList())
         {
             var config = IsDroids(_shipConfig);
-            var armyCellcell = new ArmyBornGlobalMapCell(_power, config, 
+            var armyCellcell = new FreeActionGlobalMapCell(_power, config, 
                 Utils.GetId(), StartX + armyContainer.indX, StartZ + armyContainer.indZ, 
                 this,_enemiesArmyController, _powerPerTurn);
             armyContainer.SetData(armyCellcell);
@@ -240,7 +244,7 @@ public class SectorData
         return false;
     }
 
-    public void RecalculateAllCells(int visitedSectors, int step)
+    public void RecalculateAllCells(int step)
     {
 
         for (int i = 0; i < Size; i++)
@@ -250,7 +254,7 @@ public class SectorData
                 var cell = Cells[i, j];
                 if (cell.Data != null)
                 {
-                    cell.Data.UpdatePowers(visitedSectors, StartPowerGalaxy, (int)(_powerPerTurn * step));
+                    cell.Data.UpdateAdditionalPower((int)(_powerPerTurn * step));
                 }
             }
         }
@@ -386,22 +390,22 @@ public class SectorData
         _isVisited = true;
     }
 
-    public virtual void MarkAsCore(int coreId, CoreGlobalMapCell coreCell)
-    {
-        IsCore = true;
-        Debug.Log($"Sector marked as core:{Id}  coreId:{coreId}");
-        for (int i = 0; i < Size; i++)
-        {
-            for (int j = 0; j < Size; j++)
-            {
-                var cell = Cells[i, j];
-                if (!cell.IsFreeToPopulate() && !(cell is GlobalMapNothing))
-                {
-                    cell.SetConnectedCell(coreId);
-                }
-            }
-        }
-    }
+//    public virtual void MarkAsCore(int coreId, CoreGlobalMapCell coreCell)
+//    {
+//        IsCore = true;
+//        Debug.Log($"Sector marked as core:{Id}  coreId:{coreId}");
+//        for (int i = 0; i < Size; i++)
+//        {
+//            for (int j = 0; j < Size; j++)
+//            {
+//                var cell = Cells[i, j];
+//                if (!cell.IsFreeToPopulate() && !(cell is GlobalMapNothing))
+//                {
+//                    cell.SetConnectedCell(coreId);
+//                }
+//            }
+//        }
+//    }
 
     public void ApplyPointsTo(CellsInGalaxy cellInGalaxy)
     {
@@ -528,7 +532,7 @@ public class SectorData
     {
         foreach (var cell in ListCells)
         {
-            var born = cell.Data as ArmyBornGlobalMapCell;
+            var born = cell.Data as FreeActionGlobalMapCell;
             if (born != null)
             {
                 born.BornArmy();

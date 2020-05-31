@@ -11,7 +11,7 @@ public class AdvTutorialGalaxyData : GalaxyData
     {
 
     }
-    protected override StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, int coreCells,
+    protected override StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower,
         ShipConfig playerShipConfig, int verticalCount, GalaxyEnemiesArmyController enemiesArmyController)
     {
         _verticalCount = 1;

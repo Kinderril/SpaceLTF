@@ -11,10 +11,10 @@ public class KillsByTypeQuestOnStart : BaseQuestOnStart
         _type = type;
     }
 
-    public override void Init()
-    {
-        GlobalEventDispatcher.OnShipDeath += OnShipDeath;
-    }
+//    public override void Init()
+//    {
+//        GlobalEventDispatcher.OnShipDeath += OnShipDeath;
+//    }
 
     private void OnShipDeath(ShipBase target, ShipBase killer)
     {
@@ -24,7 +24,13 @@ public class KillsByTypeQuestOnStart : BaseQuestOnStart
         }
     }
 
-    public override void Dispose()
+    protected override bool StageActivate(Player player)
+    {
+        GlobalEventDispatcher.OnShipDeath += OnShipDeath;
+        return true;
+    }
+
+    protected override void StageDispose()
     {
         GlobalEventDispatcher.OnShipDeath -= OnShipDeath;
     }

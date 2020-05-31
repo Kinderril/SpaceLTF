@@ -48,12 +48,23 @@ public class SliderWithTextMeshPro : MonoBehaviour
         _changeCallback = changeCallback;
     }
 
-    public void InitBorders(float min, float max, bool onlyInts)
+    public void InitBorders(float min, float max, bool onlyInts,bool setMidVal = true)
     {
         Slider.minValue = min;
         Slider.maxValue = max;
-        SetValue(min + (max - min) / 2f);
         Slider.wholeNumbers = onlyInts;
+        if (setMidVal)
+        {
+            var val = min + (max - min) / 2f;
+            if (onlyInts)
+            {
+                SetValue((int)val);
+            }
+            else
+            {
+                SetValue(val);
+            }
+        }
     }
 
     public float GetValue()
@@ -74,7 +85,10 @@ public class SliderWithTextMeshPro : MonoBehaviour
 
     protected virtual void UpdateFiled()
     {
-        Field.text = ((int)Slider.value).ToString("0");
+
+        Field.text = Slider.wholeNumbers?
+            ((int)Slider.value).ToString("0"):
+            (Slider.value).ToString("0.0");
         if (_changeCallback != null)
         {
             _changeCallback();

@@ -145,7 +145,7 @@ public class PlayerAfterBattleOptions
                 return new AnswerDialogData($"{Namings.DialogTag("afterBattleRepairAction")} {strChance1}", IncCallback,
                     () => RepairAction(power, config));
             case EAfterBattleAnswers.afterBattleMicrochip:
-                var chance2 = GetPercent(1, MainController.Instance.MainPlayer.Parameters.Repair.Level);
+                var chance2 = GetPercent(BASE_VAL_MICROCHIP, MainController.Instance.MainPlayer.Parameters.Repair.Level);
                 var strChance2 = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance2.ToString("0"));
                 return new AnswerDialogData($"{Namings.DialogTag("afterBattleMicrochip")} {strChance2}", IncCallback,
                     () => GetMicrochip(power, config));
@@ -153,6 +153,8 @@ public class PlayerAfterBattleOptions
                 return null;
         }
     }
+
+    private const float BASE_VAL_MICROCHIP = 2;
 
     protected bool SkillWork(int baseVal, int skillVal)
     {
@@ -271,7 +273,7 @@ public class PlayerAfterBattleOptions
     {
         var ws = new WDictionary<bool>(new Dictionary<bool, float>
         {
-            {true, MainController.Instance.MainPlayer.Parameters.Repair.Level}, {false, 1}
+            {true, MainController.Instance.MainPlayer.Parameters.Repair.Level}, {false,BASE_VAL_MICROCHIP}
         });
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));

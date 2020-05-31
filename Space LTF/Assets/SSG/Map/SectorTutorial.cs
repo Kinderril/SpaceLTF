@@ -30,7 +30,7 @@ public class SectorTutorial : SectorData
         IsPopulated = true;
         Name = Namings.ShipConfig(_shipConfig);
         StartPowerGalaxy = startPowerGalaxy;
-        _power = CalcCellPower(0, Size, startPowerGalaxy, 0);
+        _power = startPowerGalaxy;// CalcCellPower(0, Size, startPowerGalaxy, 0);
         // RandomizeBorders();
         PopulateToSide();
     }

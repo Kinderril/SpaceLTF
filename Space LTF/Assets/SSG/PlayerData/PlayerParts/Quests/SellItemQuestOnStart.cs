@@ -14,9 +14,10 @@ public class SellItemQuestOnStart : BaseQuestOnStart
         _type = type;
     }
 
-    public override void Init()
+    protected override bool StageActivate(Player player)
     {
         GlobalEventDispatcher.OnSellModul += OnSellModul;
+        return true;
     }
 
     private void OnSellModul(ActionModulInGame obj)
@@ -29,7 +30,7 @@ public class SellItemQuestOnStart : BaseQuestOnStart
     }
 
 
-    public override void Dispose()
+    protected override void StageDispose()
     {
         GlobalEventDispatcher.OnSellModul -= OnSellModul;
     }

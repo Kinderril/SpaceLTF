@@ -722,8 +722,8 @@ public static class Library
     public const float MAX_GLOBAL_SECTOR_SIZE = 5;
     public const float MIN_GLOBAL_MAP_DEATHSTART = 1;
     public const float MAX_GLOBAL_MAP_DEATHSTART = 10;
-    public const float MIN_GLOBAL_MAP_CORES = 2;
-    public const float MAX_GLOBAL_MAP_CORES = 5;
+    public const float MIN_GLOBAL_MAP_QUESTS = 1;
+    public const float MAX_GLOBAL_MAP_QUESTS = 4;
     public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 1;
     public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 10;
 
@@ -822,18 +822,18 @@ public static class Library
             case ItemType.cocpit:
                 switch (middle)
                 {
-                    case EParameterItemSubType.light:
+                    case EParameterItemSubType.Light:
                         //                        data.Add(EParameterShip.bodyPoints,10); 
                         data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(18f));
                         data.Add(EParameterShip.speed, MyExtensions.MinorRandom(1.0f));
                         break;
-                    case EParameterItemSubType.middle:
+                    case EParameterItemSubType.Middle:
                         //                        data.Add(EParameterShip.bodyPoints, 5);  
                         data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(12f));
                         data.Add(EParameterShip.speed, MyExtensions.MinorRandom(-0.7f));
                         data.Add(EParameterShip.modulsSlots, 1);
                         break;
-                    case EParameterItemSubType.heavy:
+                    case EParameterItemSubType.Heavy:
 //                        data.Add(EParameterShip.bodyPoints, -18);
                         data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(-10f));
                         data.Add(EParameterShip.speed, MyExtensions.MinorRandom(-1.0f));
@@ -844,15 +844,15 @@ public static class Library
             case ItemType.engine:
                 switch (middle)
                 {
-                    case EParameterItemSubType.light:
+                    case EParameterItemSubType.Light:
                         data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(-5f));
                         data.Add(EParameterShip.speed, MyExtensions.MinorRandom(2.0f));
                         break;
-                    case EParameterItemSubType.middle:
+                    case EParameterItemSubType.Middle:
                         data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(5f));
                         data.Add(EParameterShip.speed, MyExtensions.MinorRandom(1.5f));
                         break;
-                    case EParameterItemSubType.heavy:
+                    case EParameterItemSubType.Heavy:
                         data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(15f));
                         data.Add(EParameterShip.speed, 1f);
                         break;
@@ -861,16 +861,16 @@ public static class Library
             case ItemType.wings:
                 switch (middle)
                 {
-                    case EParameterItemSubType.light:
+                    case EParameterItemSubType.Light:
                         data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(-5f));
                         data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(40f));
                         break;
-                    case EParameterItemSubType.middle:
+                    case EParameterItemSubType.Middle:
 //                        data.Add(EParameterShip.bodyPoints, 0);
                         data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(30f));
                         data.Add(EParameterShip.bodyArmor, 1);
                         break;
-                    case EParameterItemSubType.heavy:
+                    case EParameterItemSubType.Heavy:
                         data.Add(EParameterShip.bodyPoints, (int)MyExtensions.MinorRandom(5f));
                         data.Add(EParameterShip.turn, (int)MyExtensions.MinorRandom(20f));
                         data.Add(EParameterShip.bodyArmor, 2);
@@ -942,7 +942,7 @@ public static class Library
         var item = new ParameterItem(type.Value, rarity, middle, data);
         return item;
     }
-    public static  List<EParameterItemSubType> ParameterItemTypes = new List<EParameterItemSubType>() { EParameterItemSubType.heavy, EParameterItemSubType.light, EParameterItemSubType.middle };
+    public static  List<EParameterItemSubType> ParameterItemTypes = new List<EParameterItemSubType>() { EParameterItemSubType.Heavy, EParameterItemSubType.Light, EParameterItemSubType.Middle };
 
 
     public static WDictionary<EParameterItemRarity> GetParitiesCacheShop = new WDictionary<EParameterItemRarity>( 

@@ -22,7 +22,7 @@ public class ArrowTarget : MonoBehaviour
     private ShipBase _shipBase;
     private bool isInited = false;
     private float _randomizedControls;
-    private float _randomizedControls2;
+    private float _randomizedControls2;                                
 
     void Awake()
     {

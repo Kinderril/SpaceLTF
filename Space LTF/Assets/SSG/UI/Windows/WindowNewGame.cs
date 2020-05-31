@@ -33,13 +33,13 @@ public class WindowNewGame : BaseWindow
         // StartDeathTime.InitName(Namings.StartNewGameStartDeathTime);
         CoresCount.InitName(Namings.Tag("StartNewGameCoresCount"));
         AdditionalPower.InitName(Namings.Tag("AdditionalPower"));
-        //        BasePower.InitName(Namings.StartNewGameBasePower);
+        //        Difficulty.InitName(Namings.StartNewGameBasePower);
         SectorsCount.InitName(Namings.Tag("StartNewGameSectorsCount"));
         SectorSize.InitBorders(Library.MIN_GLOBAL_SECTOR_SIZE, Library.MAX_GLOBAL_SECTOR_SIZE, true);
         // StartDeathTime.InitBorders(Library.MIN_GLOBAL_MAP_DEATHSTART, Library.MAX_GLOBAL_MAP_DEATHSTART, true);
         AdditionalPower.InitBorders(Library.MIN_GLOBAL_MAP_ADDITIONAL_POWER, Library.MAX_GLOBAL_MAP_ADDITIONAL_POWER, true);
-        CoresCount.InitBorders(Library.MIN_GLOBAL_MAP_CORES, Library.MAX_GLOBAL_MAP_CORES, true);
-        //        BasePower.InitBorders(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER, true);
+        CoresCount.InitBorders(Library.MIN_GLOBAL_MAP_QUESTS, Library.MAX_GLOBAL_MAP_QUESTS, true);
+        //        Difficulty.InitBorders(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER, true);
         SectorsCount.InitBorders(Library.MIN_GLOBAL_MAP_SECTOR_COUNT, Library.MAX_GLOBAL_MAP_SECTOR_COUNT, true);
         SectorSize.InitCallback(OnFieldChange);
         // StartDeathTime.InitCallback(OnFieldChange);
@@ -154,8 +154,8 @@ public class WindowNewGame : BaseWindow
         SectorSize.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_SECTOR_SIZE, Library.MAX_GLOBAL_SECTOR_SIZE));
         // StartDeathTime.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_DEATHSTART, Library.MAX_GLOBAL_MAP_DEATHSTART));
         AdditionalPower.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_ADDITIONAL_POWER, Library.MAX_GLOBAL_MAP_ADDITIONAL_POWER));
-        CoresCount.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_CORES, Library.MAX_GLOBAL_MAP_CORES));
-        //        BasePower.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER));
+        CoresCount.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_QUESTS, Library.MAX_GLOBAL_MAP_QUESTS));
+        //        Difficulty.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_BASE_POWER, Library.MAX_GLOBAL_MAP_BASE_POWER));
         SectorsCount.SetValue(MyExtensions.Random(Library.MIN_GLOBAL_MAP_SECTOR_COUNT, Library.MAX_GLOBAL_MAP_SECTOR_COUNT));
 
     }

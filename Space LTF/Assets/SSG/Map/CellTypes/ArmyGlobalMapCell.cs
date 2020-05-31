@@ -9,13 +9,17 @@ public abstract class ArmyGlobalMapCell : GlobalMapCell
 {
     protected Player _enemyPlayer;
 
-    protected int _power;
-    public virtual int Power {
-        get { return _power; }
-        set { _power = value; }
+    protected int _startPower;
+//    protected int _power;
+    public virtual int Power
+    {
+        get;
+        private set;
     }
 
-    protected int _additionalPower;
+    protected float _additionalPower = 0f;
+    protected float _collectedPower = 0f;
+    protected float _powerCoef = 1.001f;
 
 
     [field: NonSerialized]
@@ -52,18 +56,28 @@ public abstract class ArmyGlobalMapCell : GlobalMapCell
         SectorData sector)
         : base(id, Xind, Zind, sector, config)
     {
-        // _armyType = type;
-        Power = power;
-        
+        _startPower = power;
+        SubUpdatePower();
+
+
     }
 
-    public override void UpdatePowers(int visitedSectors, int startPower, int additionalPower)
+    public override void UpdateAdditionalPower(int additionalPower)
     {
         _additionalPower = additionalPower;
-        var nextPower = SectorData.CalcCellPower(visitedSectors, _sector.Size, startPower, _additionalPower);
         _enemyPlayer = null;
-        // Debug.Log($"Army power sector updated prev:{_power}. next:{nextPower}");
-        Power = nextPower;
+        SubUpdatePower();
+    }
+
+    protected void SubUpdatePower()
+    {
+        Power = (int)((_startPower + _collectedPower + _additionalPower) * _powerCoef);
+    }
+
+    public override void UpdateCollectedPower(float powerDelta)
+    {
+        _collectedPower += powerDelta;
+        SubUpdatePower();
     }
 
     public override Color Color()
@@ -117,6 +131,6 @@ public abstract class ArmyGlobalMapCell : GlobalMapCell
 
     public string PowerDesc()
     {
-        return PlayerArmy.PowerDesc(_sector, Power, _additionalPower);
+        return PlayerArmy.PowerDesc(_sector, Power);
     }
 }

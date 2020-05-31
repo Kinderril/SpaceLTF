@@ -13,9 +13,10 @@ public class UpgradeItemQuestOnStart : BaseQuestOnStart
         _type = type;
     }
 
-    public override void Init()
+    protected override bool StageActivate(Player player)
     {
         GlobalEventDispatcher.OnUpgradeWeapon += OnUpgradeWeapon;
+        return true;
     }
 
     private void OnUpgradeWeapon(WeaponInv obj)
@@ -24,7 +25,7 @@ public class UpgradeItemQuestOnStart : BaseQuestOnStart
     }
 
 
-    public override void Dispose()
+    protected override void StageDispose()
     {
         GlobalEventDispatcher.OnUpgradeWeapon -= OnUpgradeWeapon;
     }

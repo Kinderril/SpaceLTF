@@ -5,6 +5,7 @@ using System.Collections;
 public class ThrowVortex : ObjectElementBattleEvent
 {
     public SideTurn Side;
+    private float _initTime;
 
 
     protected override void Init()
@@ -14,6 +15,7 @@ public class ThrowVortex : ObjectElementBattleEvent
         _applyAsteroid = true;
         _applyBullet = true;
         _applyPart = true;
+        _initTime = Time.time;
     }
 
     protected override void ExitEvent(ShipHitCatcher ship)
@@ -67,6 +69,11 @@ public class ThrowVortex : ObjectElementBattleEvent
 
     protected override void EnterEvent(ShipHitCatcher ship)
     {
+        var delta = Time.time - _initTime;
+        if (delta < 2f)
+        {
+            return;
+        }
         var dir = GetSideToPush(ship.ShipBase.Position);
         ship.ShipBase.ExternalForce.Init(15,1.2f,dir);
     }

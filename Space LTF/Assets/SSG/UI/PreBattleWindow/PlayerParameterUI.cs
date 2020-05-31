@@ -33,7 +33,13 @@ public class PlayerParameterUI : MonoBehaviour
         switch (_parameter.ParameterType)
         {
             case PlayerParameterType.scout:
-                data = Namings.Format(Namings.Tag("ParameterTypeScouts"));
+                var lvl = Namings.Tag("Level");
+                var p0 = Namings.Format(Namings.Tag("ParameterTypeScouts"));
+                var p1 = Namings.Format(Namings.Tag("ParameterTypeScouts1"));
+                var p2 = Namings.Format(Namings.Tag("ParameterTypeScouts2"));
+                var p3 = Namings.Format(Namings.Tag("ParameterTypeScouts3"));
+                var p4 = Namings.Format(Namings.Tag("ParameterTypeScouts4"));
+                data = $"{p0}\n{lvl} 1: {p1}\n{lvl} 2: {p2}\n{lvl} 3: {p3}\n{lvl} 4: {p4}";      
                 break;
             case PlayerParameterType.repair:
                 var percent =  (1 + _parameter.Level) * Library.REPAIR_PERCENT_PERSTEP_PERLEVEL;

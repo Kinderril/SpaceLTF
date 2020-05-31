@@ -11,13 +11,15 @@ public class StandartMovingArmy : MovingArmy
         ,float startPower,GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn) 
         : base(startCell, destroyCallback, enemiesArmyController)
     {
-        Power = startPower;
         _powerPerTurn = powerPerTurn;
         _startPower = startPower;
+        SubUpdatePower();
         //        var humanPlayer = MainController.Instance.MainPlayer;
         //        var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
         CurCell = startCell;
-                _player = new PlayerAIWithBattleEvent($"{ Namings.Tag("SimpleMovingArmy")}:{MyExtensions.Random(3, 9999)}");
+        var posibleBattleEvent = !startCell.Sector.IsStart;
+        var name = $"{Namings.Tag("SimpleMovingArmy")}:{MyExtensions.Random(3, 9999)}";
+        _player = new PlayerAIWithBattleEvent(name, posibleBattleEvent);
 //        var armyPower = humanPower * Library.MOVING_ARMY_POWER_COEF;
 //        var armyData = ArmyCreatorLibrary.GetArmy(startCell.ConfigOwner);
 //        var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, armyData, _player);
@@ -80,10 +82,19 @@ public class StandartMovingArmy : MovingArmy
         var rnd = waysToRandom.RandomElement();
         return rnd;
     }
-    public override void UpdateAllPowers(int visitedSectors, int step, int sectorSize)
+    public override void UpdateAllPowersAdditional( float additionalPower)
     {
-        var _additionalPower = (int)(_powerPerTurn * step);
-        var nextPower = SectorData.CalcCellPower(visitedSectors, sectorSize, (int)_startPower, _additionalPower);
+        _additionalPower = additionalPower;
+        SubUpdatePower();
+    }
+    public override void UpdateAllPowersCollected(float collectedPower)
+    {
+        _collectedPower += collectedPower;
+        SubUpdatePower();
+    }
+
+    private void SubUpdatePower()
+    {
         var battleTypePowerCoef = 1f;
         var playerAi = _player as IPlayerAIWithBattleEvent;
         if (playerAi != null)
@@ -97,13 +108,14 @@ public class StandartMovingArmy : MovingArmy
                     battleTypePowerCoef = 1.1f;
                     break;
                 case EBattleType.baseDefence:
-                    battleTypePowerCoef = 1.4f;
+                    battleTypePowerCoef = 1f  + DefenceBaseEvent.POWER_ICN;
                     break;
             }
         }
-        
-        Power = nextPower * battleTypePowerCoef;
+        Power =  (_startPower + _collectedPower + _additionalPower) * battleTypePowerCoef;
     }
+
+
     public override Player GetArmyToFight()
     {
         if (_player.Army.Army.Count == 0)

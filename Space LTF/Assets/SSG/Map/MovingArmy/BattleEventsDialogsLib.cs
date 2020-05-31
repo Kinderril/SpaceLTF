@@ -31,7 +31,7 @@ public class BattleEventsDialogsLib
 //                    string d = "";
                     int slot;
                     var list = new List<EParameterItemSubType>()
-                        {EParameterItemSubType.middle, EParameterItemSubType.heavy, EParameterItemSubType.light};
+                        {EParameterItemSubType.Middle, EParameterItemSubType.Heavy, EParameterItemSubType.Light};
                     var m = Library.CreateParameterItem(list.RandomElement(), EParameterItemRarity.normal);
                     var itemName = m.GetName();
                     var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out slot);

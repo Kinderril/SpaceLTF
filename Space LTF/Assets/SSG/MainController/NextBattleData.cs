@@ -42,6 +42,8 @@ public class NextBattleData
             Statistics.EndBattle(winStatus);
             MainPlayer.MessagesToConsole.AddMsg("Battle won!");
         }
+
+
     }
 
     public void EndGameLose()

@@ -5,13 +5,15 @@ public static class EngLocalization
 {
     public static Dictionary<string, string> _locals = new Dictionary<string, string>()
     {
-        {"StartInfo", "You are in the remote sector of the galaxy on the very edge of inhabited space.\n" +
-                  "As a result of special operations, you had to steal the command ship and the energy\n" +
-                  " element on it. Now you have to find the rest of the elements to open the galaxy gates," +
-                  "\n and deliver the data to your command"},
+//        {"StartInfo", "You are in the remote sector of the galaxy on the very edge of inhabited space.\n" +
+//                  "As a result of special operations, you had to steal the command ship and the energy\n" +
+//                  " element on it. Now you have to find the rest of the elements to open the galaxy gates," +
+//                  "\n and deliver the data to your command"},
+        { "StartInfo", "Commander ask you to complete some tasks. Check your quest list."},
         {"Yes", "Yes"},
         {"No", "No"},
         {"Ok", "Ok"},
+        {"NotReady", "Not ready. Work in progress."},
         {"Reflected", "Effect reflected"},
         {"CriticalDamage", "Critical damages. If damages more than {0} ship destroyed"},
         {"Event", "Event"},
@@ -25,6 +27,8 @@ public static class EngLocalization
         {"RoundWaveStrike", "Damage all ships near by [{2}/{3}].\n[Cost:{0}/{1}]"},
         {"And", "and"},
         {"Shop", "Shop"},
+        {"SandBox", "Sandbox"},
+        {"Endless", "Explorer"},
         {"BaseCenter", "Headquarters"},
         {"BaseEnter", "Military base"},
         {"SectorDungeon", "Military base"},
@@ -118,6 +122,7 @@ public static class EngLocalization
         {"chargesCount", "Charges Count"},
         {"chargesSpeed", "Charges Speed"},
         {"engineParameter", "Engine"},
+        {"Protect", "Protect"},
 
         {"Preparing", "Preparing"},
         {"Return", "Return"},
@@ -153,6 +158,7 @@ public static class EngLocalization
         {"Lose", "Lose"},
         {"RunAwayComplete","Run away complete" },
         {"Type", "Type"},
+        {"Count", "Count"},
 
         {"Regen", "Regeneration"},
         {"DamageBody", "Damage hull"},
@@ -165,6 +171,7 @@ public static class EngLocalization
         {"Gate", "Gate"},
         {"Home", "Home"},
         {"Complete", "Complete {0}"},
+        {"CompleteNodata", "Complete"},
         {"Target", "Target {0}"},
         {"Delay", "Delay"},
 
@@ -301,9 +308,10 @@ public static class EngLocalization
         {"Destroyed", "Destroyed" },
         {"Completed", "Completed"},
         {"StartNewGameFieldSize", "Sector size"},
-        {"StartNewGameCoresCount","Energy elements" },
+        {"StartNewGameCoresCount","Quests" },
         {"StartNewGameSectorsCount", "Sectors count"},
 
+        {"New quest", "New quest"},
         {"All to me", "To fleet"},
         {"Equal", "Equal"},
         {"All to ship", "To battleships"},
@@ -400,7 +408,20 @@ public static class EngLocalization
 
         {"asteroidsEvent", "Asteroid vortex"},
         {"shieldsOffEvent", "EMP surge"},
-        {"loaderror", "Load error"},
+        {"loaderror", "Load error. Restart application."},
+        {"questNameSearchFleetMerc", "Find 2 parts of coordinates of target fleet"},
+        {"questSearachFleetMerc", "One part of coordinates found"},
+        {"questNameKillMerc", "Destroy the fleet"},
+        {"fedQuest1Name", "Clear sector"},
+        {"ReadyToComplete", "Click to finish"},
+        {"questNameSectorClearFedMerc", "Destroy all fleets at sector"},
+        {"questFedClearSectorFinal", "Sector clear! Good job."},
+        {"questReadyToDeliver", "Items ready to deploy?"},
+        {"deliverItems", "Deliver items"},
+        {"haveNotEnought", "Not enought items"},
+        {"questDeliverReadyToDeliver", "Deliver items"},
+        {"questDeliverFinal", "All item delivered. Out fleet ready now. Choose your reward"},
+        {"questStartDeliverDialog", "Deliver items to our fleets"},
 
         {"ShipsRepaired", "Ships Repaired"},
         {"Raiders", "Raiders"},
@@ -587,10 +608,20 @@ public static class EngLocalization
         {"rep_neutral", "Neutral"},
         {"rep_negative", "Negative"},
         {"rep_enemy", "Enemy"},
-        {"DemoStart", "Early Access\nThis is not final version of game\nContact: Kinderril@gmail.com"},
-        {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
+        {"DemoStart", "Early Access\nThis is not final version of game\nAny ideas or advices\nContact: Kinderril@gmail.com"},
+        {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked"},
+        {"questStartDeliverFindCoordinator", "Find coordinator to get places to deliver items"},
+        {"questProtectFortressFind", "Find coordinates of place you need to protect"},
+        {"questReadyStartProtect", "This is coordinates of place"},
+        {"questprotectFortressDialogStart", "This is place you need to protect"},
+        {"questNameProtectStage", "Protect place"},
+        {"questProtectNameBig", "Protector"},
+        {"questProtectFinalText", "Fortress protected. Choose your reward"},
 
+        {"Statistics", "Statistics"},
+        {"Nothing", "Nothing"},
         {"dialog_Ok", "Ok"},
+        {"Locked", "Locked"},
         {"dialog_MovingArmyStart", "You have been occupied by special force. You have no chance to run."},
 
         {"dialog_MovingArmyFight", "Fight"},
@@ -794,9 +825,10 @@ public static class EngLocalization
         {"dialog_secretAppearSecond","While trading, appears another fleet."},
         {"dialog_secretFindGoods","After massive battle you find some goods. [Credits:{0}]"},
         {"dialog_secretProvoceFail","Your provocation failed. Now fight."},
+        {"questFinalStageName","Defeat enemies fleet"},
 
-        {"dialog_finalStartReady","This is your main goal. You have {0}/{1} parts to open gates.\n You are ready to go in."},
-        {"dialog_finalStartNotReady","This is your main goal. You have {0}/{1} parts to open gates.\nNow you should acquire all others.\n Only one way to do it send one of your ships to block energy on gates. \n But you don't have enought ship \n Your are dead."},
+        {"dialog_finalStartReady","This is your main goal. You are ready to go in."},
+        {"dialog_finalStartNotReady","Here nothing for now."},
         {"dialog_finalProcess","This is your main goal. You have {0}/{1} parts to open gates.\n Now you should acquire all others.\n Only one way to do it send one of your ships to block energy on gates. "},
         {"dialog_finalStartFight","But somebody don't want let you go and attacks you"},
         {"dialog_finalEnd","Now way is free and you can go whatever you want."},
@@ -928,6 +960,8 @@ public static class EngLocalization
         {"CantDropNow", "You can't sell items now."},
         {"startGameNoTutor", "Pass TUTORIAL first."},
         {"toGame", "Play"},
+        {"TeachPilot", "Teach: {0} {1}"},
+        {"CamMoveSens", "Camera speed"},
         {"toTutor", "Return"},
         {"Cancel", "Cancel"},
         {"cantRemoveCauseSlots", "Can't remove. Remove modules first"},
@@ -939,19 +973,38 @@ public static class EngLocalization
         {"resolutionTooLow", "Screen resolution is too low. Maybe you will have some problems. Minimum is 1280 and 720"},
         {"Move camera", "Move camera"},
         {"Commander Guns", "Commander Guns"},
+        {"deliverQuestName", "Deliver"},
 
         {"ParameterTypeScouts", "Amount of information you get before battle. Using at some dialogs"},
+        {"ParameterTypeScouts1", "Minor information before battle"},
+        {"ParameterTypeScouts2", "Ways of fleets at global map"},
+        {"ParameterTypeScouts3", "Events at sectors"},
+        {"ParameterTypeScouts4", "Open info at all near points"},
+
+
         {"ParameterTypeRepair", "Each turn repair battle ships hull points on {0} percent."},
         {"ParameterTypeChanrgeCount", "Count of batteries you can use at battle {0}"},
         {"ParameterTypeChanrgeSpeed", "Decrease reload batteries period on {0}%"},
         {"ParameterTypeEngine", "Radius of teleportation {0}. Reload period {1}"},
 
+        {"Failed", "Failed"},
         {"cocpit", "Cockpit"},
         {"engine", "Engine"},
         {"wings", "Wings"},
+        {"Chance", "Chance"},
         {"EParameterItemRaritynormal", "Normal"},
         {"EParameterItemRarityimproved", "Improved"},
         {"EParameterItemRarityperfect", "Special"},
+        {"AttackWithFail", "Attack. Success chance {0}"},
+        {"questKidnappingBuyout", "Buyout"},
+        {"questKidnappingScoutsFine", "Scouts release him"},
+        {"questKidnappingScoutsFail", "Scouts fail"},
+        {"questKidnappingStageName", "Kidnapping"},
+        {"questKidnappingFinalName", "Kidnapping"},
+        {"questKidnappingFinaldialog", "Our man returned! Good job."},
+        {"questKidnappingScouts", "Use scouts to release him."},
+        {"questKidnappingArmyKilled", "Fleet destroyed. Release him."},
+        {"questKidnappingDialogStart", "They kidnapped our man. You need to return him. They asked money {1} or you need to kill any fleet of {0}"},
 
 
         {"EParameterShipspeed", "Speed"},
@@ -963,6 +1016,7 @@ public static class EngLocalization
         {"EParameterShipmodulsSlots", "Modules slots"},
         {"EParameterShipweaponSlots", "Weapon slots"},
         {"BonusParamField", "Bonus {0}%"},
+        {"questSearachFleetMercFinal", "You have successfully destroyed the target. Commander thanks you. Choose a reward."},
 
 
 
@@ -995,6 +1049,9 @@ public static class EngLocalization
         {"BlackHoleEvent", "Black holes"},
         {"IceZoneEvent", "Frozen"},
         {"nextWave", "Next Wave"},
+        {"mercQuest1Name", "Search and destroy"},
+        {"Quests", "Quests"},
+        {"standartStatQuestComplete", "Base quest complete. Choose a reward"},
 
         {"AdvTutorialOpenInv", "To open inventory click this button"},
         {"AdvTutorialUpgradeParameters", "Upgrade some main ship parameters to be more useful at battle or after it"},

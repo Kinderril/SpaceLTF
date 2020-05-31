@@ -64,26 +64,11 @@ public class PlayerArmy
         RemoveShip(shipTo);
     }
 
-    public static string PowerDesc(SectorData cellSector, float armyPower, int additionalPower)
+    public static string PowerDesc(SectorData cellSector, float armyPower)
     {
         var player = MainController.Instance.MainPlayer;
         var playersPower = ArmyCreator.CalcArmyPower(player.Army);
-
-        var isSameSecto = cellSector.Id == player.MapData.CurrentCell.SectorId;
-        float powerToCompare;
-        if (isSameSecto)
-        {
-            powerToCompare = armyPower;
-            //            Debug.LogError($"power2  :{powerToCompare} ");
-        }
-        else
-        {
-            powerToCompare = SectorData.CalcCellPower(player.MapData.VisitedSectors + 1, cellSector.Size,
-                cellSector.StartPowerGalaxy, additionalPower);
-            //            Debug.LogError($"power1  :{powerToCompare}");
-        }
-
-        return ComparePowers(playersPower, powerToCompare);
+        return ComparePowers(playersPower, armyPower);
     }
 
     public static string ComparePowers(float playersPower, float powerToCompare)

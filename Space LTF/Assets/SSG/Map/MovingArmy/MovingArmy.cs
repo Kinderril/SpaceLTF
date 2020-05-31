@@ -9,7 +9,12 @@ public abstract class MovingArmy
     public GlobalMapCell CurCell;
     protected Player _player;
     private Action<MovingArmy> _destroyCallback;
+
+//    [field: NonSerialized]
+//    public event Action<MovingArmy> OnDestroyed;
     protected bool _noStepNext;
+    protected float _collectedPower = 0f;
+    protected float _additionalPower = 0f;
 
     // private List<IItemInv> _getRewardsItems;
     // private bool _rewardsComplete = false;
@@ -20,6 +25,7 @@ public abstract class MovingArmy
     public GlobalMapCell PrevCell { get; set; }
     protected float _startPower;
     public ShipConfig StartConfig { get; private set; }
+//    public int LifeTime { get; private set; } = 0;
 
     private GalaxyEnemiesArmyController _armiesController;
 
@@ -38,9 +44,7 @@ public abstract class MovingArmy
         startCell.CurMovingArmy = this;
 //        Power = power;
         BattleController.Instance.OnBattleEndCallback += OnBattleEndCallback;
-     
     }
-
 
     public void GetRewardsItems()
     {
@@ -107,21 +111,30 @@ public abstract class MovingArmy
         return txt;
     }
 
-    public void UpdatePower(float power)
-    {
-        Power = power;
-//        Debug.Log($"power updated to:{Power}");
-    }
+//    public void SetPower(float power)
+//    {
+//        Power = power;
+////        Debug.Log($"power updated to:{Power}");
+//    }
 
+
+//    public void DoMove()
+//    {
+//        LifeTime++;
+//    }
     public abstract Player GetArmyToFight();
 
     public abstract MessageDialogData GetDialog(Action FightMovingArmy);
 
     public abstract MessageDialogData MoverArmyLeaverEnd();
 
-    public virtual void UpdateAllPowers(int visitedSectors, int step,int sectorSize)
+    public virtual void UpdateAllPowersAdditional(float additionalPower)
     {
-
+                
+    }
+    public virtual void UpdateAllPowersCollected(float collectedPower)
+    {
+                
     }
 }
 

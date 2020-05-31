@@ -11,9 +11,10 @@ public class KillsWeaponQuestOnStart : BaseQuestOnStart
         _type = type;
     }
 
-    public override void Init()
+    protected override bool StageActivate(Player player)
     {
         GlobalEventDispatcher.OnShipDamage += OnShipDamage;
+        return true;
     }
 
     private void OnShipDamage(ShipBase arg1, float shield, float body, WeaponType weaponType)
@@ -28,7 +29,7 @@ public class KillsWeaponQuestOnStart : BaseQuestOnStart
     }
 
 
-    public override void Dispose()
+    protected override void StageDispose()
     {
         GlobalEventDispatcher.OnShipDamage -= OnShipDamage;
     }

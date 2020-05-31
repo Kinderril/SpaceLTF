@@ -137,8 +137,8 @@ public abstract class BaseGlobalMapEvent
         {
             new     AnswerDialogData(Namings.Tag("Ok"))
         };
-        int money = MyExtensions.Random(min, max);
-        MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
+        int money = (int)(MyExtensions.Random(min, max) * Library.MONEY_QUEST_COEF);
+        MainController.Instance.MainPlayer.MoneyData.AddMoney(money) ;
         var mesData = new MessageDialogData($"Credits add {money}.", ans);
         return mesData;
     }

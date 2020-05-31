@@ -19,6 +19,10 @@ public struct ResolutionData
 
 public class CamerasController : Singleton<CamerasController>
 {
+    public const float MIN_CAM_MOVE_SENS = 0.1f;
+    public const float MAX_CAM_MOVE_SENS = 3f;
+
+    private const string SENS_MOUSE = "SENS_MOUSE";
     private const string KEY_FXAA = "KEY_FXAA";
     private const string KEY_SOUND = "SoundKey";
     private const string KEY_NO_MOUSE_MOVE = "KEY_NO_MOUSE_MOVE";
@@ -49,8 +53,10 @@ public class CamerasController : Singleton<CamerasController>
     public bool IsNoMouseMove => _noMouseMove;
     public bool IsAudioEnable => _isAudioEnabled;
     private bool _fxaaEnable;
+    private float _mouseSens =1f;
     public int CurIndexResolution { get; private set; }
     public bool FxaaEnable => _fxaaEnable;
+    public float MouseSensivity => _mouseSens;
 
     void Awake()
     {
@@ -68,6 +74,18 @@ public class CamerasController : Singleton<CamerasController>
     //     _noMouseMove = !_noMouseMove;
     //     PlayerPrefs.SetInt(KEY_NO_MOUSE_MOVE, _noMouseMove ? 1 : 0);
     // }
+
+    public void CheckSoundSensStart()
+    {
+        var key = PlayerPrefs.GetFloat(SENS_MOUSE, 1f);
+        _mouseSens = Mathf.Clamp(key, MIN_CAM_MOVE_SENS, MAX_CAM_MOVE_SENS);
+    }
+
+    public void SetSens(float sens)
+    {
+        _mouseSens = Mathf.Clamp(sens, MIN_CAM_MOVE_SENS, MAX_CAM_MOVE_SENS);
+        PlayerPrefs.SetFloat(SENS_MOUSE, _mouseSens);
+    }
 
     public void CheckSoundOnStart()
     {
@@ -132,7 +150,7 @@ public class CamerasController : Singleton<CamerasController>
             {
                 y = -1;
             }
-            keybordDir = new Vector3(y, 0, x);
+            keybordDir = new Vector3(y, 0, x) * _mouseSens;
             _activeCamera.MoveMainCamToDir(keybordDir);
         }
     }
@@ -197,7 +215,7 @@ public class CamerasController : Singleton<CamerasController>
         }
         if (shallMove)
         {
-            keybordDir = new Vector3(y, 0, x);
+            keybordDir = new Vector3(y, 0, x) * _mouseSens;
             if (_activeCamera != null)
             {
                 if (_noMouseMove)
@@ -321,6 +339,7 @@ public class CamerasController : Singleton<CamerasController>
 //        StartCheckResolution();
         StartCheckAA();
         CheckSoundOnStart();
+        CheckSoundSensStart();
         CheckNoMouseMoveOnStart();
     }
 

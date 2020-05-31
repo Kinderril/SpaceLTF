@@ -4,15 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
+//[System.Serializable]
 public class MessageDialogData
 {
     public string Message;
     public List<AnswerDialogData> Answers;
+
+    private bool _activateAnyway = false;
 //    public event Action OnAnswer;
 
-    public MessageDialogData(string Message, List<AnswerDialogData> Answers)
+    public MessageDialogData(string Message, List<AnswerDialogData> Answers,bool activateAnyway = false)
     {
+        _activateAnyway = activateAnyway;
         this.Message = Message;
         int number = 1;
         foreach (var answer in Answers)
@@ -29,6 +32,12 @@ public class MessageDialogData
         {
             answerDialogData.AddCallback(OnAnswer);
         }
+    }
+
+    public bool ActivateAnyWay()
+    {
+
+        return _activateAnyway;
     }
 }
 

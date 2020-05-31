@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class BattlefieldEventController
 {
@@ -11,7 +12,7 @@ public class BattlefieldEventController
 
     private BattleFieldEvent _event = null;
 
-    public void Init(BattleController battleController, EBattlefildEventType? type, bool canRerandom)
+    public void Init(BattleController battleController, EBattlefildEventType? type, bool canRerandom,float insideRad)
     {
         _event = null;
         if (type == null && canRerandom)
@@ -36,13 +37,13 @@ public class BattlefieldEventController
                     _event = new ShieldOffEvent(battleController);
                     break;    
                 case EBattlefildEventType.fireVortex:
-                    _event = new FireVortexBattleEvent(battleController);
+                    _event = new FireVortexBattleEvent(battleController, insideRad);
                     break;
                 case EBattlefildEventType.Vortex:
-                    _event = new VortexBattleEvent(battleController);
+                    _event = new VortexBattleEvent(battleController, insideRad);
                     break;    
                 case EBattlefildEventType.IceZone:
-                    _event = new ZoneIceBattleEvent(battleController);
+                    _event = new ZoneIceBattleEvent(battleController, insideRad);
                     break;
                 case EBattlefildEventType.BlackHole:
 //                    _event = new BlackHoleBattleEvent(battleController);
@@ -62,5 +63,14 @@ public class BattlefieldEventController
             _event.Dispose();
             _event = null;
         }
+    }
+
+    public List<Vector3> GetBlockedPosition()
+    {
+        if (_event != null)
+        {
+            _event.GetBlockedPosition();
+        }
+        return null;
     }
 }

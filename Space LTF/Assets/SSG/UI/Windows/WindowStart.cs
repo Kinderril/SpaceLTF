@@ -6,14 +6,13 @@ using UnityEngine.UI;
 
 public class WindowStart : BaseWindow
 {
-    public StatisticsController Statistics;
     public Button AchievementsButton;
     public TextMeshProUGUI DemoField;
     public GameObject TutorAdditional;
     public TutorButtonsStart TutorButtonsStart;
+    public TutorButtonsStart ButtonOpenNewGame;
     public override void Init()
     {
-        Statistics.Init();
         DemoField.gameObject.SetActive(true);
         CamerasController.Instance.MusicControl.StartMenuAudio();
         var mainTxt = Namings.Tag("DemoStart");
@@ -50,6 +49,11 @@ public class WindowStart : BaseWindow
     {
         WindowManager.Instance.OpenWindow(MainState.achievements);
     }
+
+    public void OnClickStatistics()
+    {
+        WindowManager.Instance.OpenWindow(MainState.statistics);
+    }
     public void OnClickSettings()
     {
         WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.menu);
@@ -81,7 +85,13 @@ public class WindowStart : BaseWindow
     public void OnClickStartTutorial()
     {
         TutorButtonsStart.Init();
-        TutorButtonsStart.gameObject.transform.position = TutorAdditional.transform.position;
+//        TutorButtonsStart.gameObject.transform.position = TutorAdditional.transform.position;
+    }
+
+    public void OnClickButtonOpenNewGame()
+    {
+        ButtonOpenNewGame.Init();
+//        TutorButtonsStart.gameObject.transform.position = TutorAdditional.transform.position;
     }
 
     public void OnClickLoad()

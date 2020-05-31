@@ -11,14 +11,17 @@ public class AICellDataRaound
 {
     public const float SafeRadius = 9;
     private const float AsteroidRadius = -2;
-    private const float AsteroidINFieldMin = 3;
-    private const float AsteroidINFieldMax = 7;
+    private const float AsteroidINFieldMin = 1;
+    private const float AsteroidINFieldMax = 3;
     public float CellSize;
     public float StartX;
     public float StartZ;
 
     public int MaxIx;
     public int MaxIz;
+    private int Size;
+    private int cellX;
+    private int cellZ;
 
     [SerializeField]
     public AICell[,] List;
@@ -36,8 +39,9 @@ public class AICellDataRaound
     public List<AIAsteroidPredata> Asteroids = new List<AIAsteroidPredata>();
     public List<Vector3> FreePoints = new List<Vector3>();
 
-    public void Init(Vector3 startPos, int size, float cellSize)
+    public void InitSizes1(Vector3 startPos, int size, float cellSize)
     {
+        Size = size;
         Radius = size * cellSize / 2f - cellSize;
         //        Debug.Log(Namings.TryFormat("Cells inited. SizeX:{0}  SizeZ:{1}",sizeX,sizeZ).Red());
         Debug.Log($"Cells inited. SizeX:{size}  startPos:{startPos}".Red());
@@ -48,12 +52,16 @@ public class AICellDataRaound
         //        var zzDelta = Mathf.Abs(end.z - start.z);
         MaxIx = size;//(int)(xxDelta/CellSize) + 1;
         MaxIz = size;//(int)(zzDelta/CellSize) + 1;
-        int cellX = MaxIx + 1;
-        int cellZ = MaxIz + 1;
+        cellX = MaxIx + 1;
+        cellZ = MaxIz + 1;
         Min = new Vector3(StartX, 0, StartZ);
         Max = new Vector3(StartX + CellSize * MaxIx, 0, StartZ + CellSize * MaxIz);
         CenterZone = (Max + Min) / 2f;
+    }
 
+    public void Init2( BattlefieldEventController eventController)
+    {
+        List<Vector3> blockedPositions = eventController.GetBlockedPosition();
         CellPoint[,] cellsPoints = new CellPoint[cellX, cellZ];
         List = new AICell[MaxIx, MaxIz];
         //Create Poitns
@@ -61,7 +69,7 @@ public class AICellDataRaound
         {
             for (int j = 0; j < MaxIz; j++)
             {
-                var startPoint = new Vector3(StartX + CellSize * i, 0, StartZ + cellSize * j);
+                var startPoint = new Vector3(StartX + CellSize * i, 0, StartZ + CellSize * j);
                 CellPoint point = new CellPoint(i, j, startPoint);
                 cellsPoints[i, j] = point;
             }
@@ -69,18 +77,18 @@ public class AICellDataRaound
         //SUB CREATE POINTS
         for (int i = 0; i < MaxIx; i++)
         {
-            var startPoint = new Vector3(StartX + CellSize * i, 0, StartZ + cellSize * MaxIz);
+            var startPoint = new Vector3(StartX + CellSize * i, 0, StartZ + CellSize * MaxIz);
             CellPoint point = new CellPoint(i, MaxIz, startPoint);
             cellsPoints[i, MaxIz] = point;
         }
         for (int i = 0; i < MaxIz; i++)
         {
-            var startPoint = new Vector3(StartX + CellSize * MaxIx, 0, StartZ + cellSize * i);
+            var startPoint = new Vector3(StartX + CellSize * MaxIx, 0, StartZ + CellSize * i);
             CellPoint point = new CellPoint(MaxIx, i, startPoint);
             cellsPoints[MaxIx, i] = point;
         }
         //Add last point
-        var startPoint2 = new Vector3(StartX + CellSize * MaxIx, 0, StartZ + cellSize * MaxIz);
+        var startPoint2 = new Vector3(StartX + CellSize * MaxIx, 0, StartZ + CellSize * MaxIz);
         CellPoint point2 = new CellPoint(MaxIx, MaxIz, startPoint2);
         cellsPoints[MaxIx, MaxIz] = point2;
 
@@ -95,17 +103,17 @@ public class AICellDataRaound
                 var leftCorner = cellsPoints[i, j + 1];
                 var rightCorner = cellsPoints[i + 1, j];
                 var endCorner = cellsPoints[i + 1, j + 1];
-                var cell = new AICell(ct, startCorner, leftCorner, rightCorner, endCorner, cellSize);
+                var cell = new AICell(ct, startCorner, leftCorner, rightCorner, endCorner, CellSize);
                 SetCell(i, j, cell);
             }
         }
 
         CalcStartPositinons();
 
-        int asteroidsFieldCount = (int)((size + MyExtensions.Random(4, 10)));
+        int asteroidsFieldCount = (int)((Size + MyExtensions.Random(4, 10)));
         Asteroids.Clear();
         // CreateAsteroidsOnCircle(4);
-        CreateRandomAsteroids(asteroidsFieldCount);
+        CreateRandomAsteroids(asteroidsFieldCount, blockedPositions);
         FindFreeCorePoints();
 
     }
@@ -163,6 +171,20 @@ public class AICellDataRaound
         return true;
     }
 
+    private bool IsFree(Vector3 p2, List<Vector3> blockedPosition)
+    {
+        foreach (var vector3 in blockedPosition)
+        {
+            var sDist = (vector3 - p2).sqrMagnitude;
+            if (sDist < 36)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private void CalcStartPositinons()
     {
         var dir1 = new Vector3(0, 0, -1);
@@ -176,7 +198,7 @@ public class AICellDataRaound
         StartPosition2 = CenterZone + dir2 * InsideRadius;
     }
 
-    private void CreateRandomAsteroids(int fieldsCount)
+    private void CreateRandomAsteroids(int fieldsCount,List<Vector3> blockedPositions)
     {
         //        AddAsteroidToPosition(CenterZone);
         var offsetCEnterField = InsideRadius - AsteroidRadius;
@@ -185,13 +207,17 @@ public class AICellDataRaound
             var findPointX = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
             var findPointZ = MyExtensions.Random(-offsetCEnterField, offsetCEnterField);
             //            var point = new Vector3(findPointX, 0, findPointZ);
-            var countAsteroids = MyExtensions.Random(AsteroidINFieldMin, AsteroidINFieldMax);
-            for (int j = 0; j < countAsteroids; j++)
+            var asteroidInFielod = MyExtensions.Random(AsteroidINFieldMin, AsteroidINFieldMax);
+            for (int j = 0; j < asteroidInFielod; j++)
             {
                 var xx = MyExtensions.Random(0.3f, AsteroidRadius);
                 var zz = MyExtensions.Random(0.3f, AsteroidRadius);
                 var ateroidPos = new Vector3(findPointX + xx, 0, findPointZ + zz);
-                AddAsteroidToPosition(CenterZone + ateroidPos);
+                var posToAdd = CenterZone + ateroidPos;
+                if (blockedPositions == null || IsFree(posToAdd, blockedPositions))
+                {
+                    AddAsteroidToPosition(posToAdd);
+                }
             }
         }
     }

@@ -72,13 +72,13 @@ public class CellIinfoObjectUI : MonoBehaviour
             if (!cell.IsDestroyed)
             {
                 //                Debug.LogError($"cell.IsScouted.id:{cell.Id}  scouted:{cell.IsScouted}  ");
-                var isCore = cell as CoreGlobalMapCell;
-                if (isCore != null)
-                {
-                    _curText = isCore.Desc();
-                    TextUpdate(true);
-                    return;
-                }
+//                var isCore = cell as CoreGlobalMapCell;
+//                if (isCore != null)
+//                {
+//                    _curText = isCore.Desc();
+//                    TextUpdate(true);
+//                    return;
+//                }
 
 
                 var coreCell = cell is StartGlobalCell || cell is EndGlobalCell;

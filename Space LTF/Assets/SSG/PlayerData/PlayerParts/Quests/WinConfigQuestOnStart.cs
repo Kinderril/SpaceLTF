@@ -12,9 +12,10 @@ public class WinConfigQuestOnStart : BaseQuestOnStart
         _type = type;
     }
 
-    public override void Init()
+    protected override bool StageActivate(Player player)
     {
         GlobalEventDispatcher.OnWinBattle += OnWinBattle;
+        return true;
     }
 
     private void OnWinBattle(ShipConfig obj)
@@ -26,8 +27,10 @@ public class WinConfigQuestOnStart : BaseQuestOnStart
     }
 
 
-    public override void Dispose()
+    protected override void StageDispose()
     {
         GlobalEventDispatcher.OnWinBattle -= OnWinBattle;
     }
+
+
 }

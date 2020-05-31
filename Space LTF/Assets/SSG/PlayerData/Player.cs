@@ -20,6 +20,7 @@ public class Player
     public PlayerScoutData ScoutData;
     public PlayerRepairData RepairData;
     public PlayerQuestData QuestData;
+    public PlayerDifficultyPart DifficultyPart;
     public PlayerMoneyData MoneyData;
     public LastScoutsData LastScoutsData;
     public PlayerReputationData ReputationData;
@@ -29,7 +30,6 @@ public class Player
     public PlayerMessagesToConsole MessagesToConsole;
     public PlayerArmy Army { get; private set; }
     public StartShipPilotData MainShip;
-    public QuestsOnStartController QuestsOnStartController;
 
     public string Name;
 
@@ -39,15 +39,16 @@ public class Player
     public void PlayNewGame(StartNewGameData data)
     {
         MessagesToConsole = new PlayerMessagesToConsole();
-        QuestData = new PlayerQuestData(data.CoreElementsCount);
         ByStepDamage = new PlayerByStepDamage();
         ByStepDamage.Init(data.StepsBeforeDeath, this);
         MapData = new PlayerMapData();
         MapData.Init(data, ByStepDamage);
         MapData.GalaxyData.GalaxyEnemiesArmyController.InitQuests(QuestData);
+        QuestData = new PlayerQuestData(this,data.QuestsOnStart);
         List<StartShipPilotData> startArmy;
-
-        switch (data.GameNode)
+        DifficultyPart = new PlayerDifficultyPart();
+        DifficultyPart.Init(data.Difficulty);
+        switch (data.GameNode)     
         {
             case EGameMode.simpleTutor:
                 startArmy = CreateStartArmySimpleTutor();
@@ -64,16 +65,10 @@ public class Player
         RepairData.Init(Army, MapData, Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
         ReputationData.AddReputation(data.shipConfig, Library.START_REPUTATION);
-        var mid1 = (Library.MIN_GLOBAL_SECTOR_SIZE + Library.MAX_GLOBAL_SECTOR_SIZE) * .5f;
-        var mid2 = (Library.MIN_GLOBAL_MAP_SECTOR_COUNT + Library.MAX_GLOBAL_MAP_SECTOR_COUNT) * .5f;
 
-        var midSize = mid1 * mid2;
 
-        var size = ((float)(MapData.GalaxyData.SizeOfSector * MapData.GalaxyData.AllSectors.Count / 3f));
-        var coef = size / midSize;
-        QuestsOnStartController = new QuestsOnStartController(coef);
-        QuestsOnStartController.InitQuests();
         AddModuls();
+        QuestData.StartGame();
     }
 
     private void AddModuls()
@@ -120,7 +115,7 @@ public class Player
         {
 
             var rnd1 = new List<EParameterItemSubType>()
-                {EParameterItemSubType.middle, EParameterItemSubType.heavy, EParameterItemSubType.light};
+                {EParameterItemSubType.Middle, EParameterItemSubType.Heavy, EParameterItemSubType.Light};
 
             var rnd2 = new List<EParameterItemRarity>()
             {
@@ -140,7 +135,7 @@ public class Player
 
             if (Inventory.GetFreeSlot(out var index021, ItemType.cocpit))
             {
-                var paramItem = Library.CreateParameterItem(EParameterItemSubType.heavy, EParameterItemRarity.improved, ItemType.cocpit);
+                var paramItem = Library.CreateParameterItem(EParameterItemSubType.Heavy, EParameterItemRarity.improved, ItemType.cocpit);
                 Inventory.TryAddItem(paramItem);
             }
             CreateRndParameterItem();
@@ -370,7 +365,8 @@ public class Player
     private void LoadData()
     {
         RepairData.Init(Army, MapData, Parameters);
-        QuestsOnStartController.InitQuests();
+        QuestData.AfterLoadCheck();
+
     }
 
     public virtual ETurretBehaviour GetTurretBehaviour()
@@ -400,10 +396,6 @@ public class Player
             File.Delete(path);
         }
 
-        if (QuestsOnStartController != null)
-        {
-            QuestsOnStartController.DisposeQuests();
-        }
     }
 
 }
