@@ -175,5 +175,20 @@ public class CameraController : MonoBehaviour
             FxaaEffect.enabled = fxaaEnable;
         }
     }
+
+    public void SetEvent(EBattlefildEventType? eventType)
+    {
+
+        if (Effects != null)
+        {
+            Effects.SetEvent(eventType);
+        }
+    }
+
+    public void SetNormalTemperature()
+    {
+        if (Effects != null)
+            Effects.SetNormalTemperature();
+    }
 }
 

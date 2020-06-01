@@ -139,6 +139,7 @@ public class BattleController : Singleton<BattleController>
         //Порядок должен быть именно таокй
         CellController.InitSizes1(coef);
         _eventController.Init(this, eventType, false,CellController.Data.InsideRadius);
+        CamerasController.Instance.GameCamera.SetEvent(eventType);
         CellController.Init2(_eventController);
         //-----
 

@@ -21,7 +21,7 @@ public static class RusLocalization
         {"Reflected", "Эффект отражен"},
         {"Chance", "Шанс"},
         {"questKidnappingBuyout", "Выкупить"},
-        {"questKidnappingStageName", "Похищение"},
+        {"questKidnappingStageName", "Наш человек был похищен. Освободите его."},
         {"questKidnappingFinalName", "Похищение"},
         {"questKidnappingScoutsFine", "Разведка успешно освободила цель"},
         {"questKidnappingScoutsFail", "Разведчикам не удалось выполнить задачу"},
@@ -980,6 +980,9 @@ public static class RusLocalization
         {"questSearachFleetMerc", "Одна из частей кординат найдена"},
         {"questNameKillMerc", "Уничтожьте флот"},
         {"ReadyToComplete", "Кликните для завершения"},
+        {"doDestroyShip", "Уничтожите отмеченный корабль \"T\""},
+        {"defendMarkedShip", "Защищайте отмеченный корабль \"T\""},
+        {"defendBaseWithTurrets", "Защищайте базу с помощью турелей"},
 
         { "dialog_TutorialUpgradeMainShip", "Улучшить командный корабль"},
         {"dialog_WearDetailsTutor", "Оборудовать боевой корабль"},

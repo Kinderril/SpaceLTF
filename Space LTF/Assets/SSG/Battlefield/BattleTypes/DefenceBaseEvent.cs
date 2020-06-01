@@ -8,9 +8,9 @@ public class DefenceBaseEvent : BattleTypeEvent
     public const float POWER_ICN = 0.7f;
     public override bool HaveActiveTime => false;
 
-    public override void Init(BattleController battle)
+    public DefenceBaseEvent()
+        : base(Namings.Tag("defendBaseWithTurrets"))
     {
-        base.Init(battle);
 
     }
 
@@ -43,4 +43,5 @@ public class DefenceBaseEvent : BattleTypeEvent
         }
         return prevResult;
     }
+
 }

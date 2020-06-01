@@ -17,10 +17,15 @@ public class WaveBattleType : BattleTypeEvent
     private List<StartShipPilotData>[] _armiesToSpawn;
     private int _nextIndexToSpawn = 0;
     public override bool HaveActiveTime => true;
-    private string _mag;
-    public override void Init(BattleController battle)
+
+
+    public WaveBattleType()
+        : base(Namings.Tag("nextWave"))
     {
-        _mag = Namings.Tag("nextWave");
+    }
+
+    public override void Init(BattleController battle)
+    {            
         base.Init(battle);
         var ships = battle.RedCommander;
         ships.OnShipDestroy += OnDestroy;
@@ -39,7 +44,7 @@ public class WaveBattleType : BattleTypeEvent
         {
             SpawnWave();
         }
-        OnTimeEndAction(remainTime, !IsLastWave(),_mag);
+        OnTimeEndAction(remainTime, !IsLastWave(),GetMsg());
     }
 
     private void OnDestroy(ShipBase obj)

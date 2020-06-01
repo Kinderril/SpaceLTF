@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityStandardAssets.ImageEffects;
 using Bloom = UnityEngine.Rendering.PostProcessing.Bloom;
@@ -11,6 +12,7 @@ public class CameraEffects : MonoBehaviour
 
     // public BloomOptimized Bloom;
     public Bloom Bloom;
+    public ColorGrading ColorGrading;
     public PostProcessVolume ProcessVolume;
     private float _endBloomTime;
     private bool _isBloom;
@@ -22,6 +24,7 @@ public class CameraEffects : MonoBehaviour
     void Awake()
     {
         Bloom = ProcessVolume.profile.GetSetting<Bloom>();
+        ColorGrading = ProcessVolume.profile.GetSetting<ColorGrading>();
         
 //        bloomStart = Bloom.bloomThreshold;
         // bloomStart = Bloom.threshold;
@@ -73,4 +76,39 @@ public class CameraEffects : MonoBehaviour
         Bloom.threshold.value = bloomStart;
         _isBloom = false;
     }
+
+    public void SetEvent(EBattlefildEventType? eventType)
+    {
+        if (ColorGrading != null)
+        {
+            if (eventType.HasValue)
+            {
+                switch (eventType)
+                {
+                    case EBattlefildEventType.fireVortex:
+                        ColorGrading.temperature.value = 50f;
+                        break;
+                    case EBattlefildEventType.IceZone:
+                        ColorGrading.temperature.value = -50f;
+                        break;
+                    default:
+                        ColorGrading.temperature.value = 0f;
+                        break;
+                }
+            }
+            else
+            {
+                ColorGrading.temperature.value = 0f;
+            }
+        }
+    }
+
+    public void SetNormalTemperature()
+    {
+       if (ColorGrading != null)
+       {
+           ColorGrading.temperature.value = 0f;
+       }
+    }
+
 }

@@ -8,7 +8,19 @@ public abstract class BattleTypeEvent
     protected BattleController _battle;
     protected bool _inited = false;
     public event Action<float,bool, string> OnTimeLeft;
+    private string _msg;
     public abstract bool HaveActiveTime { get; }
+
+    protected BattleTypeEvent(string msg)
+    {
+        _msg = msg;
+    }
+
+    public string GetMsg()
+    {
+        return _msg;
+    }
+
 
     public virtual void Init(BattleController battle)
     {
@@ -51,4 +63,5 @@ public abstract class BattleTypeEvent
         return true;
 
     }
+
 }

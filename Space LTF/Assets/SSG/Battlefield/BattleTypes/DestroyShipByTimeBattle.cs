@@ -12,7 +12,12 @@ public class DestroyShipByTimeBattle : BattleTypeEvent
     private bool _failed = false;
     private bool _runAwayComplete = false;
     private ShipBase _shipToKill;
-    private string _mag;
+
+    public DestroyShipByTimeBattle()
+        : base($"{Namings.Tag("doDestroyShip")} {Namings.Tag("remainTime")}")
+    {
+
+    }
 
     public override bool HaveActiveTime => true;
     public override void Init(BattleController battle)
@@ -26,7 +31,6 @@ public class DestroyShipByTimeBattle : BattleTypeEvent
             _shipToKill = ships.Values.ToList().RandomElement();
         }
         _shipToKill.OnDeath += OnDeath;
-        _mag = Namings.Tag("remainTime");
     }
 
 
@@ -35,11 +39,11 @@ public class DestroyShipByTimeBattle : BattleTypeEvent
         if (!_runAwayComplete)
         {
             var remainTime = _targetTime - Time.time;
-            OnTimeEndAction(remainTime, false, _mag);
+            OnTimeEndAction(remainTime, false, GetMsg());
             if (remainTime < 0f)
             {
                 _runAwayComplete = true;
-                OnTimeEndAction(remainTime, true, _mag);
+                OnTimeEndAction(remainTime, true, GetMsg());
                 _shipToKill.Commander.ShipRunAway(_shipToKill);
             }
         }
@@ -53,18 +57,22 @@ public class DestroyShipByTimeBattle : BattleTypeEvent
             _failed = true;
         }
         _isShipDead = true;
-        OnTimeEndAction(remainTime,false, _mag);
+        OnTimeEndAction(remainTime,false, GetMsg());
     }
 
     public override List<StartShipPilotData> RebuildArmy(TeamIndex teamIndex, List<StartShipPilotData> paramsOfShips, Player player)
     {
-        var markedShip = paramsOfShips.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
-        if (markedShip == null)
+        if (teamIndex == TeamIndex.red)
         {
-            markedShip = paramsOfShips.RandomElement();
+            var markedShip = paramsOfShips.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
+            if (markedShip == null)
+            {
+                markedShip = paramsOfShips.RandomElement();
+            }
+
+            markedShip.Ship.Marked = true;
         }
 
-        markedShip.Ship.Marked = true;
         return paramsOfShips;
     }
 
@@ -87,4 +95,5 @@ public class DestroyShipByTimeBattle : BattleTypeEvent
         }
         return prevResult;
     }
+
 }

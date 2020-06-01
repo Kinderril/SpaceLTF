@@ -312,6 +312,7 @@ public class CamerasController : Singleton<CamerasController>
     public void CloseGameCamera()
     {
         GameCamera.gameObject.SetActive(false);
+        GameCamera.Effects.SetNormalTemperature();
         _activeCamera = null;
     }
     public void CloseGlobalCamera()

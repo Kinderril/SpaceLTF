@@ -31,6 +31,7 @@ public class NextBattleData
     public void EndGameWin(EndBattleType winStatus)
     {
         Statistics.AddWin(MainPlayer.Army.BaseShipConfig);
+        ClearMarks(MainPlayer);
         if (_isFinalBattle)
         {
             EndGame(true);
@@ -44,6 +45,15 @@ public class NextBattleData
         }
 
 
+    }
+
+    private void ClearMarks(Player player)
+    {
+        foreach (var ship in player.Army.Army)
+        {
+            ship.Ship.Marked = false;
+        }
+        
     }
 
     public void EndGameLose()

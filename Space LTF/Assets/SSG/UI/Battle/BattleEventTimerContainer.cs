@@ -9,10 +9,17 @@ public class BattleEventTimerContainer : MonoBehaviour
     public void Init(BattleTypeEvent battleType)
     {
         _battleType = battleType;
-        if (_battleType != null && _battleType.HaveActiveTime)
+        if (_battleType != null)
         {
             TimeField.gameObject.SetActive(true);
-            _battleType.OnTimeLeft += OnTimeLeft;
+            if (_battleType.HaveActiveTime)
+            {
+                _battleType.OnTimeLeft += OnTimeLeft;
+            }
+            else
+            {
+                TimeField.text = _battleType.GetMsg();
+            }
         }
         else
         {

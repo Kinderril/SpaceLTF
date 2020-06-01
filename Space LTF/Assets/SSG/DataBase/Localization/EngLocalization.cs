@@ -999,7 +999,7 @@ public static class EngLocalization
         {"questKidnappingBuyout", "Buyout"},
         {"questKidnappingScoutsFine", "Scouts release him"},
         {"questKidnappingScoutsFail", "Scouts fail"},
-        {"questKidnappingStageName", "Kidnapping"},
+        {"questKidnappingStageName", "Our man has been abducted. Free him up."},
         {"questKidnappingFinalName", "Kidnapping"},
         {"questKidnappingFinaldialog", "Our man returned! Good job."},
         {"questKidnappingScouts", "Use scouts to release him."},
@@ -1051,6 +1051,9 @@ public static class EngLocalization
         {"nextWave", "Next Wave"},
         {"mercQuest1Name", "Search and destroy"},
         {"Quests", "Quests"},
+        {"doDestroyShip", "Destroy marked ship \"T\""},
+        {"defendMarkedShip", "Defend marked ship \"T\""},
+        {"defendBaseWithTurrets", "Defend base with turrets"},
         {"standartStatQuestComplete", "Base quest complete. Choose a reward"},
 
         {"AdvTutorialOpenInv", "To open inventory click this button"},
