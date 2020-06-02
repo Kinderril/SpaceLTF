@@ -21,6 +21,7 @@ public static class RusLocalization
         {"Reflected", "Эффект отражен"},
         {"Chance", "Шанс"},
         {"questKidnappingBuyout", "Выкупить"},
+        {"ClickToGetInfo", "Кликните для информации"},
         {"questKidnappingStageName", "Наш человек был похищен. Освободите его."},
         {"questKidnappingFinalName", "Похищение"},
         {"questKidnappingScoutsFine", "Разведка успешно освободила цель"},

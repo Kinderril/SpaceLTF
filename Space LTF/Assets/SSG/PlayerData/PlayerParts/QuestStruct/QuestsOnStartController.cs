@@ -66,7 +66,7 @@ public class QuestsOnStartController
 
 #if UNITY_EDITOR
 //        quests.Add(QuestsLib.GetDeliverQuest(_data, _player));
-//        var quest1 = QuestsLib.GetCalcQuest(_data, _player, EQuestOnStart.winDroids, _coef);
+//        var quest1 = QuestsLib.GetCalcQuest(_data, _player, EQuestOnStart.sellModuls, _coef);
 //        quests.Add(quest1);
 //
 

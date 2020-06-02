@@ -26,7 +26,7 @@ public enum EQuestOnStart
     cassetDamage,
     // collectMoney,
     upgradeWeapons,
-    sellModuls,
+//    sellModuls,
     winRaiders,
     winMerc,
     winFed,
@@ -70,7 +70,7 @@ public  abstract class BaseQuestOnStart   : QuestStage
     }
     public override void OnClick()
     {
-
+           WindowManager.Instance.InfoWindow.Init(null,Name);
     }
 
     public override string GetDesc()
@@ -151,8 +151,8 @@ public  abstract class BaseQuestOnStart   : QuestStage
                 return new KillsWeaponQuestOnStart(WeaponType.casset, (int)(250 * coef), eQuestOnStart);
             case EQuestOnStart.upgradeWeapons:
                 return new UpgradeItemQuestOnStart(ItemType.weapon, (int)(10 * coef), eQuestOnStart);
-            case EQuestOnStart.sellModuls:
-                return new SellItemQuestOnStart(ItemType.modul, (int)(20 * coef), eQuestOnStart);
+//            case EQuestOnStart.sellModuls:
+//                return new SellItemQuestOnStart(ItemType.modul, (int)(20 * coef), eQuestOnStart);
             case EQuestOnStart.winRaiders:
                 return new WinConfigQuestOnStart(ShipConfig.raiders, (int)(10 * coef), eQuestOnStart);
             case EQuestOnStart.winMerc:

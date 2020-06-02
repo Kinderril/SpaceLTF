@@ -992,6 +992,7 @@ public static class EngLocalization
         {"engine", "Engine"},
         {"wings", "Wings"},
         {"Chance", "Chance"},
+        {"ClickToGetInfo", "Click to get info"},
         {"EParameterItemRaritynormal", "Normal"},
         {"EParameterItemRarityimproved", "Improved"},
         {"EParameterItemRarityperfect", "Special"},

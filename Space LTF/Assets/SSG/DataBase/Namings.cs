@@ -452,8 +452,8 @@ public static class Namings
                 return Tag("mainShipKills");
             case EQuestOnStart.upgradeWeapons:
                 return Tag("upgradeWeapons");
-            case EQuestOnStart.sellModuls:
-                return Tag("sellModuls");
+//            case EQuestOnStart.sellModuls:
+//                return Tag("sellModuls");
             case EQuestOnStart.laserDamage:
                 return Namings.Format(Tag("damageByQuest"), Weapon(WeaponType.laser));
             case EQuestOnStart.rocketDamage:
