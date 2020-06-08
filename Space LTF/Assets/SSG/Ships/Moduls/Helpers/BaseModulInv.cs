@@ -120,6 +120,11 @@ public class BaseModulInv : IItemInv
         return GetInfo() + "\n" + GetDesc();
     }
 
+    public IItemInv Copy()
+    {
+        return new BaseModulInv(Type, Level);
+    }
+
     public virtual string GetDesc()
     {
         return Namings.DescSimpleModul(Type);

@@ -22,5 +22,6 @@ public interface IItemInv
     int RequireLevel(int posibleLevel = -1);
     string GetInfo();
     string WideInfo();
+    IItemInv Copy();
 }
 

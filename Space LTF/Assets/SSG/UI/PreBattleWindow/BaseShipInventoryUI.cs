@@ -46,7 +46,7 @@ public class BaseShipInventoryUI : DragZone
         base.Init(shipInventory, usable, allSlots, connectedInventory);
         InitCurrentItems();
         UpdateArmyCount();
-        _player.Army.OnAddShip += OnAddShip;
+        _player.SafeLinks.OnAddShip += OnAddShip;
     }
 
     private void OnAddShip(StartShipPilotData arg1, bool arg2)
@@ -73,7 +73,7 @@ public class BaseShipInventoryUI : DragZone
         {
             param.Dispose();
         }
-        _player.Army.OnAddShip -= OnAddShip;
+        _player.SafeLinks.OnAddShip -= OnAddShip;
         _curParams.Clear();
         base.Dispose();
     }

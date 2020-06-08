@@ -495,6 +495,17 @@ public static class Utils
     {
         return (c % 2 == 0);
     }
+
+    public static Dictionary<T, W> Copy<T, W>(Dictionary<T, W> trg)
+    {
+        var d = new Dictionary<T, W>();
+        foreach (var w in trg)
+        {
+            d.Add(w.Key,w.Value);
+        }
+
+        return d;
+    }
 }
 
 

@@ -33,7 +33,7 @@ public class DefenceShipBattle : BattleTypeEvent
                 config = player.Army.BaseShipConfig;
             }
             var pilot = Library.CreateDebugPilot();
-            var ship = Library.CreateShip(ShipType.Middle, config, player, pilot);
+            var ship = Library.CreateShip(ShipType.Middle, config, player.SafeLinks, pilot);
             ship.Marked = true;
             paramsOfShips.Add(new StartShipPilotData(pilot, ship));
         }

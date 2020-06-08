@@ -9,7 +9,6 @@ public class LaserInventory : DamageWeaponInv
 
     }
 
-
     public override WeaponInGame CreateForBattle()
     {
         return new LaserWeapon(this);

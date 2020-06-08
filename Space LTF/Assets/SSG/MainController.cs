@@ -14,7 +14,9 @@ public class MainController : Singleton<MainController>
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
     public Player MainPlayer;
+    public PlayerSlotsContainer SafeContainers;
     public PlayerStatistics Statistics;
+    public ExprolerController Exproler;
     public StartMode StartMode;
     public DataBaseController DataBase;
     public NextBattleData BattleData;
@@ -24,6 +26,9 @@ public class MainController : Singleton<MainController>
     {
         try
         {
+            Exproler = new ExprolerController();
+            SafeContainers = new PlayerSlotsContainer();
+            SafeContainers.Init();
             LogHandler.Instance.Init();
 //            Debug.LogError("FIRST ERROR TEST MESSAGE");
             SteamManager.Instance.Init();
@@ -87,8 +92,18 @@ public class MainController : Singleton<MainController>
         Statistics.PlayNewGame(data);
         MainPlayer.PlayNewGame(data);
         WindowManager.Instance.OpenWindow(MainState.map);
-        BattleData = new NextBattleData(MainPlayer, Statistics);
-
+        switch (data.GameNode)
+        {
+            case EGameMode.sandBox:
+            case EGameMode.simpleTutor:
+            case EGameMode.advTutor:
+            default:
+                BattleData = new NextBattleData(MainPlayer, Statistics);
+                break;
+            case EGameMode.safePlayer:
+                BattleData = new NextBattleDataExproler(MainPlayer, Statistics);
+                break;
+        }
     }
 
     public void PreBattle(Player player1, Player player2, bool isFinalBattle = false, bool canRetire = true)

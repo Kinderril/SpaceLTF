@@ -53,7 +53,7 @@ public abstract class BaseGlobalMapEvent
         var type = shipType;
         var cng = congif;
         var pilot = Library.CreateDebugPilot();
-        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
+        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer.SafeLinks, pilot);
         WindowManager.Instance.InfoWindow.Init(null, Namings.Format("You hired a new pilot. Type:{0}  Config:{1}",
             Namings.ShipConfig(cng), Namings.ShipType(type)));
         var data = new StartShipPilotData(pilot, ship);

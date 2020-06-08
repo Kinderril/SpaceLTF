@@ -8,12 +8,16 @@ using UnityEngine;
 public class PlayerArmy
 {
     public const int MAX_ARMY = 6;
-    public List<StartShipPilotData> Army = new List<StartShipPilotData>();
-    [field: NonSerialized]
-    public event Action<StartShipPilotData, bool> OnAddShip;
+    public List<StartShipPilotData> Army => _links.Ships;
 
+    private PlayerSafe _links;
     public ShipConfig BaseShipConfig { get; private set; }
     public int Count => Army.Count;
+
+    public PlayerArmy(PlayerSafe links)
+    {
+        _links = links;
+    }
 
     public void Add(StartShipPilotData ship)
     {
@@ -28,11 +32,7 @@ public class PlayerArmy
     {
         if (CanAddShip())
         {
-            Army.Add(ship);
-            if (OnAddShip != null)
-            {
-                OnAddShip(ship, true);
-            }
+            _links.AddShip(ship);
             return true;
         }
         return false;
@@ -98,20 +98,14 @@ public class PlayerArmy
 
     public void RemoveShip(StartShipPilotData shipToDel)
     {
-
-        Army.Remove(shipToDel);
-        if (OnAddShip != null)
-        {
-            OnAddShip(shipToDel, false);
-        }
-
+        _links.RemoveShip(shipToDel);
     }
 
     public void SetArmy(List<StartShipPilotData> createStartArmy)
     {
         var first = createStartArmy[0];
         BaseShipConfig = first.Ship.ShipConfig;
-        Army = createStartArmy;
+        _links.SetArmy(createStartArmy);
     }
 
     public float GetPower()

@@ -13,7 +13,6 @@ public class PlayerMapData
     public GalaxyData GalaxyData;
     public int Step = 0;
     public int VisitedSectors = 0;
-    private PlayerByStepDamage _stepDamage;
 
     [field: NonSerialized]
     public event Action<GlobalMapCell> OnCellChanged;
@@ -47,9 +46,8 @@ public class PlayerMapData
         }
     }
 
-    public void Init(StartNewGameData data, PlayerByStepDamage stepDamage)
+    public void Init(StartNewGameData data)
     {
-        _stepDamage = stepDamage;
         Step = 0;
         var sectorIndex = MyExtensions.Random(10 * data.SectorSize, 100 * data.SectorSize);
         GalaxyData galaxyData;
@@ -63,13 +61,18 @@ public class PlayerMapData
                 data.SectorSize = TUTOR_SECTOR_SIZE;
                 galaxyData = new SimpleTutorialGalaxyData("SimpleTutorialGalaxyData " + sectorIndex.ToString());
                 break;
+            case EGameMode.safePlayer:
+                galaxyData = new ExprolerGalaxyDataMap("ExprolerFalaxyData");
+                break;
             case EGameMode.advTutor:
                 data.SectorSize = TUTOR_SECTOR_SIZE;
                 galaxyData = new AdvTutorialGalaxyData("AdvTutorialGalaxyData " + sectorIndex.ToString());
                 break;
         }
 
-        var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, data.Difficulty, data.QuestsOnStart, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
+        int startPower = data.GetStartPower();
+
+        var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, startPower, data.QuestsOnStart, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
         GalaxyData = galaxyData;
         CurrentCell = startCell;
         OpenAllNear();
@@ -163,7 +166,6 @@ public class PlayerMapData
         OpenAllNear();
         Step++;
         GalaxyData.StepComplete(Step, CurrentCell);
-        _stepDamage.StepComplete(Step);
         if (OnCellChanged != null)
         {
             OnCellChanged(CurrentCell);
@@ -255,7 +257,7 @@ public class PlayerMapData
         var playerPower = player.Army.GetPower();
         var enemyPower = defeatedPlayer.Army.GetPower();
 
-        float powerDelta = player.DifficultyPart.CalcDelta(enemyPower, playerPower);
+        float powerDelta = player.Difficulty.CalcDelta(enemyPower, playerPower);
         foreach (var currentArmy in GalaxyData.GalaxyEnemiesArmyController.GetCurrentArmies())
         {
             currentArmy.UpdateAllPowersCollected(powerDelta);

@@ -515,7 +515,7 @@ public class BattleController : Singleton<BattleController>
         {
             case EndBattleType.win:
             case EndBattleType.winFull:
-                battleData.EndGameWin(LastWinner);
+                battleData.EndBattleWin(LastWinner);
                 break;
             case EndBattleType.lose:
                 battleData.EndGameLose();

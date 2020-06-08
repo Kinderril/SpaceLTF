@@ -154,7 +154,7 @@ public static class ArmyCreatorSpecial
         var player = new PlayerAIMilitaryFinal("Boss1");
 
         var pilot = Library.CreateDebugPilot();
-        var shipMain = Library.CreateShip(ShipType.Base, config, player, pilot);
+        var shipMain = Library.CreateShip(ShipType.Base, config, player.SafeLinks, pilot);
         remainPoints.Points -= Library.BASE_SHIP_VALUE;
 //        remainPoints.Points -= Library.BASE_SPELL_VALUE;
 //        remainPoints.Points -= Library.BASE_SPELL_VALUE;
@@ -285,7 +285,7 @@ public static class ArmyCreatorSpecial
         WeaponType weaponType)
     {
         var pilotH = Library.CreateDebugPilot();
-        var shipHeavy = Library.CreateShip(type, config, player, pilotH);
+        var shipHeavy = Library.CreateShip(type, config, player.SafeLinks, pilotH);
         var shipMainStartDataH = new StartShipPilotData(pilotH, shipHeavy);
         var weaponSlots = shipHeavy.WeaponsModuls.WeaponsCount;
         for (int i = 0; i < weaponSlots; i++)

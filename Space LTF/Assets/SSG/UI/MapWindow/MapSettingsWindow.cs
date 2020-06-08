@@ -10,7 +10,8 @@ public enum EWindowSettingsLauch
 {
     battle,
     map,
-    menu
+    menu,
+    exprolerGlobalMap,
 }
 
 public class MapSettingsWindow : MonoBehaviour
@@ -29,6 +30,7 @@ public class MapSettingsWindow : MonoBehaviour
     public GameObject BattleTutorialButton;
     public TMP_Dropdown ResolutionDropdown;
 
+    public GameObject ReturnToExprolerGlobalMap;
     public GameObject MapButtons;
     public GameObject ExitButtonMenu;
     public GameObject BattleButtons;
@@ -76,18 +78,28 @@ public class MapSettingsWindow : MonoBehaviour
                 MapButtons.gameObject.SetActive(false);
                 ExitButtonMenu.gameObject.SetActive(false);
                 BattleButtons.gameObject.SetActive(true);
+                ReturnToExprolerGlobalMap.gameObject.SetActive(false);
                 break;
             case EWindowSettingsLauch.map:
                 BattleTutorialButton.gameObject.SetActive(true);
                 MapButtons.gameObject.SetActive(true);
                 ExitButtonMenu.gameObject.SetActive(false);
                 BattleButtons.gameObject.SetActive(false);
+                ReturnToExprolerGlobalMap.gameObject.SetActive(false);
                 break;
             case EWindowSettingsLauch.menu:
                 BattleTutorialButton.gameObject.SetActive(false);
                 MapButtons.gameObject.SetActive(false);
                 ExitButtonMenu.gameObject.SetActive(true);
                 BattleButtons.gameObject.SetActive(false);
+                ReturnToExprolerGlobalMap.gameObject.SetActive(false);
+                break;  
+            case EWindowSettingsLauch.exprolerGlobalMap:
+                BattleTutorialButton.gameObject.SetActive(false); 
+                MapButtons.gameObject.SetActive(false);
+                ExitButtonMenu.gameObject.SetActive(false);
+                BattleButtons.gameObject.SetActive(false);
+                ReturnToExprolerGlobalMap.gameObject.SetActive(true);
                 break;
         }
 
@@ -136,6 +148,7 @@ public class MapSettingsWindow : MonoBehaviour
         ResolutionDropdown.AddOptions(lisOptions);
     }
 
+
     public void OnResolutionChange()
     {
         CamerasController.Instance.ChangeResolutionToIndex(ResolutionDropdown.value);
@@ -161,6 +174,8 @@ public class MapSettingsWindow : MonoBehaviour
                 MapTutorial.Open();
                 break;
             case EWindowSettingsLauch.menu:
+                break;   
+            case EWindowSettingsLauch.exprolerGlobalMap:
                 break;
         }
     }

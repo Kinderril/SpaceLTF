@@ -44,13 +44,13 @@ public class ShipInventory : IStartShipParams, IInventory
     public ParameterItem EngineSlot { get; private set; }
     public ParameterItem WingSlot { get; private set; }
 
-    private readonly Player _player;
+    private readonly PlayerSafe _player;
     private PilotParameters _pilot;
 
     public bool Marked { get; set; } = false;
 
 
-    public ShipInventory(IStartShipParams pParams, Player player, PilotParameters pilot)
+    public ShipInventory(IStartShipParams pParams, PlayerSafe player, PilotParameters pilot)
     {
         _pilot = pilot;
         CriticalDamages = 0;
@@ -245,10 +245,7 @@ public class ShipInventory : IStartShipParams, IInventory
         OnItemAdded?.Invoke(item, val);
     }
 
-    public Player Owner
-    {
-        get { return _player; }
-    }
+    public PlayerSafe Owner => _player;
 
     public int SlotsCount => SpellModulsCount + SimpleModulsCount + WeaponModulsCount;
 

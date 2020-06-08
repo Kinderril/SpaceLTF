@@ -110,7 +110,7 @@ public class ShipInventoryUI : DragZone
 
     private void DismissOk()
     {
-        _shipInventory.Owner.Army.RemoveShip(_shipInventory);
+        _shipInventory.Owner.RemoveShip(_shipData);
 
     }
 

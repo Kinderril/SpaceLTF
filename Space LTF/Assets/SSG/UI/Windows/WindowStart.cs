@@ -82,6 +82,12 @@ public class WindowStart : BaseWindow
             WindowManager.Instance.OpenWindow(MainState.startNewGame);
         }
     }
+
+    public void OnClickExprolerMode()
+    {
+        WindowManager.Instance.OpenWindow(MainState.exprolerModeStart);
+    }
+
     public void OnClickStartTutorial()
     {
         TutorButtonsStart.Init();

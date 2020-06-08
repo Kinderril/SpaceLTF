@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 public class ShopTutorInventory : ShopInventory
 {
-    public ShopTutorInventory([NotNull] Player player) 
+    public ShopTutorInventory([NotNull] PlayerSafe player) 
         : base(player)
     {
 

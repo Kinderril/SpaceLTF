@@ -59,7 +59,7 @@ public class DragableSpellItem : DragableItem
         var upgradeElements = MoneyConsts.SpellMicrochipsElements[Spell.Level];
         var haveMoney = MainController.Instance.MainPlayer.MoneyData.HaveMoney(cost);
         var haveUpgrades = MainController.Instance.MainPlayer.MoneyData.HaveMicrochips(upgradeElements);
-        var isMy = MainController.Instance.MainPlayer == Spell.CurrentInventory.Owner;
+        var isMy = MainController.Instance.MainPlayer.SafeLinks == Spell.CurrentInventory.Owner;
         var canUse = Spell.CanUpgradeByLevel() && haveMoney && Usable && isMy && haveUpgrades;
         UpgradeButton.gameObject.SetActive(canUse);
 

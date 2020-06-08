@@ -21,7 +21,8 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
     public ChangeItemMapEvent(ShipConfig config)
         : base(config)
     {
-        _traderInventory = new PlayerInventory(new PlayerAI("trader change"));
+        var playerTrader = new PlayerAI("trader change");
+        _traderInventory = new PlayerInventory(playerTrader.SafeLinks);
     }
 
     public override MessageDialogData GetDialog()

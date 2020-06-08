@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -14,20 +15,21 @@ public class Player
     public static string mainPlayer = $"myPlayerData_.data";
     //    public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
     //    public int CoinsCount = 7;
-    public PlayerInventory Inventory;
+    public PlayerInventory Inventory => SafeLinks.Inventory;
     public PlayerParameters Parameters;
     [System.NonSerialized]
     public PlayerScoutData ScoutData;
     public PlayerRepairData RepairData;
     public PlayerQuestData QuestData;
-    public PlayerDifficultyPart DifficultyPart;
+    public PlayerDifficultyPart Difficulty;
     public PlayerMoneyData MoneyData;
     public LastScoutsData LastScoutsData;
     public PlayerReputationData ReputationData;
     public PlayerAfterBattleOptions AfterBattleOptions;
     public PlayerMapData MapData;
-    public PlayerByStepDamage ByStepDamage;
+//    public PlayerByStepDamage ByStepDamage;
     public PlayerMessagesToConsole MessagesToConsole;
+    public PlayerSafe SafeLinks ;
     public PlayerArmy Army { get; private set; }
     public StartShipPilotData MainShip;
 
@@ -39,28 +41,38 @@ public class Player
     public void PlayNewGame(StartNewGameData data)
     {
         MessagesToConsole = new PlayerMessagesToConsole();
-        ByStepDamage = new PlayerByStepDamage();
-        ByStepDamage.Init(data.StepsBeforeDeath, this);
         MapData = new PlayerMapData();
-        MapData.Init(data, ByStepDamage);
-        MapData.GalaxyData.GalaxyEnemiesArmyController.InitQuests(QuestData);
+        MapData.Init(data);
         QuestData = new PlayerQuestData(this,data.QuestsOnStart);
         List<StartShipPilotData> startArmy;
-        DifficultyPart = new PlayerDifficultyPart();
-        DifficultyPart.Init(data.Difficulty);
         switch (data.GameNode)     
         {
             case EGameMode.simpleTutor:
-                startArmy = CreateStartArmySimpleTutor();
+                startArmy = data.CreateStartArmySimpleTutor(this);
                 break;
             case EGameMode.advTutor:
-                startArmy = CreateStartArmyAdvTutor();
+                startArmy = data.CreateStartArmyAdvTutor(this);
                 break;
             case EGameMode.sandBox:
             default:
-                startArmy = CreateStartArmy(data.shipConfig, data.posibleStartWeapons);
+                startArmy = data.CreateStartArmy(this);
                 break;
         }
+
+        switch (data.GameNode)
+        {
+            case EGameMode.safePlayer:
+                Difficulty = new PlayerDifficultyExprolerPart();
+                break;
+            default:
+            case EGameMode.simpleTutor:
+            case EGameMode.advTutor:
+            case EGameMode.sandBox:
+                Difficulty = new PlayerDifficultyPart();
+                break;
+        }
+        Difficulty.Init(data.Difficulty);
+        MainShip = startArmy.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
         Army.SetArmy(startArmy);
         RepairData.Init(Army, MapData, Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
@@ -184,148 +196,15 @@ public class Player
 
     }
 
-    private List<StartShipPilotData> CreateStartArmySimpleTutor()
-    {
-        ArmyCreatorLogs logs = new ArmyCreatorLogs();
-        float r = 1000;
-        int simpleIndex;
-        var bShip = ArmyCreator.CreateBaseShip(new ArmyRemainPoints(r), ShipConfig.mercenary, this);
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        {
-            var m1 = Library.CreateSpell(SpellType.machineGun);
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }
-        List<StartShipPilotData> army = new List<StartShipPilotData>();
-        army.Add(bShip);
-        MainShip = bShip;
-        return army;
-    }
-    private List<StartShipPilotData> CreateStartArmyAdvTutor()
-    {
-        ArmyCreatorLogs logs = new ArmyCreatorLogs();
-        float r = 1000;
-        int simpleIndex;
-        var bShip = ArmyCreator.CreateBaseShip(new ArmyRemainPoints(r), ShipConfig.federation, this);
-        var battleShip = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), ShipConfig.federation, this, logs);
-        battleShip.Ship.RemoveItem(battleShip.Ship.CocpitSlot);
-        battleShip.Ship.RemoveItem(battleShip.Ship.EngineSlot);
-        battleShip.Ship.RemoveItem(battleShip.Ship.WingSlot);
 
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        {
-            var m1 = Library.CreateSpell(SpellType.distShot);
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }
-        List<StartShipPilotData> army = new List<StartShipPilotData>();
-        army.Add(bShip);
-        army.Add(battleShip);
-        MainShip = bShip;
-        return army;
-
-    }
-    private List<StartShipPilotData> CreateStartArmy(ShipConfig config, List<WeaponType> posibleStartWeapons)
-    {
-        ArmyCreatorLogs logs = new ArmyCreatorLogs();
-        float r = 1000;
-        var bShip = ArmyCreator.CreateBaseShip(new ArmyRemainPoints(r), config, this);
-        r += Library.BASE_SHIP_VALUE;
-
-        var listTyper = new List<ShipType>() { ShipType.Light, ShipType.Heavy, ShipType.Middle };
-        var t1 = listTyper.RandomElement();
-        listTyper.Remove(t1);
-        var t2 = listTyper.RandomElement();
-        var ship1 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), t1, config, this, logs);
-        r += Library.BASE_SHIP_VALUE;
-        var ship2 = ArmyCreator.CreateShipByConfig(new ArmyRemainPoints(r), t2, config, this, logs);
-
-        if (MainController.Instance.Statistics.AllTimeCollectedPoints < 15)
-        {
-            NewGameAddSpellsBasic(bShip);
-        }
-        else
-        {
-            NewGameAddSpellsRandom(bShip);
-        }
-
-        AddWeaponsToShips(ref r, ship1, posibleStartWeapons);
-        AddWeaponsToShips(ref r, ship2, posibleStartWeapons);
-
-        ship1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
-        ship2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
-
-        List<StartShipPilotData> army = new List<StartShipPilotData>();
-        army.Add(bShip);
-        army.Add(ship1);
-        army.Add(ship2);
-        MainShip = bShip;
-        return army;
-    }
-
-    private void NewGameAddSpellsBasic(StartShipPilotData bShip)
-    {
-        int simpleIndex;
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        {
-            var m1 = Library.CreateSpell(SpellType.rechargeShield);
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        {
-            var m1 = Library.CreateSpell(SpellType.engineLock);
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        {
-            var m1 = Library.CreateSpell(SpellType.machineGun);
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }
-    }
-    private void NewGameAddSpellsRandom(StartShipPilotData bShip)
-    {
-        List<SpellType> healSpells = new List<SpellType>() { SpellType.rechargeShield, SpellType.repairDrones };
-        List<SpellType> controlSpells = new List<SpellType>() { SpellType.engineLock, SpellType.hookShot, SpellType.throwAround, SpellType.shildDamage };
-        List<SpellType> damageSpells = new List<SpellType>() { SpellType.artilleryPeriod, SpellType.distShot, SpellType.lineShot, SpellType.machineGun, SpellType.mineField };
-
-        int simpleIndex;
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        {
-            var m1 = Library.CreateSpell(healSpells.RandomElement());
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        {
-            var m1 = Library.CreateSpell(controlSpells.RandomElement());
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }
-        if (bShip.Ship.GetFreeSpellSlot(out simpleIndex))
-        {
-            var m1 = Library.CreateSpell(damageSpells.RandomElement());
-            bShip.Ship.TryAddSpellModul(m1, simpleIndex);
-        }
-
-    }
-
-    private void AddWeaponsToShips(ref float r, StartShipPilotData ship, List<WeaponType> list)
-    {
-        var ship2Weapon = list.RandomElement();
-        if (list.Count > 1)
-        {
-            list.Remove(ship2Weapon);
-        }
-        int count = MyExtensions.Random(2, 4);
-        for (int i = 0; i < count; i++)
-        {
-            ArmyCreator.TryAddWeapon(new ArmyRemainPoints(r), ship.Ship, ship2Weapon, true, new ArmyCreatorLogs());
-        }
-    }
 
     public Player(string name, Dictionary<PlayerParameterType, int> startData = null)
     {
-        Army = new PlayerArmy();
-        MoneyData = new PlayerMoneyData();
+        SafeLinks = new PlayerSafe();
+        Army = new PlayerArmy(SafeLinks);
+        MoneyData = new PlayerMoneyData(SafeLinks);
         ScoutData = new PlayerScoutData(this);
         Parameters = new PlayerParameters(this, startData);
-        Inventory = new PlayerInventory(this);
         RepairData = new PlayerRepairData();
         LastScoutsData = new LastScoutsData();
         ReputationData = new PlayerReputationData();

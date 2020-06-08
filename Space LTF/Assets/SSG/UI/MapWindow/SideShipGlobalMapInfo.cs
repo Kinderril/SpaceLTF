@@ -40,6 +40,8 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         _ship.Pilot.Stats.OnRankChange += OnRankChange;
         _ship.Ship.OnShipCriticalChange += OnShipCriticalChange;
 
+//        Debug.LogError($"EnableActions: {_ship.Ship.Id}");
+
     }
 
     private void OnShipCriticalChange(ShipInventory obj)
@@ -83,7 +85,8 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         for (int i = 0; i < Library.CRITICAL_DAMAGES_TO_DEATH; i++)
         {
             var haveDmg = i < _ship.Ship.CriticalDamages;
-            CriticalDamages[i].gameObject.SetActive(haveDmg);
+            var obj = CriticalDamages[i];
+            obj.gameObject.SetActive(haveDmg);
         }
     }
 
@@ -125,6 +128,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
 
     public void Dispose()
     {
+//        Debug.LogError($"EnableActions Dispose: {_ship.Ship.Id}");
         _ship.Ship.OnShipRepaired -= OnShipRepaired;
         _ship.Pilot.OnLevelUp -= OnLevelUp;
         _ship.Pilot.Stats.OnRankChange -= OnRankChange;

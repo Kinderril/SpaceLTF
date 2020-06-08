@@ -18,7 +18,7 @@ public class GalaxyEnemiesArmyController
     private int _lastStep = 1;
     // private int _lastAddedStep = 1;
     private int _totalBornArmies = 0;
-    private PlayerQuestData _questData;
+//    private PlayerQuestData _questData;
     private float _powerPerTurn;
 
     private const float DELTA_STEP = 3.4f;
@@ -164,25 +164,10 @@ public class GalaxyEnemiesArmyController
         var stepToBorn = _lastStep + (int)MyExtensions.GreateRandom(_totalBornArmies * DELTA_STEP);
         stepsToBorn.Add(stepToBorn);
     }
-
-    public void InitQuests(PlayerQuestData questData)
-    {
-        _questData = questData;
-//        _questData.OnElementFound += OnElementFound;
-    }
-
-    private void OnElementFound()
-    {
-        var stepToBorn = _lastStep + Mathf.Clamp((int)MyExtensions.GreateRandom(_totalBornArmies), 1, 4);
-        stepsToBorn.Add(stepToBorn);
-    }
-
+     
     public void Dispose()
     {
-        if (_questData != null)
-        {
-//            _questData.OnElementFound -= OnElementFound;
-        }
+
 
     }
     public void CacheTargets(Func<GlobalMapCell, bool> cellHaveObject)

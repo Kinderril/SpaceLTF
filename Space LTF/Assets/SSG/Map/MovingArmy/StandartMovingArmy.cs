@@ -118,7 +118,7 @@ public class StandartMovingArmy : MovingArmy
 
     public override Player GetArmyToFight()
     {
-        if (_player.Army.Army.Count == 0)
+        if (_player.Army.Army == null || _player.Army.Army.Count == 0)
         {
             CacheArmy();
         }

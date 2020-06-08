@@ -126,6 +126,8 @@ public class Commander
                                                  && pilotData.Ship.ShipType != ShipType.Base ? -1 : 1);
         bool haveMainShip = false;
 
+        List<StartShipPilotData> _mainShips = new List<StartShipPilotData>();
+
         foreach (var paramsOfShip in _paramsOfShips)
         {
             if (paramsOfShip.Ship.ShipType == ShipType.Base)
@@ -135,6 +137,7 @@ public class Commander
                 {
                     paramsIsOk = false;
                 }
+                _mainShips.Add(paramsOfShip);
             }
             indexPreCalc++;
         }
@@ -210,19 +213,25 @@ public class Commander
             }
             positionsToClear.Add(shipPosition);
         }
-        if (MainShip != null)
+
+        bool isBlinkInited = false;
+        foreach (var mainShip in Ships.Values)
         {
             var weaponsIndex = 0;
-            var zeroPosition = MainShip.WeaponPosition[0].transform;
-            SpellController.AddMainShipBlink();
-            foreach (var baseSpellModul in MainShip.ShipParameters.Spells)
+            var zeroPosition = mainShip.WeaponPosition[0].transform;
+            if (!isBlinkInited)
+            {
+                SpellController.AddMainShipBlink();
+                isBlinkInited = true;
+            }
+            foreach (var baseSpellModul in mainShip.ShipParameters.Spells)
             {
                 if (baseSpellModul != null)
                 {
                     Transform shootPos;
-                    if (MainShip.WeaponPosition.Count > weaponsIndex)
+                    if (mainShip.WeaponPosition.Count > weaponsIndex)
                     {
-                        shootPos = MainShip.WeaponPosition[weaponsIndex].transform;
+                        shootPos = mainShip.WeaponPosition[weaponsIndex].transform;
                         weaponsIndex++;
                     }
                     else
@@ -232,8 +241,33 @@ public class Commander
                     SpellController.AddSpell(baseSpellModul, shootPos);
                 }
             }
-            MainShip.ShipParameters.ShieldParameters.Enable();
+            mainShip.ShipParameters.ShieldParameters.Enable();
         }
+
+//        if (MainShip != null)
+//        {
+//            var weaponsIndex = 0;
+//            var zeroPosition = MainShip.WeaponPosition[0].transform;
+//            SpellController.AddMainShipBlink();
+//            foreach (var baseSpellModul in MainShip.ShipParameters.Spells)
+//            {
+//                if (baseSpellModul != null)
+//                {
+//                    Transform shootPos;
+//                    if (MainShip.WeaponPosition.Count > weaponsIndex)
+//                    {
+//                        shootPos = MainShip.WeaponPosition[weaponsIndex].transform;
+//                        weaponsIndex++;
+//                    }
+//                    else
+//                    {
+//                        shootPos = zeroPosition;
+//                    }
+//                    SpellController.AddSpell(baseSpellModul, shootPos);
+//                }
+//            }
+//            MainShip.ShipParameters.ShieldParameters.Enable();
+//        }
 
         return Ships;
     }

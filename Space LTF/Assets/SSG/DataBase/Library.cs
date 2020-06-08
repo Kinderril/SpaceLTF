@@ -287,7 +287,7 @@ public static class Library
         return w;
     }
 
-    public static ShipInventory CreateShip(ShipType shipType, ShipConfig config, Player player, PilotParameters pilot)
+    public static ShipInventory CreateShip(ShipType shipType, ShipConfig config, PlayerSafe player, PilotParameters pilot)
     {
         float hull = 34;
         float shield = 0;

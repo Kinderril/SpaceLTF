@@ -39,7 +39,7 @@ public class ArmyTutorGlobalCell : ArmyGlobalMapCell
 
         ShipType type = ShipType.Middle;
         ShipConfig cng = ShipConfig.mercenary;
-        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
+        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer.SafeLinks, pilot);
         var hireMsg = Namings.DialogTag("afterBattleHireOk"); //
         msg = Namings.Format(hireMsg, Namings.ShipConfig(cng), Namings.ShipType(type));
 //        var itemsCount = MyExtensions.Random(1, 2);
@@ -139,7 +139,7 @@ public class ArmyTutorGlobalCell : ArmyGlobalMapCell
         void CreateByType(ShipType type)
         {
             var pilot = Library.CreateDebugPilot();
-            var ship = Library.CreateShip(type, ShipConfig.droid, player, pilot);
+            var ship = Library.CreateShip(type, ShipConfig.droid, player.SafeLinks, pilot);
             var startData = new StartShipPilotData(pilot, ship);
             startData.Ship.SetRepairPercent(.3f);
             if (type == ShipType.Turret)

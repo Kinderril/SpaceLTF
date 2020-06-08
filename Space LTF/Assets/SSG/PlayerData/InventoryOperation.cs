@@ -387,7 +387,7 @@ public static class InventoryOperation
                     if (item.CurrentInventory.Owner != null)
                     {
                         var sellValue = (int)(sellPrice);
-                        item.CurrentInventory.Owner.MoneyData.AddMoney(sellValue);
+                        item.CurrentInventory.Owner.AddMoney(sellValue);
                     }
                     WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.BuySell);
                     CallbackSuccsess();
@@ -404,7 +404,7 @@ public static class InventoryOperation
         if (item.CurrentInventory.IsShop())    //Игрок покупает у магазина
         {
             int buyPrice = CalcBuyPrice(item);
-            if (to.Owner.MoneyData.HaveMoney(buyPrice))
+            if (to.Owner.HaveMoney(buyPrice))
             {
                 //Buying item from shop
                 var msg = Namings.Format(Namings.Tag("wantBuyItem"), buyPrice);
@@ -413,7 +413,7 @@ public static class InventoryOperation
                 {
                     if (to.Owner != null)
                     {
-                        to.Owner.MoneyData.RemoveMoney(buyPrice);
+                        to.Owner.RemoveMoney(buyPrice);
                     }
                     WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.BuySell);
                     CallbackSuccsess();

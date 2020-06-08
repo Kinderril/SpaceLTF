@@ -19,7 +19,7 @@ public class ArmyTutorIgnoreShieldGlobalCell : ArmyTutorAbstractGlobalCell
         void CreateByType(ShipType type)
         {
             var pilot = Library.CreateDebugPilot();
-            var ship = Library.CreateShip(type, ShipConfig.krios, player, pilot);
+            var ship = Library.CreateShip(type, ShipConfig.krios, player.SafeLinks, pilot);
             var startData = new StartShipPilotData(pilot, ship);
 //            startData.Ship.SetRepairPercent(.3f);
             if (type == ShipType.Middle)

@@ -73,7 +73,7 @@ public class WindowEndGame : BaseWindow
 
     public void OnToNewGame()
     {
-        WindowManager.Instance.OpenWindow(MainState.start);
+        MainController.Instance.BattleData.MoveToWindowEndBattle();
     }
 
 

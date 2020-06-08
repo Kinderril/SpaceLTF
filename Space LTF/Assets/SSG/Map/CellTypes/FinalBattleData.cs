@@ -19,6 +19,7 @@ public class FinalBattleData
 
     public FinalBattleData()
     {
+
     }
 
     public void Init(int power)
@@ -34,10 +35,6 @@ public class FinalBattleData
 
     public MessageDialogData GetDialog()
     {
-//        int current = 1;//mainQuest.MainElementsFound;
-//        int need = 1;//mainQuest.MaxMainElements;
-//        var isFull = current >= need;
-
         var list = new List<AnswerDialogData>();
         MessageDialogData mesData;
         if (_isFull)
@@ -50,37 +47,6 @@ public class FinalBattleData
             list.Add(new AnswerDialogData(Namings.Tag("Ok"), LoseGame, null));
             mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartNotReady")), list);
 
-
-//            var player = MainController.Instance.MainPlayer;
-//            var armyCount = player.Army.Count;
-//            var delta = need - current;
-//            if (delta > armyCount - 1)
-//            {
-//                list.Add(new AnswerDialogData(Namings.Tag("Ok"), LoseGame, null));
-//                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalStartNotReady"),
-//                    current, need), list);
-//            }
-//            else
-//            {
-//                var shipsYouCanScriface = player.Army.Army.Where(x => x.Ship.ShipType != ShipType.Base).ToList();
-//                foreach (var data in shipsYouCanScriface)
-//                {
-//                    StartShipPilotData shipToDel = data;
-//                    void Sacrifice()
-//                    {
-//                        player.Army.RemoveShip(shipToDel);
-////                        player.QuestData.AddElement();
-//                    }
-//                    list.Add(new AnswerDialogData(Namings.Format(Namings.Tag("Sacrifice"), shipToDel.Ship.Name,
-//                        Namings.ShipType(shipToDel.Ship.ShipType), Namings.ShipConfig(shipToDel.Ship.ShipConfig)), null, () =>
-//                    {
-//                        Sacrifice();
-//                        return GetDialog();
-//                    }));
-//                }
-//                mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("finalProcess"),
-//                    current, need), list);
-//            }
         }
         return mesData;
     }

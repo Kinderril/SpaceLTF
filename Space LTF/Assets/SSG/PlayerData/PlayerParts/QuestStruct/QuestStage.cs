@@ -70,6 +70,12 @@ public abstract class QuestStage
             allSectors = player.MapData.GalaxyData.AllSectors.Where(x => !(x is SectorDungeon)).ToList();
         }
 
+        if (allSectors.Count < minCount)
+        {
+            var list = player.MapData.GalaxyData.AllSectors.ToList();
+            return list;
+        }
+
         return allSectors;
     }
     protected float GetPercent(float baseVal, float curVal)

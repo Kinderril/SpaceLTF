@@ -75,6 +75,41 @@ public static class ArmyCreator
             for (int i = 0; i < countOfMainShips; i++)
             {
                 var baseShip = CreateBaseShip(points, data.NextShipConfig(), player);
+
+                if (baseShip != null)
+                    army.Add(baseShip);
+            }
+        }
+
+        void AddSpellsToMainShips(bool anyWay)
+        {
+            foreach (var baseShip in army)
+            {
+                if (baseShip.Ship.ShipType == ShipType.Base)
+                {
+                    var spell = data.GetSpell();
+                    if (spell.HasValue)
+                    {
+                        if (anyWay)
+                        {
+                            AddCastModul(points, baseShip.Ship, spell.Value, logger);
+                        }
+                        else
+                        {
+                            TryAddCastModul(points, baseShip.Ship, spell.Value, logger);
+                        }
+                    }
+                }
+            }
+        }
+
+        AddSpellsToMainShips(true);
+        AddSpellsToMainShips(false);
+
+        foreach (var baseShip in army)
+        {
+            if (baseShip.Ship.ShipType == ShipType.Base)
+            {
                 var spell = data.GetSpell();
                 if (spell.HasValue)
                 {
@@ -85,8 +120,6 @@ public static class ArmyCreator
                 {
                     TryAddCastModul(points, baseShip.Ship, spell.Value, logger);
                 }
-                if (baseShip != null)
-                    army.Add(baseShip);
             }
         }
 
@@ -319,7 +352,7 @@ public static class ArmyCreator
     public static StartShipPilotData CreateBaseShip(ArmyRemainPoints v, ShipConfig config, Player player)
     {
         var pilot = Library.CreateDebugPilot();
-        var ship = Library.CreateShip(ShipType.Base, config, player, pilot);
+        var ship = Library.CreateShip(ShipType.Base, config, player.SafeLinks, pilot);
         return new StartShipPilotData(pilot, ship);
     }
 
@@ -344,7 +377,7 @@ public static class ArmyCreator
             return null;
         }
         var pilot = Library.CreateDebugPilot();
-        var ship = Library.CreateShip(type, config, player, pilot);
+        var ship = Library.CreateShip(type, config, player.SafeLinks, pilot);
         v.Points -= Library.BASE_SHIP_VALUE;
         logs.AddLog(v.Points, "create ship");
         var startData = new StartShipPilotData(pilot, ship);
@@ -655,6 +688,20 @@ public static class ArmyCreator
             return true;
         }
         return false;
+    }    
+    public static bool AddCastModul(ArmyRemainPoints v, ShipInventory ship, SpellType spellModuls, ArmyCreatorLogs logs)
+    {
+        int simpleIndex;
+        var val = Library.BASE_SPELL_VALUE;// * Library.ShipPowerCoef(ship.ShipType);
+        if (ship.GetFreeSpellSlot(out simpleIndex))
+        {
+            v.Points -= val;
+            logs.AddLog(v.Points, "add cast modul");
+            var m1 = Library.CreateSpell(spellModuls);
+            ship.TryAddSpellModul(m1, simpleIndex);
+            return true;
+        }
+        return false;
     }
 
     public static List<StartShipPilotData> CreateTurrets(float pointsToTurrents, Player player,
@@ -668,7 +715,7 @@ public static class ArmyCreator
         for (int i = 0; i < trgCount; i++)
         {
             var pilot = Library.CreateDebugPilot();
-            var ship = Library.CreateShip(ShipType.Turret, config, player, pilot);
+            var ship = Library.CreateShip(ShipType.Turret, config, player.SafeLinks, pilot);
             pointRemain1.Points -= Library.BASE_TURRET_VALUE;
             WeaponType weapon = listWeaponTypes.RandomElement();
             TryAddWeapon(pointRemain1, ship, weapon, false, logs);

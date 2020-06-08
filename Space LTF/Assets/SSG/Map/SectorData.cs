@@ -105,22 +105,10 @@ public class SectorData
         }
     }
 
-    public static int CalcCellPower(float startCellPower, float nextPower)
+    protected virtual void PrePopulate()
     {
-        return (int)(startCellPower + nextPower);
+
     }
-//    public static int CalcCellPower(int visited, int Size, int startPowerGalaxy, int additionalPower)
-//    {
-//        var sectorPowerCoef = Library.SECTOR_COEF_POWER + startPowerGalaxy * Library.SECTOR_POWER_START_COEF;
-//        var additional = (int)((visited + 1) * Size * sectorPowerCoef);
-//        var power = startPowerGalaxy + additional + additionalPower;
-//
-//        var underLog = power * power * Library.SECTOR_POWER_LOG2;
-//        var log = Mathf.Log(underLog);
-//        var modif = (int)(log * Library.SECTOR_POWER_LOG1 -
-//                    Library.SECTOR_POWER_LOG3);
-//        return modif;
-//    }
 
     public virtual void Populate(int startPowerGalaxy)
     {
@@ -128,6 +116,7 @@ public class SectorData
         StartPowerGalaxy = startPowerGalaxy;
         _power = startPowerGalaxy;
         RandomizeBorders();
+        PrePopulate();
         var remainFreeCells = ListCells.Where(x => x.IsFreeToPopulate()).ToList();
         //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");
         //Shop cells
@@ -346,18 +335,6 @@ public class SectorData
         }
     }
 
-    private bool CanAdd(GlobalMapEventType eventType)
-    {
-        if (_maxCount.ContainsKey(eventType))
-        {
-            return _eventsCount[eventType] < _maxCount[eventType];
-        }
-        else
-        {
-            return true;
-        }
-    }
-
     private GlobalMapEventType GetBigEventType()
     {
         List<GlobalMapEventType> list = new List<GlobalMapEventType>();
@@ -389,24 +366,7 @@ public class SectorData
     {
         _isVisited = true;
     }
-
-//    public virtual void MarkAsCore(int coreId, CoreGlobalMapCell coreCell)
-//    {
-//        IsCore = true;
-//        Debug.Log($"Sector marked as core:{Id}  coreId:{coreId}");
-//        for (int i = 0; i < Size; i++)
-//        {
-//            for (int j = 0; j < Size; j++)
-//            {
-//                var cell = Cells[i, j];
-//                if (!cell.IsFreeToPopulate() && !(cell is GlobalMapNothing))
-//                {
-//                    cell.SetConnectedCell(coreId);
-//                }
-//            }
-//        }
-//    }
-
+          
     public void ApplyPointsTo(CellsInGalaxy cellInGalaxy)
     {
         int countPopulated = 0;
@@ -434,16 +394,6 @@ public class SectorData
                 continue;
             } 
             var ways = ConnectedCellsToCurrent(cell.indX, cell.indZ);
-//#if UNITY_EDITOR
-//            foreach (var globalMapCell in ways)
-//            {
-//                if (globalMapCell is GlobalMapNothing)
-//                {
-//                    Debug.LogError("sss");
-//                }
-//            }
-//#endif
-
             ways.RemoveAll(x => x is GlobalMapNothing);
             var data = cell.Data;
 #if UNITY_EDITOR

@@ -17,6 +17,7 @@ public class DataBaseController : Singleton<DataBaseController>
     public DataStructPrefabs DataStructPrefabs;
     public SpellDataBase SpellDataBase;
     public AudioDataBase AudioDataBase;
+    public ExprolerDataBase ExprolerDataBase;
     public BackgroundsDatabase Backgrounds;
     public Pool Pool;
     public Transform BulletContainer;

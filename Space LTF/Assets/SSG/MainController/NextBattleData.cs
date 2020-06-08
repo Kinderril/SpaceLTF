@@ -7,8 +7,8 @@ public class NextBattleData
     private bool _isFinalBattle;
     private bool _canRetire;
     private EBattlefildEventType? _battleEvent;
-    private Player MainPlayer;
-    private PlayerStatistics Statistics;
+    protected Player MainPlayer;
+    protected PlayerStatistics Statistics;
     public NextBattleData(Player mainPlayer, PlayerStatistics statistics)
     {
         MainPlayer = mainPlayer;
@@ -28,7 +28,36 @@ public class NextBattleData
         BattleController.Instance.LaunchGame(greenSide, redSide, _canRetire, _battleEvent, battleType);
     }
 
-    public void EndGameWin(EndBattleType winStatus)
+
+    private void ClearMarks(Player player)
+    {
+        foreach (var ship in player.Army.Army)
+        {
+            ship.Ship.Marked = false;
+        }
+        
+    }
+
+
+    public void EndGameRunAway()
+    {
+        WindowManager.Instance.OpenWindow(MainState.map);
+        //        WindowManager.Instance.OpenWindow(MainState.runAwayBattle);
+        Statistics.EndBattle(EndBattleType.runAway);
+        //        MainPlayer.EndGame();
+        MainPlayer.MessagesToConsole.AddMsg("Running away complete");
+    }
+
+    public void EndGameLose()
+    {
+        if (!_isFinalBattle)
+        {
+            Statistics.EndBattle(EndBattleType.lose);
+        }
+        EndGame(false);
+
+    }
+    public void EndBattleWin(EndBattleType winStatus)
     {
         Statistics.AddWin(MainPlayer.Army.BaseShipConfig);
         ClearMarks(MainPlayer);
@@ -43,44 +72,9 @@ public class NextBattleData
             Statistics.EndBattle(winStatus);
             MainPlayer.MessagesToConsole.AddMsg("Battle won!");
         }
-
-
     }
 
-    private void ClearMarks(Player player)
-    {
-        foreach (var ship in player.Army.Army)
-        {
-            ship.Ship.Marked = false;
-        }
-        
-    }
-
-    public void EndGameLose()
-    {
-        if (_isFinalBattle)
-        {
-            EndGame(false);
-        }
-        else
-        {
-            Statistics.EndBattle(EndBattleType.lose);
-            //            MainPlayer.EndGame();
-            MainController.Instance.BattleData.EndGame(false);
-        }
-
-    }
-
-    public void EndGameRunAway()
-    {
-        WindowManager.Instance.OpenWindow(MainState.map);
-        //        WindowManager.Instance.OpenWindow(MainState.runAwayBattle);
-        Statistics.EndBattle(EndBattleType.runAway);
-        //        MainPlayer.EndGame();
-        MainPlayer.MessagesToConsole.AddMsg("Running away complete");
-    }
-
-    public void EndGame(bool win)
+    public virtual void EndGame(bool win)
     {
         Statistics.EndGameAll(win, MainPlayer);
         WindowManager.Instance.OpenWindow(MainState.endGame);
@@ -93,4 +87,8 @@ public class NextBattleData
 
     }
 
+    public virtual void MoveToWindowEndBattle()
+    {
+        WindowManager.Instance.OpenWindow(MainState.start);
+    }
 }

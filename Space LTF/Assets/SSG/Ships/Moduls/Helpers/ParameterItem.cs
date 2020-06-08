@@ -107,4 +107,10 @@ public class ParameterItem : IItemInv
     {
         return $"Parameter item {_itemType.ToString()} Rarity:{Rarity.ToString()}";  //TODO LOCALIZTION
     }
+
+    public IItemInv Copy()
+    {
+        var copy = Utils.Copy(ParametersAffection);
+        return new ParameterItem(_itemType,Rarity,SubType, copy);
+    }
 }

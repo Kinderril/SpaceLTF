@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class EndGlobalCell : ArmyGlobalMapCell
 {
-    private FinalBattleData _data;
+    protected FinalBattleData _data;
 
     public EndGlobalCell(int power, int id, int intX, int intZ, SectorData sector)
         : base(power, ShipConfig.droid, id, intX, intZ, sector)
@@ -57,8 +57,6 @@ public class EndGlobalCell : ArmyGlobalMapCell
         if (_data == null)
         {
             var questData = MainController.Instance.MainPlayer.QuestData;
-//            questData.ComeToLastPoint();
-            //            questData.CheckIfOver();
             _data = questData.LastBattleData;
             _data.Init(Power);
         }

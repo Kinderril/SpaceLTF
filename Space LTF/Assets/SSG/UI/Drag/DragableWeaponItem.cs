@@ -60,7 +60,7 @@ public class DragableWeaponItem : DragableItem
         }
         var cost = MoneyConsts.WeaponUpgrade[Weapon.Level];
         var haveMoney = MainController.Instance.MainPlayer.MoneyData.HaveMoney(cost);
-        var isMy = MainController.Instance.MainPlayer == Weapon.CurrentInventory.Owner;
+        var isMy = MainController.Instance.MainPlayer.SafeLinks == Weapon.CurrentInventory.Owner;
         var canUse = Weapon.CanUpgrade() && haveMoney && Usable && isMy;
         UpgradeButton.gameObject.SetActive(canUse); 
 

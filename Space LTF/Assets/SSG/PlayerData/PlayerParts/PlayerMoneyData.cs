@@ -4,16 +4,18 @@
 [System.Serializable]
 public class PlayerMoneyData
 {
-    public int MoneyCount { get; private set; }
-    public int MicrochipsCount { get; private set; }
+    public int MoneyCount => _links.Credits;
+    public int MicrochipsCount => _links.Microchips;
+    private PlayerSafe _links;
 
     [field: NonSerialized]
     public event Action<int> OnMoneyChange;
     [field: NonSerialized]
     public event Action<int> OnUpgradeChange;
 
-    public PlayerMoneyData()
+    public PlayerMoneyData(PlayerSafe SafeLinks )
     {
+        _links = SafeLinks;
 #if UNITY_EDITOR
         //        MoneyCount = 1000;
 #endif
@@ -21,7 +23,7 @@ public class PlayerMoneyData
 
     public void AddMoney(int moneyToReward)
     {
-        MoneyCount += moneyToReward;
+        _links.SetMoney(MoneyCount + moneyToReward);
         if (OnMoneyChange != null)
         {
             OnMoneyChange(MoneyCount);
@@ -29,7 +31,7 @@ public class PlayerMoneyData
     }
     public void AddMicrochips(int val)
     {
-        MicrochipsCount += val;
+        _links.SetMicrochips(MicrochipsCount + val);
         if (OnUpgradeChange != null)
         {
             OnUpgradeChange(MoneyCount);
@@ -52,7 +54,7 @@ public class PlayerMoneyData
 
     public void RemoveMoney(int costValue)
     {
-        MoneyCount -= costValue;
+        _links.SetMoney(MoneyCount - costValue);
         if (OnMoneyChange != null)
         {
             OnMoneyChange(MoneyCount);
@@ -60,7 +62,7 @@ public class PlayerMoneyData
     }
     public void RemoveMicrochips(int val)
     {
-        MicrochipsCount -= val;
+        _links.SetMicrochips(MicrochipsCount - val);
         if (OnUpgradeChange != null)
         {
             OnUpgradeChange(MoneyCount);

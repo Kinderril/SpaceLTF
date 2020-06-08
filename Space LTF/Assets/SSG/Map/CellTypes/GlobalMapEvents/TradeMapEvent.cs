@@ -26,7 +26,8 @@ public class TradeMapEvent : BaseGlobalMapEvent
     public TradeMapEvent(ShipConfig config)
         : base(config)
     {
-        _inventory = new PlayerInventory(new PlayerAI("trader"));
+        var trader = new PlayerAI("trader");
+        _inventory = new PlayerInventory(trader.SafeLinks);
     }
 
     public override MessageDialogData GetDialog()

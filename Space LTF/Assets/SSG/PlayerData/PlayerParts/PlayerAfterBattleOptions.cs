@@ -404,7 +404,7 @@ public class PlayerAfterBattleOptions
 
         var type = types.Random();
         var cng = config.HasValue ? config.Value : configs.Random();
-        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer, pilot);
+        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer.SafeLinks, pilot);
         var hireMsg = Namings.DialogTag("afterBattleHireOk"); //
         msg = Namings.Format(hireMsg, Namings.ShipConfig(cng), Namings.ShipType(type));
         var itemsCount = MyExtensions.Random(1, 2);

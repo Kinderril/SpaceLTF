@@ -60,34 +60,19 @@ public class RepairStationGlobalCell : GlobalMapCell
 
             var haveSmtToRepair = player.Army.HaveSmtToRepair();
             string mainMsg;
-            if (player.ByStepDamage.IsEnable)
+
+       
+            if (haveSmtToRepair)
             {
-                mainMsg =
-                    "This is repair station. We can repair our fleet here.\n And we can try to stabilize energy module of core ship.";
-
-
-                if (RemainEnergyRepairs > 0)
-                {
-                    answers.Add(new AnswerDialogData(
-                        Namings.Format("Statilize energy module. Remain charges:{0}", RemainEnergyRepairs), null,
-                        Statilize));
-                }
+                mainMsg = Namings.DialogTag("repairStart");
             }
             else
             {
-                if (haveSmtToRepair)
-                {
-                    mainMsg = Namings.DialogTag("repairStart");
-                }
-                else
-                {
-                    mainMsg = Namings.DialogTag("nothingToRepair");
-                }
+                mainMsg = Namings.DialogTag("nothingToRepair");
             }
 
 
-
-            MessageDialogData mesData;
+                MessageDialogData mesData;
             if (total > 0 )
             {
                 var canRepairFull = player.MoneyData.HaveMoney(total);
@@ -156,18 +141,18 @@ public class RepairStationGlobalCell : GlobalMapCell
         return mesData;
     }
 
-    private MessageDialogData Statilize()
-    {
-        var answers = new List<AnswerDialogData>();
-        answers.Add(new AnswerDialogData(Namings.Tag("Ok")));
-        var player = MainController.Instance.MainPlayer;
-        RemainEnergyRepairs--;
-        player.ByStepDamage.Repair();
-        var mesData =
-            new MessageDialogData(Namings.Format("Module stabilized for {0} days", player.ByStepDamage._curRemainSteps),
-                answers);
-        return mesData;
-    }
+//    private MessageDialogData Statilize()
+//    {
+//        var answers = new List<AnswerDialogData>();
+//        answers.Add(new AnswerDialogData(Namings.Tag("Ok")));
+//        var player = MainController.Instance.MainPlayer;
+//        RemainEnergyRepairs--;
+//        player.ByStepDamage.Repair();
+//        var mesData =
+//            new MessageDialogData(Namings.Format("Module stabilized for {0} days", player.ByStepDamage._curRemainSteps),
+//                answers);
+//        return mesData;
+//    }
 
     public override Color Color()
     {

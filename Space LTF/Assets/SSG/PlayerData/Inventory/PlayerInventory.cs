@@ -20,9 +20,9 @@ public class PlayerInventory : IInventory
 
     [field: NonSerialized]
     public event ItemTransferedTo OnItemAdded;
-    private Player _player;
+    private PlayerSafe _player;
 
-    public PlayerInventory(Player player)
+    public PlayerInventory(PlayerSafe player)
     {
         _player = player;
         Moduls.Clear();
@@ -44,7 +44,7 @@ public class PlayerInventory : IInventory
         OnItemAdded?.Invoke(item, val);
     }
     [CanBeNull]
-    public Player Owner { get { return _player; } }
+    public PlayerSafe Owner => _player;
 
     public int SlotsCount => MAX_SLOTS;
 

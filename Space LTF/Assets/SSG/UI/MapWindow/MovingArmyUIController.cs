@@ -54,7 +54,8 @@ public class MovingArmyUIController : MonoBehaviour
     public void ClearAll()
     {
         _isInited = false;
-        _controller.OnAddMovingArmy -= OnAddMovingArmy;
+        if (_controller != null)
+            _controller.OnAddMovingArmy -= OnAddMovingArmy;
         _armyElements.Clear();
         Layout.ClearTransform();
     }

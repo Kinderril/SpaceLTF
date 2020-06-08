@@ -51,33 +51,14 @@ public class GalaxyData
         {GlobalMapEventType.secretDeal, 2},
     };
 
-    public GlobalMapCell Init2(int sectorCount, int sizeSector, EStartGameDifficulty difficulty, int questsOnStart,
+    public GlobalMapCell Init2(int sectorCount, int sizeSector, int startPower, int questsOnStart,
         int startDeathStep, ShipConfig playerShipConfig, int powerPerTurnBaseVal)
     {
         _questsOnStart = questsOnStart;
         _verticalCount = VERTICAL_COUNT;
         _powerPerTurn = ConfigurePowerPerTurn(powerPerTurnBaseVal);
         StartDeathStep = startDeathStep;
-        int startPower = Library.MIN_GLOBAL_MAP_EASY_BASE_POWER;
-
-        switch (difficulty)
-        {
-            case EStartGameDifficulty.VeryEasy:
-                startPower = Library.MAX_GLOBAL_MAP_VERYEASY_BASE_POWER;
-                break;
-            case EStartGameDifficulty.Easy:
-                startPower = Library.MIN_GLOBAL_MAP_EASY_BASE_POWER;
-                break;
-            case EStartGameDifficulty.Normal:
-                startPower = Library.MIN_GLOBAL_MAP_NORMAL_BASE_POWER;
-                break;
-            case EStartGameDifficulty.Hard:
-                startPower = Library.MIN_GLOBAL_MAP_HARD_BASE_POWER;
-                break;
-            case EStartGameDifficulty.Imposilbe:
-                startPower = Library.MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER;
-                break;
-        }
+ 
 
         GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController(_powerPerTurn);
         var startCell = ImpletemtSectors(sectorCount, sizeSector, startPower,  playerShipConfig,
@@ -163,45 +144,8 @@ public class GalaxyData
 
         //Create core sectors
         var randomInts = new List<int>();
-        for (var i = 2; i < sectorCount - 1; i++) randomInts.Add(i);
-
-        //        var takeThisIndex = 1;
-
-//        var xIndexs = randomInts.RandomElement(coreCells - 1);
-//        xIndexs.Add(1);
-//        var goodCorePositions = xIndexs.Count;
-        //        var goodCorePositions = Mathf.Clamp(questsOnStart, 0, sectorsCount - 2);
-//        int createdCoreSector = 0;
-//        for (var i = 0; i < xIndexs.Count; i++)
-//        {
-//            var secrosDist = xIndexs[i];
-//            List<SectorData> possibleSectors;
-//            if (MyExtensions.IsTrue01(.3f) && allSubSectors.Count > verticalCount - 2)
-//                //Only dungeons
-//                possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && x is SectorDungeon).ToList();
-//            else
-//                //Only inner
-//                possibleSectors = allSubSectors.Where(x => x.XIndex == secrosDist && !(x is SectorDungeon)).ToList();
-//
-////            var coreSector = possibleSectors.RandomElement();
-////            if (coreSector == null)
-////                Debug.LogError($"can't find sector with dist:{secrosDist}");
-////            else
-////            {
-////                createdCoreSector++;
-////                CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
-//////                allSubSectors.Add(endSector);
-////            }
-//        }
-
-//        var notGoodCores = questsOnStart - goodCorePositions;
-//        for (var i = 0; i < notGoodCores; i++)
-//        {
-//            var coreSector = allSubSectors.Where(x => !x.IsPopulated && x.StartX != 0 && x != null).ToList()
-//                .RandomElement();
-//            if (coreSector != null)
-//                CreateCoreSector(coreSector, startSector, id++, unPopulatedSectors, startPower, sizeSector);
-//        }
+        for (var i = 2; i < sectorCount - 1; i++)
+            randomInts.Add(i);
 
         foreach (var sectorData in unPopulatedSectors)
         {
@@ -566,7 +510,7 @@ public class GalaxyData
     {
         var SizeX = sectorsCount * (sizeZoneSector + 1) - 1;
         var SizeZ = verticalCount * (sizeZoneSector + 1) - 1;
-        Debug.Log(Namings.Format("ImplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}   SizeX:{2}   SizeZ:{3}  ", sizeZoneSector, sectorsCount, SizeX, SizeZ));
+        Debug.Log(Namings.Format("BornArmies : sizeSector:{0}   sectorsCount:{1}   SizeX:{2}   SizeZ:{3}  ", sizeZoneSector, sectorsCount, SizeX, SizeZ));
         for (var i = 0; i < sectorsCount; i++)
         {
             for (var j = 0; j < verticalCount; j++)

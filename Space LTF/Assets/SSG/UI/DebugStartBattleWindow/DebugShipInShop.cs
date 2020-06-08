@@ -42,7 +42,7 @@ public class DebugShipInShop : MonoBehaviour
         else
         {
             Debug.LogError("using debug ship");
-            _shipInv = Library.CreateShip(ShipType.Middle,ShipConfig.mercenary, _player, PilotParameters as PilotParameters);
+            _shipInv = Library.CreateShip(ShipType.Middle,ShipConfig.mercenary, _player.SafeLinks, PilotParameters as PilotParameters);
         }
         UpdateImages();
     }
@@ -70,7 +70,7 @@ public class DebugShipInShop : MonoBehaviour
 
     public void SetBody(ShipType shiopType,ShipConfig config)
     {
-        _shipInv = Library.CreateShip(shiopType, config, _player,Library.CreateDebugPilot());
+        _shipInv = Library.CreateShip(shiopType, config, _player.SafeLinks,Library.CreateDebugPilot());
         UpdateImages();
     }
 

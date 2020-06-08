@@ -24,6 +24,8 @@ public enum MainState
     loadinbg = 15,
     achievements = 16,
     statistics = 17,
+    exprolerModeGlobalMap = 18,
+    exprolerModeStart = 19,
     //    loading,
 }
 
@@ -92,6 +94,7 @@ public class WindowManager : Singleton<WindowManager>
 
     public void OpenWindow(MainState state)
     {
+        Debug.Log($"Open window {state.ToString()}");
         OpenWindow<object>(state, null);
     }
 

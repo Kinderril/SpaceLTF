@@ -30,7 +30,7 @@ public class ShopInventory : PlayerInventory
     public List<SimpleModulType> ValuableTypesModulsList => _valuableTypesModuls;
     public List<SimpleModulType> NotValuableTypesModulsList => _notValuableTypesModuls;
 
-    public ShopInventory([NotNull] Player player)
+    public ShopInventory([NotNull] PlayerSafe player)
         : base(player)
     {
 

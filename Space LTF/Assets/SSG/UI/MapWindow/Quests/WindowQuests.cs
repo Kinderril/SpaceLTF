@@ -53,7 +53,10 @@ public class WindowQuests : MonoBehaviour
     public void ClearAll()
     {
         _isInited = false;
-        _playerQuests.OnQuestAdd -= OnQuestAdd;
+        if (_playerQuests != null)
+        {
+            _playerQuests.OnQuestAdd -= OnQuestAdd;
+        }
         foreach (var questContainerElement in _elelemtns)
         {
             questContainerElement.ClearAll();

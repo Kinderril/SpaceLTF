@@ -20,7 +20,7 @@ public class ArmyTutorAutoFightGlobalCell : ArmyTutorAbstractGlobalCell
         void CreateByType(ShipType type)
         {
             var pilot = Library.CreateDebugPilot();
-            var ship = Library.CreateShip(type, ShipConfig.ocrons, player, pilot);
+            var ship = Library.CreateShip(type, ShipConfig.ocrons, player.SafeLinks, pilot);
             var startData = new StartShipPilotData(pilot, ship);
 //            startData.Ship.SetRepairPercent(.3f);
 //            for (int i = 0; i < 10; i++)

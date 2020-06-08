@@ -36,7 +36,6 @@ public class MapWindow : BaseWindow
     public WindowModif modifWindowUI;
     public GlobalMapController GlobalMap;
     //    public CataclysmUI Cataclysm;
-    public PlayerByStepUI PlayerByStepUI;
     private GlobalMapCell _lastClosest = null;
     public GameObject StartInfo;
     public Transform LayoutSideShips;
@@ -90,13 +89,12 @@ public class MapWindow : BaseWindow
             GlobalMap.UnBlock();
             player = MainController.Instance.MainPlayer;
             player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
-            PlayerByStepUI.Init(player.ByStepDamage);
             MoneyField.Init(player.MoneyData.MoneyCount);
             MicrochipField.Init(player.MoneyData.MicrochipsCount);
             player.MoneyData.OnMoneyChange += OnMoneyChange;
             player.MoneyData.OnUpgradeChange += OnMicrochipChange;
             player.MapData.OnCellChanged += OnCellChanged;
-            player.Army.OnAddShip += OnAddShip;
+            player.SafeLinks.OnAddShip += OnAddShip;
             // player.ReputationData.OnReputationNationChange += OnReputationChange;
             CellsOfSector();
             InitMyArmy();
@@ -567,32 +565,40 @@ public class MapWindow : BaseWindow
 
     public override void Dispose()
     {
-        PlayerByStepUI.Dispose();
         NavigationList.Dispose();
         _lastClosest = null;
         GlobalMap.Close();
         MapConsoleUI.Close();
 //        player.QuestData.OnElementFound -= OnElementFound;
-        player.RepairData.OnSomeShipRepaired -= OnSomeShipRepaired;
-        player.MoneyData.OnMoneyChange -= OnMoneyChange;
-        player.MoneyData.OnUpgradeChange -= OnMicrochipChange;
-        player.MapData.OnCellChanged -= OnCellChanged;
-        player.Army.OnAddShip -= OnAddShip;
+        if (player != null)
+        {
+            player.RepairData.OnSomeShipRepaired -= OnSomeShipRepaired;
+            player.MoneyData.OnMoneyChange -= OnMoneyChange;
+            player.MoneyData.OnUpgradeChange -= OnMicrochipChange;
+            player.MapData.OnCellChanged -= OnCellChanged;
+            player.SafeLinks.OnAddShip -= OnAddShip;
+        }
+
         // player.ReputationData.OnReputationNationChange -= OnReputationChange;
         //        player.MapData.OnSectorChanged -= OnSectorChanged;
         //        player.MapData.OnCellChanged -= OnCellChanged;
         GlobalMap.UnBlock();
         InventoryUI.Dispose();
         DialogWindow.Dispose();
-        playerArmyUI.Dispose();
         ReputationMapUI.Dispose();
-        //        Cataclysm.Dispose();
         if (playerArmyUI != null)
+        {
+            playerArmyUI.Dispose();
             Destroy(playerArmyUI.gameObject);
+        }
     }
 
     public void ClearAll()
     {
+        foreach (var sideShipGlobalMapInfo in _sideInfos)
+        {
+            sideShipGlobalMapInfo.Dispose();
+        }
         Dispose();
         QuestButton.ClearAll();
         WindowQuests.ClearAll();

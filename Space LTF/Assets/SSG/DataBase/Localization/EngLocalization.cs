@@ -261,6 +261,12 @@ public static class EngLocalization
         {"DamageTimeEffectRepair", "Remove all negative effects"},
         {"AddMicrochips", "Add microchips {0}"},
         {"Microchips", "Microchips"},
+        {"Play", "Play"},
+        {"New", "New"},
+        { "Chooseprofile", "Choose profile"},
+        {"EnterNameEtc", "Enter name..."},
+        {"Exproler", "Exproler"},
+        {"CreateProfile", "Create"},
 
         {"WeaponAOE", "Affects for all ships in radius. {0}. Decrease damage by {1}%."},
         {"WeaponSector",  "Increase aim sector by {0}% per level"},
@@ -305,6 +311,12 @@ public static class EngLocalization
 
         {"HirePilot","You hired a new pilot. Type:{0}  Config:{1}"},
 
+        {"AreYouSureWAntRemoveProfile", "Are you sure you want to remove this profile?" },
+        {"Size", "Size" },
+        {"MissionComplete", "Mission Complete" },
+        {"MissonFail", "Mission Fail" },
+        {"Galaxy", "Galaxy" },
+        {"unblockGalaxies", "Open new galaxies" },
         {"Destroyed", "Destroyed" },
         {"Completed", "Completed"},
         {"StartNewGameFieldSize", "Sector size"},
@@ -541,11 +553,17 @@ public static class EngLocalization
         {"Impulse", "Impulse"},
         {"Swarm", "Swarm"},
         {"EMI", "EMI"},
+        {"Fraction", "Fraction"},
+        {"Power", "Power"},
         {"Beam", "Beam"},
         {"MovingArmy", "Special forces of {1}\nStatus:{2}. Power:{3}"},
         {"SimpleMovingArmy", "Fleet of {1}\nStatus:{2}. Power:{3}"},
         {"MovingArmyBorn", "Special forces of {0} appear. Coordinates:{1}"},
         {"AdditionalPower", "Enemies upgrades"},
+
+        {"Size4", "Sector size 4"},
+        {"Size5", "Sector size 5"},
+        {"Size6", "Sector size 6"},
 
         {"AddCredits", "Add credits:{0}"},
         {"Comparable", "Comparable"},

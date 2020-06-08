@@ -34,7 +34,7 @@ public interface IInventory
     void TransferItem(IItemInv item, bool val);
     float ValuableItem(IItemInv item);
 
-    Player Owner { get; }
+    PlayerSafe Owner { get; }
     int SlotsCount { get; }
 
     bool IsShop();

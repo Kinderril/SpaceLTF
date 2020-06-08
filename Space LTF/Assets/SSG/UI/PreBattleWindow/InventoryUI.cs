@@ -17,7 +17,7 @@ public class InventoryUI : DragZone
     private List<ParameterItem> ParamItems = new List<ParameterItem>();
     
     public Transform Layout;
-    private Player _player;                                           
+    private PlayerSafe _player;                                           
     private HashSet<DragableItemSlot> _allSLots = new HashSet<DragableItemSlot>();
 
     public bool ShallRefreshPos = true;

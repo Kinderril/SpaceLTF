@@ -115,6 +115,14 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
                + "\n" + DescFull();
     }
 
+    public IItemInv Copy()
+    {
+        var spell = Library.CreateSpell(SpellType);
+        spell.Level = Level;
+        spell.UpgradeType = UpgradeType;
+        return spell;
+    }
+
     public abstract Bullet GetBulletPrefab();
     public abstract float ShowCircle { get; }
     public abstract bool ShowLine { get; }
@@ -166,15 +174,15 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
             {
                 var cost = MoneyConsts.SpellUpgrade[Level];
                 int microchipsElement = MoneyConsts.SpellMicrochipsElements[Level];
-                if (owner.MoneyData.HaveMicrochips(microchipsElement))
+                if (owner.HaveMicrochips(microchipsElement))
                 {
-                    if (owner.MoneyData.HaveMoney(cost))
+                    if (owner.HaveMoney(cost))
                     {
                         var txt = Namings.Format(Namings.Tag("wantUpgradeLong"), Namings.SpellName(SpellType), cost, microchipsElement);
                         WindowManager.Instance.ConfirmWindow.Init(() =>
                         {
-                            owner.MoneyData.RemoveMicrochips(microchipsElement);
-                            owner.MoneyData.RemoveMoney(cost);
+                            owner.RemoveMicrochips(microchipsElement);
+                            owner.RemoveMoney(cost);
                             Upgrade(upgradeType);
                         }, null, txt);
                     }

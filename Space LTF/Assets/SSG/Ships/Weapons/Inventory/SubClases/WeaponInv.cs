@@ -83,6 +83,8 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     public TargetType TargetType = TargetType.Enemy;
     public bool isRoundAng;
     public readonly float fixedDelta;
+
+//    protected WeaponInventoryParameters _parameters;
     // private CurWeaponDamage _currentDamage;
     // private CurWeaponDamage _currentDamage1;
     public string Name { get; set; }
@@ -98,6 +100,12 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     {
         get => _bulletSpeed;
         set => _bulletSpeed = value;
+    }
+    public IItemInv Copy()
+    {
+        var laser = Library.CreateWeaponByType(WeaponType);
+        laser.Level = Level;
+        return laser;
     }
 
     public float ReloadSec { get; set; }
@@ -121,7 +129,8 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
     public WeaponInv(WeaponInventoryParameters parameters,
         WeaponType WeaponType, int Level)
     {
-        _shieldPreLevelDamage = parameters.shieldPreLevelDamage;
+//        _parameters = parameters;
+           _shieldPreLevelDamage = parameters.shieldPreLevelDamage;
         _shieldDamage = parameters.shieldDamage;
         _bodyPreLevelDamage = parameters.bodyPreLevelDamage;
         _bodyDamage = parameters.bodyDamage;
@@ -242,13 +251,13 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
                 if (MoneyConsts.WeaponUpgrade.ContainsKey(Level))
                 {
                     var cost = MoneyConsts.WeaponUpgrade[Level];
-                    if (owner.MoneyData.HaveMoney(cost))
+                    if (owner.HaveMoney(cost))
                     {
                         var txt = Namings.Format(Namings.Tag("WANT_UPGRADE_WEAPON"), Namings.Weapon(WeaponType));
                         WindowManager.Instance.ConfirmWindow.Init(() =>
                         {
                             WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.Upgrade);
-                            owner.MoneyData.RemoveMoney(cost);
+                            owner.RemoveMoney(cost);
                             GlobalEventDispatcher.UpgradeWeapon(this);
                             Upgrade(true);
                             //                        WindowManager.Instance.InfoWindow.Init(null, "Upgrade completed");

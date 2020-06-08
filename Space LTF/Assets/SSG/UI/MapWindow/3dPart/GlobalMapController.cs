@@ -82,7 +82,7 @@ public class GlobalMapController : MonoBehaviour
         _data.OnWayDelete += OnWayDelete;
         DrawSectors(_data);
         DrawCells(data);
-        Debug.Log("cells drawed");
+        Debug.Log($"cells drawed size: SizeX:{data.SizeX}   SizeZ:{data.SizeZ}     SizeOfSector:{data.SizeOfSector}");
         for (var i = 0; i < 22; i++)
         {
             var con = DataBaseController.GetItem(GlobalMapCellConnectorPrefab);
@@ -210,7 +210,8 @@ public class GlobalMapController : MonoBehaviour
         _connectors.Clear();
         _pointers.Clear();
         _allCells = new GlobalMapCellObject[0, 0];
-        _data.OnWayDelete -= OnWayDelete;
+        if (_data != null)
+            _data.OnWayDelete -= OnWayDelete;
         _data = null;
     }
 
@@ -236,7 +237,12 @@ public class GlobalMapController : MonoBehaviour
 #endif
         GlobalMapCell startCell = null;
         int cellDrawed = 0;
-        var vertical = _data.VerticalCount * data.SizeOfSector - 1;
+        
+
+//        var vertical = _data.VerticalCount * data.SizeOfSector - 1;gg
+        var vertical = _data.SizeZ;
+        Debug.Log($"DrawCells Visual: SizeX:{data.SizeX}  vertical:{vertical}");
+
         for (var i = 0; i < data.SizeX; i++)
         {
             for (var j = 0; j < vertical; j++)
@@ -311,6 +317,7 @@ public class GlobalMapController : MonoBehaviour
         else
         {
             Debug.LogError($"Can't draw way target:{target.Id}  currentCell:{currentCell.Id}   target:{target.GetType()}   currentCell:{currentCell.GetType()} ");
+            Debug.LogError($"currentCell  indX:{currentCell.indX}  indZ:{currentCell.indZ}   target indX:{target.indX}  indZ:{currentCell.indZ} ");
         }
 
     }
@@ -363,18 +370,24 @@ public class GlobalMapController : MonoBehaviour
     {
         var player = MainController.Instance.MainPlayer;
         player.Parameters.Scouts.OnUpgrade -= OnUpgrade;
-        for (var i = 0; i < _data.SizeX; i++)
-            for (var j = 0; j < _data.VerticalCount * _data.SizeOfSector - 1; j++)
-            {
-                var cell = _allCells[i, j];
-                if (cell != null)
-                    cell.Cell.OnDestoyedCell -= OnDestoyedCell;
+        if (_data != null)
+        {
+            _data.GalaxyEnemiesArmyController.OnAddMovingArmy -= OnAddMovingArmy;
+            for (var i = 0; i < _data.SizeX; i++)
+            { 
+                for (var j = 0; j < _data.VerticalCount * _data.SizeOfSector - 1; j++)
+                {
+                    var cell = _allCells[i, j];
+                    if (cell != null)
+                        cell.Cell.OnDestoyedCell -= OnDestoyedCell;
+                }
             }
+        }
 
         LighterUpCells.Dispose();
         foreach (var moverObject in _enemiesObjects)
             DestroyImmediate(moverObject.Value.gameObject);
-        _data.GalaxyEnemiesArmyController.OnAddMovingArmy -= OnAddMovingArmy;
+
         _enemiesObjects.Clear();
     }
 
@@ -407,7 +420,8 @@ public class GlobalMapController : MonoBehaviour
                 if (cell != null)
                 {
                     var iamhere = cell.Cell == currentCell;
-                    if (iamhere) myCEll = cell;
+                    if (iamhere)
+                        myCEll = cell;
                     cell.SetIAmHere(iamhere);
                 }
             }

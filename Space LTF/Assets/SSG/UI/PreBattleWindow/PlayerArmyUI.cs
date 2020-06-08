@@ -41,7 +41,7 @@ public class PlayerArmyUI : MonoBehaviour
         transform.SetParent(parent, false);
         myRectTransform.sizeDelta = new Vector2(parentRectTransform.rect.width, parentRectTransform.rect.height);
         //        myRectTransform.transform.
-        player.Army.OnAddShip += OnAddShip;
+        player.SafeLinks.OnAddShip += OnAddShip;
         foreach (var shipPilotData in player.Army.Army)
         {
             AddShip(shipPilotData, false, tradeInventory);
@@ -118,7 +118,7 @@ public class PlayerArmyUI : MonoBehaviour
 
     public void Dispose()
     {
-        _player.Army.OnAddShip -= OnAddShip;
+        _player.SafeLinks.OnAddShip -= OnAddShip;
         mainShipInfo.Dispose();
         foreach (var inventoryUi in playerInfoList)
         {
