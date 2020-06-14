@@ -8,11 +8,22 @@ using UnityEngine;
 public class PlayerArmy
 {
     public const int MAX_ARMY = 6;
-    public List<StartShipPilotData> Army => _links.Ships;
+
+    public List<StartShipPilotData> Army
+    {
+        get
+        {
+            if (_links == null || _links.Ships == null)
+            {
+                return null;
+            }
+            return _links.Ships.Where(x => !x.Ship.IsDead).ToList();
+        }
+    } 
 
     private PlayerSafe _links;
     public ShipConfig BaseShipConfig { get; private set; }
-    public int Count => Army.Count;
+    public int Count => Army.Count(x => !x.Ship.IsDead);
 
     public PlayerArmy(PlayerSafe links)
     {

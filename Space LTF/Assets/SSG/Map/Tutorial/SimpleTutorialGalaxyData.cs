@@ -12,7 +12,7 @@ public class SimpleTutorialGalaxyData : GalaxyData
 
     }
     protected override StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, 
-         ShipConfig playerShipConfig, int verticalCount, GalaxyEnemiesArmyController enemiesArmyController)
+         ShipConfig playerShipConfig, int verticalCount, GalaxyEnemiesArmyController enemiesArmyController, ExprolerCellMapType mapType)
     {
         _verticalCount = 1;
         verticalCount = 1;

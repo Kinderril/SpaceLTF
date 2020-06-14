@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using TMPro;
 
@@ -8,6 +9,7 @@ public class ExprolerNewBattleInfo : MonoBehaviour
     public TextMeshProUGUI CaptureField;
     public TextMeshProUGUI PowerField;
     public TextMeshProUGUI ConfigField;
+    public TextMeshProUGUI BattleTypeField;
     public void Init(ExprolerGlobalMapCell cell)
     {
         _cell = cell;
@@ -15,6 +17,18 @@ public class ExprolerNewBattleInfo : MonoBehaviour
         CaptureField.text = $"{Namings.Tag("Sector")}: {_cell.Id}";
         ConfigField.text = $"{Namings.Tag("Fraction")}: {Namings.ShipConfig(_cell.Config)}";
         PowerField.text = $"{Namings.Tag("Power")}: {_cell.Power}";
+        switch (_cell.MapType)
+        {
+            case ExprolerCellMapType.normal:
+                BattleTypeField.text = $"{Namings.Tag("battleTypeNormal")}";
+                break;
+            case ExprolerCellMapType.milatary:
+                BattleTypeField.text = $"{Namings.Tag("battleTypemilatary")}";
+                break;
+            case ExprolerCellMapType.longType:
+                BattleTypeField.text = $"{Namings.Tag("battleTypelongType")}";
+                break;
+        }
 
     }
 

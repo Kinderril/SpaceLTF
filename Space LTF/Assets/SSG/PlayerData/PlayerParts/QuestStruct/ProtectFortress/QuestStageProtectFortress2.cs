@@ -81,7 +81,7 @@ public class QuestStageProtectFortress2 : QuestStage//  , ISerializable
         var power = player.Army.GetPower() * 1.2f;
         var config = player.ReputationData.WorstFaction(ShipConfig.droid);
         var withBase = power > 25;
-        var playerEnemy = new PlayerAIWithBattleEvent("FortressProtect",true,null,EBattleType.baseDefence);
+        var playerEnemy = new PlayerAIWithBattleEvent("FortressProtect",true,EBattleType.baseDefence);
         var army = ArmyCreator.CreateArmy(power, ArmyCreationMode.equalize, 2, 6, ArmyCreatorLibrary.GetArmy(config), withBase,
             playerEnemy);
         playerEnemy.Army.SetArmy(army);

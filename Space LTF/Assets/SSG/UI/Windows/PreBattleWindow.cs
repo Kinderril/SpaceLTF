@@ -52,7 +52,7 @@ public class PreBattleWindow : BaseWindow
             if (data.val1 != null)
             {
                 _greeArmyUi = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.PlayerArmyUIPrefab);
-                _greeArmyUi.Init(data.val1,MyPlayersLayout,true,new ConnectInventory(_greenPlayer.Inventory));
+                _greeArmyUi.Init(data.val1.SafeLinks,MyPlayersLayout,true,new ConnectInventory(_greenPlayer.Inventory));
                 PlayersInventory.Init(data.val1.Inventory,null, true);
             }
             if (data.val2 != null)
@@ -60,7 +60,7 @@ public class PreBattleWindow : BaseWindow
                 if (_greenPlayer.Parameters.ScoutsIsMax())
                 {
                     _redArmyUi = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.PlayerArmyUIPrefab);
-                    _redArmyUi.Init(data.val2, EnemyPlayersLayout, false, null);
+                    _redArmyUi.Init(data.val2.SafeLinks, EnemyPlayersLayout, false, null);
                 }
                 else
                 {

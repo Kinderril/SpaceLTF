@@ -9,7 +9,7 @@ public enum StartMode
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "013b.0";
+    public static string VERSION = "014b.0";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
@@ -88,7 +88,8 @@ public class MainController : Singleton<MainController>
 
     public void CreateNewPlayerAndStartGame(StartNewGameData data)
     {
-        MainPlayer = new Player("Next Player", data.startParametersLevels);
+//        MainPlayer = new Player("Next Player", data.);
+        MainPlayer = data.CreatePlayer(); 
         Statistics.PlayNewGame(data);
         MainPlayer.PlayNewGame(data);
         WindowManager.Instance.OpenWindow(MainState.map);

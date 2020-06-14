@@ -70,16 +70,16 @@ public class SecretDeal : BaseGlobalMapEvent
 
     private MessageDialogData tryRunWithAll()
     {
-
+        var player = MainController.Instance.MainPlayer;
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
-        var money = (int)(MyExtensions.Random(24, 47) * coef);
-        MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
+        var money = (int)(MyExtensions.Random(24, 47) * coef * player.SafeLinks.CreditsCoef);
+        player.MoneyData.AddMoney(money);
         var m = Library.CreatSimpleModul(2, 4);
         var itemName = Namings.SimpleModulName(m.Type);
         var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out var slot);
         if (canAdd)
         {
-            MainController.Instance.MainPlayer.Inventory.TryAddSimpleModul(m, slot);
+            player.Inventory.TryAddSimpleModul(m, slot);
         }
 
         return tryRunWithCoef(-1, Namings.Format(Namings.DialogTag("secretHaveCredits"), money, itemName));
@@ -182,9 +182,10 @@ public class SecretDeal : BaseGlobalMapEvent
 
     private MessageDialogData searchResult()
     {
+        var player = MainController.Instance.MainPlayer;
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
-        var money = (int)(MyExtensions.Random(5, 9) * coef);
-        MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
+        var money = (int)(MyExtensions.Random(5, 9) * coef * player.SafeLinks.CreditsCoef);
+        player.MoneyData.AddMoney(money);
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("secretTake"), money)));
         var mesData = new MessageDialogData(Namings.DialogTag("secretForgotCredits"), mianAnswers);
@@ -206,10 +207,11 @@ public class SecretDeal : BaseGlobalMapEvent
     {
         if (MyExtensions.IsTrueEqual())
         {
+            var player = MainController.Instance.MainPlayer;
             var mianAnswers = new List<AnswerDialogData>();
             var coef = (float)_power * Library.MONEY_QUEST_COEF;
-            var _moneyToBuy = (int)(MyExtensions.Random(24, 47) * coef);
-            MainController.Instance.MainPlayer.MoneyData.AddMoney(_moneyToBuy);
+            var _moneyToBuy = (int)(MyExtensions.Random(24, 47) * coef * player.SafeLinks.CreditsCoef);
+            player.MoneyData.AddMoney(_moneyToBuy);
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("Ok"), null, null));
             var mesData = new MessageDialogData(
                 Namings.Format(Namings.DialogTag("secretFindGoods"), _moneyToBuy),

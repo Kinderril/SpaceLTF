@@ -117,7 +117,7 @@ public class WindowNewGame : BaseWindow
         gameData = new StartNewGameData(new Dictionary<PlayerParameterType, int>(),
             ArmyTypeSelectorUI.Selected, posibleStartWeapons,
             SectorSize.GetValueInt(), SectorsCount.GetValueInt(), CoresCount.GetValueInt(),
-            DifficultyNewGame.CurDifficulty, posibleSpells, GetPowerPerTurn(), EGameMode.sandBox);
+            DifficultyNewGame.CurDifficulty, posibleSpells, GetPowerPerTurn(), EGameMode.sandBox,ExprolerCellMapType.normal);
         var dif = Utils.FloatToChance(gameData.CalcDifficulty());
         DifficultyFIeld.text = Namings.Format(Namings.Tag("StatisticDifficulty"), dif);
     }

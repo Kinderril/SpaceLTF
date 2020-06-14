@@ -4,8 +4,8 @@
 [System.Serializable]
 public class PlayerAITutorUseAutoFight : PlayerAI
 {
-    public PlayerAITutorUseAutoFight(string name, Dictionary<PlayerParameterType, int> startData = null)
-        : base(name, startData)
+    public PlayerAITutorUseAutoFight(string name)
+        : base(name)
     {
 
     }

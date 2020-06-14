@@ -52,7 +52,7 @@ public class GalaxyData
     };
 
     public GlobalMapCell Init2(int sectorCount, int sizeSector, int startPower, int questsOnStart,
-        int startDeathStep, ShipConfig playerShipConfig, int powerPerTurnBaseVal)
+        int startDeathStep, ShipConfig playerShipConfig, int powerPerTurnBaseVal,ExprolerCellMapType mapType)
     {
         _questsOnStart = questsOnStart;
         _verticalCount = VERTICAL_COUNT;
@@ -62,14 +62,15 @@ public class GalaxyData
 
         GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController(_powerPerTurn);
         var startCell = ImpletemtSectors(sectorCount, sizeSector, startPower,  playerShipConfig,
-            _verticalCount, GalaxyEnemiesArmyController);
+            _verticalCount, GalaxyEnemiesArmyController, mapType);
         GalaxyEnemiesArmyController.SetCells(GetAllList());
         return startCell;
     }
 
 
     protected virtual StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, 
-        ShipConfig playerShipConfig, int verticalCount, GalaxyEnemiesArmyController enemiesArmyController)
+        ShipConfig playerShipConfig, int verticalCount, 
+        GalaxyEnemiesArmyController enemiesArmyController, ExprolerCellMapType mapType)
     {
         var allSubSectors = new HashSet<SectorData>();
         var unPopulatedSectors = new List<SectorData>();
@@ -306,7 +307,7 @@ public class GalaxyData
         return null;
     }
 
-    private void AddPortals(int sectorsCount, SectorData[,] sectors, int verticalCount)
+    protected void AddPortals(int sectorsCount, SectorData[,] sectors, int verticalCount)
     {
         for (var i = 0; i < sectorsCount; i++)
         for (var j = 0; j < verticalCount - 1; j++)
@@ -489,7 +490,7 @@ public class GalaxyData
     {
         var SizeX = sectorsCount * (sizeZoneSector + 1) - 1;
         var SizeZ = verticalCount * (sizeZoneSector + 1) - 1;
-        Debug.Log(Namings.Format("ImplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}   SizeX:{2}   SizeZ:{3}  ", sizeZoneSector, sectorsCount, SizeX, SizeZ));
+        Debug.Log(Namings.Format("ImplementSectorToGalaxy : sizeSector:{0}   sectorsCount:{1}  verticalCount:{4}  SizeX:{2}   SizeZ:{3}  ", sizeZoneSector, sectorsCount, SizeX, SizeZ, verticalCount));
         cells = new CellsInGalaxy(SizeX, SizeZ);
         for (var i = 0; i < sectorsCount; i++)
         {

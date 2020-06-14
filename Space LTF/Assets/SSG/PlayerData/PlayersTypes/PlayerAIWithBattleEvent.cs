@@ -10,9 +10,8 @@ public class PlayerAIWithBattleEvent : PlayerAI, IPlayerAIWithBattleEvent
     private static
         List<EBattleType> posibeRndTypes = new List<EBattleType>() { EBattleType.baseDefence, EBattleType.defenceOfShip, EBattleType.defenceWaves, EBattleType.destroyShipPeriod };
 
-    public PlayerAIWithBattleEvent(string name,bool posibleEvent,
-        Dictionary<PlayerParameterType, int> startData = null, EBattleType? eBattleType = null)
-        : base(name, startData)
+    public PlayerAIWithBattleEvent(string name,bool posibleEvent, EBattleType? eBattleType = null)
+        : base(name)
     {
         if (eBattleType == null)
         {
@@ -27,7 +26,7 @@ public class PlayerAIWithBattleEvent : PlayerAI, IPlayerAIWithBattleEvent
         }
 
 #if UNITY_EDITOR
-        EBattleType = EBattleType.defenceOfShip;
+//        EBattleType = EBattleType.defenceOfShip;
 #endif
     }
 }

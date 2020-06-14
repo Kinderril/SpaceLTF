@@ -8,8 +8,8 @@ public class DistShotSpell : BaseSpellModulInv
     //B2 - AOE
 
     private const int DIST_BASE_DAMAGE = 8;
-    private const int BASE_DAMAGE = 12;
-    private const int LEVEL_DAMAGE = 8;
+    private const int BASE_DAMAGE = 9;
+    private const int LEVEL_DAMAGE = 6;
 
     private const int RAD_B2 = 4;
 //    private const float DIST_COEF = 0.8f;

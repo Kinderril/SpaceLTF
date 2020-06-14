@@ -5,9 +5,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -283,7 +285,11 @@ public class DebugPanelWindow : EditorWindow
         DebugParamsController.AnyWay = AnyWay;
     }
 
-    private GameObject _aimingBox;
+    private GameObject _cell1;
+    private GameObject _cell2;
+    private GameObject _targetTransform;
+    private GameObject _targetParent;
+    private GameObject _targetPrefab;
     private GameObject shipToFindRenderer;
     private void NoInGame()
     {
@@ -354,8 +360,285 @@ public class DebugPanelWindow : EditorWindow
             CreateTxtFile(nextLoc, "esp");
         }
 
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Set Datas"))
+        {
+            if (_targetTransform != null)
+            {
+                SetDatasToCells(_targetTransform);
+            }
+        }
 
-        _aimingBox = EditorGUILayout.ObjectField(_aimingBox, typeof(GameObject), true) as GameObject;
+        if (GUILayout.Button("DrawConnectors"))
+        {
+            if (_targetTransform != null && _targetParent != null  && _targetPrefab!=null)
+            {
+                Draw2dConnectors(_targetTransform, _targetParent.transform, _targetPrefab);
+            }
+        }
+
+        EditorGUILayout.EndHorizontal();
+        _targetTransform = EditorGUILayout.ObjectField("Begin", _targetTransform, typeof(GameObject), true) as GameObject;
+        _targetParent = EditorGUILayout.ObjectField("Parent", _targetParent, typeof(GameObject), true) as GameObject;
+        _targetPrefab = EditorGUILayout.ObjectField("Prefab",_targetPrefab, typeof(GameObject), true) as GameObject;
+
+        if (GUILayout.Button("Upload all cells"))
+        {
+            UploadAllCells();
+        }
+        _cell1 = EditorGUILayout.ObjectField("Cell1", _cell1, typeof(GameObject), true) as GameObject;
+        _cell2 = EditorGUILayout.ObjectField("Cell12", _cell2, typeof(GameObject), true) as GameObject;
+        if (GUILayout.Button("Try Link"))
+        {
+            TryLink(_cell1,_cell2);
+        }
+        if (GUILayout.Button("GlowUpConnections"))
+        {
+            GlowUpConnections();
+        }
+        //        EditorGUILayout.EndHorizontal();
+    }
+
+    private void TryLink(GameObject cell1, GameObject cell2)
+    {
+        if (cell1 == null || cell2 == null)
+        {
+            return;
+        }
+        var c1 = cell1.GetComponent<ExprolerGlobalMapCell>();
+        var c2 = cell2.GetComponent<ExprolerGlobalMapCell>();
+        if (c1 == null || c2 == null)
+        {
+            return;
+        }
+
+        c1.Neighhoods.Add(c2.Id);
+        c1.ids = $"{c1.ids}_{c2.Id}";
+        c2.Neighhoods.Add(c1.Id);
+        c2.ids = $"{c2.ids}_{c1.Id}";
+
+    }
+
+    private void UploadAllCells()
+    {
+        var mapObject = GameObject.FindObjectOfType<ExprolerGlobalMap>();
+        if (mapObject != null)
+        {
+            Undo.RecordObject(mapObject, "Record all2");
+            var findCElls = GameObject.FindObjectsOfType<ExprolerGlobalMapCell>();
+            HashSet<int> ids = new HashSet<int>();
+            foreach (var cell in findCElls)
+            {
+                if (ids.Contains(cell.Id))
+                {
+                    Debug.LogError($"Doubled ids:{cell.Id}");
+                }
+
+                ids.Add(cell.Id);
+            }
+            mapObject.AllCells = findCElls.ToList();
+            Debug.Log($"Cells linked: {mapObject.AllCells.Count} ");
+        }
+        else
+        {
+            Debug.LogError("can't find ExprolerGlobalMap. maybe this GameObject turned off?");
+        }
+
+    }
+
+    public void GlowUpConnections()
+    {
+        var findCElls = GameObject.FindObjectsOfType<ExprolerGlobalMapCell>();
+
+        foreach (var exprolerGlobalMapCell in findCElls)
+        {
+            var split = exprolerGlobalMapCell.ids.Split('_');
+            foreach (var s in split)
+            {
+                if (s.Length > 0)
+                {
+                    if (Int32.TryParse(s, out var nID))
+                    {
+                        var trg = findCElls.FirstOrDefault(x => x.Id == nID);
+                        if (trg != null)
+                        {
+                            var start = exprolerGlobalMapCell.transform.position;
+                            var end = trg.transform.position;
+
+                            var dir = end - start;
+
+
+                            Debug.DrawLine(start, start + dir/2,Color.red,5f);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void SetDatasToCells(GameObject targetTransform)
+    {
+        EditorSceneManager.MarkAllScenesDirty();
+        Undo.RecordObject(targetTransform, "Record all");
+        bool ConfigSetter = false;
+        ShipConfig config = ShipConfig.droid;
+        int curId = 0;
+        int powerIndex = 0;
+        int lastPower = 12;
+        foreach (Transform transform in targetTransform.transform)
+        {
+            Undo.RecordObject(transform, "Record all");
+            var cell = transform.GetComponent<ExprolerGlobalMapCell>();
+            if (cell != null)
+            {
+                cell.Neighhoods.Clear();
+                cell.ids = "";
+            }
+        }
+
+        //Set ids
+        foreach (Transform transform in targetTransform.transform)
+        {
+            var cell = transform.GetComponent<ExprolerGlobalMapCell>();
+            if (cell != null)
+            {
+                Undo.RecordObject(cell, "Record all");
+                if (!ConfigSetter)
+                {
+                    ConfigSetter = true;
+                    config = cell.Config;
+                    switch (config)
+                    {
+                        case ShipConfig.raiders:
+                            curId = 600;
+                            break;
+                        case ShipConfig.federation:
+                            curId = 300;
+                            break;
+                        case ShipConfig.mercenary:
+                            curId = 200;
+                            break;
+                        case ShipConfig.ocrons:
+                            curId = 400;
+                            break;
+                        case ShipConfig.krios:
+                            curId = 500;
+                            break;
+                        default:
+                        case ShipConfig.droid:
+                            curId = 100;
+                            break;
+                    }
+                }
+
+                cell.Id = curId;
+                curId++;
+                cell.Config = config;
+                cell.Power = lastPower + powerIndex * 2;
+                cell.name = $"Cell_{config.ToString()}_{cell.Id}";
+                powerIndex++;
+                var field = transform.GetComponentInChildren<TextMeshProUGUI>();
+                if (field != null)
+                {
+                    field.text = cell.Power.ToString();
+                }
+            }
+        }
+
+        ExprolerGlobalMapCell lastCell = null;
+        foreach (Transform transform1 in targetTransform.transform)
+        {
+            var cell2 = transform1.GetComponent<ExprolerGlobalMapCell>();
+            if (cell2 != null)
+            {
+                if (lastCell != null)
+                {
+                    Undo.RecordObject(cell2.gameObject, "Record all");
+                    Undo.RecordObject(lastCell.gameObject, "Record all");
+                    cell2.Neighhoods.Add(lastCell.Id);
+                    lastCell.Neighhoods.Add(cell2.Id);
+
+                    cell2.ids = $"{cell2.ids}_{lastCell.Id}";
+                    lastCell.ids = $"{lastCell.ids}_{cell2.Id}";
+
+                    Undo.RecordObject(lastCell.gameObject, "Record all");
+                }
+
+                lastCell = cell2;
+            }
+        }
+        Undo.RecordObject(targetTransform, "Record all3");
+
+    }
+
+    private void Draw2dConnectors(GameObject targetTransform,Transform trParent,GameObject prefab)
+    {
+        foreach (Transform trToDel in trParent)
+        {
+            GameObject.DestroyImmediate(trToDel.gameObject);
+        }
+
+        var list = new List<ExprolerGlobalMapCell>();
+        foreach (Transform transform in targetTransform.transform)
+        {
+            var cellData = transform.GetComponent<ExprolerGlobalMapCell>();
+            if (cellData != null)
+            {
+                list.Add(cellData);
+            }
+        }
+        HashSet<int> createdWays = new HashSet<int>();
+
+        foreach (var exprolerGlobalMapCell in list)
+        {
+            foreach (var globalMapCell in exprolerGlobalMapCell.Neighhoods)
+            {
+                var sum = globalMapCell + exprolerGlobalMapCell.Id;
+                if (!createdWays.Contains(sum))
+                {
+                    createdWays.Add(sum);
+                    var tr2 = list.FirstOrDefault(x => x.Id == globalMapCell);
+                    if (tr2 != null)
+                    {
+                        Draw2dConnector(exprolerGlobalMapCell.transform, tr2.transform, trParent, prefab);
+                    }
+                }
+            }
+        }
+//        for (int i = 0; i < list.Count-1; i++)
+//        {
+//            var tr1 = list[i];
+//            var tr2 = list[i+1];
+//            Draw2dConnector(tr1,tr2, trParent, prefab);
+//        }
+    }
+    
+    private void Draw2dConnector(Transform tr1, Transform tr2, Transform trParent, GameObject prefab)
+    {
+        var obj = DataBaseController.GetItem(prefab);
+        obj.transform.SetParent(trParent);
+
+        var midPos = (tr1.position + tr2.position) / 2f;
+        var rectTr = obj.GetComponent<RectTransform>();
+
+        var dir = (tr1.position - tr2.position);
+        var dist = dir.magnitude;
+
+        rectTr.localScale = new Vector3(dist/100f,1,1);
+
+        var ang = Vector3.Angle(dir, new Vector3(1, 0, 0));
+        if (tr2.position.y < tr1.position.y)
+        {
+            ang = -ang;
+        }
+
+        rectTr.rotation = Quaternion.Euler(new Vector3(0,0,-ang)) ;
+
+        obj.name = $"CON {tr1.name}_{tr2.name}";
+        rectTr.position = midPos;
+
+
     }
 
     private void CheckRenderers(GameObject gameObject,string nameShader)

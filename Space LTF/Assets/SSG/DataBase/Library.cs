@@ -173,6 +173,26 @@ public static class Library
         // };
     }
 
+    public static Color GetColorByConfig(ShipConfig config)
+    {
+        switch (config)
+        {
+            case ShipConfig.raiders:
+                return Utils.CreateColor(90,255,0);
+            case ShipConfig.federation:
+                return Utils.CreateColor(255,0,192);
+            case ShipConfig.mercenary:
+                return Utils.CreateColor(0,252,252);
+            case ShipConfig.ocrons:
+                return Utils.CreateColor(255,110,0);
+            case ShipConfig.krios:
+                return Utils.CreateColor(0,50,250);
+            case ShipConfig.droid:
+                return Utils.CreateColor(210,0,0);
+        }
+        return Color.white;
+    }
+
     public static int PilotLvlUpCost(int curLvl)
     {
         return _lvlUps[curLvl];
@@ -771,10 +791,10 @@ public static class Library
 
     public static Dictionary<PilotRank, int> PilotRankExp = new Dictionary<PilotRank, int>()
     {
-        {PilotRank.Private,500 },
-        {PilotRank.Lieutenant,850 },
-        {PilotRank.Captain,1050 },
-        {PilotRank.Major,1400 },
+        {PilotRank.Private,500 * MoneyConsts.EXP_COEF},
+        {PilotRank.Lieutenant,850 * MoneyConsts.EXP_COEF},
+        {PilotRank.Captain,1050 * MoneyConsts.EXP_COEF },
+        {PilotRank.Major,1400 * MoneyConsts.EXP_COEF},
     };
 
     public static int DROID_SUPPORTS_PER_SHOOT = 3;
@@ -953,5 +973,8 @@ public static class Library
         {EParameterItemRarity.improved,8},
     });
 
-    public static float PARAMETER_LEVEL_COEF = 0.05f;
+
+    public const float PARAMETER_LEVEL_COEF = 0.05f;
+    public const float LOW_MONEY_COEF = 0.3f;
+    public const float NORMAL_MONEY_COEF = 1f;
 }

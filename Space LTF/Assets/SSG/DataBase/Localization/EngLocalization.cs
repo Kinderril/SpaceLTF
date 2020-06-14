@@ -213,10 +213,14 @@ public static class EngLocalization
 
         {"Back", "Back"},
         {"Battle", "Battle"},
+        {"battleTypeNormal", "Normal sector"},
+        {"battleTypemilatary", "Military sector"},
+        {"battleTypelongType", "Long sector"},
 
         {"questKills", "{0} kills"},
         {"Fleet", "Fleet"},
         {"Loading", "Loading"},
+        {"Crashed", "Crashed"},
         {"RusLang", "Russian"},
         {"EngLang", "English"},
         {"EspLang", "Spanish"},
@@ -581,6 +585,7 @@ public static class EngLocalization
         {"Turret", "Turret"},
         {"battlefield", "Battlefield"},
         {"Amry","Amry"},
+        {"Blocked","Blocked"},
         {"Trader","Trader"},
         {"RepairCompete","Repair Compete"},
         {"RepairStation","Repair Station"},

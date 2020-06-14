@@ -21,6 +21,7 @@ public class PlayerAfterBattleOptions
 {
     private const int START_MAX_COUNT = 10000;
     private const int DialogFrequancy = 3;
+//    private Player _player;
 
     private Dictionary<EAfterBattleAnswers, int> _answersCount = new Dictionary<EAfterBattleAnswers, int>
     {
@@ -38,7 +39,7 @@ public class PlayerAfterBattleOptions
     private int _lastStepGetDialog;
 
 
-    public MessageDialogData GetDialog(int step, float cellPower, ShipConfig config)
+    public MessageDialogData GetDialog(int step, float cellPower, ShipConfig config,Player player)
     {
 
 //        var msg1 = Namings.Format(Namings.DialogTag("afterBattleStart"));
@@ -55,7 +56,7 @@ public class PlayerAfterBattleOptions
         if (isWork)
         {
             _lastStepGetDialog = step;
-            var ans = InitPosibleAnswers(cellPower, config);
+            var ans = InitPosibleAnswers(cellPower, config, player);
             ans.Add(new AnswerDialogData(Namings.Tag("leave")));
             var msg = Namings.Format(Namings.DialogTag("afterBattleStart"));
             var dialog = new MessageDialogData(msg, ans);
@@ -65,7 +66,7 @@ public class PlayerAfterBattleOptions
         return null;
     }
 
-    private List<AnswerDialogData> InitPosibleAnswers(float power, ShipConfig config)
+    private List<AnswerDialogData> InitPosibleAnswers(float power, ShipConfig config, Player player)
     {
         var preList = new List<EAfterBattleAnswers>();
         var maxData = _answersCount.Values.Max();
@@ -96,7 +97,7 @@ public class PlayerAfterBattleOptions
         }
         foreach (var answerse in preList)
         {
-            var answer = GetAnswer(answerse, power, config);
+            var answer = GetAnswer(answerse, power, config, player);
             if (answer != null)
                 list.Add(answer);
         }
@@ -104,7 +105,7 @@ public class PlayerAfterBattleOptions
         return answers;
     }
 
-    private AnswerDialogData GetAnswer(EAfterBattleAnswers type, float power, ShipConfig config)
+    private AnswerDialogData GetAnswer(EAfterBattleAnswers type, float power, ShipConfig config, Player _player)
     {
         void IncCallback()
         {
@@ -114,41 +115,41 @@ public class PlayerAfterBattleOptions
         switch (type)
         {
             case EAfterBattleAnswers.afterBattleBuyout:
-                var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[config];
+                var rep = _player.ReputationData.ReputationFaction[config];
                 var chance = GetPercent(15, rep);
                 var strChance = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance.ToString("0"));
                 return new AnswerDialogData($"{Namings.DialogTag("afterBattleBuyout")} {strChance}", IncCallback,
-                    () => Buyout(power, config));
+                    () => Buyout(power, config, _player));
             case EAfterBattleAnswers.afterBattleTeachPilots:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleTeachPilots"), IncCallback,
-                    () => TeachPilots());
+                    () => TeachPilots(_player));
             case EAfterBattleAnswers.afterBattleUpgradeSpell:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleUpgradeSpell"), IncCallback,
-                    () => UpgradeSpell());
+                    () => UpgradeSpell(_player));
             case EAfterBattleAnswers.afterBattleOpenCells:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleOpenCells"), IncCallback, 
-                    () => OpenCells());
+                    () => OpenCells(_player));
             case EAfterBattleAnswers.afterBattleHireAction:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleHireAction"), IncCallback,
-                    () => HireAction(config));
+                    () => HireAction(_player,config));
             case EAfterBattleAnswers.afterBattleSearchFor:
-                var chance3 = GetPercent(2, MainController.Instance.MainPlayer.Parameters.Scouts.Level);
+                var chance3 = GetPercent(2, _player.Parameters.Scouts.Level);
                 var strChance3 = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance3.ToString("0"));
                 return new AnswerDialogData($"{Namings.DialogTag("afterBattleSearchFor")} {strChance3}", IncCallback,
-                    () => SearchFor(power, config));
+                    () => SearchFor(power, config, _player));
             case EAfterBattleAnswers.afterBattleKillAction:
                 return new AnswerDialogData(Namings.DialogTag("afterBattleKillAction"), IncCallback,
-                    () => KillAction(power, config));
+                    () => KillAction(power, config, _player));
             case EAfterBattleAnswers.afterBattleRepairAction:
-                var chance1 = GetPercent(2, MainController.Instance.MainPlayer.Parameters.Repair.Level);
+                var chance1 = GetPercent(2, _player.Parameters.Repair.Level);
                 var strChance1 = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance1.ToString("0"));
                 return new AnswerDialogData($"{Namings.DialogTag("afterBattleRepairAction")} {strChance1}", IncCallback,
-                    () => RepairAction(power, config));
+                    () => RepairAction(power, config, _player));
             case EAfterBattleAnswers.afterBattleMicrochip:
-                var chance2 = GetPercent(BASE_VAL_MICROCHIP, MainController.Instance.MainPlayer.Parameters.Repair.Level);
+                var chance2 = GetPercent(BASE_VAL_MICROCHIP, _player.Parameters.Repair.Level);
                 var strChance2 = Namings.Format(Namings.Tag("ChanceAfterBattle"), chance2.ToString("0"));
                 return new AnswerDialogData($"{Namings.DialogTag("afterBattleMicrochip")} {strChance2}", IncCallback,
-                    () => GetMicrochip(power, config));
+                    () => GetMicrochip(power, config, _player));
             default:
                 return null;
         }
@@ -174,12 +175,11 @@ public class PlayerAfterBattleOptions
 
     #region RandomActions
 
-    private MessageDialogData TeachPilots()
+    private MessageDialogData TeachPilots(Player player)
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
-        var player = MainController.Instance.MainPlayer;
         var c = player.Army.Army.Count;
         var pilotsToTeach = player.Army.Army.RandomElement(MyExtensions.Random(1, c));
         foreach (var shipPilotData in pilotsToTeach)
@@ -191,13 +191,13 @@ public class PlayerAfterBattleOptions
         return dialog;
     }
 
-    private MessageDialogData UpgradeSpell()
+    private MessageDialogData UpgradeSpell(Player player)
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
         var ship =
-            MainController.Instance.MainPlayer.Army.Army.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
+            player.Army.Army.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
         if (ship != null)
         {
             var spell = ship.Ship.SpellsModuls.Where(x => x != null).ToList().RandomElement();
@@ -213,12 +213,11 @@ public class PlayerAfterBattleOptions
         return dialog;
     }
 
-    private MessageDialogData OpenCells()
+    private MessageDialogData OpenCells(Player player)
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
-        var player = MainController.Instance.MainPlayer;
         var sectorID = player.MapData.CurrentCell.SectorId;
         var sctor = player.MapData.GalaxyData.AllSectors.FirstOrDefault(x => x.Id == sectorID);
         if (sctor != null)
@@ -244,19 +243,19 @@ public class PlayerAfterBattleOptions
         return (curVal / (baseVal + curVal))*100;
     }
 
-    private MessageDialogData Buyout(float power, ShipConfig config)
+    private MessageDialogData Buyout(float power, ShipConfig config, Player _player)
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
-        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[config];
+        var rep = _player.ReputationData.ReputationFaction[config];
         if (SkillWork(15, rep))
         {
-            var scouts = MainController.Instance.MainPlayer.Parameters.Scouts.Level;
+            var scouts = _player.Parameters.Scouts.Level;
             var delta = MoneyConsts.MAX_PASSIVE_LEVEL - scouts;
             var coef = power * Library.MONEY_QUEST_COEF;
-            var monet = (int)(MyExtensions.Random(delta * 3, delta * 5) * coef);
-            MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
+            var monet = (int)(MyExtensions.Random(delta * 3, delta * 5) * coef * _player.SafeLinks.CreditsCoef);
+            _player.MoneyData.AddMoney(monet);
 
             msg = Namings.Format(Namings.DialogTag("afterBattleBuyoutConfirm"), monet);
         }
@@ -269,11 +268,11 @@ public class PlayerAfterBattleOptions
         return dialog;
     }
 
-    private MessageDialogData GetMicrochip(float power, ShipConfig config)
+    private MessageDialogData GetMicrochip(float power, ShipConfig config, Player _player)
     {
         var ws = new WDictionary<bool>(new Dictionary<bool, float>
         {
-            {true, MainController.Instance.MainPlayer.Parameters.Repair.Level}, {false,BASE_VAL_MICROCHIP}
+            {true, _player.Parameters.Repair.Level}, {false,BASE_VAL_MICROCHIP}
         });
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
@@ -281,7 +280,7 @@ public class PlayerAfterBattleOptions
         if (ws.Random())
         {
             msg = Namings.Format(Namings.DialogTag("afterBattleMircochipOk"));
-            MainController.Instance.MainPlayer.MoneyData.AddMicrochips(1);
+            _player.MoneyData.AddMicrochips(1*_player.SafeLinks.MicrochipCoef);
         }
         else
         {
@@ -292,23 +291,23 @@ public class PlayerAfterBattleOptions
         return dialog;
     }
 
-    private MessageDialogData SearchFor(float power, ShipConfig config)
+    private MessageDialogData SearchFor(float power, ShipConfig config, Player _player)
     {
         var ws = new WDictionary<bool>(new Dictionary<bool, float>
         {
-            {true, MainController.Instance.MainPlayer.Parameters.Scouts.Level}, {false, 2}
+            {true, _player.Parameters.Scouts.Level}, {false, 2}
         });
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
         if (ws.Random())
         {
-            var scouts = MainController.Instance.MainPlayer.Parameters.Scouts.Level;
+            var scouts = _player.Parameters.Scouts.Level;
             var coef = power * Library.MONEY_QUEST_COEF;
-            var monet = (int)(MyExtensions.Random(scouts * 3, scouts * 5) * coef);
-            MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
+            var monet = (int)(MyExtensions.Random(scouts * 3, scouts * 5) * coef * _player.SafeLinks.CreditsCoef);
+            _player.MoneyData.AddMoney(monet);
             msg = Namings.Format(Namings.DialogTag("afterBattleSearchOk"), monet); //"Credits add: {0}."
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, Library.REPUTATION_STEAL_REMOVE);
+            _player.ReputationData.RemoveReputation(config, Library.REPUTATION_STEAL_REMOVE);
         }
         else
         {
@@ -319,23 +318,23 @@ public class PlayerAfterBattleOptions
         return dialog;
     }
 
-    private MessageDialogData KillAction(float power, ShipConfig config)
+    private MessageDialogData KillAction(float power, ShipConfig config, Player _player)
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
-        var shallWork = true; //SkillWork(1, MainController.Instance.MainPlayer.Parameters.Scouts.Level);
+        var shallWork = true; //SkillWork(1, _player.Parameters.Scouts.Level);
         if (shallWork)
         {
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 8);
+            _player.ReputationData.RemoveReputation(config, 8);
             var coef = power * Library.MONEY_QUEST_COEF;
-            var monet = (int)(MyExtensions.Random(20, 30) * coef);
-            MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
+            var monet = (int)(MyExtensions.Random(20, 30) * coef * _player.SafeLinks.CreditsCoef);
+            _player.MoneyData.AddMoney(monet);
             msg = Namings.Format(Namings.DialogTag("afterBattleKillOk"), monet); //
         }
         else
         {
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 16);
+            _player.ReputationData.RemoveReputation(config, 16);
             msg = Namings.DialogTag("afterBattleKillFail"); //
         }
 
@@ -343,15 +342,15 @@ public class PlayerAfterBattleOptions
         return dialog;
     }
 
-    private MessageDialogData RepairAction(float power, ShipConfig config)
+    private MessageDialogData RepairAction(float power, ShipConfig config, Player _player)
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
-        var shallWork = SkillWork(2, MainController.Instance.MainPlayer.Parameters.Repair.Level);
+        var shallWork = SkillWork(2, _player.Parameters.Repair.Level);
         if (shallWork)
         {
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(config, 15);
+            _player.ReputationData.RemoveReputation(config, 15);
             msg = Namings.Format(Namings.DialogTag("afterBattleRepairOk"));
         }
         else
@@ -363,7 +362,7 @@ public class PlayerAfterBattleOptions
         return dialog;
     }
 
-    private MessageDialogData HireAction(ShipConfig? config = null)
+    private MessageDialogData HireAction(Player _player, ShipConfig? config = null)
     {
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
@@ -404,7 +403,7 @@ public class PlayerAfterBattleOptions
 
         var type = types.Random();
         var cng = config.HasValue ? config.Value : configs.Random();
-        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer.SafeLinks, pilot);
+        var ship = Library.CreateShip(type, cng, _player.SafeLinks, pilot);
         var hireMsg = Namings.DialogTag("afterBattleHireOk"); //
         msg = Namings.Format(hireMsg, Namings.ShipConfig(cng), Namings.ShipType(type));
         var itemsCount = MyExtensions.Random(1, 2);
@@ -415,7 +414,7 @@ public class PlayerAfterBattleOptions
                 ship.TryAddWeaponModul(weapon, inex);
             }
 
-        MainController.Instance.MainPlayer.Army.TryHireShip(new StartShipPilotData(pilot, ship));
+        _player.Army.TryHireShip(new StartShipPilotData(pilot, ship));
 
         var dialog = new MessageDialogData(msg, ans);
         return dialog;

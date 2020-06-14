@@ -4,8 +4,8 @@
 [System.Serializable]
 public class PlayerAICorePoint : PlayerAI
 {
-    public PlayerAICorePoint(string name, Dictionary<PlayerParameterType, int> startData = null)
-        : base(name, startData)
+    public PlayerAICorePoint(string name)
+        : base(name)
     {
 
     }

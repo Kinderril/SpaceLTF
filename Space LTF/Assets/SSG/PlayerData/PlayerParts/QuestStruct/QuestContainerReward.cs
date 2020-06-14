@@ -13,7 +13,8 @@ public class QuestContainerReward
 
     public void Init(int targetCounter)
     {
-        MoneyCount = targetCounter;
+        var player = MainController.Instance.MainPlayer;
+        MoneyCount = (int)(targetCounter * player.SafeLinks.CreditsCoef);
 
         WDictionary<int> levelsWeapons = new WDictionary<int>(new Dictionary<int, float>()
         {

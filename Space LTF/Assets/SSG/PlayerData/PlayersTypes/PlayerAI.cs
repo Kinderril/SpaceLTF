@@ -6,9 +6,9 @@
 public class PlayerAI : Player
 {
 
-    public PlayerAI(string name, Dictionary<PlayerParameterType, int> startData = null)
+    public PlayerAI(string name)
         :
-        base(name, startData)
+        base(name)
     {
 
     }

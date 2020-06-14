@@ -5,8 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerAIMilitaryFinal : PlayerAI
 {
-    public PlayerAIMilitaryFinal(string name, Dictionary<PlayerParameterType, int> startData = null)
-        : base(name, startData)
+    public PlayerAIMilitaryFinal(string name)
+        : base(name)
     {
 
     }
@@ -25,7 +25,7 @@ public class PlayerAIMilitaryFinal : PlayerAI
         items.Remove(rnd);
         var power = Army.GetPower();
         // _getRewardsItems = new List<IItemInv>();   
-        var countMircochips = power > 25 ? 2 : 1;
+        var countMircochips = (power > 25 ? 2 : 1 ) * winner.SafeLinks.MicrochipCoef;
         winner.MoneyData.AddMicrochips(countMircochips);
         reward.Microchips = countMircochips;
         int deltaMin, deltaMax;

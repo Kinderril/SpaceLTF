@@ -13,7 +13,7 @@ public class PlayerArmyUI : MonoBehaviour
     private BaseShipInventoryUI mainShipInfo;
     public ShipPilotInventoryUI MyPlayerPrefab;
     private List<ShipPilotInventoryUI> playerInfoList;
-    private Player _player;
+    private PlayerSafe _player;
     private bool _usable;
     private ConnectInventory _connectedInventory;
     private RectTransform myRectTransform;
@@ -25,7 +25,7 @@ public class PlayerArmyUI : MonoBehaviour
         _shipsLayoutRectTransform = ShipsLayout.GetComponent<RectTransform>();
     }
 
-    public void Init(Player player, Transform parent, bool usable, ConnectInventory connectedInventory,IInventory tradeInventory = null)
+    public void Init(PlayerSafe player, Transform parent, bool usable, ConnectInventory connectedInventory,IInventory tradeInventory = null)
     {
         _tradeInventory = tradeInventory;
         _usable = usable;
@@ -41,8 +41,8 @@ public class PlayerArmyUI : MonoBehaviour
         transform.SetParent(parent, false);
         myRectTransform.sizeDelta = new Vector2(parentRectTransform.rect.width, parentRectTransform.rect.height);
         //        myRectTransform.transform.
-        player.SafeLinks.OnAddShip += OnAddShip;
-        foreach (var shipPilotData in player.Army.Army)
+        player.OnAddShip += OnAddShip;
+        foreach (var shipPilotData in player.Ships)
         {
             AddShip(shipPilotData, false, tradeInventory);
         }
@@ -118,7 +118,7 @@ public class PlayerArmyUI : MonoBehaviour
 
     public void Dispose()
     {
-        _player.SafeLinks.OnAddShip -= OnAddShip;
+        _player.OnAddShip -= OnAddShip;
         mainShipInfo.Dispose();
         foreach (var inventoryUi in playerInfoList)
         {

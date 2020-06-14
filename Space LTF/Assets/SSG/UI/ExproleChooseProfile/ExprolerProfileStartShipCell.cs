@@ -13,5 +13,6 @@ public class ExprolerProfileStartShipCell : MonoBehaviour
         var tooltipText = $"{Namings.ShipConfig(data.Ship.ShipConfig)}  {Namings.Tag("Level")}: {data.Pilot.CurLevel.ToString()}";
         tooltip.Cache = tooltipText;
         Icon.sprite = DataBaseController.Instance.DataStructPrefabs.GetShipTypeIcon(data.Ship.ShipType);
+        Icon.color = Library.GetColorByConfig(data.Ship.ShipConfig);
     }
 }

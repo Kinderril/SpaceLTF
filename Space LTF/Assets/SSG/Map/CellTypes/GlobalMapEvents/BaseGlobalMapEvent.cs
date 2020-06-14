@@ -133,12 +133,13 @@ public abstract class BaseGlobalMapEvent
     }
     protected MessageDialogData moneyResult(int min, int max)
     {
+        var player = MainController.Instance.MainPlayer;
         var ans = new List<AnswerDialogData>()
         {
             new     AnswerDialogData(Namings.Tag("Ok"))
         };
-        int money = (int)(MyExtensions.Random(min, max) * Library.MONEY_QUEST_COEF);
-        MainController.Instance.MainPlayer.MoneyData.AddMoney(money) ;
+        int money = (int)(MyExtensions.Random(min, max) * Library.MONEY_QUEST_COEF * player.SafeLinks.CreditsCoef);
+        player.MoneyData.AddMoney(money) ;
         var mesData = new MessageDialogData($"Credits add {money}.", ans);
         return mesData;
     }

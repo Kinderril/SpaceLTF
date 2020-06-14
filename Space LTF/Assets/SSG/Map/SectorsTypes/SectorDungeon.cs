@@ -18,6 +18,7 @@ public class SectorDungeon : SectorData
     private bool _exitAndEnterConnectionCreated;
     private bool _removeOnlyOne;
     private bool _oneRemoved;
+    public override bool AnyEvent => true;
     public SectorDungeon(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
         ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, bool upSide, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
         : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
@@ -148,7 +149,7 @@ public class SectorDungeon : SectorData
         c1.AddWay(c2);
         c2.AddWay(c1);
     }
-    private ArmyGlobalMapCell PopulateCell(int j, int i)
+    public ArmyGlobalMapCell PopulateCell(int j, int i)
     {
         ArmyGlobalMapCell armyCellcell = null;
         var cellContainer = Cells[i, j];
@@ -183,7 +184,7 @@ public class SectorDungeon : SectorData
         if (armyCellcell == null)
         {
             armyCellcell = new ArmyDungeonGlobalMapCell(_power, _shipConfig, Utils.GetId(),
-                StartX + cellContainer.indX, StartZ + cellContainer.indZ, this, OTHER_POWER_COEF);
+                StartX + cellContainer.indX, StartZ + cellContainer.indZ, this, OTHER_POWER_COEF,-1f);
         }
         armyCellcell.OnComeToCell += OnComeToCell;
         cellContainer.SetData(armyCellcell);

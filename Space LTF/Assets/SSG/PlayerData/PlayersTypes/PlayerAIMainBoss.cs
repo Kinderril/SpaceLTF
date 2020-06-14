@@ -4,8 +4,8 @@
 [System.Serializable]
 public class PlayerAIMainBoss : PlayerAI
 {
-    public PlayerAIMainBoss(string name, Dictionary<PlayerParameterType, int> startData = null)
-        : base(name, startData)
+    public PlayerAIMainBoss(string name)
+        : base(name)
     {
 
     }

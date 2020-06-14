@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +13,71 @@ public class ExprolerGalaxyDataMap : GalaxyData
 
     }
     protected override StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, 
-         ShipConfig playerShipConfig, int verticalCount, GalaxyEnemiesArmyController enemiesArmyController)
+         ShipConfig playerShipConfig, int verticalCount, 
+         GalaxyEnemiesArmyController enemiesArmyController, ExprolerCellMapType mapType)
     {
-        _verticalCount = 1;
-        verticalCount = 1;
+        var step = sizeSector + 1;
+        switch (mapType)
+        {
+            default:
+            case ExprolerCellMapType.normal:
+            case ExprolerCellMapType.milatary:
+                verticalCount = 1;
+                break;;
+            case ExprolerCellMapType.longType:
+                verticalCount = 2;
+                break;
+        }
+        _verticalCount = verticalCount;
         var allSubSectors = new List<SectorData>();
         SizeOfSector = sizeSector;
         _sectorsCount = 1;
         Debug.Log($"global map size: {_sectorsCount} {verticalCount}");
-        var sectors = new SectorExproler[_sectorsCount, verticalCount];
+        var sectors = new SectorExprolerData[_sectorsCount, verticalCount];
         var startSector = sectors[0, 0];
-        startSector= new SectorExproler(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
-            1,0,1, to =>
-            {
+        var powerPerTurn = 1;
+        switch (mapType)
+        {
+            default:
+            case ExprolerCellMapType.normal:
+                startSector = new SectorExproler(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
+                    1, 0, powerPerTurn, to =>
+                    {
 
-            },enemiesArmyController);
+                    }, enemiesArmyController);
+                break;
+            case ExprolerCellMapType.milatary:
+                startSector = new SectorExprolerMilitary(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
+                    1, 0, powerPerTurn, to =>
+                    {
+
+                    }, enemiesArmyController);
+                
+                break;
+            case ExprolerCellMapType.longType:
+                var zz = step;
+                startSector = new SectorExproler(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
+                    1, 0, powerPerTurn, to =>
+                    {
+
+                    }, enemiesArmyController,true,false);
+                var secondSector = new SectorExproler(0, zz, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
+                        2, 0, powerPerTurn, to =>
+                        {
+
+                        }, enemiesArmyController, false, true);
+
+                secondSector.Populate(startPower);
+                sectors[0, 1] = secondSector;
+                allSubSectors.Add(secondSector);
+                break;
+        }
         startSector.Populate(startPower);
         sectors[0, 0] = startSector;
         allSubSectors.Add(startSector);
+
+
+
         foreach (var sectorData in allSubSectors)
         {
             AllSectors.Add(sectorData);
@@ -38,6 +86,7 @@ public class ExprolerGalaxyDataMap : GalaxyData
 
 
 
+        AddPortals(_sectorsCount, sectors, verticalCount);
         ImplementSectorToGalaxy(sectors, sizeSector, _sectorsCount, verticalCount);
         BornArmies(sectors, sizeSector, _sectorsCount, verticalCount);
 

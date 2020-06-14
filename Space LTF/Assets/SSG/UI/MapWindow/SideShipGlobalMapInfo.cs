@@ -11,6 +11,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
     private StartShipPilotData _ship;
     public GameObject LevelUpButton;
     public GameObject RepairButton;
+    public GameObject DeadObject;
 //    public TextMeshProUGUI RepairCost;
     public SliderWithTextMeshPro HealthSlider;
     public MoneySlotUI Money;
@@ -31,6 +32,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         {
             Debug.LogError($"Wrong count of critical damages must be {Library.CRITICAL_DAMAGES_TO_DEATH}");
         }
+        OnDeadChange(_ship.Ship, _ship.Ship.IsDead);
     }
 
     public void EnableActions()
@@ -39,9 +41,15 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         _ship.Pilot.OnLevelUp += OnLevelUp;
         _ship.Pilot.Stats.OnRankChange += OnRankChange;
         _ship.Ship.OnShipCriticalChange += OnShipCriticalChange;
+        _ship.Ship.OnDeadChange += OnDeadChange;
 
 //        Debug.LogError($"EnableActions: {_ship.Ship.Id}");
 
+    }
+
+    private void OnDeadChange(ShipInventory arg1, bool arg2)
+    {
+        DeadObject.SetActive(arg2);
     }
 
     private void OnShipCriticalChange(ShipInventory obj)
@@ -121,10 +129,6 @@ public class SideShipGlobalMapInfo : MonoBehaviour
             criticalDamage.gameObject.SetActive(isActive);
         }
     }
-    public bool IsDead()
-    {
-        return _ship.Ship.IsDead();
-    }
 
     public void Dispose()
     {
@@ -133,6 +137,7 @@ public class SideShipGlobalMapInfo : MonoBehaviour
         _ship.Pilot.OnLevelUp -= OnLevelUp;
         _ship.Pilot.Stats.OnRankChange -= OnRankChange;
         _ship.Ship.OnShipCriticalChange -= OnShipCriticalChange;
+        _ship.Ship.OnDeadChange -= OnDeadChange;
     }
 
 }

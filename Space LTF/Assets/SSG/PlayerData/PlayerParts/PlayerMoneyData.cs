@@ -8,10 +8,10 @@ public class PlayerMoneyData
     public int MicrochipsCount => _links.Microchips;
     private PlayerSafe _links;
 
-    [field: NonSerialized]
-    public event Action<int> OnMoneyChange;
-    [field: NonSerialized]
-    public event Action<int> OnUpgradeChange;
+//    [field: NonSerialized]
+//    public event Action<int> OnMoneyChange;
+//    [field: NonSerialized]
+//    public event Action<int> OnUpgradeChange;
 
     public PlayerMoneyData(PlayerSafe SafeLinks )
     {
@@ -24,18 +24,18 @@ public class PlayerMoneyData
     public void AddMoney(int moneyToReward)
     {
         _links.SetMoney(MoneyCount + moneyToReward);
-        if (OnMoneyChange != null)
-        {
-            OnMoneyChange(MoneyCount);
-        }
+//        if (OnMoneyChange != null)
+//        {
+//            OnMoneyChange(MoneyCount);
+//        }
     }
     public void AddMicrochips(int val)
     {
         _links.SetMicrochips(MicrochipsCount + val);
-        if (OnUpgradeChange != null)
-        {
-            OnUpgradeChange(MoneyCount);
-        }
+//        if (OnUpgradeChange != null)
+//        {
+//            OnUpgradeChange(MoneyCount);
+//        }
     }
 
     public bool HaveMicrochips(int costValue)
@@ -49,24 +49,24 @@ public class PlayerMoneyData
 
     public void Dispose()
     {
-        OnMoneyChange = null;
+//        OnMoneyChange = null;
     }
 
     public void RemoveMoney(int costValue)
     {
         _links.SetMoney(MoneyCount - costValue);
-        if (OnMoneyChange != null)
-        {
-            OnMoneyChange(MoneyCount);
-        }
+//        if (OnMoneyChange != null)
+//        {
+//            OnMoneyChange(MoneyCount);
+//        }
     }
     public void RemoveMicrochips(int val)
     {
         _links.SetMicrochips(MicrochipsCount - val);
-        if (OnUpgradeChange != null)
-        {
-            OnUpgradeChange(MoneyCount);
-        }
+//        if (OnUpgradeChange != null)
+//        {
+//            OnUpgradeChange(MoneyCount);
+//        }
     }
 
 }

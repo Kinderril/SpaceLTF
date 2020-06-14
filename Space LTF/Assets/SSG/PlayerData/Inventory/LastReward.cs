@@ -140,7 +140,7 @@ public class LastReward
 
 
 
-        int moneyToReward = (int)(moneyCoef * power * Library.BATTLE_REWARD_WIN_MONEY_COEF);
+        int moneyToReward = (int)(moneyCoef * power * Library.BATTLE_REWARD_WIN_MONEY_COEF * winner.SafeLinks.CreditsCoef);
         Money = moneyToReward;
         winner.MoneyData.AddMoney(moneyToReward);
     }

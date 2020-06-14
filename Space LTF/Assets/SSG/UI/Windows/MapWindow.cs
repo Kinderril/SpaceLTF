@@ -91,8 +91,8 @@ public class MapWindow : BaseWindow
             player.RepairData.OnSomeShipRepaired += OnSomeShipRepaired;
             MoneyField.Init(player.MoneyData.MoneyCount);
             MicrochipField.Init(player.MoneyData.MicrochipsCount);
-            player.MoneyData.OnMoneyChange += OnMoneyChange;
-            player.MoneyData.OnUpgradeChange += OnMicrochipChange;
+            player.SafeLinks.OnCreditsChange += OnMoneyChange;
+            player.SafeLinks.OnMicroChipsChange += OnMicrochipChange;
             player.MapData.OnCellChanged += OnCellChanged;
             player.SafeLinks.OnAddShip += OnAddShip;
             // player.ReputationData.OnReputationNationChange += OnReputationChange;
@@ -208,20 +208,20 @@ public class MapWindow : BaseWindow
         }
         else
         {
-            var shipsToDel = new List<SideShipGlobalMapInfo>();
-            foreach (var sideShipGlobalMapInfo in _sideInfos)
-            {
-                sideShipGlobalMapInfo.UpToDate();
-                if (sideShipGlobalMapInfo.IsDead())
-                {
-                    shipsToDel.Add(sideShipGlobalMapInfo);
-                }
-            }
-
-            foreach (var sideShipGlobalMapInfo in shipsToDel)
-            {
-                OnAddShip(sideShipGlobalMapInfo.pilot, false);
-            }
+//            var shipsToDel = new List<SideShipGlobalMapInfo>();
+//            foreach (var sideShipGlobalMapInfo in _sideInfos)
+//            {
+//                sideShipGlobalMapInfo.UpToDate();
+//                if (sideShipGlobalMapInfo.IsDead())
+//                {
+//                    shipsToDel.Add(sideShipGlobalMapInfo);
+//                }
+//            }
+//
+//            foreach (var sideShipGlobalMapInfo in shipsToDel)
+//            {
+//                OnAddShip(sideShipGlobalMapInfo.pilot, false);
+//            }
         }
     }
 
@@ -458,7 +458,7 @@ public class MapWindow : BaseWindow
     private void InitMyArmy()
     {
         playerArmyUI = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.PlayerArmyUIPrefab);
-        playerArmyUI.Init(player, PlayerContainer, true, new ConnectInventory(player.Inventory));
+        playerArmyUI.Init(player.SafeLinks, PlayerContainer, true, new ConnectInventory(player.Inventory));
     }
 
     public void OnArmyShowClick()
@@ -573,8 +573,8 @@ public class MapWindow : BaseWindow
         if (player != null)
         {
             player.RepairData.OnSomeShipRepaired -= OnSomeShipRepaired;
-            player.MoneyData.OnMoneyChange -= OnMoneyChange;
-            player.MoneyData.OnUpgradeChange -= OnMicrochipChange;
+            player.SafeLinks.OnCreditsChange -= OnMoneyChange;
+            player.SafeLinks.OnMicroChipsChange -= OnMicrochipChange;
             player.MapData.OnCellChanged -= OnCellChanged;
             player.SafeLinks.OnAddShip -= OnAddShip;
         }

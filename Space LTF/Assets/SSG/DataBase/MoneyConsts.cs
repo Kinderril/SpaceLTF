@@ -46,15 +46,21 @@ public static class MoneyConsts
         {7, 70},
     };
 
+    public const int LOW_MICROCHIP_COEF = 1;
+    public const int MICROCHIPS_COEF = 4;
+
     public static Dictionary<int, int> SpellMicrochipsElements = new Dictionary<int, int>()
     {
         {1, 0},
-        {2, 1},
-        {3, 2},
-        {4, 3},
-        {5, 4},
-        {6, 5},
+        {2, 1 * MICROCHIPS_COEF},
+        {3, 2 * MICROCHIPS_COEF},
+        {4, 3 * MICROCHIPS_COEF},
+        {5, 4 * MICROCHIPS_COEF},
+        {6, 5 * MICROCHIPS_COEF},
     };
+
+    public const int LOW_EXP_COEF = 1;
+    public const int EXP_COEF = 4;
 
 
     public const int BASE_WEAPON_MONEY_COST = 10;

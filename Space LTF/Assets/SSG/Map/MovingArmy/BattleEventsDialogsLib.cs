@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class BattleEventsDialogsLib
 {
-    public static MessageDialogData GetDialog(EBattleType battleType, bool fullWin,float armyPower)
+    public static MessageDialogData GetDialog(EBattleType battleType, bool fullWin,float armyPower, Player player)
     {
         if (battleType == EBattleType.standart)
         {
@@ -19,12 +19,12 @@ public class BattleEventsDialogsLib
             {
                 case EBattleType.defenceWaves:
                     var coef = armyPower * Library.MONEY_QUEST_COEF;
-                    var monet = (int)(MyExtensions.Random(0.8f,  1.5f) * coef);
-                    MainController.Instance.MainPlayer.MoneyData.AddMoney(monet);
+                    var monet = (int)(MyExtensions.Random(0.8f,  1.5f) * coef * player.SafeLinks.CreditsCoef);
+                    player.MoneyData.AddMoney(monet);
                     msg = Namings.Format(Namings.Tag("defenceWavesWin"), monet);
                     break;
                 case EBattleType.destroyShipPeriod:
-                    MainController.Instance.MainPlayer.MoneyData.AddMicrochips(1);
+                    player.MoneyData.AddMicrochips(1 * player.SafeLinks.MicrochipCoef);
                     msg = Namings.Format(Namings.Tag("destroyShipPeriodWin"), 1);
                     break;
                 case EBattleType.defenceOfShip:
@@ -34,10 +34,10 @@ public class BattleEventsDialogsLib
                         {EParameterItemSubType.Middle, EParameterItemSubType.Heavy, EParameterItemSubType.Light};
                     var m = Library.CreateParameterItem(list.RandomElement(), EParameterItemRarity.normal);
                     var itemName = m.GetName();
-                    var canAdd = MainController.Instance.MainPlayer.Inventory.GetFreeSimpleSlot(out slot);
+                    var canAdd = player.Inventory.GetFreeSimpleSlot(out slot);
                     if (canAdd)
                     {
-                        MainController.Instance.MainPlayer.Inventory.TryAddItem(m);
+                        player.Inventory.TryAddItem(m);
                         msg = Namings.Format(Namings.Tag("defenceOfShipWin"), itemName);
                     }
                     else
@@ -46,7 +46,7 @@ public class BattleEventsDialogsLib
                     }
                     break;
                 case EBattleType.baseDefence:
-                    MainController.Instance.MainPlayer.MoneyData.AddMicrochips(1);
+                    player.MoneyData.AddMicrochips(1*player.SafeLinks.MicrochipCoef);
                     msg = Namings.Format(Namings.Tag("baseDefenceWin"), 1);
                     break;
             }

@@ -12,7 +12,7 @@ public class ShipInventoryUI : DragZone
     public TextMeshProUGUI NameField;
     public TextMeshProUGUI LevelField;
 
-
+    public GameObject DeadObject;
     public Transform WeaponsLayout;
     public Transform ModulsLayout;
     private IPilotParameters _pilot;
@@ -51,6 +51,7 @@ public class ShipInventoryUI : DragZone
         _pilot = _shipData.Pilot;
         _shipInventory = _shipData.Ship;
         _pilot.OnLevelUp += OnLevelUp;
+        _shipInventory.OnDeadChange += OnDeadChange;
         _shipInventory.OnShipCriticalChange += OnShipCriticalChange;
         _shipInventory.OnShipRepaired += OnShipRepaired;
         _shipInventory.OnItemAdded += OnItemAdded;
@@ -87,6 +88,12 @@ public class ShipInventoryUI : DragZone
 
         RefreshParameters();
         _cofigBonus.Cache = Namings.TooltipConfigProsConsCalc(_shipData.Ship.ShipConfig);
+        OnDeadChange(_shipInventory, _shipInventory.IsDead);
+    }
+
+    private void OnDeadChange(ShipInventory arg1, bool arg2)
+    {
+        DeadObject.SetActive(arg2);
 
     }
 
@@ -272,6 +279,7 @@ public class ShipInventoryUI : DragZone
         _shipInventory.OnShipRepaired -= OnShipRepaired;
         _shipInventory.OnItemAdded -= OnItemAdded;
         _shipInventory.OnShipCriticalChange -= OnShipCriticalChange;
+        _shipInventory.OnDeadChange -= OnDeadChange;
         _pilot.OnLevelUp -= OnLevelUp;
         base.Dispose();
     }

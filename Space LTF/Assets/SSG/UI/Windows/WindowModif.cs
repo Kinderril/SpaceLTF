@@ -18,7 +18,7 @@ public class WindowModif : MonoBehaviour
         //        InitWeapons(_player.Army);
         //        InitWeapons2(_player.Inventory);
         MoneyField.Init(_player.MoneyData.MoneyCount);
-        _player.MoneyData.OnMoneyChange += OnMoneyChange;
+        _player.SafeLinks.OnCreditsChange += OnMoneyChange;
     }
 
     //    private void InitWeapons2(PlayerInventory inventory)
@@ -55,7 +55,7 @@ public class WindowModif : MonoBehaviour
     public void Disable()
     {
         if (_player != null)
-            _player.MoneyData.OnMoneyChange -= OnMoneyChange;
+            _player.SafeLinks.OnCreditsChange -= OnMoneyChange;
         MainShipModificatorsLayout.ClearTransform();
         //        WeaponsModificationsLayout.ClearTransform();
     }

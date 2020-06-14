@@ -154,10 +154,11 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         };
         if (SkillWork(Nothing, excvScounts + ScoutsLevel))
         {
-            var m = moneyTotal / 2;
+            var player = MainController.Instance.MainPlayer;
+            var m = (int)((moneyTotal / 2f) * player.SafeLinks.CreditsCoef);
             _reputation.AddReputation(_config, 5);
             mesData = new MessageDialogData(Namings.Format(Namings.Tag("YourRartMoney"), m), ans);
-            MainController.Instance.MainPlayer.MoneyData.AddMoney(m);
+            player.MoneyData.AddMoney(m);
         }
         else
         {

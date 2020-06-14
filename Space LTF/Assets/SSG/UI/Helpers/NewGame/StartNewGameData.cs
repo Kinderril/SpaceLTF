@@ -23,11 +23,12 @@ public class StartNewGameData
     public Dictionary<PlayerParameterType, int> startParametersLevels;
     public int PowerPerTurn;
     public EGameMode GameNode;
+    public ExprolerCellMapType MapType;
 
     public StartNewGameData(Dictionary<PlayerParameterType, int> startParametersLevels,
         ShipConfig shipConfig, List<WeaponType> posibleStartWeapons, int SectorSize, int SectorCount,
          int questsOnStart, EStartGameDifficulty difficulty, List<SpellType> posibleSpell
-        , int PowerPerTurn, EGameMode gameNode)
+        , int PowerPerTurn, EGameMode gameNode, ExprolerCellMapType mapType)
     {
         Debug.Log(($"StartNewGameData {shipConfig.ToString()} SectorSize:{SectorSize} " +
                   $" SectorCount:{SectorCount}  questsOnStart:{questsOnStart}" +
@@ -42,6 +43,7 @@ public class StartNewGameData
         this.Difficulty = difficulty;
         this.posibleSpell = posibleSpell;
         this.PowerPerTurn = PowerPerTurn;
+        MapType = mapType;
         GameNode = gameNode;
     }
 
@@ -217,5 +219,10 @@ public class StartNewGameData
         }
 
         return startPower;
+    }
+
+    public virtual Player CreatePlayer()
+    {
+        return new Player("Next Player");
     }
 }

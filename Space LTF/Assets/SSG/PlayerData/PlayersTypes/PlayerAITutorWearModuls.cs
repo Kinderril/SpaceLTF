@@ -5,8 +5,8 @@ using System.Linq;
 [System.Serializable]
 public class PlayerAITutorWearModuls : PlayerAI
 {
-    public PlayerAITutorWearModuls(string name, Dictionary<PlayerParameterType, int> startData = null)
-        : base(name, startData)
+    public PlayerAITutorWearModuls(string name)
+        : base(name)
     {
 
     }

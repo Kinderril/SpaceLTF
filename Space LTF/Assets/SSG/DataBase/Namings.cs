@@ -132,6 +132,13 @@ public static class Namings
     }
     public static string Tag(string tag)
     {
+#if true
+        if (_curLocalization == null)
+        {
+            return "No locs";
+        }
+#endif
+
         if (_curLocalization.TryGetValue(tag, out var info))
         {
             return info;

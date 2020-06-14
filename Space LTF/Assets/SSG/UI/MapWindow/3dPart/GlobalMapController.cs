@@ -698,7 +698,7 @@ public class GlobalMapController : MonoBehaviour
 
     public void MoveToCell(GlobalMapCell target, bool armiesCanMove, Action callback)
     {
-        MainController.Instance.MainPlayer.SaveGame();
+        MainController.Instance.MainPlayer.SaveOnMoveGame();
         Block();
         var targetCell = GetCellObjectByCell(target);
 

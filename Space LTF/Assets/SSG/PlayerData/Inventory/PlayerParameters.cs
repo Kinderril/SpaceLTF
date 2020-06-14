@@ -22,7 +22,7 @@ public class PlayerParameters
     public PlayerParameter EnginePower;
 
 
-    public PlayerParameters(Player player, Dictionary<PlayerParameterType, int> level = null)
+    public PlayerParameters(PlayerSafe player, Dictionary<PlayerParameterType, int> level = null)
     {
         Scouts = new PlayerParameter(player) { IsBattle = false, Level = 1, Name = Namings.ParameterName(PlayerParameterType.scout), ParameterType = PlayerParameterType.scout };
         ChargesCount = new PlayerParameter(player) { IsBattle = true, Level = 1, Name = Namings.ParameterName(PlayerParameterType.chargesCount), ParameterType = PlayerParameterType.chargesCount };
@@ -73,6 +73,20 @@ public class PlayerParameters
     public bool ScoutsIsMax()
     {
         return !(Scouts.Level <= MoneyConsts.MAX_PASSIVE_LEVEL);
+    }
+
+    public Dictionary<PlayerParameterType, int> GetAsDictionary()
+    {
+        Dictionary<PlayerParameterType, int> level = new Dictionary<PlayerParameterType, int>();
+
+
+        level.Add(PlayerParameterType.scout,Scouts.Level);
+        level.Add(PlayerParameterType.chargesCount,ChargesCount.Level);
+        level.Add(PlayerParameterType.chargesSpeed,ChargesSpeed.Level);
+        level.Add(PlayerParameterType.repair,Repair.Level);
+        level.Add(PlayerParameterType.engineParameter,EnginePower.Level);
+        return level;
+
     }
 }
 

@@ -11,12 +11,12 @@ public class PlayerDifficultyExprolerPart : PlayerDifficultyPart
     {
 
     }
-    public void Init(EStartGameDifficulty dataDifficulty)
+    public override void Init(EStartGameDifficulty dataDifficulty)
     {
 
     }
 
-    public float CalcDelta(float enemyPower, float playerPower)
+    public override float CalcDelta(float enemyPower, float playerPower)
     {
         return 0f;
 

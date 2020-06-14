@@ -57,6 +57,7 @@ public class TotalStats
 
     public void AddExp(int getTotalExp)
     {
+
         Exp += getTotalExp;
         if (CurRank == PilotRank.Major)
         {

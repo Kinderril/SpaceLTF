@@ -21,7 +21,9 @@ public class ShipInventory : IStartShipParams, IInventory
     [field: NonSerialized]
     public event Action<ShipInventory> OnShipRepaired;
     [field: NonSerialized]
-    public event Action<ShipInventory> OnShipCriticalChange;
+    public event Action<ShipInventory> OnShipCriticalChange;      
+    [field: NonSerialized]
+    public event Action<ShipInventory,bool> OnDeadChange;
 
     //    public int DamageTimes = 0;
     public ShipBattleData LastBattleData;
@@ -32,6 +34,18 @@ public class ShipInventory : IStartShipParams, IInventory
     public PilotParameters PilotParameters => _pilot;
     public int SpellModulsCount { get; private set; }
     public int CriticalDamages { get; private set; }
+    private bool _isDead = false;
+
+    public bool IsDead
+    {
+        get => _isDead;
+        private set
+        {
+            _isDead = value;
+            OnDeadChange?.Invoke(this,_isDead);
+        }
+    }
+
     public string Name { get; private set; }
     public float BoostChargeTime { get; private set; }
     public PilotTactic Tactic => PilotParameters.Tactic;
@@ -426,7 +440,7 @@ public class ShipInventory : IStartShipParams, IInventory
         return false;
     }
 
-    public bool IsDead()
+    public bool CheckIsDead()
     {
         return CriticalDamages >= Library.CRITICAL_DAMAGES_TO_DEATH;
     }
@@ -434,10 +448,11 @@ public class ShipInventory : IStartShipParams, IInventory
     public void AddCriticalyDamage()
     {
         CriticalDamages++;
-        if (IsDead())
+        if (CheckIsDead())
         {
             Debug.Log("Ship fully destroyed cause critical damages");
-            MainController.Instance.MainPlayer.Army.RemoveShip(this);
+            IsDead = true;
+//            MainController.Instance.MainPlayer.Army.RemoveShip(this);
         }
         else
         {
@@ -457,6 +472,7 @@ public class ShipInventory : IStartShipParams, IInventory
         {
             OnShipCriticalChange(this);
         }
+        IsDead = false;
     }
 }
 

@@ -8,12 +8,12 @@ public class PlayerParameter
     public bool IsBattle;
     public virtual int Level { get; set; }
     public virtual PlayerParameterType ParameterType { get; set; }
-    protected Player _player;
+    protected PlayerSafe _player;
 
     [field: NonSerialized]
     public event Action<PlayerParameter> OnUpgrade;
 
-    public PlayerParameter(Player player)
+    public PlayerParameter(PlayerSafe player)
     {
         _player = player;
     }
@@ -38,7 +38,7 @@ public class PlayerParameter
             WindowManager.Instance.ConfirmWindow.Init(() =>
             {
 
-                _player.MoneyData.RemoveMoney(cost);
+                _player.RemoveMoney(cost);
                 Level++;
                 if (OnUpgrade != null)
                 {
@@ -59,7 +59,7 @@ public class PlayerParameter
             return false;
         }
         var cost = MoneyConsts.PassiveUpgrade[lvl];
-        var haveMoney = _player.MoneyData.HaveMoney(cost);
+        var haveMoney = _player.HaveMoney(cost);
         return haveMoney;
     }
 
@@ -70,7 +70,7 @@ public class PlayerParameter
             return false;
         }
         var cost = MoneyConsts.SpellsCostUpgrade[lvl];
-        var haveMoney = _player.MoneyData.HaveMoney(cost);
+        var haveMoney = _player.HaveMoney(cost);
         return haveMoney;
     }
 

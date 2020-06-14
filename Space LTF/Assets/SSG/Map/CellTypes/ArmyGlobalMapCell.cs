@@ -114,7 +114,7 @@ public abstract class ArmyGlobalMapCell : GlobalMapCell
         {
             var player = MainController.Instance.MainPlayer;
             player.ReputationData.WinBattleAgainst(ConfigOwner);
-            var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power, ConfigOwner);
+            var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power, ConfigOwner,player);
             return msg;
         }
         if (MainController.Instance.Statistics.LastBattle == EndBattleType.winFull)

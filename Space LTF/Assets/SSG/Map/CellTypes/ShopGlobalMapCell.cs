@@ -6,6 +6,7 @@ using UnityEngine;
 public class ShopGlobalMapCell : GlobalMapCell
 {
     protected ShopInventory _shopInventory;
+    PlayerSafe _playerSafe = new PlayerSafe(false,true);
     public ShopGlobalMapCell(float power, int id, int intX, int intZ, SectorData sector, ShipConfig config) : base(id, intX, intZ, sector, config)
     {
         InitShop(power,sector,config);
@@ -13,7 +14,7 @@ public class ShopGlobalMapCell : GlobalMapCell
 
     protected virtual void InitShop(float power, SectorData sector, ShipConfig config)
     {
-        _shopInventory = new ShopInventory(null);
+        _shopInventory = new ShopInventory(_playerSafe);
         _shopInventory.FillItems(power, config, sector.XIndex);
     }
 

@@ -33,7 +33,8 @@ public class TradeMapEvent : BaseGlobalMapEvent
     public override MessageDialogData GetDialog()
     {
 
-        var inventory = MainController.Instance.MainPlayer.Inventory;
+        var player = MainController.Instance.MainPlayer;
+        var inventory = player.Inventory;
 
         if ((inventory.Moduls.Count > 0) || (inventory.Weapons.Count > 0))
         {
@@ -94,10 +95,12 @@ public class TradeMapEvent : BaseGlobalMapEvent
                 tradeData = "error";
                 break;
         }
+
+        _cost =(int)(_cost * player.SafeLinks.CreditsCoef);
         //        List<>
 
         var mianAnswers = new List<AnswerDialogData>();
-        var canUse = _TradeType == TradeType.traderBuy || (MainController.Instance.MainPlayer.MoneyData.HaveMoney(_cost) &&
+        var canUse = _TradeType == TradeType.traderBuy || (player.MoneyData.HaveMoney(_cost) &&
                      _TradeType == TradeType.traderSell);
         if (canUse)
         {

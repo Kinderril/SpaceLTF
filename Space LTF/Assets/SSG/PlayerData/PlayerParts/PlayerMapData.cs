@@ -72,7 +72,8 @@ public class PlayerMapData
 
         int startPower = data.GetStartPower();
 
-        var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, startPower, data.QuestsOnStart, data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn);
+        var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, startPower, data.QuestsOnStart, 
+            data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn,data.MapType);
         GalaxyData = galaxyData;
         CurrentCell = startCell;
         OpenAllNear();

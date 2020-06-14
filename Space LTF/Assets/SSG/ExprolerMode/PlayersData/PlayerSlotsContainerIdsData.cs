@@ -10,15 +10,23 @@ public class PlayerSlotsContainerIdsData
 {
     public static string pathData = $"IdsData.data";
     public HashSet<int> UnblockedIds = new HashSet<int>() { 1, 2 };
-    public HashSet<int> CompleteIds = new HashSet<int>() { 1 };
+//    public HashSet<int> CompleteIds = new HashSet<int>() { 1 };
+    public Dictionary<int,HashSet<int>> Completes = new Dictionary<int, HashSet<int>>();
     public void Unblock(int id)
     {
         UnblockedIds.Add(id);
         Save();
     }
-    public void Complete(int id)
+    public void Complete(int id, int siz)
     {
-        CompleteIds.Add(id);
+        if (Completes.ContainsKey(id))
+        {
+            var set = Completes[id].Add(siz);
+        }
+        else
+        {
+            Completes.Add(id,new HashSet<int>(){siz});
+        }
         Save();
     }
     private void Save()
@@ -41,11 +49,26 @@ public class PlayerSlotsContainerIdsData
             PlayerSlotsContainerIdsData save = (PlayerSlotsContainerIdsData)bf.Deserialize(file);
             file.Close();
             player = save;
+            if (player.Completes == null)
+            {
+                player.Completes = new Dictionary<int, HashSet<int>>();
+            }
             Debug.Log("PlayerSlotsContainerIdsData Loaded");
             return true;
         }
         Debug.Log("No PlayerSlotsContainerIdsData saved!");
         player = null;
         return false;
+    }
+
+    public void AddStartIds()
+    {
+        UnblockedIds.Add(100);
+        UnblockedIds.Add(200);
+        UnblockedIds.Add(300);
+        UnblockedIds.Add(400);
+        UnblockedIds.Add(500);
+        UnblockedIds.Add(600);  
+
     }
 }

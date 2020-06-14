@@ -328,7 +328,7 @@ public static class InventoryOperation
     public static int CalcSellPrice(IInventory to,IItemInv item)
     {
         var valuableCoef = to.ValuableItem(item);
-        var preSellPrice = (int)((float)item.CostValue * Library.SELL_COEF * valuableCoef);
+        var preSellPrice = (int)((float)item.CostValue * Library.SELL_COEF * valuableCoef * item.CurrentInventory.Owner.CreditsCoef);
 #if UNITY_EDITOR
         if (preSellPrice <= 1)
         {
@@ -387,7 +387,7 @@ public static class InventoryOperation
                     if (item.CurrentInventory.Owner != null)
                     {
                         var sellValue = (int)(sellPrice);
-                        item.CurrentInventory.Owner.AddMoney(sellValue);
+                        item.CurrentInventory.Owner.AddMoneyAfterSell(sellValue);
                     }
                     WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.BuySell);
                     CallbackSuccsess();

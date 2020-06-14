@@ -258,9 +258,10 @@ public class EndGameWindow : BaseWindow
         player.MoneyData.AddMoney(_myMoney);
         foreach (var myShip in _allMyShips)
         {
-            var money = myShip.MoneyToAdd;
+            var money = myShip.MoneyToAdd ;
+            var exp = myShip.StartShipPilotData.Ship.LastBattleData.GetTotalExp() * player.SafeLinks.ExpCoef;
             myShip.StartShipPilotData.Pilot.AddMoney(money);
-            myShip.StartShipPilotData.Pilot.Stats.AddExp(myShip.StartShipPilotData.Ship.LastBattleData.GetTotalExp());
+            myShip.StartShipPilotData.Pilot.Stats.AddExp(exp);
             myShip.StartShipPilotData.Pilot.Stats.AddKills(myShip.StartShipPilotData.Ship.LastBattleData.Kills);
             myShip.StartShipPilotData.Pilot.Stats.AddHeathDamage(myShip.StartShipPilotData.Ship.LastBattleData.HealthDamage);
             myShip.StartShipPilotData.Pilot.Stats.AddShieldDamage(myShip.StartShipPilotData.Ship.LastBattleData.ShieldhDamage);

@@ -20,7 +20,7 @@ public class DragableWeaponItem : DragableItem
     {
         if (!_isSubscribed)
         {
-            MainController.Instance.MainPlayer.MoneyData.OnMoneyChange += OnMoneyChange;
+            ContainerItem.CurrentInventory.Owner.OnCreditsChange += OnMoneyChange;
             Weapon.OnUpgrade += OnUpgrade;
             _isSubscribed = true;
         }
@@ -45,9 +45,11 @@ public class DragableWeaponItem : DragableItem
 
     protected override void Dispose()
     {
-        MainController.Instance.MainPlayer.MoneyData.OnMoneyChange -= OnMoneyChange;
         if (Weapon != null)
+        {
+            ContainerItem.CurrentInventory.Owner.OnCreditsChange -= OnMoneyChange;
             Weapon.OnUpgrade -= OnUpgrade;
+        }
         _isSubscribed = false;
         base.Dispose();
     }
@@ -59,8 +61,8 @@ public class DragableWeaponItem : DragableItem
             return;
         }
         var cost = MoneyConsts.WeaponUpgrade[Weapon.Level];
-        var haveMoney = MainController.Instance.MainPlayer.MoneyData.HaveMoney(cost);
-        var isMy = MainController.Instance.MainPlayer.SafeLinks == Weapon.CurrentInventory.Owner;
+        var haveMoney = ContainerItem.CurrentInventory.Owner.HaveMoney(cost);
+        var isMy = ContainerItem.CurrentInventory.Owner == Weapon.CurrentInventory.Owner;
         var canUse = Weapon.CanUpgrade() && haveMoney && Usable && isMy;
         UpgradeButton.gameObject.SetActive(canUse); 
 

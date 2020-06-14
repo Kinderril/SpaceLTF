@@ -13,7 +13,7 @@ public class PlayerDifficultyPart
     {
 
     }
-    public void Init(EStartGameDifficulty dataDifficulty)
+    public virtual void Init(EStartGameDifficulty dataDifficulty)
     {
         var x1 = -5f;
         var y1 = 3f;
@@ -45,7 +45,7 @@ public class PlayerDifficultyPart
 
     }
 
-    public float CalcDelta(float enemyPower, float playerPower)
+    public virtual float CalcDelta(float enemyPower, float playerPower)
     {
         var delta = enemyPower - playerPower;
 

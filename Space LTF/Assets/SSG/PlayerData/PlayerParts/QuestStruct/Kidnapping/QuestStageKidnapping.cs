@@ -183,7 +183,7 @@ public class QuestStageKidnapping : QuestStage
         var power = player.Army.GetPower();
         var config = player.ReputationData.WorstFaction(ShipConfig.droid);
         var withBase = power > 25;
-        var playerEnemy = new PlayerAIWithBattleEvent("Kidnapping", true, null, EBattleType.baseDefence);
+        var playerEnemy = new PlayerAIWithBattleEvent("Kidnapping", true, EBattleType.baseDefence);
         var army = ArmyCreator.CreateArmy(power, ArmyCreationMode.equalize, 2, 6, ArmyCreatorLibrary.GetArmy(config), withBase,
             playerEnemy);
         playerEnemy.Army.SetArmy(army);

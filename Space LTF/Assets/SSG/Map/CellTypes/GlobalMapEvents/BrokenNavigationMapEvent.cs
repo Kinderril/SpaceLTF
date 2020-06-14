@@ -122,7 +122,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
     private void TakeMoney()
     {
         var coef = (float)_power * Library.MONEY_QUEST_COEF;
-        var money = (int)(GlobalMapCell.AddMoney(24, 29) * coef);
+        var money = (int)(GlobalMapCell.AddMoney(24, 29) * coef * MainController.Instance.MainPlayer.SafeLinks.CreditsCoef);
         MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
     }
 

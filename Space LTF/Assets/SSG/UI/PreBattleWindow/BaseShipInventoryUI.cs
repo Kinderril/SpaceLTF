@@ -16,9 +16,9 @@ public class BaseShipInventoryUI : DragZone
     private List<PlayerParameterUI> _curParams = new List<PlayerParameterUI>();
 
     private ShipInventory _shipInventory;
-    private Player _player;
+    private PlayerSafe _player;
 
-    public void Init(Player player, ShipInventory shipInventory, bool usable, ConnectInventory connectedInventory, IInventory tradeInventory = null)
+    public void Init(PlayerSafe player, ShipInventory shipInventory, bool usable, ConnectInventory connectedInventory, IInventory tradeInventory = null)
     {
         _tradeInventory = tradeInventory;
         _player = player;
@@ -46,7 +46,7 @@ public class BaseShipInventoryUI : DragZone
         base.Init(shipInventory, usable, allSlots, connectedInventory);
         InitCurrentItems();
         UpdateArmyCount();
-        _player.SafeLinks.OnAddShip += OnAddShip;
+        _player.OnAddShip += OnAddShip;
     }
 
     private void OnAddShip(StartShipPilotData arg1, bool arg2)
@@ -56,7 +56,7 @@ public class BaseShipInventoryUI : DragZone
 
     private void UpdateArmyCount()
     {
-        MaxShipField.text = Namings.Format(Namings.Tag("MaxArmyCount"), _player.Army.Count, (PlayerArmy.MAX_ARMY));
+        MaxShipField.text = Namings.Format(Namings.Tag("MaxArmyCount"), _player.Ships.Count, (PlayerArmy.MAX_ARMY));
     }
 
     private void InitParameter(PlayerParameter parameter)
@@ -73,7 +73,7 @@ public class BaseShipInventoryUI : DragZone
         {
             param.Dispose();
         }
-        _player.SafeLinks.OnAddShip -= OnAddShip;
+        _player.OnAddShip -= OnAddShip;
         _curParams.Clear();
         base.Dispose();
     }

@@ -15,8 +15,8 @@ public class ExprolerStartPlayInfo
     {
         _playerToPlay = playerToPlay;
         Cell = cell;
-        var startParameters = _playerToPlay.StartParametersLevels;
-        var startGame = new StartNewGameWithSafePlayer(startParameters, Cell.Config, size, 1, null, _playerToPlay, Cell.Power);
+        var startParameters = _playerToPlay.Parameters.GetAsDictionary();
+        var startGame = new StartNewGameWithSafePlayer(startParameters, Cell.Config, size, 1, null, _playerToPlay, Cell.Power,Cell.MapType);
         MainController.Instance.CreateNewPlayerAndStartGame(startGame);
     }
 
@@ -40,20 +40,18 @@ public class ExprolerStartPlayInfo
         if (win)
         {
             var nieght = Cell.Neighhoods;
-            foreach (var cell in nieght)
+            foreach (var id in nieght)
             {
-                if (!slots.ContainsUnblockId(cell.Id))
+
+                if (!slots.ContainsUnblockId(id))
                 {
-                    Unblocks.Add(cell.Id);
-                    slots.UnblockId(cell.Id);
+                    Unblocks.Add(id);
+                    slots.UnblockId(id);
                 }
             }
 
-            if (!slots.ContainsCompleteId(Cell.Id))
-            {
-                CompleteId = Cell.Id;
-                slots.CompleteId(Cell.Id);
-            }
+            CompleteId = Cell.Id;
+            slots.CompleteId(Cell.Id, size);
         }
         slots.SaveProfiles();
         Showed = false;

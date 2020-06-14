@@ -18,7 +18,7 @@ public class DragableSpellItem : DragableItem
     {
         if (!_isSubscribed)
         {
-            MainController.Instance.MainPlayer.MoneyData.OnMoneyChange += OnMoneyChange;
+            ContainerItem.CurrentInventory.Owner.OnCreditsChange += OnMoneyChange;
             Spell.OnUpgrade += OnUpgrade;
             _isSubscribed = true;
         }
@@ -57,9 +57,9 @@ public class DragableSpellItem : DragableItem
         }
         var cost = MoneyConsts.SpellUpgrade[Spell.Level];
         var upgradeElements = MoneyConsts.SpellMicrochipsElements[Spell.Level];
-        var haveMoney = MainController.Instance.MainPlayer.MoneyData.HaveMoney(cost);
-        var haveUpgrades = MainController.Instance.MainPlayer.MoneyData.HaveMicrochips(upgradeElements);
-        var isMy = MainController.Instance.MainPlayer.SafeLinks == Spell.CurrentInventory.Owner;
+        var haveMoney = ContainerItem.CurrentInventory.Owner.HaveMoney(cost);
+        var haveUpgrades = ContainerItem.CurrentInventory.Owner.HaveMicrochips(upgradeElements);
+        var isMy = ContainerItem.CurrentInventory.Owner == Spell.CurrentInventory.Owner;
         var canUse = Spell.CanUpgradeByLevel() && haveMoney && Usable && isMy && haveUpgrades;
         UpgradeButton.gameObject.SetActive(canUse);
 
@@ -72,9 +72,11 @@ public class DragableSpellItem : DragableItem
 
     protected override void Dispose()
     {
-        MainController.Instance.MainPlayer.MoneyData.OnMoneyChange -= OnMoneyChange;
         if (Spell != null)
+        {
             Spell.OnUpgrade -= OnUpgrade;
+            ContainerItem.CurrentInventory.Owner.OnCreditsChange -= OnMoneyChange;
+        }
         _isSubscribed = false;
         base.Dispose();
     }

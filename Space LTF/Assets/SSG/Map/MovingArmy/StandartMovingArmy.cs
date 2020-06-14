@@ -118,7 +118,7 @@ public class StandartMovingArmy : MovingArmy
 
     public override Player GetArmyToFight()
     {
-        if (_player.Army.Army == null || _player.Army.Army.Count == 0)
+        if (_player.Army == null || _player.Army.Army == null || _player.Army.Army.Count == 0)
         {
             CacheArmy();
         }
@@ -279,7 +279,7 @@ public class StandartMovingArmy : MovingArmy
             string helpInfo;
             if (a == 0)
             {
-                var money = GlobalMapCell.AddMoney((int)(Power / 3), (int)(Power / 2));
+                var money = GlobalMapCell.AddMoney((int)(Power / 3), (int)(Power / 2)) * _player.SafeLinks.CreditsCoef;
                 helpInfo = Namings.Format("They give you some credits {0}", money);
             }
             else
@@ -348,14 +348,14 @@ public class StandartMovingArmy : MovingArmy
             {
                 var player = MainController.Instance.MainPlayer;
                 player.ReputationData.WinBattleAgainst(StartConfig);
-                var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power, StartConfig);
+                var msg = player.AfterBattleOptions.GetDialog(player.MapData.Step, Power, StartConfig, player);
                 return msg;
             }
         }
         else
         {
             var fullWin = MainController.Instance.Statistics.LastBattle == EndBattleType.winFull;
-            return BattleEventsDialogsLib.GetDialog(type, fullWin, Power);
+            return BattleEventsDialogsLib.GetDialog(type, fullWin, Power,MainController.Instance.MainPlayer);
         }
 
         return null;

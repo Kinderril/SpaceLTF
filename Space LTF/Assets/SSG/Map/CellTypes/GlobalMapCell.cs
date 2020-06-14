@@ -44,9 +44,9 @@ public abstract class GlobalMapCell
         indZ = iZ;
         Id = id;
         //        if (true)
-        if (indX > 5)
+        if (sector.AnyEvent || indX > 5)
         {
-            if (MyExtensions.IsTrue01(0.5f))
+            if (MyExtensions.IsTrue01(0.3f))
             {
                 WDictionary<EBattlefildEventType> chance = new WDictionary<EBattlefildEventType>(
                     new Dictionary<EBattlefildEventType, float>()

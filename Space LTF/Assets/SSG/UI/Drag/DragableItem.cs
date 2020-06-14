@@ -262,9 +262,19 @@ public abstract class DragableItem : MonoBehaviour, IDropHandler,
 #if UNITY_EDITOR
         if (ContainerItem != null && Usable)
         {
-            if (ContainerItem.CurrentInventory != Slot._inventory)
+            try
             {
-                Debug.LogError("item not on place " + id);
+
+                if (ContainerItem.CurrentInventory != Slot._inventory)
+                {
+                    Debug.LogError("item not on place " + id);
+                }
+            }
+            catch (Exception e)
+            {
+
+                Debug.LogError("try catch on place ");
+
             }
         }
 #endif
@@ -297,12 +307,12 @@ public abstract class DragableItem : MonoBehaviour, IDropHandler,
     {
         if (Usable)
         {
-            if (ContainerItem.CurrentInventory == MainController.Instance.MainPlayer.Inventory)
+            if (ContainerItem.CurrentInventory == ContainerItem.CurrentInventory.Owner.Inventory)
             {
                 return true;
             }
 
-            foreach (var startShipPilotData in MainController.Instance.MainPlayer.Army.Army)
+            foreach (var startShipPilotData in ContainerItem.CurrentInventory.Owner.Ships)
             {
                 if (startShipPilotData.Ship == ContainerItem.CurrentInventory)
                 {

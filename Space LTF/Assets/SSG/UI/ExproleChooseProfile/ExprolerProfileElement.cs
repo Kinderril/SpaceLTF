@@ -27,6 +27,7 @@ public class ExprolerProfileElement : MonoBehaviour
     {
         NameField.text = _playerSafe.Name;
         ShipConfig config = ShipConfig.mercenary;
+        Utils.ClearTransform(ShipsLayout);
         foreach (var startShipPilotData in _playerSafe.Ships)
         {
             if (startShipPilotData.Ship.ShipType == ShipType.Base)

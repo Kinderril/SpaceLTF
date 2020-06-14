@@ -17,19 +17,21 @@ public class PlayerSafe
     public PlayerInventory Inventory;
     public int Credits;
     public int Microchips;
-    public string Name;
-    public Dictionary<PlayerParameterType, int> StartParametersLevels = new Dictionary<PlayerParameterType, int>()
-    {
-        { PlayerParameterType.chargesCount,1 },
-        { PlayerParameterType.chargesSpeed,1 },
-        { PlayerParameterType.engineParameter,1 },
-        { PlayerParameterType.repair,1 },
-        { PlayerParameterType.scout,1 },
-    };
+    public float CreditsCoef=>IsLow?Library.LOW_MONEY_COEF:Library.NORMAL_MONEY_COEF;
+    public int MicrochipCoef=>IsLow ? MoneyConsts.LOW_MICROCHIP_COEF : MoneyConsts.MICROCHIPS_COEF;
+    public int ExpCoef => IsLow ? MoneyConsts.LOW_EXP_COEF : MoneyConsts.EXP_COEF;
 
-    public PlayerSafe()
+    private bool IsLow;
+    public string Name;
+    public PlayerParameters Parameters;
+    public bool ShallSafeEveryMove { get; private set; }
+
+    public PlayerSafe(bool isLow,bool shallSafeEveryMove)
     {
+        ShallSafeEveryMove = shallSafeEveryMove;
+        IsLow = isLow;
         Inventory = new PlayerInventory(this);
+        Parameters = new PlayerParameters(this);
     }
 
     public void Save()
@@ -102,9 +104,9 @@ public class PlayerSafe
         shipData2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
 
 
-
+        Parameters = new PlayerParameters(this);
         Ships = army;
-
+        
     }
 
 
@@ -114,7 +116,7 @@ public class PlayerSafe
         return Credits >= buyPrice;
     }
 
-    public void AddMoney(int sellValue)
+    public void AddMoneyAfterSell(int sellValue)
     {
         SetMoney(Credits + sellValue);
     }
@@ -130,9 +132,9 @@ public class PlayerSafe
         SetMoney(Credits - cost);
     }
 
-    public bool HaveMicrochips(int microchipsElement)
+    public bool HaveMicrochips(int target)
     {
-        return microchipsElement >= Microchips;
+        return target <= Microchips;
     }
 
     public void RemoveShip(StartShipPilotData shipToDel)
@@ -143,7 +145,12 @@ public class PlayerSafe
 
     public void AddShip(StartShipPilotData ship)
     {
-        Ships.Remove(ship);
+        Ships.Add(ship);
         OnAddShip?.Invoke(ship, true);
+    }
+
+    public void SetLowCoef()
+    {
+        IsLow = true;
     }
 }

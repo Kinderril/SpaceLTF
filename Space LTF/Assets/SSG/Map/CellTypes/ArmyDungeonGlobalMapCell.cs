@@ -5,9 +5,11 @@ using System.Collections.Generic;
 public class ArmyDungeonGlobalMapCell : ArmyGlobalMapCell
 {
     protected int _stepPowerCoef = 3;
-    public ArmyDungeonGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind, SectorData sector, float coefPower) : base(
+    private float _moneyCoef;
+    public ArmyDungeonGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind, SectorData sector, float coefPower,float moneyCoef) : base(
         power, config, id, Xind, Zind, sector)
     {
+        _moneyCoef = moneyCoef;
         _powerCoef =1f + coefPower;
     }
 
@@ -59,7 +61,7 @@ public class ArmyDungeonGlobalMapCell : ArmyGlobalMapCell
     protected override void CacheArmy()
     {
         ArmyCreatorData data = ArmyCreatorLibrary.GetArmy(ConfigOwner);
-        var player = new PlayerAIMilitary(name);
+        var player = new PlayerAIMilitary(name, _moneyCoef);
         var army = ArmyCreator.CreateSimpleEnemyArmy(Power, data, player);
         player.Army.SetArmy(army);
         _enemyPlayer = player;

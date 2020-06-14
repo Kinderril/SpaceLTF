@@ -91,9 +91,10 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
     {
         if (MyExtensions.IsTrue01(.2f))
         {
-            var coef = (float)_power * Library.MONEY_QUEST_COEF;
+            var player = MainController.Instance.MainPlayer;
+            var coef = (float)_power * Library.MONEY_QUEST_COEF * player.SafeLinks.CreditsCoef;
             var money = (int)(MyExtensions.Random(14, 30) * coef);
-            MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
+            player.MoneyData.AddMoney(money);
             var mianAnswers = new List<AnswerDialogData>();
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
             var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("battlefield_killEachOther"), money), mianAnswers);

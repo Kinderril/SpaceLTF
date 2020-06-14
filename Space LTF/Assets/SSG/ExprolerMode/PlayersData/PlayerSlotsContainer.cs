@@ -48,12 +48,26 @@ public class PlayerSlotsContainerSafeData
             PlayerSlotsContainerSafeData save = (PlayerSlotsContainerSafeData)bf.Deserialize(file);
             file.Close();
             player = save;
+            player.CheckAfterLoad();
             Debug.Log($"PlayerSlotsContainerSafeData Loaded : {loadPath}");
             return true;
         }
         Debug.Log($"No PlayerSlotsContainerSafeData saved! : {loadPath}");
         player = null;
         return false;
+    }
+
+    private void CheckAfterLoad()
+    {
+#if UNITY_EDITOR   
+        foreach (var playerSafeContainer in _playerSafeContainers)
+        {
+            Debug.LogError($"PSF {playerSafeContainer.CreditsCoef}");
+            playerSafeContainer.SetLowCoef();// = 10f;
+        }
+
+#endif
+
     }
 }
 
@@ -78,6 +92,8 @@ public class PlayerSlotsContainer
         {
             _dataIds = new PlayerSlotsContainerIdsData();
         }
+
+        _dataIds.AddStartIds();
     }
 
     public List<PlayerSafe> PlayersProfiles()
@@ -124,15 +140,23 @@ public class PlayerSlotsContainer
                 return false;
             }
         }
-        PlayerSafe safe = new PlayerSafe();
+        PlayerSafe safe = new PlayerSafe(true,false);
         safe.CreateNew(shipConfig, startPair, nameFieldText);
         AddNewContainer(safe);
         return true;
     }
 
-    public bool ContainsCompleteId(int cellId)
+    public bool ContainsCompleteId(int cellId,out HashSet<int> keys)
     {
-        return _dataIds.CompleteIds.Contains(cellId);
+        var contains = _dataIds.Completes.ContainsKey(cellId);
+        if (!contains)
+        {
+            keys = null;
+            return false;
+        }
+
+        keys = _dataIds.Completes[cellId];
+        return true;
     }
 
     public void SaveProfiles()
@@ -140,8 +164,8 @@ public class PlayerSlotsContainer
         _data.Save();
     }
 
-    public void CompleteId(int cellId)
+    public void CompleteId(int cellId,int size)
     {
-        _dataIds.Complete(cellId);
+        _dataIds.Complete(cellId, size);
     }
 }

@@ -5,8 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerAIMovingArmy : PlayerAI
 {
-    public PlayerAIMovingArmy(string name, Dictionary<PlayerParameterType, int> startData = null)
-        : base(name, startData)
+    public PlayerAIMovingArmy(string name)
+        : base(name)
     {
 
     }
@@ -14,7 +14,7 @@ public class PlayerAIMovingArmy : PlayerAI
     public override LastReward GetReward(Player winner)
     {
         MainController.Instance.Statistics.AddOpenPoints(3);
-        var microchips = MyExtensions.IsTrue01(.7f) ? 1 : 0;
+        var microchips = (MyExtensions.IsTrue01(.7f) ? 1 : 0 ) * 1 * winner.SafeLinks.MicrochipCoef;
         winner.MoneyData.AddMicrochips(microchips);
         var reward = new LastReward();
         reward.Microchips = microchips;

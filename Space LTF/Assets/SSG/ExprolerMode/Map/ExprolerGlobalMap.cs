@@ -12,11 +12,28 @@ public class ExprolerGlobalMap : MonoBehaviour
 
       public void Init(PlayerSafe player)
       {
-        NewBattleInfo.gameObject.SetActive(false);
-        _playerToPlay = player;
-        var safe = MainController.Instance.SafeContainers;
+          CellsCheck();
+            NewBattleInfo.gameObject.SetActive(false);
+            _playerToPlay = player;
+            var safe = MainController.Instance.SafeContainers;
           SyncWithData(safe);
       }
+
+      private void CellsCheck()
+      {
+#if UNITY_EDITOR
+          foreach (var exprolerGlobalMapCell in AllCells)
+          {
+              foreach (var neighhood in exprolerGlobalMapCell.Neighhoods)
+              {
+                  if (neighhood == -1)
+                  {
+                      Debug.LogError($"Neight is null at {exprolerGlobalMapCell.name}");
+                  }
+              }
+          }
+#endif
+    }
 
       public void SyncWithData(PlayerSlotsContainer slots)
       {
@@ -29,10 +46,14 @@ public class ExprolerGlobalMap : MonoBehaviour
                 cell.Unblock();
 //                UnblockAndAllNear(cell);
               }
-
-              if (slots.ContainsCompleteId(cell.Id))
+              else
               {
-                  cell.Complete();
+                  cell.Block();
+              }
+
+              if (slots.ContainsCompleteId(cell.Id,out var subSet))
+              {
+                  cell.Complete(subSet);
               }
           }
       }

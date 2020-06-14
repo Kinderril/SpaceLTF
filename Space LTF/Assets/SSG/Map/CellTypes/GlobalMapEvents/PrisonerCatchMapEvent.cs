@@ -91,9 +91,10 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
     {
         if (SkillWork(60, Reputation))
         {
+            var player = MainController.Instance.MainPlayer;
             var coef = (float)_power * Library.MONEY_QUEST_COEF;
-            var money = (int)(MyExtensions.Random(14, 30) * coef);
-            MainController.Instance.MainPlayer.MoneyData.AddMoney(money);
+            var money = (int)(MyExtensions.Random(14, 30) * coef * player.SafeLinks.CreditsCoef);
+            player.MoneyData.AddMoney(money);
             var mianAnswers = new List<AnswerDialogData>();
             mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("Ok")), null));
             var msg = Namings.Format(Namings.DialogTag("prisonerHideOk"), money);

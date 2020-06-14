@@ -21,8 +21,9 @@ public class RetranslaitorMapEvent : BaseGlobalMapEvent
 
     public override MessageDialogData GetDialog()
     {
-        var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army) * 1.9f;
-        _credits = (int)(MyExtensions.GreateRandom(myArmyPower) * Library.MONEY_QUEST_COEF);
+        var player = MainController.Instance.MainPlayer;
+        var myArmyPower = ArmyCreator.CalcArmyPower(player.Army) * 1.9f;
+        _credits = (int)(MyExtensions.GreateRandom(myArmyPower) * Library.MONEY_QUEST_COEF * player.SafeLinks.CreditsCoef);
         var mesData = new MessageDialogData(Namings.Format(Namings.Tag("StoragePower"), Namings.ShipConfig(_config)), new List<AnswerDialogData>()
         {
             new AnswerDialogData(Namings.Tag("Fight"),null,Figth),

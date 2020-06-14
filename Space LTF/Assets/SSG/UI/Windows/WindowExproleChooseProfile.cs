@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,16 @@ public class WindowExproleChooseProfile : BaseWindow
         if (!_isSingleInit)
         {
             SingleInit();
+        }
+
+        UpdateData();
+    }
+
+    private void UpdateData()
+    {
+        foreach (var exprolerProfileElement in _profiles)
+        {
+            exprolerProfileElement.UpdateData();
         }
     }
 

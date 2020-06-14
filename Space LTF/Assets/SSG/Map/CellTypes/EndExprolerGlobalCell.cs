@@ -7,9 +7,13 @@ public class EndExprolerGlobalCell : EndGlobalCell
 {
 
     public EndExprolerGlobalCell(int power, int id, int intX, int intZ, SectorData sector)
-        : base(power, id,intX,intZ,sector)
+        : base((int)(power * 1.2f), id,intX,intZ,sector)
     {
+    }
 
+    public override bool OneTimeUsed()
+    {
+        return false;
     }
 
     protected override MessageDialogData GetDialog()

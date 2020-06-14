@@ -16,7 +16,7 @@ public class Player
     //    public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
     //    public int CoinsCount = 7;
     public PlayerInventory Inventory => SafeLinks.Inventory;
-    public PlayerParameters Parameters;
+    public PlayerParameters Parameters => SafeLinks.Parameters;
     [System.NonSerialized]
     public PlayerScoutData ScoutData;
     public PlayerRepairData RepairData;
@@ -198,13 +198,19 @@ public class Player
 
 
 
-    public Player(string name, Dictionary<PlayerParameterType, int> startData = null)
+    public Player(string name, PlayerSafe linkedData = null)
     {
-        SafeLinks = new PlayerSafe();
+        if (linkedData == null)
+        {
+            SafeLinks = new PlayerSafe(false,true);
+        }
+        else
+        {
+            SafeLinks = linkedData;
+        }
         Army = new PlayerArmy(SafeLinks);
         MoneyData = new PlayerMoneyData(SafeLinks);
         ScoutData = new PlayerScoutData(this);
-        Parameters = new PlayerParameters(this, startData);
         RepairData = new PlayerRepairData();
         LastScoutsData = new LastScoutsData();
         ReputationData = new PlayerReputationData();
@@ -213,14 +219,17 @@ public class Player
         Name = name;
     }
 
-    public void SaveGame()
+    public void SaveOnMoveGame()
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + mainPlayer);
-        //        MoneyData.Dispose();
-        bf.Serialize(file, this);
-        file.Close();
-        Debug.Log("Game Saved");
+        if (SafeLinks.ShallSafeEveryMove)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(Application.persistentDataPath + mainPlayer);
+            //        MoneyData.Dispose();
+            bf.Serialize(file, this);
+            file.Close();
+            Debug.Log("Game Saved");
+        }
     }
 
     public static bool LoadGame(out Player player)

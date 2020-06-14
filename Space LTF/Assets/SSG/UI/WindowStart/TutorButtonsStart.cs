@@ -88,8 +88,8 @@ public class TutorButtonsStart : MonoBehaviour
         // gameData = new StartNewGameData(PlayerStartParametersUI.GetCurrentLevels(),
         var gameData = new StartNewGameData(new Dictionary<PlayerParameterType, int>(),
             ShipConfig.mercenary, posibleStartWeapons, 4, 1, 
-            2, EStartGameDifficulty.Easy,  posibleSpells, 0,eGameMode);
-        var dif = Utils.FloatToChance(gameData.CalcDifficulty());
+            2, EStartGameDifficulty.Easy,  posibleSpells, 0,eGameMode,ExprolerCellMapType.normal);
+//        var dif = Utils.FloatToChance(gameData.CalcDifficulty());
         return gameData;
     }
 }

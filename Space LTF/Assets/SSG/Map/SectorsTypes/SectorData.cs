@@ -33,6 +33,7 @@ public class SectorData
     private Dictionary<GlobalMapEventType, int> _maxCount;
     protected DeleteWayDelegeate RemoveWayCallback;
     private GalaxyEnemiesArmyController _enemiesArmyController;
+    public virtual bool AnyEvent => false;
 
     public SectorData(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
          ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, 
@@ -48,10 +49,6 @@ public class SectorData
         _maxCount = maxCountEvents;
         StartX = startX;
         StartZ = startZ;
-        //        if (startZ >= 12)
-        //        {
-        //            Debug.LogError("WTF");
-        //        }
         Size = size;
         Debug.Log(Namings.Format("Sub Sector X:{0} Z:{1}.     Congif:{2}   Size:{3}", startX, startZ, shipConfig.ToString(), Size));
         for (int i = 0; i < size; i++)
@@ -118,44 +115,11 @@ public class SectorData
         RandomizeBorders();
         PrePopulate();
         var remainFreeCells = ListCells.Where(x => x.IsFreeToPopulate()).ToList();
-        //        Debug.Log($"populate cell. remainFreeCells {remainFreeCells.Count}.  all cells:{_listCells.Count}");
-        //Shop cells
-        int shopsCount;
-        int repairCount;
-        //        int eventsCount;
-        int bigEventsCount;
-        int minorEventsCount;
-        int armiesCount;
-        int remainCount = remainFreeCells.Count;
+        SectorDataEventsCounts counts = GetCountOfEvents(remainFreeCells.Count,Size);
 
-        if (remainCount < 7)
+        if (counts.shopsCount > 0)
         {
-            if (MyExtensions.IsTrueEqual())
-            {
-                shopsCount = 1;
-                repairCount = 0;
-            }
-            else
-            {
-                shopsCount = 0;
-                repairCount = 1;
-            }
-
-        }
-        else
-        {
-            shopsCount = remainFreeCells.Count > 12 ? MyExtensions.Random(1, 2) : 1;
-            repairCount = 1;
-        }
-        remainCount = remainCount - shopsCount - repairCount;
-        armiesCount = (int)(remainCount * MyExtensions.Random(0.6f, 0.8f));
-        var allEventsCount = remainCount - armiesCount;
-        bigEventsCount = Mathf.Clamp((int)(allEventsCount * 0.3f), 1, 4);
-        minorEventsCount = allEventsCount - bigEventsCount;
-
-        if (shopsCount > 0)
-        {
-            var cellsForShop = remainFreeCells.RandomElement(shopsCount);
+            var cellsForShop = remainFreeCells.RandomElement(counts.shopsCount);
             foreach (var container in cellsForShop)
             {
                 var shopCell = new ShopGlobalMapCell(_power, Utils.GetId(), StartX + container.indX,
@@ -165,7 +129,7 @@ public class SectorData
             }
         }
 
-        if (repairCount == 1 && remainFreeCells.Count >= 1)
+        if (counts.repairCount == 1 && remainFreeCells.Count >= 1)
         {
             var cellForRepair = remainFreeCells.RandomElement();
             var cellRepair = new RepairStationGlobalCell(Utils.GetId(), StartX + cellForRepair.indX, StartZ + cellForRepair.indZ, this, _shipConfig);
@@ -173,9 +137,9 @@ public class SectorData
             remainFreeCells.Remove(cellForRepair);
         }
 
-        if (minorEventsCount > 0 && remainFreeCells.Count >= minorEventsCount)
+        if (counts.minorEventsCount > 0 && remainFreeCells.Count >= counts.minorEventsCount)
         {
-            var cellsForEvents = remainFreeCells.RandomElement(minorEventsCount).ToList();
+            var cellsForEvents = remainFreeCells.RandomElement(counts.minorEventsCount).ToList();
             foreach (var cellContainerForEvent in cellsForEvents)
             {
                 var type = GetMinorEventType();
@@ -185,9 +149,9 @@ public class SectorData
             }
         }
 
-        if (bigEventsCount > 0)
+        if (counts.bigEventsCount > 0)
         {
-            var cellsForEvents = remainFreeCells.RandomElement(bigEventsCount).ToList();
+            var cellsForEvents = remainFreeCells.RandomElement(counts.bigEventsCount).ToList();
             foreach (var cellContainerForEvent in cellsForEvents)
             {
                 var type = GetBigEventType();
@@ -221,6 +185,12 @@ public class SectorData
         Name = Namings.ShipConfig(_shipConfig);
     }
 
+
+    protected virtual SectorDataEventsCounts GetCountOfEvents(int remainCells, int sectorSize)
+    {
+        return SectorDataEventsCounts.Standart(remainCells, sectorSize);
+    }
+
     public bool ComeToSector()
     {
         if (!_isVisited)
@@ -249,7 +219,7 @@ public class SectorData
         }
     }
 
-    protected ShipConfig IsDroids(ShipConfig coreConfig)
+    protected virtual ShipConfig IsDroids(ShipConfig coreConfig)
     {
         if (IsStart)
         {
@@ -369,6 +339,7 @@ public class SectorData
           
     public void ApplyPointsTo(CellsInGalaxy cellInGalaxy)
     {
+        Debug.Log($"Apply points to cells");
         int countPopulated = 0;
         for (int i = 0; i < Size; i++)
         {
