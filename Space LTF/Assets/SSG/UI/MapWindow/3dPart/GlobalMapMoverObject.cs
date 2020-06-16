@@ -15,6 +15,11 @@ public class GlobalMapMoverObject : MonoBehaviour
 
     public void Init(GlobalMapCellObject startCell)
     {
+        if (startCell == null)
+        {
+            Debug.LogError("Init object at null cell");
+            return;
+        }
         _isActive = false;
         _curCell = startCell;
         transform.position = startCell.Container.position;

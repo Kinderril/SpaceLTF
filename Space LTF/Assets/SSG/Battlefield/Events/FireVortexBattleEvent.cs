@@ -10,4 +10,16 @@ public class FireVortexBattleEvent : SetterElementBattleEvent
     {
 
     }
+
+    public override void Init()
+    {
+        base.Init();
+
+        foreach (var createdElement in _createdElements)
+        {
+            var pos = createdElement.transform.position;
+            var aiCell = _battle.Battlefield.CellController.Data.GetCellByPos(pos);
+            aiCell.AddDangerPoint(pos, 3.5f);
+        }
+    }
 }

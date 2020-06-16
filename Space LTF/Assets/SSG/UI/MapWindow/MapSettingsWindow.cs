@@ -35,7 +35,11 @@ public class MapSettingsWindow : MonoBehaviour
     public GameObject ExitButtonMenu;
     public GameObject BattleButtons;
     public SliderWithTextMeshPro MouseSensivity;
+    public SliderWithTextMeshPro MusicLevel;
+    public SliderWithTextMeshPro SoundLevel;
     private float _lastSens =1f;
+    private float _lastSoundVal =1f;
+    private float _lastMusicVal =1f;
 
     private EWindowSettingsLauch _settingsLauch;
 
@@ -61,13 +65,34 @@ public class MapSettingsWindow : MonoBehaviour
     {
         _lastSens = MouseSensivity.GetValue();
         CamerasController.Instance.SetSens(_lastSens);
-    }
+    }    
+
+    public void OnSoundLevel()
+    {
+        _lastSoundVal = SoundLevel.GetValue();
+        CamerasController.Instance.SetSoundMixer(_lastSoundVal);
+    }    
+    public void OnMusicLevel()
+    {
+        _lastMusicVal = MusicLevel.GetValue();
+        CamerasController.Instance.SetMusicMixer(_lastMusicVal);
+    }  
+
+
     public void Init(EWindowSettingsLauch settingsLauch)
     {
-        MouseSensivity.InitBorders(CamerasController.MIN_CAM_MOVE_SENS, 
-            CamerasController.MAX_CAM_MOVE_SENS,false,false);
+        MouseSensivity.InitBorders(CamerasController.MIN_CAM_MOVE_SENS,CamerasController.MAX_CAM_MOVE_SENS,false,false);
         MouseSensivity.InitCallback(OnSensivityChange);
-        MouseSensivity.InitName(Namings.Tag("CamMoveSens"));
+        MouseSensivity.InitName(Namings.Tag("CamMoveSens")); 
+        
+        SoundLevel.InitBorders(0f,1f,false,false);
+        SoundLevel.InitCallback(OnSoundLevel);
+        SoundLevel.InitName(Namings.Tag("SoundLevelSens"));   
+
+        MusicLevel.InitBorders(0f,1f,false,false);
+        MusicLevel.InitCallback(OnMusicLevel);
+        MusicLevel.InitName(Namings.Tag("MusicLevelSens"));
+
         _settingsLauch = settingsLauch;
         InitDropDown();
         ResolutionDropdown.value = CamerasController.Instance.CurIndexResolution;
@@ -103,12 +128,20 @@ public class MapSettingsWindow : MonoBehaviour
                 break;
         }
 
-        _lastSens = CamerasController.Instance.MouseSensivity;
+        var camController = CamerasController.Instance;
+
+        _lastMusicVal = camController.MusicLevel;
+        _lastSoundVal = camController.SoundLevel;
+        _lastSens = camController.MouseSensivity;
         MouseSensivity.SetValue(_lastSens);
+        MusicLevel.SetValue(_lastMusicVal);
+        SoundLevel.SetValue(_lastSoundVal);
+//        camController.MusicLevel = _lastMusicVal;
+
         Keys.gameObject.SetActive(false);
-        NoMouseMoveSoundToggle.isOn = (CamerasController.Instance.IsNoMouseMove);
-        SoundToggle.isOn = (CamerasController.Instance.IsAudioEnable);
-        FXAAToggle.isOn = (CamerasController.Instance.FxaaEnable);
+        NoMouseMoveSoundToggle.isOn = (camController.IsNoMouseMove);
+        SoundToggle.isOn = (camController.IsAudioEnable);
+        FXAAToggle.isOn = (camController.FxaaEnable);
         switch (Namings.LocTag)
         {
             case ELocTag.English:          

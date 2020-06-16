@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,6 +63,13 @@ public class DragableSpellItem : DragableItem
         var isMy = ContainerItem.CurrentInventory.Owner == Spell.CurrentInventory.Owner;
         var canUse = Spell.CanUpgradeByLevel() && haveMoney && Usable && isMy && haveUpgrades;
         UpgradeButton.gameObject.SetActive(canUse);
+        try
+        {
+            UpdateLevelsInfo(Spell.Level);
+        }
+        catch (Exception e)
+        {
+        }
 
     }
 

@@ -99,7 +99,7 @@ public class ShipPathController2
             return normalizedDir;
         }
 
-        var asteroids = _owner.Cell.GetAsteroidsForShip(_owner);
+        var asteroids = _owner.Cell.GetDangerPointsForShip(_owner);
         //        float dist;
         //        Vector3 dirToAsteroid;
 
@@ -130,9 +130,9 @@ public class ShipPathController2
         bool havePointBad = false;
         float maxProjectionDist = Single.MinValue;
         bool farestProjectionDiLeft = false;
-        ShipAsteroidPoint controlSateroid = null;
+        IShipDangerPoint controlSateroid = null;
         float blockingAsteroidDist = Single.MaxValue;
-        ShipAsteroidPoint blockingAsteroid = null;
+        IShipDangerPoint blockingAsteroid = null;
 
         foreach (var asteroid in field)
         {
@@ -198,10 +198,10 @@ public class ShipPathController2
     }
 
 
-    private List<ShipAsteroidPoint> GetAsteroidsInFront(Vector3 dirToTest, Vector3 point, float maxDist,
-       List<ShipAsteroidPoint> Asteroids)
+    private List<IShipDangerPoint> GetAsteroidsInFront(Vector3 dirToTest, Vector3 point, float maxDist,
+       List<IShipDangerPoint> Asteroids)
     {
-        var closestAsteroids = new List<ShipAsteroidPoint>();
+        var closestAsteroids = new List<IShipDangerPoint>();
         var normalized = Utils.NormalizeFastSelf(dirToTest);
         for (int i = 0; i < Asteroids.Count; i++)
         {

@@ -34,7 +34,7 @@ public class MainController : Singleton<MainController>
             SteamManager.Instance.Init();
 
             LocalizationManager.Instance.Init();
-            CamerasController.Instance.StartCheck();
+//            CamerasController.Instance.StartCheck();
             Library.Init();
             DataBase.Init();
             LibraryChecker.DoCheck();
@@ -56,6 +56,7 @@ public class MainController : Singleton<MainController>
 
     void Start()
     {
+        CamerasController.Instance.StartCheck();
         StartGame();
     }
 

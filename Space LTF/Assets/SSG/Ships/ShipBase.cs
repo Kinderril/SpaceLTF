@@ -724,7 +724,7 @@ public class ShipBase : MovingObject
 
         var s = Cell.Side;
         Gizmos.DrawWireCube(Cell.Center, new Vector3(s, 0.1f, s));
-        var asteroids = Cell.GetAsteroidsForShip(this);
+//        var asteroids = Cell.GetAsteroidsForShip(this);
         DrawUtils.DrawCircle(transform.position, Vector3.up, InBattlefield ? Color.green : Color.yellow, MaxTurnRadius);
         Gizmos.color = Color.white;
         switch (TeamIndex)

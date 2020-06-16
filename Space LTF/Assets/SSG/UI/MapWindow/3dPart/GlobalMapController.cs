@@ -158,6 +158,12 @@ public class GlobalMapController : MonoBehaviour
 
     public void CreateMovingArmy(MovingArmy arg1)
     {
+        var start = GetCellObjectByCell(arg1.CurCell);
+        if (start == null)
+        {
+            Debug.LogError($"CreateMovingArmy have null start object:{arg1.CurCell.Id}  indX:{arg1.CurCell.indX}   indZ:{arg1.CurCell.indZ}");
+            return;
+        }
         EnemyGlobalMapMoverObjet prefab;
         if (arg1 is SpecOpsMovingArmy)
         {
@@ -171,7 +177,6 @@ public class GlobalMapController : MonoBehaviour
         var army = DataBaseController.GetItem(prefab);
         army.transform.SetParent(MovingArmyContainer);
         _enemiesObjects.Add(arg1, army);
-        var start = GetCellObjectByCell(arg1.CurCell);
         army.Init(this, start, arg1);
     }
 

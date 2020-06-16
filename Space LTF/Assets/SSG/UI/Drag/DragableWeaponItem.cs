@@ -64,7 +64,16 @@ public class DragableWeaponItem : DragableItem
         var haveMoney = ContainerItem.CurrentInventory.Owner.HaveMoney(cost);
         var isMy = ContainerItem.CurrentInventory.Owner == Weapon.CurrentInventory.Owner;
         var canUse = Weapon.CanUpgrade() && haveMoney && Usable && isMy;
-        UpgradeButton.gameObject.SetActive(canUse); 
+        try
+        { 
+            UpdateLevelsInfo(Weapon.Level);
+            UpgradeButton.gameObject.SetActive(canUse);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Upgrade button error");
+
+        }
 
     }
 

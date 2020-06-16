@@ -6,7 +6,7 @@ public abstract class SetterElementBattleEvent : BattleFieldEvent
     private EBattlefildEventType _eventType;
     private int _minCount;
     private int _maxCount;
-    private List<GameObject> _createdElements = new List<GameObject>();
+    protected List<GameObject> _createdElements = new List<GameObject>();
     private List<GameObject> _prefabsm;
     private float _insideRad;
     protected SetterElementBattleEvent(BattleController battle,

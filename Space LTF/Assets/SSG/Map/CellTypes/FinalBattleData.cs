@@ -127,11 +127,12 @@ public class FinalBattleData
         var conf1 = array[1].Key;
         var conf2 = array[2].Key;
         var armyType = ArmyCreatorLibrary.GetArmy(conf1, conf2);
-        if (_power < 18)
+        if (_power < 22)
         {
             armyType.MainShipCount = 1;
         }
-        else { 
+        else
+        { 
             armyType.MainShipCount = 2;
         }
         var power = Mathf.Clamp(_power, 25, 999);

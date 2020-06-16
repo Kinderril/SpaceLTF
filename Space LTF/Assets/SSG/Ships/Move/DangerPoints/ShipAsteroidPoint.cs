@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShipAsteroidPoint
+public class ShipAsteroidPoint : IShipDangerPoint
 {
     private AIAsteroidPredata cellASteroid;
 

@@ -32,6 +32,7 @@ public class SectorExprolerMilitary : SectorExprolerData
         _power = startPowerGalaxy;
         // RandomizeBorders(); 
         _startGlobalCell = CreateStart();
+        
         var prevCell = PopulateToSide(_startGlobalCell);
         var endCell = CreateEnd();
         ConnectCells(endCell, prevCell);
@@ -42,18 +43,21 @@ public class SectorExprolerMilitary : SectorExprolerData
         ListCells = new HashSet<SectorCellContainer>();
         GlobalMapCell lastCell = startCell;
         bool prevThisLevel = false;
-        for (int i = 0; i < Size; i++)
+        for (int i = startCell.indX + 1; i < Size; i++)
         {
             if (i == 0 || i == Size - 1)
             {
                 var rndIndex = MyExtensions.Random(0, Size - 1);
-                var cell = PopulateCell(i, rndIndex);
-                if (lastCell != null && cell != null)
-                {
-                    ConnectCells(cell, lastCell);
-                    //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
-                }
-                lastCell = cell;
+//                if (startCell.indX != i && startCell.indZ != rndIndex)
+//                {
+                    var cell = PopulateCell(i, rndIndex);
+                    if (lastCell != null && cell != null)
+                    {
+                        ConnectCells(cell, lastCell);
+                        //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
+                    }
+                    lastCell = cell;
+//                }
             }
             else
             {
@@ -63,18 +67,23 @@ public class SectorExprolerMilitary : SectorExprolerData
                     thisLevel = false;
                 }
                 var rndIndex = MyExtensions.Random(0, Size - 1);
-                var cell = PopulateCell(i, rndIndex);
-                if (lastCell != null && cell != null)
-                {
-                    ConnectCells(cell, lastCell);
-                    //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
-                    lastCell = cell;
-                }
-                if (thisLevel)
-                {
-                    i--;
-                }
-                prevThisLevel = thisLevel;
+//                if (startCell.indX != i && startCell.indZ != rndIndex)
+//                {
+                    var cell = PopulateCell(i, rndIndex);
+                    if (lastCell != null && cell != null)
+                    {
+                        ConnectCells(cell, lastCell);
+                        //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
+                        lastCell = cell;
+                    }
+
+                    if (thisLevel)
+                    {
+                        i--;
+                    }
+
+                    prevThisLevel = thisLevel;
+//                }
 
 
             }

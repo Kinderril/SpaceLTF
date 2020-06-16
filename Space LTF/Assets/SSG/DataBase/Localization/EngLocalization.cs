@@ -213,9 +213,12 @@ public static class EngLocalization
 
         {"Back", "Back"},
         {"Battle", "Battle"},
+        {"NameNewTooShort", "Name too short"},
         {"battleTypeNormal", "Normal sector"},
         {"battleTypemilatary", "Military sector"},
         {"battleTypelongType", "Long sector"},
+        {"SoundLevelSens", "Sound"},
+        {"MusicLevelSens", "Music"},
 
         {"questKills", "{0} kills"},
         {"Fleet", "Fleet"},

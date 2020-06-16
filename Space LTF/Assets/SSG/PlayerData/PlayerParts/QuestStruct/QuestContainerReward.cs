@@ -1,6 +1,4 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 [Serializable]
@@ -16,26 +14,54 @@ public class QuestContainerReward
         var player = MainController.Instance.MainPlayer;
         MoneyCount = (int)(targetCounter * player.SafeLinks.CreditsCoef);
 
-        WDictionary<int> levelsWeapons = new WDictionary<int>(new Dictionary<int, float>()
+        var levelsOfPower = new List<int>();
+        var levelsOfPowerModuls = new List<int>();
+//        if (targetCounter < 15)
+//        {
+//            weaponsLvlv.Add(1);
+//            weaponsLvlv.Add(2);
+//        }
+//        else 
+        if (targetCounter < 20)
         {
-            {2, 3f},
-            {3, 4f},
-            {4, 2f},
-            {5, 1f},
-            {6, 1f},
-        });
-        WeaponReward = Library.CreateDamageWeapon(levelsWeapons.Random());
-        WDictionary<int> levelsModuls = new WDictionary<int>(new Dictionary<int, float>()
+            levelsOfPower.Add(1);
+            levelsOfPower.Add(2);
+            levelsOfPowerModuls.Add(1);
+        }
+        else if (targetCounter < 25)
         {
-            {2, 5f},
-            {3, 4f},
-            {4, 2f},
-            {5, 1f},
-        });
-        ModulReward = Library.CreatSimpleModul(levelsModuls.Random());
+            levelsOfPower.Add(1);
+            levelsOfPower.Add(2);
+            levelsOfPower.Add(3);
+            levelsOfPowerModuls.Add(1);
+            levelsOfPowerModuls.Add(2);
+        }
+        else if (targetCounter < 30)
+        {
+            levelsOfPower.Add(2);
+            levelsOfPower.Add(3);
+            levelsOfPower.Add(4);
+            levelsOfPowerModuls.Add(3);
+            levelsOfPowerModuls.Add(2);
+        }
+        else if (targetCounter < 35)
+        {
+            levelsOfPower.Add(3);
+            levelsOfPower.Add(4);
+            levelsOfPower.Add(5);
+            levelsOfPowerModuls.Add(3);
+        }
+        else
+        {
+            levelsOfPower.Add(4);
+            levelsOfPower.Add(5);
+            levelsOfPower.Add(6);
+            levelsOfPowerModuls.Add(3);
+            levelsOfPowerModuls.Add(4);
+        }
 
-
-
+        WeaponReward = Library.CreateDamageWeapon(levelsOfPower.RandomElement());
+        ModulReward = Library.CreatSimpleModul(levelsOfPowerModuls.RandomElement());
     }
 
     public void TakeWeapon()

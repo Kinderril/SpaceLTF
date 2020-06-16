@@ -8,8 +8,8 @@ public class DistShotSpell : BaseSpellModulInv
     //B2 - AOE
 
     private const int DIST_BASE_DAMAGE = 8;
-    private const int BASE_DAMAGE = 9;
-    private const int LEVEL_DAMAGE = 6;
+    private const int BASE_DAMAGE = 7;
+    private const int LEVEL_DAMAGE = 5;
 
     private const int RAD_B2 = 4;
 //    private const float DIST_COEF = 0.8f;
@@ -23,7 +23,7 @@ public class DistShotSpell : BaseSpellModulInv
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 154f;
     public DistShotSpell()
-        : base(SpellType.distShot, 5, 7, 
+        : base(SpellType.distShot, 5, 13, 
             new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
         // CurWeaponDamage = new CurWeaponDamage(0, 12);

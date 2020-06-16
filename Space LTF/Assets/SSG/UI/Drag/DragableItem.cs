@@ -33,6 +33,7 @@ public abstract class DragableItem : MonoBehaviour, IDropHandler,
     public int id;
     private float _clickTime;
     public UIElementWithTooltipByItem TooltipByItem;
+    public List<GameObject> Levels = new List<GameObject>();
 
     public static DragableItem Create(IItemInv item, bool usable, IInventory tradeInventory = null)
     {
@@ -90,6 +91,18 @@ public abstract class DragableItem : MonoBehaviour, IDropHandler,
         
         daragbleElement.TooltipByItem.Init(item, GetSellCost(tradeInventory,item));
         return daragbleElement;
+    }
+
+    protected void UpdateLevelsInfo(int level)
+    {
+
+        for (int i = 0; i < Levels.Count; i++)
+        {
+            var isOn = (i + 1 < level);
+            var objLevel = Levels[i];
+            objLevel.SetActive(isOn);
+        }
+
     }
 
     private static int? GetSellCost(IInventory tradeToInventory,IItemInv item)

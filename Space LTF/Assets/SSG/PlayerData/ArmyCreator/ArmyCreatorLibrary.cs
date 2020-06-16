@@ -8,6 +8,7 @@ public static class ArmyCreatorLibrary
     public static void Init()
     {
         _datas = new Dictionary<ShipConfig, List<ArmyCreatorData>>();
+
         var merc1 = new ArmyCreatorData(new List<ShipConfig>() { ShipConfig.mercenary },
             new List<WeaponType>() { WeaponType.laser },
             new List<SimpleModulType>() { SimpleModulType.ShipTurnSpeed, SimpleModulType.antiPhysical, SimpleModulType.antiEnergy, SimpleModulType.WeaponPush },

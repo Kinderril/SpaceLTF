@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 
 public struct ResolutionData
@@ -19,9 +20,14 @@ public struct ResolutionData
 
 public class CamerasController : Singleton<CamerasController>
 {
+    public const float MIN_VOLUME = 0f;
+    public const float MAX_VOLUME = 1f;
+
     public const float MIN_CAM_MOVE_SENS = 0.1f;
     public const float MAX_CAM_MOVE_SENS = 3f;
 
+    private const string MUSIC_LEVEL = "MUSIC_LEVEL";
+    private const string SOUND_LEVEL = "SOUND_LEVEL";
     private const string SENS_MOUSE = "SENS_MOUSE";
     private const string KEY_FXAA = "KEY_FXAA";
     private const string KEY_SOUND = "SoundKey";
@@ -35,6 +41,9 @@ public class CamerasController : Singleton<CamerasController>
     private bool _noMouseMove = false;
     private bool _isAudioEnabled = true;
     public AudioSourceMusicControl MusicControl;
+    public AudioMixerGroup SoundMixerGroup;
+    public AudioMixerGroup MusicMixerGroup;
+    public AudioMixer MasterMixer;
     public List<ResolutionData>  _resolutionDatas = new List<ResolutionData>()
     {
         new ResolutionData(1280,800),
@@ -54,9 +63,13 @@ public class CamerasController : Singleton<CamerasController>
     public bool IsAudioEnable => _isAudioEnabled;
     private bool _fxaaEnable;
     private float _mouseSens =1f;
+    private float _soundLevel = 1f;
+    private float _musicLevel = 1f;
     public int CurIndexResolution { get; private set; }
     public bool FxaaEnable => _fxaaEnable;
     public float MouseSensivity => _mouseSens;
+    public float MusicLevel => _musicLevel;
+    public float SoundLevel => _soundLevel;
 
     void Awake()
     {
@@ -77,7 +90,7 @@ public class CamerasController : Singleton<CamerasController>
 
     public void CheckSoundSensStart()
     {
-        var key = PlayerPrefs.GetFloat(SENS_MOUSE, 1f);
+        var key = PlayerPrefs.GetFloat(SENS_MOUSE, 0.8f);
         _mouseSens = Mathf.Clamp(key, MIN_CAM_MOVE_SENS, MAX_CAM_MOVE_SENS);
     }
 
@@ -85,6 +98,58 @@ public class CamerasController : Singleton<CamerasController>
     {
         _mouseSens = Mathf.Clamp(sens, MIN_CAM_MOVE_SENS, MAX_CAM_MOVE_SENS);
         PlayerPrefs.SetFloat(SENS_MOUSE, _mouseSens);
+    }   
+    public void SetSoundMixer(float sens)
+    {
+        _soundLevel = Mathf.Clamp(sens, MIN_VOLUME, MAX_VOLUME);
+        PlayerPrefs.SetFloat(SOUND_LEVEL, _soundLevel);
+        CheckSoundLevel();
+    }
+
+    private float PaceToDB(float v)
+    {
+//        Debug.LogError($"pre parse {v}");
+        var percent = (1f - v) * 100f;
+        var bd = 20f - percent;
+        return bd;
+
+//        var setToFloat = Mathf.Clamp(Mathf.Log(v) * 20, -80, 20);
+//        return setToFloat;
+
+    }
+
+    private void CheckSoundLevel()
+    {
+        var setToFloat = PaceToDB(_soundLevel);
+        MasterMixer.SetFloat("Music", setToFloat);
+//        Debug.LogError($"CheckSoundLevel:{setToFloat}");
+    }
+    private void CheckMusicLevel()
+    {
+        var setToFloat = PaceToDB(_musicLevel);
+        MasterMixer.SetFloat("Sound", setToFloat);
+//        Debug.LogError($"CheckMusicLevel:{setToFloat}");
+    }
+
+    public void CheckSoundMixerOnStart()
+    {
+        var key = PlayerPrefs.GetFloat(SOUND_LEVEL, 0.8f);
+        _soundLevel = Mathf.Clamp(key, MIN_VOLUME, MAX_VOLUME);
+        CheckSoundLevel();
+    }      
+    public void SetMusicMixer(float sens)
+    {
+        _musicLevel = Mathf.Clamp(sens, MIN_VOLUME, MAX_VOLUME);
+        PlayerPrefs.SetFloat(MUSIC_LEVEL, _musicLevel);
+        CheckMusicLevel();
+    }
+
+
+    public void CheckMusicMixerOnStart()
+    {
+        var key = PlayerPrefs.GetFloat(MUSIC_LEVEL, 1f);
+        _musicLevel = Mathf.Clamp(key, MIN_VOLUME, MAX_VOLUME);
+        CheckMusicLevel();
     }
 
     public void CheckSoundOnStart()
@@ -342,6 +407,8 @@ public class CamerasController : Singleton<CamerasController>
         CheckSoundOnStart();
         CheckSoundSensStart();
         CheckNoMouseMoveOnStart();
+        CheckSoundMixerOnStart();
+        CheckMusicMixerOnStart();
     }
 
     private void CheckAntiAlysing(bool fxaaEnable)

@@ -26,12 +26,12 @@ public static class MoneyConsts
 
     public static Dictionary<int, int> WeaponUpgrade = new Dictionary<int, int>()
     {
-        {1, 18},
-        {2, 28},
-        {3, 37},
-        {4, 46},
-        {5, 55},
-        {6, 64},
+        {1, 22},
+        {2, 30},
+        {3, 39},
+        {4, 49},
+        {5, 58},
+        {6, 69},
         {7, 73},
     };
 
@@ -47,7 +47,7 @@ public static class MoneyConsts
     };
 
     public const int LOW_MICROCHIP_COEF = 1;
-    public const int MICROCHIPS_COEF = 4;
+    public const int MICROCHIPS_COEF = 3;
 
     public static Dictionary<int, int> SpellMicrochipsElements = new Dictionary<int, int>()
     {
@@ -60,7 +60,7 @@ public static class MoneyConsts
     };
 
     public const int LOW_EXP_COEF = 1;
-    public const int EXP_COEF = 4;
+    public const int EXP_COEF = 3;
 
 
     public const int BASE_WEAPON_MONEY_COST = 10;

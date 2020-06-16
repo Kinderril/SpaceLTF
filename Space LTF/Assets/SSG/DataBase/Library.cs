@@ -147,18 +147,23 @@ public static class Library
     {
         ArmyCreatorLibrary.Init();
         _lvlUps = new int[MAX_PILOT_PARAMETER_LEVEL];
-        _lvlUps[0] = 6;
-        _lvlUps[1] = 6;
-        _lvlUps[2] = 8;
-        _lvlUps[3] = 10;
-        _lvlUps[4] = 13;
-        _lvlUps[5] = 16;
-        _lvlUps[6] = 19;
-        _lvlUps[7] = 24;
-        _lvlUps[8] = 28;
-        _lvlUps[9] = 33;
-        _lvlUps[10] = 38;
-        for (var i = 10; i < MAX_PILOT_PARAMETER_LEVEL; i++)
+        _lvlUps[0] = 8;
+        _lvlUps[1] = 8;
+        _lvlUps[2] = 10;
+        _lvlUps[3] = 13;
+        _lvlUps[4] = 14;
+        _lvlUps[5] = 18;
+        _lvlUps[6] = 22;
+        _lvlUps[7] = 28;
+        _lvlUps[8] = 32;
+        _lvlUps[9] = 36;
+        _lvlUps[10] = 39;
+        _lvlUps[11] = 43;
+        _lvlUps[12] = 46;
+        _lvlUps[13] = 48;
+        _lvlUps[14] = 50;
+        _lvlUps[15] = 54;
+        for (var i = 15; i < MAX_PILOT_PARAMETER_LEVEL; i++)
         {
             _lvlUps[i] = (int)((i - 10) * 5 + 50);
         }
@@ -975,6 +980,6 @@ public static class Library
 
 
     public const float PARAMETER_LEVEL_COEF = 0.05f;
-    public const float LOW_MONEY_COEF = 0.3f;
+    public const float LOW_MONEY_COEF = 0.4f;
     public const float NORMAL_MONEY_COEF = 1f;
 }

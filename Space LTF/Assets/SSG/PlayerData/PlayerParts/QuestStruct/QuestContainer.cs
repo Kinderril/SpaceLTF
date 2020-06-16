@@ -28,7 +28,7 @@ public class QuestContainer
     public QuestContainer(PlayerQuestData playerQuest,QuestStage[] stages,Player player,string name,Func<MessageDialogData> endingDialog)
     {
         reward = new QuestContainerReward();
-        reward.Init(90);
+        reward.Init((int)player.Army.GetPower());
         _endingDialog = endingDialog;
         _name = name;
         _player = player;

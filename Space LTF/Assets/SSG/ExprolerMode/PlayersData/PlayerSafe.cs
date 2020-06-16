@@ -96,9 +96,10 @@ public class PlayerSafe
         army.Add(shipData2);
 
         StartNewGameData.NewGameAddSpellsRandom(bShip);
-        List<WeaponType> posibleStartWeapons = new List<WeaponType>(){WeaponType.laser,WeaponType.rocket,WeaponType.casset,WeaponType.impulse,WeaponType.eimRocket};
-        StartNewGameData.AddWeaponsToShips(ref r, shipData1, posibleStartWeapons);
-        StartNewGameData.AddWeaponsToShips(ref r, shipData2, posibleStartWeapons);
+        List<WeaponType> posibleStartWeapons1 = new List<WeaponType>(){WeaponType.laser,WeaponType.rocket};
+        List<WeaponType> posibleStartWeapons2 = new List<WeaponType>(){WeaponType.impulse,WeaponType.eimRocket};
+        StartNewGameData.AddWeaponsToShips(ref r, shipData1, posibleStartWeapons1);
+        StartNewGameData.AddWeaponsToShips(ref r, shipData2, posibleStartWeapons2);
 
         shipData1.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
         shipData2.Ship.TryAddSimpleModul(Library.CreatSimpleModul(1, 2), 0);
