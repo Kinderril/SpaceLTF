@@ -330,7 +330,7 @@ public class AICellDataRaound
         }
         catch (Exception e)
         {
-            Debug.LogError("wrong gettin element " + xClamped + "  " + zClamped + $"   MaxIx:{MaxIx}   MaxIz:{MaxIz}  CellSize:{CellSize}");
+            Debug.LogError("wrong gettin element " + xClamped + "  " + zClamped + $"   MaxIx:{MaxIx}   MaxIz:{MaxIz}  CellSize:{CellSize}   List:{(List != null)}");
         }
 #endif
         return List[xClamped, zClamped];

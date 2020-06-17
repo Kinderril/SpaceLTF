@@ -15,6 +15,7 @@ public class PlayerSlotsContainerIdsData
     public void Unblock(int id)
     {
         UnblockedIds.Add(id);
+        MainController.Instance.Statistics.UnblockExprolerCells(UnblockedIds.Count);
         Save();
     }
     public void Complete(int id, int siz)

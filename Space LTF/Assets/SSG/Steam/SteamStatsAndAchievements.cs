@@ -33,6 +33,9 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
         WIN_AS_OCR = 23,
         WIN_AS_KRI = 24,
         WIN_AS_RDR = 25,
+        UNBLOCK_CELLS_5 = 30,
+        UNBLOCK_CELLS_15 = 31,
+        UNBLOCK_CELLS_30 = 32,
     };
 
     private const string STATISTIC_STATS_BATTLE_WINS = "NumWins";
@@ -53,6 +56,10 @@ public class SteamStatsAndAchievements : Singleton<SteamStatsAndAchievements>
         new Achievement_t(Achievement.WIN_AS_OCR, "OcrWin"),
         new Achievement_t(Achievement.WIN_AS_KRI, "KriWin"),
         new Achievement_t(Achievement.WIN_AS_RDR, "RdrWin"),
+
+        new Achievement_t(Achievement.UNBLOCK_CELLS_5, "Unblock5cells"),
+        new Achievement_t(Achievement.UNBLOCK_CELLS_15, "Unblock15cells"),
+        new Achievement_t(Achievement.UNBLOCK_CELLS_30, "Unblock30cells"),
     };
 
     // Our GameID

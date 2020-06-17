@@ -123,7 +123,8 @@ public static class ArmyCreator
             }
         }
 
-        var subArmy = CreateShips(points, data, player, pointsOnStart, 0.5f, logger,5);
+        var precentToModuled = MyExtensions.Random(0.2f, 0.6f);
+        var subArmy = CreateShips(points, data, player, pointsOnStart, precentToModuled, logger,5);
         army.AddRange(subArmy);
         if (army.Count == 0)
         {

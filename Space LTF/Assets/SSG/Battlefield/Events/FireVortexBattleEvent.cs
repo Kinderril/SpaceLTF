@@ -19,7 +19,7 @@ public class FireVortexBattleEvent : SetterElementBattleEvent
         {
             var pos = createdElement.transform.position;
             var aiCell = _battle.Battlefield.CellController.Data.GetCellByPos(pos);
-            aiCell.AddDangerPoint(pos, 3.5f);
+            aiCell.AddDangerPoint(pos, 5f);
         }
     }
 }

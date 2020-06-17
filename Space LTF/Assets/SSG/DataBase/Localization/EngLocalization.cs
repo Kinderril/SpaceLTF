@@ -219,6 +219,12 @@ public static class EngLocalization
         {"battleTypelongType", "Long sector"},
         {"SoundLevelSens", "Sound"},
         {"MusicLevelSens", "Music"},
+        {"nameUnblock5cells", "Probe"},
+        {"descUnblock5cells", "Unblock 5 galaxies"}, 
+        {"nameUnblock15cells", "Pathfinder"},
+        {"descUnblock15cells", "Unblock 15 galaxies"}, 
+        {"nameUnblock30cells", "Exproler"},
+        {"descUnblock30cells", "Unblock 30 galaxies"},
 
         {"questKills", "{0} kills"},
         {"Fleet", "Fleet"},

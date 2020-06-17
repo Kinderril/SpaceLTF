@@ -74,9 +74,10 @@ public class AICell
     public Dictionary<AICellSegment, AICell> CellsOnSides = new Dictionary<AICellSegment, AICell>();
     public Dictionary<int, CellDirection> PosibleDirections = new Dictionary<int, CellDirection>();
 
-    private Dictionary<ShipBase, List<IShipDangerPoint>> _asteroids = new Dictionary<ShipBase, List<IShipDangerPoint>>();
+    private Dictionary<ShipBase, List<IShipDangerPoint>> _dangerPoints = new Dictionary<ShipBase, List<IShipDangerPoint>>();
     private HashSet<AIAsteroidPredata> asteroidsPreData = new HashSet<AIAsteroidPredata>();
-    public bool HaveAsteroids { get; private set; }
+    private HashSet<ShipDangerAnomalyPoint> anomalyDanger = new HashSet<ShipDangerAnomalyPoint>();
+    public bool HaveDanger { get; private set; }
 
     public AICell(CellType cell, CellPoint start, CellPoint left, CellPoint right, CellPoint end, float side)
     {
@@ -93,10 +94,13 @@ public class AICell
 
     public void AddDangerPoint(Vector3 pos,float rad)
     {
-        foreach (var asteroid in _asteroids)
+        var anomaly = new ShipDangerAnomalyPoint(pos, rad);
+        foreach (var asteroid in _dangerPoints)
         {
-            asteroid.Value.Add(new ShipDangerAnomalyPoint(pos,rad));
+            asteroid.Value.Add(anomaly);
         }
+
+        anomalyDanger.Add(anomaly);
     }
 
     public HashSet<AIAsteroidPredata> GetAllAsteroids()
@@ -106,8 +110,8 @@ public class AICell
 
     public void ClearPosition(Vector3 vector3)
     {
-        HaveAsteroids = asteroidsPreData != null && asteroidsPreData.Count > 0;
-        if (HaveAsteroids)
+        HaveDanger = asteroidsPreData != null && asteroidsPreData.Count > 0;
+        if (HaveDanger)
         {
             asteroidsPreData.RemoveWhere(cellASteroid =>
             {
@@ -118,9 +122,9 @@ public class AICell
     }
     public void AddShip(ShipBase shipBase)
     {
-        HaveAsteroids = asteroidsPreData != null && asteroidsPreData.Count > 0;
+        HaveDanger = asteroidsPreData.Count > 0 || anomalyDanger.Count > 0;
         var asteroidsCopy = new List<IShipDangerPoint>();
-        if (HaveAsteroids)
+        if (HaveDanger)
         {
             foreach (var asteroidPredata in asteroidsPreData)
             {
@@ -132,20 +136,25 @@ public class AICell
                 };
                 asteroidsCopy.Add(asteroidShip);
             }
-            _asteroids.Add(shipBase, asteroidsCopy);
+
+            foreach (var shipDangerAnomalyPoint in anomalyDanger)
+            {
+                asteroidsCopy.Add(shipDangerAnomalyPoint);
+            }
+            _dangerPoints.Add(shipBase, asteroidsCopy);
         }
         else
         {
-            _asteroids.Add(shipBase, asteroidsCopy);
+            _dangerPoints.Add(shipBase, asteroidsCopy);
         }
     }
 
     [CanBeNull]
     public List<IShipDangerPoint> GetDangerPointsForShip(ShipBase owner)
     {
-        if (HaveAsteroids)
+        if (HaveDanger)
         {
-            return _asteroids[owner];
+            return _dangerPoints[owner];
         }
         else
         {
@@ -346,10 +355,10 @@ public class AICell
     public void AddAsteroid(AIAsteroidPredata asteroid, bool fromStart)
     {
         asteroidsPreData.Add(asteroid);
-        HaveAsteroids = true;
+        HaveDanger = true;
         if (!fromStart)
         {
-            foreach (var asteroid1 in _asteroids)
+            foreach (var asteroid1 in _dangerPoints)
             {
                 var cellASteroid = asteroid;
                 var asteroidShip = new ShipAsteroidPoint(cellASteroid);

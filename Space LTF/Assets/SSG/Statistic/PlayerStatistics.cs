@@ -390,5 +390,24 @@ public class PlayerStatistics
         }
 
     }
+
+    public void UnblockExprolerCells(int unblockedIdsCount)
+    {
+        if (unblockedIdsCount > 5)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.UNBLOCK_CELLS_5);
+        }
+
+        if (unblockedIdsCount > 15)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.UNBLOCK_CELLS_15);
+        }
+
+        if (unblockedIdsCount > 30)
+        {
+            SteamStatsAndAchievements.Instance.CompleteAchievement(SteamStatsAndAchievements.Achievement.UNBLOCK_CELLS_30);
+        }
+
+    }
 }
 

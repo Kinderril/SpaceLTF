@@ -138,7 +138,6 @@ public class BattleController : Singleton<BattleController>
         }
         //Порядок должен быть именно таокй
         CellController.InitSizes1(coef);
-        _eventController.Init(this, eventType, false,CellController.Data.InsideRadius);
         CamerasController.Instance.GameCamera.SetEvent(eventType);
         CellController.Init2(_eventController);
         //-----
@@ -158,6 +157,7 @@ public class BattleController : Singleton<BattleController>
         var posTeam1 = d.StartPosition1;
         var posTeam2 = d.StartPosition2;
         Battlefield.BackgroundSpace.Init(CellController.Data.CenterZone);
+        _eventController.Init(this, eventType, false, CellController.Data.InsideRadius);
 
         List<Vector3> positionsToClear = new List<Vector3>();
         var shipsA = GreenCommander.InitShips(posTeam1, posTeam2, positionsToClear);

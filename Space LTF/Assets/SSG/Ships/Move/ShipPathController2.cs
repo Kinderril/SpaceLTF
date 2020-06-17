@@ -91,7 +91,7 @@ public class ShipPathController2
         Target = vector3;
         Vector3 dirToTarget = vector3 - _owner.Position;
         var normalizedDir = Utils.NormalizeFastSelf(dirToTarget);
-        if (!_owner.Cell.HaveAsteroids)
+        if (!_owner.Cell.HaveDanger)
         {
             speed = _owner.MaxSpeed();
             exactlyPoint = true;
