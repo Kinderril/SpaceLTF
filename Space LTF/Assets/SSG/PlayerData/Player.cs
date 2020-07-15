@@ -254,6 +254,7 @@ public class Player
     {
         RepairData.Init(Army, MapData, Parameters);
         QuestData.AfterLoadCheck();
+        MapData.GalaxyData.AfterLoadCheck();
 
     }
 

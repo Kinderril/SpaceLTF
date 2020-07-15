@@ -27,7 +27,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
         : base(config)
     {
         var trader = new PlayerAI("trader");
-        _inventory = new PlayerInventory(trader.SafeLinks);
+        _inventory = new PlayerInventory(trader.SafeLinks,48);
     }
 
     public override MessageDialogData GetDialog()

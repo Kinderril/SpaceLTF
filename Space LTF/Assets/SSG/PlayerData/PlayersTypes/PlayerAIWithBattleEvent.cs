@@ -26,7 +26,7 @@ public class PlayerAIWithBattleEvent : PlayerAI, IPlayerAIWithBattleEvent
         }
 
 #if UNITY_EDITOR
-//        EBattleType = EBattleType.defenceOfShip;
+//        EBattleType = EBattleType.baseDefence;
 #endif
     }
 }

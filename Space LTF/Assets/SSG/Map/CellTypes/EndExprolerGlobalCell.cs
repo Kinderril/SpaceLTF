@@ -7,7 +7,7 @@ public class EndExprolerGlobalCell : EndGlobalCell
 {
 
     public EndExprolerGlobalCell(int power, int id, int intX, int intZ, SectorData sector)
-        : base((int)(power * 1.2f), id,intX,intZ,sector)
+        : base((int)(power * 1.025f), id,intX,intZ,sector)
     {
     }
 

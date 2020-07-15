@@ -15,6 +15,8 @@ public class PlayerSafe
 
     public List<StartShipPilotData> Ships;
     public PlayerInventory Inventory;
+    public CraftPlayerInventory CraftInventory;
+    public CraftPlayerInventory CraftResultInventory;
     public int Credits;
     public int Microchips;
     public float CreditsCoef=>IsLow?Library.LOW_MONEY_COEF:Library.NORMAL_MONEY_COEF;
@@ -30,8 +32,31 @@ public class PlayerSafe
     {
         ShallSafeEveryMove = shallSafeEveryMove;
         IsLow = isLow;
-        Inventory = new PlayerInventory(this);
+        Inventory = new PlayerInventory(this, GetInventorySlotsCount(isLow));
+        CraftResultInventory = new CraftPlayerInventory(this,1);
         Parameters = new PlayerParameters(this);
+        InventoryCheck();
+    }
+
+    public static int GetInventorySlotsCount(bool isExprolerMode)
+    {
+        return isExprolerMode ? 64 : 30;
+    }
+    public void InventoryCheck()
+    {
+        if (CraftInventory == null)
+        {
+            CraftInventory = new CraftPlayerInventory(this, 3);
+        }   
+        if (CraftResultInventory == null)
+        {
+            CraftResultInventory = new CraftPlayerInventory(this, 1);
+        }
+
+        if (Inventory.SlotsCount == 0 || Inventory.GetAllItems().Count < Inventory.SlotsCount)
+        {
+            Inventory.FixSlotsCount(IsLow);
+        }
     }
 
     public void Save()

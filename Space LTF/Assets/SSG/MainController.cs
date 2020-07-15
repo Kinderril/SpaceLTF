@@ -1,15 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public enum StartMode
-{
-    DebugBattle,
-    Story,
-}
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "014b.0";
+    public static string VERSION = "015b.1";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
@@ -17,7 +12,6 @@ public class MainController : Singleton<MainController>
     public PlayerSlotsContainer SafeContainers;
     public PlayerStatistics Statistics;
     public ExprolerController Exproler;
-    public StartMode StartMode;
     public DataBaseController DataBase;
     public NextBattleData BattleData;
     public TutorialController TutorialController;
@@ -62,17 +56,7 @@ public class MainController : Singleton<MainController>
 
     public void StartGame()
     {
-        switch (StartMode)
-        {
-            case StartMode.DebugBattle:
-                WindowManager.Instance.OpenWindow(MainState.debugStart);
-                break;
-            case StartMode.Story:
-                WindowManager.Instance.OpenWindow(MainState.start);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        WindowManager.Instance.OpenWindow(MainState.start);
     }
 
     public bool TryLoadPlayer()

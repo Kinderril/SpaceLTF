@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -17,6 +18,16 @@ public class CurWeaponDamage
     {
         return new CurWeaponDamage(ShieldDamage, BodyDamage);
     }
+}
+
+public enum EWeapponUpgardeType
+{
+    damageBody,
+    damageShield,
+//    speed,
+    reload,
+    shootPerTime,
+//    radius,
 }
 
 public class WeaponInventoryParameters
@@ -66,7 +77,7 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
 {
     private const float MAX_DELTA = .2f;
     public float _bulletTurnSpeed = 36f;
-
+    public int SpecialUpgradeds { get; private set; } = 0;
     private float _shieldPreLevelDamage = 0f;
     private float _bodyPreLevelDamage = 0f;
     private float _shieldDamage = 0f;
@@ -167,6 +178,20 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
         }
 
         //_levelUpDependences = CreateLevelUpDependences();
+    }
+
+    public static Color LevelUpgrades(int levle)
+    {
+        switch (levle)
+        {
+            case 1:
+                return Color.yellow;  
+            case 2:
+                return Utils.CreateColor(255, 140, 0);  
+            case 3:
+                return Color.green;
+        }
+        return Color.white;
     }
 
     public int CostValue => MoneyConsts.BASE_WEAPON_MONEY_COST + MoneyConsts.LEVEL_WEAPON_MONEY_COST * (Level - 1);
@@ -309,6 +334,45 @@ public abstract class WeaponInv : IItemInv, IAffectParameters
             {
                 OnUpgrade(this);
             }
+        }
+    }
+
+    private static Dictionary<EWeapponUpgardeType, float> subList = new Dictionary<EWeapponUpgardeType, float>()
+    {
+        {EWeapponUpgardeType.damageBody, 3},
+        {EWeapponUpgardeType.damageShield, 3},
+        {EWeapponUpgardeType.reload, 2},
+//        {EWeapponUpgardeType.radius, 2},
+        {EWeapponUpgardeType.shootPerTime, 1},
+//        {EWeapponUpgardeType.speed, 2}
+    };
+    private static WDictionary<EWeapponUpgardeType> posibleUpg= new WDictionary<EWeapponUpgardeType>(new Dictionary<EWeapponUpgardeType, float>(subList));
+
+  
+    public void UpgradeWithOption()
+    {
+        SpecialUpgradeds++;
+        var upg = posibleUpg.Random();
+        switch (upg)
+        {
+            case EWeapponUpgardeType.damageBody:
+                _bodyDamage *= 1.3f;
+                break;
+            case EWeapponUpgardeType.damageShield:
+                _shieldDamage *= 1.3f;
+                break;
+//            case EWeapponUpgardeType.speed:
+//                _bulletSpeed *= 1.2f;
+//                break;
+            case EWeapponUpgardeType.reload:
+                ReloadSec *= 0.8f; 
+                break;
+            case EWeapponUpgardeType.shootPerTime:
+                ShootPerTime += 1;
+                break;
+//            case EWeapponUpgardeType.radius:
+//                _radiusShoot *= 1.2f;
+//                break;
         }
     }
 }

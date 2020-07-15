@@ -87,11 +87,11 @@ public class MapSettingsWindow : MonoBehaviour
         
         SoundLevel.InitBorders(0f,1f,false,false);
         SoundLevel.InitCallback(OnSoundLevel);
-        SoundLevel.InitName(Namings.Tag("SoundLevelSens"));   
+        SoundLevel.InitName(Namings.Tag("MusicLevelSens"));
 
         MusicLevel.InitBorders(0f,1f,false,false);
         MusicLevel.InitCallback(OnMusicLevel);
-        MusicLevel.InitName(Namings.Tag("MusicLevelSens"));
+        MusicLevel.InitName(Namings.Tag("SoundLevelSens"));
 
         _settingsLauch = settingsLauch;
         InitDropDown();

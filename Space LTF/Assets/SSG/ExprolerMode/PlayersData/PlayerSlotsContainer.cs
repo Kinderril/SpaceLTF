@@ -40,19 +40,27 @@ public class PlayerSlotsContainerSafeData
 
     public static bool TryLoadGame(out PlayerSlotsContainerSafeData player)
     {
-        var loadPath = Application.persistentDataPath + pathData;
-        if (File.Exists(loadPath))
+        try
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(loadPath, FileMode.Open);
-            PlayerSlotsContainerSafeData save = (PlayerSlotsContainerSafeData)bf.Deserialize(file);
-            file.Close();
-            player = save;
-            player.CheckAfterLoad();
-            Debug.Log($"PlayerSlotsContainerSafeData Loaded : {loadPath}");
-            return true;
+            var loadPath = Application.persistentDataPath + pathData;
+            if (File.Exists(loadPath))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Open(loadPath, FileMode.Open);
+                PlayerSlotsContainerSafeData save = (PlayerSlotsContainerSafeData)bf.Deserialize(file);
+                file.Close();
+                player = save;
+                player.CheckAfterLoad();
+                Debug.Log($"PlayerSlotsContainerSafeData Loaded : {loadPath}");
+                return true;
+            }
+            Debug.Log($"No PlayerSlotsContainerSafeData saved! : {loadPath}");
         }
-        Debug.Log($"No PlayerSlotsContainerSafeData saved! : {loadPath}");
+        catch (Exception e)
+        {
+            Debug.LogError($"load error: {e}");
+
+        }
         player = null;
         return false;
     }
@@ -68,6 +76,15 @@ public class PlayerSlotsContainerSafeData
 
 #endif
 
+    }
+
+    public void AfterLoadCheck()
+    {
+
+        foreach (var playerSafeContainer in _playerSafeContainers)
+        {
+            playerSafeContainer.InventoryCheck();
+        }
     }
 }
 
@@ -86,6 +103,8 @@ public class PlayerSlotsContainer
         {
             _data = new PlayerSlotsContainerSafeData();
         }
+
+        _data.AfterLoadCheck();
 
         PlayerSlotsContainerIdsData.TryLoadGame(out _dataIds);
         if (_dataIds == null)

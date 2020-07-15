@@ -25,8 +25,9 @@ public abstract class MovingArmy
     public GlobalMapCell PrevCell { get; set; }
     protected float _startPower;
     public ShipConfig StartConfig { get; private set; }
-//    public int LifeTime { get; private set; } = 0;
+    //    public int LifeTime { get; private set; } = 0;
 
+    [field: NonSerialized] private bool _subscribeComplete = false;
     private GalaxyEnemiesArmyController _armiesController;
 
     protected MovingArmy(GlobalMapCell startCell,
@@ -42,7 +43,17 @@ public abstract class MovingArmy
         CurCell = startCell;
         StartConfig = startCell.ConfigOwner;
         startCell.CurMovingArmy = this;
-//        Power = power;
+        //        Power = power;
+        Subscribe();
+    }
+
+    public void Subscribe()
+    {
+        if (_subscribeComplete)
+        {
+            return;
+        }
+        _subscribeComplete = true;
         BattleController.Instance.OnBattleEndCallback += OnBattleEndCallback;
     }
 
@@ -135,6 +146,11 @@ public abstract class MovingArmy
     public virtual void UpdateAllPowersCollected(float collectedPower)
     {
                 
+    }
+
+    public void AfterLoadCheck()
+    {
+        Subscribe();
     }
 }
 

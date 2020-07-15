@@ -93,10 +93,6 @@ public class DebugPanelWindow : EditorWindow
             if (GUILayout.Button("AllModuls." + AllModuls))
             {
                 AllModuls = !AllModuls;
-                if (AllModuls)
-                {
-                    PlayerInventory.MAX_SLOTS = 150;
-                }
                 DebugParamsController.AllModuls = AllModuls;
             }
             if (GUILayout.Button("Hire test."))

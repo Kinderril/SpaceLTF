@@ -11,9 +11,6 @@ public class AttackAction : AbstractAttackAction
     private readonly float _minAttackDistToEnd;
     private readonly float _minAttackDistToStart;
     protected float _nextRecalTime;
-    protected float _nextCheckTwist;
-    protected float _nextCheckRam;
-    protected float _nextCheckTurn;
     public IShipData Target;
 
     public AttackAction([NotNull] ShipBase owner, [NotNull] IShipData target,
@@ -53,28 +50,13 @@ public class AttackAction : AbstractAttackAction
             CheckBoostTwistByShoot(shooter1);
         }
     }
-    private void CheckBoostTwistByShoot(ShipBase shooter)
-    {
-        if (!_owner.Boost.IsReady)
-        {
-            return;
-        }
 
-        if (_nextCheckTwist < Time.time)
-        {
-            _nextCheckTwist = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
-            if (_owner.Enemies.TryGetValue(shooter, out var data))
-            {
-                _owner.Boost.BoostTwist.Activate(data);
-            }
-        }
-    }
 
     protected void MoveToTarget()
     {
-        CheckBoostTurn();
-        CheckBoostTwist();
-        CheckBoostRam();
+        CheckBoostTurn(Target);
+        CheckBoostTwist(Target);
+        CheckBoostRam(Target);
         if (_isDogFight)
         {
             ShallEndDogFight();
@@ -115,56 +97,6 @@ public class AttackAction : AbstractAttackAction
                 _owner.MoveByWay(pp1.Right);
             else
                 _owner.MoveByWay(Target);
-        }
-    }
-
-    private void CheckBoostTwist()
-    {
-        if (!_owner.Boost.IsReady)
-        {
-            return;
-        }
-
-        if (_nextCheckTwist < Time.time)
-        {
-            _nextCheckTwist = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD); ;
-            if (_owner.Boost.BoostTwist.ShallStartUse(Target))
-            {
-                _owner.Boost.BoostTwist.Activate(Target);
-            }
-        }
-    }
-    private void CheckBoostRam()
-    {
-        if (!_owner.Boost.IsReady)
-        {
-            return;
-        }
-
-        if (_nextCheckRam < Time.time)
-        {
-            _nextCheckRam = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
-            if (_owner.Boost.BoostRam.ShallStartUse(Target))
-            {
-                _owner.Boost.BoostRam.Activate();
-            }
-        }
-    }
-
-    private void CheckBoostTurn()
-    {
-        if (!_owner.Boost.IsReady)
-        {
-            return;
-        }
-
-        if (_nextCheckTurn < Time.time)
-        {
-            _nextCheckTurn = Time.time + MyExtensions.GreateRandom(TRICK_CHECK_PERIOD);
-            if (_owner.Boost.BoostTurn.ShallStartUse(Target))
-            {
-                _owner.Boost.BoostTurn.Activate(Target.DirNorm);
-            }
         }
     }
 
@@ -219,7 +151,7 @@ public class AttackAction : AbstractAttackAction
         return c;
     }
 
-    protected virtual bool AnotherTargetBetter()
+    protected virtual bool AnotherTargetBetter()                                                                                                               
     {
         if (_nextRecalTime < Time.time)
         {

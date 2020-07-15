@@ -11,7 +11,7 @@ using UnityEngine;
 public class PlayerInventory : IInventory
 {
 
-    public static int MAX_SLOTS = 48;
+    public int MaxSlots = 48;
     public List<BaseModulInv> Moduls = new List<BaseModulInv>();
     public List<WeaponInv> Weapons = new List<WeaponInv>();
     public List<BaseSpellModulInv> Spells = new List<BaseSpellModulInv>();
@@ -22,8 +22,9 @@ public class PlayerInventory : IInventory
     public event ItemTransferedTo OnItemAdded;
     private PlayerSafe _player;
 
-    public PlayerInventory(PlayerSafe player)
+    public PlayerInventory(PlayerSafe player,int maxSlots)
     {
+        MaxSlots = maxSlots;
         _player = player;
         Moduls.Clear();
         Weapons.Clear();
@@ -46,7 +47,7 @@ public class PlayerInventory : IInventory
     [CanBeNull]
     public PlayerSafe Owner => _player;
 
-    public int SlotsCount => MAX_SLOTS;
+    public int SlotsCount => MaxSlots;
 
     public virtual bool IsShop()
     {
@@ -73,18 +74,18 @@ public class PlayerInventory : IInventory
         return b;
     }
 
-    public bool CanRemoveModulSlots(int slotsInt)
+    public virtual bool CanRemoveModulSlots(int slotsInt)
     {
-        if (totalSlots() + slotsInt < MAX_SLOTS)
+        if (totalSlots() + slotsInt < MaxSlots)
         {
             return true;
         }
         return false;
 
     }      
-    public bool CanRemoveWeaponSlots(int slotsInt)
+    public virtual bool CanRemoveWeaponSlots(int slotsInt)
     {
-        if (totalSlots() + slotsInt < MAX_SLOTS)
+        if (totalSlots() + slotsInt < MaxSlots)
         {
             return true;
         }
@@ -102,10 +103,18 @@ public class PlayerInventory : IInventory
         return list;
     }
 
+    public int GetFreeSlotsCount()
+    {
+        var items = GetAllItems();
+        var count = items.Count;
+        var res = MaxSlots - count;
+        return res;
+    }
+
     public bool GetFreeSlot(out int index, ItemType type)
     {
         index = Moduls.Count;
-        if (totalSlots() < MAX_SLOTS)
+        if (totalSlots() < MaxSlots)
         {
             return true;
         }
@@ -115,7 +124,7 @@ public class PlayerInventory : IInventory
     public bool GetFreeSimpleSlot(out int index)
     {
         index = Moduls.Count;
-        if (totalSlots() < MAX_SLOTS)
+        if (totalSlots() < MaxSlots)
         {
             return true;
         }
@@ -129,7 +138,7 @@ public class PlayerInventory : IInventory
     public bool GetFreeSpellSlot(out int index)
     {
         index = Spells.Count;
-        if (totalSlots() < MAX_SLOTS)
+        if (totalSlots() < MaxSlots)
         {
             return true;
         }
@@ -139,7 +148,7 @@ public class PlayerInventory : IInventory
     public bool GetFreeWeaponSlot(out int index)
     {
         index = Weapons.Count;
-        if (totalSlots() < MAX_SLOTS)
+        if (totalSlots() < MaxSlots)
         {
             return true;
         }
@@ -195,5 +204,9 @@ public class PlayerInventory : IInventory
         return Moduls.Count + Spells.Count + Weapons.Count + ParamItems.Count;
     }
 
+    public void FixSlotsCount(bool isExprolerMode)
+    {
+        MaxSlots = PlayerSafe.GetInventorySlotsCount(isExprolerMode);
+    }
 }
 

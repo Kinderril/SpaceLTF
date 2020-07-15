@@ -18,6 +18,7 @@ public class DragableWeaponItem : DragableItem
 
     protected override void Init()
     {
+        Icon.color = WeaponInv.LevelUpgrades(Weapon.SpecialUpgradeds);
         if (!_isSubscribed)
         {
             ContainerItem.CurrentInventory.Owner.OnCreditsChange += OnMoneyChange;

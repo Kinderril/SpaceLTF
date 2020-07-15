@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
 {
     private bool isLastFramePressed;
     private bool isOverUI;
+    private bool _prevLastLeft;
     private bool isEnbale = false;
     private InGameMainUI inGameMainUi;
 //    public Vector3 keybordDir;
@@ -18,6 +19,7 @@ public class InputManager : MonoBehaviour
 
     public void Init(InGameMainUI inGameMainUi,Commander commander)
     {
+        _prevLastLeft = false;
         this.inGameMainUi = inGameMainUi;
         _commander = commander;
     }
@@ -28,6 +30,20 @@ public class InputManager : MonoBehaviour
         {
             return;
         }
+
+//        var isLeftDown = Input.GetMouseButtonDown(0);
+//        var isLeftUp = Input.GetMouseButtonUp(0);
+        var isRightDown = Input.GetMouseButton(1);
+        var isSame = _prevLastLeft == isRightDown;
+
+//        Debug.LogError($"isLeftDown:{isRightDown}  isSame:{isSame} ");
+
+//        if (isLeftDown)
+//        {
+        if (inGameMainUi.DoMouseButtonDown(isSame, isRightDown))
+            return;
+//        }
+        _prevLastLeft = isRightDown;
 
         if (Input.GetMouseButtonUp(0))
         {
@@ -60,28 +76,10 @@ public class InputManager : MonoBehaviour
             inGameMainUi.Clicked(Input.mousePosition,false, delta);
 //            isLastFramePressed = true;
         }   
-//        if (Input.GetMouseButtonUp(2))
-//        {
-////            Debug.Log("u");
-//            var delta = Time.time - _rightDown;
-////            Debug.Log("Pressed left click:" + delta);
-////            var isLong = delta > 0.6f;
-//            isOverUI = EventSystem.current.IsPointerOverGameObject();
-//            inGameMainUi.Clicked(Input.mousePosition,false, delta);
-////            isLastFramePressed = true;
-//        }
-
-//        if (Input.GetMouseButtonUp(0))
-//        {
-//            Debug.Log("Pressed left click.");
-//            isLastFramePressed = false;
-//            if (isOverUI)
-//            {
-//                EndPress(true);
-//                return;
-//            }
 //        }
     }
+
+
 
     void Update()
     {

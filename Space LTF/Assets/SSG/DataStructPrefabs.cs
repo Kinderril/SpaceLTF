@@ -31,6 +31,12 @@ public struct ParameterItemIcon
     public EParameterItemSubType SubType;
     public ItemType ItemType;
 }
+[Serializable]
+public struct ParameterItemIconNoSubtype
+{
+    public Sprite Icon;
+    public ItemType ItemType;
+}
 
 [Serializable]
 public struct WeaponIcon
@@ -130,6 +136,7 @@ public class DataStructPrefabs : MonoBehaviour
     private Dictionary<PilotRank, Sprite> PilotRankIconsDic = new Dictionary<PilotRank, Sprite>();
 
     public List<ParameterItemIcon> ParametersItemsIcons = new List<ParameterItemIcon>();
+    public List<ParameterItemIconNoSubtype> ParametersItemsIconsNoSubType = new List<ParameterItemIconNoSubtype>();
     public List<WeaponIcon> WeaponTypeIcons = new List<WeaponIcon>();
     private Dictionary<WeaponType, Sprite> WeaponTypeIconsDic = new Dictionary<WeaponType, Sprite>();
     private Dictionary<string, Sprite> SpritesByName = new Dictionary<string, Sprite>();
@@ -163,6 +170,8 @@ public class DataStructPrefabs : MonoBehaviour
     public List<GameObject> BlackHole;
     public QuestStageElement QuestStageElement;
     public QuestContainerElement QuestContainerElement;
+    public CraftDataBase Craft;
+    public ShipWayDrawler WayDrawler;
 
 
     public void Init()
@@ -472,6 +481,19 @@ public class DataStructPrefabs : MonoBehaviour
     {
         ParameterItemIcon? itemIcon = ParametersItemsIcons.FirstOrDefault(x =>
             x.ItemType == parameterItemItemType && x.SubType == subType);
+        if (itemIcon.HasValue)
+        {
+            return itemIcon.Value.Icon;
+        }
+
+        return null;
+
+    }
+
+    public Sprite GetParameterItemIcon(ItemType parameterItemItemType)
+    {
+        ParameterItemIconNoSubtype? itemIcon = ParametersItemsIconsNoSubType.FirstOrDefault(x =>
+            x.ItemType == parameterItemItemType);
         if (itemIcon.HasValue)
         {
             return itemIcon.Value.Icon;

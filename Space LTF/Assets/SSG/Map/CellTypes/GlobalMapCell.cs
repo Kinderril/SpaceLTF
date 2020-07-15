@@ -64,7 +64,7 @@ public abstract class GlobalMapCell
 
         }
 #if UNITY_EDITOR
-        _eventType = EBattlefildEventType.fireVortex;
+//        _eventType = EBattlefildEventType.fireVortex;
 #endif
         //        if (indZ == 12)
         //        {

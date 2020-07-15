@@ -22,7 +22,7 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
         : base(config)
     {
         var playerTrader = new PlayerAI("trader change");
-        _traderInventory = new PlayerInventory(playerTrader.SafeLinks);
+        _traderInventory = new PlayerInventory(playerTrader.SafeLinks,30);
     }
 
     public override MessageDialogData GetDialog()

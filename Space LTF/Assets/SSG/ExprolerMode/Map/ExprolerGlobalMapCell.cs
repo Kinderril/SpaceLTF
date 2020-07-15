@@ -24,6 +24,9 @@ public class ExprolerGlobalMapCell : MonoBehaviour
     public GameObject Size4;
     public GameObject Size5;
     public GameObject Size6;
+
+    public Animator Anim;
+    public CanvasGroup AnimCanvas;
     
     public TextMeshProUGUI LevelField;
     public int Id;
@@ -151,5 +154,16 @@ public class ExprolerGlobalMapCell : MonoBehaviour
         GlowObject.gameObject.SetActive(IsOpen);
         Tooltip.Cache = TooltipCache();
 
+    }
+
+    public void StopAnim()
+    {
+        Anim.enabled = false;
+        AnimCanvas.alpha = 1f;
+    }
+
+    public void StartAnim()
+    {
+        Anim.enabled = true;
     }
 }

@@ -90,7 +90,7 @@ public class ShipModulsUI : MonoBehaviour
         WeaponsLayout.gameObject.SetActive(weapons.Count > 0);
         foreach (var baseModul in weapons)
         {
-            if (baseModul != null)
+            if (baseModul != null && weaponIndex < _weaponModuls.Count)
             {
                 var wModul = _weaponModuls[weaponIndex];
                 wModul.Init(baseModul);

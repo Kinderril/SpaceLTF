@@ -273,5 +273,13 @@ public class GalaxyEnemiesArmyController
         }
     }
 
+    public void AfterLoadCheck()
+    {
+        foreach (var movingArmy in _armies)
+        {
+            movingArmy.AfterLoadCheck();
+        }
+
+    }
 }
 

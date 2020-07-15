@@ -148,9 +148,10 @@ public class SpellModulsContainer : MonoBehaviour
     public void TryCast(bool left,Vector3 pos)
     {
         var battle = BattleController.Instance;
-        if (!battle.PauseData.IsPause)
+ 
+        if (left)
         {
-            if (left)
+            if (!battle.PauseData.IsPause)
             {
                 var ray = _inGameMain.GetPointByClick(pos);
                 if (ray.HasValue)
@@ -166,6 +167,7 @@ public class SpellModulsContainer : MonoBehaviour
                         {
                             inedx = TeamIndex.green;
                         }
+
                         var getClosest = BattleController.Instance.ClosestShipToPos(ray.Value, inedx, out float sDIst);
                         if (getClosest != null && sDIst < 4)
                         {
@@ -175,6 +177,7 @@ public class SpellModulsContainer : MonoBehaviour
                         {
                             Debug.LogError($"No closest ship. dist: {Mathf.Sqrt(sDIst)}");
                         }
+
                         AutoChange(false);
                     }
                     else
@@ -185,16 +188,19 @@ public class SpellModulsContainer : MonoBehaviour
                             EndCastSpell();
                             return;
                         }
+
                         EndCastSpell();
                     }
                 }
-                EndCastSpell();
-            }
-            else
-            {
+
                 EndCastSpell();
             }
         }
+        else
+        {
+            EndCastSpell();
+        }
+        
 
     }
 

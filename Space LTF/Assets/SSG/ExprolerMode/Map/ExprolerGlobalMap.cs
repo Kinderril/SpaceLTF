@@ -37,6 +37,7 @@ public class ExprolerGlobalMap : MonoBehaviour
 
       public void SyncWithData(PlayerSlotsContainer slots)
       {
+          Dictionary<ShipConfig,ExprolerGlobalMapCell> _maxCElls = new Dictionary<ShipConfig, ExprolerGlobalMapCell>();
           foreach (var cell in AllCells)
           {
               cell.Init();
@@ -44,6 +45,18 @@ public class ExprolerGlobalMap : MonoBehaviour
               if (slots.ContainsUnblockId(cell.Id))
               {
                 cell.Unblock();
+                cell.StopAnim();
+                if (_maxCElls.TryGetValue(cell.Config, out var maxCell))
+                {
+                    if (cell.Power > maxCell.Power)
+                    {
+                        _maxCElls[cell.Config] = cell;
+                    }
+                }
+                else
+                {
+                    _maxCElls.Add(cell.Config,cell);
+                }
 //                UnblockAndAllNear(cell);
               }
               else
@@ -55,6 +68,11 @@ public class ExprolerGlobalMap : MonoBehaviour
               {
                   cell.Complete(subSet);
               }
+          }
+
+          foreach (var exprolerGlobalMapCell in _maxCElls)
+          {
+              exprolerGlobalMapCell.Value.StartAnim();
           }
       }
 

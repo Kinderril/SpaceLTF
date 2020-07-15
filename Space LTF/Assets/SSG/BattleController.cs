@@ -61,6 +61,8 @@ public class BattleController : Singleton<BattleController>
     public Transform BulletContainer;
     public Transform OneBattleContainer;
     public Transform AsteroidContainer;
+    public Transform ShipWaysContainer;
+    public Transform ShipsContainer;
     public BackgroundParticles GroundParticles;
 
     public PauseData PauseData = new PauseData();

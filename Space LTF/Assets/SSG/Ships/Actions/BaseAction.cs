@@ -23,6 +23,7 @@ public enum ActionType
     // attackHalfLoop,
     shootFromPlace,
     support,
+    moveByWay,
 }
 
 public abstract class BaseAction
@@ -36,11 +37,15 @@ public abstract class BaseAction
     protected ShipDesicionDataBase _shipDesicionDataBase;
     public ActionType ActionType { get; private set; }
 
-    public BaseAction(ShipBase owner, ActionType actionType)
+    protected BaseAction(ShipBase owner, ActionType actionType)
     {
         ActionType = actionType;
         _causes = GetEndCauses();
         _owner = owner;
+#if UNITY_EDITOR
+        Debug.Log(Namings.Format("<color=green>End Start  Id:{0}  Action:{1} Time:{2}</color>"
+            , _owner.Id, ActionType.ToString(),  Time.time.ToString()));
+#endif
     }
 
     public void SetDesider(ShipDesicionDataBase shipDesicionDataBase)

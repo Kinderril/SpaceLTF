@@ -203,7 +203,7 @@ public static class Library
         return _lvlUps[curLvl];
     }
 
-    public static WeaponInv CreateWeaponByType(WeaponType weapon)
+    public static WeaponInv CreateWeaponByType(WeaponType weapon,int level = 1)
     {
         WeaponInventoryParameters parametes;
         switch (weapon)
@@ -211,31 +211,31 @@ public static class Library
             //DAMAGE
             case WeaponType.laser:
                 parametes = new WeaponInventoryParameters(8, 8, 2, 2, LASER_ANG, LASER_DELAY, 0.5f, 1, LASER_SPEED, 8, 0, TargetType.Enemy);
-                return new LaserInventory(parametes, 1);
+                return new LaserInventory(parametes, level);
             case WeaponType.rocket:
                 parametes = new WeaponInventoryParameters(4, 12, 1, 3, ROCKET_ANG, ROCKET_DELAY, 0.5f, 1, ROCKET_SPEED, 11,
                     36f, TargetType.Enemy);
-                return new RocketInventory(parametes, 1);
+                return new RocketInventory(parametes, level);
             case WeaponType.impulse:
                 parametes = new WeaponInventoryParameters(5, 2, 2, 1, LASER_ANG, IMPULSE_DELAY, 0.5f, 2, IMPULSE_SPEED, 6, 0f, TargetType.Enemy);
-                return new ImpulseInventory(parametes, 1);
+                return new ImpulseInventory(parametes, level);
             case WeaponType.casset:
                 parametes = new WeaponInventoryParameters(4, 8, 1, 2, MINE_ANG, MINE_DELAY, 0.5f, 1, MINE_SPEED, 9, 70f, TargetType.Enemy);
-                return new BombInventoryWeapon(parametes, 1);
+                return new BombInventoryWeapon(parametes, level);
             case WeaponType.eimRocket:
                 parametes = new WeaponInventoryParameters(4, 4, 2, 1, EMI_ANG, EMI_DELAY, 0.4f, 2, EMI_SPEED, 11, 0f, TargetType.Enemy);
-                return new EMIRocketInventory(parametes, 1);
+                return new EMIRocketInventory(parametes, level);
             case WeaponType.beam:
                 parametes = new WeaponInventoryParameters(2, 8, 1, 3, BEAM_ANG, BEAM_DELAY, 0.4f, 1, BEAM_SPEED, 2.5f, 0f, TargetType.Enemy);
-                return new BeamWeaponInventory(parametes, 1);
+                return new BeamWeaponInventory(parametes, level);
 
             //SUPPORT
             case WeaponType.healBodySupport:
                 parametes = new WeaponInventoryParameters(0, 4, 0, 1, SUPPORT_ANG, SUPPORT_RELOAD, 0.4f, 1, SUPPORT_SPEED, 4.5f, SUPPORT_TURN_SPEED, TargetType.Ally);
-                return new HealSuppotWeaponInventory(parametes, 1);
+                return new HealSuppotWeaponInventory(parametes, level);
             case WeaponType.healShieldSupport:
                 parametes = new WeaponInventoryParameters(4, 0, 1, 0, SUPPORT_ANG, SUPPORT_RELOAD, 0.4f, 1, SUPPORT_SPEED, 4.5f, SUPPORT_TURN_SPEED, TargetType.Ally);
-                return new ShieldSuppotWeaponInventory(parametes, 1);
+                return new ShieldSuppotWeaponInventory(parametes, level);
 
 
 
@@ -920,7 +920,7 @@ public static class Library
                 switch (rnd)
                 {
                     case EParameterShip.speed:
-                        val = MyExtensions.Random(4, 8);
+                        val = MyExtensions.Random(0.4f, 0.8f);
                         break;
                     case EParameterShip.turn:
                         val = MyExtensions.Random(5, 9);

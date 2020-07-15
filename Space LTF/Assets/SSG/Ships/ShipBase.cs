@@ -45,6 +45,7 @@ public class ShipBase : MovingObject
     public int Id;
     public bool IsInited;
     public ShipVisual ShipVisual;
+    private bool _wayDestroyed = false;
     public ShipPathController2 PathController { get; private set; }
     public ShipBuffData BuffData { get; private set; }
     public ShipVisibilityData VisibilityData { get; private set; }
@@ -55,6 +56,7 @@ public class ShipBase : MovingObject
     public ShipBoost Boost { get; private set; }
     public ShipAttackersData AttackersData { get; private set; }
     public ShipDamageData DamageData { get; private set; }
+    public ShipWayDrawler WayDrawler;
 
     public IPilotParameters PilotParameters;
 //    public BaseEffectAbsorber ModulEffectDestroy;
@@ -160,6 +162,10 @@ public class ShipBase : MovingObject
 
         }
 
+        transform.SetParent(BattleController.Instance.ShipsContainer);
+        WayDrawler = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.WayDrawler);
+        WayDrawler.transform.SetParent(BattleController.Instance.ShipWaysContainer);
+        WayDrawler.Clear();
         DamageData = new ShipDamageData(this);
         HitData = new ShipHitData();
         HitData.Init(ShipVisual.transform, Easing.EaseType.easeInOutElastic);
@@ -284,7 +290,7 @@ public class ShipBase : MovingObject
             Debug.LogError("Can't be dead twise");
             return;
         }
-
+        WayDrawler.Clear();
         ShipVisual.gameObject.SetActive(false);
         InitDeathParts();
         IsDead = true;
@@ -342,6 +348,13 @@ public class ShipBase : MovingObject
         {
             OnDispose(this);
         }
+
+        if (!_wayDestroyed)
+        {
+            _wayDestroyed = true;
+            GameObject.Destroy(WayDrawler.gameObject);
+        }
+//        WayDrawler.Clear();
         SelfCamera.Dispose();
         WeaponsController.Dispose();
         DesicionData.Dispose();

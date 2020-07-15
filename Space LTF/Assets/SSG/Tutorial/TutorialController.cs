@@ -15,6 +15,7 @@
     public EndBattleTutorial endBattle;
     public ShopMapTutorial shopMain;
     public PreBattleTutorial preBattle;
+    public ExprolerMapTutorial exprolerTutor;
     public bool EnableTutor = false;
 
     public void Init()
@@ -40,6 +41,7 @@
 
             GlobalMapTutorialVideo.Init();
             VideoBattleTutorial.Init();
+            exprolerTutor.Init();
             #endregion
 
 

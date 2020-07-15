@@ -9,18 +9,21 @@ public class WindowExprolerGlobalMap : BaseWindow
     public MoneySlotUI MicrochipsField;
     private PlayerSafe _player;
     public InventoryUI InventoryUI;
+    public CraftInventoryUI CraftInventoryUi;
     private Vector3 _stablePos;
     private bool _stablePosCached = false;
     private bool isArmyActive = false;
     public GameObject ArmyInfoContainer;
     private PlayerArmyUI playerArmyUI;
     public Transform PlayerContainer;
+    public CraftHelpWindow CraftHelp;
 
 
     public override void Init()
     {
-        
-        var exproler = MainController.Instance.Exproler;
+        CraftHelp.Close();
+
+var exproler = MainController.Instance.Exproler;
         _player = exproler.CurrentPlayer;
 
         if (!exproler.PlayInfo.Showed)
@@ -34,6 +37,7 @@ public class WindowExprolerGlobalMap : BaseWindow
         }
         InitMyArmy();
         InventoryUI.Init(exproler.CurrentPlayer.Inventory, null, true);
+        CraftInventoryUi.Init(exproler.CurrentPlayer.CraftInventory, exproler.CurrentPlayer.CraftResultInventory);
         GlobalMap.Init(_player);
         _player.OnCreditsChange += OnCreditsChange;
         _player.OnMicroChipsChange+= OnMicroChipsChange;
@@ -42,6 +46,11 @@ public class WindowExprolerGlobalMap : BaseWindow
         base.Init();
     }
 
+    public void OnClickHelp()
+    {
+
+        CraftHelp.Open();
+    }
     private void OnMicroChipsChange(int obj)
     {
         UpdateFields();
@@ -59,6 +68,7 @@ public class WindowExprolerGlobalMap : BaseWindow
             WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.WindowOpen);
             ArmyInfoContainer.transform.position = _stablePos;
             InventoryUI.RefreshPosition();
+            CraftInventoryUi.RefreshPosition();
         }
         else
         {
@@ -131,6 +141,7 @@ public class WindowExprolerGlobalMap : BaseWindow
         UnSubscribe();
         MainController.Instance.SafeContainers.SaveProfiles();
         InventoryUI.Dispose();
+        CraftInventoryUi.Dispose();
         base.Dispose();
     }
 }

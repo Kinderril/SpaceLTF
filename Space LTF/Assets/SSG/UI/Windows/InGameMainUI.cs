@@ -34,6 +34,7 @@ public class InGameMainUI : BaseWindow
     public CamerasLinkButtons CamerasLinkButtons;
     private bool _isSimpleTutor;
     private bool _isStartAutoTutor;
+    private bool _isStartDrawWay;
 
     public TimeScaleBattleUI TimeScaleBattle;
     //    public Button DebugKillAllEnemies;
@@ -41,8 +42,11 @@ public class InGameMainUI : BaseWindow
     public SimpleTutorialVideo TutorSimple1;
     public SimpleTutorialVideo TutorSimple2;
     public SimpleTutorialVideo TutorSimpleAutoFight;
+    public SimpleTutorialVideo TutorWayDraw;
     public Button TutorButton;
     public event Action<ShipBase> OnShipSelected;
+    private ManualShipWayController _manualWay = new ManualShipWayController();
+    public WayDrawer WayDrawer;
 
     public ShipBase SelectedShip
     {
@@ -109,6 +113,8 @@ public class InGameMainUI : BaseWindow
         //            WindowKeys.gameObject.SetActive(false);
         //        }
         //        CommanderPriority.Init(MyCommander);
+        _manualWay.Init(this,battle.PauseData);
+        WayDrawer.Init(_manualWay);
         FlyingNumbersController.Init(FlyingInfosContainer);
         PreFinish.Init();
         // FastEndButton.gameObject.SetActive(false);
@@ -117,6 +123,7 @@ public class InGameMainUI : BaseWindow
         SpellModulsContainer.UnselectSpell();
         _isSimpleTutor = battle.RedCommander.Player is PlayerAITutor;
          _isStartAutoTutor = battle.RedCommander.Player is PlayerAITutorUseAutoFight;
+         _isStartDrawWay = battle.RedCommander.Player is PlayerAITutorWearModuls;
         TutorSimple1.Init();
         TutorSimple2.Init();
 
@@ -124,7 +131,7 @@ public class InGameMainUI : BaseWindow
         BattleCoinUI.Init(MyCommander.CoinController);
         battle.OnShipAdd += OnShipAdd;
         var canRetire = battle.CanRetire;
-        var _isTutor = _isSimpleTutor || _isStartAutoTutor;
+        var _isTutor = _isSimpleTutor || _isStartAutoTutor || _isStartDrawWay;
         if (_isTutor)
         {
             canRetire = false;
@@ -184,6 +191,11 @@ public class InGameMainUI : BaseWindow
         {
             BattleController.Instance.PauseData.Pause();
             TutorSimpleAutoFight.Open(Unpause);
+        }   
+        else if (_isStartDrawWay)
+        {                                   
+            BattleController.Instance.PauseData.Pause();
+            TutorWayDraw.Open(Unpause);
         }
     }
 
@@ -393,7 +405,7 @@ public class InGameMainUI : BaseWindow
         return null;
     }
 
-    private ShipBase GetShipByPoint(Vector3 pos)
+    public ShipBase GetShipByPoint(Vector3 pos)
     {
         var ray = GetPointByClick(pos);
         if (ray.HasValue)
@@ -440,6 +452,11 @@ public class InGameMainUI : BaseWindow
         CamerasLinkButtons.Dispose();
         ArrowTarget.Disable();
         PreFinish.Activate(_battle, endBattleType);
+    }
+
+    public bool DoMouseButtonDown(bool isSame, bool mouseButtonDown)
+    {
+        return _manualWay.DoMouseButtonDown(isSame, mouseButtonDown);
     }
 }
 

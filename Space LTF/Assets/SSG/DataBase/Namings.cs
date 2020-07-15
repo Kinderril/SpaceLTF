@@ -395,7 +395,9 @@ public static class Namings
             case ActionType.shootFromPlace:
                 return Tag("Attack");
             case ActionType.attack:
-                return Tag("Attack");
+                return Tag("Attack");  
+            case ActionType.moveByWay:
+                return Tag("moveByWay");
             // case ActionType.attackHalfLoop:
             //     return Tag("AttackHalfLoop");
             case ActionType.moveToBase:

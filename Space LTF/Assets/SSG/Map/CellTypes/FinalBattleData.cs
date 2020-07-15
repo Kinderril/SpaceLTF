@@ -135,7 +135,7 @@ public class FinalBattleData
         { 
             armyType.MainShipCount = 2;
         }
-        var power = Mathf.Clamp(_power, 25, 999);
+        var power = Mathf.Clamp(_power, 14, 999);
         // ArmyCreator.cre
 //        player.Army.SetArmy(army);
 //        _player = player;
