@@ -9,8 +9,8 @@ public class SectorExprolerMilitary : SectorExprolerData
     public override StartGlobalCell StartCell => _startGlobalCell;
     public override bool AnyEvent => true;
     public SectorExprolerMilitary(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-        ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
-        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
+        ShipConfig shipConfig, int xIndex, float powerPerTurn, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
+        : base(startX, startZ, size, maxCountEvents, shipConfig, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
     {
 
     }
@@ -31,7 +31,7 @@ public class SectorExprolerMilitary : SectorExprolerData
         StartPowerGalaxy = startPowerGalaxy;
         _power = startPowerGalaxy;
         // RandomizeBorders(); 
-        _startGlobalCell = CreateStart();
+        _startGlobalCell = CreateStartCell();
         
         var prevCell = PopulateToSide(_startGlobalCell);
         var endCell = CreateEnd();

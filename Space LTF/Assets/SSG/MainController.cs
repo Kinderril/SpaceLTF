@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "015b.1";
+    public static string VERSION = "016b";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
     public Player MainPlayer;
     public PlayerSlotsContainer SafeContainers;
     public PlayerStatistics Statistics;
+    public CampaingController Campaing;
     public ExprolerController Exproler;
     public DataBaseController DataBase;
     public NextBattleData BattleData;
@@ -20,6 +21,7 @@ public class MainController : Singleton<MainController>
     {
         try
         {
+            Campaing = new CampaingController();
             Exproler = new ExprolerController();
             SafeContainers = new PlayerSlotsContainer();
             SafeContainers.Init();
@@ -59,7 +61,7 @@ public class MainController : Singleton<MainController>
         WindowManager.Instance.OpenWindow(MainState.start);
     }
 
-    public bool TryLoadPlayer()
+    public bool TryLoadPlayerSandBox()
     {
         Player playerToLoad;
         if (Player.LoadGame(out playerToLoad))
@@ -88,6 +90,9 @@ public class MainController : Singleton<MainController>
                 break;
             case EGameMode.safePlayer:
                 BattleData = new NextBattleDataExproler(MainPlayer, Statistics);
+                break;   
+            case EGameMode.champaing:
+                BattleData = new NextBattleDataCapmaing(MainPlayer, Statistics);
                 break;
         }
     }
@@ -100,10 +105,10 @@ public class MainController : Singleton<MainController>
     public void LaunchBattle(Player greenSide, Player redSide)
     {
         var predAsAi = redSide as IPlayerAIWithBattleEvent;
-        EBattleType battle = EBattleType.standart;
+        BattleTypeData battle = new BattleTypeData();
         if (predAsAi != null)
         {
-            battle = predAsAi.EBattleType;
+            battle = predAsAi.BattleTypeData;
         }
         BattleData.LaunchBattle(greenSide, redSide, battle);
     }

@@ -24,10 +24,10 @@ public class DebugParamsController
 
     public static void TestHire()
     {
-        HireAction();
+        HireAction(MainController.Instance.MainPlayer);
     }
 
-    protected static StartShipPilotData HireAction(int itemsCount = 1)
+    public static StartShipPilotData HireAction(Player player,int itemsCount = 1)
     {
         var pilot = Library.CreateDebugPilot();
         WDictionary<ShipType> types = new WDictionary<ShipType>(new Dictionary<ShipType, float>()
@@ -39,28 +39,58 @@ public class DebugParamsController
 
         var configsD = new Dictionary<ShipConfig, float>();
         configsD.Add(ShipConfig.krios, 3);
-        configsD.Add(ShipConfig.raiders, 5);
+        configsD.Add(ShipConfig.raiders, 3);
         configsD.Add(ShipConfig.ocrons, 3);
-        configsD.Add(ShipConfig.federation, 2);
-        configsD.Add(ShipConfig.mercenary, 5);
+        configsD.Add(ShipConfig.federation, 3);
+        configsD.Add(ShipConfig.mercenary, 3);
 
         WDictionary<ShipConfig> configs = new WDictionary<ShipConfig>(configsD);
 
         var type = types.Random();
         var cng = configs.Random();
-        var ship = Library.CreateShip(type, cng, MainController.Instance.MainPlayer.SafeLinks, pilot);
+        var ship = Library.CreateShip(type, cng, player.SafeLinks, pilot);
         WindowManager.Instance.InfoWindow.Init(null, Namings.Format(Namings.Tag("HirePilot"), Namings.ShipConfig(cng), Namings.ShipType(type)));
         var data = new StartShipPilotData(pilot, ship);
         data.Ship.SetRepairPercent(0.1f);
+        WeaponType? typeWeapon = null;
         for (int i = 0; i < itemsCount; i++)
         {
             if (data.Ship.GetFreeWeaponSlot(out var inex))
             {
-                var weapon = Library.CreateDamageWeapon(true);
+                WeaponInv weapon;
+                if (typeWeapon == null)
+                {
+                    weapon = Library.CreatWeapon(1);
+                    typeWeapon = weapon.WeaponType;
+                }
+                else
+                {
+                    weapon = Library.CreateWeaponByType(typeWeapon.Value);
+                }
+
                 data.Ship.TryAddWeaponModul(weapon, inex);
             }
         }
-        MainController.Instance.MainPlayer.Army.TryHireShip(data);
+        data.Ship.SetRepairPercent(1f);
+        player.Army.TryHireShip(data);
         return data;
+    }
+    public static void LevelUpRandom(Player player)
+    {
+        var army = player.Army.Army.Suffle();
+        var points = 1000f;
+        foreach (var pilotData in army)
+        {
+            if (pilotData.Ship.ShipType != ShipType.Base)
+            {
+                if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
+                {
+                    Debug.Log("LevelUpRandom complete");
+                    return;
+                }
+            }
+        }
+        Debug.LogError("can't upgrade");
+
     }
 }

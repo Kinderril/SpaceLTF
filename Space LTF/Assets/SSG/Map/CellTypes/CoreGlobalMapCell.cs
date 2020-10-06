@@ -30,11 +30,11 @@
 //
 ////    public override int Power => (int)(_power * Library.COEF_CORE_ARMY);
 //
-//    public CoreGlobalMapCell(int power, int id, int intX, int intZ, SectorData sector)
-//        : base(power, ShipConfig.mercenary, id, intX, intZ, sector)
+//    public CoreGlobalMapCell(int power, int id, int intGlobalX, int intZ, SectorData sector)
+//        : base(power, ShipConfig.mercenary, id, intGlobalX, intZ, sector)
 //    {
 //        _startPower = power;
-//        //        Debug.LogError($"CoreGlobalMapCell:{intX}  {intZ}");
+//        //        Debug.LogError($"CoreGlobalMapCell:{intGlobalX}  {intZ}");
 //        WDictionary<GlobalCellType> chances = new WDictionary<GlobalCellType>(new Dictionary<GlobalCellType, float>()
 //        {
 //            { GlobalCellType.simple, 2},

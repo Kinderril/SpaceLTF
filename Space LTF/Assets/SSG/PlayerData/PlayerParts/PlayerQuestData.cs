@@ -9,6 +9,7 @@ public class PlayerQuestData
 //    public int mainElementsFound = 0;
 //    public int MaxMainElements = 4;
     public FinalBattleData LastBattleData { get; private set; }
+
     public QuestsOnStartController QuestsOnStartController;
 
     //    [field: NonSerialized]
@@ -30,6 +31,8 @@ public class PlayerQuestData
     private Player _player;
     private int _currentCompleteQuest = 0;
     private int _questsToActivate = 0;
+    private EGameMode _eGameMode;
+    private Queue<Func<MessageDialogData>> _queueDialogs = new Queue<Func<MessageDialogData>>();
 
     public List<QuestContainer> AllQuests => _quests;
 
@@ -55,9 +58,32 @@ public class PlayerQuestData
         _activeQuest = active;
     }
 
-    public void StartGame()
+    public void StartGame(EGameMode eGameMode,int act,ShipConfig config)
     {
-        var quests = QuestsOnStartController.GetStartQuests();
+        _eGameMode = eGameMode;
+        switch (eGameMode)
+        {
+            case EGameMode.champaing:
+                CampaingActivation(act,config);
+                break;
+            default:
+                SandBoxActivation();
+                break;
+        }
+    }
+
+    private void CampaingActivation(int act,ShipConfig config)
+    {
+        var quests = QuestsOnStartController.GetStartCampaingQuests(act, config);
+        foreach (var quest in quests)
+        {
+            AddQuest(quest);
+        }
+
+    }
+    private void SandBoxActivation()
+    {
+        var quests = QuestsOnStartController.GetStartRandomQuests();
         foreach (var quest in quests)
         {
             AddQuest(quest);
@@ -81,8 +107,13 @@ public class PlayerQuestData
         }
     }
 
-    private void AddQuest(QuestContainer quest)
+    public void AddQuest(QuestContainer quest)
     {
+        if (quest == null)
+        {
+            Debug.LogError("Try add null quest");
+            return;
+        }
         _quests.Add(quest);
         _activeQuest = quest;
         OnQuestAdd?.Invoke(quest);
@@ -131,10 +162,14 @@ public class PlayerQuestData
     public void CompleteQuest(QuestContainer questContainer)
     {
         _currentCompleteQuest++;
-        if (_currentCompleteQuest >= _questsToActivate)
+        if (_eGameMode == EGameMode.sandBox)
         {
-            AddFinalQuests();
+            if (_currentCompleteQuest >= _questsToActivate)
+            {
+                AddFinalQuests();
+            }
         }
+
         OnComplete?.Invoke(questContainer);
     }
 
@@ -149,5 +184,29 @@ public class PlayerQuestData
     public void StageChange(QuestContainer questContainer)
     {
         OnStageChange?.Invoke(questContainer);
+    }
+
+    public void AddLeaveDialogToQuery(Func<MessageDialogData> dialog)
+    {
+        Debug.Log($"AddLeaveDialogToQuery");
+        _queueDialogs.Enqueue(dialog);
+    }
+
+    public bool TryGetDialog(out MessageDialogData o)
+    {
+        if (_queueDialogs.Count>0)
+        {
+
+            var dialog = _queueDialogs.Dequeue();
+                o = dialog();
+            if (o != null)
+            {
+                return true;
+            }
+
+        }
+
+        o = null;
+        return false;
     }
 }

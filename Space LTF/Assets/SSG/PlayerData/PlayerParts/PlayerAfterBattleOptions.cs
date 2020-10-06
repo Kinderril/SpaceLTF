@@ -307,7 +307,7 @@ public class PlayerAfterBattleOptions
             var monet = (int)(MyExtensions.Random(scouts * 3, scouts * 5) * coef * _player.SafeLinks.CreditsCoef);
             _player.MoneyData.AddMoney(monet);
             msg = Namings.Format(Namings.DialogTag("afterBattleSearchOk"), monet); //"Credits add: {0}."
-            _player.ReputationData.RemoveReputation(config, Library.REPUTATION_STEAL_REMOVE);
+//            _player.ReputationData.RemoveReputation(config, Library.REPUTATION_STEAL_REMOVE);
         }
         else
         {
@@ -323,20 +323,20 @@ public class PlayerAfterBattleOptions
         var ans = new List<AnswerDialogData>();
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
         string msg;
-        var shallWork = true; //SkillWork(1, _player.Parameters.Scouts.Level);
-        if (shallWork)
-        {
-            _player.ReputationData.RemoveReputation(config, 8);
+//        var shallWork = true; //SkillWork(1, _player.Parameters.Scouts.Level);
+//        if (shallWork)
+//        {
+//            _player.ReputationData.RemoveReputation(config, 8);
             var coef = power * Library.MONEY_QUEST_COEF;
             var monet = (int)(MyExtensions.Random(20, 30) * coef * _player.SafeLinks.CreditsCoef);
             _player.MoneyData.AddMoney(monet);
             msg = Namings.Format(Namings.DialogTag("afterBattleKillOk"), monet); //
-        }
-        else
-        {
-            _player.ReputationData.RemoveReputation(config, 16);
-            msg = Namings.DialogTag("afterBattleKillFail"); //
-        }
+//        }
+//        else
+//        {
+////            _player.ReputationData.RemoveReputation(config, 16);
+////            msg = Namings.DialogTag("afterBattleKillFail"); //
+//        }
 
         var dialog = new MessageDialogData(msg, ans);
         return dialog;
@@ -350,7 +350,7 @@ public class PlayerAfterBattleOptions
         var shallWork = SkillWork(2, _player.Parameters.Repair.Level);
         if (shallWork)
         {
-            _player.ReputationData.RemoveReputation(config, 15);
+//            _player.ReputationData.RemoveReputation(config, 15);
             msg = Namings.Format(Namings.DialogTag("afterBattleRepairOk"));
         }
         else

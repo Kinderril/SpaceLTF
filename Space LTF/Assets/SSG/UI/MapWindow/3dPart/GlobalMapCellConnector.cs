@@ -45,5 +45,14 @@ public class GlobalMapCellConnector : MonoBehaviour
         Gizmos.DrawSphere(_from, 0.5f);
         Gizmos.DrawSphere(_to, 0.5f);
     }
+
+    public void Show()
+    {
+        ParticleAttractor.gameObject.SetActive(true);
+    }  
+    public void Hide()
+    {
+        ParticleAttractor.gameObject.SetActive(false);
+    }
 }
 

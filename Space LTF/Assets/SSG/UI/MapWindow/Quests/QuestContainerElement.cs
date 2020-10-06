@@ -12,11 +12,25 @@ public class QuestContainerElement : MonoBehaviour
     public GameObject ReadyToComplete;
     public GameObject Complete;
     public TextMeshProUGUI NameField;
+    public TextMeshProUGUI OwnerField;
     private List<QuestStageElement> _elements = new List<QuestStageElement>();
     private Action _closeCallback;
-    public void Init(QuestContainer container,Action closeCallback)
+    private WindowQuests _windowQuests;
+
+    public void Init(QuestContainer container,Action closeCallback,WindowQuests windowQuests)
     {
+        _windowQuests = windowQuests;
         _closeCallback = closeCallback;
+        if (container.Owner.HasValue)
+        {
+            OwnerField.gameObject.SetActive(true);
+            OwnerField.text = Namings.ShipConfig(container.Owner.Value);
+            OwnerField.color = Library.GetColorByConfig(container.Owner.Value);
+        }
+        else
+        {
+            OwnerField.gameObject.SetActive(false);
+        }
         NameField.text = container.NameQuest();
         ReadyToComplete.gameObject.SetActive(false);
         Complete.gameObject.SetActive(false);
@@ -53,6 +67,7 @@ public class QuestContainerElement : MonoBehaviour
 
     private void OnComplete(QuestContainer obj)
     {
+        _windowQuests.QuestComlete(this);
         Complete.SetActive(true);
         NameField.text = $"{_container.NameQuest()} ({Namings.Tag("CompleteNodata")})";
     }

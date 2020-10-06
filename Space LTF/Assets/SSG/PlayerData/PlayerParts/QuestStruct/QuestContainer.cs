@@ -22,16 +22,73 @@ public class QuestContainer
     private string _name;
 
     public bool ReadyIsComplete { get; set; }
-    public bool IsComplete { get; private set; }
+    public bool IsComplete { get; private set; }                                                 
     private Func<MessageDialogData> _endingDialog;
+    private bool _autoEnd;
+    private Action _autoEndCallback;
+    public ShipConfig? Owner;
 
-    public QuestContainer(PlayerQuestData playerQuest,QuestStage[] stages,Player player,string name,Func<MessageDialogData> endingDialog)
+    public QuestContainer(ShipConfig? questOwner,PlayerQuestData playerQuest,QuestStage[] stages,Player player,string name,
+        Func<MessageDialogData> endingDialog, Action autoEndCallback = null)
     {
+        Owner = questOwner;
+        _autoEnd = autoEndCallback!= null;
+        _autoEndCallback = autoEndCallback;
         reward = new QuestContainerReward();
-        reward.Init((int)player.Army.GetPower());
+        int rewardPower = 10;
+        _player = player;
+        if (questOwner.HasValue)
+        {
+            if (_player.ReputationData.IsAllies(questOwner.Value))
+            {
+                switch (_player.ReputationData.AlliesRank)
+                {
+                    case EReputationAlliesRank.rank1:
+                        rewardPower = 21;
+                        break;
+                    case EReputationAlliesRank.rank2:
+                        rewardPower = 26;
+                        break;
+                    case EReputationAlliesRank.rank3:
+                        rewardPower = 31;
+                        break;
+                    case EReputationAlliesRank.rank4:
+                        rewardPower = 36;
+                        break;
+                    case EReputationAlliesRank.rank5:
+                        rewardPower = 41;
+                        break;
+                }
+            }
+            else
+            {
+                var rep = _player.ReputationData.GetStatus(questOwner.Value);
+                switch (rep)
+                {
+                    case EReputationStatus.friend:
+                        rewardPower = 26;
+                        break;
+                    case EReputationStatus.neutral:
+                        rewardPower = 21;
+                        break;
+                    case EReputationStatus.negative:
+                        rewardPower = 16;
+                        break;
+                    case EReputationStatus.enemy:
+                        rewardPower = 11;
+                        break;
+                }
+            }
+        }
+        else
+        {
+            reward.Init((int)player.Army.GetPower());
+        }
+
+
+        reward.Init(rewardPower);
         _endingDialog = endingDialog;
         _name = name;
-        _player = player;
         CurStage = 0;
         IsComplete = false;
         ReadyIsComplete = false;
@@ -68,35 +125,59 @@ public class QuestContainer
         }
         else
         {
-            ReadyToComplete();
-            Debug.Log($"ReadyToComplete {this}");
+            if (_autoEnd)
+            {
+                Debug.Log($"AutoComplete quest {this}");
+                ReadyToComplete();
+                Complete(null);
+            }
+            else
+            {
+                ReadyToComplete();
+                Debug.Log($"ReadyToComplete {this}");
+            }
         }
 
-    }
+    }                                                                                                            
 
     public void Complete(Action closeWindowCallback)
     {
         if (ReadyIsComplete && !IsComplete)
         {
-            var mapWindow = WindowManager.Instance.CurrentWindow as MapWindow;
-            if (mapWindow)
+            if (_autoEnd)
             {
-                if (closeWindowCallback!= null)
-                    closeWindowCallback();
                 IsComplete = true;
                 OnComplete?.Invoke(this);
                 _player.QuestData.CompleteQuest(this);
-
-                void CloseObject()
+                _autoEndCallback?.Invoke();
+                reward.TakeRandom();
+                if (Owner.HasValue)
                 {
-                    mapWindow.TakeRewardObject.gameObject.SetActive(false);
+                    _player.ReputationData.AddReputation(Owner.Value,Library.QUEST_COMPLETE_REPUTATION);
                 }
+            }
+            else
+            {
 
-                mapWindow.StartExternalDialog(_endingDialog(), () =>
+                var mapWindow = WindowManager.Instance.CurrentWindow as MapWindow;
+                if (mapWindow)
                 {
-                    mapWindow.TakeRewardObject.Init(reward, NameQuest(),CloseObject);
+                    closeWindowCallback?.Invoke();
+                    IsComplete = true;
+                    OnComplete?.Invoke(this);
+                    _player.QuestData.CompleteQuest(this);
 
-                });
+                    void CloseObject()
+                    {
+                        mapWindow.TakeRewardObject.gameObject.SetActive(false);
+                    }
+
+                    mapWindow.StartExternalDialog(_endingDialog(), () =>
+                    {
+                        mapWindow.TakeRewardObject.Init(reward, NameQuest(), CloseObject);
+
+                    });
+                }
             }
 
         }
@@ -132,4 +213,5 @@ public class QuestContainer
             questStage.AfterLoad();
         }
     }
+
 }

@@ -17,7 +17,7 @@ public class PlayerSafe
     public PlayerInventory Inventory;
     public CraftPlayerInventory CraftInventory;
     public CraftPlayerInventory CraftResultInventory;
-    public int Credits;
+    public int Credits;                
     public int Microchips;
     public float CreditsCoef=>IsLow?Library.LOW_MONEY_COEF:Library.NORMAL_MONEY_COEF;
     public int MicrochipCoef=>IsLow ? MoneyConsts.LOW_MICROCHIP_COEF : MoneyConsts.MICROCHIPS_COEF;
@@ -57,11 +57,6 @@ public class PlayerSafe
         {
             Inventory.FixSlotsCount(IsLow);
         }
-    }
-
-    public void Save()
-    {
-
     }
 
     public void SetArmy(List<StartShipPilotData> createStartArmy)
@@ -178,5 +173,12 @@ public class PlayerSafe
     public void SetLowCoef()
     {
         IsLow = true;
+    }
+
+    public void ClearEvents()
+    {
+        OnCreditsChange = null;
+        OnAddShip = null;
+        OnMicroChipsChange = null;
     }
 }

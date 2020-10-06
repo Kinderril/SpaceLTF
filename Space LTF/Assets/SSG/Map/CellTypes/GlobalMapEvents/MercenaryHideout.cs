@@ -96,12 +96,12 @@ public class MercenaryHideout : BaseGlobalMapEvent
 
     private void TryAttack()
     {
-        int repToRemove = 5;
+//        int repToRemove = 5;
         var player = MainController.Instance.MainPlayer;
-        player.ReputationData.RemoveReputation(ShipConfig.mercenary, repToRemove);
-        player.ReputationData.RemoveReputation(ShipConfig.raiders, repToRemove);
-        player.ReputationData.AddReputation(ShipConfig.federation, repToRemove);
-        player.ReputationData.AddReputation(ShipConfig.krios, repToRemove);
+//        player.ReputationData.RemoveReputation(ShipConfig.mercenary, repToRemove);
+//        player.ReputationData.RemoveReputation(ShipConfig.raiders, repToRemove);
+//        player.ReputationData.AddReputation(ShipConfig.federation, repToRemove);
+//        player.ReputationData.AddReputation(ShipConfig.krios, repToRemove);
         var power = player.Army.GetPower();
         MainController.Instance.PreBattle(player, GetArmy(ShipConfig.mercenary, ShipConfig.raiders, power), false);
     }

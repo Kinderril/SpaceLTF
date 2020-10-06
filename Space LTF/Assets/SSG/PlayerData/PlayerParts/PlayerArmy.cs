@@ -25,6 +25,8 @@ public class PlayerArmy
     public ShipConfig BaseShipConfig { get; private set; }
     public int Count => Army.Count(x => !x.Ship.IsDead);
 
+    public StartShipPilotData MainShip { get; private set; }
+
     public PlayerArmy(PlayerSafe links)
     {
         _links = links;
@@ -114,6 +116,7 @@ public class PlayerArmy
 
     public void SetArmy(List<StartShipPilotData> createStartArmy)
     {
+        MainShip = createStartArmy.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
         var first = createStartArmy[0];
         BaseShipConfig = first.Ship.ShipConfig;
         _links.SetArmy(createStartArmy);

@@ -23,6 +23,10 @@ public static class ArmyCreator
     }
     public static float CalcArmyPower(List<StartShipPilotData> ships)
     {
+        if (ships == null || ships.Count <= 0f)
+        {
+            return 0f;
+        }
         var f = 0f;
         foreach (var ship in ships)
         {
@@ -221,6 +225,7 @@ public static class ArmyCreator
             }
             armyCount = c1;
         }
+        Debug.Log($"Create army. Count:{armyCount}");
         if (withBase)
         {
             var baseShip = CreateBaseShip(pointsArmy, data.ArmyConfig, player);

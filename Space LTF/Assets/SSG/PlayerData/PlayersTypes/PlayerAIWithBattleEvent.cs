@@ -6,23 +6,28 @@ using System.Collections.Generic;
 public class PlayerAIWithBattleEvent : PlayerAI, IPlayerAIWithBattleEvent
 {
 
-    public EBattleType EBattleType { get; private set; } = EBattleType.standart;
+    public BattleTypeData BattleTypeData { get; private set; } 
     private static
-        List<EBattleType> posibeRndTypes = new List<EBattleType>() { EBattleType.baseDefence, EBattleType.defenceOfShip, EBattleType.defenceWaves, EBattleType.destroyShipPeriod };
+        List<EBattleType> posibeRndTypes = new List<EBattleType>() { EBattleType.baseDefence,
+            EBattleType.defenceOfShip, EBattleType.defenceWaves, EBattleType.destroyShipPeriod };
 
-    public PlayerAIWithBattleEvent(string name,bool posibleEvent, EBattleType? eBattleType = null)
+    public PlayerAIWithBattleEvent(string name,bool posibleEvent, BattleTypeData eBattleType = null)
         : base(name)
     {
         if (eBattleType == null)
         {
             if (posibleEvent && MyExtensions.IsTrue01(.33f))
             {
-                EBattleType = posibeRndTypes.RandomElement();
+                BattleTypeData = new BattleTypeData(posibeRndTypes.RandomElement());
+            }
+            else
+            {
+                BattleTypeData = new BattleTypeData();
             }
         }
         else
         {
-            EBattleType = eBattleType.Value;
+            BattleTypeData = eBattleType;
         }
 
 #if UNITY_EDITOR

@@ -26,9 +26,15 @@ public class GalaxyEnemiesArmyController
 
     [field: NonSerialized]
     private Func<GlobalMapCell, bool> _cellHaveObject = null;
+    private HashSet<ShipConfig> _possibleConfigs = new HashSet<ShipConfig>();
 
     public GalaxyEnemiesArmyController(float powerPerTurn,int armiesToMove = 3)
     {
+        _possibleConfigs.Add(ShipConfig.federation);
+        _possibleConfigs.Add(ShipConfig.mercenary);
+        _possibleConfigs.Add(ShipConfig.krios);
+        _possibleConfigs.Add(ShipConfig.raiders);
+        _possibleConfigs.Add(ShipConfig.ocrons);
         _powerPerTurn = powerPerTurn;
         if (armiesToMove > 0)
         {
@@ -36,6 +42,11 @@ public class GalaxyEnemiesArmyController
             // _lastAddedStep = startStep;
             stepsToBorn.Add(startStep);
         }
+    }
+
+    public void RemovePosibleSpecOps(ShipConfig cfg)
+    {
+        _possibleConfigs.Remove(cfg);
     }
 
     public List<MovingArmy> GetCurrentArmies()
@@ -87,10 +98,10 @@ public class GalaxyEnemiesArmyController
         }
     }
 
-    public void TryBornArmyAtCell(GlobalMapCell cell)
-    {
-        TryBornArmy(cell);
-    }
+//    public void TryBornArmyAtCell(GlobalMapCell cell)
+//    {
+//        TryBornArmy(cell);
+//    }
 
     public void AddArmy(MovingArmy movingArmy)
     {
@@ -112,10 +123,14 @@ public class GalaxyEnemiesArmyController
         DestroyArmy(army);
     }
 
+
     private void TryBornArmy(GlobalMapCell curPlayersCell)
     {
         var posibleCells = _cells.Where(x =>
-            !x.Completed && x.CurMovingArmy == null && !(x is GlobalMapNothing) && Mathf.Abs(x.indX - curPlayersCell.indX) > 4 && Mathf.Abs(x.indZ - curPlayersCell.indZ) > 4);
+            !x.Completed && x.CurMovingArmy == null && !(x is GlobalMapNothing)
+            && Mathf.Abs(x.indX - curPlayersCell.indX) > 4 
+            && Mathf.Abs(x.indZ - curPlayersCell.indZ) > 4
+            && _possibleConfigs.Contains(x.ConfigOwner));
 
         var posibleCell = posibleCells.FirstOrDefault();
         if (posibleCell != null)
@@ -131,9 +146,9 @@ public class GalaxyEnemiesArmyController
         }
     }
 
-    public MovingArmy BornArmyAtCell(GlobalMapCell cell)
+    public MovingArmy BornArmyAtCell(GlobalMapCell cell,int power = -1)
     {
-        var movingArmy = new SpecOpsMovingArmy(cell, DestroySpecOpsCallback, this);
+        var movingArmy = new SpecOpsMovingArmy(cell, DestroySpecOpsCallback, this, power);
         AddArmy(movingArmy);
         _totalBornArmies++;
         var coordinates = $"{movingArmy.CurCell.indX},{movingArmy.CurCell.indZ}";

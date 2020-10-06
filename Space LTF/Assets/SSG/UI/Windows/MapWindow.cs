@@ -116,9 +116,16 @@ public class MapWindow : BaseWindow
             InitSideShip();
 //            QuestsOnStartController.Init(player.QuestsOnStartController);
             CheckLeaveDialog();
+            var isCampStart = player.MapData.GalaxyData is StartChampaingGalaxyDataMap;
+           
             _simpleTutor = (player.MapData.GalaxyData is SimpleTutorialGalaxyData);
             _advTutor = (player.MapData.GalaxyData is AdvTutorialGalaxyData);
             bool showFirstInfo = player.MapData.Step == 0;
+            if (isCampStart)
+            {
+                showFirstInfo = false;
+            }
+            else 
             if (_simpleTutor)
             {
                 showFirstInfo = false;
@@ -144,7 +151,18 @@ public class MapWindow : BaseWindow
             }
             QuestButton.Init(player,this);
             StartInfo.gameObject.SetActive(showFirstInfo);
-            MovingArmyUIController.Init(MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController, GlobalMap);
+            MovingArmyUIController.Init(player.MapData.GalaxyData.GalaxyEnemiesArmyController, GlobalMap);
+            var campStartCell = player.MapData.CurrentCell as CampaingStartGlobalCell;
+            if (isCampStart && campStartCell != null)
+            {                                               
+                var startDialog = campStartCell.StartCampDialog();
+                StartDialog(startDialog, OnMainDialogEnds);
+            }
+            else if (player.QuestData.TryGetDialog(out var dialog))
+            {
+                Debug.Log($"player.QuestData.TryGetDialo");
+                StartDialog(dialog, OnMainDialogEnds);
+            }
         }
         catch (Exception e)
         {

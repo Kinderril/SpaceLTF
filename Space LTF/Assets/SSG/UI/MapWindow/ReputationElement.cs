@@ -10,10 +10,10 @@ public class ReputationElement : UIElementWithTooltip
     public TextMeshProUGUI StatusField;
     public TextMeshProUGUI EnemiesField;
     private string _tooltip;
+    private Color _friendColor = new Color(0f, 1f, 85f / 255f, 1f);
 
-    public void Init(ShipConfig config)
+    public void Init(ShipConfig config, ShipConfig? allies, EReputationAlliesRank alliesRank)
     {
-        Field.text = Info(config);
         var rep = MainController.Instance.MainPlayer.ReputationData;
         var enemiesList = rep.Enemies;
         var list = enemiesList[config];
@@ -34,25 +34,40 @@ public class ReputationElement : UIElementWithTooltip
         }
 
         var status = rep.GetStatus(config);
-        StatusField.text = Namings.Tag($"rep_{status.ToString()}");
-        Color color = Color.white;
-        switch (status)
-        {
-            case EReputationStatus.friend:
-                color = new Color(0f, 1f, 85f / 255f, 1f);
-                break;
-            case EReputationStatus.neutral:
-                color = Color.white;
-                break;
-            case EReputationStatus.negative:
-                color = new Color(1f, 115f / 255f, 0f, 1f);
-                break;
-            case EReputationStatus.enemy:
-                color = new Color(1f, 215f / 255f, 0f, 1f);
-                break;
-        }
 
-        StatusField.color = color;
+        if (allies.HasValue && allies.Value == config)
+        {
+
+            Field.text = Namings.ShipConfig(config);
+            StatusField.text = Namings.Format(Namings.Tag($"rep_allies_rank"), Namings.Tag($"alliesRank_{alliesRank.ToString()}"));
+            Field.color = StatusField.color = _friendColor;
+
+        }
+        else
+        {
+            Field.text = Info(config);
+            StatusField.text = Namings.Tag($"rep_{status.ToString()}");
+            Color color = Color.white;
+            switch (status)
+            {
+                case EReputationStatus.friend:
+                    color = _friendColor;
+                    break;
+                case EReputationStatus.neutral:
+                    color = Color.white;
+                    break;
+                case EReputationStatus.negative:
+                    color = new Color(1f, 115f / 255f, 0f, 1f);
+                    break;
+                case EReputationStatus.enemy:
+                    color = new Color(1f, 215f / 255f, 0f, 1f);
+                    break;
+            }
+
+            StatusField.color = color;
+//            StatusField.gameObject.SetActive(true);
+
+        }
         var en = Namings.Format(Namings.Tag("ReputationElement"), enemiesString);
         EnemiesField.text = en;
         _tooltip = Namings.Tag($"rep_adv_{status.ToString()}");

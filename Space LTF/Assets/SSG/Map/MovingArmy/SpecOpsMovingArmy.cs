@@ -7,13 +7,21 @@ using System.Linq;
 [System.Serializable]
 public class SpecOpsMovingArmy : MovingArmy
 {
-    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController enemiesArmyController) 
+    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController enemiesArmyController,int power = -1) 
         : base(startCell, destroyCallback, enemiesArmyController)
     {
         var humanPlayer = MainController.Instance.MainPlayer;
         var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
         _player = new PlayerAIMovingArmy($"{ Namings.Tag("Destroyed")}:{MyExtensions.Random(3, 9999)}");
-        var armyPower = humanPower * Library.MOVING_ARMY_POWER_COEF;
+        int armyPower;
+        if (power < 0)
+        {
+            armyPower = (int)(humanPower * Library.MOVING_ARMY_POWER_COEF);
+        }
+        else
+        {
+            armyPower = power;
+        }
         Power = armyPower;
         var armyData = ArmyCreatorLibrary.GetArmy(startCell.ConfigOwner);
         var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, armyData, _player);
@@ -42,6 +50,10 @@ public class SpecOpsMovingArmy : MovingArmy
 
     public override MessageDialogData MoverArmyLeaverEnd()
     {
+        if (_endDialog != null)
+        {
+            return _endDialog();
+        }
         var ans = new List<AnswerDialogData>()
         {
             new AnswerDialogData(Namings.DialogTag("MovingArmyGerReward"), GetRewardsItems,  null,false,false),
@@ -51,8 +63,12 @@ public class SpecOpsMovingArmy : MovingArmy
 
     }
 
-    public override MessageDialogData GetDialog(Action FightMovingArmy)
+    public override MessageDialogData GetDialog(Action FightMovingArmy, MessageDialogData nextDialog)
     {
+        if (_startDialog != null)
+        {
+            return _startDialog(FightMovingArmy);
+        }
         var ans = new List<AnswerDialogData>()
         {
             new AnswerDialogData(Namings.DialogTag("MovingArmyFight"), FightMovingArmy,  null,false,false),

@@ -36,7 +36,11 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
     {
         var rep = Library.REPUTATION_HIRE_CRIMINAL_REMOVED;
         var info = Namings.Format(Namings.DialogTag("prisonerHired"), rep);
-        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, rep);  
+        foreach (var cfg in Library.ConfigsNoDroid())
+        {
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(cfg, rep);
+        }
+       
         HireAction(2);
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("Ok")), null));
@@ -46,7 +50,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
 
     public void Fight()
     {
-        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, Library.REPUTATION_HIRE_CRIMINAL_REMOVED);
+//        MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, Library.REPUTATION_HIRE_CRIMINAL_REMOVED);
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
             GetArmy(_config, (int)myArmyPower));
@@ -72,7 +76,7 @@ public class PrisonerCatchMapEvent : BaseGlobalMapEvent
                 d = Namings.DialogTag("prisonerNoSpace");
             }
 
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, Library.REPUTATION_FIND_WAY_ADD);
+//            MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, Library.REPUTATION_FIND_WAY_ADD);
 
 
 

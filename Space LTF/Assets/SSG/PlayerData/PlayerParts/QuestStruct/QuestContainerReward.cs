@@ -16,12 +16,6 @@ public class QuestContainerReward
 
         var levelsOfPower = new List<int>();
         var levelsOfPowerModuls = new List<int>();
-//        if (targetCounter < 15)
-//        {
-//            weaponsLvlv.Add(1);
-//            weaponsLvlv.Add(2);
-//        }
-//        else 
         if (targetCounter < 20)
         {
             levelsOfPower.Add(1);
@@ -62,6 +56,18 @@ public class QuestContainerReward
 
         WeaponReward = Library.CreateDamageWeapon(levelsOfPower.RandomElement());
         ModulReward = Library.CreatSimpleModul(levelsOfPowerModuls.RandomElement());
+    }
+
+    public void TakeRandom()
+    {
+        List<Action> allAct = new List<Action>()
+        {
+            TakeModul,
+            TakeMoney,
+            TakeWeapon,
+        };
+        var reult = allAct.RandomElement();
+        reult();
     }
 
     public void TakeWeapon()

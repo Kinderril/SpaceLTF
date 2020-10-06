@@ -191,7 +191,7 @@ public static class Library
             case ShipConfig.ocrons:
                 return Utils.CreateColor(255,110,0);
             case ShipConfig.krios:
-                return Utils.CreateColor(0,50,250);
+                return Utils.CreateColor(120, 147,250);
             case ShipConfig.droid:
                 return Utils.CreateColor(210,0,0);
         }
@@ -769,20 +769,19 @@ public static class Library
 
     public static int REPUTATION_REPAIR_ADD = 12;
     public static int REPUTATION_SCIENS_LAB_ADD = 12;
-    public static int REPUTATION_FIND_WAY_ADD = 8;
+    public static int REPUTATION_FIND_WAY_ADD = 3;
     public static float CHARGE_SPEED_COEF_PER_LEVEL = 0.12f;
     public static float REPURARTION_TO_DIPLOMATY_COEF = .05f;
     public static float MONEY_QUEST_COEF = 0.09f;
-    public static int PEACE_REPUTATION = 50;
-    public static int START_REPUTATION = -35;
-    public static int BATTLE_REPUTATION_AFTER_FIGHT = 4;
+    public static int PEACE_REPUTATION = 35;
+    public static int ASK_HELP_REPUTATION = 1;
+    public static int START_REPUTATION = -18;
+    public static int BATTLE_REPUTATION_AFTER_FIGHT = 3;
+    public static int BATTLE_REPUTATION_AFTER_REMOVE = 2;
+    public static int QUEST_COMPLETE_REPUTATION = 5;
     public static int REPUTATION_FOR_REINFORCMENTS = 10;
 
-    public const int REPUTATION_STEAL_REMOVE = 5;
-    public const int REPUTATION_REPAIR_REMOVE = 4;
-    public const int REPUTATION_ATTACK_PEACEFULL_REMOVE = 14;
-    public const int REPUTATION_FRIGHTEN_SHIP_REMOVE = 9;
-    public const int REPUTATION_HIRE_CRIMINAL_REMOVED = 10;
+    public const int REPUTATION_HIRE_CRIMINAL_REMOVED = 3;
     public const float REPAIR_PERCENT_PERSTEP_PERLEVEL = 0.08f;
 
 
@@ -982,4 +981,33 @@ public static class Library
     public const float PARAMETER_LEVEL_COEF = 0.05f;
     public const float LOW_MONEY_COEF = 0.4f;
     public const float NORMAL_MONEY_COEF = 1f;
+
+    private static List<ShipConfig> _configs = new List<ShipConfig>()
+    {
+        ShipConfig.droid,
+        ShipConfig.federation,
+        ShipConfig.mercenary,
+        ShipConfig.krios,
+        ShipConfig.ocrons,
+        ShipConfig.raiders
+    };
+
+    public static List<ShipConfig> Configs()
+    {
+        return _configs;
+    }   
+
+    private static List<ShipConfig> _configsNoDroid = new List<ShipConfig>()
+    {
+        ShipConfig.federation,
+        ShipConfig.mercenary,
+        ShipConfig.krios,
+        ShipConfig.ocrons,
+        ShipConfig.raiders
+    };
+
+    public static List<ShipConfig> ConfigsNoDroid()
+    {
+        return _configsNoDroid;
+    }
 }

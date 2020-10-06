@@ -150,7 +150,7 @@ public abstract class BaseGlobalMapEvent
         {
             new     AnswerDialogData(Namings.Tag("Ok"))
         };
-        _reputation.AddReputation(_config, 1);
+//        _reputation.AddReputation(_config, 1);
         var mesData = new MessageDialogData("Action fail.", ans);
         return mesData;
     }

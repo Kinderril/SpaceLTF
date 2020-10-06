@@ -34,7 +34,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
         if (isRep)
         {
             var mianAnswers = new List<AnswerDialogData>();
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, 10);
+//            MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, 10);
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_thanks"), () => GetItemsAfterBattle(false), null));
             var mesData = new MessageDialogData(Namings.DialogTag("battlefield_diplomacyWin"), mianAnswers);
             return mesData;
@@ -42,7 +42,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
         else
         {
             var mianAnswers = new List<AnswerDialogData>();
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, 5);
+//            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, 5);
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_run"), null, runOpt));
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_shoot"), null, shootNear));
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_fight"), Fight, null));
@@ -62,7 +62,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
         }
         else
         {
-            MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, 10);
+//            MainController.Instance.MainPlayer.ReputationData.AddReputation(_config, 10);
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_ufff"), null, null));
             mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("battlefield_stopAttack")), mianAnswers);
 
@@ -119,7 +119,7 @@ public class BattlefieldMapEvent : BaseGlobalMapEvent
             var mianAnswers = new List<AnswerDialogData>();
             mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("battlefield_good"), () => GetItemsAfterBattle(true), null));
             var mesData = new MessageDialogData(Namings.DialogTag("battlefield_goodSHot"), mianAnswers);
-            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, 5);
+//            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(_config, 5);
             return mesData;
         }
         else

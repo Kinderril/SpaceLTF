@@ -66,7 +66,7 @@ public class AsteroidFieldMapEvent : BaseGlobalMapEvent
     {
         if (SkillWork(4, RepairLevel))
         {
-            _reputation.AddReputation(_config, 10);
+//            _reputation.AddReputation(_config, 10);
             var ans = new List<AnswerDialogData>()
             {
                 new AnswerDialogData(Namings.Tag("Ok"))

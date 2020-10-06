@@ -64,6 +64,9 @@ public class BattleEventsDialogsLib
                     break;
                 case EBattleType.defenceOfShip:
                     msg = Namings.Tag("defenceOfShipFail");
+                    break;  
+                case EBattleType.massiveFight:
+                    msg = Namings.Tag("massiveFightFail");
                     break;
                 case EBattleType.baseDefence:
                     msg = Namings.Tag("baseDefenceFail");

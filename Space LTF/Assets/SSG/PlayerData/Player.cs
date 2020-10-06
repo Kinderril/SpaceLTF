@@ -31,7 +31,8 @@ public class Player
     public PlayerMessagesToConsole MessagesToConsole;
     public PlayerSafe SafeLinks ;
     public PlayerArmy Army { get; private set; }
-    public StartShipPilotData MainShip;
+    public StartShipPilotData MainShip => Army.MainShip;
+    private EGameMode _eGameMode;
 
     public string Name;
 
@@ -45,7 +46,8 @@ public class Player
         MapData.Init(data);
         QuestData = new PlayerQuestData(this,data.QuestsOnStart);
         List<StartShipPilotData> startArmy;
-        switch (data.GameNode)     
+        _eGameMode = data.GameNode;
+        switch (_eGameMode)     
         {
             case EGameMode.simpleTutor:
                 startArmy = data.CreateStartArmySimpleTutor(this);
@@ -54,6 +56,7 @@ public class Player
                 startArmy = data.CreateStartArmyAdvTutor(this);
                 break;
             case EGameMode.sandBox:
+            case EGameMode.champaing:
             default:
                 startArmy = data.CreateStartArmy(this);
                 break;
@@ -68,19 +71,25 @@ public class Player
             case EGameMode.simpleTutor:
             case EGameMode.advTutor:
             case EGameMode.sandBox:
+            case EGameMode.champaing:
                 Difficulty = new PlayerDifficultyPart();
                 break;
         }
         Difficulty.Init(data.Difficulty);
-        MainShip = startArmy.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
         Army.SetArmy(startArmy);
         RepairData.Init(Army, MapData, Parameters);
         AfterBattleOptions = new PlayerAfterBattleOptions();
-        ReputationData.AddReputation(data.shipConfig, Library.START_REPUTATION);
 
-
+        var campStart = data as StartNewGameChampaing;
         AddModuls();
-        QuestData.StartGame();
+        if (campStart != null)
+        {
+            QuestData.StartGame(_eGameMode, campStart?.Act ?? 0, campStart.ShiConfigAllise);
+        }
+        else
+        {
+            QuestData.StartGame(_eGameMode,0, ShipConfig.droid);
+        }
     }
 
     private void AddModuls()
@@ -196,26 +205,40 @@ public class Player
 
     }
 
-
-
-    public Player(string name, PlayerSafe linkedData = null)
+    public Player(string name)
     {
-        if (linkedData == null)
-        {
-            SafeLinks = new PlayerSafe(false,true);
-        }
-        else
-        {
-            SafeLinks = linkedData;
-        }
+        SafeLinks = new PlayerSafe(false, true);
         Army = new PlayerArmy(SafeLinks);
         MoneyData = new PlayerMoneyData(SafeLinks);
         ScoutData = new PlayerScoutData(this);
         RepairData = new PlayerRepairData();
         LastScoutsData = new LastScoutsData();
         ReputationData = new PlayerReputationData();
-        //        MapData  = new PlayerMapData();
-        //        MapData.Init();
+        ReputationData.Init();
+        Name = name;
+    }
+
+    public Player(string name, PlayerSafe linkedData)
+    {
+        SafeLinks = linkedData;
+        Army = new PlayerArmy(SafeLinks);
+        MoneyData = new PlayerMoneyData(SafeLinks);
+        ScoutData = new PlayerScoutData(this);
+        RepairData = new PlayerRepairData();
+        LastScoutsData = new LastScoutsData();
+        ReputationData = new PlayerReputationData();
+        ReputationData.Init();
+        Name = name;
+    }     
+    public Player(string name, PlayerSafe linkedData,PlayerReputationData rep)
+    {
+        SafeLinks = linkedData;
+        Army = new PlayerArmy(SafeLinks);
+        MoneyData = new PlayerMoneyData(SafeLinks);
+        ScoutData = new PlayerScoutData(this);
+        RepairData = new PlayerRepairData();
+        LastScoutsData = new LastScoutsData();
+        ReputationData = rep;
         Name = name;
     }
 

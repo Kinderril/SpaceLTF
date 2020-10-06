@@ -99,7 +99,7 @@ public class StandartMovingArmy : MovingArmy
         var playerAi = _player as IPlayerAIWithBattleEvent;
         if (playerAi != null)
         {
-            switch (playerAi.EBattleType)
+            switch (playerAi.BattleTypeData.EBattleType)
             {
                 case EBattleType.defenceWaves:
                     battleTypePowerCoef = 1.15f;
@@ -126,18 +126,18 @@ public class StandartMovingArmy : MovingArmy
         return _player;
     }
 
-    public override MessageDialogData GetDialog(Action FightMovingArmy)
+    public override MessageDialogData GetDialog(Action FightMovingArmy, MessageDialogData nextDialog)
     {
 
-        return GetDialogInner(FightMovingArmy);
+        return GetDialogInner(FightMovingArmy, nextDialog);
     }
 
-    protected MessageDialogData GetDialogInner(Action FightMovingArmy)
+    protected MessageDialogData GetDialogInner(Action FightMovingArmy, MessageDialogData nextDialog)
     {
         var myPlaer = MainController.Instance.MainPlayer;
         var status = myPlaer.ReputationData.GetStatus(StartConfig);
+        bool isAllies = myPlaer.ReputationData.IsAllies(StartConfig);
         bool isFriends = status == EReputationStatus.friend;
-//        string masinMsg;
 
         var ans = new List<AnswerDialogData>();
         var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[StartConfig];
@@ -163,27 +163,37 @@ public class StandartMovingArmy : MovingArmy
         }
 
         var reputation = Namings.Format(Namings.DialogTag("ArmyReputation"), rep);
+        bool haveNextDialog = nextDialog != null;
+        var leaveStr = haveNextDialog? Namings.Tag("leaveWithNext") : Namings.Tag("leave");
         scoutsField = $"{scoutsField}\n{reputation}";
-        ans.Add(new AnswerDialogData(Namings.DialogTag("Attack"), FightMovingArmy));
-        if (isFriends)
+        if (isAllies)
         {
-            ans.Add(new AnswerDialogData(Namings.Tag("leave"), null));
-            ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyAskHelp"), rep), null, DimlomatyOption));
+            ans.Add(new AnswerDialogData(leaveStr, null,()=> nextDialog));
+            ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyAskHelp"), 
+                rep,Library.ASK_HELP_REPUTATION), null,()=>DimlomatyOption(nextDialog)));
         }
         else
         {
-            int buyoutCost = (int)Power;
-
-            if (myPlaer.MoneyData.HaveMoney(buyoutCost) && (StartConfig == ShipConfig.mercenary || StartConfig == ShipConfig.raiders))
+            ans.Add(new AnswerDialogData(Namings.DialogTag("Attack"), FightMovingArmy));
+            if (isFriends)
             {
-                ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
-                    () => BuyOutOption(buyoutCost)));
+                ans.Add(new AnswerDialogData(leaveStr, null, () => nextDialog));
             }
-            ans.Add(new AnswerDialogData(
-                Namings.Format(Namings.DialogTag("armyRun"), scoutsField),
-                () =>
+            else
+            {
+                int buyoutCost = (int)Power;
+
+                if (myPlaer.MoneyData.HaveMoney(buyoutCost) && (StartConfig == ShipConfig.mercenary || StartConfig == ShipConfig.raiders))
                 {
-                }, null, false, true));
+                    ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyBuyOut"), buyoutCost), null,
+                        () => BuyOutOption(buyoutCost)));
+                }
+                ans.Add(new AnswerDialogData(
+                    Namings.Format(Namings.DialogTag("armyRun"), scoutsField),
+                    () =>
+                    {
+                    }, null, false, true));
+            }
 
 
         }
@@ -214,7 +224,7 @@ public class StandartMovingArmy : MovingArmy
         EBattleType battleType = EBattleType.standart;
         if (playerAi != null)
         {
-            battleType = playerAi.EBattleType;
+            battleType = playerAi.BattleTypeData.EBattleType;
         }
         switch (battleType)
         {
@@ -226,6 +236,9 @@ public class StandartMovingArmy : MovingArmy
                 break;
             case EBattleType.defenceOfShip:
                 masinMsg = Namings.Tag("defenceOfShipStart");
+                break; 
+            case EBattleType.massiveFight:
+                masinMsg = Namings.Tag("massiveFightStart");
                 break;
             case EBattleType.baseDefence:
                 masinMsg = Namings.Tag("baseDefenceStart");
@@ -253,14 +266,14 @@ public class StandartMovingArmy : MovingArmy
         return masinMsg;
     }
 
-    private MessageDialogData DimlomatyOption()
+    private MessageDialogData DimlomatyOption(MessageDialogData nextDialog)
     {
         var ans = new List<AnswerDialogData>();
-        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
-        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[StartConfig];
-        bool doDip = MyExtensions.IsTrue01((float)rep / PlayerReputationData.MAX_REP);
-        if (doDip)
-        {
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok"),null,()=> nextDialog));
+//        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[StartConfig];
+//        bool doDip = MyExtensions.IsTrue01((float)rep / PlayerReputationData.MAX_REP);
+//        if (doDip)
+//        {
             int a = 0;
             switch (StartConfig)
             {
@@ -321,14 +334,15 @@ public class StandartMovingArmy : MovingArmy
             }
 
             var pr = $"They help you as much as they can. {helpInfo}";
+            MainController.Instance.MainPlayer.ReputationData.RemoveReputation(StartConfig, Library.ASK_HELP_REPUTATION);
             var mesData = new MessageDialogData(pr, ans);
             return mesData;
-        }
-        else
-        {
-            var mesData = new MessageDialogData("They can't help you now", ans);
-            return mesData;
-        }
+//        }
+//        else
+//        {
+//            var mesData = new MessageDialogData("They can't help you now", ans);
+//            return mesData;
+//        }
     }
 
 
@@ -339,7 +353,7 @@ public class StandartMovingArmy : MovingArmy
         EBattleType type = EBattleType.standart;
         if (playerAI != null)
         {
-            type = playerAI.EBattleType;
+            type = playerAI.BattleTypeData.EBattleType;
         }
 
         if (type == EBattleType.standart)

@@ -95,8 +95,8 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
         _scienceKilled = shallKillSciens;
         _fightStarts = true;
 
-        if (_scienceKilled)
-            _reputation.RemoveReputation(_config, 5);
+//        if (_scienceKilled)
+//            _reputation.RemoveReputation(_config, 5);
         var myArmyPower = ArmyCreator.CalcArmyPower(MainController.Instance.MainPlayer.Army);
         MainController.Instance.PreBattle(MainController.Instance.MainPlayer,
             GetArmy(_config, (int)myArmyPower * 1.3f));
@@ -129,7 +129,7 @@ public class ScienceLabMapEvent : BaseGlobalMapEvent
     private MessageDialogData ImproveDialog()
     {
 
-        _reputation.AddReputation(_config, Library.REPUTATION_SCIENS_LAB_ADD);
+//        _reputation.AddReputation(_config, Library.REPUTATION_SCIENS_LAB_ADD);
         var mianAnswers = new List<AnswerDialogData>();
         mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabImproveMain"), null, improveMainShip));
         mianAnswers.Add(new AnswerDialogData(Namings.DialogTag("scLabImproveBattle"), null, improveBattleShips));

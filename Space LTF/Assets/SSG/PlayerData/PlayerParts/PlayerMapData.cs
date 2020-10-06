@@ -62,7 +62,18 @@ public class PlayerMapData
                 galaxyData = new SimpleTutorialGalaxyData("SimpleTutorialGalaxyData " + sectorIndex.ToString());
                 break;
             case EGameMode.safePlayer:
-                galaxyData = new ExprolerGalaxyDataMap("ExprolerFalaxyData");
+                galaxyData = new ExprolerGalaxyDataMap("ExprolerGalaxyData");
+                break;  
+            case EGameMode.champaing:
+                var champaingData = data as StartNewGameChampaing;
+                if (champaingData.Act == 0)
+                {
+                    galaxyData = new StartChampaingGalaxyDataMap("StartChampaingGalaxyData", champaingData.Act, champaingData.ShiConfigAllise);
+                }
+                else
+                {
+                    galaxyData = new MidChampaingGalaxyDataMap("StartChampaingGalaxyData", champaingData.Act, champaingData.ShiConfigAllise);
+                }
                 break;
             case EGameMode.advTutor:
                 data.SectorSize = TUTOR_SECTOR_SIZE;
@@ -75,6 +86,11 @@ public class PlayerMapData
         var startCell = galaxyData.Init2(data.SectorCount, data.SectorSize, startPower, data.QuestsOnStart, 
             data.StepsBeforeDeath, data.shipConfig, data.PowerPerTurn,data.MapType);
         GalaxyData = galaxyData;
+        var champaingData2 = data as StartNewGameChampaing;
+        if (champaingData2 != null)
+        {
+            GalaxyData.GalaxyEnemiesArmyController.RemovePosibleSpecOps(champaingData2.ShiConfigAllise);
+        }
         CurrentCell = startCell;
         OpenAllNear();
     }

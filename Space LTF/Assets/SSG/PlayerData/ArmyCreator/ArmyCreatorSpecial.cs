@@ -215,6 +215,10 @@ public static class ArmyCreatorSpecial
         {
             shipTypes.Add(ShipType.Middle);
         }
+#if UNITY_EDITOR
+        Debug.LogError("set unity editor count");
+        count = 15;
+#endif
 
         for (int i = 0; i < count && remainPoints > 0; i++)
         {

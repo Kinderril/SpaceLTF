@@ -3,11 +3,11 @@ using UnityEngine;
 
 public enum EGameMode
 {
-                 sandBox,
-//                 sandBox,
-                 simpleTutor,
-                 advTutor,
-                 safePlayer,
+     sandBox,
+     simpleTutor,
+     advTutor,
+     safePlayer,
+     champaing,
 }
 
 public class StartNewGameData
@@ -46,6 +46,7 @@ public class StartNewGameData
         MapType = mapType;
         GameNode = gameNode;
     }
+
 
 
     public float CalcDifficulty()
@@ -121,6 +122,14 @@ public class StartNewGameData
         else
         {
             NewGameAddSpellsRandom(bShip);
+        }
+
+        if (posibleStartWeapons.Count == 0)
+        {
+            posibleStartWeapons.Add(WeaponType.laser);
+            posibleStartWeapons.Add(WeaponType.rocket);
+            posibleStartWeapons.Add(WeaponType.impulse);
+            posibleStartWeapons.Add(WeaponType.eimRocket);
         }
 
         AddWeaponsToShips(ref r, ship1, posibleStartWeapons);

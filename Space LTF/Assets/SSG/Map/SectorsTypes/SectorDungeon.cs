@@ -20,8 +20,8 @@ public class SectorDungeon : SectorData
     private bool _oneRemoved;
     public override bool AnyEvent => true;
     public SectorDungeon(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-        ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, bool upSide, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
-        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
+        ShipConfig shipConfig, int xIndex, float powerPerTurn, bool upSide, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
+        : base(startX, startZ, size, maxCountEvents, shipConfig,  xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
     {
         _upSide = upSide;
         _exitCreated = false;
@@ -144,11 +144,6 @@ public class SectorDungeon : SectorData
 
     }
 
-    private void AddWays(GlobalMapCell c1, GlobalMapCell c2)
-    {
-        c1.AddWay(c2);
-        c2.AddWay(c1);
-    }
     public ArmyGlobalMapCell PopulateCell(int j, int i)
     {
         ArmyGlobalMapCell armyCellcell = null;

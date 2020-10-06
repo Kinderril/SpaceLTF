@@ -106,8 +106,8 @@ public class WindowNewGame : BaseWindow
             SpellType.hookShot,
 //            SpellType.spaceWall,
         };
-        List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
         var posibleSpells = posibleStartSpells.RandomElement(2);
+        List<WeaponType> posibleStartWeapons = StartGameWeaponsChooseUI.Selected.GetAsList();
 #if UNITY_EDITOR
         //        posibleSpells.Add(SpellType.repairDrones);
 #endif

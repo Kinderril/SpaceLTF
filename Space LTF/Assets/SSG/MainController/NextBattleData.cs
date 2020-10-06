@@ -2,6 +2,11 @@
 
 public delegate void BattleEndCallback(Player human, Player ai, EndBattleType win);
 
+public class BattleParameters
+{
+
+}
+
 public class NextBattleData
 {
     private bool _isFinalBattle;
@@ -23,7 +28,7 @@ public class NextBattleData
         WindowManager.Instance.OpenWindow(MainState.preBattle, new Tuple<Player, Player>(player1, player2));
     }
 
-    public void LaunchBattle(Player greenSide, Player redSide, EBattleType battleType)
+    public void LaunchBattle(Player greenSide, Player redSide, BattleTypeData battleType)
     {
         BattleController.Instance.LaunchGame(greenSide, redSide, _canRetire, _battleEvent, battleType);
     }

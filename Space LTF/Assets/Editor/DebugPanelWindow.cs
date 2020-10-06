@@ -88,13 +88,42 @@ public class DebugPanelWindow : EditorWindow
             {
                 SwitchAnyWay();
             }
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("AllModuls." + AllModuls))
             {
                 AllModuls = !AllModuls;
                 DebugParamsController.AllModuls = AllModuls;
             }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("1 act" ))
+            {
+                if (MainController.Instance.Campaing == null)
+                {
+                    Debug.LogError("MainController.Instance.Campaing is NULL!");
+                    return;
+                }
+                MainController.Instance.Campaing.DebugNewChamp(0);
+            }   
+            if (GUILayout.Button("2 act" ))
+            {
+                if (MainController.Instance.Campaing == null)
+                {
+                    Debug.LogError("MainController.Instance.Campaing is NULL!");
+                    return;
+                }
+                MainController.Instance.Campaing.DebugNewChamp(1);
+            } 
+            if (GUILayout.Button("3 act" ))
+            {
+                if (MainController.Instance.Campaing == null)
+                {
+                    Debug.LogError("MainController.Instance.Campaing is NULL!");
+                    return;
+                }
+                MainController.Instance.Campaing.DebugNewChamp(2);
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Hire test."))
             {
                 DebugParamsController.TestHire();
@@ -212,21 +241,7 @@ public class DebugPanelWindow : EditorWindow
 
     private void LevelUpRandom()
     {
-        var army = MainController.Instance.MainPlayer.Army.Army.Suffle();
-        var points = 1000f;
-        foreach (var pilotData in army)
-        {
-            if (pilotData.Ship.ShipType != ShipType.Base)
-            {
-                if (ArmyCreator.TryUpgradePilot(new ArmyRemainPoints(points), pilotData.Pilot, new ArmyCreatorLogs()))
-                {
-                    Debug.Log("LevelUpRandom complete");
-                    return;
-                }
-            }
-        }
-        Debug.LogError("can't upgrade");
-
+        DebugParamsController.LevelUpRandom(MainController.Instance.MainPlayer);
     }
 
     private void ExpAll()

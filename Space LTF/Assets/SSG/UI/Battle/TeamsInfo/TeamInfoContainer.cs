@@ -65,7 +65,7 @@ public class TeamInfoContainer : MonoBehaviour
 
             var pref = DataBaseController.Instance.DataStructPrefabs.SideShipInfoLeft;
             var s1 = DataBaseController.GetItem(pref);
-            s1.Init(obj, _shipSelectedAction, ToggleChanges, shallOpen, _mainUi);
+            s1.Init(obj, _shipSelectedAction, ToggleChanges, false, _mainUi);
             if (shallOpen)
             {
                 _lastToggle = s1;

@@ -97,13 +97,13 @@ public class GalaxyData
                 {
                     var isUp = upper;
                     subSector = new SectorDungeon(xx, zz, sizeSector,
-                        _eventsCount, shipConfig, id, i, _powerPerTurn, isUp, DeletedWays,enemiesArmyController);
+                        _eventsCount, shipConfig,  i, _powerPerTurn, isUp, DeletedWays,enemiesArmyController);
                 }
             }
             else
             {
                 subSector = new SectorData(xx, zz, sizeSector,
-                    _eventsCount, shipConfig, id, i, _powerPerTurn, DeletedWays,enemiesArmyController);
+                    _eventsCount, shipConfig, id,  _powerPerTurn, DeletedWays,enemiesArmyController);
             }
 
             id++;
@@ -309,25 +309,37 @@ public class GalaxyData
 
     protected void AddPortals(int sectorsCount, SectorData[,] sectors, int verticalCount)
     {
+        Debug.Log($"Add portals:   sectorsCount:{sectorsCount}   verticalCount:{verticalCount}");
         for (var i = 0; i < sectorsCount; i++)
-        for (var j = 0; j < verticalCount - 1; j++)
         {
-            var subSector = sectors[i, j];
-            if (subSector == null) continue;
-            if (i + 1 < sectorsCount && j > 0)
+            for (var j = 0; j < verticalCount - 1; j++)
             {
-                var rightConnectSector = sectors[i + 1, j];
-                if (rightConnectSector == null)
+                var subSector = sectors[i, j];
+                if (subSector == null)
+                {                                         
                     continue;
-                ConnectSectorsRight(subSector, rightConnectSector);
-            }
+                }
 
-            if (j + 1 < verticalCount)
-            {
-                var topConnectedSector = sectors[i, j + 1];
-                if (topConnectedSector == null)
-                    continue;
-                ConnectSectorTop(subSector, topConnectedSector);
+                if (i + 1 < sectorsCount && j > 0)
+                {
+                    var rightConnectSector = sectors[i + 1, j];
+                    if (rightConnectSector != null)
+                    {
+                        ConnectSectorsRight(subSector, rightConnectSector);
+                    }
+
+                }
+
+                if (j + 1 < verticalCount)
+                {
+                    var topConnectedSector = sectors[i, j + 1];
+                    if (topConnectedSector != null)
+                    {
+                        ConnectSectorTop(subSector, topConnectedSector);
+                    }
+
+                }
+
             }
         }
     }
@@ -365,11 +377,14 @@ public class GalaxyData
         ConnectedCellsListsFirst(rightCells, leftCells, "RightLeft", 2);
     }
 
-    private void ConnectSectorTop(SectorData bot, SectorData top)
+    protected void ConnectSectorTop(SectorData bot, SectorData top)
     {
+        Debug.Log($"connect Sectors bot:{bot.IndexInfo()}  top:{top.IndexInfo()}");
+
         var botCells = new HashSet<GlobalMapCell>();
         var moveIndex = 1;
-        var targetConnections = bot is SectorDungeon || top is SectorDungeon ? 1 : 2;
+        var targetConnections =
+            bot is SectorDungeon || top is SectorDungeon || bot is SectorCampaignStart || top is SectorCampaignStart ? 1 : 2;
 
         while (botCells.Count < targetConnections && bot.Size - moveIndex > 0)
         {

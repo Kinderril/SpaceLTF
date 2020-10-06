@@ -71,6 +71,7 @@ public class GlobalMapCellObject : MonoBehaviour
         Cell.OnUnconnect += OnUnconnect;
         Cell.OnScouted += OnScouted;
         Cell.OnComplete += OnComplete;
+        Cell.OnHide += OnHide;
         InitMainObject();
         var c = cellSize * 0.3f;
         var armyCell = Cell as FreeActionGlobalMapCell;
@@ -90,7 +91,19 @@ public class GlobalMapCellObject : MonoBehaviour
             OnDestoyedCell(cell);
         }
 
+        Container.gameObject.SetActive(!Cell.IsHide);
+
         UpdateQuestInfo();
+
+    }
+
+    private void OnHide(GlobalMapCell arg1, bool arg2)
+    {
+        var isActive = !Cell.IsHide;
+//        Debug.LogError($"hide result : {isActive}");
+        Container.gameObject.SetActive(isActive);
+//        if (arg1.CurMovingArmy.)
+
 
     }
 
@@ -118,7 +131,10 @@ public class GlobalMapCellObject : MonoBehaviour
 
     private void OnComplete(GlobalMapCell obj, bool isComplete)
     {
-        Unknown.gameObject.SetActive(false);
+        if (Unknown != null)
+        {
+            Unknown.gameObject.SetActive(false);
+        }
         if (ObjectPainted != null)
             ObjectPainted.gameObject.SetActive(true);
         if (ActiveRenderer != null)

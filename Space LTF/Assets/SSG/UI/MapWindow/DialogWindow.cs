@@ -13,6 +13,10 @@ public class DialogWindow : MonoBehaviour
 
     public void Init(MessageDialogData dialog, DialogEndsCallback endCallback)
     {
+        if (dialog == null)
+        {
+            Debug.LogError($"Dialog is null");
+        }
         WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.StartDialog);
         Utils.ClearTransform(Layout);
         gameObject.SetActive(true);
@@ -40,7 +44,16 @@ public class DialogWindow : MonoBehaviour
         }
         else
         {
-            Init(data.NextDialog(), _endCallback);
+            var nextDialog = data.NextDialog();
+            if (nextDialog == null)
+            {
+                _endCallback(data.ShallCompleteCell, data.ShallReturnToLastCell);
+                Dispose();
+            }
+            else
+            {
+                Init(nextDialog, _endCallback);
+            }
         }
     }
 

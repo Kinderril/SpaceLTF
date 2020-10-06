@@ -58,6 +58,34 @@ public abstract class QuestStage
         }
     }
 
+    public override string ToString()
+    {
+        string ids = "ids:";
+        foreach (var b in _idToComplete)
+        {
+            ids = $"{ids}_{b}";
+        }
+
+        var str = $"{base.ToString()}_{ids}";
+        return str;
+    }
+
+    protected int comparator(SectorCellContainer x, SectorCellContainer y)
+    {
+
+        return x.Data.Id > y.Data.Id ? 1 : -1;
+    }
+    protected virtual Func<MessageDialogData> AfterCompleteDialog()
+    {
+        return null;
+    }
+    protected List<string> GetDialogsTagAttack()
+    {
+        var list = new List<string>();
+        list.Add("dialog_armyShallFight");
+        list.Add("dialog_Attack");
+        return list;
+    }
     public List<SectorData> GetSectors(Player player,int minXindex,int maxXindex,int minCount)
     {
         var sectorId = player.MapData.CurrentCell.SectorId;
@@ -128,7 +156,73 @@ public abstract class QuestStage
         });
         return wd.Random();
     }
+    public GlobalMapCell FindAndMarkCellClosest(SectorData posibleSector, Func<MessageDialogData> dialogFunc, GlobalMapCell playerCell)
+    {
+        var cells = posibleSector.ListCells.Where(x => x.Data != null && x.Data is FreeActionGlobalMapCell && !(x.Data as FreeActionGlobalMapCell).HaveQuest).ToList();
+        if (cells.Count == 0)
+        {
+            return null;
+        }
+        int deltaMax = Int32.MaxValue;
 
+        SectorCellContainer container = null;
+        foreach (var sectorCellContainer in cells)
+        {
+            var deltaX = Mathf.Abs(sectorCellContainer.indX - playerCell.indX);
+            var deltaZ = Mathf.Abs(sectorCellContainer.indZ - playerCell.indZ);
+            var deltaSum = deltaZ + deltaX;
+            if (deltaSum < deltaMax)
+            {
+                deltaMax = deltaSum;
+                container = sectorCellContainer;
+            }
+        }
+        var cell = container.Data as FreeActionGlobalMapCell;
+
+        cell.SetQuestData(dialogFunc);
+        return cell;
+    }
+    protected GlobalMapCell FindAndMarkCellFarest(SectorData posibleSector, Func<MessageDialogData> dialogFunc, GlobalMapCell playerCell)
+    {
+        var cells = posibleSector.ListCells.Where(x => x.Data != null && x.Data is FreeActionGlobalMapCell && !(x.Data as FreeActionGlobalMapCell).HaveQuest).ToList();
+        if (cells.Count == 0)
+        {
+            return null;
+        }
+        int deltaMax = Int32.MinValue;
+
+        SectorCellContainer container = null;
+        foreach (var sectorCellContainer in cells)
+        {
+            var deltaX = Mathf.Abs(sectorCellContainer.indX - playerCell.indX);
+            var deltaZ = Mathf.Abs(sectorCellContainer.indZ - playerCell.indZ);
+            var deltaSum = deltaZ + deltaX;
+            if (deltaSum > deltaMax)
+            {
+                deltaMax = deltaSum;
+                container = sectorCellContainer;
+            }
+        }
+        var cell = container.Data as FreeActionGlobalMapCell;
+
+        cell.SetQuestData(dialogFunc);
+        return cell;
+    }
+
+    public GlobalMapCell FindAndMarkCellRandom(SectorData posibleSector, Func<MessageDialogData> dialogFunc, GlobalMapCell playerCell)
+    {
+        var cells = posibleSector.ListCells.Where(x => x.Data != null && x.Data is FreeActionGlobalMapCell && !(x.Data as FreeActionGlobalMapCell).HaveQuest).ToList();
+        if (cells.Count == 0)
+        {
+            return null;
+        }
+        int deltaMax = Int32.MaxValue;
+
+        SectorCellContainer container = cells.RandomElement();
+        var cell = container.Data as FreeActionGlobalMapCell;
+        cell.SetQuestData(dialogFunc);
+        return cell;
+    }
 
     protected void TryNavigateToCell(GlobalMapCell cell)
     {
@@ -171,6 +265,9 @@ public abstract class QuestStage
         if (!_failed)
         {
             _complete = true;
+            var dialog = AfterCompleteDialog();
+            if(dialog != null)
+                _playerQuest.AddLeaveDialogToQuery(dialog);
             OnComplete?.Invoke(this);
             _questContainer.CompleteStage(this);
         }

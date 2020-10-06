@@ -7,6 +7,8 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
     public MovingArmy Owner;
     private GlobalMapController _mapController;
     public GameObject LookObject;
+    public GameObject RedObject;
+    public GameObject GreenObject;
     private Vector3 _cahceDirection;
     private bool _isLastActive;
 
@@ -16,6 +18,15 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
         base.Init(startCell);
         Owner = owner;
         UpdateLookDirection();
+        UpdateCurHideCell();
+        GreenObject.SetActive(false);
+        RedObject.SetActive(true);
+    }
+
+    public void SetAllies()
+    {
+        GreenObject.SetActive(true);
+        RedObject.SetActive(false);
     }
 
     public void UpdateLookDirection()
@@ -92,6 +103,14 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
               var to = _cahceDirection + up;
               Gizmos.DrawLine(from,to);
         }
+    }
+
+    public void UpdateCurHideCell()
+    {
+
+        var shallHide = Owner.CurCell.IsHide;
+        gameObject.SetActive(!shallHide);
+
     }
 }
 

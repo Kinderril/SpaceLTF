@@ -10,8 +10,8 @@ public class SectorTutorial : SectorData
     public StartGlobalCell StartCell  => _startGlobalCell;
 
     public SectorTutorial(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-        ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
-        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
+        ShipConfig shipConfig, int xIndex, float powerPerTurn, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
+        : base(startX, startZ, size, maxCountEvents, shipConfig, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
     {
 
 

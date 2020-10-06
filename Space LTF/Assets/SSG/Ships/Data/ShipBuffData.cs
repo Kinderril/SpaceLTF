@@ -60,7 +60,7 @@ public class ShipBuffData : ShipData
 
     public void AddConstantSpeed(float percent)
     {
-        Debug.LogError("AddConstantSpeed");
+//        Debug.LogError("AddConstantSpeed");
   
         DeactivateCostBuff();
       
@@ -78,7 +78,7 @@ public class ShipBuffData : ShipData
         {
             return;
         }
-        Debug.LogError("DeactivateCostBuff");
+//        Debug.LogError("DeactivateCostBuff");
         turnCoef = turnCoef / _contsntPercent;
         speedCoef = speedCoef / _contsntPercent;
         _constActive = false;

@@ -10,8 +10,8 @@ public abstract class SectorExprolerData : SectorData
 
 
     protected SectorExprolerData(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents, ShipConfig shipConfig, 
-        int index, int xIndex, float powerPerTurn, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController) 
-        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
+        int xIndex, float powerPerTurn, DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController) 
+        : base(startX, startZ, size, maxCountEvents, shipConfig,  xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
     {
 
     }
@@ -21,30 +21,7 @@ public abstract class SectorExprolerData : SectorData
         return coreConfig;
     }
 
-    protected StartGlobalCell CreateStart()
-    {
 
-        var zzStart = 0;
-        for (int i = 0; i < Size; i++)
-        {
-            for (int j = zzStart; j < Size+ zzStart; j++)
-            {
-                var testCell = Cells[i, j];
-                if (testCell.Data is GlobalMapNothing)
-                {
-                    continue;
-                }
-                var indZ = StartZ + j;
-                var startCEll = new StartGlobalCell(999999, i, indZ, this, ShipConfig);
-                var cellContainer = Cells[i, j];
-                cellContainer.SetData(startCEll);
-                ListCells.Add(cellContainer);
-                return startCEll;
-            }
-        }
-
-        return null;
-    }
 
     protected GlobalMapCell CreateEnd()
     {

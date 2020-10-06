@@ -88,8 +88,8 @@ public class QuestStageKidnapping : QuestStage
 
     }
 
-    private float CHANCE_TO_FAIL_ATTACK = 50f;
     private int MONEY_TO_BUY = 120;
+    private float CHANCE_TO_FAIL_ATTACK = 50f;
     private int SCOUTS_LVL = 2;
 
 
@@ -98,8 +98,6 @@ public class QuestStageKidnapping : QuestStage
         _playerQuest.QuestIdComplete(QuestsLib.QUEST_KIDNAPPING1);
         _armyKilledInited = true;
         List<AnswerDialogData> ans = new List<AnswerDialogData>();
-        //        var player = MainController.Instance.MainPlayer;
-
         var scouts = _player.Parameters.Scouts.Level;
         var chance = GetPercent(scouts, SCOUTS_LVL);
         _configToKill = _player.ReputationData.BestFaction();
@@ -149,7 +147,7 @@ public class QuestStageKidnapping : QuestStage
 
         ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
 
-  var msg = new MessageDialogData(str, ans, true);
+        var msg = new MessageDialogData(str, ans, true);
         return msg;
     }
 
@@ -183,11 +181,11 @@ public class QuestStageKidnapping : QuestStage
         var power = player.Army.GetPower();
         var config = player.ReputationData.WorstFaction(ShipConfig.droid);
         var withBase = power > 25;
-        var playerEnemy = new PlayerAIWithBattleEvent("Kidnapping", true, EBattleType.baseDefence);
+        var playerEnemy = new PlayerAIWithBattleEvent("Kidnapping", true,new BattleTypeData(EBattleType.baseDefence));
         var army = ArmyCreator.CreateArmy(power, ArmyCreationMode.equalize, 2, 6, ArmyCreatorLibrary.GetArmy(config), withBase,
             playerEnemy);
         playerEnemy.Army.SetArmy(army);
-        return player;
+        return playerEnemy;
     }
 
     protected override void StageDispose()

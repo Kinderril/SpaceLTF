@@ -88,7 +88,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
 
 
             var mianAnswers = new List<AnswerDialogData>();
-            _reputation.AddReputation(_config, 8);
+//            _reputation.AddReputation(_config, 8);
             var mesData = new MessageDialogData(Namings.Format(Namings.DialogTag("navigation_shelterOk"), d), mianAnswers);
             mianAnswers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, null));
             return mesData;
@@ -104,7 +104,7 @@ public class BrokenNavigationMapEvent : BaseGlobalMapEvent
     {
         if (SkillWork(2, RepairLevel))
         {
-            _reputation.AddReputation(_config, 6);
+//            _reputation.AddReputation(_config, 6);
             var mianAnswers = new List<AnswerDialogData>();
             var mesData = new MessageDialogData(Namings.DialogTag("navigation_repairOk"), mianAnswers);
             if (MainController.Instance.MainPlayer.Army.CanAddShip())

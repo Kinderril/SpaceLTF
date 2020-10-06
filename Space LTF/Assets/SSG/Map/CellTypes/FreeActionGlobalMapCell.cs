@@ -15,21 +15,45 @@ public class FreeActionGlobalMapCell : GlobalMapCell
     [field: NonSerialized]
     public event Action<bool> OnQuestDialogChanges;
     public bool HaveQuest => _questData != null;
+    protected float _additionalPower = 0f;
+    protected float _collectedPower = 0f;
+    protected float _powerCoef = 1.001f;
 
-//    protected int _additionalPower;
-
+    private bool _bornArmy;
+    //    protected int _additionalPower;
+    public int Power
+    {
+        get;
+        private set;
+    }
     public FreeActionGlobalMapCell(int power, ShipConfig config, int id, int Xind, int Zind,
-        SectorData sector, GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn)
+        SectorData sector, GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn,bool bornArmy = true)
         : base(id, Xind, Zind, sector, config)
     {
+        _bornArmy = bornArmy;
         _powerPerTurn = powerPerTurn;
         _power = power;
         _enemiesArmyController = enemiesArmyController;
     }
 
+    private static bool _lockedInof = false;
+
     public void BornArmy()
     {
-        var army = new StandartMovingArmy(this,_enemiesArmyController.SimpleArmyDestroyed, _power,_enemiesArmyController, _powerPerTurn);
+#if UNITY_EDITOR
+        if (!_lockedInof)
+        {
+            _lockedInof = true;
+            Debug.LogError("Born army locked");
+        }
+        return;
+#endif
+        if (!_bornArmy)
+        {
+            return;
+        }
+        var army = new StandartMovingArmy(this,
+            _enemiesArmyController.SimpleArmyDestroyed, _power,_enemiesArmyController, _powerPerTurn);
         _enemiesArmyController.AddArmy(army);
     }
 
@@ -75,7 +99,8 @@ public class FreeActionGlobalMapCell : GlobalMapCell
         {
             return null;
         }
-        return _questData();
+        var dialog = _questData();
+        return dialog;
 //        var mesData = new MessageDialogData("Nothing here.", new List<AnswerDialogData>()
 //        {
 //            new AnswerDialogData("Ok",null),
@@ -91,6 +116,22 @@ public class FreeActionGlobalMapCell : GlobalMapCell
     public override bool OneTimeUsed()
     {
         return true;
+    }
+    public override void UpdateAdditionalPower(int additionalPower)
+    {
+        _additionalPower = additionalPower;
+        SubUpdatePower();
+    }
+
+    protected void SubUpdatePower()
+    {
+        Power = (int)((_power + _collectedPower + _additionalPower) * _powerCoef);
+    }
+
+    public override void UpdateCollectedPower(float powerDelta)
+    {
+        _collectedPower += powerDelta;
+        SubUpdatePower();
     }
 }
 

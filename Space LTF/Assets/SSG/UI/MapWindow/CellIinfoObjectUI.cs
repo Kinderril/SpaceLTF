@@ -45,6 +45,11 @@ public class CellIinfoObjectUI : MonoBehaviour
     {
         if (cell != null)
         {
+            if (cell.IsHide)
+            {
+                return;
+            }
+
             var isWithArmy = cell.CurMovingArmy != null;
             if (isWithArmy)
             {

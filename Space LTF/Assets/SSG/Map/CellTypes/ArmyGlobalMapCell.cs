@@ -9,7 +9,6 @@ public abstract class ArmyGlobalMapCell : GlobalMapCell
 {
     protected Player _enemyPlayer;
 
-    protected int _startPower;
 //    protected int _power;
     public virtual int Power
     {
@@ -19,6 +18,7 @@ public abstract class ArmyGlobalMapCell : GlobalMapCell
 
     protected float _additionalPower = 0f;
     protected float _collectedPower = 0f;
+    protected int _startPower;
     protected float _powerCoef = 1.001f;
 
 

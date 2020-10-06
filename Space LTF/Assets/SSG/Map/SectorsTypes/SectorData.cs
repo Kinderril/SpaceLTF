@@ -22,7 +22,7 @@ public class SectorData
     protected int _power;
     private bool _isVisited;
     public SectorCellContainer[,] Cells;
-    private float _powerPerTurn;
+    protected float _powerPerTurn;
     public HashSet<SectorCellContainer> ListCells = new HashSet<SectorCellContainer>();
 
     Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
@@ -32,11 +32,16 @@ public class SectorData
     public ShipConfig ShipConfig => _shipConfig;
     private Dictionary<GlobalMapEventType, int> _maxCount;
     protected DeleteWayDelegeate RemoveWayCallback;
-    private GalaxyEnemiesArmyController _enemiesArmyController;
+    protected GalaxyEnemiesArmyController _enemiesArmyController;
     public virtual bool AnyEvent => false;
 
+    protected bool _isHide = false;
+
+    public bool IsHide => _isHide;
+
+
     public SectorData(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-         ShipConfig shipConfig, int index, int xIndex, float powerPerTurn, 
+         ShipConfig shipConfig,  int xIndex, float powerPerTurn, 
          DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
     {
         _enemiesArmyController = enemiesArmyController;
@@ -62,6 +67,19 @@ public class SectorData
         }
     }
 
+    public void UnHide()
+    {
+//        Debug.LogError("sector data unhide");
+        _isHide = false;
+        foreach (var sectorCellContainer in ListCells)
+        {
+            if (sectorCellContainer.Data != null)
+            {
+                sectorCellContainer.Data.Unhide();
+            }
+        }
+    }
+
     public void ChangeSectorOwner(ShipConfig shipConfig)
     {
         _shipConfig = shipConfig;
@@ -70,6 +88,12 @@ public class SectorData
     public void MarkAsStart()
     {
         IsStart = true;
+    }
+
+    protected void AddWays(GlobalMapCell c1, GlobalMapCell c2)
+    {
+        c1.AddWay(c2);
+        c2.AddWay(c1);
     }
 
     public void SetCell(GlobalMapCell cell, int subSectotId)
@@ -201,6 +225,40 @@ public class SectorData
         }
 
         return false;
+    }
+
+    protected StartGlobalCell CreateStartCell(bool campCell = false, int act = 0,ShipConfig campConfig = ShipConfig.mercenary)
+    {
+
+        var zzStart = 0;
+        for (int i = 0; i < Size; i++)
+        {
+            for (int j = zzStart; j < Size + zzStart; j++)
+            {
+                var testCell = Cells[i, j];
+                if (testCell.Data is GlobalMapNothing)
+                {
+                    continue;
+                }
+                var indZ = StartZ + j;
+                var indX = StartX + i;
+                StartGlobalCell startCEll;
+                if (campCell)
+                {
+                    startCEll = new CampaingStartGlobalCell(999999, indX, indZ, this, campConfig, act);
+                }
+                else
+                {
+                    startCEll = new StartGlobalCell(999999, indX, indZ, this, ShipConfig);
+                }
+                var cellContainer = Cells[i, j];
+                cellContainer.SetData(startCEll);
+                ListCells.Add(cellContainer);
+                return startCEll;
+            }
+        }
+
+        return null;
     }
 
     public void RecalculateAllCells(int step)
@@ -349,6 +407,7 @@ public class SectorData
                 if (cell.Data != null)
                 {
                     countPopulated++;
+//                    Debug.LogError($"Set cell: {cell.indX}  {cell.indZ}");
                     cellInGalaxy.SetCell(cell.Data);
                 }
             }
@@ -459,5 +518,10 @@ public class SectorData
                 born.BornArmy();
             }
         }
+    }
+
+    public string IndexInfo()
+    {
+        return $"X:{StartX},Z:{StartZ}  Config:{ShipConfig.ToString()}";
     }
 }

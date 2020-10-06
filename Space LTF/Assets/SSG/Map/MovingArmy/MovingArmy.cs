@@ -9,9 +9,11 @@ public abstract class MovingArmy
     public GlobalMapCell CurCell;
     protected Player _player;
     private Action<MovingArmy> _destroyCallback;
+    protected Func<Action,MessageDialogData> _startDialog = null;
+    protected Func<MessageDialogData> _endDialog = null;
 
-//    [field: NonSerialized]
-//    public event Action<MovingArmy> OnDestroyed;
+    //    [field: NonSerialized]
+    //    public event Action<MovingArmy> OnDestroyed;
     protected bool _noStepNext;
     protected float _collectedPower = 0f;
     protected float _additionalPower = 0f;
@@ -64,6 +66,15 @@ public abstract class MovingArmy
     public GlobalMapCell NextCell()
     {
         return _armiesController.GetNextTarget(this);
+    }
+
+    public void SetStartDialog(Func<Action,MessageDialogData> startDialog)
+    {
+        _startDialog = startDialog;
+    } 
+    public void SetEndDialog(Func<MessageDialogData> endDialog)
+    {
+        _endDialog = endDialog;
     }
 
     public abstract GlobalMapCell FindCellToMove( HashSet<GlobalMapCell> posibleCells);
@@ -135,7 +146,7 @@ public abstract class MovingArmy
 //    }
     public abstract Player GetArmyToFight();
 
-    public abstract MessageDialogData GetDialog(Action FightMovingArmy);
+    public abstract MessageDialogData GetDialog(Action FightMovingArmy,MessageDialogData nextDialog);
 
     public abstract MessageDialogData MoverArmyLeaverEnd();
 

@@ -18,7 +18,6 @@ public class StartNewGameWithSafePlayer : StartNewGameData
 
     public override List<StartShipPilotData> CreateStartArmy(Player player)
     {
-//        var copy = _playerSafe.GetArmyCopy();
         return _playerSafe.Ships;
     }
     public override Player CreatePlayer()

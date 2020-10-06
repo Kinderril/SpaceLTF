@@ -8,7 +8,7 @@ public class QuestStartClearSectorFed1 : QuestStage
 {
 
     private GalaxyEnemiesArmyController _enemiesController;
-    private int _countOnStart = 0;
+    private int _countOnStart = 0;                                                                                                                    
     public QuestStartClearSectorFed1()
         : base(QuestsLib.QUEST_FED_CLEAR_SECTOR)
     {

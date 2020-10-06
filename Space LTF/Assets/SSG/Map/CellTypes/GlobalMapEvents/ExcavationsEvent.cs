@@ -113,7 +113,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
             new AnswerDialogData(Namings.Tag("Ok"), null,  Threaten),
         };
         BrokeShipWithRandom();
-        _reputation.RemoveReputation(_config, 5);
+//        _reputation.RemoveReputation(_config, 5);
         mesData = new MessageDialogData(Namings.Format(Namings.Tag("TheyHaveNothing"), moneyTotal), ans);
         return mesData;
     }
@@ -156,7 +156,7 @@ public class ExcavationsEvent : BaseGlobalMapEvent
         {
             var player = MainController.Instance.MainPlayer;
             var m = (int)((moneyTotal / 2f) * player.SafeLinks.CreditsCoef);
-            _reputation.AddReputation(_config, 5);
+//            _reputation.AddReputation(_config, 5);
             mesData = new MessageDialogData(Namings.Format(Namings.Tag("YourRartMoney"), m), ans);
             player.MoneyData.AddMoney(m);
         }

@@ -5,7 +5,7 @@
         var windwoMap = WindowManager.Instance.CurrentWindow as MapWindow;
         if (windwoMap != null)
         {
-            var sector = new SectorData(1, 1, 1, null, ShipConfig.federation, 1, 1, 0f, removeCallback,null);
+            var sector = new SectorData(1, 1, 1, null, ShipConfig.federation,  1, 0f, removeCallback,null);
             var cellEvent = new EventGlobalMapCell(type, Utils.GetId(), 1, 1, sector, 20, ShipConfig.mercenary);
             windwoMap.ActivateCellDialog(cellEvent);
         }

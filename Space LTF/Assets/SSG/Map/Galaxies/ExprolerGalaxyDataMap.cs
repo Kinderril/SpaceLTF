@@ -41,14 +41,14 @@ public class ExprolerGalaxyDataMap : GalaxyData
             default:
             case ExprolerCellMapType.normal:
                 startSector = new SectorExproler(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
-                    1, 0, powerPerTurn, to =>
+                     0, powerPerTurn, to =>
                     {
 
                     }, enemiesArmyController);
                 break;
             case ExprolerCellMapType.milatary:
                 startSector = new SectorExprolerMilitary(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
-                    1, 0, powerPerTurn, to =>
+                     0, powerPerTurn, to =>
                     {
 
                     }, enemiesArmyController);
@@ -57,12 +57,12 @@ public class ExprolerGalaxyDataMap : GalaxyData
             case ExprolerCellMapType.longType:
                 var zz = step;
                 startSector = new SectorExproler(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
-                    1, 0, powerPerTurn, to =>
+                     0, powerPerTurn, to =>
                     {
 
                     }, enemiesArmyController,true,false);
                 var secondSector = new SectorExproler(0, zz, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
-                        2, 0, powerPerTurn, to =>
+                         0, powerPerTurn, to =>
                         {
 
                         }, enemiesArmyController, false, true);

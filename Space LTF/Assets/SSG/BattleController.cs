@@ -72,14 +72,14 @@ public class BattleController : Singleton<BattleController>
     public AutoAICommander GreenAutoAICommander;
 
 
-    public void LaunchGame(Player greenSide, Player redSide, bool canRetire, EBattlefildEventType? eventType, EBattleType eBattleType)
+    public void LaunchGame(Player greenSide, Player redSide, bool canRetire, EBattlefildEventType? eventType, BattleTypeData eBattleType)
     {
         AICommander.Clear();
         _canRetire = canRetire;
         ActiveBullet.Clear();
         ActiveBulletKillers.Clear();
         PreLaunchGame(greenSide, redSide, eventType);
-        switch (eBattleType)
+        switch (eBattleType.EBattleType)
         {
             case EBattleType.defenceWaves:
                 _battleType = new WaveBattleType();
@@ -88,7 +88,10 @@ public class BattleController : Singleton<BattleController>
                 _battleType = new DestroyShipByTimeBattle();
                 break;
             case EBattleType.defenceOfShip:
-                _battleType = new DefenceShipBattle();
+                _battleType = new DefenceShipBattle(eBattleType);
+                break;   
+            case EBattleType.massiveFight:
+                _battleType = new MassiveBattle(eBattleType);
                 break;
             case EBattleType.baseDefence:
                 _battleType = new DefenceBaseEvent();

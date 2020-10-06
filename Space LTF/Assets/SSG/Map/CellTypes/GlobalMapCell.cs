@@ -9,6 +9,7 @@ public enum EBattleType
     defenceWaves,
     destroyShipPeriod,
     defenceOfShip,
+    massiveFight,
     baseDefence,
 
 }
@@ -29,6 +30,8 @@ public abstract class GlobalMapCell
     public int indZ;
     public bool InfoOpen;
     public bool IsDestroyed;
+    private bool _isHide = false;
+    public bool IsHide => _isHide;
     public bool LeavedDialogComplete = false;
     protected string name;
 
@@ -91,6 +94,7 @@ public abstract class GlobalMapCell
     [field: NonSerialized] public event Action<GlobalMapCell> OnUnconnect;
 
     [field: NonSerialized] public event Action<GlobalMapCell, bool> OnComplete;
+    [field: NonSerialized] public event Action<GlobalMapCell, bool> OnHide;
 
     public abstract string Desc();
 
@@ -105,7 +109,7 @@ public abstract class GlobalMapCell
         if (CurMovingArmy != null)
         {
             activateAnyway = true;
-            return DialogMovingArmy(CurMovingArmy);
+            return CurMovingArmy.GetDialog(FightMovingArmy,GetDialog());
         }
 
         var dialog = GetDialog();
@@ -120,9 +124,17 @@ public abstract class GlobalMapCell
         return dialog;
     }
 
-    private MessageDialogData DialogMovingArmy(MovingArmy army)
+
+    public void Unhide()
     {
-        return army.GetDialog(FightMovingArmy);
+        _isHide = false;
+        OnHide?.Invoke(this,_isHide);
+    }
+
+    public void Hide()
+    {
+        _isHide = true;
+        OnHide?.Invoke(this, _isHide);
     }
 
     public virtual bool CanGotFromIt(bool withAction)
@@ -259,6 +271,19 @@ public abstract class GlobalMapCell
     }
 
     public HashSet<GlobalMapCell> GetCurrentPosibleWays()
+    {
+        var ways = new HashSet<GlobalMapCell>();
+        foreach (var globalMapCell in _ways)
+        {
+            if (!globalMapCell.IsHide)
+            {
+                ways.Add(globalMapCell);
+            }
+        }
+        return ways;
+    }
+
+    public HashSet<GlobalMapCell> GetAllPosibleWays()
     {
         return _ways;
     }

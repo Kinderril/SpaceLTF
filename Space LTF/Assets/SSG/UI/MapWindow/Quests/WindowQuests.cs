@@ -38,7 +38,8 @@ public class WindowQuests : MonoBehaviour
         QuestContainerElement prefab = DataBaseController.Instance.DataStructPrefabs.QuestContainerElement;
         var elelemt = DataBaseController.GetItem(prefab);
         elelemt.transform.SetParent(Layout);
-        elelemt.Init(questContainer,Close);
+        elelemt.Init(questContainer,Close,this);
+        elelemt.transform.SetAsFirstSibling();
         _elelemtns.Add(elelemt);
         LayoutRebuilder.ForceRebuildLayoutImmediate(Layout);
     }
@@ -76,6 +77,13 @@ public class WindowQuests : MonoBehaviour
         gameObject.SetActive(true);
         Layout.gameObject.SetActive(false);
         StartCoroutine(RebuildCour());
+
+    }
+
+    public void QuestComlete(QuestContainerElement questContainerElement)
+    {
+        questContainerElement.transform.SetAsLastSibling();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(Layout);
 
     }
 }

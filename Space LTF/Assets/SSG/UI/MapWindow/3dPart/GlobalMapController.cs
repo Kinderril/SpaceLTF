@@ -110,11 +110,23 @@ public class GlobalMapController : MonoBehaviour
         {
             Debug.LogError($" _waysList visual :{_waysList.Count}    waysLogic:{list}");
         }
+
+        CheckObjectsOnHide();
+    }
+
+    private void CheckObjectsOnHide()
+    {
+
+        foreach (var logicToVisualObject in _logicToVisualObjects)
+        {
+            OnHide(logicToVisualObject.Key, !logicToVisualObject.Key.IsHide);
+        }
     }
 
     private void OnUpgrade(PlayerParameter obj)
     {
         UpdateLookAtAllMoverObjects();
+        UpdateHideAllMoverObjects();
         foreach (var logicToVisualObject in _logicToVisualObjects)
         {
             logicToVisualObject.Value.TryOpenBattleEvent();
@@ -133,7 +145,7 @@ public class GlobalMapController : MonoBehaviour
     {
         foreach (var globalMapCell in _data.GetAllList())
         {
-            var ways = globalMapCell.GetCurrentPosibleWays();
+            var ways = globalMapCell.GetAllPosibleWays();
             foreach (var target in ways)
             {
                 DrawWays(target, globalMapCell);
@@ -177,7 +189,16 @@ public class GlobalMapController : MonoBehaviour
         var army = DataBaseController.GetItem(prefab);
         army.transform.SetParent(MovingArmyContainer);
         _enemiesObjects.Add(arg1, army);
+        var player = MainController.Instance.MainPlayer;
         army.Init(this, start, arg1);
+        if (player.ReputationData.Allies.HasValue)
+        {
+            if (arg1.StartConfig == player.ReputationData.Allies.Value)
+            {
+                army.SetAllies();
+            }
+        }
+
     }
 
     private void OnAddMovingArmy(MovingArmy arg1, bool arg2)
@@ -258,7 +279,8 @@ public class GlobalMapController : MonoBehaviour
                 if (!(cell is GlobalMapNothing))
                 {
                     cellDrawed++;
-                    if (cell is StartGlobalCell) startCell = cell;
+//                    if (cell is StartGlobalCell)
+//                        startCell = cell;
                     var v = new Vector3(OffsetCell * i, 0, OffsetCell * j);
                     var cellObj = DataBaseController.GetItem(CellPrefab);
                     cellObj.transform.SetParent(PointsContainer, true);
@@ -267,7 +289,8 @@ public class GlobalMapController : MonoBehaviour
                     cellObj.Init(cell, OffsetCell);
                     _logicToVisualObjects.Add(cell, cellObj);
                     cellObj.Cell.OnDestoyedCell += OnDestoyedCell;
-//                    Debug.Log($"Add cell:{Time.frameCount}  {_logicToVisualObjects.Count}");
+                    cellObj.Cell.OnHide += OnHide;
+                    //                    Debug.Log($"Add cell:{Time.frameCount}  {_logicToVisualObjects.Count}");
                     _allCells[i, j] = cellObj;
                 }
             }
@@ -284,6 +307,45 @@ public class GlobalMapController : MonoBehaviour
         var waysToDestroy = _cellsWaysObjects[cell];
         foreach (var connector in waysToDestroy) connector.DestroyWay();
         cell.OnDestoyedCell -= OnDestoyedCell;
+        cell.OnHide -= OnHide;
+    }
+
+    private void HideWays(GlobalMapCell cell)
+    {
+//        Debug.LogError($"HideWays1:{cell.IsHide} ");
+        if (_cellsWaysObjects.TryGetValue(cell, out var waysToDestroy))
+        {
+//            Debug.LogError($"HideWays2:{cell.IsHide} ");
+            foreach (var connector in waysToDestroy)
+            {
+                connector.Hide();
+            }
+        }
+    }   
+    private void ShowWays(GlobalMapCell cell)
+    {
+//        Debug.LogError($"ShowWays1:{cell.IsHide} ");
+        if (_cellsWaysObjects.TryGetValue(cell, out var waysToDestroy))
+        {
+//            Debug.LogError($"ShowWays2:{cell.IsHide} ");
+            foreach (var connector in waysToDestroy)
+            {
+                connector.Show();
+            }
+        }
+    }
+
+    private void OnHide(GlobalMapCell cell,bool enable)
+    {
+        if (cell.IsHide)
+        {
+            HideWays(cell);
+        }
+        else
+        {
+            UpdateHideAllMoverObjects();
+            ShowWays(cell);
+        }
     }
 
 //    private void RecursuveDrawWays(GalaxyData sector, GlobalMapCell currentCell, HashSet<GlobalMapCell> usedCells)
@@ -335,7 +397,7 @@ public class GlobalMapController : MonoBehaviour
             cells = new HashSet<GlobalMapCell>();
             if (cells.Contains(to))
             {
-                Debug.LogError($"draw second time {from.Id} to {to.Id}");
+//                Debug.LogError($"draw second time {from.Id} to {to.Id}");
                 return false;
             }
             cells.Add(to);
@@ -345,7 +407,7 @@ public class GlobalMapController : MonoBehaviour
         {
             if (cells.Contains(to))
             {
-                Debug.LogError($"draw second time {from.Id} to {to.Id}");
+//                Debug.LogError($"draw second time {from.Id} to {to.Id}");
                 return false;
             }
             cells.Add(to);
@@ -384,7 +446,10 @@ public class GlobalMapController : MonoBehaviour
                 {
                     var cell = _allCells[i, j];
                     if (cell != null)
+                    {
+                        cell.Cell.OnHide -= OnHide;
                         cell.Cell.OnDestoyedCell -= OnDestoyedCell;
+                    }
                 }
             }
         }
@@ -404,6 +469,7 @@ public class GlobalMapController : MonoBehaviour
         var armies = player.MapData.GalaxyData.GalaxyEnemiesArmyController;
         armies.CacheTargets(CellHaveObject);
         UpdateLookAtAllMoverObjects();
+        UpdateHideAllMoverObjects();
     }
 
     private void UpdateLookAtAllMoverObjects()
@@ -414,11 +480,20 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
+    private void UpdateHideAllMoverObjects()
+    {
+        foreach (var moverObjet in _enemiesObjects)
+        {
+            moverObjet.Value.UpdateCurHideCell();
+        }
+    }
+
     public void SingleReset(GlobalMapCell currentCell, HashSet<GlobalMapCell> posibleWays)
     {
         if (_data == null) return;
         //        var cells = _data.AllCells();
         for (var i = 0; i < _data.SizeX; i++)
+        {
             for (var j = 0; j < _data.SizeZ; j++)
             {
                 var cell = _allCells[i, j];
@@ -430,16 +505,19 @@ public class GlobalMapController : MonoBehaviour
                     cell.SetIAmHere(iamhere);
                 }
             }
+        }
 
         MapMoverObject.Init(myCEll);
         var connectd = 0;
         if (myCEll != null)
+        {
             foreach (var globalMapCell in posibleWays)
             {
                 var canDraw = !(globalMapCell is GlobalMapNothing) && !globalMapCell.IsDestroyed;
                 if (canDraw)
                     DrawConnecttion(myCEll, globalMapCell, ref connectd);
             }
+        }
     }
 
     private void DrawConnecttion(GlobalMapCellObject myCEll, GlobalMapCell globalMapCell, ref int connectd)

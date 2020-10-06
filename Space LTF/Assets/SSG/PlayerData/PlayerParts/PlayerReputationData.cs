@@ -4,6 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void ReputationChangeDelegate(ShipConfig config, int curVal, int delta);
+public delegate void ReputationNewRankDelegate(ShipConfig config, EReputationAlliesRank rank);
+
+public enum EReputationAlliesRank
+{
+    rank1,
+    rank2,
+    rank3,
+    rank4,
+    rank5,
+}
 
 public enum EReputationStatus
 {
@@ -26,11 +36,23 @@ public class PlayerReputationData
     public Dictionary<ShipConfig, int> ReputationFaction = new Dictionary<ShipConfig, int>();
     public Dictionary<ShipConfig, List<ShipConfig>> Enemies = new Dictionary<ShipConfig, List<ShipConfig>>();
 
+    private ShipConfig? _allies = null;
+    public ShipConfig? Allies => _allies;
+    private EReputationAlliesRank _alliesRank = EReputationAlliesRank.rank1;
+    public EReputationAlliesRank AlliesRank => _alliesRank;
+
+
 
     [field: NonSerialized]
-    public event ReputationChangeDelegate OnReputationNationChange;
+    public event ReputationChangeDelegate OnReputationNationChange;         
+    [field: NonSerialized]
+    public event ReputationNewRankDelegate OnReputationRankChange;
 
     public PlayerReputationData()
+    {
+
+    }
+    public void Init()
     {
 #if UNITY_EDITOR
         //        MoneyCount = 1000;
@@ -49,7 +71,9 @@ public class PlayerReputationData
         Enemies.Add(ShipConfig.mercenary, new List<ShipConfig>() { ShipConfig.federation, ShipConfig.raiders });
         Enemies.Add(ShipConfig.raiders, new List<ShipConfig>() { ShipConfig.krios, ShipConfig.ocrons });
         Enemies.Add(ShipConfig.droid, new List<ShipConfig>());
+
     }
+
 
     public bool IsFriend(ShipConfig config)
     {
@@ -68,7 +92,7 @@ public class PlayerReputationData
             return EReputationStatus.enemy;
         }
 
-        if (val < 0)
+        if (val < -10)
         {
             return EReputationStatus.negative;
         }
@@ -83,6 +107,7 @@ public class PlayerReputationData
     public void AddReputation(ShipConfig config, int val)
     {
         var old = ReputationFaction[config];
+//        Debug.LogError($"add {config.ToString()}   val:{val}");
         var sum = old + val;
         var clampedVal = Mathf.Clamp(sum, MIN_REP, MAX_REP);
         ReputationFaction[config] = clampedVal;
@@ -90,11 +115,43 @@ public class PlayerReputationData
         if (delta > 0)
         {
             MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("ReputationChanges"), old, clampedVal, Namings.ShipConfig(config)));
-            if (OnReputationNationChange != null)
-            {
-                OnReputationNationChange(config, val, delta);
-            }
+            OnReputationNationChange?.Invoke(config, val, delta);
         }
+
+        if (_allies.HasValue && config == _allies.Value)
+        {
+            CheckAlliesRank();
+        }
+    }
+
+    private void CheckAlliesRank()
+    {
+        if (!_allies.HasValue)
+        {
+            return;
+        }
+        var val = ReputationFaction[_allies.Value];
+        if (val > 80 && _alliesRank < EReputationAlliesRank.rank5)
+        {
+            _alliesRank = EReputationAlliesRank.rank5;
+        }
+        else if (val > 60 && _alliesRank < EReputationAlliesRank.rank4)
+        {
+            _alliesRank = EReputationAlliesRank.rank4;
+
+        }
+        else if (val > 40 && _alliesRank < EReputationAlliesRank.rank3)
+        {
+            _alliesRank = EReputationAlliesRank.rank3;
+
+        }
+        else if (val > 20 && _alliesRank < EReputationAlliesRank.rank2)
+        {
+            _alliesRank = EReputationAlliesRank.rank2;
+
+        }
+        OnReputationRankChange?.Invoke(_allies.Value,_alliesRank);
+
     }
 
 
@@ -108,11 +165,9 @@ public class PlayerReputationData
         if (delta > 0)
         {
             MainController.Instance.MainPlayer.MessagesToConsole.AddMsg(Namings.Format(Namings.Tag("ReputationChanges"), old, clampedVal, Namings.ShipConfig(config)));
-            if (OnReputationNationChange != null)
-            {
-                OnReputationNationChange(config, val, delta);
-            }
+            OnReputationNationChange?.Invoke(config, val, delta);
         }
+//        Debug.LogError($"remove {config.ToString()}   val:{val}");
     }
 
     public int ModifBuyValue(ShipConfig config, int val)
@@ -140,15 +195,12 @@ public class PlayerReputationData
 
     public void WinBattleAgainst(ShipConfig config, float coef = 1f)
     {
-        RemoveReputation(config, (int)(Library.BATTLE_REPUTATION_AFTER_FIGHT * coef));
-        if (MyExtensions.IsTrueEqual())
+        RemoveReputation(config, (int)(Library.BATTLE_REPUTATION_AFTER_REMOVE * coef));
+
+        var enemy = Enemies[config];
+        foreach (var shipConfig in enemy)
         {
-            var enemy = Enemies[config];
-            if (enemy.Count > 0)
-            {
-                ShipConfig repToAdd = enemy.RandomElement();
-                AddReputation(repToAdd, (int)(Library.BATTLE_REPUTATION_AFTER_FIGHT * 2 * coef));
-            }
+            AddReputation(shipConfig, (int)(Library.BATTLE_REPUTATION_AFTER_FIGHT * coef));
         }
     }
 
@@ -234,6 +286,24 @@ public class PlayerReputationData
 
         shipConfig = ShipConfig.droid;
         return false;
+    }
+
+    public void ClearEvents()
+    {
+        OnReputationNationChange = null;
+    }
+
+    public bool IsAllies(ShipConfig startConfig)
+    {
+#if UNITY_EDITOR
+//        return true;
+#endif
+        return (_allies.HasValue && _allies.Value == startConfig);
+    }
+
+    public void SetAllies(ShipConfig allies)
+    {
+        _allies = allies;
     }
 }
 

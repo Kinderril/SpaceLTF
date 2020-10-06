@@ -23,7 +23,7 @@ public class AdvTutorialGalaxyData : GalaxyData
         var sectors = new SectorTutorialAdvanced[_sectorsCount, verticalCount];
         var startSector = sectors[0, 0];
         startSector= new SectorTutorialAdvanced(0, 0, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), playerShipConfig,
-            1,0,1, to =>
+            0,1, to =>
             {
 
             },enemiesArmyController);

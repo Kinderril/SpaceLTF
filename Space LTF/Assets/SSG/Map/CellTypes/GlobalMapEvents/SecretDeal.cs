@@ -93,12 +93,12 @@ public class SecretDeal : BaseGlobalMapEvent
     private MessageDialogData tryRunWithCoef(int coef, string add)
     {
         var mianAnswers = new List<AnswerDialogData>();
-        var absCoef = Mathf.Abs(coef);
-        if (absCoef > 0)
-        {
-            _reputation.RemoveReputation(_config, 10 * absCoef);
-            _reputation.RemoveReputation(_secondSide, 10 * absCoef);
-        }
+//        var absCoef = Mathf.Abs(coef);
+//        if (absCoef > 0)
+//        {
+//            _reputation.RemoveReputation(_config, 10 * absCoef);
+//            _reputation.RemoveReputation(_secondSide, 10 * absCoef);
+//        }
 
         if (SkillWork(2, ScoutsLevel + coef))
         {

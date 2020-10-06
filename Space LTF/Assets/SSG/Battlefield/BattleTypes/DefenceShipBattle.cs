@@ -8,10 +8,12 @@ public class DefenceShipBattle : BattleTypeEvent
     private bool _isShipDead = false;
 
     public override bool HaveActiveTime => false;
-    public DefenceShipBattle()
+    private BattleTypeData _eBattleType;
+    public DefenceShipBattle(BattleTypeData eBattleType)
         : base(Namings.Tag("defendMarkedShip"))
     {
-    }
+        _eBattleType = eBattleType;
+    }     
     public override void Init(BattleController battle)
     {
         base.Init(battle);

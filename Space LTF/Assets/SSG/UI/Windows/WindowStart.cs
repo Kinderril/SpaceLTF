@@ -41,9 +41,19 @@ public class WindowStart : BaseWindow
         base.Init();
     }
 
+    public void OnClickNewChampaing()
+    {
+        StartNewChampaing();
+    }
+
+    private void StartNewChampaing()
+    {
+        MainController.Instance.Campaing.PlayerNewGame();
+    }
+
     public void OnClickNewGame()
     {
-        StartNewGame();
+        StartNewSandBoxGame();
     }
     public void OnClickAchievements()
     {
@@ -64,7 +74,7 @@ public class WindowStart : BaseWindow
             return MainController.Instance.Statistics.AllTimeCollectedPoints >= PlayerStatistics.TUTORIAL_POINTS;
     }
 
-    private void StartNewGame()
+    private void StartNewSandBoxGame()
     {
         bool haveTutor = HaveTutor();
 
@@ -102,7 +112,7 @@ public class WindowStart : BaseWindow
 
     public void OnClickLoad()
     {
-        if (MainController.Instance.TryLoadPlayer())
+        if (MainController.Instance.TryLoadPlayerSandBox())
         {
             WindowManager.Instance.OpenWindow(MainState.map);
         }

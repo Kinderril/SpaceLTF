@@ -100,6 +100,11 @@ public class SectorGlobalMapInfo : MonoBehaviour
     }
     public void Select()
     {
+        if (_sector.IsHide)
+        {
+            return;
+        }
+
         UpdateField();
         MainGo.gameObject.SetActive(true);
         CloseEffect.enabled = false;

@@ -14,9 +14,9 @@ public class SectorExproler : SectorExprolerData
     private bool _withStart = true;
     private bool _withEnd = true;
     public SectorExproler(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
-        ShipConfig shipConfig, int index, int xIndex, float powerPerTurn
+        ShipConfig shipConfig, int xIndex, float powerPerTurn
         , DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController, bool withStart = true, bool withEnd = true)
-        : base(startX, startZ, size, maxCountEvents, shipConfig, index, xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
+        : base(startX, startZ, size, maxCountEvents, shipConfig,  xIndex, powerPerTurn, removeWayCallback, enemiesArmyController)
     {
         _withStart = withStart;
         _withEnd = withEnd;
@@ -29,7 +29,7 @@ public class SectorExproler : SectorExprolerData
     protected override void PrePopulate()
     {
         if (_withStart)
-            _startGlobalCell = CreateStart();
+            _startGlobalCell = CreateStartCell();
         if (_withEnd)
             CreateEnd();
     }

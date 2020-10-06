@@ -27,6 +27,8 @@ public enum MainState
     exprolerModeGlobalMap = 18,
     exprolerModeStart = 19,
     //    loading,
+    startNewChampaing = 20,
+    campaingEndAct = 21,
 }
 
 [Serializable]
@@ -66,12 +68,15 @@ public class WindowManager : Singleton<WindowManager>
     public Transform TopPanel;
     public MapSettingsWindow WindowSettings;
     public AudioSource UiAudioSource;
+//    public Animator Animator;
+//    public CanvasGroup AnimatorCanvas;
 
 
     public BaseWindow CurrentWindow => currentWindow;
 
     public void Init()
     {
+//        AnimatorCanvas.alpha = 0f;
         WindowSettings.gameObject.SetActive(false);
         LoadingScreen.gameObject.SetActive(false);
         foreach (var window in windows)
@@ -194,6 +199,7 @@ public class WindowManager : Singleton<WindowManager>
     private async Task OpenWindowTask<T>(T obj, BaseWindow windowToLoad)
     {
         bool withLOadWindow = windowToLoad.WithLoadWindow;
+//        Animator.SetTrigger("Play");
         if (withLOadWindow)
         {
             LoadingScreen.gameObject.SetActive(true);
