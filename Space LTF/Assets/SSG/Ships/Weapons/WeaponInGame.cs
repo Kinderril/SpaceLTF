@@ -150,7 +150,7 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         }
     }
 
-    public virtual void ApplyToShip(ShipParameters shipParameters, ShipBase shipBase, Bullet bullet)
+    public void ApplyToShip(ShipParameters shipParameters, ShipBase shipBase, Bullet bullet)
     {
         AffectTotal(shipParameters, shipBase, bullet, new WeaponAffectionAdditionalParams());
     }
@@ -438,10 +438,10 @@ public abstract class WeaponInGame : IWeapon, IAffectable, IAffectParameters
         ShootPos = transform.BulletOut;
     }
 
-    public void AddAffectTargtAction(AffectTargetDelegate affectTarget)
-    {
-        AffectAction.Add(affectTarget);
-    }
+//    public void AddAffectTargtAction(AffectTargetDelegate affectTarget)
+//    {
+//        AffectAction.Add(affectTarget);
+//    }
 
     public void CacheAngCos()
     {

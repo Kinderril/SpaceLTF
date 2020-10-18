@@ -17,7 +17,7 @@ public class AICommander : IAICommander
         }
         _mainShip = new AICommanderMainShip(_shipControl);
         var spellTmp = new List<BaseAISpell>();
-        foreach (var baseSpellModulInv in _shipControl.ShipInventory.SpellsModuls)
+        foreach (var baseSpellModulInv in _shipControl.ShipInventory.SpellsModuls.GetNonNullActiveSlots())
         {
             if (baseSpellModulInv != null)
             {

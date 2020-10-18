@@ -6,10 +6,7 @@ public class WeaponPushModul : BaseSupportModul
     {
     }
 
-    protected override bool AffectTargetImplement
-    {
-        get { return true; }
-    }
+    protected override bool AffectTargetImplement => true;
 
     protected void AffectTargetDelegate(ShipParameters paramsTargte, ShipBase ship, Bullet bullet, DamageDoneDelegate doneDelegate, WeaponAffectionAdditionalParams additional)
     {

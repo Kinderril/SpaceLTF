@@ -48,6 +48,15 @@ public class ShipModulsInventory
         return slots;
     }
 
+    public bool IsSlotFree(int preferableIndex)
+    {
+        if (preferableIndex < SimpleModulsCount)
+        {
+            var m = _simpleModuls[preferableIndex];
+            return (m == null);
+        }
+        return false;
+    }
     public void AddSlots(DragItemType type)
     {
         _additionalSlost = Mathf.Clamp(_additionalSlost + 1, 0, 90);
@@ -133,6 +142,28 @@ public class ShipModulsInventory
             }
         }
         return false;
+    }
+
+    public IItemInv Get(int i)
+    {
+        if (_simpleModuls == null)
+        {
+            return null;
+        }
+        return _simpleModuls[i];
+    }
+
+    public int GetItemIndex(IItemInv item)
+    {
+        for (int i = 0; i < SimpleModulsCount; i++)
+        {
+            var m = _simpleModuls[i];
+            if (m!=null && m == item)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 

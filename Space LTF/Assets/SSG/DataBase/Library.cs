@@ -688,7 +688,7 @@ public static class Library
                       BASE_WEAPON_VALUE + (weaponsModul.Level - 1) * WEAPON_LEVEL_COEF) +
                   ship.Moduls.GetNonNullActiveSlots().Sum(simple =>
                       BASE_SIMPLE_MODUL_VALUE + (simple.Level - 1) * BASE_SIMPLE_MODUL_VALUE_UPGRADE) +
-                  ship.SpellsModuls.Where(spell => spell != null)
+                  ship.SpellsModuls.GetNonNullActiveSlots()
                       .Sum(spell => BASE_SPELL_VALUE + +(spell.Level - 1) * BASE_SPELL_VALUE_LEVEL);
         //        float shipCoef = ShipPowerCoef(ship.ShipType);
         //        var t = sum*shipCoef + BASE_SHIP_VALUE;

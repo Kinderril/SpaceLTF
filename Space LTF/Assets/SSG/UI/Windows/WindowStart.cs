@@ -11,11 +11,13 @@ public class WindowStart : BaseWindow
     public GameObject TutorAdditional;
     public TutorButtonsStart TutorButtonsStart;
     public TutorButtonsStart ButtonOpenNewGame;
+    public CampLoadContainer CampLoader;
     public override void Init()
     {
         DemoField.gameObject.SetActive(true);
         CamerasController.Instance.MusicControl.StartMenuAudio();
         var mainTxt = Namings.Tag("DemoStart");
+        CampLoader.OnCloseClick();
 
         AchievementsButton.interactable = (true);
 //#if UNITY_EDITOR || Develop
@@ -108,6 +110,11 @@ public class WindowStart : BaseWindow
     {
         ButtonOpenNewGame.Init();
 //        TutorButtonsStart.gameObject.transform.position = TutorAdditional.transform.position;
+    }
+
+    public void OnClickLoadCamp()
+    {
+        CampLoader.Init();
     }
 
     public void OnClickLoad()

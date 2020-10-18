@@ -120,7 +120,7 @@ public class DebugShipInShop : MonoBehaviour
             var msg = (sm == null)?"null": sm.GetInfo();
             CreatAndText(msg, LayoutWeapons);
         }
-        foreach (var sm in _shipInv.SpellsModuls)
+        foreach (var sm in _shipInv.SpellsModuls.GetNonNullActiveSlots())
         {
             var msg = (sm == null) ? "null" : sm.GetInfo();
             CreatAndText(msg, LayoutSpells);

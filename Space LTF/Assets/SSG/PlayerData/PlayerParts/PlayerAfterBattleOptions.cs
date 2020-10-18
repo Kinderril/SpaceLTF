@@ -200,7 +200,7 @@ public class PlayerAfterBattleOptions
             player.Army.Army.FirstOrDefault(x => x.Ship.ShipType == ShipType.Base);
         if (ship != null)
         {
-            var spell = ship.Ship.SpellsModuls.Where(x => x != null).ToList().RandomElement();
+            var spell = ship.Ship.SpellsModuls.GetNonNullActiveSlots().RandomElement();
             if (spell.Upgrade(ESpellUpgradeType.None))
             {
                 msg = Namings.Format(Namings.DialogTag("afterBattleUpgradeSpellOk"), spell.Name);

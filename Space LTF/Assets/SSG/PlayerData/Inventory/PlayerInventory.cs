@@ -92,6 +92,65 @@ public class PlayerInventory : IInventory
         return false;
 
     }
+    public int GetItemIndex(IItemInv item)
+    {
+        switch (item.ItemType)
+        {
+            case ItemType.weapon:
+                return GetIndex(Weapons,item);
+            case ItemType.modul:
+                return GetIndex(Moduls,item);
+            case ItemType.spell:
+                return GetIndex(Spells,item);
+            default:
+            case ItemType.cocpit:
+            case ItemType.engine:
+            case ItemType.wings:
+                return 0;
+        }
+    }
+
+    public bool IsSlotFree(int preferableIndex, ItemType type)
+    {
+        switch (type)
+        {
+            case ItemType.weapon:
+                return IsFree(Weapons,preferableIndex);
+            case ItemType.modul:
+                return IsFree(Moduls, preferableIndex);
+            case ItemType.spell:
+                return IsFree(Spells, preferableIndex);
+            default:
+            case ItemType.cocpit:
+            case ItemType.engine:
+            case ItemType.wings:
+                return false;
+        }
+    }
+
+    private bool IsFree<T>(List<T> list,int index)
+    {
+        if (index < list.Count)
+        {
+            var s = list[index];
+            return s == null;
+        }
+
+        return false;
+    }  
+    private int GetIndex<T>(List<T> list,IItemInv item) where T : IItemInv
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            var p1 = list[i] as IItemInv;
+            if (p1 != null && p1 == item)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
 
     public List<IItemInv> GetAllItems()
     {

@@ -45,8 +45,10 @@ public static class InventoryOperation
                     Debug.LogError("transfer item error");
                 }
                 TryItemTransfered(oldInv2, item1, b1 =>
-                    { callback(b); },false);
-            },false);
+                {
+                    callback(b);
+                },-1,false);
+            }, -1,false);
             return;
         }
         callback(false);
@@ -77,10 +79,11 @@ public static class InventoryOperation
         }
     }
 
-    public static void TryItemTransfered(IInventory to, IItemInv item, Action<bool> callback,bool withRemove = true)
+    public static void TryItemTransfered(IInventory to, IItemInv item, Action<bool> callback,int preferableIndex,bool withRemove = true)
     {
         IInventory from = item.CurrentInventory;
         int index;
+        bool haveSlot = false;
         switch (item.ItemType)
         {
             case ItemType.engine:
@@ -121,7 +124,16 @@ public static class InventoryOperation
                 break;
             case ItemType.weapon:
                 var w = item as WeaponInv;
-                if (to.GetFreeWeaponSlot(out index))
+                if (to.IsSlotFree(preferableIndex, ItemType.weapon))
+                {
+                    haveSlot = true;
+                    index = preferableIndex;
+                }
+                else
+                {
+                    haveSlot = to.GetFreeWeaponSlot(out index);
+                }
+                if (haveSlot)
                 {
                     CanDo(() =>
                     {
@@ -149,7 +161,17 @@ public static class InventoryOperation
                 break;
             case ItemType.modul:
                 var m = item as BaseModulInv;
-                if (to.GetFreeSimpleSlot(out index))
+                if (to.IsSlotFree(preferableIndex, ItemType.modul))
+                {
+                    haveSlot = true;
+                    index = preferableIndex;
+                }
+                else
+                {
+                    haveSlot = to.GetFreeSimpleSlot(out index);
+                }
+
+                if (haveSlot)
                 {
                     CanDo(() =>
                     {
@@ -176,8 +198,18 @@ public static class InventoryOperation
                 }
                 break;
             case ItemType.spell:
+                if (to.IsSlotFree(preferableIndex, ItemType.spell))
+                {
+                    haveSlot = true;
+                    index = preferableIndex;
+                }
+                else
+                {
+                    haveSlot = to.GetFreeSpellSlot(out index);
+                }
+
                 var s = item as BaseSpellModulInv;
-                if (to.GetFreeSpellSlot(out index))
+                if (haveSlot)
                 {
                     CanDo(() =>
                     {
@@ -431,5 +463,42 @@ public static class InventoryOperation
 
 
         CallbackSuccsess();
+    }
+
+    public static void TryItemChnageIndex(IInventory inventory, IItemInv item, Action<bool> callback, int index)
+    {
+        if (inventory.IsSlotFree(index, item.ItemType))
+        {
+            switch (item.ItemType)
+            {
+                case ItemType.weapon:
+                    if (inventory.RemoveWeaponModul(item as WeaponInv))
+                    {
+                        inventory.TryAddWeaponModul(item as WeaponInv, index);
+                        callback(true);
+                        return;
+                    }
+                    break;
+                case ItemType.modul:
+                    if (inventory.RemoveSimpleModul(item as BaseModulInv))
+                    {
+                        inventory.TryAddSimpleModul(item as BaseModulInv, index);
+                        callback(true);
+                        return;
+                    }
+                    break;
+                case ItemType.spell:
+                    if (inventory.RemoveSpellModul(item as BaseSpellModulInv))
+                    {
+                        inventory.TryAddSpellModul(item as BaseSpellModulInv, index);
+                        callback(true);
+                        return;
+                    }
+                    break;
+            }
+        }
+
+        callback(false);
+
     }
 }

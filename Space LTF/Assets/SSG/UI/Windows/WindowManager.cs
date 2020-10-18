@@ -76,7 +76,8 @@ public class WindowManager : Singleton<WindowManager>
 
     public void Init()
     {
-//        AnimatorCanvas.alpha = 0f;
+        //        AnimatorCanvas.alpha = 0f;
+        WindowSettings.SaveWindow.OnCloseClick();
         WindowSettings.gameObject.SetActive(false);
         LoadingScreen.gameObject.SetActive(false);
         foreach (var window in windows)

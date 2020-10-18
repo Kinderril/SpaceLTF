@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class WindowChampaing : BaseWindow
 {
     public DialogWindow Dialog;
-    private PlayerChampaing _playerChampaing;
+    private PlayerChampaingContainer _playerChampaingContainer;
     public TextMeshProUGUI Field;
     public GameObject ScrollContent;
     public GameObject ScrollContainer;
@@ -28,8 +28,8 @@ public class WindowChampaing : BaseWindow
         base.Init(obj);
         Dialog.gameObject.SetActive(false);
         ScrollContent.gameObject.SetActive(true);
-        _playerChampaing = obj as PlayerChampaing;
-        Field.text = _playerChampaing.GetActDesc();
+        _playerChampaingContainer = obj as PlayerChampaingContainer;
+        Field.text = _playerChampaingContainer.GetActDesc();
     }
 
 //    public void RefreshPosition()
@@ -55,7 +55,7 @@ public class WindowChampaing : BaseWindow
 
     public void OnClickClose()
     {
-        var startDialog = _playerChampaing.Dialog();
+        var startDialog = _playerChampaingContainer.Dialog();
         if (startDialog != null)
         {
             ScrollContent.gameObject.SetActive(false);
@@ -71,7 +71,7 @@ public class WindowChampaing : BaseWindow
     private void ContinueAct()
     {
 
-        _playerChampaing.PlayNextAct();
+        _playerChampaingContainer.PlayNextAct();
     }
 
     private void DialogEnds(bool shallcompletecell, bool shallreturntolastcell)

@@ -70,6 +70,8 @@ public class ShipParameters : IShipAffectableParams
 
     public event ParameterChange OnHealthChanged;
     public BaseSpellModulInv[] Spells = new BaseSpellModulInv[0];
+
+    public OnlyModulsInventory[] SubSpellModuls = new OnlyModulsInventory[0];
     //    private int ShipId;
     private Action _deathCallback;
     private ShipBase _shipOwner;
@@ -78,10 +80,11 @@ public class ShipParameters : IShipAffectableParams
 
     public IStartShipParams StartParams;
 
-    public ShipParameters(IStartShipParams startParams, BaseSpellModulInv[] spells,
+    public ShipParameters(IStartShipParams startParams, BaseSpellModulInv[] spells,OnlyModulsInventory[] subSpellModuls,
         Action dealthCallback, int id, ShipBase shipOwner, Collider shieldCollider, IPilotParameters pilotParams)
     {
         _shipOwner = shipOwner;
+        SubSpellModuls = subSpellModuls;
         Spells = spells;
         StartParams = startParams;
 

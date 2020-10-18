@@ -188,7 +188,7 @@ public class ShipBase : MovingObject
             Debug.LogError("can't find shield collider");
         }
         SelectedElement.gameObject.transform.position = ShieldCollider.gameObject.transform.position;
-        ShipParameters = new ShipParameters(shipInventory, shipInventory.SpellsModuls,
+        ShipParameters = new ShipParameters(shipInventory, shipInventory.SpellsModuls.GetAsCopyArray(),shipInventory.SpellConnectedModules,
             Death, Id, this, ShieldCollider, pilotParams);
         WeaponsController = new WeaponsController(WeaponPosition, this,
             shipInventory.WeaponsModuls.GetNonNullActiveSlots(), shipInventory.Moduls.GetNonNullActiveSlots());

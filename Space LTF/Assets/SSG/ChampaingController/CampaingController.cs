@@ -3,29 +3,46 @@ using System.Collections;
 
 public class CampaingController
 {
-    public PlayerChampaing PlayerChampaing;
+    public PlayerChampaingContainer PlayerChampaingContainer;
+    public CampaingLoader CampaingLoader = new CampaingLoader();
 
-    public void Load(int field)
+    public void Load(PlayerChampaingContainer loadPlayer)
     {
-
+        PlayerChampaingContainer = loadPlayer;
+        MainController.Instance.TryLoadCamp(loadPlayer);
     }
 
+    public bool SaveGame(string name)
+    {
+        if (PlayerChampaingContainer == null)
+        {
+            Debug.LogError("can't save null profile");
+            return false;
+        }
+        return CampaingLoader.SaveTo(name, PlayerChampaingContainer);
+    }
+
+    public void DeleteSave(string name)
+    {
+        CampaingLoader.DeleteSave(name);
+
+    }
     public void PlayerNewGame()
     {
-        var playerChampaing = new PlayerChampaing();
-        PlayerChampaing = playerChampaing;
-        WindowManager.Instance.OpenWindow(MainState.startNewChampaing, PlayerChampaing);
+        var playerChampaing = new PlayerChampaingContainer();
+        PlayerChampaingContainer = playerChampaing;
+        WindowManager.Instance.OpenWindow(MainState.startNewChampaing, PlayerChampaingContainer);
     }
 
     public void DebugNewChamp(int act)
     {
         ShipConfig cfg = ShipConfig.ocrons;
-        var playerChampaing = new PlayerChampaing();
-        PlayerChampaing = playerChampaing;
-        PlayerChampaing.StartNewGame(cfg, EStartGameDifficulty.Normal);
-        PlayerChampaing.DebugSetAct(act);
-        PlayerChampaing.PlayNextAct();
-        PlayerChampaing.Player.ReputationData.SetAllies(cfg);
+        var playerChampaing = new PlayerChampaingContainer();
+        PlayerChampaingContainer = playerChampaing;
+        PlayerChampaingContainer.StartNewGame(cfg, EStartGameDifficulty.Normal);
+        PlayerChampaingContainer.DebugSetAct(act);
+        PlayerChampaingContainer.PlayNextAct();
+        PlayerChampaingContainer.Player.ReputationData.SetAllies(cfg);
         switch (act)
         {
 //            case 1:

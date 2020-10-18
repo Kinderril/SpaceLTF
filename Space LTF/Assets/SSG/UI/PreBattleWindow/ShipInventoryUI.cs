@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -178,7 +179,7 @@ public class ShipInventoryUI : DragZone
         {
             var weaponSlot = InventoryOperation.GetDragableItemSlot();
             allslots.Add(weaponSlot);
-            weaponSlot.Init(_shipInventory, true);
+            weaponSlot.Init(_shipInventory, true,i);
             weaponSlot.transform.SetParent(WeaponsLayout, false);
             weaponSlot.DragItemType = DragItemType.weapon;
         }
@@ -186,7 +187,7 @@ public class ShipInventoryUI : DragZone
         {
             var itemSlot = InventoryOperation.GetDragableItemSlot();
             allslots.Add(itemSlot);
-            itemSlot.Init(_shipInventory, true);
+            itemSlot.Init(_shipInventory, true,i);
             itemSlot.transform.SetParent(ModulsLayout, false);
             itemSlot.DragItemType = DragItemType.modul;
         }
@@ -213,7 +214,8 @@ public class ShipInventoryUI : DragZone
     private void AddModulSlot(DragItemType type)
     {
         var itemSlot = InventoryOperation.GetDragableItemSlot();
-        itemSlot.Init(_shipInventory, true);
+        var modulsSlots = _slots.Where(x => x.DragItemType == DragItemType.modul);
+        itemSlot.Init(_shipInventory, true, modulsSlots.Count());
         itemSlot.transform.SetParent(ModulsLayout, false);
         itemSlot.DragItemType = type;
         AddSlot(itemSlot);
@@ -222,7 +224,8 @@ public class ShipInventoryUI : DragZone
     private void AddWeaponSlot(DragItemType type)
     {
         var itemSlot = InventoryOperation.GetDragableItemSlot();
-        itemSlot.Init(_shipInventory, true);
+        var weaponSlots = _slots.Where(x => x.DragItemType == DragItemType.weapon);
+        itemSlot.Init(_shipInventory, true, weaponSlots.Count());
         itemSlot.transform.SetParent(WeaponsLayout, false);
         itemSlot.DragItemType = type;
         AddSlot(itemSlot);
@@ -240,25 +243,28 @@ public class ShipInventoryUI : DragZone
 
     private void InitCurrentItems()
     {
-        CocpitSlot.Init(_shipInventory, true);
-        EngineSlot.Init(_shipInventory, true);
-        WingSlot.Init(_shipInventory, true);
+        CocpitSlot.Init(_shipInventory, true,0);
+        EngineSlot.Init(_shipInventory, true,0);
+        WingSlot.Init(_shipInventory, true,0);
 
         InitCurrent(_shipInventory.CocpitSlot, CocpitSlot);
         InitCurrent(_shipInventory.EngineSlot, EngineSlot);
         InitCurrent(_shipInventory.WingSlot, WingSlot);
 
         var weapon = _shipInventory.WeaponsModuls.GetNonNullActiveSlots();
+        int index = 0;
         foreach (var weaponInv in weapon)
         {
-            var slot = GetFreeSlot(ItemType.weapon);
+            var slot = GetFreeSlot(index,ItemType.weapon);
             SetStartItem(slot, weaponInv, _tradeInventory);
+            index++;
         }
-
+        index = 0;
         foreach (var modulInv in _shipInventory.Moduls.GetNonNullActiveSlots())
         {
-            var slot = GetFreeSlot(ItemType.modul);
+            var slot = GetFreeSlot(index,ItemType.modul);
             SetStartItem(slot, modulInv, _tradeInventory);
+            index++;
         }
     }
 

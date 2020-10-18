@@ -255,6 +255,7 @@ public class Player
         }
     }
 
+
     public static bool LoadGame(out Player player)
     {
         if (File.Exists(Application.persistentDataPath + mainPlayer))
@@ -273,7 +274,7 @@ public class Player
         return false;
     }
 
-    private void LoadData()
+    public void LoadData()
     {
         RepairData.Init(Army, MapData, Parameters);
         QuestData.AfterLoadCheck();

@@ -75,7 +75,7 @@ public class InventoryUI : DragZone
         {
             var paramItem = ParamItems[i];
             var itemSlot = AttachToLayout();
-            itemSlot.Init(_inventory,true);
+            itemSlot.Init(_inventory,true,i);
             SetStartItem(itemSlot,paramItem,_tradeInventory);
             itemSlot.CanDrop = canDrop;
             _allSLots.Add(itemSlot);
@@ -84,7 +84,7 @@ public class InventoryUI : DragZone
         {
             var weapon = Weapons[i];
             var itemSlot = AttachToLayout();
-            itemSlot.Init(_inventory,true);
+            itemSlot.Init(_inventory,true,i);
             SetStartItem(itemSlot,weapon, _tradeInventory);
             itemSlot.CanDrop = canDrop;
             _allSLots.Add(itemSlot);
@@ -93,7 +93,7 @@ public class InventoryUI : DragZone
         {
             var weapon = Moduls[i];
             var itemSlot = AttachToLayout();
-            itemSlot.Init(_inventory, true);
+            itemSlot.Init(_inventory, true,i);
             //            var item = DragableItem.Create(weapon, true);
             _allSLots.Add(itemSlot);
             SetStartItem(itemSlot,weapon, _tradeInventory);
@@ -103,7 +103,7 @@ public class InventoryUI : DragZone
         {
             var weapon = Spells[i];
             var itemSlot = AttachToLayout();
-            itemSlot.Init(_inventory, true);
+            itemSlot.Init(_inventory, true,i);
             //            var item = DragableItem.Create(weapon, true);
             SetStartItem(itemSlot,weapon, _tradeInventory);
             _allSLots.Add(itemSlot);
@@ -126,7 +126,7 @@ public class InventoryUI : DragZone
         {
             var itemSlot = AttachToLayout();
 
-            itemSlot.Init(_inventory, true);
+            itemSlot.Init(_inventory, true,i);
             itemSlot.transform.SetAsLastSibling();
             itemSlot.CanDrop = canDrop;
             //            itemSlot.OnItemImplemented += OnItemImplemented;

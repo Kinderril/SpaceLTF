@@ -73,6 +73,14 @@ public class MainController : Singleton<MainController>
         return false;
     }
 
+    public void TryLoadCamp(PlayerChampaingContainer playerCamp)
+    {
+
+        MainPlayer = playerCamp.Player;
+        BattleData = new NextBattleData(MainPlayer, Statistics);
+        WindowManager.Instance.OpenWindow(MainState.map);
+    }
+
     public void CreateNewPlayerAndStartGame(StartNewGameData data)
     {
 //        MainPlayer = new Player("Next Player", data.);

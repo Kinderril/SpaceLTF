@@ -153,7 +153,7 @@ public class PreBattleWindow : BaseWindow
 
         if (_greenPlayer.MainShip != null)
         {
-            var listSpells = (_greenPlayer.MainShip.Ship.SpellsModuls.Where(x => x != null)).ToList();
+            var listSpells = (_greenPlayer.MainShip.Ship.SpellsModuls.GetNonNullActiveSlots()).ToList();
             isMainShipHaveWeapons = (listSpells.Count > 0);
         }
 

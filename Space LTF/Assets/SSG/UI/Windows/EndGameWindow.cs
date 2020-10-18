@@ -71,7 +71,7 @@ public class EndGameWindow : BaseWindow
             {
                 var itemSlot = InventoryOperation.GetDragableItemSlot();
                 itemSlot.transform.SetParent(LayoutRewards, false);
-                itemSlot.Init(moduls.CurrentInventory, false);
+                itemSlot.Init(moduls.CurrentInventory, false, -1);
                 itemSlot.StartItemSet(moduls);
             }
 
@@ -79,7 +79,7 @@ public class EndGameWindow : BaseWindow
             {
                 var itemSlot = InventoryOperation.GetDragableItemSlot();
                 itemSlot.transform.SetParent(LayoutRewards, false);
-                itemSlot.Init(weaponInv.CurrentInventory, false);
+                itemSlot.Init(weaponInv.CurrentInventory, false, -1);
                 itemSlot.StartItemSet(weaponInv);
             }
 
@@ -87,7 +87,7 @@ public class EndGameWindow : BaseWindow
             {
                 var itemSlot = InventoryOperation.GetDragableItemSlot();
                 itemSlot.transform.SetParent(LayoutRewards, false);
-                itemSlot.Init(spellModulInv.CurrentInventory, false);
+                itemSlot.Init(spellModulInv.CurrentInventory, false, -1);
                 itemSlot.StartItemSet(spellModulInv);
             } 
 
@@ -95,7 +95,7 @@ public class EndGameWindow : BaseWindow
             {
                 var itemSlot = InventoryOperation.GetDragableItemSlot();
                 itemSlot.transform.SetParent(LayoutRewards, false);
-                itemSlot.Init(spellModulInv.CurrentInventory, false);
+                itemSlot.Init(spellModulInv.CurrentInventory, false, -1);
                 itemSlot.StartItemSet(spellModulInv);
             }
         }

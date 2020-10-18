@@ -224,61 +224,57 @@ public class Commander
         {
             if (mainShip.ShipInventory.ShipType == ShipType.Base)
             {
-                var weaponsIndex = 0;
-                var zeroPosition = mainShip.WeaponPosition[0].transform;
-                if (!isBlinkInited)
-                {
-                    SpellController.AddMainShipBlink();
-                    isBlinkInited = true;
-                }
-                foreach (var baseSpellModul in mainShip.ShipParameters.Spells)
-                {
-                    if (baseSpellModul != null)
-                    {
-                        Transform shootPos;
-                        if (mainShip.WeaponPosition.Count > weaponsIndex)
-                        {
-                            shootPos = mainShip.WeaponPosition[weaponsIndex].transform;
-                            weaponsIndex++;
-                        }
-                        else
-                        {
-                            shootPos = zeroPosition;
-                        }
-                        SpellController.AddSpell(baseSpellModul, shootPos);
-                    }
-                }
-                mainShip.ShipParameters.ShieldParameters.Enable();
+                InitSpells(mainShip, ref isBlinkInited);
             }
           
         }
-
-//        if (MainShip != null)
-//        {
-//            var weaponsIndex = 0;
-//            var zeroPosition = MainShip.WeaponPosition[0].transform;
-//            SpellController.AddMainShipBlink();
-//            foreach (var baseSpellModul in MainShip.ShipParameters.Spells)
-//            {
-//                if (baseSpellModul != null)
-//                {
-//                    Transform shootPos;
-//                    if (MainShip.WeaponPosition.Count > weaponsIndex)
-//                    {
-//                        shootPos = MainShip.WeaponPosition[weaponsIndex].transform;
-//                        weaponsIndex++;
-//                    }
-//                    else
-//                    {
-//                        shootPos = zeroPosition;
-//                    }
-//                    SpellController.AddSpell(baseSpellModul, shootPos);
-//                }
-//            }
-//            MainShip.ShipParameters.ShieldParameters.Enable();
-//        }
-
         return Ships;
+    }
+
+    private void InitSpells(ShipBase mainShip,ref bool isBlinkInited)
+    {
+        isBlinkInited = false;
+        var weaponsIndex = 0;
+        var zeroPosition = mainShip.WeaponPosition[0].transform;
+        if (!isBlinkInited)
+        {
+            SpellController.AddMainShipBlink();
+            isBlinkInited = true;
+        }
+
+        var spells = mainShip.ShipParameters.Spells;
+        var subModuls = mainShip.ShipParameters.SubSpellModuls;
+        for (int i = 0; i < spells.Length; i++)
+        {
+
+            var baseSpellModul = spells[i];
+            if (baseSpellModul != null)
+            {
+                Transform shootPos;
+                if (mainShip.WeaponPosition.Count > weaponsIndex)
+                {
+                    shootPos = mainShip.WeaponPosition[weaponsIndex].transform;
+                    weaponsIndex++;
+                }
+                else
+                {
+                    shootPos = zeroPosition;
+                }
+
+                List<BaseModulInv> moduls = null;
+                if (i < subModuls.Length)
+                {
+                    var subs = subModuls[i];
+                    if (subs != null)
+                    {
+                        moduls = subs.Moduls.GetNonNullActiveSlots();
+                    }
+                }
+
+                SpellController.AddSpell(baseSpellModul, shootPos, moduls);
+            }
+        }
+        mainShip.ShipParameters.ShieldParameters.Enable();
     }
 
     public SameSidePersonalInfo GetSameSide(ShipBase infoOf, ShipBase requester)

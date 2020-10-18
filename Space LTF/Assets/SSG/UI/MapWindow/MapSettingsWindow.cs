@@ -12,6 +12,7 @@ public enum EWindowSettingsLauch
     map,
     menu,
     exprolerGlobalMap,
+    mapCampaing,
 }
 
 public class MapSettingsWindow : MonoBehaviour
@@ -30,6 +31,7 @@ public class MapSettingsWindow : MonoBehaviour
     public GameObject BattleTutorialButton;
     public TMP_Dropdown ResolutionDropdown;
 
+    public GameObject SaveLoadCampaing;
     public GameObject ReturnToExprolerGlobalMap;
     public GameObject MapButtons;
     public GameObject ExitButtonMenu;
@@ -42,6 +44,8 @@ public class MapSettingsWindow : MonoBehaviour
     private float _lastMusicVal =1f;
 
     private EWindowSettingsLauch _settingsLauch;
+    private bool _isDropDownInited = false;
+    public SaveWindow SaveWindow;
 
 
 
@@ -104,6 +108,7 @@ public class MapSettingsWindow : MonoBehaviour
                 ExitButtonMenu.gameObject.SetActive(false);
                 BattleButtons.gameObject.SetActive(true);
                 ReturnToExprolerGlobalMap.gameObject.SetActive(false);
+                SaveLoadCampaing.gameObject.SetActive(false);
                 break;
             case EWindowSettingsLauch.map:
                 BattleTutorialButton.gameObject.SetActive(true);
@@ -111,6 +116,7 @@ public class MapSettingsWindow : MonoBehaviour
                 ExitButtonMenu.gameObject.SetActive(false);
                 BattleButtons.gameObject.SetActive(false);
                 ReturnToExprolerGlobalMap.gameObject.SetActive(false);
+                SaveLoadCampaing.gameObject.SetActive(false);
                 break;
             case EWindowSettingsLauch.menu:
                 BattleTutorialButton.gameObject.SetActive(false);
@@ -118,6 +124,7 @@ public class MapSettingsWindow : MonoBehaviour
                 ExitButtonMenu.gameObject.SetActive(true);
                 BattleButtons.gameObject.SetActive(false);
                 ReturnToExprolerGlobalMap.gameObject.SetActive(false);
+                SaveLoadCampaing.gameObject.SetActive(false);
                 break;  
             case EWindowSettingsLauch.exprolerGlobalMap:
                 BattleTutorialButton.gameObject.SetActive(false); 
@@ -125,6 +132,15 @@ public class MapSettingsWindow : MonoBehaviour
                 ExitButtonMenu.gameObject.SetActive(false);
                 BattleButtons.gameObject.SetActive(false);
                 ReturnToExprolerGlobalMap.gameObject.SetActive(true);
+                SaveLoadCampaing.gameObject.SetActive(false);
+                break;
+            case EWindowSettingsLauch.mapCampaing:
+                BattleTutorialButton.gameObject.SetActive(true);
+                MapButtons.gameObject.SetActive(true);
+                ExitButtonMenu.gameObject.SetActive(false);
+                BattleButtons.gameObject.SetActive(false);
+                ReturnToExprolerGlobalMap.gameObject.SetActive(false);
+                SaveLoadCampaing.gameObject.SetActive(true);
                 break;
         }
 
@@ -162,7 +178,11 @@ public class MapSettingsWindow : MonoBehaviour
         }
     }
 
-    private bool _isDropDownInited = false;
+    public void OnSaveClick()
+    {
+        SaveWindow.Init();
+    }
+
     private void InitDropDown()
     {
         if (_isDropDownInited)

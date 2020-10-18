@@ -117,6 +117,16 @@ public class DragZone : MonoBehaviour
                 }
             }
 #endif
+            var slot1 = _slots.FirstOrDefault(x => x.Index == item.CurrentInventory.GetItemIndex(item));
+            if (slot1 != null)
+            {
+                if (slot1.CanPutHere(item))
+                {
+                    SetStartItem(slot1, item, _tradeInventory);
+                    return;
+                }
+            }
+
             foreach (var itemSlot in _slots)
             {
                 if (itemSlot.CanPutHere(item))
@@ -143,23 +153,34 @@ public class DragZone : MonoBehaviour
         }
     }
 
-    public void DropElement(DragableItem item)
+//    public void DropElement(DragableItem item)
+//    {
+//        InventoryOperation.TryItemTransfered(_inventory, item.ContainerItem, b =>
+//        {
+//            if (b)
+//            {
+//                GameObject.Destroy(item.gameObject);
+//
+//            }
+//            else
+//            {
+//                item.ReturnToLastParent();
+//            }
+//        });
+//    }
+
+    protected DragableItemSlot GetFreeSlot(int index,ItemType type)
     {
-        InventoryOperation.TryItemTransfered(_inventory, item.ContainerItem, b =>
+        var freeSlot = _slots.FirstOrDefault(
+            x => x.CurrentItem == null && Slot(x.DragItemType, type) && x.Index == index);
+        if (freeSlot == null)
         {
-            if (b)
-            {
-                GameObject.Destroy(item.gameObject);
+            return GetFreeSlot(type);
+        }
 
-            }
-            else
-            {
-                item.ReturnToLastParent();
-            }
-        });
-    }
-
-    protected virtual DragableItemSlot GetFreeSlot(ItemType type)
+        return freeSlot;
+    } 
+    private DragableItemSlot GetFreeSlot(ItemType type)
     {
         var freeSlot = _slots.FirstOrDefault(
             x => x.CurrentItem == null && Slot(x.DragItemType, type));

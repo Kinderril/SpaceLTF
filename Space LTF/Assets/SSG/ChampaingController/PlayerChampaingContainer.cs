@@ -2,12 +2,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using JetBrains.Annotations;
 
 [System.Serializable]
-public class PlayerChampaing
+public class PlayerChampaingContainer
 {
-    public Player Player { get; private set; }
+    public PlayerCampaing Player { get; private set; }
     public int Act { get; private set; }
     private ShipConfig _config = ShipConfig.mercenary;
     private EStartGameDifficulty _difficulty = EStartGameDifficulty.Normal;
@@ -20,6 +22,39 @@ public class PlayerChampaing
         _config = config;
         _difficulty = difficulty;
         Act = 0;
+    }
+
+    public void SaveTo(string path)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(path);
+        bf.Serialize(file, this);
+        file.Close();
+        Debug.Log($"Game Saved PlayerChampaing path:{path}");
+        WindowManager.Instance.InfoWindow.Init(null,  Namings.Tag("GameSaved"));
+    }
+
+    public static bool LoadGame( string path, out PlayerChampaingContainer player)
+    {
+        if (File.Exists(path))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(path, FileMode.Open);
+            var save = (PlayerChampaingContainer)bf.Deserialize(file);
+            file.Close();
+            player = save;
+            player.LoadData();
+            Debug.Log("Game Loaded PlayerChampaing");
+            return true;
+        }
+        Debug.Log("No game saved!");
+        player = null;
+        return false;
+    }
+
+    private void LoadData()
+    {
+        Player.LoadData();
     }
 
     [CanBeNull]
@@ -205,7 +240,7 @@ public class PlayerChampaing
             _reputationData = new PlayerReputationData();
             _reputationData.Init();
         }
-        Player = new Player($"Campaing player {Act}", _safe,_reputationData);
+        Player = new PlayerCampaing($"Campaing player {Act}", _safe,_reputationData);
         Debug.Log($"Play act {Act}");
         int sizeSector = 5;
         int powerPerTurn = 0;

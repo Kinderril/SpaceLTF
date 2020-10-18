@@ -39,6 +39,13 @@ public struct ParameterItemIconNoSubtype
 }
 
 [Serializable]
+public struct PlayerParameterIcon
+{
+    public Sprite Icon;
+    public PlayerParameterType ItemType;
+}
+
+[Serializable]
 public struct WeaponIcon
 {
     public Sprite Icon;
@@ -129,11 +136,13 @@ public class DataStructPrefabs : MonoBehaviour
     private Dictionary<EPilotTricks, Sprite> PilotTricksIconsSideDic = new Dictionary<EPilotTricks, Sprite>();
 
     public List<ShipTypeIcon> ShipTypeIcons = new List<ShipTypeIcon>();
+    public List<PlayerParameterIcon> PlayerParametersIcons = new List<PlayerParameterIcon>();
     private Dictionary<ShipType, Sprite> ShipTypeIconsDic = new Dictionary<ShipType, Sprite>();
 
     //    public List<BaseModulIcon> ModulsIcons = new List<BaseModulIcon>();
     private Dictionary<SimpleModulType, Sprite> ModulsIconsDic = new Dictionary<SimpleModulType, Sprite>();
     private Dictionary<PilotRank, Sprite> PilotRankIconsDic = new Dictionary<PilotRank, Sprite>();
+    private Dictionary<PlayerParameterType, Sprite> PlayerParameterIconsDic = new Dictionary<PlayerParameterType, Sprite>();
 
     public List<ParameterItemIcon> ParametersItemsIcons = new List<ParameterItemIcon>();
     public List<ParameterItemIconNoSubtype> ParametersItemsIconsNoSubType = new List<ParameterItemIconNoSubtype>();
@@ -214,6 +223,17 @@ public class DataStructPrefabs : MonoBehaviour
         //            Debug.LogError("not enought icons actions");
         //        }
 
+        //----------
+        foreach (var actionIcon in PlayerParametersIcons)
+        {
+            PlayerParameterIconsDic.Add(actionIcon.ItemType, actionIcon.Icon);
+        }
+        var values23 = Enum.GetValues(typeof(PlayerParameterType)).Length;
+        if (values23 != PlayerParametersIcons.Count)
+        {
+            Debug.LogError("not enought player parameter ships");
+        }
+                
         //----------
         foreach (var actionIcon in ShipTypeIcons)
         {
@@ -501,6 +521,21 @@ public class DataStructPrefabs : MonoBehaviour
 
         return null;
 
+    }
+
+    public Sprite GetParameterIcon(PlayerParameterType parameterParameterType)
+    {
+#if UNITY_EDITOR
+        try
+        {
+            return PlayerParameterIconsDic[parameterParameterType];
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"GetParameterIcon {parameterParameterType.ToString()}");
+        }
+#endif
+        return PlayerParameterIconsDic[parameterParameterType];
     }
 }
 

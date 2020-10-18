@@ -53,7 +53,8 @@ public class ShipInventory : IStartShipParams, IInventory
     public int Id { get; private set; }
     public ShipModulsInventory Moduls;
     public ShipWeaponsInventory WeaponsModuls;
-    public BaseSpellModulInv[] SpellsModuls;
+    public ShipSpellsInventory SpellsModuls;
+    public OnlyModulsInventory[] SpellConnectedModules = null;
     public ParameterItem CocpitSlot { get; private set; }
     public ParameterItem EngineSlot { get; private set; }
     public ParameterItem WingSlot { get; private set; }
@@ -83,7 +84,12 @@ public class ShipInventory : IStartShipParams, IInventory
 //        SimpleModulsCount = pParams.SimpleModulsCount;
         Moduls = new ShipModulsInventory(pParams.SimpleModulsCount, this);
         SpellModulsCount = pParams.SpellModulsCount;
-        SpellsModuls = new BaseSpellModulInv[SpellModulsCount];
+        SpellConnectedModules = new OnlyModulsInventory[SpellModulsCount];
+        for (int i = 0; i < SpellModulsCount; i++)
+        {
+            SpellConnectedModules[i] = new OnlyModulsInventory(player);
+        }
+        SpellsModuls = new ShipSpellsInventory(SpellModulsCount,this);
         Name = pParams.Name;
         BoostChargeTime = pParams.BoostChargeTime;
         //        Debug.Log("ShipInventory create:" + pParams.Name);
@@ -123,11 +129,22 @@ public class ShipInventory : IStartShipParams, IInventory
         }
     }
 
+    public OnlyModulsInventory GetModulsInventory(int index)
+    {
+
+        if (SpellConnectedModules != null && index < SpellConnectedModules.Length)
+        {
+            return SpellConnectedModules[index];
+        }
+
+        return null;
+    }
+
     public List<IItemInv> GetAllItems()
     {
         var list = new List<IItemInv>();
         list.AddRange(WeaponsModuls.GetNonNullActiveSlots());
-        list.AddRange(SpellsModuls);
+        list.AddRange(SpellsModuls.GetNonNullActiveSlots());
         list.AddRange(Moduls.GetNonNullActiveSlots());
         return list;
     }
@@ -186,7 +203,7 @@ public class ShipInventory : IStartShipParams, IInventory
 
     public bool GetFreeSpellSlot(out int index)
     {
-        return GetFreeItemSlot(out index, SpellsModuls);
+        return SpellsModuls.GetFreeSimpleSlot(out index);
     }
 
     public bool GetFreeWeaponSlot(out int index)
@@ -196,25 +213,7 @@ public class ShipInventory : IStartShipParams, IInventory
 
     public bool TryAddSpellModul(BaseSpellModulInv spellModul, int fieldIndex)
     {
-        if (spellModul == null)
-        {
-            return false;
-        }
-        if (SpellsModuls.Length <= fieldIndex)
-        {
-            Debug.LogError("Too big spell index slot");
-            return false;
-        }
-        var field = SpellsModuls[fieldIndex];
-        if (field == null)
-        {
-            SpellsModuls[fieldIndex] = spellModul;
-            spellModul.CurrentInventory = this;
-            TransferItem(spellModul, true);
-            return true;
-        }
-        Debug.LogError("Slot not spell free");
-        return false;
+        return SpellsModuls.TryAddSpellModul(spellModul, fieldIndex);
     }
 
     public bool TryAddSimpleModul(BaseModulInv simpleModul, int fieldIndex)
@@ -241,17 +240,7 @@ public class ShipInventory : IStartShipParams, IInventory
 
     public bool RemoveSpellModul(BaseSpellModulInv spell)
     {
-        for (int i = 0; i < SpellsModuls.Length; i++)
-        {
-            var m = SpellsModuls[i];
-            if (m == spell)
-            {
-                SpellsModuls[i] = null;
-                TransferItem(m, false);
-                return true;
-            }
-        }
-        return false;
+        return SpellsModuls.RemoveSpellModul(spell);
     }
 
     public void TransferItem(IItemInv item, bool val)
@@ -408,6 +397,42 @@ public class ShipInventory : IStartShipParams, IInventory
     public bool CanRemoveWeaponSlots(int slotsInt)
     {
         return WeaponsModuls.CanRemoveSlots(slotsInt);
+    }
+
+
+    public int GetItemIndex(IItemInv item)
+    {
+        switch (item.ItemType)
+        {
+            case ItemType.weapon:
+                return WeaponsModuls.GetItemIndex(item);
+            case ItemType.modul:
+                return Moduls.GetItemIndex(item);
+            case ItemType.spell:
+                return SpellsModuls.GetItemIndex(item);
+            default:
+            case ItemType.cocpit:
+            case ItemType.engine:
+            case ItemType.wings:
+                return 0;
+        }
+    }
+    public bool IsSlotFree(int preferableIndex, ItemType type)
+    {
+        switch (type)
+        {
+            case ItemType.weapon:
+                return WeaponsModuls.IsSlotFree(preferableIndex);
+            case ItemType.modul:
+                return Moduls.IsSlotFree(preferableIndex);
+            case ItemType.spell:
+                return SpellsModuls.IsSlotFree(preferableIndex);
+            default:
+            case ItemType.cocpit:
+            case ItemType.engine:
+            case ItemType.wings:
+                return false;
+        }
     }
 
     public int HealthPointToRepair()

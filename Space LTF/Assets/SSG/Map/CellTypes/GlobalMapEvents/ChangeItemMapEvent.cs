@@ -88,7 +88,7 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
                 Debug.LogError("Can't transferr item a trade event to _traderInventory");
             }
 
-        });
+        },-1);
 
         InventoryOperation.TryItemTransfered(MainController.Instance.MainPlayer.Inventory, _itemsToTrade, b =>
         {
@@ -97,7 +97,7 @@ public class ChangeItemMapEvent : BaseGlobalMapEvent
                 Debug.LogError("Can't transferr item a trade event to MainPlayer");
             }
 
-        });
+        }, -1);
     }
 }
 

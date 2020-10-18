@@ -40,7 +40,7 @@ public class ShipScoutData
         {
             Moduls.Add(modul.Type);
         }
-        foreach (var modul in data.Ship.SpellsModuls)
+        foreach (var modul in data.Ship.SpellsModuls.GetNonNullActiveSlots())
         {
             if (modul != null)
                 Spells.Add(modul.SpellType);

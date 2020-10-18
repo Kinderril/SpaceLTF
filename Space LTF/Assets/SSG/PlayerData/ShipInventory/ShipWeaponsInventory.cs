@@ -67,6 +67,15 @@ public class ShipWeaponsInventory
         Debug.LogError("Slot not free");
         return false;
     }
+    public bool IsSlotFree(int preferableIndex)
+    {
+        if (preferableIndex < WeaponsCount)
+        {
+            var m = _weapons[preferableIndex];
+            return (m == null);
+        }
+        return false;
+    }
     public bool GetFreeSimpleSlot(out int index)
     {
         for (int i = 0; i < WeaponsCount; i++)
@@ -117,6 +126,18 @@ public class ShipWeaponsInventory
             }
         }
         return false;
+    }
+    public int GetItemIndex(IItemInv item)
+    {
+        for (int i = 0; i < WeaponsCount; i++)
+        {
+            var m = _weapons[i];
+            if (m != null && m == item)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public bool RemoveSlot(DragItemType type)

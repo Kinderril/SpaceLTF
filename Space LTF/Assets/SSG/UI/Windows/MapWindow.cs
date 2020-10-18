@@ -561,7 +561,17 @@ public class MapWindow : BaseWindow
 
     public void OnClickSettings()
     {
-        WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.map);
+        if (MainController.Instance.MainPlayer is PlayerCampaing)
+        {
+            WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.mapCampaing);
+
+        }
+        else
+        {
+
+            WindowManager.Instance.OpenSettingsSettings(EWindowSettingsLauch.map);
+        }
+
     }
 
     public void OnQuestsOpen()

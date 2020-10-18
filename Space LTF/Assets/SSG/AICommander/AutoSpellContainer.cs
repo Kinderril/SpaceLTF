@@ -42,7 +42,7 @@ public class AutoSpellContainer
         _owner = commander;
         _teamIndex = commander.TeamIndex;
         _delay = MyExtensions.Random(1f, 4f);
-        var spellRad = spellData.MaxDist; //. .r.BulleStartParameters.radiusShoot;
+        var spellRad = spellData.AimRadius; //. .r.BulleStartParameters.radiusShoot;
         _maxDist = spellRad;
         ShootDistSqrt = spellRad * spellRad;
         _withAsteroids = true;
@@ -111,7 +111,7 @@ public class AutoSpellContainer
                     var sDistToTarget = targInfo.Dist * targInfo.Dist;
 
                     findPositionBySpeed = _withSpeed ? FindPosBySpeed(_owner.Position,Target,
-                        _spellData.BulletStartParams.bulletSpeed):Target.Position;
+                        _spellData.BulletSpeed):Target.Position;
 
                     if (_withAsteroids)
                     {
@@ -293,7 +293,8 @@ public class AutoSpellContainer
             target = maxDistPos;
         }
 
-        _spellData.CastSpell(new BulletTarget(target), _spellData.BulletOrigin, _spellData, startPos, _spellData.BulletStartParams);
+        _spellData.CastSpell(new BulletTarget(target), _spellData.BulletOrigin, _spellData, startPos, 
+            _spellData.BulletStartParams);
     }
 
     protected Vector3 _modulPos()

@@ -13,6 +13,7 @@ public class BaseShipInventoryUI : DragZone
     public Transform SpellsLayout;
     public Transform PamsLayout;
     public PlayerParameterUI PlayerParameterPrefab;
+    public BaseShipSpellContainer ShipSpellContainerPrefab;
     private List<PlayerParameterUI> _curParams = new List<PlayerParameterUI>();
 
     private ShipInventory _shipInventory;
@@ -79,27 +80,33 @@ public class BaseShipInventoryUI : DragZone
     }
 
     private HashSet<DragableItemSlot> InitSpells()
-    {
+    {              
         HashSet<DragableItemSlot> allslots = new HashSet<DragableItemSlot>();
         for (int i = 0; i < _shipInventory.SpellModulsCount; i++)
         {
-            var spellSlot = InventoryOperation.GetDragableItemSlot();
-            allslots.Add(spellSlot);
-            spellSlot.Init(_shipInventory, true);
-            spellSlot.transform.SetParent(SpellsLayout, false);
-            spellSlot.DragItemType = DragItemType.spell;
+            var spellSlot = DataBaseController.GetItem(ShipSpellContainerPrefab);
+            var inv = _shipInventory.GetModulsInventory(i);
+            var slots = spellSlot.InitSpell(i,SpellsLayout, _shipInventory, inv);
+            foreach (var dragableItemSlot in slots)
+            {
+                allslots.Add(dragableItemSlot);
+            }
+          
         }
         return allslots;
     }
 
     private void InitCurrentItems()
     {
-        for (int i = 0; i < _shipInventory.SpellsModuls.Length; i++)
+        for (int i = 0; i < _shipInventory.SpellsModuls.SpellsCount; i++)
         {
-            var spell = _shipInventory.SpellsModuls[i];
-            var slot = GetFreeSlot(ItemType.spell);
-            slot.Init(_shipInventory, _usable);
-            SetStartItem(slot, spell, _tradeInventory);
+            var spell = _shipInventory.SpellsModuls.Get(i);
+            if (spell != null)
+            {
+                var slot = GetFreeSlot(i,ItemType.spell);
+                slot.Init(_shipInventory, _usable, i);
+                SetStartItem(slot, spell, _tradeInventory);
+            }
         }
     }
 }

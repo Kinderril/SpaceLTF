@@ -123,7 +123,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
                     {
                         Debug.LogError("Can't transferr item a trade event");
                     }
-                });
+                },-1);
                 break;
             case TradeType.traderBuy:
                 MainController.Instance.MainPlayer.MoneyData.AddMoney(_cost);
@@ -134,7 +134,7 @@ public class TradeMapEvent : BaseGlobalMapEvent
                         Debug.LogError("Can't transferr item a trade event");
                     }
 
-                });
+                }, -1);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

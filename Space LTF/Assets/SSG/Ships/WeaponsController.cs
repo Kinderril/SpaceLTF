@@ -70,7 +70,7 @@ public class WeaponsController
                 slotIndex++;
 
                 weapon.Init(owner);
-                UpgradeWithModuls(weapon, moduls);
+                UpgradeWeaponsWithModuls(weapon, moduls);
                 _allWeapons.Add(weapon);
                 if (weapon.TargetType == TargetType.Enemy)
                 {
@@ -132,7 +132,7 @@ public class WeaponsController
 
     }
 
-    private void UpgradeWithModuls(WeaponInGame weapon, List<BaseModulInv> moduls)
+    private void UpgradeWeaponsWithModuls(WeaponInGame weapon, List<BaseModulInv> moduls)
     {
         foreach (var modul in moduls)
         {

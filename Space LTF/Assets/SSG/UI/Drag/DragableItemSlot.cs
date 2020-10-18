@@ -33,11 +33,13 @@ public class DragableItemSlot : MonoBehaviour
     public Image YellowImage;
     public Image RedImage;
     public DragableSlotBackParameterItems ParapeteBack;
+    public int Index { get; private set; }
 
     //    public event Action<DragableItemSlot, DragableItem,bool> OnItemImplemented;
 
-    public void Init(IInventory inventory,bool usage)
+    public void Init(IInventory inventory,bool usage,int index)
     {
+        Index = index;
         UpdateSlots();
 #if UNITY_EDITOR
         if (inventory == null)
@@ -175,10 +177,20 @@ public class DragableItemSlot : MonoBehaviour
                     Debug.LogError("transfered item fail");
                 }
 #endif
-                InventoryOperation.TryItemTransfered(_inventory, item.ContainerItem, Callback);
+                InventoryOperation.TryItemTransfered(_inventory, item.ContainerItem, Callback, Index);
                 return;
 
             }
+            else
+            {
+
+                if (Index >= 0)
+                {
+                    InventoryOperation.TryItemChnageIndex(_inventory, item.ContainerItem, Callback, Index);
+                    return;
+                }
+            }
+
         }
         else
         {
@@ -288,7 +300,7 @@ public class DragableItemSlot : MonoBehaviour
                 InventoryOperation.TryItemTransfered(connectedInventory, dragableItem.ContainerItem, b =>
                 {
                     
-                });
+                }, dragableItem.Slot.Index);
             }
         }
     }

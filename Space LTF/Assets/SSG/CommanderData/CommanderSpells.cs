@@ -51,13 +51,25 @@ public class CommanderSpells
         return spell.TryCast(trg);
     }
 
-    public void AddSpell(BaseSpellModulInv baseSpellModul, Transform modulPos)
+    public void AddSpell(BaseSpellModulInv baseSpellModul, Transform modulPos,List<BaseModulInv> moduls)
     {
 
         ShipBase mainShip = _commander.MainShip;
         var spellInGame = new SpellInGame(baseSpellModul, () => modulPos.position, mainShip.TeamIndex, mainShip, 1,
             baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount, baseSpellModul.SpellType,
             baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.DescFull(), baseSpellModul.DiscCounter, 1f);
+        foreach (var modul in moduls)
+        {
+            var support = modul as BaseSupportModul;
+            if (support != null)
+            {
+                Debug.LogError($"Apply to spell:{baseSpellModul.Name}  modul:{modul.Name}");
+                support.ChangeBullet(spellInGame);
+                support.ChangeTargetAffect(spellInGame);
+                support.ChangeParams(spellInGame);
+            }
+        }
+
         AllSpells.Add(spellInGame);
     }
 }

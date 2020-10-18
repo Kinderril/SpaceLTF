@@ -33,15 +33,15 @@ public class SpellDamageData
 
 }
 
-public class SpellInGame : IWeapon
+public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
 {
     public ShallCastToTaregtAI ShallCastToTaregtAIAction;
     public BulletDestroyDelegate BulletDestroyAction;
-    public CreateBulletDelegate CreateBulletAction;
-    public WeaponInventoryAffectTarget AffectAction;
+    private CreateBulletDelegate _createBulletAction;
+    private WeaponInventoryAffectTarget _affectAction;
 
     private BulleStartParameters _bulletStartParams;  
-    public BulleStartParameters BulletStartParams => _bulletStartParams;
+//    public BulleStartParameters BulletStartParams => _bulletStartParams;
 
     private SpellZoneVisualCircle CircleObjectToShow;
     private SpellZoneVisualLine LineObjectToShow;
@@ -66,13 +66,22 @@ public class SpellInGame : IWeapon
     public CanCastAtPoint CanCastAtPoint { get; private set; }
     public float CurOwnerSpeed => 0.001f;
     public CurWeaponDamage CurrentDamage => new CurWeaponDamage(0, 0);
+
+
+    public float AimRadius { get; set; }
+    public float SetorAngle { get; set; }
+    public float BulletSpeed { get; set; }
+    public float ReloadSec { get; set; }
+    public int ShootPerTime { get; set; }
+
+
     public string Name { get; private set; }
     public string Desc { get; private set; }
     public SpellType SpellType { get; private set; }
     //    float ShowCircleRadius { get; }
     bool ShowLine { get; }
-    public float MaxDist => _maxDist;
-    private float _maxDist;
+//    public float MaxDist => _maxDist;
+//    private float _maxDist;
     public CanUseDelayedAction DelayedAction;
     public bool ShowCircle { get; private set; }
     private DistCounter _distCounter;
@@ -95,7 +104,7 @@ public class SpellInGame : IWeapon
         _distCounter = distCounter;
 
         Desc = desc;
-        _maxDist = maxDist;
+        AimRadius = maxDist;
         //        ShowCircleRadius = spellData.ShowCircle;
         ShowLine = spellData.ShowLine;
         Level = level;
@@ -109,11 +118,14 @@ public class SpellInGame : IWeapon
         _bulletOrigin = spellData.GetBulletPrefab();
         _spellDamageData = spellData.RadiusAOE();
         _bulletStartParams = spellData.BulleStartParameters;
-        AffectAction = spellData.AffectAction;
+        _affectAction = spellData.AffectAction;
         CastSpell = spellData.CastSpell;
         SubUpdateShowCast = spellData.SubUpdateShowCast;
         CanCastAtPoint = spellData.CanCastAtPoint;
-        CreateBulletAction = spellData.CreateBulletAction;
+        _createBulletAction = spellData.CreateBulletAction;
+        ///
+        SetBulletCreateAction(_createBulletAction);
+        ///
         ShallCastToTaregtAIAction = spellData.ShallCastToTaregtAIAction;
         BulletDestroyAction = spellData.BulletDestroyDelegate;
         ShowCircle = _spellDamageData.AOERad > 0;
@@ -148,7 +160,7 @@ public class SpellInGame : IWeapon
         if (ShowLine)
         {
             var dir = (pos - _modulPos());
-            LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir, _maxDist);
+            LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir, AimRadius);
         }
     }
     public void StartShowCast()
@@ -196,10 +208,10 @@ public class SpellInGame : IWeapon
         _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetCastSpell(SpellType));
         var startPos = _modulPos();
         var dir = Utils.NormalizeFastSelf(target - startPos);
-        var maxDistPos = startPos + dir * _maxDist;
+        var maxDistPos = startPos + dir * AimRadius;
         var distCal = _distCounter(maxDistPos, target);
         DelayedAction.Use();
-        CastSpell(new BulletTarget(distCal), _bulletOrigin, this, startPos, _bulletStartParams);
+        CastSpell(new BulletTarget(distCal), _bulletOrigin, this, startPos, BulletStartParams);
         //        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
     }
 
@@ -207,16 +219,28 @@ public class SpellInGame : IWeapon
     public void BulletCreateByDir(ShipBase target, Vector3 dir)
     {
         CreateBulletWithModif(dir);
+        if (ShootPerTime > 0)
+        {
+            for (int i = 1; i < ShootPerTime; i++)
+            {
+                var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.1f * i);
+                timer.OnTimer += () =>
+                {
+                    if (!Owner.IsDead)
+                        CreateBulletWithModif(dir);
+                };
+            }     
+        }
     }
 
     protected void CreateBulletWithModif(ShipBase target)
     {
-        CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos(), _bulletStartParams);
+        CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos(), BulletStartParams );
     }
 
     protected void CreateBulletWithModif(Vector3 target)
     {
-        CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos(), _bulletStartParams);
+        CreateBulletAction(new BulletTarget(target), _bulletOrigin, this, _modulPos(), BulletStartParams);
     }
 
     public void DamageDoneCallback(float healthdelta, float shielddelta, ShipBase damageAppliyer)
@@ -292,5 +316,17 @@ public class SpellInGame : IWeapon
         }
 
         return false;
+    }
+
+    public WeaponInventoryAffectTarget AffectAction => _affectAction;
+    public CreateBulletDelegate CreateBulletAction { get; set; }
+
+    public BulleStartParameters BulletStartParams =>
+        new BulleStartParameters(BulletSpeed, _bulletStartParams.turnSpeed, _bulletStartParams.distanceShoot,
+            _bulletStartParams.radiusShoot);
+
+    public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
+    {
+        CreateBulletAction = bulletCreate;
     }
 }
