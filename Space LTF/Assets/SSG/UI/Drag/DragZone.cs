@@ -58,6 +58,7 @@ public class DragZone : MonoBehaviour
 //        Debug.Log("DragZone dispose:" + _zoneId + "  " + gameObject.name);
         _slots.Clear();
         Disable();
+        _inventory = null;
     }
          /*
     private void CheckCurrentItems()
@@ -248,7 +249,7 @@ public class DragZone : MonoBehaviour
     {
         if (_enabled)
         {
-//            Debug.Log("drag zone Disable:" + _zoneId + "  " + gameObject.name);
+//            Debug.LogError("drag zone Disable:" + _zoneId + "  " + gameObject.name);
             _enabled = false;
             _subcribed = false;
             _inventory.OnItemAdded -= OnItemAdded;
@@ -259,7 +260,7 @@ public class DragZone : MonoBehaviour
         if (!_enabled)
         {
 //            CheckCurrentItems();
-            Debug.Log("drag zone Enable:" + _zoneId + "  " + gameObject.name);
+//            Debug.LogError("drag zone Enable:" + _zoneId + "  " + gameObject.name);
             _enabled = true;
             _subcribed = true;
             _inventory.OnItemAdded += OnItemAdded;

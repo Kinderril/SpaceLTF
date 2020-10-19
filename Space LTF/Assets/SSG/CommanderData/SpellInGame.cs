@@ -1,9 +1,16 @@
 ﻿using System;
 using UnityEngine;
 
+public class CastSpellData
+{
+    public BulleStartParameters Bullestartparameters;
+    public int ShootsCount = 1;
+
+}
+
 [System.Serializable]
 public delegate void CastActionSpell(BulletTarget target, Bullet origin, IWeapon weapon,
-    Vector3 shootpos, BulleStartParameters bullestartparameters);
+    Vector3 shootpos, CastSpellData castData);
 
 [System.Serializable]
 public delegate Vector3 DistCounter(Vector3 maxDistPos, Vector3 targetDistPos);
@@ -37,7 +44,7 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
 {
     public ShallCastToTaregtAI ShallCastToTaregtAIAction;
     public BulletDestroyDelegate BulletDestroyAction;
-    private CreateBulletDelegate _createBulletAction;
+//    private CreateBulletDelegate _createBulletAction;
     private WeaponInventoryAffectTarget _affectAction;
 
     private BulleStartParameters _bulletStartParams;  
@@ -51,7 +58,7 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     private Func<Vector3> _modulPos;
     private Bullet _bulletOrigin;
     public Bullet BulletOrigin => _bulletOrigin;
-    private WeaponAffectionAdditionalParams _additionalParams = new WeaponAffectionAdditionalParams();
+//    private WeaponAffectionAdditionalParams _additionalParams = new WeaponAffectionAdditionalParams();
     private SpellDamageData _spellDamageData;
 
     private readonly ShipBase _owner;
@@ -65,14 +72,14 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     public SubUpdateShowCast SubUpdateShowCast { get; private set; }
     public CanCastAtPoint CanCastAtPoint { get; private set; }
     public float CurOwnerSpeed => 0.001f;
-    public CurWeaponDamage CurrentDamage => new CurWeaponDamage(0, 0);
+    public CurWeaponDamage CurrentDamage { get; set; }
 
 
     public float AimRadius { get; set; }
     public float SetorAngle { get; set; }
     public float BulletSpeed { get; set; }
     public float ReloadSec { get; set; }
-    public int ShootPerTime { get; set; }
+    public int ShootPerTime { get; set; } 
 
 
     public string Name { get; private set; }
@@ -86,14 +93,19 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     public bool ShowCircle { get; private set; }
     private DistCounter _distCounter;
     private ShipControlCenter _controlShip;
+    private ISpellToGame _spellData;
 
     public SpellInGame(ISpellToGame spellData, Func<Vector3> modulPos,
         TeamIndex teamIndex, ShipBase owner, int level, string name, int period,
-        int count, SpellType spellType, float maxDist, string desc, DistCounter distCounter, float delayPeriod)
+        int count, SpellType spellType, string desc, 
+        DistCounter distCounter, float delayPeriod,CurWeaponDamage damageAffection)
     {
-        if (maxDist < 1)
+        ShootPerTime = 1;
+        _spellData = spellData;
+        CurrentDamage = damageAffection;
+        if (spellData.BulleStartParameters.distanceShoot < 1)
         {
-            Debug.LogError($"Shoot dist is vey low {spellData}  {maxDist}  name:{name}");
+            Debug.LogError($"Shoot dist is vey low {spellData}  {spellData.BulleStartParameters.distanceShoot}  name:{name}");
         }
         _controlShip = owner as ShipControlCenter;
         if (_controlShip == null)
@@ -104,7 +116,10 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         _distCounter = distCounter;
 
         Desc = desc;
-        AimRadius = maxDist;
+        AimRadius = spellData.BulleStartParameters.distanceShoot;
+        BulletSpeed = spellData.BulleStartParameters.bulletSpeed;
+
+        Debug.LogError($"AIM rad start:{AimRadius.ToString("0.00")} _ {name}");
         //        ShowCircleRadius = spellData.ShowCircle;
         ShowLine = spellData.ShowLine;
         Level = level;
@@ -118,17 +133,19 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         _bulletOrigin = spellData.GetBulletPrefab();
         _spellDamageData = spellData.RadiusAOE();
         _bulletStartParams = spellData.BulleStartParameters;
-        _affectAction = spellData.AffectAction;
+        _affectAction = new WeaponInventoryAffectTarget(spellData.AffectAction.Main, spellData.AffectAction.TargetType);
         CastSpell = spellData.CastSpell;
         SubUpdateShowCast = spellData.SubUpdateShowCast;
         CanCastAtPoint = spellData.CanCastAtPoint;
-        _createBulletAction = spellData.CreateBulletAction;
+        spellData.ResetBulletCreateAtion();
+        //        _createBulletAction = spellData.CreateBulletAction;
         ///
-        SetBulletCreateAction(_createBulletAction);
+        //        SetBulletCreateAction(_createBulletAction);
         ///
         ShallCastToTaregtAIAction = spellData.ShallCastToTaregtAIAction;
         BulletDestroyAction = spellData.BulletDestroyDelegate;
         ShowCircle = _spellDamageData.AOERad > 0;
+
     }
 
     public bool IsReady => DelayedAction.IsReady;
@@ -211,7 +228,13 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         var maxDistPos = startPos + dir * AimRadius;
         var distCal = _distCounter(maxDistPos, target);
         DelayedAction.Use();
-        CastSpell(new BulletTarget(distCal), _bulletOrigin, this, startPos, BulletStartParams);
+        Debug.LogError($"Cast rad start:{AimRadius.ToString("0.00")}");
+        var castData = new CastSpellData()
+        {
+            Bullestartparameters = BulletStartParams,
+            ShootsCount = ShootPerTime,
+        };
+        CastSpell(new BulletTarget(distCal), _bulletOrigin, this, startPos, castData);
         //        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
     }
 
@@ -219,18 +242,18 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     public void BulletCreateByDir(ShipBase target, Vector3 dir)
     {
         CreateBulletWithModif(dir);
-        if (ShootPerTime > 0)
-        {
-            for (int i = 1; i < ShootPerTime; i++)
-            {
-                var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.1f * i);
-                timer.OnTimer += () =>
-                {
-                    if (!Owner.IsDead)
-                        CreateBulletWithModif(dir);
-                };
-            }     
-        }
+//        if (ShootPerTime > 0)
+//        {
+//            for (int i = 1; i < ShootPerTime; i++)
+//            {
+//                var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.1f * i);
+//                timer.OnTimer += () =>
+//                {
+//                    if (!Owner.IsDead)
+//                        CreateBulletWithModif(dir);
+//                };
+//            }     
+//        }
     }
 
     protected void CreateBulletWithModif(ShipBase target)
@@ -295,11 +318,21 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
 
     public void ApplyToShipSub(ShipParameters shipParameters, ShipBase shipBase, Bullet bullet)
     {
+        var addInfo = new WeaponAffectionAdditionalParams()
+        {
+            AimRadius = AimRadius,
+            BulletSpeed = BulletSpeed,
+            ReloadSec = ReloadSec,
+            SetorAngle = SetorAngle,
+            ShootPerTime = ShootPerTime,
+            CurrentDamage = CurrentDamage
+        };
+
         foreach (var targetDelegate in AffectAction.Additional)
         {
-            targetDelegate(shipParameters, shipBase, bullet, DamageDoneCallback, _additionalParams);
+            targetDelegate(shipParameters, shipBase, bullet, DamageDoneCallback, addInfo);
         }
-        AffectAction.Main(shipParameters, shipBase, bullet, DamageDoneCallback, _additionalParams);
+        AffectAction.Main(shipParameters, shipBase, bullet, DamageDoneCallback, addInfo);
     }
 
 
@@ -319,14 +352,13 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     }
 
     public WeaponInventoryAffectTarget AffectAction => _affectAction;
-    public CreateBulletDelegate CreateBulletAction { get; set; }
+    public CreateBulletDelegate CreateBulletAction => _spellData.CreateBulletAction;
 
     public BulleStartParameters BulletStartParams =>
-        new BulleStartParameters(BulletSpeed, _bulletStartParams.turnSpeed, _bulletStartParams.distanceShoot,
-            _bulletStartParams.radiusShoot);
+        new BulleStartParameters(BulletSpeed, _bulletStartParams.turnSpeed, AimRadius,AimRadius);
 
     public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
     {
-        CreateBulletAction = bulletCreate;
+        _spellData.SetBulletCreateAction(bulletCreate);
     }
 }

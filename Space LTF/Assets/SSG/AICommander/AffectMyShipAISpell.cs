@@ -69,7 +69,11 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
             target = maxDistPos;
         }
 
-        _spell.CastSpell(new BulletTarget(target), _bulletOrigin, _spellData, startPos, _bulletStartParams);
+        var castDat = new CastSpellData()
+        {
+            Bullestartparameters = _bulletStartParams,
+        };
+        _spell.CastSpell(new BulletTarget(target), _bulletOrigin, _spellData, startPos, castDat);
     }
 }
 

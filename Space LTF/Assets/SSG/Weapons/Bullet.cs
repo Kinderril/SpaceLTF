@@ -199,6 +199,7 @@ public abstract class Bullet : MovingObject
     {
         _curSpeed = weapon.CurOwnerSpeed / 2f;
         _startTime = Time.time;
+        _distanceShoot = distanceShoot;
         //        _turnSpeed = turnSpeed;
         _curSpeed = 0f;
         _maxSpeed = bulletSpeed * (1 + (weapon.Level - 1) * 0.1f);

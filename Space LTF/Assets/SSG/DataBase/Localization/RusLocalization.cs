@@ -1072,6 +1072,7 @@ public static class RusLocalization
         {"EParameterShipmodulsSlots", "Слоты модулей"},
         {"EParameterShipweaponSlots", "Оружейные слоты"},
         {"Goal", "Цель"},
+        {"Load", "Загрузить"},
 
         {"Energy storage", "Хранилище энергии"},
         {"Steal", "Украсть"},

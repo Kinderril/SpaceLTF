@@ -24,6 +24,8 @@ public class LineShotSpell : BaseSpellModulInv
         return true;
     }
 
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(Damage, Damage);
+
     private float FireCoefCalc(int level, ESpellUpgradeType upd)
     {
         if (upd == ESpellUpgradeType.B2)
@@ -60,27 +62,27 @@ public class LineShotSpell : BaseSpellModulInv
 
     }
 
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
         var ANG_2 = 20f;
 
-        var dirToShoot = target.Position - shootPos;
         //        Debug.Log($"dir to shoot{dirToShoot}   targte{target.Position}   from{shootPos}");
-
-        var b0 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, bullestartparameters);
-        var half = ANG_2 / 2f;
-
-        var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
-        var r2 = Utils.RotateOnAngUp(dirToShoot, half);
-
-        var b1 = Bullet.Create(origin, weapon, r1, shootPos, target.target, bullestartparameters);
-        var b2 = Bullet.Create(origin, weapon, r2, shootPos, target.target, bullestartparameters);
-
-
-        if (UpgradeType == ESpellUpgradeType.A1)
+        for (int i = 0; i < castData.ShootsCount; i++)
         {
-            b1.DeathOnHit = b2.DeathOnHit = b0.DeathOnHit = false;
+            var dirToShoot = target.Position - shootPos;
+            modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+            var half = ANG_2 / 2f;
+
+            var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
+            var r2 = Utils.RotateOnAngUp(dirToShoot, half);
+
+            var sp1 = target.Position + r1;
+            var sp2 = target.Position + r2;
+
+            modificatedCreateBullet(target, origin, weapon, sp1, castData.Bullestartparameters);
+            modificatedCreateBullet(target, origin, weapon, sp2, castData.Bullestartparameters);
         }
+
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
@@ -96,9 +98,13 @@ public class LineShotSpell : BaseSpellModulInv
     {
         var dirToShoot = target.Position - shootPos;
         var b0 = Bullet.Create(origin, weapon, dirToShoot, shootPos, target.target, bullestartparameters);
+        if (UpgradeType == ESpellUpgradeType.A1)
+        {
+            b0.DeathOnHit = false;
+        }
     }
 
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 

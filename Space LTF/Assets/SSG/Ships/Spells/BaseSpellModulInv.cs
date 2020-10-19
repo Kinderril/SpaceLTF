@@ -40,7 +40,7 @@ public enum ESpellUpgradeType
 
 
 [Serializable]
-public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, IAffectParameters
+public abstract class BaseSpellModulInv : IItemInv, ISpellToGame, IAffectParameters, IAffectable
 {
     protected BaseSpellModulInv(IInventory currentInventory)
     {
@@ -56,7 +56,7 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
         CastSpell = castActionSpell;
         BulleStartParameters = bulleStartParameters;
         AffectAction = new WeaponInventoryAffectTarget(affectAction, targetType);
-        CreateBullet = createBullet;
+//        CreateBullet = createBullet;
         SpellType = spell;
         CostCount = costCount;
         CostTime = costTime;
@@ -69,23 +69,28 @@ public abstract class BaseSpellModulInv : IItemInv, IAffectable, ISpellToGame, I
     public bool IsHoming { get; protected set; }
     public SpellType SpellType { get; private set; }
     public ESpellUpgradeType UpgradeType { get; private set; }
-    protected CreateBulletDelegate CreateBullet { get; private set; }
+//    protected CreateBulletDelegate CreateBullet { get; private set; }
     public string Name => Namings.SpellName(SpellType);
 
-    protected abstract CreateBulletDelegate createBullet { get; }
+    protected abstract CreateBulletDelegate standartCreateBullet { get; } //Базовый делегат по созданию пули
+    protected CreateBulletDelegate modificatedCreateBullet { get;private set; } //Модифицированный делегат по созданию пули
     protected abstract CastActionSpell castActionSpell { get; }
     protected abstract AffectTargetDelegate affectAction { get; }
     public WeaponInventoryAffectTarget AffectAction { get; private set; }
-    public CreateBulletDelegate CreateBulletAction => CreateBullet;
+    public CreateBulletDelegate CreateBulletAction => modificatedCreateBullet;
     public abstract ShallCastToTaregtAI ShallCastToTaregtAIAction { get; }
     public virtual BulletDestroyDelegate BulletDestroyDelegate => null;
 
-    public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
+    public void ResetBulletCreateAtion()
     {
-        CreateBullet = bulletCreate;
+        modificatedCreateBullet = standartCreateBullet;
     }
 
-    public virtual CurWeaponDamage CurrentDamage => new CurWeaponDamage(0, 0);
+    public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
+    {
+        modificatedCreateBullet = bulletCreate;
+    }
+    public abstract CurWeaponDamage CurrentDamage { get; }
     public float AimRadius { get; set; }
     public float SetorAngle { get; set; }
     public float BulletSpeed { get; set; }

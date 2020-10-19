@@ -19,6 +19,7 @@ public class MineFieldSpell : BaseSpellModulInv
     private int MINES_COUNT => BASE_MINES_COUNT + Level;
     public float DAMAGE_BODY => damageBody + Level;
     public float DAMAGE_SHIELD => damageShield + Level;
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(DAMAGE_SHIELD, DAMAGE_BODY);
 
     public MineFieldSpell()
         : base(SpellType.mineField, 2, 14,
@@ -26,23 +27,23 @@ public class MineFieldSpell : BaseSpellModulInv
     {
 
     }
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
         var deltaAng = 360f / MINES_COUNT;
         var direction = MyExtensions.IsTrueEqual() ? Vector3.right : Vector3.left;
         var baseDist = (target.Position - weapon.CurPosition).magnitude;
         //        Debug.LogError($"Mine base dist {baseDist}");
-        for (int i = 0; i < MINES_COUNT; i++)
+        for (int i = 0; i < MINES_COUNT + castData.ShootsCount - 1; i++)
         {
             direction = Utils.RotateOnAngUp(direction, MyExtensions.GreateRandom((deltaAng * i)));
             var position = target.Position + direction * MyExtensions.Random(rad / 4, rad);
             var dir = (position - weapon.CurPosition);
-            bullestartparameters.distanceShoot = baseDist;
-            MainCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, bullestartparameters);
+            castData.Bullestartparameters.distanceShoot = baseDist;
+            modificatedCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, castData.Bullestartparameters);
         }
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;

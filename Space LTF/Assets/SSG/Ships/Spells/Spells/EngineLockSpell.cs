@@ -41,15 +41,33 @@ public class EngineLockSpell : BaseSpellModulInv
 
     public float CurLockPeriod => LOCK_PERIOD + LOCK_LEVEL * Level;
 
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(CurLockPeriod, CurLockPeriod);
     public EngineLockSpell()
         : base(SpellType.engineLock, 3, _baseCostTime,
             new BulleStartParameters(15, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
 
     }
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        EngineCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
+        var period = 0.5f;
+        for (int i = 0; i < castData.ShootsCount; i++)
+        {
+            var pp = i * period;
+            if (pp > 0)
+            {
+                var timer =
+                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
+                timer.OnTimer += () =>
+                {
+                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                };
+            }
+            else
+            {
+                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+            }
+        }
 
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
@@ -86,7 +104,7 @@ public class EngineLockSpell : BaseSpellModulInv
         EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE, origin.Position, 3f);
     }
 
-    protected override CreateBulletDelegate createBullet => EngineCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => EngineCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 

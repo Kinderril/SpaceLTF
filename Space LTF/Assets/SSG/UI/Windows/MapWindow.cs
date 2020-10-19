@@ -497,6 +497,7 @@ public class MapWindow : BaseWindow
     {
         if (val)
         {
+            playerArmyUI.TryEnableMainShipInv();
             playerArmyUI.SoftRefresh();
             WindowManager.Instance.UiAudioSource.PlayOneShot(DataBaseController.Instance.AudioDataBase.WindowOpen);
             ArmyInfoContainer.transform.position = _stablePos;
@@ -504,6 +505,7 @@ public class MapWindow : BaseWindow
         }
         else
         {
+            playerArmyUI.DisableMainShipInv();
             if (!_stablePosCached)
             {
                 _stablePosCached = true;
@@ -513,10 +515,8 @@ public class MapWindow : BaseWindow
             ArmyInfoContainer.transform.position = v;
             GlobalMap.UnBlock();
         }
-        if (OnOpenInventory != null)
-        {
-            OnOpenInventory(val);
-        }
+
+        OnOpenInventory?.Invoke(val);
         isArmyActive = val;
     }
 

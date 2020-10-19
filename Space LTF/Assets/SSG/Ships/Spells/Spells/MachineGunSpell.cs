@@ -33,6 +33,7 @@ public class MachineGunSpell : BaseSpellModulInv
         return true;
     }
     private float DmgShield => 1 + (int)(Level * 1.5f);
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(DmgShield, DmgHull);
 
     public int BulletsCount => ClacBulletCount(UpgradeType);
 
@@ -49,7 +50,8 @@ public class MachineGunSpell : BaseSpellModulInv
     }
 
     public MachineGunSpell()
-        : base(SpellType.machineGun, 1, 45, new BulleStartParameters(14f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
+        : base(SpellType.machineGun, 1, 45, 
+            new BulleStartParameters(14f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
     }
 
@@ -58,7 +60,7 @@ public class MachineGunSpell : BaseSpellModulInv
         return new SpellDamageData();
     }
 
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castData)
     {
         var battle = BattleController.Instance;
         var offset = rad / 2;
@@ -68,17 +70,17 @@ public class MachineGunSpell : BaseSpellModulInv
                 BattleController.OppositeIndex(weapon.TeamIndex), DIST_SHOT);
             foreach (var ship in closestsShips)
             {
-                for (int i = 0; i < BulletsCount; i++)
+                for (int i = 0; i < BulletsCount + castData.ShootsCount - 1; i++)
                 {
-                    ShootToTarget(battle, offset, i * .3f, ship.Position, origin, weapon, bullestartparameters);
+                    ShootToTarget(battle, offset, i * .3f, ship.Position, origin, weapon, castData.Bullestartparameters);
                 }
             }
         }
         else
         {
-            for (int i = 0; i < BulletsCount; i++)
+            for (int i = 0; i < BulletsCount + castData.ShootsCount - 1; i++)
             {
-                ShootToTarget(battle, offset, i * .3f, target.Position, origin, weapon, bullestartparameters);
+                ShootToTarget(battle, offset, i * .3f, target.Position, origin, weapon, castData.Bullestartparameters);
             }
 
         }
@@ -98,7 +100,7 @@ public class MachineGunSpell : BaseSpellModulInv
                 var zz = MyExtensions.Random(-offset, offset);
 
                 var nTargte = new BulletTarget(pos + new Vector3(xx, 0, zz));
-                MainCreateBullet(nTargte, origin, weapon, weapon.CurPosition, bullestartparameters);
+                modificatedCreateBullet(nTargte, origin, weapon, weapon.CurPosition, bullestartparameters);
             }
         };
     }
@@ -117,7 +119,7 @@ public class MachineGunSpell : BaseSpellModulInv
             null, bullestartparameters);
     }
 
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 

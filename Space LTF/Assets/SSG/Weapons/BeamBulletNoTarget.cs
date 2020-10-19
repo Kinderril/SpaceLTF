@@ -20,10 +20,18 @@ public class BeamBulletNoTarget : Bullet
 
 //    private string _undersideName;
     private Color _crolor;
+    public GameObject EdgeObject;
+    private bool haveEdgeObject = false;
+    private Vector3 _startScaleEdgeObject = Vector3.one;
 
     public CurveLineAbsorber ProcessEvent;
     void Awake()
     {
+        haveEdgeObject = EdgeObject != null;
+        if (haveEdgeObject)
+        {
+            _startScaleEdgeObject = EdgeObject.transform.localScale;
+        }
         _roadName = NcCurveAnimation.Ng_GetMaterialColorName(ProcessEvent.ParticleAttractor.roadMaterial);
 //        _undersideName = NcCurveAnimation.Ng_GetMaterialColorName(ProcessEvent.ParticleAttractor.undersideMaterial);
         ProcessEvent.ParticleAttractor.roadMaterial = Utils.CopyMaterial(ProcessEvent.ParticleAttractor.roadMaterial);
@@ -105,6 +113,10 @@ public class BeamBulletNoTarget : Bullet
     {
         var period = (_deathTime - Time.time);
         var p = Mathf.Clamp01(1f - period / _endPeriod);
+        if (haveEdgeObject)
+        {
+            EdgeObject.transform.localScale = _startScaleEdgeObject * p;
+        }
         ProcessEvent.ParticleAttractor.roadWidth = p * .7f * coefWidth;
     } 
     private void UpdateOffPeriod()
@@ -124,6 +136,10 @@ public class BeamBulletNoTarget : Bullet
 
     private void MoveTo(Vector3 target, Vector3 @from)
     {
+        if (haveEdgeObject)
+        {
+            EdgeObject.transform.position = target;
+        }
         ProcessEvent.UpdatePositions(from, target);
     }
 

@@ -146,6 +146,10 @@ public class DebugPanelWindow : EditorWindow
 //            {
 //                DebugEventStart.AcitvateDialog(GlobalMapEventType.anomaly);
 //            }
+            if (GUILayout.Button("Modules"))
+            {
+                AddDebugModules();
+            }
             if (GUILayout.Button("MovArmy"))
             {
                 BornMovingArmy();
@@ -227,7 +231,44 @@ public class DebugPanelWindow : EditorWindow
         var army = MainController.Instance.MainPlayer.Army;
         var power = ArmyCreator.CalcArmyPower(army);
         Debug.Log($"YOU ARMY POWER:{power}".Green());
-    }  
+    }
+
+
+    private void AddDebugModules()
+    {
+        var player = MainController.Instance.MainPlayer;
+        if (player == null)
+        {
+            return;
+        }
+
+        var inventory = player.Inventory;
+        if (inventory == null)
+        {
+            return;
+        }
+
+        var allVals = (SimpleModulType[])Enum.GetValues(typeof(SimpleModulType));
+        foreach (var type in allVals)
+        {
+            if (inventory.GetFreeSimpleSlot(out var index1))
+            {
+                var modul = Library.CreatSimpleModul(type, 1);
+                inventory.TryAddSimpleModul(modul, index1);
+            }
+        }
+
+        var allSpellType = (SpellType[])Enum.GetValues(typeof(SpellType));
+        foreach (var type in allSpellType)
+        {
+            if (type != SpellType.BaitPriorityTarget && type != SpellType.priorityTarget && inventory.GetFreeSpellSlot(out var index1))
+            {
+                var modul = Library.CreateSpell(type);
+                inventory.TryAddSpellModul(modul, index1);
+            }
+
+        }
+    }
 
     private void BornMovingArmy()
     {                                 

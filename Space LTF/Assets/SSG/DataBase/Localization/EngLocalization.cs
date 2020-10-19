@@ -247,6 +247,7 @@ public static class EngLocalization
 
         {"exprolerMapTutor", "Explorer map.\nClick to points you want to explore.\nAfter completing galaxies you will have new options to move"},
         {"questKills", "{0} kills"},
+        {"Load", "Load"},
         {"Fleet", "Fleet"},
         {"cmGetCredits", "Get credits"},
         {"Loading", "Loading"},
@@ -526,6 +527,8 @@ public static class EngLocalization
         {"SpellMaxLevel", "Max level reached: {0}"},
         {"WantChangeLang", "Restart game to update localization."},
         {"NoMouseMove", "Camera have no move by mouse."},
+        {"cm_Merc_2_2_startTakeItems", "You are near target"},
+        {"cmMerc_2_2_StealFine", "Data stealed"},
 
 
         {"descWinner", "Win at 1 battle"},
@@ -1606,25 +1609,25 @@ public static class EngLocalization
 { "cmMerc2_3_SpecOps_0_M2", "BC: From the intonation of the speech, I can't say that this speaker belongs to humanoids."},
 { "cmMerc2_3_SpecOps_0_A2", "This is strange! Okay… We need to stop them."},
 
-    { "cmMerc2_3_Spec Ops_1_M1", "BC: Ships eliminated."},
-    { "cmMerc2_3_Spec Ops_1_A1", "What news?"},
+    { "cmMerc2_3_SpecOps_1_M1", "BC: Ships eliminated."},
+    { "cmMerc2_3_SpecOps_1_A1", "What news?"},
     { "cmMerc2_3_SpecOps_1_M2", "BC: no Physical shells or parts of them found. Absolutely empty ships."},
     { "cmMerc2_3_SpecOps_1_A3", "Empty ships means… Remote control?"},
-    { "cmMerc2_3_Spec Ops_1_M3", "BC: not excluded."},
+    { "cmMerc2_3_SpecOps_1_M3", "BC: not excluded."},
 
     { "cmMerc2_3_SpecOps_2_M1", "BC: Need more data to determine the source of remote control."},
-    { "cmMerc2_3_Spec Ops_2_A1", "I will get data."},
+    { "cmMerc2_3_SpecOps_2_A1", "I will get data."},
 
 
-    { "cmMerc2_3_Spec Ops_3_M1", "BC: The definition of completed… But... Not… I can…"},
-         { "cmMerc2_3_Spec Ops_3_A1", "What happened?"},
+    { "cmMerc2_3_SpecOps_3_M1", "BC: The definition of completed… But... Not… I can…"},
+        { "cmMerc2_3_SpecOps_3_A1", "What happened?"},
         { "cmMerc2_3_SpecOps_3_M2", "BC: ...*?:%№№)(:;?:(.... MESSAGE! ... You ... Are Helpless… We… Help… To You…Give Back... The Planet… Reboot! Hacking attempt by an unknown user. Stopped."},
-        { "cmMerc2_3_Spec Ops_3_A2", "What the fuck... was that?"},
-        { "cmMerc2_3_Spec Ops_3_M3", "BC: Attention! Attempt to hack the system! The message was transmitted from the Futurum base."},
-        { "cmMerc2_3_Spec Ops_3_A3", "This means that the opponents are already there…"},
-        { "cmMerc2_3_Spec Ops_3_M4", "BC: They have a very smart hacker."},
-        { "cmMerc2_3_Spec Ops_3_A4", "We need to warn Philip as soon as possible."},
-        { "cmMerc2_3_Spec Ops_3_M5", "BC: For the security of the armistice negotiations, any unregistered communication is prohibited. You need to move to another zone."},
+        { "cmMerc2_3_SpecOps_3_A2", "What the fuck... was that?"},
+        { "cmMerc2_3_SpecOps_3_M3", "BC: Attention! Attempt to hack the system! The message was transmitted from the Futurum base."},
+        { "cmMerc2_3_SpecOps_3_A3", "This means that the opponents are already there…"},
+        { "cmMerc2_3_SpecOps_3_M4", "BC: They have a very smart hacker."},
+        { "cmMerc2_3_SpecOps_3_A4", "We need to warn Philip as soon as possible."},
+        { "cmMerc2_3_SpecOps_3_M5", "BC: For the security of the armistice negotiations, any unregistered communication is prohibited. You need to move to another zone."},
 
         { "cmMerc2_4_dialog_start_M1", "BC: Communication allowed."},
         { "cmMerc2_4_dialog_start_A1", "Contact Philip…"},
@@ -1739,7 +1742,33 @@ public static class EngLocalization
 { "cmMerc3_1_dialog_1_A3", "Heh! Yes,Yes!"},
 { "cmMerc3_1_dialog_1_M4", "Philip: Thank you, K-Kurt! I owe you a huge debt."},
 { "cmMerc3_1_dialog_1_A4", "We'll make a deal."},
-                                                                        
+
+
+//{ "cmMerc2_3_SpecOps_1_M1", "BC: The ships have been eliminated."},
+//{ "cmMerc2_3_SpecOps_1_A1", "What's the news?"},
+//{ "cmMerc2_3_SpecOps_1_M2", "BC: Physical shells or parts of them were not detected. Completely empty ships."},
+//{ "cmMerc2_3_SpecOps_1_A3", "Dummy means… Remote control?"},
+//{ "cmMerc2_3_SpecOps_1_M3", "BC: Not excluded."},
+
+//{ "cmMerc2_3_SpecOps_2_M1", "BC: need more data to determine the remote control source."},
+//{ "cmMerc2_3_SpecOps_2_A1", "There will be data for you."},
+//
+//
+//{ "cmMerc2_3_SpecOps_3_M1", "BC: The definition of completed… But... Not… I can…"},
+//{ "cmMerc2_3_SpecOps_3_A1", "What happened?"},
+//{ "cmMerc2_3_SpecOps_3_M2", "BC: ...*?:%№№)(:;?:(.... MESSAGE! ... You ... Are Helpless… We… Help… To You…Give Back... The Planet… Reboot! Hacking attempt by an unknown user. Stopped."},
+//{ "cmMerc2_3_SpecOps_3_A2", "What the fuck... was that?"},
+//{ "cmMerc2_3_SpecOps_3_M3", "BC: Attention! Attempt to hack the system! The message was transmitted from the Futurum base."},
+//{ "cmMerc2_3_SpecOps_3_A3", "This means that the opponents are already there…"},
+//{ "cmMerc2_3_SpecOps_3_M4", "BC: They have a very smart hacker."},
+//{ "cmMerc2_3_SpecOps_3_A4", "We need to warn Philip as soon as possible."},
+//{ "cmMerc2_3_SpecOps_3_M5", "BC: For the security of the armistice negotiations, any unregistered communication is prohibited. You need to move to another zone."},
+
+
+
+
+
+
         { "cmMerc3_1_dialog_2_M1", "БК: Обнаружен флот Кочевников."}, 
         { "cmMerc3_1_dialog_2_M2", "Филипп: Это они!"}, 
         { "cmMerc3_1_dialog_2_A2", "Спокойно, Филипп. Тут какая-то неразбериха."},

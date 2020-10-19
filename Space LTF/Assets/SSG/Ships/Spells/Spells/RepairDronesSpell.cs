@@ -27,6 +27,7 @@ public class RepairDronesSpell : BaseSpellModulInv
     {
         return HEAL_PERCENT + l * 0.16f;
     }
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(HealPercent, HealPerTick);
 
     public RepairDronesSpell()
         : base(SpellType.repairDrones, 3, 30,
@@ -48,25 +49,40 @@ public class RepairDronesSpell : BaseSpellModulInv
         return false;
     }
 
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
         if (_lastClosest != null)
         {
-            MainCreateBullet(new BulletTarget(_lastClosest), origin, weapon, shootPos, bullestartparameters);
-            //            MainAffect(_lastClosest.ShipParameters, _lastClosest, null, null, null);
+            target = new BulletTarget(_lastClosest);
+            var period = 0.5f;
+            for (int i = 0; i < castData.ShootsCount; i++)
+            {
+                var pp = i * period;
+                if (pp > 0)
+                {
+                    var timer =
+                        MainController.Instance.BattleTimerManager.MakeTimer(pp);
+                    timer.OnTimer += () =>
+                    {
+                        modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                    };
+                }
+                else
+                {
+                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                }
+            }
         }
-        //        var dir = (target.Position - weapon.CurPosition);
-        //        MainCreateBullet(new BulletTarget(dir + weapon.CurPosition), origin, weapon, shootPos, bullestartparameters);
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var dir = (target.target.Position - weapon.CurPosition);
+        Vector3 dir = target.target!=null?(target.target.Position - weapon.CurPosition): (target.Position - weapon.CurPosition);
         Bullet.Create(origin, weapon, dir, weapon.CurPosition, target.target, BulleStartParameters);
     }
 

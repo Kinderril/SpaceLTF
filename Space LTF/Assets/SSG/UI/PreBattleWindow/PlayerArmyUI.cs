@@ -50,6 +50,21 @@ public class PlayerArmyUI : MonoBehaviour
         WaitLoadStart();
     }
 
+    public void TryEnableMainShipInv()
+    {
+        if (mainShipInfo != null)
+        {
+            mainShipInfo.EnableDragZone();
+        }
+    }       
+    public void DisableMainShipInv()
+    {
+        if (mainShipInfo != null)
+        {
+            mainShipInfo.DisableDragZone();
+        }
+    }
+
     private async void WaitLoadStart()
     {
         await WaitLoadTask();
@@ -146,17 +161,17 @@ public class PlayerArmyUI : MonoBehaviour
             mainShipInfo.Disable();
         }
     }
-    public void Enable()
-    {
-        foreach (var inventoryUi in playerInfoList)
-        {
-            inventoryUi.Enable();
-        }
-        if (mainShipInfo != null)
-        {
-            mainShipInfo.Enable();
-        }
-    }
+//    public void Enable()
+//    {
+//        foreach (var inventoryUi in playerInfoList)
+//        {
+//            inventoryUi.Enable();
+//        }
+//        if (mainShipInfo != null)
+//        {
+//            mainShipInfo.Enable();
+//        }
+//    }
 
 }
 

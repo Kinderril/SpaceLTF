@@ -25,6 +25,7 @@ public class VacuumSpell : BaseSpellModulInv
         }
         return a;
     }
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(shieldDmg, powerThrow);
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
     private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
@@ -57,16 +58,33 @@ public class VacuumSpell : BaseSpellModulInv
         return targetdistpos;
     }
 
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
+        var period = 0.5f;
+        for (int i = 0; i < castData.ShootsCount; i++)
+        {
+            var pp = i * period;
+            if (pp > 0)
+            {
+                var timer =
+                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
+                timer.OnTimer += () =>
+                {
+                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                };
+            }
+            else
+            {
+                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+            }
+        }
     }
     public override SpellDamageData RadiusAOE()
     {
         return new SpellDamageData(rad);
     }
 
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
     public override bool ShowLine => true;

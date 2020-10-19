@@ -43,6 +43,7 @@ public class HookShotSpell : BaseSpellModulInv
             return _baseCostTime;
         }
     }
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(rad, rad);
 
     private const int _baseCostTime = 10;
     private const int _B2_costTime = 7;
@@ -59,9 +60,26 @@ public class HookShotSpell : BaseSpellModulInv
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos,
-        BulleStartParameters bullestartparameters)
+        CastSpellData castData)
     {
-        MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
+        var period = 0.5f;
+        for (int i = 0; i < castData.ShootsCount; i++)
+        {
+            var pp = i * period;
+            if (pp > 0)
+            {
+                var timer =
+                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
+                timer.OnTimer += () =>
+                {
+                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                };
+            }
+            else
+            {
+                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+            }
+        }
     }
 
     public override SpellDamageData RadiusAOE()
@@ -69,7 +87,7 @@ public class HookShotSpell : BaseSpellModulInv
         return new SpellDamageData(rad);
     }
 
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
     public override bool ShowLine => false;

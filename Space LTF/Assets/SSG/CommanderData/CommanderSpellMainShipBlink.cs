@@ -36,14 +36,14 @@ public class CommanderSpellMainShipBlink : ISpellToGame
     }
     public BulletDestroyDelegate BulletDestroyDelegate { get; }
 
-    public CastActionSpell CastSpell => (target, origin, weapon, shootpos, bullestartparameters) =>
+    public CastActionSpell CastSpell => (target, origin, weapon, shootpos, castDat) =>
     {
 
         var pos = target.Position;
         var distFromCenter = (pos - center).sqrMagnitude;
         if (distFromCenter < MaxRadiusSqrt)
         {
-            CreateBulletAction(target, origin, weapon, shootpos, bullestartparameters);
+            CreateBulletAction(target, origin, weapon, shootpos, castDat.Bullestartparameters);
             EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.BlinkPlaceEffect, pos, 3f);
             EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.BlinkTargetEffect, _shipToMove.Position, 3f);
             // _shipToMove.Rotation = Quaternion.FromToRotation(Vector3.forward, dir);
@@ -66,6 +66,12 @@ public class CommanderSpellMainShipBlink : ISpellToGame
 
     public float ShowCircle => 1;
     public bool ShowLine => true;
+    public void ResetBulletCreateAtion()
+    {
+        
+
+    }
+
     public SubUpdateShowCast SubUpdateShowCast { get; }
 
     public CanCastAtPoint CanCastAtPoint
@@ -73,4 +79,8 @@ public class CommanderSpellMainShipBlink : ISpellToGame
         get { return pos => true; }
     }
 
+    public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
+    {
+
+    }
 }

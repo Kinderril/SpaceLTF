@@ -8,10 +8,12 @@ public class BaseShipSpellContainer : DragZone
     public Transform LayoutSpell;
     public Transform LayoutModules;
 
+    private List<DragableItemSlot> slots = new List<DragableItemSlot>();
+    private HashSet<DragableItemSlot> modulsSlots = new HashSet<DragableItemSlot>();
     public List<DragableItemSlot> InitSpell(int index,Transform layout,ShipInventory shipInventory,[CanBeNull]OnlyModulsInventory modulsInventory)
     {
+        slots.Clear();
         transform.SetParent(layout, false);
-        List<DragableItemSlot> slots = new List<DragableItemSlot>();
 
         var spellSlot = InventoryOperation.GetDragableItemSlot();
         spellSlot.Init(shipInventory, true, index);
@@ -19,9 +21,11 @@ public class BaseShipSpellContainer : DragZone
         spellSlot.DragItemType = DragItemType.spell;
         slots.Add(spellSlot);
 
+        modulsSlots.Clear();
+
         if (modulsInventory != null)
         {
-            var modulsSlots = new HashSet<DragableItemSlot>();
+            modulsSlots = new HashSet<DragableItemSlot>();
             for (int i = 0; i < OnlyModulsInventory.COUNT; i++)
             {
                 var modulSlot = InventoryOperation.GetDragableItemSlot();
@@ -36,6 +40,23 @@ public class BaseShipSpellContainer : DragZone
 
         return slots;
     }
+
+    public override void Dispose()
+    {
+        foreach (var dragableItemSlot in slots)
+        {
+            dragableItemSlot.Dispose();
+        }
+
+        foreach (var dragableItemSlot in modulsSlots)
+        {
+            dragableItemSlot.Dispose();
+        }
+        modulsSlots.Clear();
+        slots.Clear();
+        base.Dispose();
+    }
+
     private void InitCurrentItems(OnlyModulsInventory modulsInventory)
     {
         for (int i = 0; i < modulsInventory.Moduls.SimpleModulsCount; i++)
@@ -44,9 +65,16 @@ public class BaseShipSpellContainer : DragZone
             if (modul != null)
             {
 
-                var slot = GetFreeSlot(i,ItemType.spell);
-                slot.Init(modulsInventory, _usable, i);
-                SetStartItem(slot, modul, _tradeInventory);
+                var slot = GetFreeSlot(i,ItemType.modul);
+                if (slot != null)
+                {
+                    slot.Init(modulsInventory, _usable, i);
+                    SetStartItem(slot, modul, _tradeInventory);
+                }
+                else
+                {
+                    Debug.LogError($"Can't find slot _slots:{_slots.Count} ");
+                }
             }
         }
     }

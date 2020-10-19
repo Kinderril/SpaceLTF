@@ -42,8 +42,8 @@ public class CommanderSpells
 
         var priority = new CommanderSpellMainShipBlink(radius, mainShip);
         var spellInGame = new SpellInGame(priority, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
-            Namings.Tag("MainShipBlinkName"), 0, 0, SpellType.mainShipBlink, radius, Namings.Tag("MainShipBlinkDesc"),
-            posCutter, delay);
+            Namings.Tag("MainShipBlinkName"), 0, 0, SpellType.mainShipBlink, Namings.Tag("MainShipBlinkDesc"),
+            posCutter, delay, new CurWeaponDamage(0,0));
         AllSpells.Add(spellInGame);
     }
     public bool TryCastspell(SpellInGame spell, Vector3 trg)
@@ -57,7 +57,8 @@ public class CommanderSpells
         ShipBase mainShip = _commander.MainShip;
         var spellInGame = new SpellInGame(baseSpellModul, () => modulPos.position, mainShip.TeamIndex, mainShip, 1,
             baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount, baseSpellModul.SpellType,
-            baseSpellModul.BulleStartParameters.distanceShoot, baseSpellModul.DescFull(), baseSpellModul.DiscCounter, 1f);
+             baseSpellModul.DescFull(),
+            baseSpellModul.DiscCounter, 1f, baseSpellModul.CurrentDamage);
         foreach (var modul in moduls)
         {
             var support = modul as BaseSupportModul;

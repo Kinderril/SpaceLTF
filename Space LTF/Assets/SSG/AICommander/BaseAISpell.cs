@@ -63,10 +63,12 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
 {
     protected T _spell;
     protected TeamIndex oIndex;
+    private SpellInGame _spellData;
 
     protected BaseAISpell(SpellInGame spellData, T spell, ShipControlCenter commander)
         : base(commander, spellData)
     {
+        _spellData = spellData;
         oIndex = BattleController.OppositeIndex(_teamIndex);
         _spell = spell;
         _bulletOrigin = spell.GetBulletPrefab();
@@ -140,8 +142,15 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         {
             var maxDistPos = startPos + dir * _maxDist;
             target = maxDistPos;
+            
         }
-        _spell.CastSpell(new BulletTarget(target), _bulletOrigin, _spellData, startPos, _bulletStartParams);
+
+        var castDat = new CastSpellData()
+        {
+            Bullestartparameters = _bulletStartParams,
+            ShootsCount = _spellData.ShootPerTime,
+        };
+        _spell.CastSpell(new BulletTarget(target), _bulletOrigin, _spellData, startPos, castDat);
     }
 
 }

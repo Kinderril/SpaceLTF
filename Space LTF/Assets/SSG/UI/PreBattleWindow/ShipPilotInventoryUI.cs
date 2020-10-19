@@ -43,10 +43,10 @@ public class ShipPilotInventoryUI : MonoBehaviour
     {
         ShipInventory.Disable();
     }
-    public void Enable()
-    {
-        ShipInventory.Enable();
-    }
+//    public void Enable()
+//    {
+//        ShipInventory.Enable();
+//    }
 
     public void SoftRefresh()
     {

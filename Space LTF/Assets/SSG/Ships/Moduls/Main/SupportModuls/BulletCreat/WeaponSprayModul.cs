@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class WeaponSprayModul : BaseSupportModul
 {
     private const float ANG_1 = 8f;

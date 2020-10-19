@@ -1,4 +1,7 @@
-﻿[System.Serializable]
+﻿
+using System;
+
+[Serializable]
 public class WeaponAOEModul : BaseSupportModul
 {
     private const float RAD = 5f;

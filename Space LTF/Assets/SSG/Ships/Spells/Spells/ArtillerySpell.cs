@@ -33,6 +33,7 @@ public class ArtillerySpell : BaseSpellModulInv
     }
 
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(DmgShield,DmgHull);
 
     private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
     {
@@ -54,12 +55,12 @@ public class ArtillerySpell : BaseSpellModulInv
         return period;
     }
 
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castData)
     {
         var battle = BattleController.Instance;
         var offset = rad / 2;
         float period = Period(UpgradeType);
-        for (int i = 0; i < BulletsCount; i++)
+        for (int i = 0; i < BulletsCount + castData.ShootsCount - 1; i++)
         {
             var timer =
                 MainController.Instance.BattleTimerManager.MakeTimer(i * period);
@@ -71,13 +72,14 @@ public class ArtillerySpell : BaseSpellModulInv
                     var zz = MyExtensions.Random(-offset, offset);
 
                     var nTargte = new BulletTarget(target.Position + new Vector3(xx, 0, zz));
-                    MainCreateBullet(nTargte, origin, weapon, weapon.CurPosition, bullestartparameters);
+                    MainCreateBullet(nTargte, origin, weapon, weapon.CurPosition, castData.Bullestartparameters);
                 }
             };
         }
     }
 
-    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    private void MainAffect(ShipParameters shipparameters, ShipBase target,
+        Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         ActionShip(target, DmgHull, DmgShield, damagedone);
     }
@@ -90,7 +92,7 @@ public class ArtillerySpell : BaseSpellModulInv
             null, bullestartparameters);
     }
 
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 

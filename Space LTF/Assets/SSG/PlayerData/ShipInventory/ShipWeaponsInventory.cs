@@ -69,7 +69,7 @@ public class ShipWeaponsInventory
     }
     public bool IsSlotFree(int preferableIndex)
     {
-        if (preferableIndex < WeaponsCount)
+        if (preferableIndex < WeaponsCount && preferableIndex >= 0)
         {
             var m = _weapons[preferableIndex];
             return (m == null);

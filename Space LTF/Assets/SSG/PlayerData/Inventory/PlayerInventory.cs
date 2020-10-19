@@ -130,7 +130,7 @@ public class PlayerInventory : IInventory
 
     private bool IsFree<T>(List<T> list,int index)
     {
-        if (index < list.Count)
+        if (index < list.Count && index >= 0)
         {
             var s = list[index];
             return s == null;

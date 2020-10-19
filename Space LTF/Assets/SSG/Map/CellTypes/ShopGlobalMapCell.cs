@@ -37,7 +37,7 @@ public class ShopGlobalMapCell : GlobalMapCell
     protected override MessageDialogData GetDialog()
     {
         var rep = MainController.Instance.MainPlayer.ReputationData.GetStatus(ConfigOwner);
-        if (rep == EReputationStatus.enemy)
+        if (rep == EReputationStatus.enemy && ConfigOwner != ShipConfig.droid)
         {
             var mesData = new MessageDialogData(Namings.Tag("dialog_shopEnemy"), new List<AnswerDialogData>
             {

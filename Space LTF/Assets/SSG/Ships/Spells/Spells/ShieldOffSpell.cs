@@ -14,7 +14,7 @@ public class ShieldOffSpell : BaseSpellModulInv
     private const float FIRE_PERIOD = 5f;
     private const int cost_base = 3;
     private const int cost_A1 = 2;
-    public CurWeaponDamage CurrentDamage { get; }
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(2, Period);
 
 
     public override int CostCount
@@ -35,7 +35,7 @@ public class ShieldOffSpell : BaseSpellModulInv
         : base(SpellType.shildDamage, 3, 15,
             new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-        CurrentDamage = new CurWeaponDamage(2, 0);
+//        CurrentDamage = new CurWeaponDamage(2, 0);
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
@@ -50,15 +50,32 @@ public class ShieldOffSpell : BaseSpellModulInv
         return false;
 
     }
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        MainCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
+        var period = 0.5f;
+        for (int i = 0; i < castData.ShootsCount; i++)
+        {
+            var pp = i * period;
+            if (pp > 0)
+            {
+                var timer =
+                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
+                timer.OnTimer += () =>
+                {
+                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                };
+            }
+            else
+            {
+                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+            }
+        }
     }
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {
         return targetdistpos;
     }
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 

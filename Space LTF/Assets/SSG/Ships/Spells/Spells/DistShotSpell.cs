@@ -21,16 +21,33 @@ public class DistShotSpell : BaseSpellModulInv
 
     private const float BULLET_SPEED = 50f;
     private const float BULLET_TURN_SPEED = .2f;
-    private const float DIST_SHOT = 154f;
+    private const float DIST_SHOT = 42;
     public DistShotSpell()
         : base(SpellType.distShot, 5, 13, 
             new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
         // CurWeaponDamage = new CurWeaponDamage(0, 12);
     }
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        DistShotCreateBullet(target, origin, weapon, shootPos, bullestartparameters);
+        var period = 0.5f;
+        for (int i = 0; i < castData.ShootsCount; i++)
+        {
+            var pp = i * period;
+            if (pp > 0)
+            {
+                var timer =
+                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
+                timer.OnTimer += () =>
+                {
+                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                };
+            }
+            else
+            {
+                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+            }
+        }
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
@@ -39,7 +56,9 @@ public class DistShotSpell : BaseSpellModulInv
         return true;
     }
 
-    private void DistShotCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(Engine_Off, BASE_damage);
+    private void DistShotCreateBullet(BulletTarget target, Bullet origin,
+        IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var dir = target.Position - shootpos;
 //        Debug.LogError($"dir:{dir}    target.Position:{target.Position}");
@@ -98,7 +117,7 @@ public class DistShotSpell : BaseSpellModulInv
     public override bool ShowLine => true;
     public override float ShowCircle => -1;
 
-    protected override CreateBulletDelegate createBullet => DistShotCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => DistShotCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
 

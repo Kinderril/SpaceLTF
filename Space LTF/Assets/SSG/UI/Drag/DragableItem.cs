@@ -325,12 +325,19 @@ public abstract class DragableItem : MonoBehaviour, IDropHandler,
                 return true;
             }
 
-            foreach (var startShipPilotData in ContainerItem.CurrentInventory.Owner.Ships)
+            if (ContainerItem.CurrentInventory.Owner.Ships != null)
             {
-                if (startShipPilotData.Ship == ContainerItem.CurrentInventory)
+                foreach (var startShipPilotData in ContainerItem.CurrentInventory.Owner.Ships)
                 {
-                    return true;
+                    if (startShipPilotData.Ship == ContainerItem.CurrentInventory)
+                    {
+                        return true;
+                    }
                 }
+            }
+            else
+            {
+                return true;
             }
         }
 

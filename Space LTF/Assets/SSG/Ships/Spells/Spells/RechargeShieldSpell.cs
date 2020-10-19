@@ -17,6 +17,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
     private bool _lastCheckIsOk = false;
     [field: NonSerialized]
     private ShipBase _lastClosest;
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(HealPercent, HealPercent);
 
     private float HealPercent => Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT + Level * 0.12f;
     public RechargeShieldSpell()
@@ -25,7 +26,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
     {
 
     }
-    protected override CreateBulletDelegate createBullet => MainCreateBullet;
+    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
@@ -41,24 +42,26 @@ public class RechargeShieldSpell : BaseSpellModulInv
 
         return false;
     }
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        if (UpgradeType == ESpellUpgradeType.A1)
+        var period = 0.5f;
+        for (int i = 0; i < castData.ShootsCount; i++)
         {
-            var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position, weapon.TeamIndex, ShowCircle);
-            foreach (var ship in closestsShips)
+            var pp = i * period;
+            if (pp > 0)
             {
-                MainAffect(ship.ShipParameters, ship, null, null, null);
+                var timer =
+                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
+                timer.OnTimer += () =>
+                {
+                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                };
+            }
+            else
+            {
+                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
             }
         }
-        else
-        {
-            if (_lastClosest != null)
-            {
-                MainAffect(_lastClosest.ShipParameters, _lastClosest, null, null, null);
-            }
-        }
-
     }
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {
@@ -68,21 +71,47 @@ public class RechargeShieldSpell : BaseSpellModulInv
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-
+        var startPos = shootpos;
+        var dir = target.Position - startPos;
+        bullestartparameters.distanceShoot = dir.magnitude;
+        var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
     }
 
-    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+
+    private void MainAffect2(ShipParameters shipparameters, ShipBase target, Bullet bullet1,
+        DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         var ship = target;
-        var maxShield = ship.ShipParameters.ShieldParameters.MaxShield;
+        var maxShield = shipparameters.ShieldParameters.MaxShield;
         var countToHeal = maxShield * HealPercent;
         ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
-        ship.ShipParameters.ShieldParameters.HealShield(countToHeal);
+        shipparameters.ShieldParameters.HealShield(countToHeal);
         if (UpgradeType == ESpellUpgradeType.B2)
         {
             if (!ship.DamageData.IsReflecOn)
             {
                 ship.DamageData.TurnOnReflectFor(OFF_PERIOD);
+            }
+        }
+    }
+    
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, 
+        Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    {
+
+        if (UpgradeType == ESpellUpgradeType.A1)
+        {
+            var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position, _lastClosest.TeamIndex, ShowCircle);
+            foreach (var ship in closestsShips)
+            {
+                MainAffect2(ship.ShipParameters, ship, null, null, additional);
+            }
+        }
+        else
+        {
+            if (_lastClosest != null)
+            {
+                MainAffect2(_lastClosest.ShipParameters, _lastClosest, null, null, additional);
             }
         }
     }

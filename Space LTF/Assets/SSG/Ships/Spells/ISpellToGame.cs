@@ -10,6 +10,8 @@
     Bullet GetBulletPrefab();
     //    float ShowCircle { get; }
     bool ShowLine { get; }
+    void ResetBulletCreateAtion();
     SubUpdateShowCast SubUpdateShowCast { get; }
     CanCastAtPoint CanCastAtPoint { get; }
+    void SetBulletCreateAction(CreateBulletDelegate bulletCreate);
 }

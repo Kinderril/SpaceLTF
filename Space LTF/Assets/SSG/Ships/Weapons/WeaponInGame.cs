@@ -39,8 +39,14 @@ public enum WeaponType
     beamNoTarget = 28,
 }
 
-public class WeaponAffectionAdditionalParams
+public struct WeaponAffectionAdditionalParams
 {
+    public CurWeaponDamage CurrentDamage;
+    public float AimRadius;
+    public float SetorAngle;
+    public float BulletSpeed;
+    public float ReloadSec;
+    public int ShootPerTime;
 }
 
 

@@ -50,7 +50,7 @@ public class ShipModulsInventory
 
     public bool IsSlotFree(int preferableIndex)
     {
-        if (preferableIndex < SimpleModulsCount)
+        if (preferableIndex < SimpleModulsCount && preferableIndex >= 0)
         {
             var m = _simpleModuls[preferableIndex];
             return (m == null);

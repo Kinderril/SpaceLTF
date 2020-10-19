@@ -1,4 +1,7 @@
-﻿[System.Serializable]
+﻿
+using System;
+
+[Serializable]
 public class WeaponMultiTargetModul : BaseSupportModul
 {
     private const float _decrase_Base = 0.35f;

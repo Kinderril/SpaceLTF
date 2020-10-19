@@ -192,7 +192,22 @@ public class ShipBase : MovingObject
             Death, Id, this, ShieldCollider, pilotParams);
         WeaponsController = new WeaponsController(WeaponPosition, this,
             shipInventory.WeaponsModuls.GetNonNullActiveSlots(), shipInventory.Moduls.GetNonNullActiveSlots());
-        ShipModuls = new ShipModuls(this, shipInventory.Moduls.GetNonNullActiveSlots());
+        var modulsForShip = shipInventory.Moduls.GetNonNullActiveSlots();
+        foreach (var subSpellModul in ShipParameters.SubSpellModuls)
+        {
+            if (subSpellModul != null)
+            {
+                foreach (var allItem in subSpellModul.GetAllItems())
+                {
+                    if (allItem is BaseModulInv asModul)
+                    {
+                        modulsForShip.Add(asModul);
+                    }
+                }
+            }
+        }
+
+        ShipModuls = new ShipModuls(this, modulsForShip);
         ShipModuls.InitModuls();
         _dealthCallback = dealthCallback;
         DesicionDataInit();

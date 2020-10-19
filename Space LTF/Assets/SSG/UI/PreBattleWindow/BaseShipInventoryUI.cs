@@ -15,6 +15,7 @@ public class BaseShipInventoryUI : DragZone
     public PlayerParameterUI PlayerParameterPrefab;
     public BaseShipSpellContainer ShipSpellContainerPrefab;
     private List<PlayerParameterUI> _curParams = new List<PlayerParameterUI>();
+    List<BaseShipSpellContainer> _listSpellContaners = new List<BaseShipSpellContainer>();
 
     private ShipInventory _shipInventory;
     private PlayerSafe _player;
@@ -76,11 +77,24 @@ public class BaseShipInventoryUI : DragZone
         }
         _player.OnAddShip -= OnAddShip;
         _curParams.Clear();
+        Clear(_listSpellContaners);
         base.Dispose();
     }
 
+    private void Clear(List<BaseShipSpellContainer> listSpellContaners)
+    {
+        foreach (var baseShipSpellContainer in listSpellContaners)
+        {
+            baseShipSpellContainer.Dispose();
+        }
+
+    }
+
+
     private HashSet<DragableItemSlot> InitSpells()
-    {              
+    {
+        Clear(_listSpellContaners);
+        _listSpellContaners.Clear();
         HashSet<DragableItemSlot> allslots = new HashSet<DragableItemSlot>();
         for (int i = 0; i < _shipInventory.SpellModulsCount; i++)
         {
@@ -91,7 +105,9 @@ public class BaseShipInventoryUI : DragZone
             {
                 allslots.Add(dragableItemSlot);
             }
-          
+            _listSpellContaners.Add(spellSlot);
+
+
         }
         return allslots;
     }
@@ -104,10 +120,32 @@ public class BaseShipInventoryUI : DragZone
             if (spell != null)
             {
                 var slot = GetFreeSlot(i,ItemType.spell);
-                slot.Init(_shipInventory, _usable, i);
-                SetStartItem(slot, spell, _tradeInventory);
+                if (slot != null)
+                {
+                    slot.Init(_shipInventory, _usable, i);
+                    SetStartItem(slot, spell, _tradeInventory);
+                }
             }
         }
+    }
+
+    public void EnableDragZone()
+    {
+        foreach (var baseShipSpellContainer in _listSpellContaners)
+        {
+            baseShipSpellContainer.Enable();
+        }
+
+    }
+
+    public void DisableDragZone()
+    {
+
+        foreach (var baseShipSpellContainer in _listSpellContaners)
+        {
+            baseShipSpellContainer.Disable();
+        }
+
     }
 }
 

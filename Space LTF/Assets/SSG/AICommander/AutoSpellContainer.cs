@@ -293,8 +293,12 @@ public class AutoSpellContainer
             target = maxDistPos;
         }
 
-        _spellData.CastSpell(new BulletTarget(target), _spellData.BulletOrigin, _spellData, startPos, 
-            _spellData.BulletStartParams);
+        var castDat = new CastSpellData()
+        {
+            Bullestartparameters = _spellData.BulletStartParams,
+            ShootsCount = _spellData.ShootPerTime,
+        };
+        _spellData.CastSpell(new BulletTarget(target), _spellData.BulletOrigin, _spellData, startPos, castDat);
     }
 
     protected Vector3 _modulPos()
