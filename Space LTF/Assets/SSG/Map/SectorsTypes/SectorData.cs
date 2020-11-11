@@ -508,7 +508,7 @@ public class SectorData
         }
     }
 
-    public void BornArmies()
+    public virtual void BornArmies()
     {
         foreach (var cell in ListCells)
         {

@@ -57,7 +57,7 @@ public static class InventoryOperation
 
     }
 
-    private static void RemoveItemFromSelfInventory(IItemInv item)
+    public static void RemoveItemFromSelfInventory(IItemInv item)
     {
 
         switch (item.ItemType)

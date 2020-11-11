@@ -9,6 +9,9 @@ public class PlayerDifficultyPart
     private float a;
     private float b;
     private float c;
+
+    private float offset = 1;
+    private float coef = 0.35f;
     public PlayerDifficultyPart()
     {
 
@@ -23,7 +26,7 @@ public class PlayerDifficultyPart
         switch (dataDifficulty)
         {
             case EStartGameDifficulty.VeryEasy:
-                y2 = -3;
+                y2 = -4;
                 break;
             case EStartGameDifficulty.Easy:
                 y2 = -2;
@@ -39,6 +42,8 @@ public class PlayerDifficultyPart
                 break;
         }
 
+        offset = y2;
+
         a = y1 - y2;
         b = x2 - x1;
         c = x1 * y2 - x2 * y1;
@@ -47,11 +52,11 @@ public class PlayerDifficultyPart
 
     public virtual float CalcDelta(float enemyPower, float playerPower)
     {
-        var delta = enemyPower - playerPower;
-
-        var yy = (-c - a * delta) / b;
-
-        return yy;
+        var delta = (playerPower - enemyPower + offset) * coef;
+        return delta;
+//        var delta = enemyPower - playerPower;
+//        var yy = (-c - a * delta) / b;
+//        return yy;
 
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "016b";
+    public static string VERSION = "017ea";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
@@ -77,7 +77,8 @@ public class MainController : Singleton<MainController>
     {
 
         MainPlayer = playerCamp.Player;
-        BattleData = new NextBattleData(MainPlayer, Statistics);
+        BattleData = new NextBattleDataCapmaing(MainPlayer, Statistics);
+        playerCamp.AfterLoadCheck();
         WindowManager.Instance.OpenWindow(MainState.map);
     }
 

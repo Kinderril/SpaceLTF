@@ -36,7 +36,7 @@ public class WeaponBigInfoUI : AbstractBaseInfoUI
 
     public void Init(WeaponInv inv, Action callback, bool canClick, bool withModul)
     {
-        base.Init(callback);
+        base.Init(callback, inv);
         _withModul = withModul;
 
         ButtonUpgrade.interactable = canClick;

@@ -123,6 +123,8 @@ public class AudioDataBase : MonoBehaviour
             case WeaponType.throwAroundSpell:
                 break;
             case WeaponType.nextFrame:
+                break;   
+            case WeaponType.nextFrameRepair:
                 break;
             case WeaponType.beam:
                 return BeamShot;

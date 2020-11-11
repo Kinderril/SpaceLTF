@@ -73,7 +73,7 @@ public class QuestStageCmMerc2_3_SpecForce : QuestStage
         if (cell != null)
         {
             _enemiesController = player.MapData.GalaxyData.GalaxyEnemiesArmyController;
-            _army = _enemiesController.BornArmyAtCell(cell.Data);
+            _army = _enemiesController.BornArmyAtCell(cell.Data, (int)(player.Army.GetPower() * 1.1f));
             switch (_index)
             {
                 case 1:

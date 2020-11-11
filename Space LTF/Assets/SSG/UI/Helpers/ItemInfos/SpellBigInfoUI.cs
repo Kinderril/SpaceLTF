@@ -22,6 +22,7 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
     public UIElementWithTooltipCache UpgradeB2Tooltip;
 
 
+
     public TextMeshProUGUI MaxLevel;
     public TextMeshProUGUI CostCountField;
     public TextMeshProUGUI CostDelayField;
@@ -29,17 +30,62 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
     public TextMeshProUGUI UpgradeMicrochipsCount;
     public MoneySlotUI UpgradeCost;
     private BaseSpellModulInv _spell;
+    public Transform ModulesContainer;
+    public ObjectWithTextMeshPro ModulPrefab;
 
 
     public void Init(BaseSpellModulInv spell, Action callback, bool canChange)
     {
-        base.Init(callback);
+        
+        base.Init(callback, spell);
+        ModulesContainer.ClearTransform();
         _spell = spell;
         NameField.text = Namings.SpellName(spell.SpellType);
         OnUpgrade(spell);
         _spell.OnUpgrade += OnUpgrade;
         ButtonUpgrade.interactable = canChange;
+        var haveModules = CheckSupportModules();
+        ModulesContainer.gameObject.SetActive(haveModules);
+    }
 
+    private bool CheckSupportModules()
+    {
+        var shipInv = _spell.CurrentInventory as ShipInventory;
+        if (shipInv == null)
+        {
+            return false;
+        }
+
+        if (shipInv.SpellConnectedModules.Length == 0)
+        {
+            return false;
+        }
+
+        var myIndex = _spell.CurrentInventory.GetItemIndex(_spell);
+        if (myIndex >= 0 && myIndex < shipInv.SpellConnectedModules.Length)
+        {
+            var supportModulesContainer = shipInv.SpellConnectedModules[myIndex];
+            bool haveUsableMopduls = false;
+            foreach (var item in supportModulesContainer.GetAllItems())
+            {
+                var supItem = item as BaseSupportModul;
+                if (supItem != null)
+                {
+                    haveUsableMopduls = true;
+                    ImplementSupportField(supItem );
+                }
+            }
+
+            return haveUsableMopduls;
+        }
+        return false;
+    }
+
+    private void ImplementSupportField(BaseSupportModul supItem)
+    {
+        var data = DataBaseController.GetItem(ModulPrefab);
+        data.Field.text = supItem.DescSupport();
+          data.transform.SetParent(ModulesContainer,false);
     }
 
     private void OnUpgrade(BaseSpellModulInv obj)
@@ -106,6 +152,7 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
 
     public override void Dispose()
     {
+        ModulesContainer.ClearTransform();
         Unsubscibe();
     }
 

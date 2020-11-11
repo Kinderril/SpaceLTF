@@ -10,18 +10,18 @@ public static class MoneyConsts
     //Upgrade
     public static Dictionary<int, int> SpellsCostUpgrade = new Dictionary<int, int>()
     {
-        {1, 16},
-        {2, 32},
-        {3, 45},
-        {4, 55},
+        {1, 31},
+        {2, 49},
+        {3, 71},
+        {4, 83},
     };
 
     public static Dictionary<int, int> PassiveUpgrade = new Dictionary<int, int>()
     {
-        {1, 15},
-        {2, 23},
-        {3, 40},
-        {4, 50},
+        {1, 31},
+        {2, 49},
+        {3, 71},
+        {4, 83},
     };
 
     public static Dictionary<int, int> WeaponUpgrade = new Dictionary<int, int>()

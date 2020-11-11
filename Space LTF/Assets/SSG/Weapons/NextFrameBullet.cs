@@ -12,8 +12,10 @@ public class NextFrameBullet : Bullet
         remainFrames = 3;
         if (Target == null)
         {
-            var inex = BattleController.OppositeIndex(Weapon.TeamIndex);
-            var ship = BattleController.Instance.ClosestShipToPos(_endPos, inex);
+            TeamIndex inedx = Weapon.TargetType == TargetType.Enemy
+                ? BattleController.OppositeIndex(Weapon.TeamIndex)
+                : Weapon.TeamIndex;
+            var ship = BattleController.Instance.ClosestShipToPos(_endPos, inedx);
             Target = ship;
         }
         

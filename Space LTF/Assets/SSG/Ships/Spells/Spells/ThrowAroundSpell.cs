@@ -71,7 +71,8 @@ public class ThrowAroundSpell : BaseSpellModulInv
         return targetdistpos;
     }
 
-    private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
+    private void MainCreateBullet(BulletTarget target, 
+        Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var dir = target.Position - weapon.CurPosition;
         var d = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);

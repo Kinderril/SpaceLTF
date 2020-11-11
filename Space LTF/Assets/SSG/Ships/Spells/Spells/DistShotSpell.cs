@@ -80,17 +80,18 @@ public class DistShotSpell : BaseSpellModulInv
     public int BASE_damage => BASE_DAMAGE + LEVEL_DAMAGE * Level;
     public float Engine_Off => ENGINE_OFF_DELTA;
 
-    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1,
+        DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         var dist = (target.Position - bullet1.Weapon.Owner.Position).magnitude;
         var totalDistDamage = dist;// * DIST_COEF;
-        int damage = BASE_damage + Mathf.Clamp((int)totalDistDamage, 0, DIST_BASE_DAMAGE);
+        int damage = (int)(additional.CurrentDamage.BodyDamage + Mathf.Clamp((int)totalDistDamage, 0, DIST_BASE_DAMAGE));
 
         target.ShipParameters.Damage(0, damage, bullet1.Weapon.DamageDoneCallback, target);
         switch (UpgradeType)
         {
             case ESpellUpgradeType.A1:
-                target.DamageData.ApplyEffect(ShipDamageType.engine, Engine_Off);
+                target.DamageData.ApplyEffect(ShipDamageType.engine, additional.CurrentDamage.ShieldDamage);
                 break;
 //            case ESpellUpgradeType.B2:
 //                var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position,

@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 
 public delegate void ItemTransferedTo(IItemInv item,bool val);
 
+//[Serializable]
 public interface IInventory
 {
     bool GetFreeSlot(out int index,ItemType type);
@@ -29,7 +30,7 @@ public interface IInventory
 
     List<IItemInv> GetAllItems();
 
-    event ItemTransferedTo OnItemAdded;
+    event ItemTransferedTo OnItemAdded;   //MUST BE NOT SERIALIZED
 
     void TransferItem(IItemInv item, bool val);
     float ValuableItem(IItemInv item);

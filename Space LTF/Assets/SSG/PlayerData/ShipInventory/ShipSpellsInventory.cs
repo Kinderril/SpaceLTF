@@ -91,7 +91,7 @@ public class ShipSpellsInventory
     }
     public bool IsSlotFree(int preferableIndex)
     {
-        if (preferableIndex < SpellsCount)
+        if (preferableIndex < SpellsCount && preferableIndex >=0 )
         {
             var m = _spells[preferableIndex];
             return (m == null);

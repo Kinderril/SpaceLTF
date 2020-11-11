@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum BulletAffectType
@@ -82,6 +83,7 @@ public abstract class Bullet : MovingObject
     public BaseEffectAbsorber HitEffect;
     public BaseEffectAbsorber TrailEffect;
     public bool _traileChecked;
+    private HashSet<int> _hittedShips = new HashSet<int>();
 
     protected override float TurnSpeed()
     {
@@ -117,6 +119,12 @@ public abstract class Bullet : MovingObject
         {
             HitEffect.Stop();
         }
+#if UNITY_EDITOR
+        if (transform.localScale != Vector3.one)
+        {
+            Debug.LogError($"bullet:{gameObject.name}  have wrong scale");
+        }
+#endif
     }
 
     public abstract BulletType GetType { get; }
@@ -140,6 +148,7 @@ public abstract class Bullet : MovingObject
         }
 #endif
         var bullet = DataBaseController.Instance.Pool.GetBullet(origin.ID);
+        bullet.ClearHitList();
         switch (origin.GetType)
         {
             case BulletType.beamNoTarget:
@@ -176,6 +185,12 @@ public abstract class Bullet : MovingObject
         BattleController.Instance.AddBullet(bullet);
 
         return bullet;
+    }
+
+    private void ClearHitList()
+    {
+        
+        _hittedShips.Clear();
     }
 
     private void InitBeam(IWeapon weapon, Vector3 position, ShipBase target, float bulletSpeed)
@@ -259,6 +274,7 @@ public abstract class Bullet : MovingObject
 
     private void InitNextFrame(IWeapon weapon, Vector3 dir, Vector3 position, float distanceShoot, float bulletSpeed)
     {
+        Target = null;
         _curTime = 0;
         _curSpeed = _maxSpeed = bulletSpeed;
 #if UNITY_EDITOR
@@ -371,8 +387,9 @@ public abstract class Bullet : MovingObject
         {
             var ship = other.GetComponent<ShipHitCatcher>();
 
-            if (ship != null && IsCatch(ship))
+            if (ship != null && IsCatch(ship) && !_hittedShips.Contains(ship.ShipBase.Id))
             {
+                _hittedShips.Add(ship.ShipBase.Id);
                 switch (AffectTypeHit)
                 {
                     case BulletAffectType.repair:

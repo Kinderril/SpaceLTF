@@ -9,12 +9,17 @@ public class OnlyModulsInventory : IInventory
     public ShipModulsInventory Moduls;
     private readonly PlayerSafe _player;
     public const int COUNT = 2;
+    public PlayerSafe Owner => _player;
+    public int SlotsCount => COUNT;
+
+    [field: NonSerialized] public event ItemTransferedTo OnItemAdded;
 
     public OnlyModulsInventory(PlayerSafe _player)
     {
         this._player = _player;
         Moduls = new ShipModulsInventory(COUNT, this);
     }
+
     public bool GetFreeSlot(out int index, ItemType type)
     {
         index = -1;
@@ -81,7 +86,6 @@ public class OnlyModulsInventory : IInventory
         return list;
     }
 
-    public event ItemTransferedTo OnItemAdded;
     public void TransferItem(IItemInv item, bool val)
     {
         OnItemAdded?.Invoke(item, val);
@@ -92,8 +96,7 @@ public class OnlyModulsInventory : IInventory
         return 1f;
     }
 
-    public PlayerSafe Owner => _player;
-    public int SlotsCount => COUNT;
+
     public bool IsShop()
     {
         return false;

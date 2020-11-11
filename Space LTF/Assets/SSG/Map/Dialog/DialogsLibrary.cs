@@ -20,27 +20,42 @@ public static class DialogsLibrary
             tags.Add("campStealMrcA4");
             tags.Add("campStealMrcM5");
             tags.Add("campStealMrcA5");
+
+            return GetPairDialogByTag(tags, null);
         }
 
         switch (config)
         {
             case ShipConfig.raiders:
-                tags.Add("campStealRdrM1");
-                tags.Add("campStealRdrA1");      
-                tags.Add("campStealRdrM2");
-                tags.Add("campStealRdrA2");      
-                tags.Add("campStealRdrM3");
-                tags.Add("campStealRdrA3");
+                switch (act)
+                {
+                    case 1:
+                        tags.Add("campStealRdrM1");
+                        tags.Add("DC");
+                        tags.Add("campStealRdrM2");
+                        tags.Add("DC");
+                        tags.Add("campStealRdrM3");
+                        tags.Add("campStealRdrA3");
+                        tags.Add("campStealRdrM4");
+                        tags.Add("campStealRdrA4");
+                        tags.Add("campStealRdrM5");
+                        tags.Add("campStealRdrA5");
+                        break;
+                }
+
+                //            case ShipConfig.federation:
+                //                tags.Add("campStealFedM1");
+                //                tags.Add("campStealFedA1");
+                //                tags.Add("campStealFedM2");
+                //                tags.Add("campStealFedA2");
+                //                tags.Add("campStealFedM3");
+                //                tags.Add("campStealFedA3");
+                //                break;
+                //            case ShipConfig.raiders:     
                 break;
             case ShipConfig.federation:
-                tags.Add("campStealFedM1");
-                tags.Add("campStealFedA1");
-                tags.Add("campStealFedM2");
-                tags.Add("campStealFedA2");
-                tags.Add("campStealFedM3");
-                tags.Add("campStealFedA3");
-                break;
             case ShipConfig.mercenary:
+            case ShipConfig.krios:
                 switch (act)
                 { 
                     case 1:
@@ -143,14 +158,14 @@ public static class DialogsLibrary
                         break;
                 }
                 break;
-            case ShipConfig.krios:
-                tags.Add("campStealKrsM1");
-                tags.Add("campStealKrsA1");
-                tags.Add("campStealKrsM2");
-                tags.Add("campStealKrsA2");
-                tags.Add("campStealKrsM3");
-                tags.Add("campStealKrsA3");
-                break;
+//            case ShipConfig.krios:
+//                tags.Add("campStealKrsM1");
+//                tags.Add("campStealKrsA1");
+//                tags.Add("campStealKrsM2");
+//                tags.Add("campStealKrsA2");
+//                tags.Add("campStealKrsM3");
+//                tags.Add("campStealKrsA3");
+//                break;
             default:
                 Debug.LogError($"error start dialog  {config.ToString()}  act:{act}");
                 return null;

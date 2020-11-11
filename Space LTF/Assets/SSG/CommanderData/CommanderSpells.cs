@@ -19,6 +19,14 @@ public class CommanderSpells
         _commander = commander;
     }
 
+    public void Dispose()
+    {
+        foreach (var spellInGame in AllSpells)
+        {
+            spellInGame.Dispose();
+        }
+        AllSpells.Clear();
+    }
 
     public void AddMainShipBlink()
     {
@@ -64,10 +72,11 @@ public class CommanderSpells
             var support = modul as BaseSupportModul;
             if (support != null)
             {
-                Debug.LogError($"Apply to spell:{baseSpellModul.Name}  modul:{modul.Name}");
+//                Debug.LogError($"Apply to spell:{baseSpellModul.Name}  modul:{modul.Name}");
                 support.ChangeBullet(spellInGame);
                 support.ChangeTargetAffect(spellInGame);
                 support.ChangeParams(spellInGame);
+                spellInGame.AddInfoForTooltip(support.DescSupport());
             }
         }
 

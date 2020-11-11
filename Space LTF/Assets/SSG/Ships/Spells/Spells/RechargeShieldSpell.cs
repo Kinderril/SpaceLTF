@@ -16,13 +16,14 @@ public class RechargeShieldSpell : BaseSpellModulInv
     private const float _sDistToShoot = 4 * 4;
     private bool _lastCheckIsOk = false;
     [field: NonSerialized]
-    private ShipBase _lastClosest;
+//    private ShipBase _lastClosest;
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(HealPercent, HealPercent);
 
     private float HealPercent => Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT + Level * 0.12f;
     public RechargeShieldSpell()
         : base(SpellType.rechargeShield, 2, 30,
-             new BulleStartParameters(15f, 46f, MINES_DIST, MINES_DIST), false,TargetType.Ally)
+             new BulleStartParameters(15f, 46f, 
+                 MINES_DIST, MINES_DIST), false,TargetType.Ally)
     {
 
     }
@@ -83,7 +84,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
     {
         var ship = target;
         var maxShield = shipparameters.ShieldParameters.MaxShield;
-        var countToHeal = maxShield * HealPercent;
+        var countToHeal = maxShield * additional.CurrentDamage.ShieldDamage;
         ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
         shipparameters.ShieldParameters.HealShield(countToHeal);
         if (UpgradeType == ESpellUpgradeType.B2)
@@ -94,14 +95,14 @@ public class RechargeShieldSpell : BaseSpellModulInv
             }
         }
     }
-    
+
     private void MainAffect(ShipParameters shipparameters, ShipBase target, 
         Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
 
         if (UpgradeType == ESpellUpgradeType.A1)
         {
-            var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position, _lastClosest.TeamIndex, ShowCircle);
+            var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position, target.TeamIndex, ShowCircle);
             foreach (var ship in closestsShips)
             {
                 MainAffect2(ship.ShipParameters, ship, null, null, additional);
@@ -109,10 +110,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
         }
         else
         {
-            if (_lastClosest != null)
-            {
-                MainAffect2(_lastClosest.ShipParameters, _lastClosest, null, null, additional);
-            }
+            MainAffect2(shipparameters, target, null, null, additional);
         }
     }
     public override bool ShowLine => false;
@@ -130,7 +128,9 @@ public class RechargeShieldSpell : BaseSpellModulInv
     }
     public override Bullet GetBulletPrefab()
     {
-        return null;
+        var bullet = DataBaseController.Instance.GetBullet(WeaponType.nextFrameRepair);
+        DataBaseController.Instance.Pool.RegisterBullet(bullet);
+        return bullet;
     }
 
     protected override void CastAction(Vector3 pos)
@@ -152,11 +152,11 @@ public class RechargeShieldSpell : BaseSpellModulInv
             _lastCheckIsOk = true;
             objectToShow.gameObject.SetActive(true);
             objectToShow.transform.position = closestsShip.Position;
-            _lastClosest = closestsShip;
+//            _lastClosest = closestsShip;
         }
         else
         {
-            _lastClosest = null;
+//            _lastClosest = null;
             _lastCheckIsOk = false;
             objectToShow.gameObject.SetActive(false);
         }
@@ -166,7 +166,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
 
     public override SpellDamageData RadiusAOE()
     {
-        return new SpellDamageData(ShowCircle);
+        return new SpellDamageData(ShowCircle,false);
     }
     public override string Desc()
     {

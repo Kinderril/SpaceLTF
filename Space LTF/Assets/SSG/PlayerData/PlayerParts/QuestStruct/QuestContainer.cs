@@ -113,14 +113,22 @@ public class QuestContainer
         DoNextStage();
     }
 
+    public void ActivateCurStage()
+    {
+        if (!IsComplete)
+        {
+            var curStage = GetCurStage();
+            curStage.Activate(_player);
+            Debug.Log($"DoNextStage {curStage}");
+        }
+    }
+
     private void DoNextStage()
     {
         if (CurStage < _stages.Length)
         {
-            var curStage = GetCurStage();
-            Debug.Log($"DoNextStage {curStage}");
-            curStage.Activate(_player);
-            OnStageChange?.Invoke(this);
+            ActivateCurStage();
+   OnStageChange?.Invoke(this);
             _player.QuestData.StageChange(this);
         }
         else

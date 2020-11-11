@@ -12,14 +12,14 @@ public class CampaingController
         MainController.Instance.TryLoadCamp(loadPlayer);
     }
 
-    public bool SaveGame(string name)
+    public bool SaveGame(string name,bool autosave)
     {
         if (PlayerChampaingContainer == null)
         {
             Debug.LogError("can't save null profile");
             return false;
         }
-        return CampaingLoader.SaveTo(name, PlayerChampaingContainer);
+        return CampaingLoader.SaveTo(name, PlayerChampaingContainer, autosave);
     }
 
     public void DeleteSave(string name)

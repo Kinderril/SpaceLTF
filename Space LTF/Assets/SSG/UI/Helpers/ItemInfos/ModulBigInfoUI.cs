@@ -12,7 +12,7 @@ public class ModulBigInfoUI : AbstractBaseInfoUI
 
     public void Init(BaseModulInv modul, Action callback)
     {
-        base.Init(callback);
+        base.Init(callback, modul);
         NameField.text = Namings.SimpleModulName(modul.Type);
         //        string desc;
         var supprt = modul as BaseSupportModul;

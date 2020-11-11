@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class BaseShipInventoryUI : DragZone
 {
+    public const float ALPHA = 0.98f;
     public Image IconType;
     public TextMeshProUGUI ConfigType;
     public TextMeshProUGUI NameField;
@@ -19,6 +20,7 @@ public class BaseShipInventoryUI : DragZone
 
     private ShipInventory _shipInventory;
     private PlayerSafe _player;
+    public Image Background;
 
     public void Init(PlayerSafe player, ShipInventory shipInventory, bool usable, ConnectInventory connectedInventory, IInventory tradeInventory = null)
     {
@@ -49,6 +51,10 @@ public class BaseShipInventoryUI : DragZone
         InitCurrentItems();
         UpdateArmyCount();
         _player.OnAddShip += OnAddShip;
+
+        var colro = Library.GetColorByConfig(shipInventory.ShipConfig);
+        colro.a = ALPHA;
+        Background.color = colro;
     }
 
     private void OnAddShip(StartShipPilotData arg1, bool arg2)
@@ -129,23 +135,23 @@ public class BaseShipInventoryUI : DragZone
         }
     }
 
-    public void EnableDragZone()
-    {
-        foreach (var baseShipSpellContainer in _listSpellContaners)
-        {
-            baseShipSpellContainer.Enable();
-        }
-
-    }
-
-    public void DisableDragZone()
-    {
-
-        foreach (var baseShipSpellContainer in _listSpellContaners)
-        {
-            baseShipSpellContainer.Disable();
-        }
-
-    }
+//    public void EnableDragZone()
+//    {
+//        foreach (var baseShipSpellContainer in _listSpellContaners)
+//        {
+//            baseShipSpellContainer.Enable();
+//        }
+//
+//    }
+//
+//    public void DisableDragZone()
+//    {
+//
+//        foreach (var baseShipSpellContainer in _listSpellContaners)
+//        {
+//            baseShipSpellContainer.Disable();
+//        }
+//
+//    }
 }
 

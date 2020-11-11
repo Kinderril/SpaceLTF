@@ -6,6 +6,7 @@ using System.IO;
 public class CampaingLoader
 {
     private const string PATH_CAMP = "CampSave/";
+    public const string AUTO_SAVE = "AUTO_SAVE";
     public string[] GetAllSaves()
     {
         string[] fileEntries = null;
@@ -52,6 +53,10 @@ public class CampaingLoader
 
     public bool CanUseName(string name)
     {
+        if(name.Equals(AUTO_SAVE))
+        {
+            return false;
+        }
         var saves = GetAllSaves();
         if (saves == null)
         {
@@ -68,14 +73,19 @@ public class CampaingLoader
         return true;
     }
 
-    public bool SaveTo(string name, PlayerChampaingContainer playerChampaingContainer)
+    public bool SaveTo(string name, PlayerChampaingContainer playerChampaingContainer, bool autosave)
     {
-        if (CanUseName(name))
+
+        if (autosave || CanUseName(name))
         {
+            if (autosave)
+            {
+                name = AUTO_SAVE;
+            }
             string path = Application.persistentDataPath + PATH_CAMP + name;
             try
             {
-                playerChampaingContainer.SaveTo(path);
+                playerChampaingContainer.SaveTo(path, autosave);
             }
             catch (Exception e)
             {

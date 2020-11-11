@@ -5,7 +5,7 @@ using System.Linq;
 
 public class DefenceBaseEvent : BattleTypeEvent
 {
-    public const float POWER_ICN = 0.7f;
+    public const float POWER_ICN = 0.35f;
     public override bool HaveActiveTime => false;
 
     public DefenceBaseEvent()

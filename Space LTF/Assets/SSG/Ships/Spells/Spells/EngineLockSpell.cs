@@ -91,8 +91,8 @@ public class EngineLockSpell : BaseSpellModulInv
     private void EngineCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         //        var startPos = target.Position + new Vector3(MyExtensions.Random(-rad, rad), DIST_SHOT, MyExtensions.Random(-rad, rad));
-        var startPos = shootpos;
-        var dir = target.Position - startPos;
+        var startPos = target.Position;
+        var dir = target.Position - startPos + new Vector3(1f,0,1f);
         bullestartparameters.distanceShoot = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
 
@@ -112,7 +112,7 @@ public class EngineLockSpell : BaseSpellModulInv
         DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         if (target != null)
-            ActionShip(target);
+            ActionShip(target, additional.CurrentDamage.BodyDamage);
         //        var pos = bullet.Position;
         //        var oppositeIndex = BattleController.OppositeIndex(bullet.Weapon.TeamIndex);
         //        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE,pos, CurLockPeriod);
@@ -135,9 +135,9 @@ public class EngineLockSpell : BaseSpellModulInv
 
 
 
-    private void ActionShip(ShipBase shipBase)
+    private void ActionShip(ShipBase shipBase,float period)
     {
-        shipBase.DamageData.ApplyEffect(ShipDamageType.engine, CurLockPeriod);//.EngineStop.Stop(2.5f);
+        shipBase.DamageData.ApplyEffect(ShipDamageType.engine, period);//.EngineStop.Stop(2.5f);
     }
 
     public override Bullet GetBulletPrefab()

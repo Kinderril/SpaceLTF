@@ -104,7 +104,7 @@ public class SaveSlot : MonoBehaviour, IPointerEnterHandler
             MainController.Instance.Campaing.DeleteSave(_haveData);
         }
 
-        if (!MainController.Instance.Campaing.SaveGame(InputFiled.text))
+        if (!MainController.Instance.Campaing.SaveGame(InputFiled.text,false))
         {
             ErrorSaveGame();
         }

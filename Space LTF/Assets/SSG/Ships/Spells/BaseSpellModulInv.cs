@@ -90,6 +90,14 @@ public abstract class BaseSpellModulInv : IItemInv, ISpellToGame, IAffectParamet
     {
         modificatedCreateBullet = bulletCreate;
     }
+
+    public void DisposeAfterBattle()
+    {
+        ResetBulletCreateAtion();
+
+
+    }
+
     public abstract CurWeaponDamage CurrentDamage { get; }
     public float AimRadius { get; set; }
     public float SetorAngle { get; set; }

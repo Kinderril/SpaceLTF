@@ -36,6 +36,11 @@ public class ShopInventory : PlayerInventory
 
     }
 
+    public override bool CanRemoveModulSlots(int slotsInt)
+    {
+        return true;
+    }
+
     public static List<WeaponType> ValuableTypesWeapon(ShipConfig config)
     {
         List<WeaponType> valuableTypesWeapon = new List<WeaponType>();

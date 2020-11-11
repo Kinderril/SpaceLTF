@@ -146,9 +146,13 @@ public class DebugPanelWindow : EditorWindow
 //            {
 //                DebugEventStart.AcitvateDialog(GlobalMapEventType.anomaly);
 //            }
-            if (GUILayout.Button("Modules"))
+            if (GUILayout.Button("Mod Exp"))
             {
                 AddDebugModules();
+            }  
+            if (GUILayout.Button("Save Exp"))
+            {
+                SaveExproleMode();
             }
             if (GUILayout.Button("MovArmy"))
             {
@@ -215,6 +219,17 @@ public class DebugPanelWindow : EditorWindow
         }
     }
 
+    private void SaveExproleMode()
+    {
+        var mc = MainController.Instance.SafeContainers;
+        if (mc == null)
+        {
+                return;
+        }
+        mc.SaveProfiles();
+
+    }
+
     private void DebugCompleteQuest()
     {
         MainController.Instance.MainPlayer.QuestData.DebugCompleteRndQuest();
@@ -236,7 +251,7 @@ public class DebugPanelWindow : EditorWindow
 
     private void AddDebugModules()
     {
-        var player = MainController.Instance.MainPlayer;
+        var player = MainController.Instance.Exproler.CurrentPlayer;
         if (player == null)
         {
             return;

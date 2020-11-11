@@ -122,6 +122,12 @@ public abstract class QuestStage
     public bool Activate(Player player)
     {
         _player = player;
+        if (_activated)
+        {
+            if (_playerQuest!= null)
+                _playerQuest.OnQuestId += OnQuestId;
+            return false;
+        }
 #if UNITY_EDITOR
         if (_idToComplete.Count == 0)
         {

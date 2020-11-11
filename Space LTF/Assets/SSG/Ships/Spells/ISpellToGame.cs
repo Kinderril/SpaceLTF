@@ -14,4 +14,5 @@
     SubUpdateShowCast SubUpdateShowCast { get; }
     CanCastAtPoint CanCastAtPoint { get; }
     void SetBulletCreateAction(CreateBulletDelegate bulletCreate);
+    void DisposeAfterBattle();
 }

@@ -3,6 +3,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum SaveMode
+{
+    none,
+    onelife,
+    campaing,
+}
+
 [System.Serializable]
 public class PlayerSafe
 {
@@ -26,9 +33,9 @@ public class PlayerSafe
     private bool IsLow;
     public string Name;
     public PlayerParameters Parameters;
-    public bool ShallSafeEveryMove { get; private set; }
+    public SaveMode ShallSafeEveryMove { get; private set; }
 
-    public PlayerSafe(bool isLow,bool shallSafeEveryMove)
+    public PlayerSafe(bool isLow, SaveMode shallSafeEveryMove)
     {
         ShallSafeEveryMove = shallSafeEveryMove;
         IsLow = isLow;
@@ -40,7 +47,7 @@ public class PlayerSafe
 
     public static int GetInventorySlotsCount(bool isExprolerMode)
     {
-        return isExprolerMode ? 64 : 30;
+        return isExprolerMode ? 74 : 50;
     }
     public void InventoryCheck()
     {

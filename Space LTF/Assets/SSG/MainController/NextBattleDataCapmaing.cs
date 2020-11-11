@@ -31,7 +31,14 @@ public class NextBattleDataCapmaing : NextBattleData
 
     }
     public override void MoveToWindowEndBattle()
-    {                                  
-        WindowManager.Instance.OpenWindow(MainState.endGame);
+    {
+        if (_winAct)
+        {
+            WindowManager.Instance.OpenWindow(MainState.campaingEndAct);
+        }
+        else
+        {
+            WindowManager.Instance.OpenWindow(MainState.start);
+        }
     }
 }

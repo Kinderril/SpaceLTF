@@ -22,6 +22,7 @@ public class SpellButton : UIElementWithTooltip, IPointerClickHandler
     private SpellModulsContainer     _modulsContainer;
     private bool _canAuto = true;
     public GameObject AutoCastObject;
+    private string _cachedTooltip;
 
     public void Init(InGameMainUI inGameMain, SpellInGame spell, 
         Action<SpellInGame> OnSpellClick, float speedCoef, int index, AutoSpellContainer autoSpell,SpellModulsContainer modulsContainer)
@@ -59,9 +60,23 @@ public class SpellButton : UIElementWithTooltip, IPointerClickHandler
                 _keyCode = KeyCode.Alpha5;
                 break;             
         }
+
+        CacheTooltipData();
         //        Debug.LogError($"Init spc brn :{_spell.Name}   TargetType:{_spell.AffectAction.TargetType}");
         //        _canAuto = _spell.AffectAction.TargetType == TargetType.Enemy;
     }
+
+    private void CacheTooltipData()
+    {
+        var spellName = Namings.Format(_spell.Name);
+        var info = $"{spellName}\n{_spell.Desc}";
+        foreach (var sDesc in _spell.SupportDesc)
+        {
+            info = $"{info}\n{sDesc}";
+        }
+        _cachedTooltip = info;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -133,8 +148,7 @@ public class SpellButton : UIElementWithTooltip, IPointerClickHandler
 
     protected override string TextToTooltip()
     {
-        var spellName = Namings.Format(_spell.Name);
-        return $"{spellName}\n{_spell.Desc}";
+        return _cachedTooltip;
     }
 
 }

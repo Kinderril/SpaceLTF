@@ -54,6 +54,44 @@ public class PlayerInventory : IInventory
         return false;
     }
 
+    public void RemoveItem(IItemInv item)
+    {
+        switch (item.ItemType)
+        {
+            case ItemType.weapon:
+                var weapon = item as WeaponInv;
+                if (weapon != null)
+                {
+                    RemoveWeaponModul(weapon);
+                }
+                break;
+            case ItemType.modul:
+                var modul = item as BaseModulInv;
+                if (modul != null)
+                {
+                    RemoveSimpleModul(modul);
+                }
+                break;
+            case ItemType.spell:
+                var spell = item as BaseSpellModulInv;
+                if (spell != null)
+                {
+                    RemoveSpellModul(spell);
+                }
+                break;
+            case ItemType.cocpit:
+            case ItemType.engine:
+            case ItemType.wings:
+                var param = item as ParameterItem;
+                if (param != null)
+                {
+                    RemoveItem(param);
+                }
+                break;
+
+        }
+    }
+
     public bool CanMoveToByLevel(IItemInv item, int posibleLevel)
     {
         return true;
@@ -74,8 +112,17 @@ public class PlayerInventory : IInventory
         return b;
     }
 
+    protected int GetFreeModulSlots()
+    {
+        var takeSlots = totalSlots();
+        return MaxSlots - takeSlots;
+    }
+
     public virtual bool CanRemoveModulSlots(int slotsInt)
     {
+
+
+        //TODO
         if (totalSlots() + slotsInt < MaxSlots)
         {
             return true;

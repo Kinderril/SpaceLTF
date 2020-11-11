@@ -124,6 +124,7 @@ public class PlayerQuestData
         foreach (var questContainer in _quests)
         {
             questContainer.SafeInit();
+            questContainer.ActivateCurStage();
         }
     }
 

@@ -198,6 +198,8 @@ public class CloseStrikeModul : ActionModulInGame, IWeapon
 
     }
 
+    public TargetType TargetType => TargetType.Enemy;
+
     public TeamIndex TeamIndex
     {
         get { return _owner.TeamIndex; }

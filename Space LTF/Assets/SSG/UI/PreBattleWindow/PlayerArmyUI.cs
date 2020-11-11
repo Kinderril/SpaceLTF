@@ -50,20 +50,20 @@ public class PlayerArmyUI : MonoBehaviour
         WaitLoadStart();
     }
 
-    public void TryEnableMainShipInv()
-    {
-        if (mainShipInfo != null)
-        {
-            mainShipInfo.EnableDragZone();
-        }
-    }       
-    public void DisableMainShipInv()
-    {
-        if (mainShipInfo != null)
-        {
-            mainShipInfo.DisableDragZone();
-        }
-    }
+//    public void TryEnableMainShipInv()
+//    {
+//        if (mainShipInfo != null)
+//        {
+//            mainShipInfo.EnableDragZone();
+//        }
+//    }       
+//    public void DisableMainShipInv()
+//    {
+//        if (mainShipInfo != null)
+//        {
+//            mainShipInfo.DisableDragZone();
+//        }
+//    }
 
     private async void WaitLoadStart()
     {

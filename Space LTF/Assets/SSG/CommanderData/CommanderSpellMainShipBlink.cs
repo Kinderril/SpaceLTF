@@ -83,4 +83,9 @@ public class CommanderSpellMainShipBlink : ISpellToGame
     {
 
     }
+
+    public void DisposeAfterBattle()
+    {
+        
+    }
 }

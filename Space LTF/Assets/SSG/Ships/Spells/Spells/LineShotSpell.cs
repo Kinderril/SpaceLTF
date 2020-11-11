@@ -24,7 +24,7 @@ public class LineShotSpell : BaseSpellModulInv
         return true;
     }
 
-    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(Damage, Damage);
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(FirePeriod, Damage);
 
     private float FireCoefCalc(int level, ESpellUpgradeType upd)
     {
@@ -79,8 +79,8 @@ public class LineShotSpell : BaseSpellModulInv
             var sp1 = target.Position + r1;
             var sp2 = target.Position + r2;
 
-            modificatedCreateBullet(target, origin, weapon, sp1, castData.Bullestartparameters);
-            modificatedCreateBullet(target, origin, weapon, sp2, castData.Bullestartparameters);
+            modificatedCreateBullet(new BulletTarget(sp1), origin, weapon, shootPos, castData.Bullestartparameters);
+            modificatedCreateBullet(new BulletTarget(sp2), origin, weapon, shootPos, castData.Bullestartparameters);
         }
 
     }
@@ -88,8 +88,8 @@ public class LineShotSpell : BaseSpellModulInv
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
 
-        shipparameters.Damage(Damage, Damage, damagedone, target);
-        target.DamageData.ApplyEffect(ShipDamageType.fire, FirePeriod, FireCoef);
+        shipparameters.Damage(additional.CurrentDamage.BodyDamage, additional.CurrentDamage.BodyDamage, damagedone, target);
+        target.DamageData.ApplyEffect(ShipDamageType.fire, additional.CurrentDamage.ShieldDamage, FireCoef);
     }
 
     public override bool ShowLine => true;

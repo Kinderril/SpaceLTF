@@ -18,6 +18,17 @@ public class SectorCampaignStart : SectorData
     }
 
 
+    public override void BornArmies()
+    {
+//        foreach (var cell in ListCells)
+//        {
+//            var born = cell.Data as FreeActionGlobalMapCell;
+//            if (born != null)
+//            {
+//                born.BornArmy();
+//            }
+//        }
+    }
 
     public override void Populate(int startPowerGalaxy)
     {

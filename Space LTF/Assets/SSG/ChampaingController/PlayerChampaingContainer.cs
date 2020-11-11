@@ -24,14 +24,15 @@ public class PlayerChampaingContainer
         Act = 0;
     }
 
-    public void SaveTo(string path)
+    public void SaveTo(string path,bool autosave)
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(path);
         bf.Serialize(file, this);
         file.Close();
         Debug.Log($"Game Saved PlayerChampaing path:{path}");
-        WindowManager.Instance.InfoWindow.Init(null,  Namings.Tag("GameSaved"));
+        if (!autosave)
+            WindowManager.Instance.InfoWindow.Init(null,  Namings.Tag("GameSaved"));
     }
 
     public static bool LoadGame( string path, out PlayerChampaingContainer player)
@@ -232,7 +233,7 @@ public class PlayerChampaingContainer
         var posibleSpells = posibleStartSpells.RandomElement(2);
         if (_safe == null)
         {
-            _safe = new PlayerSafe(false,false);
+            _safe = new PlayerSafe(false,SaveMode.campaing);
         }
 
         if (_reputationData == null)
@@ -289,5 +290,10 @@ public class PlayerChampaingContainer
     public void DebugSetAct(int act)
     {
         Act = act;
+    }
+
+    public void AfterLoadCheck()
+    {
+        Player.QuestData.AfterLoadCheck();
     }
 }

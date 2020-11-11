@@ -12,7 +12,7 @@ public delegate void ItemTransfer(IInventory from, IInventory to, IItemInv item)
 [System.Serializable]
 public class Player
 {
-    public static string mainPlayer = $"myPlayerData_.data";
+    public static string mainPlayer = $"myPlayerData_B.data";
     //    public static string mainPlayer = $"myPlayerData_{MainController.VERSION}.data";
     //    public int CoinsCount = 7;
     public PlayerInventory Inventory => SafeLinks.Inventory;
@@ -207,7 +207,7 @@ public class Player
 
     public Player(string name)
     {
-        SafeLinks = new PlayerSafe(false, true);
+        SafeLinks = new PlayerSafe(false, SaveMode.onelife);
         Army = new PlayerArmy(SafeLinks);
         MoneyData = new PlayerMoneyData(SafeLinks);
         ScoutData = new PlayerScoutData(this);
@@ -244,14 +244,20 @@ public class Player
 
     public void SaveOnMoveGame()
     {
-        if (SafeLinks.ShallSafeEveryMove)
+
+        switch (SafeLinks.ShallSafeEveryMove)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(Application.persistentDataPath + mainPlayer);
-            //        MoneyData.Dispose();
-            bf.Serialize(file, this);
-            file.Close();
-            Debug.Log("Game Saved");
+            case SaveMode.onelife:
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Create(Application.persistentDataPath + mainPlayer);
+                //        MoneyData.Dispose();
+                bf.Serialize(file, this);
+                file.Close();
+                Debug.Log("Game Saved");
+                break;
+            case SaveMode.campaing:
+                MainController.Instance.Campaing.SaveGame(CampaingLoader.AUTO_SAVE,true);
+                break;
         }
     }
 

@@ -69,7 +69,8 @@ public class MineFieldSpell : BaseSpellModulInv
         return targetdistpos;
     }
 
-    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    private void MainAffect(ShipParameters shipparameters, ShipBase target,
+        Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         switch (UpgradeType)
         {
@@ -80,7 +81,8 @@ public class MineFieldSpell : BaseSpellModulInv
                 target.DamageData.ApplyEffect(ShipDamageType.engine, effectPeriod, 1f);
                 break;
         }
-        shipparameters.Damage(DAMAGE_SHIELD, DAMAGE_BODY, damagedone, target);
+        shipparameters.Damage(additional.CurrentDamage.ShieldDamage, 
+            additional.CurrentDamage.BodyDamage, damagedone, target);
     }
     public override bool ShowLine => false;
     public override float ShowCircle => rad;

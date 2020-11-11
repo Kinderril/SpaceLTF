@@ -14,7 +14,7 @@ public class ShieldOffSpell : BaseSpellModulInv
     private const float FIRE_PERIOD = 5f;
     private const int cost_base = 3;
     private const int cost_A1 = 2;
-    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(2, Period);
+    public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(SHIELD_DAMAGE, Period);
 
 
     public override int CostCount
@@ -83,17 +83,18 @@ public class ShieldOffSpell : BaseSpellModulInv
     public override float ShowCircle => rad;
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        ActionShip(target, damagedone);
+        ActionShip(target, damagedone,additional);
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var dir = target.Position - weapon.CurPosition;
+        var trg = target.Position;
+        var dir = trg - weapon.CurPosition + new Vector3(1f, 0, 1f);
         var dist = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
         bullestartparameters.distanceShoot = dist;
         bullestartparameters.radiusShoot = dist;
         var b = Bullet.Create(origin, weapon, dir,
-            weapon.CurPosition, null, bullestartparameters);
+            trg, null, bullestartparameters);
     }
     public override BulletDestroyDelegate BulletDestroyDelegate => BulletDestroy;
 
@@ -118,10 +119,10 @@ public class ShieldOffSpell : BaseSpellModulInv
     {
 
     }
-    private void ActionShip(ShipBase shipBase, DamageDoneDelegate damageDone)
+    private void ActionShip(ShipBase shipBase, DamageDoneDelegate damageDone, WeaponAffectionAdditionalParams additiona)
     {
-        shipBase.DamageData.ApplyEffect(ShipDamageType.shiled, Period);
-        shipBase.ShipParameters.Damage(SHIELD_DAMAGE, 0, damageDone, shipBase);
+        shipBase.DamageData.ApplyEffect(ShipDamageType.shiled, additiona.CurrentDamage.BodyDamage);
+        shipBase.ShipParameters.Damage(additiona.CurrentDamage.ShieldDamage, 0, damageDone, shipBase);
         if (UpgradeType == ESpellUpgradeType.B2)
         {
             shipBase.DamageData.ApplyEffect(ShipDamageType.fire, FIRE_PERIOD, 1f);

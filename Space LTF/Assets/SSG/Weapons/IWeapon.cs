@@ -7,6 +7,7 @@ using UnityEngine;
 
 public interface IWeapon
 {
+    TargetType TargetType { get; }
     TeamIndex TeamIndex { get; }
     Vector3 CurPosition { get; }
     ShipBase Owner { get; }

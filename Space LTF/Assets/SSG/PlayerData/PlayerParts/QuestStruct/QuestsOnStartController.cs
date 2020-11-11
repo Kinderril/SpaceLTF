@@ -243,10 +243,13 @@ public class QuestsOnStartController
     private void EndStartQuest()
     {
         _data.AddQuest(GetQuest(EQuestType.cmMerc0, EndStartMerc));
+
+#if UNITY_EDITOR
         _data.AddQuest(GetQuest(EQuestType.cmFed0, EndStartFed));
         _data.AddQuest(GetQuest(EQuestType.cmRdr0, EndStartRdr));
         _data.AddQuest(GetQuest(EQuestType.cmKrs0, EndStartKrs));
         _data.AddQuest(GetQuest(EQuestType.cmOcr0, EndStartOcr));
+#endif
     }
 
 
@@ -347,6 +350,7 @@ public class QuestsOnStartController
     private void EndMerc1_4()
     {
         _player.ReputationData.SetAllies(ShipConfig.mercenary);
+        MainController.Instance.BattleData.SetCampWinAct();
         MainController.Instance.BattleData.EndGame(true);//End act 1
     }
     #endregion

@@ -105,9 +105,10 @@ public class MachineGunSpell : BaseSpellModulInv
         };
     }
 
-    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
+    private void MainAffect(ShipParameters shipparameters, ShipBase target,
+        Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        ActionShip(target, DmgHull, DmgShield, damagedone);
+        ActionShip(target, additional.CurrentDamage.BodyDamage, additional.CurrentDamage.ShieldDamage, damagedone);
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)

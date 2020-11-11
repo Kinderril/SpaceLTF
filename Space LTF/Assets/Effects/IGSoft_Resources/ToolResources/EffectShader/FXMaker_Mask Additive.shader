@@ -2,6 +2,7 @@ Shader "FXMaker/Mask Additive" {
 	Properties {
 		_MainTex ("Particle Texture", 2D) = "white" {}
 		_Mask ("Mask", 2D) = "white" {}
+
 	}
 
 	Category {

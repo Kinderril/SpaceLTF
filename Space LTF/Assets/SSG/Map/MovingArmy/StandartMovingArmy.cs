@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class StandartMovingArmy : MovingArmy
 {
     private float _powerPerTurn;
+    private bool canAskHelp = true;
     public StandartMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback
         ,float startPower,GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn) 
         : base(startCell, destroyCallback, enemiesArmyController)
@@ -169,8 +170,12 @@ public class StandartMovingArmy : MovingArmy
         if (isAllies)
         {
             ans.Add(new AnswerDialogData(leaveStr, null,()=> nextDialog));
-            ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyAskHelp"), 
-                rep,Library.ASK_HELP_REPUTATION), null,()=>DimlomatyOption(nextDialog)));
+            if (canAskHelp)
+            {
+                canAskHelp = false;
+                ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("armyAskHelp"),
+                    rep, Library.ASK_HELP_REPUTATION), null, () => DimlomatyOption(nextDialog)));
+            }
         }
         else
         {

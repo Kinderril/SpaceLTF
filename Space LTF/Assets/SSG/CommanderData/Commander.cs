@@ -507,6 +507,7 @@ public class Commander
 
     public void Dispose()
     {
+        SpellController.Dispose();
         CoinController.Dispsoe();
         foreach (var shipBase in Ships)
         {

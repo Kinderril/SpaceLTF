@@ -10,6 +10,7 @@ public class PlayerRepairData
     [field: NonSerialized]
     public event Action OnSomeShipRepaired;
 
+    [field: NonSerialized]
     private bool isInited = false;
 
     public PlayerRepairData()

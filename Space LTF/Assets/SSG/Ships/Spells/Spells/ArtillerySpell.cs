@@ -27,7 +27,8 @@ public class ArtillerySpell : BaseSpellModulInv
 
     public ArtillerySpell()
         : base(SpellType.artilleryPeriod, 4, 20,
-            new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
+            new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT),
+            false,TargetType.Enemy)
     {
 
     }
@@ -72,7 +73,7 @@ public class ArtillerySpell : BaseSpellModulInv
                     var zz = MyExtensions.Random(-offset, offset);
 
                     var nTargte = new BulletTarget(target.Position + new Vector3(xx, 0, zz));
-                    MainCreateBullet(nTargte, origin, weapon, weapon.CurPosition, castData.Bullestartparameters);
+                    modificatedCreateBullet(nTargte, origin, weapon, weapon.CurPosition, castData.Bullestartparameters);
                 }
             };
         }
@@ -81,7 +82,7 @@ public class ArtillerySpell : BaseSpellModulInv
     private void MainAffect(ShipParameters shipparameters, ShipBase target,
         Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        ActionShip(target, DmgHull, DmgShield, damagedone);
+        ActionShip(target, additional.CurrentDamage.BodyDamage, additional.CurrentDamage.ShieldDamage, damagedone);
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)

@@ -37,6 +37,7 @@ public enum WeaponType
     healShieldSupport = 26,
     ramStrike = 27,
     beamNoTarget = 28,
+    nextFrameRepair = 30,
 }
 
 public struct WeaponAffectionAdditionalParams

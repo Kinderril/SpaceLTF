@@ -11,7 +11,7 @@ public class ParameterItemBigInfoUI : AbstractBaseInfoUI
 
     public void Init(ParameterItem modul, Action callback)
     {
-        base.Init(callback);
+        base.Init(callback, modul);
         NameField.text = Namings.ParameterModulName(modul.ItemType);
         RarityField.text = Namings.Tag($"EParameterItemRarity{modul.Rarity}");
         string desc = "";

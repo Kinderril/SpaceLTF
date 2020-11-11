@@ -17,6 +17,7 @@ public class WindowEndGame : BaseWindow
 
     public TextMeshProUGUI OpenDataField;
     public GameObject OpenDataContainer;
+    public GameObject LoadButton;
     public Image GooBad;
     public Color WinColor;
     public Color LoseColor;
@@ -39,7 +40,9 @@ public class WindowEndGame : BaseWindow
         WinLoseField.text = result.Win ? Namings.Tag("WinEnd") : Namings.Tag("LoseEnd");
         DrawOpens(stat);
         GooBad.color = result.Win ? WinColor : LoseColor;
-
+        var battledata = MainController.Instance.BattleData;
+        var isCamp = battledata is NextBattleDataCapmaing;
+        LoadButton.gameObject.SetActive(isCamp);
         base.Init();
     }
 
@@ -74,6 +77,12 @@ public class WindowEndGame : BaseWindow
     public void OnToNewGame()
     {
         MainController.Instance.BattleData.MoveToWindowEndBattle();
+    }  
+
+    public void OnLoadClick()
+    {
+        MainController.Instance.Campaing.CampaingLoader.TryLoad(CampaingLoader.AUTO_SAVE);
+//        MainController.Instance.BattleData.MoveToWindowEndBattle();
     }
 
 

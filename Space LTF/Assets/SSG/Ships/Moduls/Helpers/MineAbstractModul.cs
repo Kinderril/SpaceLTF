@@ -139,6 +139,8 @@ public abstract class MineAbstractModul : ActionModulInGame, IWeapon
 
     public abstract void BulletDestroyed(Vector3 position, Bullet bullet);
 
+    public TargetType TargetType => TargetType.Enemy;
+
     public TeamIndex TeamIndex
     {
         get { return _owner.TeamIndex; }

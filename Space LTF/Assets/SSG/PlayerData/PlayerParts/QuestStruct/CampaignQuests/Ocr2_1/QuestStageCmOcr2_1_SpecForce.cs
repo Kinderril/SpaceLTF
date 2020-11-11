@@ -10,6 +10,7 @@ public class QuestStageCmOcr2_1_SpecForce : QuestStage
     private MovingArmy _army;
     private GalaxyEnemiesArmyController _enemiesController;
 
+    [NonSerialized]
     private bool isInited = false;
     public override bool CloseWindowOnClick => true;
 
@@ -52,10 +53,11 @@ public class QuestStageCmOcr2_1_SpecForce : QuestStage
 
     protected override void SubAfterLoad()
     {
-        if (isInited) return;
+        if (isInited)
+            return;
 
         isInited = true;
-        _enemiesController.OnAddMovingArmy += OnAddMovingArmy;
+            _enemiesController.OnAddMovingArmy += OnAddMovingArmy;
     }
 
     private void OnAddMovingArmy(MovingArmy arg1, bool arg2)

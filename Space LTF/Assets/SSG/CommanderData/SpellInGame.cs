@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CastSpellData
@@ -47,14 +48,20 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
 //    private CreateBulletDelegate _createBulletAction;
     private WeaponInventoryAffectTarget _affectAction;
 
-    private BulleStartParameters _bulletStartParams;  
-//    public BulleStartParameters BulletStartParams => _bulletStartParams;
+    private BulleStartParameters _bulletStartParams;
+    //    public BulleStartParameters BulletStartParams => _bulletStartParams;    
+    public WeaponInventoryAffectTarget AffectAction => _affectAction;
+    public CreateBulletDelegate CreateBulletAction => _spellData.CreateBulletAction;
+
+    public BulleStartParameters BulletStartParams =>
+        new BulleStartParameters(BulletSpeed, _bulletStartParams.turnSpeed, AimRadius, AimRadius);
 
     private SpellZoneVisualCircle CircleObjectToShow;
     private SpellZoneVisualLine LineObjectToShow;
 
 
     //    private int RadiusCircle;
+    public List<string> SupportDesc = new List<string>();
     private Func<Vector3> _modulPos;
     private Bullet _bulletOrigin;
     public Bullet BulletOrigin => _bulletOrigin;
@@ -62,6 +69,7 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     private SpellDamageData _spellDamageData;
 
     private readonly ShipBase _owner;
+    public TargetType TargetType => _spellData.AffectAction.TargetType;
     public TeamIndex TeamIndex { get; private set; }
     public Vector3 CurPosition => _modulPos();
     public ShipBase Owner => _owner;
@@ -78,7 +86,9 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     public float AimRadius { get; set; }
     public float SetorAngle { get; set; }
     public float BulletSpeed { get; set; }
-    public float ReloadSec { get; set; }
+    private float _reloadSec;
+
+
     public int ShootPerTime { get; set; } 
 
 
@@ -100,6 +110,7 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         int count, SpellType spellType, string desc, 
         DistCounter distCounter, float delayPeriod,CurWeaponDamage damageAffection)
     {
+        _reloadSec = 1f;
         ShootPerTime = 1;
         _spellData = spellData;
         CurrentDamage = damageAffection;
@@ -119,7 +130,7 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         AimRadius = spellData.BulleStartParameters.distanceShoot;
         BulletSpeed = spellData.BulleStartParameters.bulletSpeed;
 
-        Debug.LogError($"AIM rad start:{AimRadius.ToString("0.00")} _ {name}");
+//        Debug.LogError($"AIM rad start:{AimRadius.ToString("0.00")} _ {name}");
         //        ShowCircleRadius = spellData.ShowCircle;
         ShowLine = spellData.ShowLine;
         Level = level;
@@ -149,6 +160,17 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     }
 
     public bool IsReady => DelayedAction.IsReady;
+
+    public float ReloadSec
+    {
+        get { return _reloadSec; }
+        set
+        {
+            _reloadSec = value;
+            CostPeriod = (int)(CostPeriod * _reloadSec);
+        }
+    }
+
     public bool CanCast()
     {
         if (!DelayedAction.IsReady)
@@ -351,14 +373,20 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         return false;
     }
 
-    public WeaponInventoryAffectTarget AffectAction => _affectAction;
-    public CreateBulletDelegate CreateBulletAction => _spellData.CreateBulletAction;
-
-    public BulleStartParameters BulletStartParams =>
-        new BulleStartParameters(BulletSpeed, _bulletStartParams.turnSpeed, AimRadius,AimRadius);
 
     public void SetBulletCreateAction(CreateBulletDelegate bulletCreate)
     {
         _spellData.SetBulletCreateAction(bulletCreate);
+    }
+
+    public void Dispose()
+    {
+        _spellData.DisposeAfterBattle();
+        _spellData = null;
+    }
+
+    public void AddInfoForTooltip(string descSupport)
+    {
+        SupportDesc.Add(descSupport);
     }
 }

@@ -13,52 +13,44 @@ public class WeaponSprayModul : BaseSupportModul
 
     protected override CreateBulletDelegate BulletCreate(CreateBulletDelegate standartDelegate)
     {
-        if (Level == 1)
-        {
-            return (target, origin, weapon, pos, parameters) => BulletCreateSpray2(target, origin, weapon, pos, parameters, standartDelegate);
-        }
-        else if (Level == 2)
-        {
-            return (target, origin, weapon, pos, parameters) => BulletCreateSpray3(target, origin, weapon, pos, parameters, standartDelegate);
+        return BulletCreateStatic(Level, standartDelegate);
+    }
 
-        }
+    private static CreateBulletDelegate BulletCreateStatic(int level, CreateBulletDelegate standartDelegate)
+    {
+        if (level == 1)
+            return (target, origin, weapon, pos, parameters) =>
+                BulletCreateSpray2(target, origin, weapon, pos, parameters, standartDelegate);
+        else if (level == 2)
+            return (target, origin, weapon, pos, parameters) =>
+                BulletCreateSpray3(target, origin, weapon, pos, parameters, standartDelegate);
 
-        return (target, origin, weapon, pos, parameters) => BulletCreateSpray4(target, origin, weapon, pos, parameters, standartDelegate);
+        return (target, origin, weapon, pos, parameters) =>
+            BulletCreateSpray4(target, origin, weapon, pos, parameters, standartDelegate);
     }
 
     private int BulletsCount()
     {
         if (Level == 1)
-        {
             return 2;
-        }
-        else if (Level == 2)
-        {
-            return 3;
-
-        }
+        else if (Level == 2) return 3;
 
         return 4;
     }
 
-    private void BulletCreateSpray4(BulletTarget target, Bullet origin,
+    private static void BulletCreateSpray4(BulletTarget target, Bullet origin,
         IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters, CreateBulletDelegate standartDelegate)
     {
-
         var dirToShoot = target.Position - shootPos;
         var isHoming = origin is HomingBullet;
         if (isHoming)
         {
             standartDelegate(target, origin, weapon, shootPos, startParameters);
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.4f);
-                timer.OnTimer += () =>
-                {
-                    standartDelegate(target, origin, weapon, shootPos, startParameters);
-                };
+                timer.OnTimer += () => { standartDelegate(target, origin, weapon, shootPos, startParameters); };
             }
-
         }
         else
         {
@@ -76,24 +68,20 @@ public class WeaponSprayModul : BaseSupportModul
             standartDelegate(new BulletTarget(shootPos + r4), origin, weapon, shootPos, startParameters);
         }
     }
-    private void BulletCreateSpray3(BulletTarget target, Bullet origin,
+
+    private static void BulletCreateSpray3(BulletTarget target, Bullet origin,
         IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters, CreateBulletDelegate standartDelegate)
     {
-
         var dirToShoot = target.Position - shootPos;
         var isHoming = origin is HomingBullet;
         if (isHoming)
         {
             standartDelegate(target, origin, weapon, shootPos, startParameters);
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
                 var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.4f);
-                timer.OnTimer += () =>
-                {
-                    standartDelegate(target, origin, weapon, shootPos, startParameters);
-                };
+                timer.OnTimer += () => { standartDelegate(target, origin, weapon, shootPos, startParameters); };
             }
-
         }
         else
         {
@@ -108,7 +96,7 @@ public class WeaponSprayModul : BaseSupportModul
         }
     }
 
-    private void BulletCreateSpray2(BulletTarget target, Bullet origin,
+    private static void BulletCreateSpray2(BulletTarget target, Bullet origin,
         IWeapon weapon, Vector3 shootPos, BulleStartParameters startParameters, CreateBulletDelegate standartDelegate)
     {
         var dirToShoot = target.Position - shootPos;
@@ -118,11 +106,7 @@ public class WeaponSprayModul : BaseSupportModul
         {
             standartDelegate(target, origin, weapon, shootPos, startParameters);
             var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.4f);
-            timer.OnTimer += () =>
-            {
-                standartDelegate(target, origin, weapon, shootPos, startParameters);
-            };
-
+            timer.OnTimer += () => { standartDelegate(target, origin, weapon, shootPos, startParameters); };
         }
         else
         {
@@ -131,14 +115,18 @@ public class WeaponSprayModul : BaseSupportModul
             var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
             var r2 = Utils.RotateOnAngUp(dirToShoot, half);
 
+            Debug.DrawRay(shootPos + r1,Vector3.up,Color.red,3);
+            Debug.DrawRay(shootPos + r2,Vector3.up,Color.red,3);
             standartDelegate(new BulletTarget(shootPos + r1), origin, weapon, shootPos, startParameters);
             standartDelegate(new BulletTarget(shootPos + r2), origin, weapon, shootPos, startParameters);
         }
     }
+
     public override string DescSupport()
     {
         return Namings.Format(Namings.Tag("SprayModulDesc"), BulletsCount(), Utils.FloatToChance(RELOAD));
     }
+
     public override void ChangeParams(IAffectParameters weapon)
     {
         weapon.ReloadSec *= RELOAD;

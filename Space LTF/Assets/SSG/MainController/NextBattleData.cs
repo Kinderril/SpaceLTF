@@ -14,10 +14,16 @@ public class NextBattleData
     private EBattlefildEventType? _battleEvent;
     protected Player MainPlayer;
     protected PlayerStatistics Statistics;
+    protected bool _winAct;
     public NextBattleData(Player mainPlayer, PlayerStatistics statistics)
     {
         MainPlayer = mainPlayer;
         Statistics = statistics;
+    }
+
+    public void SetCampWinAct()
+    {
+        _winAct = true;
     }
 
     public void PreBattle(Player player1, Player player2, bool isFinalBattle, bool canRetire)

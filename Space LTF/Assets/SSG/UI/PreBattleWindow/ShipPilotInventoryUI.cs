@@ -7,6 +7,7 @@ public class ShipPilotInventoryUI : MonoBehaviour
 {
     public ShipInventoryUI ShipInventory;
     public PilotInventoryUI PilotInventory;
+    public Image Background;
 
     private Action ontoggleSwitched;
 //    public Toggle ToggleElement;
@@ -25,6 +26,10 @@ public class ShipPilotInventoryUI : MonoBehaviour
         {
             PilotInventory.Init(data.Pilot, data.Ship);
         }
+
+        var colro = Library.GetColorByConfig(data.Ship.ShipConfig);
+        colro.a = BaseShipInventoryUI.ALPHA;
+        Background.color = colro;
     }
 
     public void OnEnableAdditionsClick()

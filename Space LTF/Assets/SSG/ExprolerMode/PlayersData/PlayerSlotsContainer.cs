@@ -11,7 +11,7 @@ using UnityEngine;
 public class PlayerSlotsContainerSafeData
 {
 
-    public static string pathData = $"PlayerSlotsContainerSafeData.data";
+    public static string pathData = $"PlayerSlotsContainerSafeDataA.data";
     public List<PlayerSafe> _playerSafeContainers = new List<PlayerSafe>();
 
     public void Add(PlayerSafe safe)
@@ -29,12 +29,19 @@ public class PlayerSlotsContainerSafeData
 
     public void Save()
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + pathData);
-        //        MoneyData.Dispose();
-        bf.Serialize(file, this);
-        file.Close();
-        Debug.Log("PlayerSlotsContainerSafeData Saved");
+        try
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(Application.persistentDataPath + pathData);
+            //        MoneyData.Dispose();
+            bf.Serialize(file, this);
+            file.Close();
+            Debug.Log("PlayerSlotsContainerSafeData Saved");
+        }
+        catch (Exception e)
+        {
+              WindowManager.Instance.InfoWindow.Init(null,"Save error");
+        }
 
     }
 
@@ -159,7 +166,7 @@ public class PlayerSlotsContainer
                 return false;
             }
         }
-        PlayerSafe safe = new PlayerSafe(true,false);
+        PlayerSafe safe = new PlayerSafe(true,SaveMode.none);
         safe.CreateNew(shipConfig, startPair, nameFieldText);
         AddNewContainer(safe);
         return true;

@@ -100,7 +100,7 @@ public static class Library
     private const float EMI_DELAY = 7f;
     private const float EMI_SPEED = 15f;
 
-    public const float MOVING_ARMY_POWER_COEF = 1.5f;
+    public const float MOVING_ARMY_POWER_COEF = 1.35f;
 
     public const float BASE_WEAPON_VALUE = 1.2f;
     public const float BASE_SPELL_VALUE = 1.1f;
@@ -131,7 +131,7 @@ public static class Library
     public const int BaitPriorityTargetCostCount = 2;
     public const int CRITICAL_DAMAGES_TO_DEATH = 2;
     public const int SHIELD_COEF_EXTRA_CHARGE = 10;
-    public const float BATTLE_REWARD_WIN_MONEY_COEF = 1.3f;
+    public const float BATTLE_REWARD_WIN_MONEY_COEF = 0.8f;
     public const float MONEY_PILOT_LEVEL_UP_COST_BASE = 5f;
     public const float MONEY_PILOT_LEVEL_UP_COST_COEF = 1.25f;
     public static int START_PLAYER_FREE_PARAMETERS = 2;

@@ -7,7 +7,7 @@ public class ShopGlobalMapCell : GlobalMapCell
 {
     public ShopInventory ShopInventory=>_shopInventory;
     protected ShopInventory _shopInventory;
-    PlayerSafe _playerSafe = new PlayerSafe(false,true);
+    PlayerSafe _playerSafe = new PlayerSafe(false,SaveMode.none);
     public ShopGlobalMapCell(float power, int id, int intX, int intZ, SectorData sector, ShipConfig config) : base(id, intX, intZ, sector, config)
     {
         InitShop(power,sector,config);

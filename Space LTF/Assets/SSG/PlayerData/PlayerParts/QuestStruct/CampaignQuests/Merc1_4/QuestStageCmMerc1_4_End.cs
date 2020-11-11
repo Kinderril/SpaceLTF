@@ -45,8 +45,8 @@ public class QuestStageCmMerc1_4_End : QuestStage
     private List<string> GetDialogsTag()
     {
         var list = new List<string>();
-        list.Add("cmMerc1_4_dialog_end_M1");
-        list.Add("DC");
+//        list.Add("cmMerc1_4_dialog_end_M1");
+//        list.Add("DC");
         list.Add("cmMerc1_4_dialog_end_M1_2");
         list.Add("DC");
         list.Add("cmMerc1_4_dialog_end_M1_3");

@@ -13,7 +13,7 @@ public class CoreSpellBigInfo : AbstractBaseInfoUI
     public void Init(int index, Action callback)
     {
         var isZero = index == 0;
-        base.Init(callback);
+        base.Init(callback,null);
 
 
         NameField.text = isZero ? Namings.Tag("PriorityTarget") : Namings.Tag("BaitPriorityTarget");

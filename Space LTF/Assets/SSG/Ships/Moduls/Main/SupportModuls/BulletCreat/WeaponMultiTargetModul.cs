@@ -19,14 +19,14 @@ public class WeaponMultiTargetModul : BaseSupportModul
     {
         return (target, origin, weapon, shootpos, bullestartparameters) =>
         {
-            var isWeaponSupport = weapon is SupportWeaponInGame;
+            var isWeaponSupport = weapon.TargetType == TargetType.Ally;
             var index = isWeaponSupport ? weapon.TeamIndex : BattleController.OppositeIndex(weapon.TeamIndex);
             var shipsInRad = BattleController.Instance.GetAllShipsInRadius(weapon.CurPosition, index, bullestartparameters.radiusShoot);
             if (shipsInRad.Count > 0)
             {
                 foreach (var shipBase in shipsInRad)
                 {
-                    var dir = Utils.NormalizeFastSelf(shipBase.Position - shootpos);
+                    var dir = shipBase.Position - shootpos;
                     BulletTarget trg;
                     if (target.target != null)
                     {

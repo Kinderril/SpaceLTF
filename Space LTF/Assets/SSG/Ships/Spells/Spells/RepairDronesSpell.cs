@@ -89,13 +89,13 @@ public class RepairDronesSpell : BaseSpellModulInv
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         target.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
-        var addHealth = shipparameters.MaxHealth * HealPercent;
-        shipparameters.HealthRegen.Start(addHealth, HealPerTick);
+        var addHealth = shipparameters.MaxHealth * additional.CurrentDamage.ShieldDamage;
+        shipparameters.HealthRegen.Start(addHealth, additional.CurrentDamage.BodyDamage);
         switch (UpgradeType)
         {
             case ESpellUpgradeType.A1:
                 var maxShield = target.ShipParameters.ShieldParameters.MaxShield;
-                var countToHeal = maxShield * HealPercent * SHIELD_PERCENT;
+                var countToHeal = maxShield * additional.CurrentDamage.ShieldDamage * SHIELD_PERCENT;
                 target.ShipParameters.ShieldParameters.HealShield(countToHeal);
                 break;
             case ESpellUpgradeType.B2:
