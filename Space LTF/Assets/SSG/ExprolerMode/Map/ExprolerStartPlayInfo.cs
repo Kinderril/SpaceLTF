@@ -39,6 +39,12 @@ public class ExprolerStartPlayInfo
         var slots = MainController.Instance.SafeContainers;
         if (win)
         {
+
+#if Demo
+        WindowManager.Instance.InfoWindow.Init(null,Namings.Tag("DemoVersionNoSafe"));
+        return;
+#else
+
             var nieght = Cell.Neighhoods;
             foreach (var id in nieght)
             {
@@ -52,6 +58,7 @@ public class ExprolerStartPlayInfo
 
             CompleteId = Cell.Id;
             slots.CompleteId(Cell.Id, size);
+#endif
         }
         slots.SaveProfiles();
         Showed = false;

@@ -21,9 +21,21 @@ public abstract class GlobalMapCell
 
     public SectorData Sector => _sector;
     private HashSet<GlobalMapCell> _ways = new HashSet<GlobalMapCell>();
-    public MovingArmy CurMovingArmy = null;
+    public CellArmyContainer CurMovingArmy
+    {
+        get
+        {
+            if (Container == null)
+            {
+                Debug.LogError($"cell id:{Id} null Container:{indX}  {indZ}");
+            }
+            return Container.CurMovingArmy;
+        }
+    }
+
     protected EBattlefildEventType? _eventType = null;
     public EBattlefildEventType? EventType => _eventType;
+    public SectorCellContainer Container { get; private set; }
 
     public int ConnectedGates = -1;
     public int indX;
@@ -105,11 +117,12 @@ public abstract class GlobalMapCell
 
     public MessageDialogData GetDialogMain(out bool activateAnyway)
     {
-        Debug.Log($"Activate dialog: {this.ToString()}.   CurMovingArmy:{CurMovingArmy != null}");
-        if (CurMovingArmy != null)
+        Debug.Log($"Activate dialog: {this.ToString()}.");
+        var dilaog = CurMovingArmy.GetDialog(FightMovingArmy, GetDialog());
+        if (dilaog != null)
         {
             activateAnyway = true;
-            return CurMovingArmy.GetDialog(FightMovingArmy,GetDialog());
+            return dilaog;
         }
 
         var dialog = GetDialog();
@@ -233,6 +246,10 @@ public abstract class GlobalMapCell
         return money;
     }
 
+    public void SetContainer(SectorCellContainer cellContainer)
+    {
+        Container = cellContainer;
+    }
 
     protected bool SkillWork(int baseVal, int skillVal)
     {
@@ -295,10 +312,31 @@ public abstract class GlobalMapCell
 
     public void VisitCell(PlayerMapData mapData, int step)
     {
+
+        if (!CurMovingArmy.HaveArmy() )
+        {
+            var army = this as ArmyBornCenterGlobalCell;
+            if (army != null)
+            {
+                if (army.FightComplete)
+                {
+                    Complete();
+                }
+            }
+            else
+            {
+                Complete();
+            }
+        }
         if (_sector.ComeToSector())
         {
             mapData.VisitedSectors++;
         }
+
+    }
+
+    public virtual void UpdateStep(int step)
+    {
 
     }
 

@@ -31,6 +31,7 @@ public class SectorGlobalMapInfo : MonoBehaviour
         _sideMove = MyExtensions.IsTrueEqual();
         MainGo.gameObject.SetActive(false);
         _sector = sector;
+        _sector.OnCompleteChange += OnCompleteChange;
         _data = data;
         var sectorSize = sector.Size * offset;
         var scl = sectorSize * 0.11f;
@@ -65,6 +66,11 @@ public class SectorGlobalMapInfo : MonoBehaviour
         _maxVertical = center + new Vector3(0, 0, sectorSize / 2f);
     }
 
+    private void OnCompleteChange()
+    {
+        UpdateField();
+    }
+
     private void UpdateField()
     {
         var sectorCells = _data.GetAllList().Where(x => !(x is GlobalMapNothing) && x.SectorId == _sector.Id).ToList();
@@ -95,7 +101,17 @@ public class SectorGlobalMapInfo : MonoBehaviour
         }
         var completedCount = sectorCells.Count(x => x.Completed);
         var totalCount = sectorCells.Count;
-        var txt = $"{ss}\n{Namings.Tag("Completed")}:{completedCount}/{totalCount} \n {_sector.Name}";
+        string txt;
+        if (_sector.IsSectorMy)
+        {
+            txt =$"{Namings.Tag("MySector") }\n {_sector.Name}" ;
+        }
+        else
+        {
+
+            txt = $"{ss}\n{Namings.Tag("Completed")}:{completedCount}/{totalCount} \n {_sector.Name}";
+        }
+
         Field.text = txt;
     }
     public void Select()
@@ -112,6 +128,12 @@ public class SectorGlobalMapInfo : MonoBehaviour
         OpenEffect.Play();
 //        HorizontalLine.SetActive(true);
 //        VerticalLine.SetActive(true);
+    }
+
+    void OnDestroy()
+    {
+        if (_sector != null)
+            _sector.OnCompleteChange -= OnCompleteChange;
     }
 
     public void UnSelect()

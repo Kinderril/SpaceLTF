@@ -19,7 +19,19 @@ public class PlayerArmy
             }
             return _links.Ships.Where(x => !x.Ship.IsDead).ToList();
         }
-    } 
+    }
+
+    public List<StartShipPilotData> AllArmy
+    {
+        get
+        {
+            if (_links == null || _links.Ships == null)
+            {
+                return null;
+            }
+            return _links.Ships.ToList();
+        }
+    }
 
     private PlayerSafe _links;
     public ShipConfig BaseShipConfig { get; private set; }

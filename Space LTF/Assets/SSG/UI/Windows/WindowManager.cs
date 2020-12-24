@@ -260,5 +260,10 @@ public class WindowManager : Singleton<WindowManager>
             OnItemWindowClose();
         }
     }
+
+    public void InfoDemoWindow()
+    {
+        WindowManager.Instance.InfoWindow.Init(null, Namings.Tag("DemoVersion"));
+    }
 }
 

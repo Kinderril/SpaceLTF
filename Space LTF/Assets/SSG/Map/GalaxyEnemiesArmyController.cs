@@ -84,7 +84,7 @@ public class GalaxyEnemiesArmyController
         var allSectors = data.GalaxyData.GetAllList();
 
         var posibleCells = allSectors.Where(x =>
-            !(x is GlobalMapNothing) && x.CurMovingArmy == null).ToList();
+            !(x is GlobalMapNothing) && !x.CurMovingArmy.HaveArmy()).ToList();
 
         if (posibleCells.Count == 0)
         {
@@ -127,7 +127,7 @@ public class GalaxyEnemiesArmyController
     private void TryBornArmy(GlobalMapCell curPlayersCell)
     {
         var posibleCells = _cells.Where(x =>
-            !x.Completed && x.CurMovingArmy == null && !(x is GlobalMapNothing)
+            !x.Completed && !(x is GlobalMapNothing) && !x.CurMovingArmy.HaveArmy() 
             && Mathf.Abs(x.indX - curPlayersCell.indX) > 4 
             && Mathf.Abs(x.indZ - curPlayersCell.indZ) > 4
             && _possibleConfigs.Contains(x.ConfigOwner));
@@ -146,9 +146,18 @@ public class GalaxyEnemiesArmyController
         }
     }
 
-    public MovingArmy BornArmyAtCell(GlobalMapCell cell,int power = -1)
+    public MovingArmy BornArmyAtCell(GlobalMapCell cell, bool isAllies = false, int power = -1)
     {
-        var movingArmy = new SpecOpsMovingArmy(cell, DestroySpecOpsCallback, this, power);
+        if (cell.CurMovingArmy.HaveArmy())
+        {
+            return null;
+        }
+
+        if (cell == MainController.Instance.MainPlayer.MapData.CurrentCell)
+        {
+            return null;
+        }
+        var movingArmy = new SpecOpsMovingArmy(cell, DestroySpecOpsCallback, this, isAllies, power);
         AddArmy(movingArmy);
         _totalBornArmies++;
         var coordinates = $"{movingArmy.CurCell.indX},{movingArmy.CurCell.indZ}";
@@ -228,7 +237,7 @@ public class GalaxyEnemiesArmyController
             {
                 if (cellHaveObject == null || cellHaveObject(globalMapCell))
                 {
-                    if (globalMapCell.CurMovingArmy == null)
+                    if (!globalMapCell.CurMovingArmy.HaveArmy())
                     {
                         freeCells.Add(globalMapCell);
                     }
@@ -242,18 +251,13 @@ public class GalaxyEnemiesArmyController
 
         foreach (var movingArmy in _armies)
         {
-//            if (movingArmy.CurCell != playersCell)
-//            {
-                var targetCell = movingArmy.FindCellToMove(freeCells);
-               
-                    if (targetCell != null)
-                    {
-                        _nextCell.Add(movingArmy, targetCell);
-                        freeCells.Remove(targetCell);
-                        choosedCells.Add(targetCell);
-                    }
-                
-//            }
+            var targetCell = movingArmy.FindCellToMove(freeCells);
+            if (targetCell != null)
+            {
+                _nextCell.Add(movingArmy, targetCell);
+                freeCells.Remove(targetCell);
+                choosedCells.Add(targetCell);
+            }
         }
 
         return _nextCell;
@@ -265,8 +269,7 @@ public class GalaxyEnemiesArmyController
         foreach (var globalMapCell in targets)
         {
             globalMapCell.Key.PrevCell = globalMapCell.Key.CurCell;
-            globalMapCell.Key.CurCell.CurMovingArmy = null;
-            globalMapCell.Key.CurCell = null;
+            globalMapCell.Key.CurCell.CurMovingArmy.ArmyRemove(globalMapCell.Key);
         }
     }
 

@@ -23,9 +23,12 @@ public class QuestStartClearSectorFed1 : QuestStage
         var targetSector = allSectors.RandomElement();
         foreach (var targetSectorListCell in targetSector.ListCells)
         {
-            if (targetSectorListCell.Data != null && targetSectorListCell.Data.CurMovingArmy != null)
+            if (targetSectorListCell.Data != null && targetSectorListCell.Data.CurMovingArmy.HaveArmy())
             {
-                _idsToKill.Add(targetSectorListCell.Data.CurMovingArmy);
+                foreach (MovingArmy id in targetSectorListCell.Data.CurMovingArmy.GetAllArmies())
+                {
+                    _idsToKill.Add(id);
+                }
             }
         }
         _enemiesController = player.MapData.GalaxyData.GalaxyEnemiesArmyController;

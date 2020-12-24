@@ -10,7 +10,7 @@ public class StandartMovingArmy : MovingArmy
     private bool canAskHelp = true;
     public StandartMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback
         ,float startPower,GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn) 
-        : base(startCell, destroyCallback, enemiesArmyController)
+        : base(startCell, destroyCallback, enemiesArmyController,false)
     {
         _powerPerTurn = powerPerTurn;
         _startPower = startPower;

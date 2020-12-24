@@ -51,13 +51,16 @@ public class MercsConfig
 [System.Serializable]
 public class MercenaryHideout : BaseGlobalMapEvent
 {
-
+    private GlobalMapCell _cell;
     private int creditsToEnter = 10;
     private List<MercsConfig> _mercsConfigs = null;
+    private bool _feePayed = false;
+    public bool FeePayed => _feePayed || _cell.Sector.IsSectorMy;
 
-    public MercenaryHideout(ShipConfig config)
+    public MercenaryHideout(ShipConfig config,GlobalMapCell cell)
         : base(config)
     {
+        _cell = cell;
     }
     public override string Desc()
     {
@@ -75,7 +78,7 @@ public class MercenaryHideout : BaseGlobalMapEvent
         {
             GenerateMercs();
         }
-        if (_feePayed)
+        if (FeePayed)
         {
             return MercToHire();
         }
@@ -94,15 +97,12 @@ public class MercenaryHideout : BaseGlobalMapEvent
 
     }
 
+
     private void TryAttack()
     {
 //        int repToRemove = 5;
         var player = MainController.Instance.MainPlayer;
-//        player.ReputationData.RemoveReputation(ShipConfig.mercenary, repToRemove);
-//        player.ReputationData.RemoveReputation(ShipConfig.raiders, repToRemove);
-//        player.ReputationData.AddReputation(ShipConfig.federation, repToRemove);
-//        player.ReputationData.AddReputation(ShipConfig.krios, repToRemove);
-        var power = player.Army.GetPower();
+        var power = player.Army.GetPower() * 1.5f;
         MainController.Instance.PreBattle(player, GetArmy(ShipConfig.mercenary, ShipConfig.raiders, power), false);
     }
 
@@ -151,7 +151,6 @@ public class MercenaryHideout : BaseGlobalMapEvent
         return mesData;
     }
 
-    private bool _feePayed = false;
 
     private MessageDialogData MercToHire()
     {

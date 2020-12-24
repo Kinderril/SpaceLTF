@@ -243,7 +243,7 @@ public class PlayerChampaingContainer
         }
         Player = new PlayerCampaing($"Campaing player {Act}", _safe,_reputationData);
         Debug.Log($"Play act {Act}");
-        int sizeSector = 5;
+        int sizeSector = 4;
         int powerPerTurn = 0;
         switch (Act)
         {
@@ -256,7 +256,7 @@ public class PlayerChampaingContainer
                 powerPerTurn = 1;
                 break;
             case 2:
-                sizeSector = 6;
+                sizeSector = 3;
                 powerPerTurn = 2;
                 break;
 //            case 3:

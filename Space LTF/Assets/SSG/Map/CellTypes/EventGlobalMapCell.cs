@@ -67,7 +67,7 @@ public class EventGlobalMapCell : GlobalMapCell
                 _mapEvent = new ExcavationsEvent(power, config);
                 break; 
             case GlobalMapEventType.mercHideout:
-                _mapEvent = new MercenaryHideout(config);
+                _mapEvent = new MercenaryHideout(config,this);
                 break;
             case GlobalMapEventType.brokenNavigation:
                 _mapEvent = new BrokenNavigationMapEvent(power, config);

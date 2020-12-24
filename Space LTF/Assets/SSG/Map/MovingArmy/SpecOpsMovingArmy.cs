@@ -7,8 +7,8 @@ using System.Linq;
 [System.Serializable]
 public class SpecOpsMovingArmy : MovingArmy
 {
-    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController enemiesArmyController,int power = -1) 
-        : base(startCell, destroyCallback, enemiesArmyController)
+    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController enemiesArmyController, bool isAllies,int power = -1) 
+        : base(startCell, destroyCallback, enemiesArmyController,isAllies)
     {
         var humanPlayer = MainController.Instance.MainPlayer;
         var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
@@ -69,6 +69,16 @@ public class SpecOpsMovingArmy : MovingArmy
         {
             return _startDialog(FightMovingArmy);
         }
+
+        if (IsAllies)
+        {
+            var ans1 = new List<AnswerDialogData>()
+            {
+                new AnswerDialogData(Namings.Tag("Ok"), null,  null,false,false),
+            };
+            var mesData1 = new MessageDialogData(Namings.DialogTag("MovingArmyAllies"), ans1);
+            return mesData1;
+        }
         var ans = new List<AnswerDialogData>()
         {
             new AnswerDialogData(Namings.DialogTag("MovingArmyFight"), FightMovingArmy,  null,false,false),
@@ -94,7 +104,7 @@ public class SpecOpsMovingArmy : MovingArmy
         var playersCell = player.MapData.CurrentCell;
         var ways = CurCell.GetCurrentPosibleWays();
         var ststus = player.ReputationData.GetStatus(_player.Army.BaseShipConfig);
-        var posibleWays = ways.Where(x => !(x is GlobalMapNothing) && x.CurMovingArmy == null).ToList();
+        var posibleWays = ways.Where(x => !(x is GlobalMapNothing) && !x.CurMovingArmy.HaveArmy()).ToList();
         if (posibleWays.Count == 0)
         {
             return null;

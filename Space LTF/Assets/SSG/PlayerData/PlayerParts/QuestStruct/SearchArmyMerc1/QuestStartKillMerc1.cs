@@ -19,13 +19,13 @@ public class QuestStartKillMerc1 : QuestStage
         var allSectors = player.MapData.GalaxyData.GetAllList();
 
         var posibleCells = allSectors.Where(x =>
-        x is FreeActionGlobalMapCell && x.CurMovingArmy == null 
+        x is FreeActionGlobalMapCell && x.CurMovingArmy.NoAmry() 
                                      && x.indX > player.MapData.CurrentCell.indX
                                      && player.MapData.CurrentCell.SectorId != x.Id ).ToList();
 
         if (posibleCells.Count == 0)
         {
-            posibleCells = allSectors.Where(x => !(x is GlobalMapNothing) && x.CurMovingArmy == null).ToList();
+            posibleCells = allSectors.Where(x => !(x is GlobalMapNothing) && x.CurMovingArmy.NoAmry()).ToList();
         }
 
         if (posibleCells.Count == 0)
@@ -37,7 +37,7 @@ public class QuestStartKillMerc1 : QuestStage
         if (cell != null)
         {
             _enemiesController = player.MapData.GalaxyData.GalaxyEnemiesArmyController;
-            _army = _enemiesController.BornArmyAtCell(cell, (int)(player.Army.GetPower() * 1.1f));
+            _army = _enemiesController.BornArmyAtCell(cell,false, (int)(player.Army.GetPower() * 1.1f));
 //            _army.SetDestroyCallback(ArmyDestroyed);
             return true;
         }

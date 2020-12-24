@@ -63,12 +63,12 @@ public static class MoneyConsts
     public const int EXP_COEF = 3;
 
 
-    public const int BASE_WEAPON_MONEY_COST = 10;
-    public const int LEVEL_WEAPON_MONEY_COST = 13;
-    public const int SPELL_BASE_MONEY_COST = 16;
-    public const int MODUL_BASE_MONEY_COST = 16;
-    public const float MODUL_BASE_MONEY_COST_MID = 2f;
-    public const int MODUL_LEVEL_MONEY_COST = 11;
+    public const int BASE_WEAPON_MONEY_COST = 20;
+    public const int LEVEL_WEAPON_MONEY_COST = 16;
+    public const int SPELL_BASE_MONEY_COST = 36;
+    public const int MODUL_BASE_MONEY_COST = 29;
+    public const float MODUL_BASE_MONEY_COST_MID = 4f;
+    public const int MODUL_LEVEL_MONEY_COST = 20;
     public const int MODUL_RARE_MONEY_COST = 26;
 
 

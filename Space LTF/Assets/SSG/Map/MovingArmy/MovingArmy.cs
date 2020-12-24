@@ -6,11 +6,12 @@ using UnityEngine;
 [Serializable]
 public abstract class MovingArmy
 {
-    public GlobalMapCell CurCell;
+    public GlobalMapCell CurCell { get; protected set; }
     protected Player _player;
     private Action<MovingArmy> _destroyCallback;
     protected Func<Action,MessageDialogData> _startDialog = null;
     protected Func<MessageDialogData> _endDialog = null;
+    public bool IsAllies { get; private set; }
 
     //    [field: NonSerialized]
     //    public event Action<MovingArmy> OnDestroyed;
@@ -33,8 +34,9 @@ public abstract class MovingArmy
     private GalaxyEnemiesArmyController _armiesController;
 
     protected MovingArmy(GlobalMapCell startCell,
-        Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController armiesController)
+        Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController armiesController,bool isAllies)
     {
+        IsAllies = isAllies;
         _armiesController = armiesController;
         _destroyCallback = destroyCallback;
         Id = Utils.GetId();
@@ -44,7 +46,7 @@ public abstract class MovingArmy
         }
         CurCell = startCell;
         StartConfig = startCell.ConfigOwner;
-        startCell.CurMovingArmy = this;
+        startCell.CurMovingArmy.ArmyCome(this);
         //        Power = power;
         Subscribe();
     }
@@ -112,7 +114,7 @@ public abstract class MovingArmy
 
     public void Dispose()
     {
-        CurCell.CurMovingArmy = null;
+        CurCell.CurMovingArmy.ArmyRemove(this);
         BattleController.Instance.OnBattleEndCallback -= OnBattleEndCallback;
     }
 
@@ -162,6 +164,12 @@ public abstract class MovingArmy
     public void AfterLoadCheck()
     {
         Subscribe();
+    }
+
+    public void SetCurCell(GlobalMapCell cellToGo)
+    {
+        CurCell = cellToGo;
+
     }
 }
 

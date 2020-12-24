@@ -17,8 +17,8 @@ public class ShopInventory : PlayerInventory
     private const int Max_SPELLS = 2;
     private const float CHANCE_SUPPORT_1 = .4f;
 
-    private const float VALUABLE_COEF = 1.5f;
-    private const float UNVALUABLE_COEF = 0.5f;
+    private const float VALUABLE_COEF = 1.65f;
+    private const float UNVALUABLE_COEF = 0.4f;
 
     private List<WeaponType> _valuableTypesWeapon = new List<WeaponType>();
     private List<WeaponType> _notValuableTypesWeapon = new List<WeaponType>();

@@ -19,15 +19,13 @@ public class SectorData
     public int Id { get; private set; }
     public bool IsPopulated { get; protected set; }
     public int StartPowerGalaxy { get; protected set; }
+    public bool IsSectorMy => _allArmiesDestryed;
     protected int _power;
     private bool _isVisited;
+    private bool _allArmiesDestryed;
     public SectorCellContainer[,] Cells;
     protected float _powerPerTurn;
     public HashSet<SectorCellContainer> ListCells = new HashSet<SectorCellContainer>();
-
-    Dictionary<GlobalMapEventType, int> _eventsCount = new Dictionary<GlobalMapEventType, int>();
-
-    //    private static Dictionary<int, WDictionary<ShipConfig>> ShipsDictionary;
     protected ShipConfig _shipConfig;
     public ShipConfig ShipConfig => _shipConfig;
     private Dictionary<GlobalMapEventType, int> _maxCount;
@@ -36,6 +34,9 @@ public class SectorData
     public virtual bool AnyEvent => false;
 
     protected bool _isHide = false;
+    [field: NonSerialized]
+    public event Action OnCompleteChange;
+    [field: NonSerialized] public event Action<SectorData> OnBecomeMine;
 
     public bool IsHide => _isHide;
 
@@ -186,6 +187,19 @@ public class SectorData
             }
         }
 
+        if (remainFreeCells.Count > 1)
+        {
+            var rndRemainCell = remainFreeCells.RandomElement();
+            if (rndRemainCell != null)
+            {
+
+                remainFreeCells.Remove(rndRemainCell);
+                var bornCenterGlobalCell = new ArmyBornCenterGlobalCell(Utils.GetId(), StartX + rndRemainCell.indX,
+                    StartZ + rndRemainCell.indZ, this, _shipConfig);
+                rndRemainCell.SetData(bornCenterGlobalCell);
+            }
+        }
+
         foreach (var armyContainer in remainFreeCells.ToList())
         {
             var config = IsDroids(_shipConfig);
@@ -217,6 +231,8 @@ public class SectorData
 
     public bool ComeToSector()
     {
+        CheckIsAllArmiesDestryoed();
+        OnCompleteChange?.Invoke();
         if (!_isVisited)
         {
             _isVisited = true;
@@ -225,6 +241,32 @@ public class SectorData
         }
 
         return false;
+    }
+
+    private void CheckIsAllArmiesDestryoed()
+    {
+        bool isAllArmiesDestyoyed = true;
+        foreach (var sectorCellContainer in ListCells)
+        {
+            if (sectorCellContainer.Data.CurMovingArmy.HaveArmy())
+            {
+                isAllArmiesDestyoyed = false;
+            }
+        }
+
+        if (isAllArmiesDestyoyed)
+        {
+            var sectorCells = ListCells.Where(x => !(x.Data is GlobalMapNothing)).ToList();
+            var completedCount = sectorCells.Count(x => x.Data.Completed);
+            var totalCount = sectorCells.Count;
+            var allCompleted = completedCount >= totalCount;
+            if (!_allArmiesDestryed && allCompleted)
+            {
+                _allArmiesDestryed = true;
+                OnBecomeMine?.Invoke(this);
+            }
+        }
+
     }
 
     protected StartGlobalCell CreateStartCell(bool campCell = false, int act = 0,ShipConfig campConfig = ShipConfig.mercenary)
@@ -397,7 +439,7 @@ public class SectorData
           
     public void ApplyPointsTo(CellsInGalaxy cellInGalaxy)
     {
-        Debug.Log($"Apply points to cells");
+//        Debug.Log($"Apply points to cells");
         int countPopulated = 0;
         for (int i = 0; i < Size; i++)
         {

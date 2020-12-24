@@ -50,7 +50,7 @@ public class CellIinfoObjectUI : MonoBehaviour
                 return;
             }
 
-            var isWithArmy = cell.CurMovingArmy != null;
+            var isWithArmy = cell.CurMovingArmy.HaveArmy();
             if (isWithArmy)
             {
                 var name = cell.CurMovingArmy.ShortDesc();

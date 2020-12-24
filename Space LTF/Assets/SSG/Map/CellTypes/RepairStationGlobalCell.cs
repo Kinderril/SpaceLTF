@@ -26,26 +26,37 @@ public class RepairStationGlobalCell : GlobalMapCell
     {
         var answers = new List<AnswerDialogData>();
         var rep = MainController.Instance.MainPlayer.ReputationData.GetStatus(ConfigOwner);
-        if (rep == EReputationStatus.enemy)
+        bool isEnemy = rep == EReputationStatus.enemy;
+//        if (rep == EReputationStatus.enemy)
+//        {
+//            MessageDialogData mesData;
+//            answers.Add(new AnswerDialogData(Namings.Tag("Ok")));
+//            mesData = new MessageDialogData(Namings.DialogTag("repairEnemy"), answers);
+//            return mesData;
+//        }
+//        else
+//        {
+        float costCoef = 1f;
+        if (Sector.IsSectorMy)
         {
-            MessageDialogData mesData;
-            answers.Add(new AnswerDialogData(Namings.Tag("Ok")));
-            mesData = new MessageDialogData(Namings.DialogTag("repairEnemy"), answers);
-            return mesData;
+            costCoef = 0.5f;
         }
-        else
+        else  if (isEnemy)
         {
+            costCoef = 2f;
+        }
+
             var player = MainController.Instance.MainPlayer;
-            var allShips = player.Army.Army;
+            var allShips = player.Army.AllArmy;
             var total = 0;
             bool haveCriticalDamages = false;
             foreach (var startShipPilotData in allShips)
             {
                 var pointToRepair = startShipPilotData.Ship.HealthPointToRepair();
-                var cost = Library.GetReapairCost(pointToRepair, startShipPilotData.Pilot.CurLevel);
+                var cost = Library.GetReapairCost(pointToRepair, startShipPilotData.Pilot.CurLevel) * costCoef;
                 var thisShip = (int)Mathf.Clamp((int)cost * Library.REPAIR_DISCOUTNT, 1, 99999);
                 total += thisShip;
-                if (startShipPilotData.Ship.CriticalDamages > 0)
+                if (startShipPilotData.Ship.CriticalDamages > 0 || startShipPilotData.Ship.IsDead)
                 {
                     haveCriticalDamages = true;
                 }
@@ -54,7 +65,7 @@ public class RepairStationGlobalCell : GlobalMapCell
             if (haveCriticalDamages)
             {
                 float count = player.Army.Army.Sum(startShipPilotData => startShipPilotData.Ship.CriticalDamages * (5 + startShipPilotData.Pilot.CurLevel * 0.2f));
-                var critFixCost = (int)(count * Library.COST_REPAIR_CRIT);
+                var critFixCost = (int)(count * Library.COST_REPAIR_CRIT * costCoef);
                 answers.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("fixCrit"), critFixCost), null, () => FixCrit(critFixCost)));
             }
 
@@ -64,7 +75,12 @@ public class RepairStationGlobalCell : GlobalMapCell
        
             if (haveSmtToRepair)
             {
+
                 mainMsg = Namings.DialogTag("repairStart");
+                if (isEnemy && !Sector.IsSectorMy)
+                {
+                    mainMsg = $"{mainMsg} {Namings.DialogTag("repairEnemy")}";
+                }
             }
             else
             {
@@ -72,7 +88,7 @@ public class RepairStationGlobalCell : GlobalMapCell
             }
 
 
-                MessageDialogData mesData;
+            MessageDialogData mesData;
             if (total > 0 )
             {
                 var canRepairFull = player.MoneyData.HaveMoney(total);
@@ -105,7 +121,7 @@ public class RepairStationGlobalCell : GlobalMapCell
             mesData = new MessageDialogData(mainMsg, answers);
             return mesData;
 
-        }
+//        }
 
 
     }
@@ -128,7 +144,7 @@ public class RepairStationGlobalCell : GlobalMapCell
         answers.Add(new AnswerDialogData(Namings.Tag("Ok"), null, () => GetDialog()));
         if (haveMoney)
         {
-            foreach (var startShipPilotData in player.Army.Army)
+            foreach (var startShipPilotData in player.Army.AllArmy)
             {
                 startShipPilotData.Ship.RestoreAllCriticalDamages();
             }

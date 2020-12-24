@@ -32,9 +32,9 @@ public class PlayerParameter
 
     public void TryUpgrade()
     {
+        int cost = UpgradeCost();
         if (CanUpgrade())
         {
-            int cost = UpgradeCost();
             WindowManager.Instance.ConfirmWindow.Init(() =>
             {
 
@@ -48,7 +48,7 @@ public class PlayerParameter
         }
         else
         {
-            WindowManager.Instance.InfoWindow.Init(null, Namings.Tag("cantUpgrade"));
+            WindowManager.Instance.InfoWindow.Init(null, $"{Namings.Tag("cantUpgrade")}\n{Namings.Format(Namings.Tag("NotEnoughtMoneyLong"), cost)}" );
         }
     }
 

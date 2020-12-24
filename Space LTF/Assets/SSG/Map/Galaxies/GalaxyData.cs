@@ -164,6 +164,7 @@ public class GalaxyData
         AddExitsFromDungeons(sectorCount, sectors, verticalCount);
         ImplementSectorToGalaxy(sectors, sizeSector, _sectorsCount, verticalCount);
         BornArmies(sectors, sizeSector, _sectorsCount, verticalCount);
+        cells.FindNoWayCells();
         Debug.Log("Population end");
 //#if UNITY_EDITOR
 //        var list = cells.GetAllList();
@@ -675,6 +676,11 @@ public class GalaxyData
     public void StepComplete(int step, GlobalMapCell curCell)
     {
         GalaxyEnemiesArmyController.CheckEnemiesMovingArmies(step, curCell);
+        var cellsList = cells.GetAllList();
+        foreach (var globalMapCell in cellsList)
+        {
+            globalMapCell.UpdateStep(step);
+        }
     }
 
     public void StepStart(int step, GlobalMapCell curCell)
@@ -691,6 +697,7 @@ public class GalaxyData
     public void AfterLoadCheck()
     {
         GalaxyEnemiesArmyController.AfterLoadCheck();
+        cells.FindNoWayCells();
     }
 
     public GlobalMapCell[,] AllCells()

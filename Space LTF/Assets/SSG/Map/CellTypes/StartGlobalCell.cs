@@ -8,6 +8,7 @@ public class StartGlobalCell : GlobalMapCell
     public StartGlobalCell(int id, int intX, int intZ, SectorData secto, ShipConfig config) : base(id, intX, intZ, secto, config)
     {
         InfoOpen = true;
+        Complete();
     }
 
 

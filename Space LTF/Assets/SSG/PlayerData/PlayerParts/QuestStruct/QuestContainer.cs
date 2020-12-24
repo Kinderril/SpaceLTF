@@ -222,4 +222,15 @@ public class QuestContainer
         }
     }
 
+    public void ReActivateStageIfStarted()
+    {
+
+        foreach (var questStage in Stages)
+        {
+            if (questStage.Activated)
+            {
+                questStage.Reactivate();
+            }
+        }
+    }
 }

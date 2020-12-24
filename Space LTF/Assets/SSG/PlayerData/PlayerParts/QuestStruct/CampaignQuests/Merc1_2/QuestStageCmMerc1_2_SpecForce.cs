@@ -23,13 +23,13 @@ public class QuestStageCmMerc1_2_SpecForce : QuestStage
 
 
         var posibleCells = sectorId.ListCells
-            .Where(x => x.Data != null && !(x.Data is GlobalMapNothing) && x.Data.CurMovingArmy == null).ToList();
+            .Where(x => x.Data != null && !(x.Data is GlobalMapNothing) && x.Data.CurMovingArmy.NoAmry()).ToList();
 
         var cell = posibleCells.RandomElement();
         if (cell != null)
         {
             _enemiesController = player.MapData.GalaxyData.GalaxyEnemiesArmyController;
-            _army = _enemiesController.BornArmyAtCell(cell.Data,(int)(player.Army.GetPower() * 1.1f));
+            _army = _enemiesController.BornArmyAtCell(cell.Data,false,(int)(player.Army.GetPower() * 1.1f));
 //            _army.SetDestroyCallback(ArmyDestroyed);
             return true;
         }

@@ -514,7 +514,7 @@ public static class RusLocalization
 
         {"Raiders", "Королевство"},
         {"Federation", "Федерация"},
-        {"Mercenary", "Наёмники"},
+        {"Mercenary", "Кочевники"},
         {"Ocrons", "Окроны"},
         {"Krios", "Криос"},
         {"Droids", "Дройды"},
@@ -534,6 +534,8 @@ public static class RusLocalization
         {"ECommanderPriority1Slow","Выбирать корабли для атаки с минимальной маневренностью"  },
         {"EGlobalTacticsFight", "Воевать"},
         {"EGlobalTacticsGoSafe", "Быть в укрытии"},
+        {"MovingArmyAllies", "Ваш союзный флот"},
+        {"dialog_MovingArmyAllies", "Союзный флот"},
 
         {"ECommanderPriority1MinShield","Выбирать корабли для атаки с минимальным щитом" },
         {"ECommanderPriority1MinHealth","Выбирать корабли для атаки с минимальным уровнем корпуса"  },
@@ -593,6 +595,13 @@ public static class RusLocalization
         {"nameKriWin", "Экспериментатор"},
         {"nameOcrWin", "Фанатик"},
         {"nameRdrWin", "Король"},
+        {"MySector", "Сектор под контролем"},
+        {"ArmyBornCenterGlobalCell", "Центр контроля флотов"},
+        {"armyBornCenterRequestArmy", "Заказать новый флот. Цена:{0}"},
+        {"armyBornCenterMy", "Центр контроля под вашим контролем"},
+        {"armyBornCenterComplete", "Вражеский центр контроля. Не активен."},
+        {"armyBornCenterEnemy", "Вражеский центр контроля. Иногда выпускает спец армии. Очень хорошо защищен."},
+        {"armyBornCenterFleetRequested", "Новый флот вскоре будет готов."},
 
 
         {"ShipsRepaired", "Ships Repaired"},
@@ -696,11 +705,12 @@ public static class RusLocalization
         {"rep_adv_negative", "Вы все еще можете торговать но цены вас не порадуют"},
         {"rep_adv_enemy", "Торговать запрещено. только битвы! Спец силы будут преследовать вас."},
         {"rep_friend", "Союзники"},
+        {"Campaign", "Кампания"},
         {"rep_neutral", "Нейтральное"},
         {"rep_negative", "Негативное"},
         {"rep_enemy", "Враг"},
         {"DemoStart", "Ранний доступ\nЭто не финальная версия игры\nПочта: Kinderril@gmail.com"},
-        {"DemoStart2", "You will have only 25 turns. And some mechanics will be blocked."},
+        {"DemoStart2", "Думо версия.\n Дотупен только режим исследования."},
         {"RepairCompete","Ремонт выполнен"},
         {"RepairStation","Станция тех. обслуживания."},
 
@@ -840,7 +850,7 @@ public static class RusLocalization
         {"dialog_scMap", "Это карта области! {0}"},
 
         {"dialog_hirePay", "Заплатить"},
-        {"dialog_hireAttack", "Не платить. Атаковать в лоб."},
+        {"dialog_hireAttack", "Не платить. Атаковать в лоб. Вы не сможете нанять здесь новые корабли."},
         {"dialog_hireEnter","Огромная база построенная на астероиде. Обладает впечатляющей обороной. \nВход платный. Заплатить {0} за вход" },
         {"dialog_hireSomebody","Вы можете попытаться нанять здесь корабли." },
         {"dialog_hireMax","Ваш флот максимального размера." },
@@ -1013,6 +1023,14 @@ public static class RusLocalization
         {"TutorShootMainShip", "Используйте пулемет что бы уничтожить турель."},
         {"dialog_tutorEnds", "Обучение закончено"},
         {"ChanceAfterBattle", "[Успех {0}%]"},
+
+        {"alliesRank_rank1", "Изгой"},
+        {"alliesRank_rank2", "Любимчик"},
+        {"alliesRank_rank3", "Бро"},
+        {"alliesRank_rank4", "Свой человек"},
+        {"alliesRank_rank5", "Член семьи"},
+        {"DemoVersion", "Это демо версия игры.\n Данная опция доступна только в полной версии игры"},
+        {"DemoVersionNoSafe", "Это демо версия игры.\n Только в полной версии игры будут доступны новые галактики"},
 
         {"StartTutorMoveGlobal", "Что бы двигать камеру используйте мышь или WSAD. Кликните левой кнопкой мыши туда куда вы хотите переместить корабль"},
         {"startGameNoTutor", "Советуем пройти обучение."},

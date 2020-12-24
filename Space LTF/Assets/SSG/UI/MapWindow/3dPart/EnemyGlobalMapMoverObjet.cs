@@ -19,8 +19,8 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
         Owner = owner;
         UpdateLookDirection();
         UpdateCurHideCell();
-        GreenObject.SetActive(false);
-        RedObject.SetActive(true);
+        GreenObject.SetActive(owner.IsAllies);
+        RedObject.SetActive(!owner.IsAllies);
     }
 
     public void SetAllies()
@@ -73,10 +73,10 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
                 Debug.LogError($"Very fast time to move:{timeToMove}");
             }
             Debug.Log($"Id:{Owner.Id}  Moving start go to: {place.ToString()}  Owner.CurCell:{Owner.CurCell}   timeToMove:{timeToMove}");
-            if (Owner.CurCell != null)
-                Owner.CurCell.CurMovingArmy = null;
-            Owner.CurCell = place;
-            Owner.CurCell.CurMovingArmy = Owner;
+//            if (Owner.CurCell != null)
+            Owner.CurCell.CurMovingArmy.ArmyRemove(Owner);
+            Owner.SetCurCell(place);
+            Owner.CurCell.CurMovingArmy.ArmyCome(Owner);
             LookObject.SetActive(false);
             MoveTo(timeToMove, objPlace, () =>
             {

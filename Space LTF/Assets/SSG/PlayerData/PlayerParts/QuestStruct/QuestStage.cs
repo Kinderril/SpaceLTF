@@ -241,6 +241,10 @@ public abstract class QuestStage
 
     private void OnQuestId(string obj)
     {
+        if (_complete)
+        {
+            return;
+        }
         if (_idToComplete.ContainsKey(obj))
         {
             _idToComplete[obj] = true;
@@ -304,4 +308,9 @@ public abstract class QuestStage
 
 //    public abstract GlobalMapCell GetCurCellTarget();
     public abstract string GetDesc();
+
+    public void Reactivate()
+    {
+        Activate(_player);
+    }
 }

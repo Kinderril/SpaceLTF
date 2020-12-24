@@ -30,6 +30,58 @@ public class CellsInGalaxy
         cellsList.Add(cell);
     }
 
+    public void FindNoWayCells()
+    {
+        var copyCells = new HashSet<GlobalMapCell>();
+        foreach (var globalMapCell in cellsList)
+        {
+            if (!(globalMapCell is GlobalMapNothing) && !globalMapCell.IsHide)
+                copyCells.Add(globalMapCell);
+        }
+
+        foreach (var globalMapCell in cellsList)
+        {
+            if (!(globalMapCell is GlobalMapNothing) && !globalMapCell.IsHide)
+            {
+                var allWays = globalMapCell.GetCurrentPosibleWays();
+                foreach (var way in allWays)
+                {
+                    copyCells.Remove(way);
+                }
+            }
+        }
+
+        foreach (var globalMapCell in copyCells)
+        {
+            GlobalMapCell nearestCell = GetNearestCell(globalMapCell);
+            if (nearestCell != null)
+                globalMapCell.AddWay(nearestCell);
+        }
+    }
+
+    private GlobalMapCell GetNearestCell(GlobalMapCell globalMapCell)
+    {
+        int dist = Int32.MaxValue;
+        GlobalMapCell tmpCel = null;
+
+
+        foreach (var cell in cellsList)
+        {
+            if (!(cell is GlobalMapNothing) && !cell.IsHide && cell != globalMapCell)
+            {
+                var d = Mathf.Abs(globalMapCell.indZ - cell.indZ) + Mathf.Abs(globalMapCell.indX - cell.indX);
+                if (d < dist)
+                {
+                    d = dist;
+                    tmpCel = cell;
+                }
+            }
+        }
+
+        return tmpCel;
+
+    }
+
 
     public void SetCell(GlobalMapCell cell)
     {

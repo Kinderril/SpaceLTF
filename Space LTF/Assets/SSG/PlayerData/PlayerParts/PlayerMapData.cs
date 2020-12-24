@@ -195,20 +195,7 @@ public class PlayerMapData
     }
 
     public bool CanGoTo(GlobalMapCell target,bool withActionIfCantGo)
-    {
-#if Demo
-        int step = Step * 200;
-        int check = 5000;
-        if (VisitedSectors > 2 || step > check)
-        {
-            WindowManager.Instance.InfoWindow.Init(()=>
-            {
-                WindowManager.Instance.OpenWindow(MainState.start);
-            },Namings.TryFormat(Namings.Tag("Demo"),2,25));
-            return false;
-        }
-#endif
-
+    {       
         if (CurrentCell != null && !CurrentCell.CanGotFromIt(withActionIfCantGo))
         {
             return false;

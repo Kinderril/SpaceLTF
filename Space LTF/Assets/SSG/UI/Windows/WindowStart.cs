@@ -28,7 +28,7 @@ public class WindowStart : BaseWindow
 //#endif
 #if Demo
         DemoField.gameObject.SetActive(true);  
-      mainTxt = $"{mainTxt}{Namings.Tag("DemoStart2")}";
+      mainTxt = $"{Namings.Tag("DemoStart2")}";
 #else
         //        DemoField.gameObject.SetActive(false);
 #endif
@@ -50,6 +50,10 @@ public class WindowStart : BaseWindow
 
     private void StartNewChampaing()
     {
+#if Demo
+        WindowManager.Instance.InfoDemoWindow();
+        return;
+#endif
         MainController.Instance.Campaing.PlayerNewGame();
     }
 
@@ -78,6 +82,10 @@ public class WindowStart : BaseWindow
 
     private void StartNewSandBoxGame()
     {
+#if Demo
+        WindowManager.Instance.InfoDemoWindow();
+        return;
+#endif
         bool haveTutor = HaveTutor();
 
         if (haveTutor)
@@ -114,11 +122,19 @@ public class WindowStart : BaseWindow
 
     public void OnClickLoadCamp()
     {
+#if Demo        
+        WindowManager.Instance.InfoDemoWindow();
+        return;
+#endif
         CampLoader.Init();
     }
 
     public void OnClickLoad()
     {
+#if Demo
+        WindowManager.Instance.InfoDemoWindow();
+        return;
+#endif
         if (MainController.Instance.TryLoadPlayerSandBox())
         {
             WindowManager.Instance.OpenWindow(MainState.map);

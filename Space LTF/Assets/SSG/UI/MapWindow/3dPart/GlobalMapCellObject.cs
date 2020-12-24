@@ -3,13 +3,16 @@
 
 public class GlobalMapCellObject : MonoBehaviour
 {
-    public GlobalMapCell Cell;
+    private static Color _greenCell = Utils.CreateColor(65, 185, 48);
+    public GlobalMapCell Cell => _containerCell.Data;
+    private SectorCellContainer _containerCell;
 
     public GameObject Unknown;
     public GameObject Fleet;
     public GameObject Shop;
     public GameObject Event;
     public GameObject Repair;
+    public GameObject FleetBase;
     public GameObject Destroyed;
     public GameObject ExitObject;
     public GameObject StartObject;
@@ -21,18 +24,23 @@ public class GlobalMapCellObject : MonoBehaviour
     public GameObject BlackHoleEvent;
     public GameObject StartDungeon;
     public GameObject QuestInfo;
+    public GameObject AlliesWin;
+    public GameObject EnemiesWin;
     public Renderer ActiveRenderer;
 
     private GameObject ObjectPainted;
 
 
     private bool _isArmy;
+    private bool _subscribed;
+    private bool _isSameObject;
     public GameObject IAmHere;
     public Transform Container;
     public GameObject SelectedObj;
     //    public GameObject CanBeTargetObject;
     public Color CompleteColor;
     private bool _IamHere;
+    private float _cellSize;
 
     public Vector3 ModifiedPosition
     {
@@ -41,11 +49,13 @@ public class GlobalMapCellObject : MonoBehaviour
 
     void Awake()
     {
-        Unknown.gameObject.SetActive(false);
+        AlliesWin.gameObject.SetActive(false);
+        EnemiesWin.gameObject.SetActive(false);
         Fleet.gameObject.SetActive(false);
         Shop.gameObject.SetActive(false);
         Event.gameObject.SetActive(false);
         Repair.gameObject.SetActive(false);
+        FleetBase.gameObject.SetActive(false);
         Destroyed.gameObject.SetActive(false);
         ExitObject.gameObject.SetActive(false);
         StartObject.gameObject.SetActive(false);
@@ -64,14 +74,16 @@ public class GlobalMapCellObject : MonoBehaviour
 
     public void Init(GlobalMapCell cell, float cellSize)
     {
-        //        HistoryInfo.gameObject.SetActive(false);
-        //        DestroyedContainer.gameObject.SetActive(false);
-        Cell = cell;
+        _containerCell = cell.Container;
+        _cellSize = cellSize;
+        Cell.Container.OnDataChanged += OnDataChanged;
         Cell.OnDestoyedCell += OnDestoyedCell;
         Cell.OnUnconnect += OnUnconnect;
         Cell.OnScouted += OnScouted;
         Cell.OnComplete += OnComplete;
         Cell.OnHide += OnHide;
+        Cell.CurMovingArmy.OnFightWas += OnFightWas;
+        Cell.CurMovingArmy.OnNoFight += OnNoFight;
         InitMainObject();
         var c = cellSize * 0.3f;
         var armyCell = Cell as FreeActionGlobalMapCell;
@@ -95,6 +107,23 @@ public class GlobalMapCellObject : MonoBehaviour
 
         UpdateQuestInfo();
 
+    }
+
+    private void OnDataChanged(SectorCellContainer obj)
+    {
+        InitMainObject();
+    }
+
+    private void OnNoFight()
+    {
+        AlliesWin.gameObject.SetActive(false);
+        EnemiesWin.gameObject.SetActive(false);
+    }
+
+    private void OnFightWas(bool obj)
+    {
+        AlliesWin.gameObject.SetActive(obj);
+        EnemiesWin.gameObject.SetActive(!obj);
     }
 
     private void OnHide(GlobalMapCell arg1, bool arg2)
@@ -131,12 +160,16 @@ public class GlobalMapCellObject : MonoBehaviour
 
     private void OnComplete(GlobalMapCell obj, bool isComplete)
     {
-        if (Unknown != null)
+        if (!_isSameObject)
         {
-            Unknown.gameObject.SetActive(false);
+
+            if (Unknown != null)
+            {
+                Unknown.gameObject.SetActive(false);
+            }
+            if (ObjectPainted != null)
+                ObjectPainted.gameObject.SetActive(true);
         }
-        if (ObjectPainted != null)
-            ObjectPainted.gameObject.SetActive(true);
         if (ActiveRenderer != null)
         {
             SetColor(CompleteColor);
@@ -156,10 +189,20 @@ public class GlobalMapCellObject : MonoBehaviour
 
     private void OnScouted(GlobalMapCell obj)
     {
-        Unknown.gameObject.SetActive(false);
-        if (ObjectPainted != null)
-            ObjectPainted.gameObject.SetActive(true);
+        OpenScoutedImage();
+    }
+
+    private void OpenScoutedImage()
+    {
+        if (!_isSameObject)
+        {
+            Unknown.gameObject.SetActive(false);
+            if (ObjectPainted != null)
+                ObjectPainted.gameObject.SetActive(true);
+        }
+
         TryOpenBattleEvent();
+
     }
 
     public void TryOpenBattleEvent()
@@ -200,8 +243,37 @@ public class GlobalMapCellObject : MonoBehaviour
 
     }
 
+    private void TrySubscribe()
+    {
+        if (!_subscribed)
+        {
+            _subscribed = true;
+            Cell.Sector.OnBecomeMine += OnBecomeMine;
+        }
+    }
+
+    private void OnBecomeMine(SectorData obj)
+    {
+        TryRepaintIsMine();
+    }
+
+    private void TryRepaintIsMine()
+    {
+        if (Cell.Sector.IsSectorMy)
+        {
+
+            if (ActiveRenderer != null)
+            {
+                var meterial = ActiveRenderer.material;
+                meterial.color = _greenCell;
+//                meterial.SetColor("_Tint", Color.green);
+            }
+        }
+    }
+
     private void InitMainObject()
     {
+        TrySubscribe();
         var army = Cell as ArmyGlobalMapCell;
         _isArmy = army != null;
         Unknown.gameObject.SetActive(!_isArmy);
@@ -236,6 +308,11 @@ public class GlobalMapCellObject : MonoBehaviour
         else
         {
             bool checkOnEnd = false;
+            if (Cell is ArmyBornCenterGlobalCell)
+            {
+                ObjectPainted = FleetBase;
+            }
+            else
             if (Cell is ShopGlobalMapCell)
             {
                 ObjectPainted = Shop;
@@ -260,6 +337,7 @@ public class GlobalMapCellObject : MonoBehaviour
                 ObjectPainted = Unknown;
             }
 
+
             ObjectPainted.gameObject.gameObject.SetActive(false);
 
             if (checkOnEnd)
@@ -272,7 +350,13 @@ public class GlobalMapCellObject : MonoBehaviour
                 }
             }
 
+            _isSameObject = ObjectPainted == Unknown;
             ActiveRenderer = ObjectPainted.GetComponent<Renderer>();
+        }
+        TryRepaintIsMine();
+        if (Cell.Completed)
+        {
+            OpenScoutedImage();
         }
 #if UNITY_EDITOR
         if (ObjectPainted == null)
@@ -327,6 +411,9 @@ public class GlobalMapCellObject : MonoBehaviour
     {
         if (Cell != null)
         {
+            Cell.Container.OnDataChanged -= OnDataChanged;
+            Cell.CurMovingArmy.OnFightWas -= OnFightWas;
+            Cell.CurMovingArmy.OnNoFight -= OnNoFight;
             Cell.OnDestoyedCell -= OnDestoyedCell;
             Cell.OnUnconnect -= OnUnconnect;
             Cell.OnScouted -= OnScouted;

@@ -14,12 +14,9 @@ public class ArmyDungeonEnterGlobalMapCell : ArmyGlobalMapCell
     protected override MessageDialogData GetDialog()
     {
         var myPlaer = MainController.Instance.MainPlayer;
-//        var status = myPlaer.ReputationData.GetStatus(ConfigOwner);
-//        bool isFriends = status == EReputationStatus.friend;
         string masinMsg;
 
         var ans = new List<AnswerDialogData>();
-//        var rep = MainController.Instance.MainPlayer.ReputationData.ReputationFaction[ConfigOwner];
         var scoutData = GetArmy().ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
         string scoutsField = "";
         for (int i = 0; i < scoutData.Count; i++)

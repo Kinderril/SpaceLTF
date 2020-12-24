@@ -28,13 +28,13 @@ public class QuestStageCmOcr2_2_SpecForce : QuestStage
 
 
         var posibleCells = sectorId.ListCells
-            .Where(x => x.Data != null && !(x.Data is GlobalMapNothing) && x.Data.CurMovingArmy == null).ToList();
+            .Where(x => x.Data != null && !(x.Data is GlobalMapNothing) && x.Data.CurMovingArmy.NoAmry()).ToList();
 
         var cell = posibleCells.RandomElement();
         if (cell != null)
         {
             _enemiesController = player.MapData.GalaxyData.GalaxyEnemiesArmyController;
-            _army = _enemiesController.BornArmyAtCell(cell.Data,7);
+            _army = _enemiesController.BornArmyAtCell(cell.Data, false, 7);
             _army.SetStartDialog(AfterCompleteDialog1);
             //            _army.SetDestroyCallback(ArmyDestroyed);
             return true;

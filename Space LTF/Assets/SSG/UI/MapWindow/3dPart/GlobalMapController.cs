@@ -25,8 +25,8 @@ public class GlobalMapController : MonoBehaviour
     private GlobalMapCellObject _lastNearObject;
     private SectorGlobalMapInfo _lastSelectedSector;
 
-    private readonly Dictionary<GlobalMapCell, GlobalMapCellObject> _logicToVisualObjects =
-        new Dictionary<GlobalMapCell, GlobalMapCellObject>();
+    private readonly Dictionary<SectorCellContainer, GlobalMapCellObject> _logicToVisualObjects =
+        new Dictionary<SectorCellContainer, GlobalMapCellObject>();
 
     private float _mapPressedDownTime;
     private MapWindow _mapWindow;
@@ -119,7 +119,7 @@ public class GlobalMapController : MonoBehaviour
 
         foreach (var logicToVisualObject in _logicToVisualObjects)
         {
-            OnHide(logicToVisualObject.Key, !logicToVisualObject.Key.IsHide);
+            OnHide(logicToVisualObject.Key.Data, !logicToVisualObject.Key.Data.IsHide);
         }
     }
 
@@ -287,7 +287,7 @@ public class GlobalMapController : MonoBehaviour
                     cellObj.transform.position = v;
                     cellObj.name = $"Cell:{cell.ToString()}";
                     cellObj.Init(cell, OffsetCell);
-                    _logicToVisualObjects.Add(cell, cellObj);
+                    _logicToVisualObjects.Add(cell.Container, cellObj);
                     cellObj.Cell.OnDestoyedCell += OnDestoyedCell;
                     cellObj.Cell.OnHide += OnHide;
                     //                    Debug.Log($"Add cell:{Time.frameCount}  {_logicToVisualObjects.Count}");
@@ -593,7 +593,8 @@ public class GlobalMapController : MonoBehaviour
             {
                 float dist;
                 var closeObject = ClosestObject(ray.Value, out dist);
-                if (closeObject != null) _mapWindow.ClickCell(closeObject.Cell);
+                if (closeObject != null) 
+                    _mapWindow.ClickCell(closeObject.Cell);
             }
         }
     }
@@ -762,7 +763,7 @@ public class GlobalMapController : MonoBehaviour
     [CanBeNull]
     public GlobalMapCellObject GetCellObjectByCell(GlobalMapCell cell)
     {
-        if (_logicToVisualObjects.TryGetValue(cell, out var cellObj))
+        if (_logicToVisualObjects.TryGetValue(cell.Container, out var cellObj))
             return cellObj;
         Debug.LogError($"Can't find cell {cell}  _logicToVisualObjects.count:{_logicToVisualObjects.Count}");
         return null;
@@ -814,7 +815,7 @@ public class GlobalMapController : MonoBehaviour
                 AfterMoveReset();
                 CamerasController.Instance.SetCameraTo(targetCell.ModifiedPosition);
                 Debug.Log(
-                    $"My object come to: {targetCell.Cell}.   CurMovingArmy:{targetCell.Cell.CurMovingArmy != null}");
+                    $"My object come to: {targetCell.Cell}.   CurMovingArmy:{targetCell.Cell.CurMovingArmy.HaveArmy()}");
             });
             if (armiesCanMove)
             {
