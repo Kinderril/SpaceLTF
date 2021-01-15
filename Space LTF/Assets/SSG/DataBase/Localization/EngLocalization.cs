@@ -47,6 +47,8 @@ public static class EngLocalization
         {"Reload", "Reload time"},
         {"WeaponShieldPerHit", "Shield stealer"},
         {"ShootPerTime", "Bullet count"},
+        {"myFleetImproved", "Fleet improved"},
+        {"ImproveFleet", "Upgrade fleet. Credits:{0}"},
 
         {"cantUpgrade", "Can't upgrade"},
         {"UpgParams", "Dou you want upgrade {0}?\n Cost {1} credits."},
@@ -477,10 +479,16 @@ public static class EngLocalization
         {"questReadyToDeliver", "Items ready to deploy?"},
         {"deliverItems", "Deliver items"},
         {"haveNotEnought", "Not enought items"},
+        {"TakeReward", "Take credits:{0}"},
+        {"PerairStLevel", "Station level:{0}"},
+        {"armyBornCenterShopUpgraded", "Shop upgraded."},
+        {"armyBornCenterRepairUpgraded", "Repair station upgraded."},
+        {"cellUpgradeShop", "Upgrade shop. Cost:{0}. Level:{1}"},
+        {"cellUpgradeRepair", "Upgrade repair station. Cost:{0}. Level:{1}"},
         {"questDeliverReadyToDeliver", "Deliver items"},
         {"questDeliverFinal", "All item delivered. Out fleet ready now. Choose your reward"},
         {"questStartDeliverDialog", "Deliver items to our fleets"},
-        {"MovingArmyAllies", "This is your allies"},
+        {"MovingArmyAllies", "This is your allies. Wins:{0}. Current grabbed credits:{1}"},
 
         {"ShipsRepaired", "Ships Repaired"},
         {"Raiders", "Raiders"},
@@ -541,6 +549,8 @@ public static class EngLocalization
         {"NoMouseMove", "Camera have no move by mouse."},
         {"cm_Merc_2_2_startTakeItems", "You are near target"},
         {"cmMerc_2_2_StealFine", "Data stealed"},
+        {"armyBornCenterRequestRepair", "Build new repair station. Each station will earn credits for you"},
+        {"armyBornCenterRequestShop", "Build new shop. Each station will earn credits for you"},
 
 
         {"descWinner", "Win at 1 battle"},
@@ -614,6 +624,7 @@ public static class EngLocalization
         {"Size4", "Sector size 4"},
         {"Size5", "Sector size 5"},
         {"Size6", "Sector size 6"},
+        {"pilotInvCredits", "Pilot credits. Use this money to upgrade pilots level or repair ship."},
 
         {"SureSaveSlot", "Are you sure? You will override this data"},
         {"WrongName", "Wrong Name"},
@@ -707,7 +718,7 @@ public static class EngLocalization
         {"dialog_armyTutorIgnoreShield", "Before battle you have found some weapons and modules. Equip them before fight."},
 
         {"dialog_shopEnemy", "You see shop. Nobody wants to trade with you." },
-        {"dialog_shopTrade", "You see shop. Maybe you want buy something?" },
+        {"dialog_shopTrade", "You see shop. Maybe you want buy something? Shop level:{0}" },
         {"dialog_nothingToRepair", "This is repair station. All your ships already fixed." },
         {"dialog_repairEnemy", "Your reputation is too bad. Cost will be hieght" },
         {"dialog_repairStart", "This is repair station. We can repair our fleet here." },

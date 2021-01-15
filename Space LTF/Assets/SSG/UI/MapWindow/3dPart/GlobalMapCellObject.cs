@@ -4,6 +4,7 @@
 public class GlobalMapCellObject : MonoBehaviour
 {
     private static Color _greenCell = Utils.CreateColor(65, 185, 48);
+    private static Color _greenBasementCell = Utils.CreateColor(65, 185, 48,0.6f);
     public GlobalMapCell Cell => _containerCell.Data;
     private SectorCellContainer _containerCell;
 
@@ -24,9 +25,10 @@ public class GlobalMapCellObject : MonoBehaviour
     public GameObject BlackHoleEvent;
     public GameObject StartDungeon;
     public GameObject QuestInfo;
-    public GameObject AlliesWin;
-    public GameObject EnemiesWin;
+    public Animator ChangeBuild;
     public Renderer ActiveRenderer;
+    public Renderer BasementRenderer;
+    public LastFightCellUIObject LastFight;
 
     private GameObject ObjectPainted;
 
@@ -49,8 +51,8 @@ public class GlobalMapCellObject : MonoBehaviour
 
     void Awake()
     {
-        AlliesWin.gameObject.SetActive(false);
-        EnemiesWin.gameObject.SetActive(false);
+        LastFight.Disable();
+//        ChangeBuild.gameObject.SetActive(false);
         Fleet.gameObject.SetActive(false);
         Shop.gameObject.SetActive(false);
         Event.gameObject.SetActive(false);
@@ -111,19 +113,35 @@ public class GlobalMapCellObject : MonoBehaviour
 
     private void OnDataChanged(SectorCellContainer obj)
     {
+        CamerasController.Instance.SetCameraTo(ModifiedPosition + new Vector3(0, 0, -10));
+        StartObject.gameObject.SetActive(false);
+        ObjectPainted.gameObject.SetActive(false);
+        if (Cell is FreeActionGlobalMapCell)
+        {
+            ChangeBuild.SetTrigger("Destroy");
+        }
+        else
+        {
+            ChangeBuild.SetTrigger("Play");
+        }
         InitMainObject();
     }
 
     private void OnNoFight()
     {
-        AlliesWin.gameObject.SetActive(false);
-        EnemiesWin.gameObject.SetActive(false);
+        LastFight.Disable();
     }
 
     private void OnFightWas(bool obj)
     {
-        AlliesWin.gameObject.SetActive(obj);
-        EnemiesWin.gameObject.SetActive(!obj);
+        if (obj)
+        {
+            LastFight.DoAlliesWin();
+        }
+        else
+        {
+            LastFight.DoEnemiesWin();
+        }
     }
 
     private void OnHide(GlobalMapCell arg1, bool arg2)
@@ -268,6 +286,12 @@ public class GlobalMapCellObject : MonoBehaviour
                 meterial.color = _greenCell;
 //                meterial.SetColor("_Tint", Color.green);
             }
+
+            if (BasementRenderer != null)
+            {
+                var meterial = BasementRenderer.material;
+                meterial.color = _greenBasementCell;
+            }
         }
     }
 
@@ -276,7 +300,8 @@ public class GlobalMapCellObject : MonoBehaviour
         TrySubscribe();
         var army = Cell as ArmyGlobalMapCell;
         _isArmy = army != null;
-        Unknown.gameObject.SetActive(!_isArmy);
+        if (!_containerCell.Data.Completed)
+            Unknown.gameObject.SetActive(!_isArmy);
         if (_isArmy)
         {
             ActiveRenderer = Fleet.GetComponent<Renderer>();

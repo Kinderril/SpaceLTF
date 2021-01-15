@@ -143,12 +143,15 @@ public class GlobalMapController : MonoBehaviour
 
     private void DrawAllWays()
     {
-        foreach (var globalMapCell in _data.GetAllList())
+        foreach (var globalMapCell in _data.GetAllContainers())
         {
-            var ways = globalMapCell.GetAllPosibleWays();
-            foreach (var target in ways)
+            if (globalMapCell != null)
             {
-                DrawWays(target, globalMapCell);
+                var ways = globalMapCell.GetAllPosibleWays();
+                foreach (var target in ways)
+                {
+                    DrawWays(target, globalMapCell.Data);
+                }
             }
         }
 
@@ -809,6 +812,8 @@ public class GlobalMapController : MonoBehaviour
         {
             var timeToMove = MapMoverObject.MoveTo(targetCell, () =>
             {
+                CheeckAllArmiesToFight();
+                CheeckAllArmiesToDestroy();
                 AfterAction(shallChange, shallChange2);
                 isMainReady = true;
                 CheckIsAllReady();
@@ -832,10 +837,28 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
+    private void CheeckAllArmiesToDestroy()
+    {
+        foreach (var currentArmy in _data.GalaxyEnemiesArmyController.GetCurrentArmies())
+        {
+            currentArmy.AfterStepAction();
+        }
+
+    }
+
     // private void MainObjectMoveTo(Vector3 obj)
     // {
     //     CamerasController.Instance.SetCameraTo(obj);
     // }
+
+    private void CheeckAllArmiesToFight()
+    {
+        foreach (var globalMapCell in _data.GetAllList())
+        {
+            if (!(globalMapCell is GlobalMapNothing))
+                globalMapCell.CurMovingArmy.CheckIfHaveFight();
+        }
+    }
 
     private void MoveEnemies(Action callback, GlobalMapCell playersCell, float timeToMove)
     {
@@ -869,6 +892,7 @@ public class GlobalMapController : MonoBehaviour
                 obj.AndGo(globalMapCell.Value, timeToMove);
             }
         }
+
 
 //        var objectsCels = new Dictionary<GlobalMapCell, EnemyGlobalMapMoverObjet>();
 //        foreach (var globalMapMoverObject in _enemiesObjects)

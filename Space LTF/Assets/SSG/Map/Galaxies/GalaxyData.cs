@@ -239,6 +239,10 @@ public class GalaxyData
     public List<GlobalMapCell> GetAllList()
     {
         return cells.GetAllList();
+    }  
+    public List<SectorCellContainer> GetAllContainers()
+    {
+        return cells.GetAllContainers();
     }
 
     private int RndIndex(int upsizeZoneSector)
@@ -676,10 +680,11 @@ public class GalaxyData
     public void StepComplete(int step, GlobalMapCell curCell)
     {
         GalaxyEnemiesArmyController.CheckEnemiesMovingArmies(step, curCell);
-        var cellsList = cells.GetAllList();
+        var cellsList = cells.GetAllContainers();
         foreach (var globalMapCell in cellsList)
         {
-            globalMapCell.UpdateStep(step);
+            if (globalMapCell != null)
+                globalMapCell.Data.UpdateStep(step);
         }
     }
 
@@ -713,7 +718,11 @@ public class GalaxyData
     public int GetAllWaysCount()
     {
         var logic = 0;
-        foreach (var globalMapCell in GetAllList()) logic += globalMapCell.GetCurrentPosibleWays().Count;
+        foreach (var globalMapCell in GetAllContainers())
+        {
+            if (globalMapCell != null)
+                logic += globalMapCell.GetCurrentPosibleWays().Count;
+        }
 
         return logic;
     }

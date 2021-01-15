@@ -17,6 +17,10 @@ public class StartGlobalCell : GlobalMapCell
         return Namings.Tag("Start point");
     }
 
+    public override bool IsPossibleToChange()
+    {
+        return true;
+    }
     public override void Take()
     {
 

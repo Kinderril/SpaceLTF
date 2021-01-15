@@ -15,7 +15,7 @@ public class TutorShopGlobalMapCell : ShopGlobalMapCell
     protected virtual void InitShop(float power, SectorData sector, ShipConfig config)
     {
         _shopInventory = new ShopTutorInventory(null);
-        _shopInventory.FillItems(power, config, sector.XIndex);
+        _shopInventory.FillItems(1, config);
     }
     protected override MessageDialogData GetDialog()
     {

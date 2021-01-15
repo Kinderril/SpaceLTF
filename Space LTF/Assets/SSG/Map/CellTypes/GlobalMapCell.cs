@@ -20,7 +20,6 @@ public abstract class GlobalMapCell
     protected SectorData _sector;
 
     public SectorData Sector => _sector;
-    private HashSet<GlobalMapCell> _ways = new HashSet<GlobalMapCell>();
     public CellArmyContainer CurMovingArmy
     {
         get
@@ -177,14 +176,7 @@ public abstract class GlobalMapCell
 
     public void AddWay(GlobalMapCell extraWay)
     {
-        if (extraWay != null)
-        {
-            _ways.Add(extraWay);
-        }
-        else
-        {
-            Debug.LogError("Try add null way");
-        }
+        Container.AddWay(extraWay);
     }
 
     public void SetConnectedCell(int coreIndex)
@@ -260,13 +252,33 @@ public abstract class GlobalMapCell
         });
         return wd.Random();
     }
-
-    public void DestroyCell()
+    protected MessageDialogData TryRequestSmt(int cost, Action doRequest, string mainMsgKey)
     {
-        _ways.Clear();
-        IsDestroyed = true;
-        if (OnDestoyedCell != null) OnDestoyedCell(this);
+        var ans = new List<AnswerDialogData>();
+        string masinMsg;
+
+        var player = MainController.Instance.MainPlayer;
+        if (player.MoneyData.HaveMoney(cost))
+        {
+            player.MoneyData.RemoveMoney(cost);
+            doRequest();
+            masinMsg = Namings.Tag(mainMsgKey);
+        }
+        else
+        {
+            masinMsg = Namings.Tag("NotEnoughtMoney");
+        }
+
+        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
+        var mesData = new MessageDialogData(masinMsg, ans);
+        return mesData;
     }
+//    public void DestroyCell()
+//    {
+//        _ways.Clear();
+//        IsDestroyed = true;
+//        if (OnDestoyedCell != null) OnDestoyedCell(this);
+//    }
 
     public void AddWayObject(GlobalMapCellConnector globalMapCellConnector)
     {
@@ -274,40 +286,22 @@ public abstract class GlobalMapCell
 
     public void AddWays(List<GlobalMapCell> ways)
     {
-        foreach (var way in ways)
-        {
-            if (way != null)
-            {
-                _ways.Add(way);
-            }
-            else
-            {
-                Debug.LogError("Try add null way");
-            }
-        }
+        Container.AddWays(ways);
     }
 
     public HashSet<GlobalMapCell> GetCurrentPosibleWays()
     {
-        var ways = new HashSet<GlobalMapCell>();
-        foreach (var globalMapCell in _ways)
-        {
-            if (!globalMapCell.IsHide)
-            {
-                ways.Add(globalMapCell);
-            }
-        }
-        return ways;
+        return Container.GetCurrentPosibleWays();
     }
 
     public HashSet<GlobalMapCell> GetAllPosibleWays()
     {
-        return _ways;
+        return Container.GetAllPosibleWays();
     }
 
     public void RemoveWayTo(GlobalMapCell rnd)
     {
-        _ways.Remove(rnd);
+        Container.RemoveWayTo(rnd);
     }
 
     public void VisitCell(PlayerMapData mapData, int step)
@@ -356,5 +350,10 @@ public abstract class GlobalMapCell
     public virtual void UpdateCollectedPower(float powerDelta)
     {
         
+    }
+
+    public virtual bool IsPossibleToChange()
+    {
+        return false;
     }
 }

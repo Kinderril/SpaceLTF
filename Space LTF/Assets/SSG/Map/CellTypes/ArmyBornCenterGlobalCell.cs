@@ -100,20 +100,22 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
 
         var ans = new List<AnswerDialogData>();
         var player = MainController.Instance.MainPlayer;
-        var cost = (int)(player.Army.GetPower() * 2f);
+        var cost = (int)(player.Army.GetPower() * 4f);
         masinMsg = Namings.Format(Namings.Tag("armyBornCenterMy"));
-        ans.Add(new AnswerDialogData(Namings.Format(Namings.Tag("armyBornCenterRequestArmy"), cost), null, () =>
+        if (!_shallTryBornNextStep)
         {
-            return TryRequest(cost);
-        }));
-        var freeCells = (Sector.ListCells.Where(x => x.Data is FreeActionGlobalMapCell)).ToList();
+            ans.Add(new AnswerDialogData(Namings.Format(Namings.Tag("armyBornCenterRequestArmy"), cost), null,
+                () => { return TryRequest(cost); }));
+        }
+
+        var freeCells = (Sector.ListCells.Where(x => x.Data.IsPossibleToChange())).ToList();
         if (freeCells.Count > 0)
         {
 
             var rndFreeCell = freeCells.RandomElement();
-            ans.Add(new AnswerDialogData(Namings.Format(Namings.Tag("armyBornCenterRequestMercenary"), cost), null, () =>
+            ans.Add(new AnswerDialogData(Namings.Format(Namings.Tag("armyBornCenterRequestRepair"), cost), null, () =>
             {
-                return TryRequestBuildMerc(cost, rndFreeCell);
+                return TryRequestBuildRepair(cost, rndFreeCell);
             }));  
             ans.Add(new AnswerDialogData(Namings.Format(Namings.Tag("armyBornCenterRequestShop"), cost), null, () =>
             {
@@ -121,10 +123,13 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
             }));
 
         }
+
+
         ans.Add(new AnswerDialogData(Namings.Tag("leave"), null, null, false));
         var mesData = new MessageDialogData(masinMsg, ans);
         return mesData;
     }
+
 
 
     private MessageDialogData TryRequestBuildMerc(int cost, SectorCellContainer rndFreeCell)
@@ -140,6 +145,7 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
         {
             var player = MainController.Instance.MainPlayer;
             var newShop = new EventGlobalMapCell(GlobalMapEventType.mercHideout, Utils.GetId(), cell.indX, cell.indZ, _sector, (int)player.Army.GetPower(),_sector.ShipConfig);
+            newShop.Complete();
             cell.SetData(newShop);
         }
         return Act;
@@ -149,6 +155,11 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
     {
 
         return TryRequestSmt(cost,BuildShop(rndFreeCell), "armyBornCenterShopBuilded");
+    }      
+    private MessageDialogData TryRequestBuildRepair(int cost, SectorCellContainer rndFreeCell)
+    {
+
+        return TryRequestSmt(cost,BuildRepair(rndFreeCell), "armyBornCenterRepairBuilded");
     }
 
     private Action BuildShop(SectorCellContainer rndFreeCell)
@@ -159,6 +170,20 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
             var cell1 = cell;
             var player = MainController.Instance.MainPlayer;
             var newShop = new ShopGlobalMapCell(player.Army.GetPower(), Utils.GetId(), cell1.Data.indX, cell1.Data.indZ, _sector, _sector.ShipConfig);
+            newShop.Complete();
+            cell1.SetData(newShop);
+        }
+        return Act;
+    }      
+    private Action BuildRepair(SectorCellContainer rndFreeCell)
+    {
+        var cell = rndFreeCell;
+        void Act()
+        {
+            var cell1 = cell;
+            var player = MainController.Instance.MainPlayer;
+            var newShop = new RepairStationGlobalCell( Utils.GetId(), cell1.Data.indX, cell1.Data.indZ, _sector, _sector.ShipConfig);
+            newShop.Complete();
             cell1.SetData(newShop);
         }
         return Act;
@@ -174,27 +199,7 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
         return TryRequestSmt(cost, () => { _shallTryBornNextStep = true; }, "armyBornCenterFleetRequested");
     }  
 
-    private MessageDialogData TryRequestSmt(int cost,Action doRequest,string mainMsgKey)
-    {
-        var ans = new List<AnswerDialogData>();
-        string masinMsg;
-
-        var player = MainController.Instance.MainPlayer;
-        if (player.MoneyData.HaveMoney(cost))
-        {
-            player.MoneyData.RemoveMoney(cost);
-            doRequest();
-            masinMsg = Namings.Tag(mainMsgKey);
-        }
-        else
-        {
-            masinMsg = Namings.Tag("NotEnoughtMoney");
-        }
-
-        ans.Add(new AnswerDialogData(Namings.Tag("Ok")));
-        var mesData = new MessageDialogData(masinMsg, ans);
-        return mesData;
-    }
+   
 
     private void TryAttack()
     {

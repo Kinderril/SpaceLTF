@@ -94,6 +94,7 @@ public class MapWindow : BaseWindow
             player.SafeLinks.OnCreditsChange += OnMoneyChange;
             player.SafeLinks.OnMicroChipsChange += OnMicrochipChange;
             player.MapData.OnCellChanged += OnCellChanged;
+            player.MapData.OnStep += OnStep;
             player.SafeLinks.OnAddShip += OnAddShip;
             // player.ReputationData.OnReputationNationChange += OnReputationChange;
             CellsOfSector();
@@ -172,6 +173,11 @@ public class MapWindow : BaseWindow
                 WindowManager.Instance.OpenWindow(MainState.start);
             }, Namings.Tag("loaderror"));
         }
+    }
+
+    private void OnStep()
+    {
+        MovingArmyUIController.DoStep();
     }
 
     private void CheckLeaveDialog()
@@ -604,7 +610,7 @@ public class MapWindow : BaseWindow
             player.SafeLinks.OnCreditsChange -= OnMoneyChange;
             player.SafeLinks.OnMicroChipsChange -= OnMicrochipChange;
             player.MapData.OnCellChanged -= OnCellChanged;
-            player.SafeLinks.OnAddShip -= OnAddShip;
+            player.MapData.OnStep -= OnStep;
         }
 
         // player.ReputationData.OnReputationNationChange -= OnReputationChange;

@@ -62,6 +62,10 @@ public class MercenaryHideout : BaseGlobalMapEvent
     {
         _cell = cell;
     }
+    public override bool IsPossibleToChnage()
+    {
+        return false;
+    }
     public override string Desc()
     {
         return Namings.Tag("MercGlobal");

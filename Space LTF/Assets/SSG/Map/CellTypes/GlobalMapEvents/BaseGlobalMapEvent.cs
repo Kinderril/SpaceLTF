@@ -174,5 +174,10 @@ public abstract class BaseGlobalMapEvent
     {
         return true;
     }
+
+    public virtual bool IsPossibleToChnage()
+    {
+        return true;
+    }
 }
 

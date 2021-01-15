@@ -22,16 +22,18 @@ public abstract class MovingArmy
     // private List<IItemInv> _getRewardsItems;
     // private bool _rewardsComplete = false;
     public int Id { get; private set; }
+    public int Wins { get; private set; }
     public int Priority { get; private set; }
     public bool Destroyed { get; private set; }
     public float Power { get; protected set; }
+    public float Reward { get; protected set; }
     public GlobalMapCell PrevCell { get; set; }
     protected float _startPower;
     public ShipConfig StartConfig { get; private set; }
     //    public int LifeTime { get; private set; } = 0;
 
     [field: NonSerialized] private bool _subscribeComplete = false;
-    private GalaxyEnemiesArmyController _armiesController;
+    protected GalaxyEnemiesArmyController _armiesController;
 
     protected MovingArmy(GlobalMapCell startCell,
         Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController armiesController,bool isAllies)
@@ -49,6 +51,12 @@ public abstract class MovingArmy
         startCell.CurMovingArmy.ArmyCome(this);
         //        Power = power;
         Subscribe();
+    }
+
+    public void TakeReward(Player player)
+    {
+        player.MoneyData.AddMoney((int)Reward);
+        Reward = 0;
     }
 
     public void Subscribe()
@@ -169,6 +177,25 @@ public abstract class MovingArmy
     public void SetCurCell(GlobalMapCell cellToGo)
     {
         CurCell = cellToGo;
+
+    }
+
+    public void AddWin(float enemiesPower)
+    {
+        Wins++;
+        Reward = enemiesPower * 0.85f;
+        //Addreward
+
+    }
+
+    public void Destroy()
+    {
+        CurCell.CurMovingArmy.ArmyRemove(this);
+    }
+
+    public virtual void AfterStepAction()
+    {
+        
 
     }
 }

@@ -9,6 +9,7 @@ public class CellsInGalaxy
 
     private GlobalMapCell[,] cells;
     private List<GlobalMapCell> cellsList;
+    private List<SectorCellContainer> cellsContainers;
     public int SizeX { get; private set; }
     public int SizeZ { get; private set; }
 
@@ -18,17 +19,22 @@ public class CellsInGalaxy
         SizeZ = sizeZ;
         cells = new GlobalMapCell[SizeX, SizeZ];
         cellsList = new List<GlobalMapCell>(sizeX * sizeZ);
+        cellsContainers = new List<SectorCellContainer>(sizeX * sizeZ);
     }
     public List<GlobalMapCell> GetAllList()
     {
         return cellsList;
+    }   
+    public List<SectorCellContainer> GetAllContainers()
+    {
+        return cellsContainers;
     }
 
-    public void SetCell(int x, int z, GlobalMapCell cell)
-    {
-        cells[x, z] = cell;
-        cellsList.Add(cell);
-    }
+//    public void SetCell(int x, int z, GlobalMapCell cell)
+//    {
+//        cells[x, z] = cell;
+//        cellsList.Add(cell);
+//    }
 
     public void FindNoWayCells()
     {
@@ -89,6 +95,7 @@ public class CellsInGalaxy
         {
             cells[cell.indX, cell.indZ] = cell;
             cellsList.Add(cell);
+            cellsContainers.Add(cell.Container);
         }
         catch (Exception e)
         {

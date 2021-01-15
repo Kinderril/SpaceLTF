@@ -61,6 +61,11 @@ public class FreeActionGlobalMapCell : GlobalMapCell
         _enemiesArmyController.AddArmy(army);
     }
 
+    public override bool IsPossibleToChange()
+    {
+        return true;
+    }
+
 
     public override string Desc()
     {

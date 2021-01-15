@@ -31,6 +31,7 @@ public class PilotInventoryUI : MonoBehaviour
     public TrickPilotButton TrickTwist;
     public TrickPilotButton TrickLoop;
     public TrickPilotButton TrickStrike;
+//    public TextMeshProUGUI CreditsField;
 
     //    public GameObject LevelUpObject;
     //    public TextMeshProUGUI LevelUpField;
@@ -45,6 +46,7 @@ public class PilotInventoryUI : MonoBehaviour
         _pilot.Tactic.OnSideChange += OnTacticSideChange;
         _pilot.OnLevelUp += OnLevelUp;
         UpdateTacticField();
+//        CreditsField.text = Namings.Tag("pilotInvCredits");
 
         RankUpdate();
         SetParamsAndMoney();

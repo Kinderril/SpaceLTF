@@ -320,6 +320,10 @@ public static class Utils
     public static Color CreateColor(float r,float g,float b)
     {
         return new Color(r/255f,g/255f,b/255);
+    } 
+    public static Color CreateColor(float r,float g,float b,float a)
+    {
+        return new Color(r/255f,g/255f,b/255,a);
     }
     public static void Sort<T>(List<T> list, Func<T, int> GetPriority) where T : MonoBehaviour
     {

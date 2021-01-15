@@ -180,15 +180,16 @@ public class ShopInventory : PlayerInventory
         return true;
     }
 
-    public void FillItems(float power, ShipConfig config, int intdex)
+    public void FillItems(int level, ShipConfig config)
     {
         try
         {
 
             //        int totalItems = (int)((power + 5) / 2);
             //        totalItems = Mathf.Clamp(totalItems, MIN_ITEMS, MAX_ITEMS);
-            var weaponsCount = MyExtensions.Random(MIN_WEAPONS, MAX_WEAPONS);
-            var clampedIndex = Mathf.Clamp(intdex * 1.5f,0, 7 );
+            var weapLevelCoef = Mathf.Clamp(level * 0.8f,1,3);
+            var weaponsCount = MyExtensions.Random(MIN_WEAPONS * weapLevelCoef, MAX_WEAPONS * weapLevelCoef);
+            var clampedIndex = Mathf.Clamp(level * 1.5f,0, 7 );
             var baseModuls = MyExtensions.Random(MIN_MODULS, Max_MODULS);
             var parameterItems = MyExtensions.Random(MIN_PARAMETER, Max_PARAMETER);
 
@@ -205,10 +206,31 @@ public class ShopInventory : PlayerInventory
                 ParamItems.Add(paramItem);
             }
             var spells = MyExtensions.Random(MIN_SPELLS, Max_SPELLS);
-            bool goodPower = power > 22;
+            var dd = new Dictionary<int, float>();
+            switch (level)
+            {
+                case 2:
+                    dd.Add(1,3);
+                    dd.Add(2,4);
+                    dd.Add(3,3);
+                    dd.Add(4,1);
+                    break;
+                case 3:
+                    dd.Add(2, 3);
+                    dd.Add(3, 2);
+                    dd.Add(4, 1);
+                    break;
+                default:
+                    dd.Add(1, 5);
+                    dd.Add(2, 4);
+                    dd.Add(3, 1);
+                    break;
+            }
+            WDictionary<int> levle = new WDictionary<int>(dd);
+
             for (var i = 0; i < weaponsCount; i++)
             {
-                var w = Library.CreateDamageWeapon(goodPower);
+                var w = Library.CreateDamageWeapon(levle.Random());
                 w.CurrentInventory = this;
                 Weapons.Add(w);
             }

@@ -7,7 +7,9 @@ using System.Linq;
 [System.Serializable]
 public class SpecOpsMovingArmy : MovingArmy
 {
-    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController enemiesArmyController, bool isAllies,int power = -1) 
+    private bool _nextCellCrash;
+    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, 
+        GalaxyEnemiesArmyController enemiesArmyController, bool isAllies,int power = -1) 
         : base(startCell, destroyCallback, enemiesArmyController,isAllies)
     {
         var humanPlayer = MainController.Instance.MainPlayer;
@@ -16,7 +18,8 @@ public class SpecOpsMovingArmy : MovingArmy
         int armyPower;
         if (power < 0)
         {
-            armyPower = (int)(humanPower * Library.MOVING_ARMY_POWER_COEF);
+            var rnd = MyExtensions.GreateRandom(humanPower * Library.MOVING_ARMY_POWER_COEF);
+            armyPower = (int)(rnd);
         }
         else
         {
@@ -76,7 +79,16 @@ public class SpecOpsMovingArmy : MovingArmy
             {
                 new AnswerDialogData(Namings.Tag("Ok"), null,  null,false,false),
             };
-            var mesData1 = new MessageDialogData(Namings.DialogTag("MovingArmyAllies"), ans1);
+            if (Reward > 0)
+            {
+                ans1.Add(new AnswerDialogData(Namings.Format(Namings.Tag("TakeReward"),Reward.ToString("0")), () => TakeReward(MainController.Instance.MainPlayer), null, false, false));
+            }
+
+            var costImprove = (int)(Power*1.5f);
+            var improve = new AnswerDialogData(Namings.Format(Namings.Tag("ImproveFleet"),costImprove), null, ()=>FleetImproved(costImprove), false, false);
+            ans1.Add(improve);
+
+            var mesData1 = new MessageDialogData(Namings.Format(Namings.DialogTag("MovingArmyAllies"), Wins,Reward), ans1);
             return mesData1;
         }
         var ans = new List<AnswerDialogData>()
@@ -85,10 +97,34 @@ public class SpecOpsMovingArmy : MovingArmy
         };
         var mesData = new MessageDialogData(Namings.DialogTag("MovingArmyStart"), ans);
         return mesData;
-    }       
+    }
 
+    private MessageDialogData FleetImproved(int costImprove)
+    {
+        var player = MainController.Instance.MainPlayer;
+        var ans1 = new List<AnswerDialogData>()
+        {
+            new AnswerDialogData(Namings.Tag("Ok"), null,  null,false,false),
+        };
+        if (player.MoneyData.HaveMoney(costImprove))
+        {
+            player.MoneyData.RemoveMoney(costImprove);
+            var myPower = player.Army.GetPower();
+            var rnd = (int)MyExtensions.GreateRandom(myPower * 0.1f);
+            Power += rnd;
+            var mesData = new MessageDialogData(Namings.Tag("myFleetImproved"), ans1);
+            return mesData;
 
-    public override GlobalMapCell FindCellToMove(HashSet<GlobalMapCell> posibleCells)
+        }
+        else
+        {
+            var mesData = new MessageDialogData(Namings.DialogTag("NotEnoughtMoney"), ans1);
+            return mesData;
+        }
+
+    }
+
+    private GlobalMapCell SubFindCellToMove(HashSet<GlobalMapCell> posibleCells)
     {
         if (_noStepNext)
         {
@@ -104,7 +140,36 @@ public class SpecOpsMovingArmy : MovingArmy
         var playersCell = player.MapData.CurrentCell;
         var ways = CurCell.GetCurrentPosibleWays();
         var ststus = player.ReputationData.GetStatus(_player.Army.BaseShipConfig);
-        var posibleWays = ways.Where(x => !(x is GlobalMapNothing) && !x.CurMovingArmy.HaveArmy()).ToList();
+        var notNoghing = ways.Where(x => !(x is GlobalMapNothing));
+        List<GlobalMapCell> posibleWays;
+        if (IsAllies)
+        {
+            bool wannaAttack = MyExtensions.IsTrue01(0.5f);
+#if UNITY_EDITOR
+            //            wannaAttack = true;
+#endif
+            if (wannaAttack)
+            {
+                posibleWays = notNoghing.Where(x => x.CurMovingArmy.HaveEnemiesAmry()).ToList();
+                if (posibleWays.Count == 0)
+                {
+                    posibleWays = notNoghing.Where(x => !x.CurMovingArmy.HaveAlliesAmry()).ToList();
+                }
+            }
+            else
+            {
+                posibleWays = notNoghing.Where(x => !x.CurMovingArmy.HaveAlliesAmry()).ToList();
+            }
+            var selectedWay1 = posibleWays.RandomElement();
+            return selectedWay1;
+
+
+        }
+        else
+        {
+            posibleWays = notNoghing.Where(x => !x.CurMovingArmy.HaveEnemiesAmry()).ToList();
+        }
+
         if (posibleWays.Count == 0)
         {
             return null;
@@ -142,6 +207,37 @@ public class SpecOpsMovingArmy : MovingArmy
 
         return null;
 
+    }
+
+    public override void AfterStepAction()
+    {
+        if (_nextCellCrash)
+        {
+            _nextCellCrash = false;
+
+
+            var newData = new FreeActionGlobalMapCell((int)Power, StartConfig, Utils.GetId(), 
+                CurCell.indX, CurCell.indZ, CurCell.Sector,_armiesController,0,false);
+            newData.Complete();
+            CurCell.Container.SetData(newData);
+
+        }
+    }
+
+    public override GlobalMapCell FindCellToMove(HashSet<GlobalMapCell> posibleCells)
+    {
+        if (CurCell.Sector.IsSectorMy && !IsAllies)
+        {
+            if (CurCell is ShopGlobalMapCell || CurCell is RepairStationGlobalCell)
+            {
+                _nextCellCrash = true;
+                return null;
+            }
+        }
+
+        _nextCellCrash = false;
+        var trg = SubFindCellToMove(posibleCells);
+        return trg;
     }
 
 }

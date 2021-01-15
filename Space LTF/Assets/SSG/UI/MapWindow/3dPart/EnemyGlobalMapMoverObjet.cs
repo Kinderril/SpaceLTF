@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
@@ -10,7 +11,10 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
     public GameObject RedObject;
     public GameObject GreenObject;
     private Vector3 _cahceDirection;
+    public TextMeshPro PowerField;
     private bool _isLastActive;
+    private bool _canShowPower;
+    private float _lastVal = -1f;
 
     public void Init(GlobalMapController mapController, GlobalMapCellObject startCell, MovingArmy owner)
     {
@@ -21,6 +25,12 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
         UpdateCurHideCell();
         GreenObject.SetActive(owner.IsAllies);
         RedObject.SetActive(!owner.IsAllies);
+        _canShowPower = owner is SpecOpsMovingArmy;
+        if (!_canShowPower)
+        {
+            PowerField.gameObject.SetActive(false);
+        }
+        PowerFieldUpdate();
     }
 
     public void SetAllies()
@@ -29,10 +39,29 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
         RedObject.SetActive(false);
     }
 
+
+    private void PowerFieldUpdate()
+    {
+        if (!_canShowPower)
+        {
+            return;
+        }
+
+        var delta = _lastVal - Owner.Power;
+        var abs = Mathf.Abs(delta) > 0.5;
+        if (abs)
+        {
+            _lastVal = Owner.Power;
+            PowerField.text = _lastVal.ToString("0");
+        }
+
+    }
+
     public void UpdateLookDirection()
     {
         var player = MainController.Instance.MainPlayer; 
         var trg = Owner.NextCell();
+        PowerFieldUpdate();
         if (trg == null)
         {
             _isLastActive = false;
@@ -64,7 +93,7 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
 
     public bool AndGo(/*Action callback,*/ GlobalMapCell place, float timeToMove)
     {
-        
+        PowerFieldUpdate();
         var objPlace = _mapController.GetCellObjectByCell(place);
         if (objPlace != null)
         {

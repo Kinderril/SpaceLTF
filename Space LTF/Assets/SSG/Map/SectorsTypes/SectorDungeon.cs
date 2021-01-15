@@ -88,7 +88,6 @@ public class SectorDungeon : SectorData
             _exitCreated = true;
             armyCellcell.OnComeToCell += OnComeToCellExit;
             ExitCell = armyCellcell;
-            CheckConnectExitAndEnter();
             return armyCellcell;
         }
         return null;
@@ -102,7 +101,6 @@ public class SectorDungeon : SectorData
             armyCellcell.OnComeToCell += OnComeToCellEnter;
             _enterCell = armyCellcell;
             _enterCreated = true;
-            CheckConnectExitAndEnter();
             return armyCellcell;
         }
         return null;
@@ -184,6 +182,8 @@ public class SectorDungeon : SectorData
         armyCellcell.OnComeToCell += OnComeToCell;
         cellContainer.SetData(armyCellcell);
         ListCells.Add(cellContainer);
+
+        CheckConnectExitAndEnter();
         return armyCellcell;
     }
 

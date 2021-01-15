@@ -160,10 +160,10 @@ public class GalaxyEnemiesArmyController
         var movingArmy = new SpecOpsMovingArmy(cell, DestroySpecOpsCallback, this, isAllies, power);
         AddArmy(movingArmy);
         _totalBornArmies++;
-        var coordinates = $"{movingArmy.CurCell.indX},{movingArmy.CurCell.indZ}";
-        WindowManager.Instance.InfoWindow.Init(null,
-            Namings.Format(Namings.Tag("MovingArmyBorn"),
-                Namings.ShipConfig(movingArmy.StartConfig), coordinates));
+//        var coordinates = $"{movingArmy.CurCell.indX},{movingArmy.CurCell.indZ}";
+//        WindowManager.Instance.InfoWindow.Init(null,
+//            Namings.Format(Namings.Tag("MovingArmyBorn"),
+//                Namings.ShipConfig(movingArmy.StartConfig), coordinates));
         return movingArmy;
     }
 
@@ -180,6 +180,7 @@ public class GalaxyEnemiesArmyController
     public void DestroyArmy(MovingArmy movingArmy)
     {
         OnAddMovingArmy?.Invoke(movingArmy, false);
+        movingArmy.Destroy();
         _armies.Remove(movingArmy);
     }
 

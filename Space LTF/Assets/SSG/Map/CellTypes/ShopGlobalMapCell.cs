@@ -5,18 +5,35 @@ using UnityEngine;
 [Serializable]
 public class ShopGlobalMapCell : GlobalMapCell
 {
-    public ShopInventory ShopInventory=>_shopInventory;
+    public const int MAX_LEVEL = 3;
+    public ShopInventory ShopInventory=>_shopInventory;      
+    public int Level { get; private set; } = 1;
+    public float CollectedMoney { get; private set; } = 0;
+
+
     protected ShopInventory _shopInventory;
     PlayerSafe _playerSafe = new PlayerSafe(false,SaveMode.none);
     public ShopGlobalMapCell(float power, int id, int intX, int intZ, SectorData sector, ShipConfig config) : base(id, intX, intZ, sector, config)
     {
+        Level = 1;
         InitShop(power,sector,config);
     }
 
-    protected virtual void InitShop(float power, SectorData sector, ShipConfig config)
+    protected void InitShop(float power, SectorData sector, ShipConfig config)
     {
         _shopInventory = new ShopInventory(_playerSafe);
-        _shopInventory.FillItems(power, config, sector.XIndex);
+        int lvl = 1;
+        if (sector.XIndex > _sector.Size * 2)
+        {
+            lvl = 2;
+        }
+        else if (sector.XIndex > _sector.Size * 4)
+        {
+            lvl = 3;
+        }
+
+        Level = lvl;
+        _shopInventory.FillItems(Level, config);
     }
 
     public void ClearShop()
@@ -48,16 +65,53 @@ public class ShopGlobalMapCell : GlobalMapCell
         }
         else
         {
-            var mesData = new MessageDialogData(Namings.Tag("dialog_shopTrade"), new List<AnswerDialogData>
+            var ans = new List<AnswerDialogData>
             {
                 new AnswerDialogData(Namings.Tag("Yes"), Take),
                 new AnswerDialogData(Namings.Tag("No"), null)
-            });
+            };
+            var cost = (int)(Level * 40f);
+            if (Sector.IsSectorMy)
+            {
+                if (Level < MAX_LEVEL)
+                {
+                    var b = new AnswerDialogData(
+                        Namings.Format(Namings.Tag("cellUpgradeShop"), cost, Level), null,
+                        () => TryRequestUpgradeShop(cost, this));
+                    ans.Add(b);
+                }
+
+                var a = new AnswerDialogData(Namings.Format(Namings.Tag("TakeReward"), (int)CollectedMoney), TakeReward);
+                ans.Add(a);
+            }
+            var mesData = new MessageDialogData(Namings.Format(Namings.Tag("dialog_shopTrade"), Level), ans);
             return mesData;
 
         }
 
 
+    }
+
+    private MessageDialogData TryRequestUpgradeShop(int cost, ShopGlobalMapCell shop)
+    {
+        return TryRequestSmt(cost, UpgradeShop(shop), "armyBornCenterShopUpgraded");
+    }
+
+
+    private Action UpgradeShop(ShopGlobalMapCell shop)
+    {
+        var cell = shop;
+        void Act()
+        {
+            cell.UpgradeLevel();
+        }
+        return Act;
+    }
+
+    private void TakeReward()
+    {
+        CollectedMoney = 0f;
+        MainController.Instance.MainPlayer.MoneyData.AddMoney((int)CollectedMoney);
     }
 
     public override Color Color()
@@ -72,7 +126,7 @@ public class ShopGlobalMapCell : GlobalMapCell
 
     public override string Desc()
     {
-        return Namings.Tag("Shop");
+        return $"{Namings.Tag("Shop")} {Namings.Tag("Level")}:{Level}";
     }
 
     public override void Take()
@@ -80,4 +134,38 @@ public class ShopGlobalMapCell : GlobalMapCell
         WindowManager.Instance.OpenWindow(MainState.shop, _shopInventory);
     }
 
+    public override void UpdateStep(int step)
+    {
+        base.UpdateStep(step);
+        if (_sector.IsSectorMy)
+        {
+            float perTurn = 0f;
+            switch (Level)
+            {
+                case 1:
+                    perTurn = 3 * MoneyConsts.CELL_MONEY_COEF;
+                    break;
+                case 2:
+                    perTurn = 4 * MoneyConsts.CELL_MONEY_COEF;
+                    break;
+                case 3:
+                    perTurn = 5 * MoneyConsts.CELL_MONEY_COEF;
+                    break;
+            }
+
+            CollectedMoney += perTurn;
+        }
+
+    }
+
+    public void UpgradeLevel()
+    {
+        if (Level < MAX_LEVEL)
+        {
+            _shopInventory.ClearShop();
+            _shopInventory.FillItems(Level,ConfigOwner);
+            Level++;
+        }
+
+    }
 }

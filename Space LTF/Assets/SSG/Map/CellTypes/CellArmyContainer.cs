@@ -22,7 +22,7 @@ public class CellArmyContainer
     {
         if (army.IsAllies)
         {
-            var haveAllies = _curArmies.FirstOrDefault(x => x.IsAllies) != null;
+            var haveAllies = Allies() != null;
             if (haveAllies)
             {
                 return false;
@@ -30,7 +30,7 @@ public class CellArmyContainer
         }
         else
         {
-            var haveEnemies = _curArmies.FirstOrDefault(x => !x.IsAllies) != null;
+            var haveEnemies = Enemies() != null;
             if (haveEnemies)
             {
                 return false;
@@ -54,7 +54,7 @@ public class CellArmyContainer
         foreach (var movingArmy in _curArmies)
         {
             var sum = movingArmy.Power;
-            if (movingArmy.IsAllies)
+            if (!movingArmy.Destroyed && movingArmy.IsAllies)
             {
                 sumAllies += sum;
             }
@@ -73,10 +73,18 @@ public class CellArmyContainer
            });
            var result = wDd.Random();
            var player = MainController.Instance.MainPlayer.MapData.GalaxyData.GalaxyEnemiesArmyController;
-           var enemies = _curArmies.Where(x => result != x.IsAllies).ToList();
+           var enemies = _curArmies.Where(x => !x.Destroyed && result != x.IsAllies).ToList();
            foreach (var movingArmy in enemies)
            {
                player.DestroyArmy(movingArmy);
+           }
+
+           foreach (var movingArmy in _curArmies)
+           {
+               if (!movingArmy.Destroyed)
+               {
+                   movingArmy.AddWin(sumEnemies);
+               }
            }
 
            OnFightWas?.Invoke(result);
@@ -95,12 +103,12 @@ public class CellArmyContainer
     public MessageDialogData GetDialog(Action fightMovingArmy, MessageDialogData getDialog)
     {
 
-        var enemies = _curArmies.FirstOrDefault(x => !x.IsAllies);
+        var enemies = Enemies();
         if (enemies != null)
         {
             return enemies.GetDialog(fightMovingArmy, getDialog);
         }   
-        var allise = _curArmies.FirstOrDefault(x => x.IsAllies);
+        var allise = Allies();
         if (allise != null)
         {
             return allise.GetDialog(fightMovingArmy, getDialog);
@@ -113,12 +121,12 @@ public class CellArmyContainer
     public MessageDialogData MoverArmyLeaverEnd()
     {
 
-        var enemies = _curArmies.FirstOrDefault(x => !x.IsAllies);
+        var enemies = Enemies();
         if (enemies != null)
         {
             return enemies.MoverArmyLeaverEnd();
         }
-        var allise = _curArmies.FirstOrDefault(x => x.IsAllies);
+        var allise = Allies();
         if (allise != null)
         {
             return allise.MoverArmyLeaverEnd();
@@ -130,7 +138,7 @@ public class CellArmyContainer
     public Player GetArmyToFight()
     {
 
-        var enemies = _curArmies.FirstOrDefault(x => !x.IsAllies);
+        var enemies = Enemies();
         if (enemies != null)
         {
             return enemies.GetArmyToFight();
@@ -152,14 +160,23 @@ public class CellArmyContainer
 
     }
 
+    private MovingArmy Allies()
+    {
+        return _curArmies.FirstOrDefault(x => !x.Destroyed && x.IsAllies);
+    }      
+    private MovingArmy Enemies()
+    {
+        return _curArmies.FirstOrDefault(x => !x.Destroyed && !x.IsAllies);
+    }
+
     public string ShortDesc()
     {
-        var enemies = _curArmies.FirstOrDefault(x => !x.IsAllies);
+        var enemies = Enemies();
         if (enemies != null)
         {
             return enemies.ShortDesc();
         }
-        var allise = _curArmies.FirstOrDefault(x => x.IsAllies);
+        var allise = Allies();
         if (allise != null)
         {
             return allise.ShortDesc();
@@ -171,6 +188,16 @@ public class CellArmyContainer
     public IEnumerable<MovingArmy> GetAllArmies()
     {
         return _curArmies;
+    }
+
+    public bool HaveAlliesAmry()
+    {
+        return Allies() != null;
+    }
+
+    public bool HaveEnemiesAmry()
+    {
+        return Enemies() != null;
     }
 }
 

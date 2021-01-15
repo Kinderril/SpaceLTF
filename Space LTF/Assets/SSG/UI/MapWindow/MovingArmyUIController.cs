@@ -6,11 +6,15 @@ using UnityEngine;
 public class MovingArmyUIController : MonoBehaviour
 {
     public Transform Layout;
+    public Transform LayoutFight;
     private GalaxyEnemiesArmyController _controller;
     public MovingArmyElement MovingArmyElementPrefab;
+    public FightResult FightResultPrefab;
     private List<MovingArmyElement> _armyElements = new List<MovingArmyElement>();
+    private List<FightResult> _fightResults = new List<FightResult>();
     private GlobalMapController _globalMap;
     private bool _isInited = false;
+    private int _movingArmies = 0;
 
     public void Init(GalaxyEnemiesArmyController controller, GlobalMapController globalMap)
     {
@@ -27,14 +31,20 @@ public class MovingArmyUIController : MonoBehaviour
 
     private void OnAddMovingArmy(MovingArmy arg1, bool arg2)
     {
+        FightResaults(arg1,arg2);
+
         if (arg1 is SpecOpsMovingArmy)
         {
             if (arg2)
             {
-                var element = DataBaseController.GetItem(MovingArmyElementPrefab);
-                element.transform.SetParent(Layout);
-                _armyElements.Add(element);
-                element.Init(_globalMap, arg1);
+                _movingArmies++;
+                if (_movingArmies <= 3)
+                {
+                    var element = DataBaseController.GetItem(MovingArmyElementPrefab);
+                    element.transform.SetParent(Layout);
+                    _armyElements.Add(element);
+                    element.Init(_globalMap, arg1);
+                }
             }
             else
             {
@@ -50,6 +60,17 @@ public class MovingArmyUIController : MonoBehaviour
 
     }
 
+    private void FightResaults(MovingArmy movingArmy, bool onAdd)
+    {
+        if (!onAdd)
+        {
+            var element = DataBaseController.GetItem(FightResultPrefab);
+            element.transform.SetParent(LayoutFight);
+            element.InitToCell(_globalMap,movingArmy);
+            _fightResults.Add(element);
+        }
+    }
+
 
     public void ClearAll()
     {
@@ -58,6 +79,21 @@ public class MovingArmyUIController : MonoBehaviour
             _controller.OnAddMovingArmy -= OnAddMovingArmy;
         _armyElements.Clear();
         Layout.ClearTransform();
+    }
+
+    public void DoStep()
+    {
+        var curStep = MainController.Instance.MainPlayer.MapData.Step;
+        var fightToDel = _fightResults.Where(x => Mathf.Abs(x.StepCreated - curStep) > 1).ToList();
+        foreach (var fightResult in fightToDel)
+        {
+            if (_fightResults != null)
+            {
+                _fightResults.Remove(fightResult);
+                GameObject.Destroy(fightResult.gameObject);
+            }
+        }
+
     }
 }
 

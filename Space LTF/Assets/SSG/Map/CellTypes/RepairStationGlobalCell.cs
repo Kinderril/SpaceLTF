@@ -6,7 +6,10 @@ using UnityEngine;
 [Serializable]
 public class RepairStationGlobalCell : GlobalMapCell
 {
+    public const int MAX_LEVEL = 3;
     public int RemainEnergyRepairs = 1;
+    public float CollectedMoney { get; private set; } = 0;
+    public int Level { get; private set; } = 1;
 
     public RepairStationGlobalCell(int id, int intX, int intZ, SectorData secto, ShipConfig config) : base(id, intX, intZ, secto, config)
     {
@@ -14,7 +17,7 @@ public class RepairStationGlobalCell : GlobalMapCell
 
     public override string Desc()
     {
-        return Namings.Tag("RepairStation");
+        return $"{Namings.Tag("RepairStation")} {Namings.Tag("Level")}:{Level}";
     }
 
     public override void Take()
@@ -117,13 +120,77 @@ public class RepairStationGlobalCell : GlobalMapCell
             {
                 answers.Add(new AnswerDialogData(Namings.Tag("leave")));
             }
+            if (Sector.IsSectorMy)
+            {
+                if (Level < MAX_LEVEL)
+                {
+                    var cost = (int) (Level * 35f);
+                    var b = new AnswerDialogData(
+                        Namings.Format(Namings.Tag("cellUpgradeRepair"), cost, Level), null,
+                        () => TryRequestUpgrade(cost, this));
+                    answers.Add(b);
+                }
 
-            mesData = new MessageDialogData(mainMsg, answers);
+            var a = new AnswerDialogData(Namings.Format(Namings.Tag("TakeReward"), (int)CollectedMoney), TakeReward);
+                answers.Add(a);
+            }
+
+        mesData = new MessageDialogData($"{mainMsg} {Namings.Format(Namings.Tag("PerairStLevel"), Level)}", answers);
             return mesData;
+    }
+    private MessageDialogData TryRequestUpgrade(int cost, RepairStationGlobalCell shop)
+    {
+        return TryRequestSmt(cost, UpgradeThis(shop), "armyBornCenterRepairUpgraded");
+    }
+    private Action UpgradeThis(RepairStationGlobalCell shop)
+    {
+        var cell = shop;
+        void Act()
+        {
+            cell.UpgradeLevel();
+        }
+        return Act;
+    }
 
-//        }
+    private void UpgradeLevel()
+    {
+        if (Level >= MAX_LEVEL)
+        {
+            return;
+        }
 
+        Level++;
 
+    }
+
+    public override void UpdateStep(int step)
+    {
+        base.UpdateStep(step);
+        if (_sector.IsSectorMy)
+        {
+            float perTurn = 0f;
+            switch (Level)
+            {
+                case 1:
+                    perTurn = 4 * MoneyConsts.CELL_MONEY_COEF;
+                    break;
+                case 2:
+                    perTurn = 5 * MoneyConsts.CELL_MONEY_COEF;
+                    break;
+                case 3:
+                    perTurn = 6 * MoneyConsts.CELL_MONEY_COEF;
+                    break;
+            }
+
+            CollectedMoney += perTurn;
+        }
+
+    }
+
+    private void TakeReward()
+    {
+        CollectedMoney = 0f;
+        MainController.Instance.MainPlayer.MoneyData.AddMoney((int)CollectedMoney);
     }
 
     private MessageDialogData RepairAll(int total)

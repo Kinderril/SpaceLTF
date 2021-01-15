@@ -31,6 +31,10 @@ public class EventGlobalMapCell : GlobalMapCell
 {
     private GlobalMapEventType _eventType;
     private BaseGlobalMapEvent _mapEvent;
+    public override bool IsPossibleToChange()
+    {
+        return _mapEvent.IsPossibleToChnage();
+    }
 
     public EventGlobalMapCell(GlobalMapEventType eventType, int id, int intX, int intZ, SectorData sector,int power,ShipConfig config) 
         : base( id, intX, intZ, sector, config)

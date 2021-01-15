@@ -59,6 +59,8 @@ public static class MoneyConsts
         {6, 5 * MICROCHIPS_COEF},
     };
 
+    public const float CELL_MONEY_COEF = 0.2f;
+
     public const int LOW_EXP_COEF = 1;
     public const int EXP_COEF = 3;
 

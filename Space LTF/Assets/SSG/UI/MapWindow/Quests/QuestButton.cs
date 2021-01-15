@@ -19,8 +19,8 @@ public class QuestButton : MonoBehaviour
 
         NewQuestChange.SetActive(false);
         QuestChange.SetActive(false);
-_window = window;
-_isInited = true;
+        _window = window;
+        _isInited = true;
         _player = player;
         _player.QuestData.OnComplete += OnComplete;
         _player.QuestData.OnReadyToComplete += OnReadyToComplete;
