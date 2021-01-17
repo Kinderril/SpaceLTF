@@ -190,7 +190,7 @@ public class GlobalMapCellObject : MonoBehaviour
         }
         if (ActiveRenderer != null)
         {
-            SetColor(CompleteColor);
+//            SetColor(CompleteColor);
         }
         TryOpenBattleEvent();
     }

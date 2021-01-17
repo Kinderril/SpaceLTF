@@ -54,6 +54,8 @@ public class BattleController : Singleton<BattleController>
     public event Action OnBattleLoaded;
     public bool CanFastEnd = false;
     public BattleState State;
+
+    public Light AreaLight;
     //    private float _lastTimeDelta = 1f;
 
     public List<Bullet> ActiveBullet = new List<Bullet>();
@@ -163,6 +165,10 @@ public class BattleController : Singleton<BattleController>
         var posTeam2 = d.StartPosition2;
         Battlefield.BackgroundSpace.Init(CellController.Data.CenterZone);
         _eventController.Init(this, eventType, false, CellController.Data.InsideRadius);
+        var rndV = new Vector3(MyExtensions.Random(-1f,1f), MyExtensions.Random(-1f, 1f));
+        var dir = Utils.NormalizeFastSelf(rndV) * CellController.Data.InsideRadius * 0.7f;
+        AreaLight.transform.position = CellController.Data.CenterZone + dir + Vector3.up * 10;
+        AreaLight.range = CellController.Data.InsideRadius;
 
         List<Vector3> positionsToClear = new List<Vector3>();
         var shipsA = GreenCommander.InitShips(posTeam1, posTeam2, positionsToClear);

@@ -65,7 +65,7 @@ public class QuestStageCmMerc1_2_SpecForce : QuestStage
 
     public GlobalMapCell GetCurCellTarget()
     {
-        return _army?.CurCell;
+        return _army?.CurCell.Data;
     }
 
     public override string GetDesc()

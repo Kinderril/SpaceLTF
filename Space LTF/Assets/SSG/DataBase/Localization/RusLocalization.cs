@@ -535,6 +535,7 @@ public static class RusLocalization
         {"cellUpgradeShop", "Улучшить магазин. Стоимость улучшения:{0}. Уровень:{1}"},
         {"cellUpgradeRepair", "Улучшить станцию ремонта. Стоимость улучшения:{0}. Уровень:{1}"},
         {"myFleetImproved", "Флот улучшен"},
+        {"CellDestroyed", "Станция уничтожена"},
         {"ImproveFleet", "Улучшить флот. Кредитов:{0}"},
 
         {"armyBornCenterRequestRepair", "Построить ремонтную станцию . Каждая станция будет зарабатывать для вас кредиты"},

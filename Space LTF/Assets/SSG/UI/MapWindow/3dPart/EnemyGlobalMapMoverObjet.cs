@@ -104,7 +104,7 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
             Debug.Log($"Id:{Owner.Id}  Moving start go to: {place.ToString()}  Owner.CurCell:{Owner.CurCell}   timeToMove:{timeToMove}");
 //            if (Owner.CurCell != null)
             Owner.CurCell.CurMovingArmy.ArmyRemove(Owner);
-            Owner.SetCurCell(place);
+            Owner.SetCurCell(place.Container);
             Owner.CurCell.CurMovingArmy.ArmyCome(Owner);
             LookObject.SetActive(false);
             MoveTo(timeToMove, objPlace, () =>
@@ -137,7 +137,7 @@ public class EnemyGlobalMapMoverObjet : GlobalMapMoverObject
     public void UpdateCurHideCell()
     {
 
-        var shallHide = Owner.CurCell.IsHide;
+        var shallHide = Owner.CurCell.Data.IsHide;
         gameObject.SetActive(!shallHide);
 
     }

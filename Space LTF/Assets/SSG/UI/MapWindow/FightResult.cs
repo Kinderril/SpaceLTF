@@ -20,7 +20,7 @@ public  class FightResult : MonoBehaviour
         Win.SetActive(!movingArmy.IsAllies);
         Lose.SetActive(movingArmy.IsAllies);
         if (movingArmy.CurCell != null)
-            _cell = movingArmy.CurCell.Container;
+            _cell = movingArmy.CurCell;
 
     }
 

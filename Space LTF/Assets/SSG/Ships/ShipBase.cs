@@ -310,10 +310,7 @@ public class ShipBase : MovingObject
         InitDeathParts();
         IsDead = true;
         _dealthCallback(this);
-        if (OnDeath != null)
-        {
-            OnDeath(this);
-        }
+        OnDeath?.Invoke(this);
         EffectController.Instance.Create(DataBaseController.Instance.DataStructPrefabs.OnShipDeathEffect, transform.position, 5f);
         Dispose();
     }

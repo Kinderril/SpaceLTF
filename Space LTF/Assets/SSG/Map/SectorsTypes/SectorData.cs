@@ -93,8 +93,8 @@ public class SectorData
 
     protected void AddWays(GlobalMapCell c1, GlobalMapCell c2)
     {
-        c1.AddWay(c2);
-        c2.AddWay(c1);
+        c1.AddWay(c2.Container);
+        c2.AddWay(c1.Container);
     }
 
     public void SetCell(GlobalMapCell cell, int subSectotId)
@@ -468,19 +468,27 @@ public class SectorData
             var ways = ConnectedCellsToCurrent(cell.indX, cell.indZ);
             ways.RemoveAll(x => x is GlobalMapNothing);
             var data = cell.Data;
-#if UNITY_EDITOR
-
-            try
+            foreach (var globalMapCell in ways)
             {
-                data.AddWays(ways);
+                if (globalMapCell != null)
+                {
+                    data.AddWay(globalMapCell.Container);
+                }
             }
-            catch (Exception e)
-            {
-                Debug.LogError($"zero cell data:  Sector:{Id}  Size:{Size}. cell:{cell.indX},{cell.indZ}");
-                return;
-            }
-#endif
-            data.AddWays(ways);
+//
+//#if UNITY_EDITOR
+//
+//            try
+//            {
+//                data.AddWays(ways);
+//            }
+//            catch (Exception e)
+//            {
+//                Debug.LogError($"zero cell data:  Sector:{Id}  Size:{Size}. cell:{cell.indX},{cell.indZ}");
+//                return;
+//            }
+//#endif
+//            data.AddWays(ways);
         }
 
         CutSomeWays();
@@ -498,7 +506,7 @@ public class SectorData
                 foreach (var mapCell in wayToCut)
                 {
                     cell.Data.RemoveWayTo(mapCell);
-                    mapCell.RemoveWayTo(cell.Data);
+                    mapCell.RemoveWayTo(cell);
                 }
             }
         }

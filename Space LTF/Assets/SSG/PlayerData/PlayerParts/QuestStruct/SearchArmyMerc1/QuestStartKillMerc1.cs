@@ -16,16 +16,16 @@ public class QuestStartKillMerc1 : QuestStage
 
     protected override bool StageActivate(Player player)
     {
-        var allSectors = player.MapData.GalaxyData.GetAllList();
+        var allSectors = player.MapData.GalaxyData.GetAllContainersNotNull();
 
         var posibleCells = allSectors.Where(x =>
-        x is FreeActionGlobalMapCell && x.CurMovingArmy.NoAmry() 
+        x.Data is FreeActionGlobalMapCell && x.CurMovingArmy.NoAmry() 
                                      && x.indX > player.MapData.CurrentCell.indX
-                                     && player.MapData.CurrentCell.SectorId != x.Id ).ToList();
+                                     && player.MapData.CurrentCell.SectorId != x.Data.Id ).ToList();
 
         if (posibleCells.Count == 0)
         {
-            posibleCells = allSectors.Where(x => !(x is GlobalMapNothing) && x.CurMovingArmy.NoAmry()).ToList();
+            posibleCells = allSectors.Where(x => !(x.Data is GlobalMapNothing) && x.CurMovingArmy.NoAmry()).ToList();
         }
 
         if (posibleCells.Count == 0)
@@ -37,7 +37,7 @@ public class QuestStartKillMerc1 : QuestStage
         if (cell != null)
         {
             _enemiesController = player.MapData.GalaxyData.GalaxyEnemiesArmyController;
-            _army = _enemiesController.BornArmyAtCell(cell,false, (int)(player.Army.GetPower() * 1.1f));
+            _army = _enemiesController.BornArmyAtCell(cell.Data,false, (int)(player.Army.GetPower() * 1.1f));
 //            _army.SetDestroyCallback(ArmyDestroyed);
             return true;
         }
@@ -84,7 +84,7 @@ public override bool CloseWindowOnClick => true;
 
     public GlobalMapCell GetCurCellTarget()
     {
-        return _army?.CurCell;
+        return _army?.CurCell.Data;
     }
     public override string GetDesc()
     {

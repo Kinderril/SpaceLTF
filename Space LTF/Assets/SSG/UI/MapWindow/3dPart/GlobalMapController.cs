@@ -143,15 +143,12 @@ public class GlobalMapController : MonoBehaviour
 
     private void DrawAllWays()
     {
-        foreach (var globalMapCell in _data.GetAllContainers())
+        foreach (var globalMapCell in _data.GetAllContainersNotNull())
         {
-            if (globalMapCell != null)
+            var ways = globalMapCell.GetAllPosibleWays();
+            foreach (var target in ways)
             {
-                var ways = globalMapCell.GetAllPosibleWays();
-                foreach (var target in ways)
-                {
-                    DrawWays(target, globalMapCell.Data);
-                }
+                DrawWays(target.Data, globalMapCell.Data);
             }
         }
 
@@ -173,10 +170,10 @@ public class GlobalMapController : MonoBehaviour
 
     public void CreateMovingArmy(MovingArmy arg1)
     {
-        var start = GetCellObjectByCell(arg1.CurCell);
+        var start = GetCellObjectByCell(arg1.CurCell.Data);
         if (start == null)
         {
-            Debug.LogError($"CreateMovingArmy have null start object:{arg1.CurCell.Id}  indX:{arg1.CurCell.indX}   indZ:{arg1.CurCell.indZ}");
+            Debug.LogError($"CreateMovingArmy have null start object:{arg1.CurCell.Data.Id}  indX:{arg1.CurCell.indX}   indZ:{arg1.CurCell.indZ}");
             return;
         }
         EnemyGlobalMapMoverObjet prefab;
@@ -491,7 +488,7 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-    public void SingleReset(GlobalMapCell currentCell, HashSet<GlobalMapCell> posibleWays)
+    public void SingleReset(GlobalMapCell currentCell, HashSet<SectorCellContainer> posibleWays)
     {
         if (_data == null) return;
         //        var cells = _data.AllCells();
@@ -516,9 +513,13 @@ public class GlobalMapController : MonoBehaviour
         {
             foreach (var globalMapCell in posibleWays)
             {
-                var canDraw = !(globalMapCell is GlobalMapNothing) && !globalMapCell.IsDestroyed;
-                if (canDraw)
-                    DrawConnecttion(myCEll, globalMapCell, ref connectd);
+                if (globalMapCell != null && globalMapCell.Data != null)
+                {
+                    var data = globalMapCell.Data;
+                    var canDraw = !(data is GlobalMapNothing) && !data.IsDestroyed;
+                    if (canDraw)
+                        DrawConnecttion(myCEll, data, ref connectd);
+                }
             }
         }
     }
@@ -813,7 +814,7 @@ public class GlobalMapController : MonoBehaviour
             var timeToMove = MapMoverObject.MoveTo(targetCell, () =>
             {
                 CheeckAllArmiesToFight();
-                CheeckAllArmiesToDestroy();
+                CheeckAllArmiesToDestroy(targetCell.Cell.Container);
                 AfterAction(shallChange, shallChange2);
                 isMainReady = true;
                 CheckIsAllReady();
@@ -837,11 +838,11 @@ public class GlobalMapController : MonoBehaviour
         }
     }
 
-    private void CheeckAllArmiesToDestroy()
+    private void CheeckAllArmiesToDestroy(SectorCellContainer playerTrg)
     {
         foreach (var currentArmy in _data.GalaxyEnemiesArmyController.GetCurrentArmies())
         {
-            currentArmy.AfterStepAction();
+            currentArmy.AfterStepAction(playerTrg);
         }
 
     }
@@ -853,9 +854,9 @@ public class GlobalMapController : MonoBehaviour
 
     private void CheeckAllArmiesToFight()
     {
-        foreach (var globalMapCell in _data.GetAllList())
+        foreach (var globalMapCell in _data.GetAllContainersNotNull())
         {
-            if (!(globalMapCell is GlobalMapNothing))
+            if (!(globalMapCell.Data is GlobalMapNothing))
                 globalMapCell.CurMovingArmy.CheckIfHaveFight();
         }
     }
@@ -920,9 +921,9 @@ public class GlobalMapController : MonoBehaviour
     }
 
 
-    private bool CellHaveObject(GlobalMapCell cell)
+    private bool CellHaveObject(SectorCellContainer cell)
     {
-        return GetCellObjectByCell(cell) != null;
+        return GetCellObjectByCell(cell.Data) != null;
     }
 
 //    private bool FindAndGo(float timeToMove, EnemyGlobalMapMoverObjet obj, GlobalMapCell cell, Action callback)

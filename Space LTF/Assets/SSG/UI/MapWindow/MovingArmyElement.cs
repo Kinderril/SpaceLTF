@@ -18,7 +18,7 @@ public class MovingArmyElement : MonoBehaviour
 
     public void OnClick()
     {
-        _globalMap.SetCameraToCellHome(Army.CurCell);
+        _globalMap.SetCameraToCellHome(Army.CurCell.Data);
     }
 
 }

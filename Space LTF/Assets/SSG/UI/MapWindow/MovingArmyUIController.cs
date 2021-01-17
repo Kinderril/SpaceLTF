@@ -6,12 +6,14 @@ using UnityEngine;
 public class MovingArmyUIController : MonoBehaviour
 {
     public Transform Layout;
-    public Transform LayoutFight;
+//    public Transform LayoutFight;
     private GalaxyEnemiesArmyController _controller;
     public MovingArmyElement MovingArmyElementPrefab;
+    public CellDamageElement CellDamagePrefab;
     public FightResult FightResultPrefab;
     private List<MovingArmyElement> _armyElements = new List<MovingArmyElement>();
     private List<FightResult> _fightResults = new List<FightResult>();
+    private List<CellDamageElement> _cellsDamage = new List<CellDamageElement>();
     private GlobalMapController _globalMap;
     private bool _isInited = false;
     private int _movingArmies = 0;
@@ -33,7 +35,7 @@ public class MovingArmyUIController : MonoBehaviour
     {
         FightResaults(arg1,arg2);
 
-        if (arg1 is SpecOpsMovingArmy)
+        if (!arg1.IsAllies && arg1 is SpecOpsMovingArmy)
         {
             if (arg2)
             {
@@ -65,7 +67,7 @@ public class MovingArmyUIController : MonoBehaviour
         if (!onAdd)
         {
             var element = DataBaseController.GetItem(FightResultPrefab);
-            element.transform.SetParent(LayoutFight);
+            element.transform.SetParent(Layout);
             element.InitToCell(_globalMap,movingArmy);
             _fightResults.Add(element);
         }
@@ -77,8 +79,12 @@ public class MovingArmyUIController : MonoBehaviour
         _isInited = false;
         if (_controller != null)
             _controller.OnAddMovingArmy -= OnAddMovingArmy;
+//        _fightResults.Clear();
+        foreach (var movingArmyElement in _armyElements)
+        {
+            GameObject.Destroy(movingArmyElement.gameObject);
+        }
         _armyElements.Clear();
-        Layout.ClearTransform();
     }
 
     public void DoStep()
@@ -92,6 +98,27 @@ public class MovingArmyUIController : MonoBehaviour
                 _fightResults.Remove(fightResult);
                 GameObject.Destroy(fightResult.gameObject);
             }
+        }       
+        var cellDamageElements = _cellsDamage.Where(x => Mathf.Abs(x.StepCreated - curStep) > 1).ToList();
+        foreach (var cellDamageElement in cellDamageElements)
+        {
+            if (cellDamageElement != null)
+            {
+                _cellsDamage.Remove(cellDamageElement);
+                GameObject.Destroy(cellDamageElement.gameObject);
+            }
+        }
+
+    }
+
+    public void CellDataChange(SectorCellContainer sectorCellContainer)
+    {
+        if (sectorCellContainer.Data is FreeActionGlobalMapCell)
+        {
+            var element = DataBaseController.GetItem(CellDamagePrefab);
+            element.transform.SetParent(Layout);
+            element.Init(_globalMap,sectorCellContainer);
+            _cellsDamage.Add(element);
         }
 
     }

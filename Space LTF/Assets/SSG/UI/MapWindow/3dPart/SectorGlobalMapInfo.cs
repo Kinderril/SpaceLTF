@@ -73,7 +73,7 @@ public class SectorGlobalMapInfo : MonoBehaviour
 
     private void UpdateField()
     {
-        var sectorCells = _data.GetAllList().Where(x => !(x is GlobalMapNothing) && x.SectorId == _sector.Id).ToList();
+        var sectorCells = _data.GetAllContainersNotNull().Where(x => !(x.Data is GlobalMapNothing) && x.Data.SectorId == _sector.Id).ToList();
         string ss = "";
         if (_sector.IsFinal)
         {
@@ -99,7 +99,7 @@ public class SectorGlobalMapInfo : MonoBehaviour
                 }
             }
         }
-        var completedCount = sectorCells.Count(x => x.Completed);
+        var completedCount = sectorCells.Count(x => x.Data.Completed);
         var totalCount = sectorCells.Count;
         string txt;
         if (_sector.IsSectorMy)

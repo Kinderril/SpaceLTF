@@ -63,7 +63,7 @@ public class GalaxyData
         GalaxyEnemiesArmyController = new GalaxyEnemiesArmyController(_powerPerTurn);
         var startCell = ImpletemtSectors(sectorCount, sizeSector, startPower,  playerShipConfig,
             _verticalCount, GalaxyEnemiesArmyController, mapType);
-        GalaxyEnemiesArmyController.SetCells(GetAllList());
+        GalaxyEnemiesArmyController.SetCells(GetAllContainers);
         return startCell;
     }
 
@@ -179,23 +179,26 @@ public class GalaxyData
     public void RemoveAllWaysFromAnotherSectorToCell(GlobalMapCell cell)
     {
         Debug.LogError($"RemoveAllWaysFromAnotherSectorToCell start  {cell.Id} indX:{cell.indX} indz:{cell.indZ}");
-        var waysToRemove = new List<GlobalMapCell>();
-        var cells = GetAllList();
+        var waysToRemove = new List<SectorCellContainer>();
+        var cells = GetAllContainers();
         foreach (var globalMapCell in cells)
         {
-            var ways = globalMapCell.GetCurrentPosibleWays();
-            if (ways.Contains(cell) && globalMapCell.SectorId != cell.SectorId)
+            if (globalMapCell != null)
             {
-                Debug.LogError(
-                    $"RemoveAllWaysFromAnotherSectorToCell waysToRemove.Add(cell):{globalMapCell.Id}  indX:{globalMapCell.indX} indz:{globalMapCell.indZ}");
-                waysToRemove.Add(globalMapCell);
+                var ways = globalMapCell.GetCurrentPosibleWays();
+                if (ways.Contains(cell.Container) && globalMapCell.Data.SectorId != cell.SectorId)
+                {
+                    Debug.LogError(
+                        $"RemoveAllWaysFromAnotherSectorToCell waysToRemove.Add(cell):{globalMapCell.Data.Id}  indX:{globalMapCell.indX} indz:{globalMapCell.indZ}");
+                    waysToRemove.Add(globalMapCell);
+                }
             }
         }
 
         foreach (var globalMapCell in waysToRemove)
         {
-            globalMapCell.RemoveWayTo(cell);
-            OnWayDelete?.Invoke(globalMapCell.Id, cell.Id);
+            globalMapCell.RemoveWayTo(cell.Container);
+            OnWayDelete?.Invoke(globalMapCell.Data.Id, cell.Id);
         }
 
     }
@@ -236,13 +239,13 @@ public class GalaxyData
 ////        Debug.Log($"Core created {coreSector.StartX} {coreSector.StartZ}.  coreCell:{coreCell.indX} {coreCell.indZ}");
 //    }
 
-    public List<GlobalMapCell> GetAllList()
-    {
-        return cells.GetAllList();
-    }  
     public List<SectorCellContainer> GetAllContainers()
     {
         return cells.GetAllContainers();
+    }       
+    public IEnumerable<SectorCellContainer> GetAllContainersNotNull()
+    {
+        return cells.GetAllContainers().Where(x=>x != null);
     }
 
     private int RndIndex(int upsizeZoneSector)
@@ -275,7 +278,7 @@ public class GalaxyData
                     var cellToConnect = FindEndExtraPortal(sectorConnected, connectedSecotAtBot);
                     if (cellToConnect != null && cellToConnect.Data != null)
                         //                            Debug.LogError($"Extra portal {pointToExit}   to {cellToConnect.Data}");
-                        pointToExit.AddWay(cellToConnect.Data);
+                        pointToExit.AddWay(cellToConnect);
                     else
                         Debug.LogError("Can't find FindEndExtraPortal");
                 }
@@ -501,8 +504,8 @@ public class GalaxyData
         //        Debug.Log($"Connect cell ({cellL.indX};{cellL.indZ})<->({cellR.indX};{cellR.indZ}) __ info:{info}");
         if (cellL != null && cellR != null)
         {
-            cellL.AddWay(cellR);
-            cellR.AddWay(cellL);
+            cellL.AddWay(cellR.Container);
+            cellR.AddWay(cellL.Container);
         }
     }
 
@@ -667,11 +670,6 @@ public class GalaxyData
         return startPower + (int) (distToStart * deltaPerCell);
     }
 
-    public GlobalMapCell GetRandomConnectedCell()
-    {
-        return cells.GetRandomConnectedCell();
-    }
-
     public GalaxyData(string name)
     {
         Name = name;
@@ -688,12 +686,7 @@ public class GalaxyData
         }
     }
 
-    public void StepStart(int step, GlobalMapCell curCell)
-    {
-    }
-
-
-    public GlobalMapCell GetRandomCell()
+    public SectorCellContainer GetRandomCell()
     {
         var cells1 = cells.GetRandom();
         return cells1;

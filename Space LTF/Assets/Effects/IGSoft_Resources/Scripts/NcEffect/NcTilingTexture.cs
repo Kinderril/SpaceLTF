@@ -5,6 +5,7 @@
 //
 // ----------------------------------------------------------------------------------
 
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -25,8 +26,15 @@ public class NcTilingTexture : NcEffectBehaviour
     public string OffsetTextureName;
     private bool _offsetEnable = false;
     public float OffsetX_Speed = 0;
-    public float OffsetY_Speed = 0;
+    public float OffsetY_Speed = 0;       
+    private float OffsetX_Speed_RND = 0;
+    private float OffsetY_Speed_RND = 0;
     private Vector2 _offsetVector = Vector2.zero;
+    public bool EnableRandom;
+    public bool EnableRandomMouseConnection;
+    public float SecPeriodEnd;
+    public float LerpRndomize = 0.5f;
+    private float _lastChangeRnd;
 
     // Property -------------------------------------------------------------------------
     //#if UNITY_EDITOR
@@ -49,6 +57,11 @@ public class NcTilingTexture : NcEffectBehaviour
     {
         renderer = GetComponent<Renderer>();
 
+        if (EnableRandom)
+        {
+            OffsetX_Speed_RND = OffsetX_Speed * 0.4f;
+            OffsetY_Speed_RND = OffsetY_Speed * 0.4f;
+        }
         if (renderer != null && renderer.material != null)
 		{
             renderer.material.mainTextureScale	= new Vector2(m_fTilingX, m_fTilingY);
@@ -69,8 +82,25 @@ public class NcTilingTexture : NcEffectBehaviour
 
         if (_offsetEnable)
         {
-            _offsetVector.x += MyExtensions.Random(0f, OffsetX_Speed);
-            _offsetVector.y += MyExtensions.Random(0f, OffsetY_Speed);
+            if (EnableRandom)
+            {
+                if (_lastChangeRnd < Time.time)
+                {
+                    _lastChangeRnd = Time.time + SecPeriodEnd;
+                    var newOffsetX = MyExtensions.Random(-OffsetX_Speed, OffsetX_Speed);
+                    var newOffsetY = MyExtensions.Random(-OffsetY_Speed, OffsetY_Speed);
+
+                    OffsetX_Speed_RND = Mathf.Lerp(OffsetX_Speed_RND, newOffsetX, LerpRndomize);
+                    OffsetY_Speed_RND = Mathf.Lerp(OffsetY_Speed_RND, newOffsetY, LerpRndomize);
+                }
+                _offsetVector.x +=  OffsetX_Speed_RND;
+                _offsetVector.y +=  OffsetY_Speed_RND;
+            }
+            else
+            {
+                _offsetVector.x += MyExtensions.Random(0f, OffsetX_Speed);
+                _offsetVector.y += MyExtensions.Random(0f, OffsetY_Speed);
+            }
             renderer.material.SetTextureOffset(OffsetTextureName, _offsetVector);
         }
 

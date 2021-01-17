@@ -19,11 +19,9 @@ public class SectorTutorial : SectorData
 
     private void AddWays(GlobalMapCell c1, GlobalMapCell c2)
     {
-        c1.AddWay(c2);
-        c2.AddWay(c1);
+        c1.AddWay(c2.Container);
+        c2.AddWay(c1.Container);
     }
-
-
 
     public override void Populate(int startPowerGalaxy)
     {

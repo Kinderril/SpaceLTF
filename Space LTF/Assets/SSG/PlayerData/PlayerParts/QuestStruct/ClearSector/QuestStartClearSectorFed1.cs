@@ -89,7 +89,7 @@ public override bool CloseWindowOnClick => true;
         if (_idsToKill.Count > 0)
         {
             var army = _idsToKill.First();
-            return army.CurCell;
+            return army.CurCell.Data;
         }
         return null;
     }

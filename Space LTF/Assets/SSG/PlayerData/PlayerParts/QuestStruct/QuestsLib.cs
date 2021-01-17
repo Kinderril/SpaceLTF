@@ -233,13 +233,13 @@ public static class QuestsLib
 
     private static SimpleModulType GetModulTypeForQuest(Player player,ShipConfig cfg)
     {
-        var shops = player.MapData.GalaxyData.GetAllList().Where(x => x is ShopGlobalMapCell && x.ConfigOwner == cfg).ToList();
+        var shops = player.MapData.GalaxyData.GetAllContainersNotNull().Where(x => x.Data is ShopGlobalMapCell && x.Data.ConfigOwner == cfg).ToList();
         if (shops.Count == 0)
         {
             return SimpleModulType.ShipTurnSpeed;
         }
         var rndShop = shops.RandomElement();
-        var shop = rndShop as ShopGlobalMapCell;
+        var shop = rndShop.Data as ShopGlobalMapCell;
 
         if (shop.ShopInventory.Moduls.Count > 0)
         {

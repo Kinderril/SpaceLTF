@@ -41,6 +41,7 @@ public static class EngLocalization
         {"Easy", "Easy"},
         {"Normal", "Normal"},
         {"Hard", "Hard"},
+        {"CellDestroyed", "Station destroyed"},
         {"Imposilbe", "Imposible"},
         {"Radius", "Radius"},
         {"Sector", "Sector"},

@@ -21,9 +21,9 @@ public class QuestStageFinalQuest : QuestStage
 
     protected override bool StageActivate(Player player)
     {
-        var cellFinal = player.MapData.GalaxyData.GetAllList().FirstOrDefault(x => x is EndGlobalCell || x is EndTutorGlobalCell);
+        var cellFinal = player.MapData.GalaxyData.GetAllContainersNotNull().FirstOrDefault(x => x.Data is EndGlobalCell || x.Data is EndTutorGlobalCell);
         player.QuestData.LastBattleData.SetReady();
-        cell1 = cellFinal;
+        cell1 = cellFinal.Data;
         return true;
 
     }

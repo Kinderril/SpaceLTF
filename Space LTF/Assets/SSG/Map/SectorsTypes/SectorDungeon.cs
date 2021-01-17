@@ -40,8 +40,8 @@ public class SectorDungeon : SectorData
                 var cell = PopulateCell(i, rndIndex);
                 if (_lastCell != null && cell != null)
                 {
-                    _lastCell.AddWay(cell);
-                    cell.AddWay(_lastCell);
+                    _lastCell.AddWay(cell.Container);
+                    cell.AddWay(_lastCell.Container);
 //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
                 }
                 _lastCell = cell;
@@ -57,8 +57,8 @@ public class SectorDungeon : SectorData
                 var cell = PopulateCell(i, rndIndex);
                 if (_lastCell != null && cell != null)
                 {
-                    _lastCell.AddWay(cell);
-                    cell.AddWay(_lastCell);
+                    _lastCell.AddWay(cell.Container);
+                    cell.AddWay(_lastCell.Container);
 //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
                     _lastCell = cell;
                 }      
@@ -116,7 +116,7 @@ public class SectorDungeon : SectorData
         if (_exitCreated && _enterCreated)
         {
             _exitAndEnterConnectionCreated = true;
-            ExitCell.AddWay(_enterCell);
+            ExitCell.AddWay(_enterCell.Container);
         }
 
     }

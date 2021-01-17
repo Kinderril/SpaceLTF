@@ -8,7 +8,7 @@ public class StandartMovingArmy : MovingArmy
 {
     private float _powerPerTurn;
     private bool canAskHelp = true;
-    public StandartMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback
+    public StandartMovingArmy(SectorCellContainer startCell, Action<MovingArmy> destroyCallback
         ,float startPower,GalaxyEnemiesArmyController enemiesArmyController, float powerPerTurn) 
         : base(startCell, destroyCallback, enemiesArmyController,false)
     {
@@ -18,7 +18,7 @@ public class StandartMovingArmy : MovingArmy
         //        var humanPlayer = MainController.Instance.MainPlayer;
         //        var humanPower = ArmyCreator.CalcArmyPower(humanPlayer.Army);
         CurCell = startCell;
-        var posibleBattleEvent = !startCell.Sector.IsStart;
+        var posibleBattleEvent = !startCell.Data.Sector.IsStart;
         var name = $"{Namings.Tag("SimpleMovingArmy")}:{MyExtensions.Random(3, 9999)}";
         _player = new PlayerAIWithBattleEvent(name, posibleBattleEvent);
 //        var armyPower = humanPower * Library.MOVING_ARMY_POWER_COEF;
@@ -67,9 +67,9 @@ public class StandartMovingArmy : MovingArmy
         var ways = CurCell.GetCurrentPosibleWays();
 
         var waysToRandom = new List<GlobalMapCell>();
-        foreach (var cell in CurCell.Sector.ListCells)
+        foreach (var cell in CurCell.Data.Sector.ListCells)
         {
-            if (ways.Contains(cell.Data) && posibleCells.Contains(cell.Data) && !(cell.Data is GlobalMapNothing))
+            if (ways.Contains(cell) && posibleCells.Contains(cell.Data) && !(cell.Data is GlobalMapNothing))
             {
                 waysToRandom.Add(cell.Data);
             }
@@ -146,7 +146,7 @@ public class StandartMovingArmy : MovingArmy
         string scoutsField = "";
         if (army.ScoutData != null)
         {
-            EBattlefildEventType? _eventType = CurCell.EventType;
+            EBattlefildEventType? _eventType = CurCell.Data.EventType;
             var scoutData = army.ScoutData.GetInfo(myPlaer.Parameters.Scouts.Level);
             if (_eventType.HasValue)
             {

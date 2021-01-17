@@ -55,8 +55,8 @@ public class SectorFinalBattle : SectorData
                 if (_lastCell != null && cell != null)
                 {
                     id++;
-                    _lastCell.AddWay(cell);
-                    cell.AddWay(_lastCell);
+                    _lastCell.AddWay(cell.Container);
+                    cell.AddWay(_lastCell.Container);
                     //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
                 }
                 _lastCell = cell;
@@ -74,8 +74,8 @@ public class SectorFinalBattle : SectorData
                 if (_lastCell != null && cell != null)
                 {
                     id++;
-                    _lastCell.AddWay(cell);
-                    cell.AddWay(_lastCell);
+                    _lastCell.AddWay(cell.Container);
+                    cell.AddWay(_lastCell.Container);
                     //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
                     _lastCell = cell;
                 }

@@ -97,13 +97,13 @@ public class PlayerMapData
 
     public int ScoutedCells(int min, int max)
     {
-        var allCells = GalaxyData.GetAllList().Where(x => !x.IsScouted && !x.Completed).ToList();
+        var allCells = GalaxyData.GetAllContainers().Where(x => x != null && !x.Data.IsScouted && !x.Data.Completed).ToList();
         var cellsToScout = MyExtensions.Random(min, max);
         var count = Mathf.Clamp(cellsToScout, 0, allCells.Count);
         var cells = allCells.RandomElement(count);
         foreach (var cell in cells)
         {
-            cell.Scouted();
+            cell.Data.Scouted();
         }
         return count;
     }
@@ -112,7 +112,8 @@ public class PlayerMapData
         var allConnectd = ConnectedCellsToCurrent();
         foreach (var globalMapCell in allConnectd)
         {
-            globalMapCell.OpenInfo();
+            if (globalMapCell != null)
+                globalMapCell.Data.OpenInfo();
         }
 
         ScoutAllAround(CurrentCell);
@@ -168,9 +169,9 @@ public class PlayerMapData
         {
             if (MainController.Instance.MainPlayer.Parameters.Scouts.Level >= 4)
             {
-                if (!cell.IsScouted)
+                if (!cell.Data.IsScouted)
                 {
-                    cell.Scouted();
+                    cell.Data.Scouted();
                 }
             }
 //            cell.
@@ -214,7 +215,7 @@ public class PlayerMapData
             return false;
         }
         var getConnect = ConnectedCellsToCurrent();
-        var isConnected = getConnect.Contains(target);
+        var isConnected = getConnect.Contains(target.Container);
 #if UNITY_EDITOR
         if (DebugParamsController.AnyWay)
         {
@@ -227,7 +228,7 @@ public class PlayerMapData
         return isConnected;
     }
 
-    public HashSet<GlobalMapCell> ConnectedCellsToCurrent()
+    public HashSet<SectorCellContainer> ConnectedCellsToCurrent()
     {
         return CurrentCell.GetCurrentPosibleWays();
     }
@@ -267,9 +268,10 @@ public class PlayerMapData
             currentArmy.UpdateAllPowersCollected(powerDelta);
         }
 
-        foreach (var cell in GalaxyData.GetAllList())
+        foreach (var cell in GalaxyData.GetAllContainers())
         {
-            cell.UpdateCollectedPower(powerDelta);
+            if (cell != null && cell.Data != null)
+                cell.Data.UpdateCollectedPower(powerDelta);
         }
 
     }

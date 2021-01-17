@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public abstract class MovingArmy
 {
-    public GlobalMapCell CurCell { get; protected set; }
+    public SectorCellContainer CurCell { get; protected set; }
     protected Player _player;
     private Action<MovingArmy> _destroyCallback;
     protected Func<Action,MessageDialogData> _startDialog = null;
@@ -35,7 +35,7 @@ public abstract class MovingArmy
     [field: NonSerialized] private bool _subscribeComplete = false;
     protected GalaxyEnemiesArmyController _armiesController;
 
-    protected MovingArmy(GlobalMapCell startCell,
+    protected MovingArmy(SectorCellContainer startCell,
         Action<MovingArmy> destroyCallback, GalaxyEnemiesArmyController armiesController,bool isAllies)
     {
         IsAllies = isAllies;
@@ -47,7 +47,7 @@ public abstract class MovingArmy
             Debug.LogError("can't create moving army nowhere");
         }
         CurCell = startCell;
-        StartConfig = startCell.ConfigOwner;
+        StartConfig = startCell.Data.ConfigOwner;
         startCell.CurMovingArmy.ArmyCome(this);
         //        Power = power;
         Subscribe();
@@ -174,7 +174,7 @@ public abstract class MovingArmy
         Subscribe();
     }
 
-    public void SetCurCell(GlobalMapCell cellToGo)
+    public void SetCurCell(SectorCellContainer cellToGo)
     {
         CurCell = cellToGo;
 
@@ -193,7 +193,7 @@ public abstract class MovingArmy
         CurCell.CurMovingArmy.ArmyRemove(this);
     }
 
-    public virtual void AfterStepAction()
+    public virtual void AfterStepAction(SectorCellContainer playerTrg)
     {
         
 

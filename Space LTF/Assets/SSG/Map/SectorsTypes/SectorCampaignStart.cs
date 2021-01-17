@@ -62,7 +62,7 @@ public class SectorCampaignStart : SectorData
         cellContainerBattle1.SetData(battle1CEll);
         ListCells.Add(cellContainerBattle1);
 
-        startCEll.AddWay(battle1CEll);
+        startCEll.AddWay(battle1CEll.Container);
 
 
         //BATTLE CELL           

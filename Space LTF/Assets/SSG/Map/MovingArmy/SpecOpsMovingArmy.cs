@@ -8,7 +8,7 @@ using System.Linq;
 public class SpecOpsMovingArmy : MovingArmy
 {
     private bool _nextCellCrash;
-    public SpecOpsMovingArmy(GlobalMapCell startCell, Action<MovingArmy> destroyCallback, 
+    public SpecOpsMovingArmy(SectorCellContainer startCell, Action<MovingArmy> destroyCallback, 
         GalaxyEnemiesArmyController enemiesArmyController, bool isAllies,int power = -1) 
         : base(startCell, destroyCallback, enemiesArmyController,isAllies)
     {
@@ -26,7 +26,7 @@ public class SpecOpsMovingArmy : MovingArmy
             armyPower = power;
         }
         Power = armyPower;
-        var armyData = ArmyCreatorLibrary.GetArmy(startCell.ConfigOwner);
+        var armyData = ArmyCreatorLibrary.GetArmy(startCell.Data.ConfigOwner);
         var army = ArmyCreator.CreateSimpleEnemyArmy(armyPower, armyData, _player);
         _player.Army.SetArmy(army);
         _startPower = armyPower;
@@ -132,16 +132,12 @@ public class SpecOpsMovingArmy : MovingArmy
             return null;
         }
 
-        //        if (playersCell == CurCell)
-        //        {
-        //            return null;
-        //        }
         var player = MainController.Instance.MainPlayer;
         var playersCell = player.MapData.CurrentCell;
         var ways = CurCell.GetCurrentPosibleWays();
         var ststus = player.ReputationData.GetStatus(_player.Army.BaseShipConfig);
-        var notNoghing = ways.Where(x => !(x is GlobalMapNothing));
-        List<GlobalMapCell> posibleWays;
+        var notNoghing = ways.Where(x => !(x.Data is GlobalMapNothing));
+        List<SectorCellContainer> posibleWays;
         if (IsAllies)
         {
             bool wannaAttack = MyExtensions.IsTrue01(0.5f);
@@ -150,18 +146,18 @@ public class SpecOpsMovingArmy : MovingArmy
 #endif
             if (wannaAttack)
             {
-                posibleWays = notNoghing.Where(x => x.CurMovingArmy.HaveEnemiesAmry()).ToList();
+                posibleWays = notNoghing.Where(x => x.Data.CurMovingArmy.HaveEnemiesAmry()).ToList();
                 if (posibleWays.Count == 0)
                 {
-                    posibleWays = notNoghing.Where(x => !x.CurMovingArmy.HaveAlliesAmry()).ToList();
+                    posibleWays = notNoghing.Where(x => !x.Data.CurMovingArmy.HaveAlliesAmry()).ToList();
                 }
             }
             else
             {
-                posibleWays = notNoghing.Where(x => !x.CurMovingArmy.HaveAlliesAmry()).ToList();
+                posibleWays = notNoghing.Where(x => !x.Data.CurMovingArmy.HaveAlliesAmry()).ToList();
             }
             var selectedWay1 = posibleWays.RandomElement();
-            return selectedWay1;
+            return selectedWay1.Data;
 
 
         }
@@ -181,14 +177,33 @@ public class SpecOpsMovingArmy : MovingArmy
             case EReputationStatus.friend:
             case EReputationStatus.neutral:
                 var selectedWay = posibleWays.RandomElement();
-                if (posibleCells.Contains(selectedWay))
-                    return selectedWay;
+                if (posibleCells.Contains(selectedWay.Data))
+                    return selectedWay.Data;
                 break;
 
             case EReputationStatus.negative:
             case EReputationStatus.enemy:
+                foreach (var way in posibleWays)
+                {
+                    if (way == playersCell.Container)
+                    {
+                        if (posibleCells.Contains(way.Data))
+                            return way.Data;
+                    }
+                }
+
+                foreach (var way in posibleWays)
+                {
+                    if (way.Data.Sector.IsSectorMy)
+                    {
+                        if (posibleCells.Contains(way.Data))
+                            return way.Data;
+                    }
+                }
+
+
                 int minDelta = 999;
-                GlobalMapCell cellToGo = posibleWays[0];
+                var cellToGo = posibleWays[0];
                 foreach (var way in posibleWays)
                 {
                     var a = Mathf.Abs(way.indX - playersCell.indX);
@@ -200,8 +215,8 @@ public class SpecOpsMovingArmy : MovingArmy
                         cellToGo = way;
                     }
                 }
-                if (posibleCells.Contains(cellToGo))
-                    return cellToGo;
+                if (posibleCells.Contains(cellToGo.Data))
+                    return cellToGo.Data;
                 break;
         }
 
@@ -209,26 +224,26 @@ public class SpecOpsMovingArmy : MovingArmy
 
     }
 
-    public override void AfterStepAction()
+    public override void AfterStepAction(SectorCellContainer playerTrg)
     {
         if (_nextCellCrash)
         {
             _nextCellCrash = false;
-
-
-            var newData = new FreeActionGlobalMapCell((int)Power, StartConfig, Utils.GetId(), 
-                CurCell.indX, CurCell.indZ, CurCell.Sector,_armiesController,0,false);
-            newData.Complete();
-            CurCell.Container.SetData(newData);
-
+            if (playerTrg != CurCell)
+            {
+                var newData = new FreeActionGlobalMapCell((int)Power, StartConfig, Utils.GetId(),
+                    CurCell.indX, CurCell.indZ, CurCell.Data.Sector, _armiesController, 0, false);
+                newData.Complete();
+                CurCell.SetData(newData);
+            }
         }
     }
 
     public override GlobalMapCell FindCellToMove(HashSet<GlobalMapCell> posibleCells)
     {
-        if (CurCell.Sector.IsSectorMy && !IsAllies)
+        if (CurCell.Data.Sector.IsSectorMy && !IsAllies)
         {
-            if (CurCell is ShopGlobalMapCell || CurCell is RepairStationGlobalCell)
+            if (CurCell.Data is ShopGlobalMapCell || CurCell.Data is RepairStationGlobalCell)
             {
                 _nextCellCrash = true;
                 return null;

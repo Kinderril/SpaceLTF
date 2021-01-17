@@ -96,6 +96,7 @@ public class MapWindow : BaseWindow
             player.MapData.OnCellChanged += OnCellChanged;
             player.MapData.OnStep += OnStep;
             player.SafeLinks.OnAddShip += OnAddShip;
+            GlobalEventDispatcher.OnCellDataChanged += OnCellDataChanged;
             // player.ReputationData.OnReputationNationChange += OnReputationChange;
             CellsOfSector();
             InitMyArmy();
@@ -173,6 +174,11 @@ public class MapWindow : BaseWindow
                 WindowManager.Instance.OpenWindow(MainState.start);
             }, Namings.Tag("loaderror"));
         }
+    }
+
+    private void OnCellDataChanged(SectorCellContainer obj)
+    {
+        MovingArmyUIController.CellDataChange(obj);
     }
 
     private void OnStep()
@@ -435,15 +441,19 @@ public class MapWindow : BaseWindow
     public void DebugActivateEndDialog()
     {
         var endCell =
-            MainController.Instance.MainPlayer.MapData.GalaxyData.GetAllList()
-                .FirstOrDefault(x => x is EndGlobalCell) as EndGlobalCell;
+            MainController.Instance.MainPlayer.MapData.GalaxyData.GetAllContainersNotNull()
+                .FirstOrDefault(x => x.Data is EndGlobalCell) ;
         if (endCell != null)
         {
-            ActivateCellDialog(endCell);
+            var subEndCell = endCell.Data as EndGlobalCell;
+            if (endCell != null)
+            {
+                ActivateCellDialog(subEndCell);
+            }
         }
         else
         {
-            Debug.LogError("Can't find end game cell");
+            Debug.LogError("Can't find end game cell2");
         }
     }
 
@@ -613,6 +623,7 @@ public class MapWindow : BaseWindow
             player.MapData.OnStep -= OnStep;
         }
 
+        GlobalEventDispatcher.OnCellDataChanged -= OnCellDataChanged;
         // player.ReputationData.OnReputationNationChange -= OnReputationChange;
         //        player.MapData.OnSectorChanged -= OnSectorChanged;
         //        player.MapData.OnCellChanged -= OnCellChanged;

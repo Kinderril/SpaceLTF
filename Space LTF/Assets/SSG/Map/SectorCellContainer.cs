@@ -11,7 +11,7 @@ public class SectorCellContainer
     public GlobalMapCell Data { get; private set; }
     [field: NonSerialized] public event Action<SectorCellContainer> OnDataChanged;
     public CellArmyContainer CurMovingArmy = new CellArmyContainer();
-    private HashSet<GlobalMapCell> _ways = new HashSet<GlobalMapCell>();
+    private HashSet<SectorCellContainer> _ways = new HashSet<SectorCellContainer>();
 
     public SectorCellContainer(int x,int z)
     {
@@ -25,6 +25,7 @@ public class SectorCellContainer
         Data = data;
         data.SetContainer(this);
         OnDataChanged?.Invoke(this);
+        GlobalEventDispatcher.CellDataChanged(this);
     }
 
 
@@ -33,7 +34,7 @@ public class SectorCellContainer
         return Data == null;
     }
 
-    public void AddWay(GlobalMapCell extraWay)
+    public void AddWay(SectorCellContainer extraWay)
     {
 
         if (extraWay != null)
@@ -47,7 +48,7 @@ public class SectorCellContainer
 
     }
 
-    public void AddWays(List<GlobalMapCell> ways)
+    public void AddWays(List<SectorCellContainer> ways)
     {
 
         foreach (var way in ways)
@@ -62,12 +63,12 @@ public class SectorCellContainer
             }
         }
     }
-    public HashSet<GlobalMapCell> GetCurrentPosibleWays()
+    public HashSet<SectorCellContainer> GetCurrentPosibleWays()
     {
-        var ways = new HashSet<GlobalMapCell>();
+        var ways = new HashSet<SectorCellContainer>();
         foreach (var globalMapCell in _ways)
         {
-            if (!globalMapCell.IsHide)
+            if (!globalMapCell.Data.IsHide)
             {
                 ways.Add(globalMapCell);
             }
@@ -75,12 +76,12 @@ public class SectorCellContainer
         return ways;
     }
 
-    public HashSet<GlobalMapCell> GetAllPosibleWays()
+    public HashSet<SectorCellContainer> GetAllPosibleWays()
     {
         return _ways;
     }
 
-    public void RemoveWayTo(GlobalMapCell rnd)
+    public void RemoveWayTo(SectorCellContainer rnd)
     {
         _ways.Remove(rnd);
     }

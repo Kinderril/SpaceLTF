@@ -56,7 +56,7 @@ public class FreeActionGlobalMapCell : GlobalMapCell
         {
             return;
         }
-        var army = new StandartMovingArmy(this,
+        var army = new StandartMovingArmy(this.Container,
             _enemiesArmyController.SimpleArmyDestroyed, _power,_enemiesArmyController, _powerPerTurn);
         _enemiesArmyController.AddArmy(army);
     }

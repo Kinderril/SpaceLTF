@@ -8,7 +8,7 @@ public class CellsInGalaxy
 {
 
     private GlobalMapCell[,] cells;
-    private List<GlobalMapCell> cellsList;
+//    private List<GlobalMapCell> cellsList;
     private List<SectorCellContainer> cellsContainers;
     public int SizeX { get; private set; }
     public int SizeZ { get; private set; }
@@ -18,13 +18,9 @@ public class CellsInGalaxy
         SizeX = sizeX;
         SizeZ = sizeZ;
         cells = new GlobalMapCell[SizeX, SizeZ];
-        cellsList = new List<GlobalMapCell>(sizeX * sizeZ);
+//        cellsList = new List<GlobalMapCell>(sizeX * sizeZ);
         cellsContainers = new List<SectorCellContainer>(sizeX * sizeZ);
     }
-    public List<GlobalMapCell> GetAllList()
-    {
-        return cellsList;
-    }   
     public List<SectorCellContainer> GetAllContainers()
     {
         return cellsContainers;
@@ -38,16 +34,16 @@ public class CellsInGalaxy
 
     public void FindNoWayCells()
     {
-        var copyCells = new HashSet<GlobalMapCell>();
-        foreach (var globalMapCell in cellsList)
+        var copyCells = new HashSet<SectorCellContainer>();
+        foreach (var globalMapCell in cellsContainers)
         {
-            if (!(globalMapCell is GlobalMapNothing) && !globalMapCell.IsHide)
+            if (globalMapCell != null && !(globalMapCell.Data is GlobalMapNothing) && !globalMapCell.Data.IsHide)
                 copyCells.Add(globalMapCell);
         }
 
-        foreach (var globalMapCell in cellsList)
+        foreach (var globalMapCell in cellsContainers)
         {
-            if (!(globalMapCell is GlobalMapNothing) && !globalMapCell.IsHide)
+            if (globalMapCell != null && !(globalMapCell.Data is GlobalMapNothing) && !globalMapCell.Data.IsHide)
             {
                 var allWays = globalMapCell.GetCurrentPosibleWays();
                 foreach (var way in allWays)
@@ -59,27 +55,28 @@ public class CellsInGalaxy
 
         foreach (var globalMapCell in copyCells)
         {
-            GlobalMapCell nearestCell = GetNearestCell(globalMapCell);
+            var nearestCell = GetNearestCell(globalMapCell);
             if (nearestCell != null)
                 globalMapCell.AddWay(nearestCell);
         }
     }
 
-    private GlobalMapCell GetNearestCell(GlobalMapCell globalMapCell)
+    private SectorCellContainer GetNearestCell(SectorCellContainer globalMapCell)
     {
         int dist = Int32.MaxValue;
-        GlobalMapCell tmpCel = null;
+        SectorCellContainer tmpCel = null;
 
 
-        foreach (var cell in cellsList)
+        foreach (var data in cellsContainers)
         {
-            if (!(cell is GlobalMapNothing) && !cell.IsHide && cell != globalMapCell)
+            var cell = data.Data;
+            if (!(cell is GlobalMapNothing) && !cell.IsHide && cell.Container != globalMapCell)
             {
                 var d = Mathf.Abs(globalMapCell.indZ - cell.indZ) + Mathf.Abs(globalMapCell.indX - cell.indX);
                 if (d < dist)
                 {
                     d = dist;
-                    tmpCel = cell;
+                    tmpCel = data;
                 }
             }
         }
@@ -94,7 +91,7 @@ public class CellsInGalaxy
         try
         {
             cells[cell.indX, cell.indZ] = cell;
-            cellsList.Add(cell);
+//            cellsList.Add(cell);
             cellsContainers.Add(cell.Container);
         }
         catch (Exception e)
@@ -114,20 +111,14 @@ public class CellsInGalaxy
         return cells[x, z];
     }
 
-    public GlobalMapCell GetRandom()
+    public SectorCellContainer GetRandom()
     {
-        return cellsList.RandomElement();
+        return cellsContainers.RandomElement();
     }
 
     public GlobalMapCell[,] GetAllCells()
     {
         return cells;
-    }
-    public GlobalMapCell GetRandomConnectedCell()
-    {
-        var cell = cellsList.Where(x => x.ConnectedGates > 0 && !x.IsScouted && !x.Completed).ToList();
-        var rnd = cell.RandomElement();
-        return rnd;
     }
 
 

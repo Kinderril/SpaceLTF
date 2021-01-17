@@ -96,8 +96,8 @@ public class SectorExprolerMilitary : SectorExprolerData
     private void ConnectCells(GlobalMapCell cell1,GlobalMapCell cell2)
     {
 
-        cell1.AddWay(cell2);
-        cell2.AddWay(cell1);
+        cell1.AddWay(cell2.Container);
+        cell2.AddWay(cell1.Container);
     }
 
     public ArmyGlobalMapCell PopulateCell(int j, int i)

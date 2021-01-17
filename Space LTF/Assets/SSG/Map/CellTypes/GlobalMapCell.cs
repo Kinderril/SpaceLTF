@@ -174,8 +174,12 @@ public abstract class GlobalMapCell
         OnComplete?.Invoke(this, false);
     }
 
-    public void AddWay(GlobalMapCell extraWay)
+    public void AddWay(SectorCellContainer extraWay)
     {
+        if (extraWay == null)
+        {
+            Debug.LogError($"Can't add extra way == null");
+        }
         Container.AddWay(extraWay);
     }
 
@@ -284,22 +288,22 @@ public abstract class GlobalMapCell
     {
     }
 
-    public void AddWays(List<GlobalMapCell> ways)
+    public void AddWays(List<SectorCellContainer> ways)
     {
         Container.AddWays(ways);
     }
 
-    public HashSet<GlobalMapCell> GetCurrentPosibleWays()
+    public HashSet<SectorCellContainer> GetCurrentPosibleWays()
     {
         return Container.GetCurrentPosibleWays();
     }
 
-    public HashSet<GlobalMapCell> GetAllPosibleWays()
+    public HashSet<SectorCellContainer> GetAllPosibleWays()
     {
         return Container.GetAllPosibleWays();
     }
 
-    public void RemoveWayTo(GlobalMapCell rnd)
+    public void RemoveWayTo(SectorCellContainer rnd)
     {
         Container.RemoveWayTo(rnd);
     }

@@ -9,6 +9,7 @@ public static class GlobalEventDispatcher
     public static event Action<ShipConfig> OnWinBattle;
     public static event Action<ActionModulInGame> OnSellModul;
     public static event Action<WeaponInv> OnUpgradeWeapon;
+    public static event Action<SectorCellContainer> OnCellDataChanged;
     public static ShipShootDelegate OnShipShootDelegate;
 
     public static void ShipDeath(ShipBase target, ShipBase killer)
@@ -52,6 +53,13 @@ public static class GlobalEventDispatcher
     public static void ShipShoot(ShipBase shooter, ShipBase target)
     {
         OnShipShootDelegate?.Invoke(shooter, target);
+    }
+
+    public static void CellDataChanged(SectorCellContainer sectorCellContainer)
+    {
+
+        OnCellDataChanged?.Invoke(sectorCellContainer);
+
     }
 }
 

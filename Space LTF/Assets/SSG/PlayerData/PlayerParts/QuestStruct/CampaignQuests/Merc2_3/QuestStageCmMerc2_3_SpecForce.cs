@@ -134,7 +134,7 @@ public class QuestStageCmMerc2_3_SpecForce : QuestStage
 
     public GlobalMapCell GetCurCellTarget()
     {
-        return _army?.CurCell;
+        return _army?.CurCell.Data;
     }
 
     public override string GetDesc()

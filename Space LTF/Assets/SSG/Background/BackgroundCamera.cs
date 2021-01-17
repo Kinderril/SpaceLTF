@@ -9,8 +9,10 @@ public class BackgroundCamera : MonoBehaviour
 
     public Camera Camera;
 //    public Camera MiniBackgroundCamera;
-    public SpriteRenderer SpriteBattleRenderer;
-    public SpriteRenderer SpriteMenuRenderer;
+    public Renderer BattleRenderer;
+    public Renderer MenuRenderer;
+//    public SpriteRenderer SpriteBattleRenderer;
+//    public SpriteRenderer SpriteMenuRenderer;
     private Sprite _spriteGlobal;
     public List<Sprite> BackgroundsGlobal = new List<Sprite>();
     public List<Sprite> BackgroundsBattle = new List<Sprite>();
@@ -19,7 +21,9 @@ public class BackgroundCamera : MonoBehaviour
     {
         _spriteGlobal = BackgroundsGlobal.RandomElement();
         // SpriteBattleRenderer.sprite = _spriteGlobal;
-        SpriteMenuRenderer.sprite = _spriteGlobal;
+//        MenuRenderer.sprite = _spriteGlobal;
+//        var sprite = BackgroundsBattle.RandomElement();
+        MenuRenderer.material.SetTexture("_MainTex", _spriteGlobal.texture);
         ActivateSprites(false);
     }
     public void EndBattleGame()
@@ -31,48 +35,48 @@ public class BackgroundCamera : MonoBehaviour
     private void ActivateSprites(bool battle)
     {
 
-        SpriteBattleRenderer.gameObject.SetActive(battle);
-        SpriteMenuRenderer.gameObject.SetActive(!battle);
+        BattleRenderer.gameObject.SetActive(battle);
+        MenuRenderer.gameObject.SetActive(!battle);
     }
 
     private void CheckSize(bool isBattle)
     {
-        float cameraHeight = Camera.orthographicSize * 2;
-        Vector2 cameraSize = new Vector2(Camera.aspect * cameraHeight, cameraHeight);
-        cameraSize = cameraSize / Camera.orthographicSize;
-        var sprite = isBattle ? SpriteBattleRenderer : SpriteMenuRenderer;
-        Vector2 spriteSize = sprite.sprite.bounds.size;
-        if (spriteSize.y > spriteSize.x)
-        {
-            Debug.LogError("wrong background sprite! " + SpriteBattleRenderer.sprite.name);
-            return;
-        }
-        var camDim = cameraSize.x / cameraSize.y;
-        var backDim = spriteSize.x / spriteSize.y;
-        // Debug.Log(" cam dims:" + camDim + "   " + backDim + "    cameraSize:" + cameraSize + "   spriteSize:" + spriteSize);
-        if (camDim > backDim)
-        {
-//            MiniBackgroundCamera.orthographicSize= 
-                Camera.orthographicSize = spriteSize.x / cameraSize.x;
-        }
-        else
-        {
-//            MiniBackgroundCamera.orthographicSize =
-                Camera.orthographicSize = spriteSize.y / cameraSize.y;
-        }
-
-        //        Vector2 scale = transform.localScale;
-        if (cameraSize.x >= cameraSize.y)
-        {
-           
-            // Landscape (or equal)
-
-//            scale *= cameraSize.x / spriteSize.x;
-        }
-        else
-        { // Portrait
-//            scale *= cameraSize.y / spriteSize.y;
-        }
+//        float cameraHeight = Camera.orthographicSize * 2;
+//        Vector2 cameraSize = new Vector2(Camera.aspect * cameraHeight, cameraHeight);
+//        cameraSize = cameraSize / Camera.orthographicSize;
+//        var sprite = isBattle ? SpriteBattleRenderer : SpriteMenuRenderer;
+//        Vector2 spriteSize = sprite.sprite.bounds.size;
+//        if (spriteSize.y > spriteSize.x)
+//        {
+//            Debug.LogError("wrong background sprite! " + SpriteBattleRenderer.sprite.name);
+//            return;
+//        }
+//        var camDim = cameraSize.x / cameraSize.y;
+//        var backDim = spriteSize.x / spriteSize.y;
+//        // Debug.Log(" cam dims:" + camDim + "   " + backDim + "    cameraSize:" + cameraSize + "   spriteSize:" + spriteSize);
+//        if (camDim > backDim)
+//        {
+////            MiniBackgroundCamera.orthographicSize= 
+//                Camera.orthographicSize = spriteSize.x / cameraSize.x;
+//        }
+//        else
+//        {
+////            MiniBackgroundCamera.orthographicSize =
+//                Camera.orthographicSize = spriteSize.y / cameraSize.y;
+//        }
+//
+//        //        Vector2 scale = transform.localScale;
+//        if (cameraSize.x >= cameraSize.y)
+//        {
+//           
+//            // Landscape (or equal)
+//
+////            scale *= cameraSize.x / spriteSize.x;
+//        }
+//        else
+//        { // Portrait
+////            scale *= cameraSize.y / spriteSize.y;
+//        }
 
         //        transform.position = Vector2.zero; // Optional
 //        transform.localScale = scale;
@@ -80,7 +84,8 @@ public class BackgroundCamera : MonoBehaviour
 
     public void StartGame()
     {
-        SpriteBattleRenderer.sprite = BackgroundsBattle.RandomElement();
+        var sprite = BackgroundsBattle.RandomElement();
+        BattleRenderer.material.SetTexture("_MainTex", sprite.texture);
         CheckSize(true);
         Camera.enabled = true;
         ActivateSprites(true);
