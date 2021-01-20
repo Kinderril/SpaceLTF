@@ -11,6 +11,7 @@ public class Commander
     // public Dictionary<ShipBase, ShipPersonalInfo> MyShipsInfos = new Dictionary<ShipBase, ShipPersonalInfo>();
     public List<ShipInventory> _destroyedShips = new List<ShipInventory>();
     private List<ShipBase> _shipsToRemove = new List<ShipBase>();
+    private List<ShipBase> _shipsToPlayDeath = new List<ShipBase>();
     // private Dictionary<int, CommanderShipEnemy> _enemies = new Dictionary<int, CommanderShipEnemy>();
     public ShipControlCenter MainShip;
     public CommanderCoinController CoinController;
@@ -423,9 +424,9 @@ public class Commander
 
     private void ShipDeath(ShipBase ship)
     {
+        _shipsToPlayDeath.Add(ship);
         _shipsToRemove.Add(ship);
-        if (OnShipDestroy != null)
-            OnShipDestroy(ship);
+        OnShipDestroy?.Invoke(ship);
         if (ship.ShipParameters.StartParams.ShipType == ShipType.Base)
         {
             OnCommanderDeathCallback(this);
@@ -442,6 +443,14 @@ public class Commander
         if (Time.time == 0f)
         {
             return;
+        }
+
+        if (_shipsToPlayDeath.Count > 0)
+        {
+            foreach (var shipBase in _shipsToPlayDeath)
+            {
+                var shallRemove = shipBase.UpdateDeath();
+            }
         }
 
         //        SpellController.ManualUpdate();
@@ -513,6 +522,12 @@ public class Commander
         {
             shipBase.Value.Dispose();
         }
+
+        foreach (var shipBase in _shipsToPlayDeath)
+        {
+            GameObject.Destroy(shipBase.gameObject);
+        }
+        _shipsToPlayDeath.Clear();
 
         foreach (var turretConnector in Connectors)
         {

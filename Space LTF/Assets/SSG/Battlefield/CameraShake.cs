@@ -11,6 +11,7 @@ public class CameraShake : MonoBehaviour
 
     // Amplitude of the shake. A larger value shakes the camera harder.
     public float shakeAmount = 0.7f;
+    private float _shakeAmount = 0.7f;
     public float decreaseFactor = 1.0f;
 
     Vector3 originalPos;
@@ -18,14 +19,23 @@ public class CameraShake : MonoBehaviour
 
     void Awake()
     {
+        _shakeAmount = shakeAmount;
         if (camTransform == null)
         {
             camTransform = GetComponent(typeof(Transform)) as Transform;
         }
     }
 
-    public void Init(float duration)
+    public void Init(float duration,float shakeAmount1 = -1)
     {
+        if (shakeAmount1 < 0)
+        {
+            _shakeAmount = shakeAmount;
+        }
+        else
+        {
+            _shakeAmount = shakeAmount1;
+        }
         originalPos = camTransform.localPosition;
         shakeDuration = duration;
         isShake = true;
@@ -39,7 +49,7 @@ public class CameraShake : MonoBehaviour
             {
                 if (shakeDuration > 0)
                 {
-                    camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
+                    camTransform.localPosition = originalPos + Random.insideUnitSphere * _shakeAmount;
                     shakeDuration -= Time.deltaTime * decreaseFactor;
                 }
                 else

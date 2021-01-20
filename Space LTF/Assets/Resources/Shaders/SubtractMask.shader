@@ -1,5 +1,12 @@
 ﻿Shader "p0/SubtractMask"
 {
+
+    Properties
+    {
+		_ColorRed("Main Color", Color) = (1,0,0,1)
+		_ColorGreen("Main Color", Color) = (0,1,0,1)
+		_Lerp("Lerp", Float) = 0.7
+    }
 	SubShader
 	{
 		Pass
@@ -23,6 +30,9 @@
             uniform sampler2D _ssaoBlur2;
 			uniform sampler2D _ssaoMask2;
 			uniform sampler2D _MainTex;
+			float4 _ColorRed;
+			float4 _ColorGreen;
+			float _Lerp;
 
 			v2f vert (appdata_img v)
 			{
@@ -42,12 +52,12 @@
 				float delta3 = texB - texA;
 				if (delta3 > 0){
 				
-					return lerp(color, float4(0,1,0,1), saturate(delta3 * 0.7));
+					return lerp(color,_ColorGreen, saturate(delta3 * _Lerp));
 				}
 				float delta4 = texB2 - texA1;
 				if (delta4 > 0){
 				
-					return lerp(color, float4(1,0,0,1), saturate(delta4 * 0.7));
+					return lerp(color,  _ColorRed, saturate(delta4 * _Lerp));
 				}
 				return color;
 

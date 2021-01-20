@@ -52,6 +52,7 @@ public class ShipBase : MovingObject
     public ShipPeriodDamage PeriodDamage { get; private set; }
     public CellController CellController { get; private set; }
     public ShipLocator Locator { get; private set; }
+    public ShipDeathData DeathData { get; private set; }
     public ShipHitData HitData { get; private set; }
     public ShipBoost Boost { get; private set; }
     public ShipAttackersData AttackersData { get; private set; }
@@ -161,7 +162,7 @@ public class ShipBase : MovingObject
             }
 
         }
-
+        DeathData = new ShipDeathData(this,InitDeathParts, DeathEffects);
         transform.SetParent(BattleController.Instance.ShipsContainer);
         WayDrawler = DataBaseController.GetItem(DataBaseController.Instance.DataStructPrefabs.WayDrawler);
         WayDrawler.transform.SetParent(BattleController.Instance.ShipWaysContainer);
@@ -295,8 +296,25 @@ public class ShipBase : MovingObject
 
     private void Death()
     {
-        if (TeamIndex == TeamIndex.red && MyExtensions.IsTrueEqual())
-            CamerasController.Instance.GameCamera.MainCameraShake.Init(1f);
+        if (MyExtensions.IsTrue01(0.3f))
+        {
+            float amount = 0.5f;
+            float duration = 0.8f;
+
+            switch (TeamIndex)
+            {
+                case TeamIndex.red:
+                    amount = 0.3f;
+                    duration = 0.6f;
+                    break;
+                case TeamIndex.green:
+                    amount = 0.5f;
+                    duration = 0.7f;
+                    break;
+            }
+            CamerasController.Instance.GameCamera.MainCameraShake.Init(duration, amount);
+        }
+
         Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetDeath());
         ShipInventory.LastBattleData.Destroyed = true;
         VisibilityData.Dispose();
@@ -306,12 +324,14 @@ public class ShipBase : MovingObject
             return;
         }
         WayDrawler.Clear();
-        ShipVisual.gameObject.SetActive(false);
-        InitDeathParts();
+        
+        DeathData.StartDeath();
+//        ShipVisual.gameObject.SetActive(false);
+//        InitDeathParts();
         IsDead = true;
         _dealthCallback(this);
         OnDeath?.Invoke(this);
-        EffectController.Instance.Create(DataBaseController.Instance.DataStructPrefabs.OnShipDeathEffect, transform.position, 5f);
+//        EffectController.Instance.Create(DataBaseController.Instance.DataStructPrefabs.OnShipDeathEffect, transform.position, 5f);
         Dispose();
     }
 
@@ -356,10 +376,7 @@ public class ShipBase : MovingObject
         VisibilityData.Dispose();
         IsInited = false;
         base.Dispose();
-        if (OnDispose != null)
-        {
-            OnDispose(this);
-        }
+        OnDispose?.Invoke(this);
 
         if (!_wayDestroyed)
         {
@@ -376,7 +393,7 @@ public class ShipBase : MovingObject
         //        OnAttackRewardChange = null;
         OnDeath = null;
         OnDispose = null;
-        gameObject.SetActive(false);
+//        gameObject.SetActive(false);
     }
 
     private void EndWayCallback()
@@ -389,6 +406,10 @@ public class ShipBase : MovingObject
         Rotation = transform.rotation;
     }
 
+    public bool UpdateDeath()
+    {
+        return DeathData.Update();
+    }
     public void UpdateManual()
     {
         if (IsDead)
@@ -654,6 +675,19 @@ public class ShipBase : MovingObject
         return _predictionPosAim;
     }
 
+    private void DeathEffects()
+    {
+        if (ShipEngineStop != null)
+        {
+            ShipEngineStop.Play();
+        }
+
+        if (PeriodDamageEffect != null)
+        {
+            PeriodDamageEffect.Play();
+        }
+    }
+
     public void SetEnemyData(Vector3 dirFromAtoB, float dist, ShipBase mover)
     {
         Enemies[mover].SetParams(dirFromAtoB, dist);
@@ -682,6 +716,7 @@ public class ShipBase : MovingObject
             Debug.DrawLine(posToLookAt, effect.transform.position, Color.red, 10);
             effect.transform.LookAt(posToLookAt, Vector3.up);
         }
+        DeathData.LastBullet(bullet);
         weapon.ApplyToShip(ShipParameters, this, bullet);
     }
     public bool HaveClosestDamagedFriend(out ShipBase ship)
