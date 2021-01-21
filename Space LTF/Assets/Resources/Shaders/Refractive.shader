@@ -30,7 +30,7 @@
 
 	SubShader 
 	{
-		Tags{ "RenderType"="Transparent" "Queue"="Transparent+5" }
+		Tags{ "RenderType"="TransparentButHasDepth" "Queue"="Transparent+1"  }
 		//Tags{ "Queue"="Transparent+1" "RenderType"="Transparent" }
 
 		GrabPass { }
@@ -58,7 +58,7 @@
 		uniform float _FScale;
 		uniform float _FBias;
 
-		uniform float _DissortAmt;
+		float _DissortAmt;
 		uniform sampler2D _BumpMap;
 		uniform float _BumpScale;
 
@@ -92,7 +92,6 @@
 			// Compute final fragment color
 			half3 frag, emission;
 			frag = lerp (tex2Dproj (_GrabTexture, i.screenPos), _DarkColor, _DarkColor.a).rgb;
-			//frag = lerp (tex2Dproj (_GrabTexture, i.screenPos), _DarkColor, _DarkColor.a).rgb;
 			frag = lerp (frag, _LitColor, (_LitColor.a * fresnel));
 			emission = _LitColor * (_LitColor.a * fresnel);
 

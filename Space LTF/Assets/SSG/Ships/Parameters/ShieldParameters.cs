@@ -28,14 +28,28 @@ public class ShieldParameters
     private ShipBase _shipBase;
     private float _restoreTime;
     private float _startRestore;
+    private float _curDistValue;
+    private float _speed = 0.3f;
+    private bool _isDistortion;
+    private bool _distortionDirection;
 
     public event ShieldParameterChange OnShildChanged;
     public event Action<ShieldChangeSt> OnStateChange;
+    private Material _materialToChange = null;
 
     public ShieldParameters(ShipBase shipBase,Collider shieldCollider, float shiledRegen, float maxShiled)
     {
         _shipBase = shipBase;
         this._shieldCollider = shieldCollider;
+        if (_shieldCollider != null)
+        {
+            _shieldCollider.gameObject.layer = LayerMaskController.ShieldLayer;
+            var renderer = _shieldCollider.gameObject.GetComponentInChildren<Renderer>();
+            if (renderer != null)
+            {
+                _materialToChange = Utils.CopyMaterial(renderer);
+            }
+        }
         this.ShieldRegenPerSec = shiledRegen;
         MaxShield = maxShiled;
         CurShiled = MaxShield;
@@ -73,9 +87,10 @@ public class ShieldParameters
             }
             else
             {
+                GetHit();
                 if (isActive)
                     _curShiled = value;
-               }
+            }
             if (isActive)
             {
                 if (_curShiled <= 0f)
@@ -83,16 +98,12 @@ public class ShieldParameters
                     SetState(ShieldChangeSt.restoring);
                 }
             }
-
-            //            if (_shiledIsActive)
-            //            {
-            //                ShiledIsActive = _curShiled > 0.9f;
-            //            }
-            //            else
-            //            {
-            //                ShiledIsActive = _curShiled > MaxShiled * 0.1f;
-            //            }
         }
+    }
+
+    private void GetHit()
+    {
+        StartDistortion();
     }
 
     public void Crash(float period = -1)
@@ -167,6 +178,7 @@ public class ShieldParameters
 
     public void Update()
     {
+        UpdateDistortion();
         switch (State)
         {
             case ShieldChangeSt.disable:
@@ -202,6 +214,54 @@ public class ShieldParameters
                     RegenShield();
                 }
                 break;
+        }
+    }
+
+
+    public void StartDistortion()
+    {
+        if (_materialToChange == null)
+        {
+            return;
+        }
+
+        _curDistValue = 0f;
+        _distortionDirection = true;
+        _isDistortion = true;
+        Debug.LogError("StartDistortion");
+    }
+
+    private void UpdateDistortion()
+    {
+        if (_isDistortion)
+        {
+            var val = _speed * Time.deltaTime;
+            if (_distortionDirection)
+            {
+                if (_curDistValue < 0.65f)
+                {
+                    val *= 3f;
+                }
+                _curDistValue += val;
+                if (_curDistValue > 1)
+                {
+                    _curDistValue = 1f;
+                    _distortionDirection = false;
+                }
+            }
+            else
+            {
+
+                _curDistValue -= 4 * val;
+                if (_curDistValue < 0)
+                {
+                    _curDistValue = 0f;
+                    _isDistortion = false;
+                }
+
+            }
+            _materialToChange.SetFloat("_DissortAmt",_curDistValue);
+            Debug.LogError($"SetFloat {_shipBase.Id}  :{_curDistValue}");
         }
     }
 

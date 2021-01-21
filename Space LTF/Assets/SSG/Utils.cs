@@ -221,6 +221,12 @@ public static class Utils
         }
         renderer.materials = materialsInside.ToArray();
         return renderer.materials;
+    }     
+    public static Material CopyMaterial(Renderer renderer)
+    {
+        var newMaterial = GameObject.Instantiate(renderer.material) as Material;
+        renderer.material = newMaterial;
+        return newMaterial;
     }
 
     public static Material CopyMaterial(Material renderer)
