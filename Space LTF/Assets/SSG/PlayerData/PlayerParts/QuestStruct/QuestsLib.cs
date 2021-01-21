@@ -101,6 +101,13 @@ public static class QuestsLib
     public static string CM_MERC_1_1 = "CM_MERC_1_1";
     public static string CM_START_QUEST = "CM_START_QUEST";
     public static string CM_START_QUEST_ATTACK = "CM_START_QUEST_ATTACK";
+    public static string QuestStageCmRdr1_4_ComeTo1 = "QuestStageCmRdr1_4_ComeTo1";
+    public static string QuestStageCmRdr1_4_ComeTo2 = "QuestStageCmRdr1_4_ComeTo2";
+    public static string QuestStageCmRdr1_4_ComeTo3 = "QuestStageCmRdr1_4_ComeTo3";
+    public static string QuestStageCmRdr1_4_ComeTo4 = "QuestStageCmRdr1_4_ComeTo4";
+    public static string QuestStageCmRdr2_1_Start = "QuestStageCmRdr2_1_Start";
+    public static string QuestStageCmRdr1_4_Start = "QuestStageCmRdr1_4_Start";
+    public static string QuestStageCmRdr2_3_SpecForce = "QuestStageCmRdr2_3_SpecForce";
     public const string QUEST_MERC_FIND_TARGET1 = "QUEST_MERC_FIND_TARGET1";
     public const string QUEST_MERC_FIND_TARGET2 = "QUEST_MERC_FIND_TARGET2";
     public const string QUEST_MERC_BATTLE_TARGET = "QUEST_MERC_BATTLE_TARGET";
@@ -113,9 +120,16 @@ public static class QuestsLib
     public const string QUEST_KIDNAPPING1 = "QUEST_KIDNAPPING1";
     public const string QUEST_KIDNAPPING2 = "QUEST_KIDNAPPING2";
     public const string QUEST_FINALQUEST = "QUEST_FINALQUEST";
-
-
-
+    public static string QuestStageCmRdr2_2_ComeTo1 = "QuestStageCmRdr2_2_ComeTo1";
+    public static string QuestStageCmRdr2_3_ComeTo1 = "QuestStageCmRdr2_3_ComeTo1";
+    public static string QuestStageCmRdr2_4_Start = "QuestStageCmRdr2_4_Start";
+    public static string QuestStageCmRdr2_3_Fight3 = "QuestStageCmRdr2_3_Fight3";
+    public static string QuestStageCmRdr2_1_Fight = "QuestStageCmRdr2_1_Fight";
+    public static string QuestStageCmRdr2_1_ComeTo1 = "QuestStageCmRdr2_1_ComeTo1";
+    public static string QuestStageCmRdr2_2_Fight2= "QuestStageCmRdr2_2_Fight2";
+    public static string QuestStageCmRdr2_4_Fight = "QuestStageCmRdr2_4_Fight";
+    public static string QuestStageCmRdr2_4_End= "QuestStageCmRdr2_4_End";
+    public static string QuestStageCmRdr2_4_ComeTo2 = "QuestStageCmRdr2_4_ComeTo2";
 
 
     public static QuestContainer GetDeliverQuest(PlayerQuestData data,Player player)
@@ -271,6 +285,125 @@ public static class QuestsLib
         QuestContainer qust1 = new QuestContainer(Library.Configs().RandomElement(),data, stages, player,Namings.Tag("mercQuest1Name"), GetDialog);
         return qust1;
     }
+
+    #region RAIDERS 1
+    public static QuestContainer CmRdr1_1(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var sectorId = player.MapData.GalaxyData.AllSectors.FirstOrDefault(x => x.ShipConfig == ShipConfig.ocrons);  
+        
+        var cell1 = sectorId.ListCells.Where(x => x != null && x.Data != null && x.Data is FreeActionGlobalMapCell).ToList().RandomElement();
+            
+        var cellRnd= cell1.Data as FreeActionGlobalMapCell;
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr1_1_Start(),
+            new QuestStageCmRdr1_1_ComeTo1(), 
+            new QuestStageCmRdr1_1_ComeToExit1(), 
+            new QuestStageCmRdr1_1_ComeTo2(cellRnd),
+            new QuestStageCmRdr1_1_ComeToWithRarity(EParameterItemRarity.improved,cellRnd),
+            new QuestStageCmRdr1_1_Fight(1),
+            new QuestStageCmRdr1_1_ComeToExit2(),
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr1_1"), null, endCallback);
+        return qust1;
+    }       
+    
+    public static QuestContainer CmRdr1_2(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr1_2_Start(),
+            new QuestStageCmRdr1_2_Fight(1), 
+            new QuestStageCmRdr1_2_Fight(2), 
+            new QuestStageCmRdr1_2_Fight(3), 
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr1_2"), null, endCallback);
+        return qust1;
+    }    
+    public static QuestContainer CmRdr1_3(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr1_3_Start(),
+            new QuestStageCmRdr1_3_Fight(1), 
+            new QuestStageCmRdr1_3_Fight2(1), 
+            new QuestStageCmRdr1_3_Fight2(2), 
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr1_3"), null, endCallback);
+        return qust1;
+    }    
+    public static QuestContainer CmRdr1_4(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr1_4_Start(),
+            new QuestStageCmRdr1_4_ComeTo1(), 
+            new QuestStageCmRdr1_4_ComeTo2(), 
+            new QuestStageCmRdr1_4_ComeTo3(), 
+            new QuestStageCmRdr1_4_ComeTo4(), 
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr1_4"), null, endCallback);
+        return qust1;
+    }
+
+    #endregion
+
+    #region RAIDERS 2
+    public static QuestContainer CmRdr2_1(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr2_1_Start(), 
+            new QuestStageCmRdr2_1_ComeTo1(), 
+            new QuestStageCmRdr2_1_Fight(1), 
+            new QuestStageCmRdr2_1_Fight(2), 
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr2_1"), null, endCallback);
+        return qust1;
+    }    
+    public static QuestContainer CmRdr2_2(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr2_2_ComeTo1(1), 
+            new QuestStageCmRdr2_2_ComeTo1(2), 
+            new QuestStageCmRdr2_2_ComeTo1(3), 
+            new QuestStageCmRdr2_2_Fight2(1), 
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr2_2"), null, endCallback);
+        return qust1;
+    }   
+    public static QuestContainer CmRdr2_3(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr2_3_SpecForce(), 
+            new QuestStageCmOcr_GetModul(SimpleModulType.armor,45981), 
+            new QuestStageCmRdr2_3_ComeTo2(1), 
+            new QuestStageCmRdr2_3_ComeTo2(2), 
+            new QuestStageCmRdr2_3_Fight3(1),  
+            new QuestStageCmRdr2_3_Fight3(2),  
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr2_3"), null, endCallback);
+        return qust1;
+    }     
+    public static QuestContainer CmRdr2_4(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr2_4_Start(), 
+            new QuestStageCmRdr2_4_ComeTo2(1),  
+            new QuestStageCmRdr2_4_ComeTo2(2),  
+            new QuestStageCmRdr2_4_Fight(1),  
+            new QuestStageCmRdr2_4_End(),  
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr2_4"), null, endCallback);
+        return qust1;
+    }
+
+
+
+    #endregion
 
     #region OCRONS 1
 

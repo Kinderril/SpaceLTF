@@ -40,18 +40,36 @@ public static class DialogsLibrary
                         tags.Add("campStealRdrA4");
                         tags.Add("campStealRdrM5");
                         tags.Add("campStealRdrA5");
+                        break;    
+                    case 2:
+                        tags.Add("campStartRdrM1");
+                        tags.Add("campStartRdrA1");   
+                        tags.Add("campStartRdrM2");
+                        tags.Add("campStartRdrA2");   
+                        tags.Add("campStartRdrM3");
+                        tags.Add("campStartRdrA3");   
+                        tags.Add("campStartRdrM4");
+                        tags.Add("campStartRdrA4");   
+                        tags.Add("campStartRdrM5");
+                        tags.Add("campStartRdrA5");   
+                        tags.Add("campStartRdrM6");
+                        tags.Add("campStartRdrA6");   
+                        tags.Add("campStartRdrM7");
+                        tags.Add("campStartRdrA7");   
+                        tags.Add("campStartRdrM8");
+                        tags.Add("campStartRdrA8");   
+                        tags.Add("campStartRdrM9");
+                        tags.Add("campStartRdrA9");   
+                        tags.Add("campStartRdrM10");
+                        tags.Add("campStartRdrA10");   
+                        tags.Add("campStartRdrM11");
+                        tags.Add("campStartRdrA11");   
+                        tags.Add("campStartRdrM12");
+                        tags.Add("campStartRdrA12");   
+                        tags.Add("campStartRdrM13");
+                        tags.Add("campStartRdrA13");  
                         break;
-                }
-
-                //            case ShipConfig.federation:
-                //                tags.Add("campStealFedM1");
-                //                tags.Add("campStealFedA1");
-                //                tags.Add("campStealFedM2");
-                //                tags.Add("campStealFedA2");
-                //                tags.Add("campStealFedM3");
-                //                tags.Add("campStealFedA3");
-                //                break;
-                //            case ShipConfig.raiders:     
+                } 
                 break;
             case ShipConfig.federation:
             case ShipConfig.mercenary:

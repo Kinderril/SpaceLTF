@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -358,6 +359,7 @@ public class DebugPanelWindow : EditorWindow
     private GameObject _targetParent;
     private GameObject _targetPrefab;
     private GameObject shipToFindRenderer;
+    private string _stringToParse;
     private void NoInGame()
     {
         if (GUILayout.Button("Recalc bullets IDs"))
@@ -375,6 +377,7 @@ public class DebugPanelWindow : EditorWindow
             }
 
         }
+
         shipToFindRenderer = EditorGUILayout.ObjectField(shipToFindRenderer, typeof(GameObject), true) as GameObject;
         if (GUILayout.Button("CacheRenderers"))
         {
@@ -465,6 +468,7 @@ public class DebugPanelWindow : EditorWindow
         }
         //        EditorGUILayout.EndHorizontal();
     }
+
 
     private void TryLink(GameObject cell1, GameObject cell2)
     {
