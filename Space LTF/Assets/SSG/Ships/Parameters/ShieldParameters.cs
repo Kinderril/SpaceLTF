@@ -240,7 +240,7 @@ public class ShieldParameters
             {
                 if (_curDistValue < 0.65f)
                 {
-                    val *= 3f;
+                    val *= 4f;
                 }
                 _curDistValue += val;
                 if (_curDistValue > 1)
