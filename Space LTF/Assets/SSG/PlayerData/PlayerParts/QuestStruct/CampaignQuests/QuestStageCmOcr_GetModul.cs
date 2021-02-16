@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class QuestStageCmOcr_GetModul : QuestStage
@@ -17,6 +18,9 @@ public class QuestStageCmOcr_GetModul : QuestStage
 
     protected override bool StageActivate(Player player)
     {
+        _player = player;
+        CheckAtShops();
+
         foreach (var inventoryModul in player.Inventory.Moduls)
         {
             if (inventoryModul.Type == _type)
@@ -25,9 +29,34 @@ public class QuestStageCmOcr_GetModul : QuestStage
                 return true;
             }
         }
-        _player = player;
         player.Inventory.OnItemAdded += OnItemAdded;
         return true;
+    }
+
+    private void CheckAtShops()
+    {
+        var map = _player.MapData.GalaxyData.GetAllContainersNotNull();
+        var allModulesInShops = new List<BaseModulInv>();
+        foreach (var sectorCellContainer in map)
+        {
+            var shop = sectorCellContainer.Data as ShopGlobalMapCell;
+            if (shop != null)
+            {
+                var allModules = shop.ShopInventory.Moduls;
+                allModulesInShops.AddRange(allModules);
+                foreach (var baseModulInv in allModules)
+                {
+                    if (baseModulInv.Type == _type)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
+        var rndModul = allModulesInShops.RandomElement();
+        _type = rndModul.Type;
+
     }
 
     private void OnItemAdded(IItemInv item, bool val)

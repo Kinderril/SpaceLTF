@@ -103,7 +103,7 @@ public class GalaxyData
             else
             {
                 subSector = new SectorData(xx, zz, sizeSector,
-                    _eventsCount, shipConfig, id,  _powerPerTurn, DeletedWays,enemiesArmyController);
+                    _eventsCount, shipConfig, id,  _powerPerTurn, DeletedWays,enemiesArmyController,true);
             }
 
             id++;

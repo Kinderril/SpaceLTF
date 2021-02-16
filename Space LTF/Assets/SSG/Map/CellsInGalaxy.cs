@@ -69,14 +69,17 @@ public class CellsInGalaxy
 
         foreach (var data in cellsContainers)
         {
-            var cell = data.Data;
-            if (!(cell is GlobalMapNothing) && !cell.IsHide && cell.Container != globalMapCell)
+            if (data != null)
             {
-                var d = Mathf.Abs(globalMapCell.indZ - cell.indZ) + Mathf.Abs(globalMapCell.indX - cell.indX);
-                if (d < dist)
+                var cell = data.Data;
+                if (!(cell is GlobalMapNothing) && !cell.IsHide && cell.Container != globalMapCell)
                 {
-                    d = dist;
-                    tmpCel = data;
+                    var d = Mathf.Abs(globalMapCell.indZ - cell.indZ) + Mathf.Abs(globalMapCell.indX - cell.indX);
+                    if (d < dist)
+                    {
+                        d = dist;
+                        tmpCel = data;
+                    }
                 }
             }
         }

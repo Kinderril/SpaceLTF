@@ -72,7 +72,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var startPos = shootpos;
+        var startPos = target.Position;
         var dir = target.Position - startPos;
         bullestartparameters.distanceShoot = dir.magnitude;
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);

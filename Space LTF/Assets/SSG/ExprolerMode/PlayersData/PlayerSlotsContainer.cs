@@ -11,7 +11,7 @@ using UnityEngine;
 public class PlayerSlotsContainerSafeData
 {
 
-    public static string pathData = $"PlayerSlotsContainerSafeDataA.data";
+    public static string pathData = $"PlayerSlotsContainerSafeDataA{MainController.VERSION}.data";
     public List<PlayerSafe> _playerSafeContainers = new List<PlayerSafe>();
 
     public void Add(PlayerSafe safe)

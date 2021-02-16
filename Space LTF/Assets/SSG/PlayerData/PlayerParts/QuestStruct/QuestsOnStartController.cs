@@ -38,12 +38,23 @@ public enum EQuestType
     cmMerc2_4,
     cmOcr2_1,
     cmFed2_1,
-    cmRdrc2_1,
     cmKrs2_1,
     cmMerc3_1,
     cmMerc3_2,
     cmMerc3_3,
-    cmMerc4_1
+    cmMerc4_1,
+
+    cmRdr1_1,
+    cmRdr1_2,
+    cmRdr1_3,
+    cmRdr1_4,  
+    cmRdr2_1,
+    cmRdr2_2,
+    cmRdr2_3,
+    cmRdr2_4,
+    cmRdr3_1,
+    cmRdr3_2,
+    cmRdr3_3
 }
 
 
@@ -167,6 +178,30 @@ public class QuestsOnStartController
                 return QuestsLib.CmMerc3_3(_data, _player,endQuestCallback);    
 
 
+            case EQuestType.cmRdr1_1:
+                return QuestsLib.CmRdr1_1(_data, _player,endQuestCallback);   
+            case EQuestType.cmRdr1_2:
+                return QuestsLib.CmRdr1_2(_data, _player,endQuestCallback);   
+            case EQuestType.cmRdr1_3:
+                return QuestsLib.CmRdr1_3(_data, _player,endQuestCallback);       
+            case EQuestType.cmRdr1_4:
+                return QuestsLib.CmRdr1_4(_data, _player,endQuestCallback);
+            case EQuestType.cmRdr2_1:
+                return QuestsLib.CmRdr2_1(_data, _player,endQuestCallback);   
+            case EQuestType.cmRdr2_2:
+                return QuestsLib.CmRdr2_2(_data, _player,endQuestCallback);   
+            case EQuestType.cmRdr2_3:
+                return QuestsLib.CmRdr2_3(_data, _player,endQuestCallback);       
+            case EQuestType.cmRdr2_4:
+                return QuestsLib.CmRdr2_4(_data, _player,endQuestCallback);  
+            case EQuestType.cmRdr3_1:
+                return QuestsLib.CmRdr3_1(_data, _player,endQuestCallback);  
+            case EQuestType.cmRdr3_2:
+                return QuestsLib.CmRdr3_2(_data, _player,endQuestCallback);  
+            case EQuestType.cmRdr3_3:
+                return QuestsLib.CmRdr3_3(_data, _player,endQuestCallback);    
+
+
             case EQuestType.searchAndkill:
                 return QuestsLib.SearchAndKill(_data, _player);
             case EQuestType.fedStart:
@@ -197,7 +232,7 @@ public class QuestsOnStartController
                 switch (config)
                 {
                     case ShipConfig.raiders:
-                        Debug.LogError("TODO");
+                        quests.Add(GetQuest(EQuestType.cmRdr2_1, EndRdr2_1));
                         break;
                     case ShipConfig.federation:
                         Debug.LogError("TODO");
@@ -218,7 +253,7 @@ public class QuestsOnStartController
                 switch (config)
                 {
                     case ShipConfig.raiders:
-                        Debug.LogError("TODO");
+                        quests.Add(GetQuest(EQuestType.cmRdr3_1, EndRdr3_1));
                         break;
                     case ShipConfig.federation:
                         Debug.LogError("TODO");
@@ -245,6 +280,7 @@ public class QuestsOnStartController
         _data.AddQuest(GetQuest(EQuestType.cmMerc0, EndStartMerc));
 
 #if UNITY_EDITOR
+        Debug.LogError($"Only one campaing");
         _data.AddQuest(GetQuest(EQuestType.cmFed0, EndStartFed));
         _data.AddQuest(GetQuest(EQuestType.cmRdr0, EndStartRdr));
         _data.AddQuest(GetQuest(EQuestType.cmKrs0, EndStartKrs));
@@ -254,10 +290,6 @@ public class QuestsOnStartController
 
 
     private void EndStartKrs()
-    {
-    }
-
-    private void EndStartRdr()
     {
     }
 
@@ -301,7 +333,7 @@ public class QuestsOnStartController
 
     private void EndOcr3_3()
     {
-        MainController.Instance.BattleData.EndGame(true);//End act 2 Merc
+        MainController.Instance.BattleData.EndGame(true);//End campaign ocr
     }
     #endregion
 
@@ -330,7 +362,7 @@ public class QuestsOnStartController
     }
     #endregion 
     
-    #region MERC_ACT1
+#region MERC_ACT1
     private void EndStartMerc()
     {
         _data.AddQuest(GetQuest(EQuestType.cmMerc1_1, EndMerc1_1));
@@ -353,7 +385,7 @@ public class QuestsOnStartController
         MainController.Instance.BattleData.SetCampWinAct();
         MainController.Instance.BattleData.EndGame(true);//End act 1
     }
-    #endregion
+#endregion
 
 #region MERC_ACT2
     private void EndMerc2_1()
@@ -392,6 +424,74 @@ public class QuestsOnStartController
     {
         MainController.Instance.BattleData.EndGame(true);//End Merc
     }
+    #endregion
+
+
+
+#region RDR_ACT1
+    private void EndStartRdr()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr1_1, EndRdr1_1));
+    }
+    private void EndRdr1_1()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr1_2, EndRdr1_2));
+    }
+    private void EndRdr1_2()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr1_3, EndRdr1_3));
+    }
+    private void EndRdr1_3()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr1_4, EndRdr1_4));
+    }
+    private void EndRdr1_4()
+    {
+        _player.ReputationData.SetAllies(ShipConfig.raiders);
+        MainController.Instance.BattleData.SetCampWinAct();
+        MainController.Instance.BattleData.EndGame(true);//End act 1
+    }
 #endregion
+
+#region RDR_ACT2
+    private void EndRdr2_1()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr2_2, EndRdr2_2));
+    }
+
+    private void EndRdr2_2()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr2_3, EndRdr2_3));
+    }
+
+    private void EndRdr2_3()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr2_4, EndRdr2_4));
+    }
+
+    private void EndRdr2_4()
+    {
+        MainController.Instance.BattleData.EndGame(true);//End act 2 Rdr
+    }
+#endregion
+
+#region RDR_ACT3  
+    private void EndRdr3_1()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr3_2, EndRdr3_2));
+    }
+
+    private void EndRdr3_2()
+    {
+        _data.AddQuest(GetQuest(EQuestType.cmRdr3_3, EndRdr3_3));
+    }
+
+    private void EndRdr3_3()
+    {
+        MainController.Instance.BattleData.EndGame(true);//End Rdr  campaign
+    }
+#endregion
+
+
 
 }

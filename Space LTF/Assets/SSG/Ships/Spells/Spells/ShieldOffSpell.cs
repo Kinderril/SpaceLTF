@@ -90,9 +90,9 @@ public class ShieldOffSpell : BaseSpellModulInv
     {
         var trg = target.Position;
         var dir = trg - weapon.CurPosition + new Vector3(1f, 0, 1f);
-        var dist = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
-        bullestartparameters.distanceShoot = dist;
-        bullestartparameters.radiusShoot = dist;
+        var dist = Mathf.Clamp(dir.magnitude*.5f, 1, DIST_SHOT);
+        bullestartparameters.distanceShoot = 0f;
+        bullestartparameters.radiusShoot = 0f;
         var b = Bullet.Create(origin, weapon, dir,
             trg, null, bullestartparameters);
     }

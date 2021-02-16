@@ -22,7 +22,8 @@ public class QuestStageCmRdr1_1_ComeToWithRarity : QuestStage
 
     protected override bool StageActivate(Player player)
     {
-        _player = player;
+        _player = player; 
+        cell1.SetQuestData(GetDialog);
         return true;
 
     }
@@ -95,6 +96,6 @@ public class QuestStageCmRdr1_1_ComeToWithRarity : QuestStage
 
     public override string GetDesc()
     {
-        return $"{Namings.Tag("cmComeToPoint")}";
+        return $"{Namings.Tag("cmFindItemRarity")}:{Namings.Tag(_rarLvl.ToString())}";     
     }
 }

@@ -102,14 +102,21 @@ public class SectorGlobalMapInfo : MonoBehaviour
         var completedCount = sectorCells.Count(x => x.Data.Completed);
         var totalCount = sectorCells.Count;
         string txt;
-        if (_sector.IsSectorMy)
+        if (_sector.IsMy)
         {
             txt =$"{Namings.Tag("MySector") }\n {_sector.Name}" ;
         }
         else
         {
 
-            txt = $"{ss}\n{Namings.Tag("Completed")}:{completedCount}/{totalCount} \n {_sector.Name}";
+            if (_sector.CanConcuqer())
+            {
+                txt = $"{ss}\n{Namings.Tag("Completed")}:{completedCount}/{totalCount} \n {_sector.Name}";
+            }
+            else
+            {
+                txt = $"{ss}\n{_sector.Name}";
+            }
         }
 
         Field.text = txt;

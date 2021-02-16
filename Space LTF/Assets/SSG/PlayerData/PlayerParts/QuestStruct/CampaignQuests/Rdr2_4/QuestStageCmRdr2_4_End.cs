@@ -20,7 +20,7 @@ public class QuestStageCmRdr2_4_End : QuestStage
 
     protected override bool StageActivate(Player player)
     {
-        var sectorId = player.MapData.GalaxyData.AllSectors.FirstOrDefault(x => x.ShipConfig == ShipConfig.droid);
+        var sectorId = player.MapData.CurrentCell.Sector;
         cell1 = FindAndMarkCellClosest(sectorId, GetDialog, player.MapData.CurrentCell) as FreeActionGlobalMapCell;
         if (cell1 == null)
         {

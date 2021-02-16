@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 public delegate void BattleEndCallback(Player human, Player ai, EndBattleType win);
 
@@ -15,6 +16,7 @@ public class NextBattleData
     protected Player MainPlayer;
     protected PlayerStatistics Statistics;
     protected bool _winAct;
+    private Action _afterBattleCallback;
     public NextBattleData(Player mainPlayer, PlayerStatistics statistics)
     {
         MainPlayer = mainPlayer;
@@ -26,10 +28,11 @@ public class NextBattleData
         _winAct = true;
     }
 
-    public void PreBattle(Player player1, Player player2, bool isFinalBattle, bool canRetire)
+    public void PreBattle(Player player1, Player player2, bool isFinalBattle, bool canRetire, Action afterBattleCallback = null)
     {
         _isFinalBattle = isFinalBattle;
         _canRetire = canRetire;
+        _afterBattleCallback = afterBattleCallback;
         _battleEvent = MainPlayer.MapData.CurrentCell.EventType;//  battleEvent;
         WindowManager.Instance.OpenWindow(MainState.preBattle, new Tuple<Player, Player>(player1, player2));
     }
@@ -83,6 +86,7 @@ public class NextBattleData
             Statistics.EndBattle(winStatus);
             MainPlayer.MessagesToConsole.AddMsg("Battle won!");
         }
+        _afterBattleCallback?.Invoke();
     }
 
     public virtual void EndGame(bool win)

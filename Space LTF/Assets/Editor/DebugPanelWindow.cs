@@ -29,6 +29,7 @@ public class DebugPanelWindow : EditorWindow
 //    public static bool NoMouseMove;
     public static bool FastRecharge;
     public static bool AnyWay;
+    public static bool NoAmyBorn;
     public static bool AllModuls;
 
     [MenuItem("Tools/Debug Panel")]
@@ -88,6 +89,10 @@ public class DebugPanelWindow : EditorWindow
             if (GUILayout.Button("AnyWay." + AnyWay))
             {
                 SwitchAnyWay();
+            }  
+            if (GUILayout.Button($"NoArmy:{NoAmyBorn}"))
+            {
+                SwitchNoAmyBorn();
             }
             if (GUILayout.Button("AllModuls." + AllModuls))
             {
@@ -351,6 +356,11 @@ public class DebugPanelWindow : EditorWindow
     {
         AnyWay = !AnyWay;
         DebugParamsController.AnyWay = AnyWay;
+    }   
+    public static void SwitchNoAmyBorn()
+    {
+        NoAmyBorn = !NoAmyBorn;
+        DebugParamsController.NoAmyBorn = NoAmyBorn;
     }
 
     private GameObject _cell1;

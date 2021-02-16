@@ -122,11 +122,12 @@ public class QuestStageCmRdr1_2_Fight : QuestStage
                 list.Add("cmRdr1_2_dialog_2_M5");
                 list.Add("cmRdr1_2_dialog_2_A5");    
                 list.Add("cmRdr1_2_dialog_2_M6");
-                list.Add("cmRdr1_2_dialog_2_A6");
+                list.Add("cmRdr1_2_dialog_2_A6");   
+                list.Add("DC");
                 break;
             case 2:
                 list.Add("cmRdr1_2_dialog_4_M1");
-                list.Add("cmRdr1_2_dialog_4_A1");   
+                list.Add("DC");   
                 list.Add("cmRdr1_2_dialog_4_M2");
                 list.Add("cmRdr1_2_dialog_4_A2");   
                 list.Add("cmRdr1_2_dialog_4_M3");
@@ -134,9 +135,9 @@ public class QuestStageCmRdr1_2_Fight : QuestStage
                 list.Add("cmRdr1_2_dialog_4_M4");
                 list.Add("cmRdr1_2_dialog_4_A4");   
                 list.Add("cmRdr1_2_dialog_4_M5");
-                list.Add("cmRdr1_2_dialog_4_A5");   
+                list.Add("DC");   
                 list.Add("cmRdr1_2_dialog_4_M6");
-                list.Add("cmRdr1_2_dialog_4_A6");   
+                list.Add("DC");   
                 list.Add("cmRdr1_2_dialog_4_M7");
                 list.Add("cmRdr1_2_dialog_4_A7");   
                 list.Add("cmRdr1_2_dialog_4_M8");

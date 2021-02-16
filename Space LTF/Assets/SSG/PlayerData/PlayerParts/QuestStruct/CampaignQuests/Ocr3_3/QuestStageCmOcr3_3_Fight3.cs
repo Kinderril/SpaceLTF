@@ -23,7 +23,7 @@ public class QuestStageCmOcr3_3_Fight3 : QuestStage
         var sectorId = player.MapData.GalaxyData.AllSectors.FirstOrDefault(x => x is SectorFinalBattle);
         sectorId.UnHide();
 
-        cell1 = FindAndMarkCell(sectorId, GetDialog, player.MapData.CurrentCell) as FreeActionGlobalMapCell;
+        cell1 = FindAndMarkCell(sectorId, GetDialog, _index) as FreeActionGlobalMapCell;
         if (cell1 == null)
         {
             return false;
@@ -36,41 +36,7 @@ public class QuestStageCmOcr3_3_Fight3 : QuestStage
     {
         return DialogsLibrary.GetPairDialogByTag(GetDialogsTag(), DialogEnds);
     }
-    public GlobalMapCell FindAndMarkCell(SectorData posibleSector, Func<MessageDialogData> dialogFunc, GlobalMapCell playerCell)
-    {
-        var cells = posibleSector.ListCells.Where(x => x.Data != null && x.Data is FreeActionGlobalMapCell && !(x.Data as FreeActionGlobalMapCell).HaveQuest).ToList();
-        if (cells.Count == 0)
-        {
-            return null;
-        }
 
-        cells.Sort(comparator);
-
-        var index = _index - 1;
-        SectorCellContainer container;
-        FreeActionGlobalMapCell cell;
-        index = Mathf.Clamp(index, 1, cells.Count - 1);
-        if (index < cells.Count)
-        {
-            container = cells[index];
-            cell = container.Data as FreeActionGlobalMapCell;
-            cell.SetQuestData(dialogFunc);
-            return cell;
-        }
-
-        Debug.LogError($"Error final quest: _index :{_index}  cells.count:{cells.Count}");
-        foreach (var sectorCellContainer in cells)
-        {
-            var freeAction = sectorCellContainer.Data as FreeActionGlobalMapCell;
-
-            Debug.LogError($"All ids:{freeAction.Id}");
-        }
-        container = cells.RandomElement();
-        cell = container.Data as FreeActionGlobalMapCell;
-        cell.SetQuestData(dialogFunc);
-        return cell;
-
-    }
     private void DialogEnds()
     {
         Fight();

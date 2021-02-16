@@ -40,7 +40,7 @@ public class RepairStationGlobalCell : GlobalMapCell
 //        else
 //        {
         float costCoef = 1f;
-        if (Sector.IsSectorMy)
+        if (Sector.IsMy)
         {
             costCoef = 0.5f;
         }
@@ -80,7 +80,7 @@ public class RepairStationGlobalCell : GlobalMapCell
             {
 
                 mainMsg = Namings.DialogTag("repairStart");
-                if (isEnemy && !Sector.IsSectorMy)
+                if (isEnemy && !Sector.IsMy)
                 {
                     mainMsg = $"{mainMsg} {Namings.DialogTag("repairEnemy")}";
                 }
@@ -120,7 +120,7 @@ public class RepairStationGlobalCell : GlobalMapCell
             {
                 answers.Add(new AnswerDialogData(Namings.Tag("leave")));
             }
-            if (Sector.IsSectorMy)
+            if (Sector.IsMy)
             {
                 if (Level < MAX_LEVEL)
                 {
@@ -166,7 +166,7 @@ public class RepairStationGlobalCell : GlobalMapCell
     public override void UpdateStep(int step)
     {
         base.UpdateStep(step);
-        if (_sector.IsSectorMy)
+        if (_sector.IsMy)
         {
             float perTurn = 0f;
             switch (Level)

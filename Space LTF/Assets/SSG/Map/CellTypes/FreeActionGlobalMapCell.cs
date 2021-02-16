@@ -41,12 +41,16 @@ public class FreeActionGlobalMapCell : GlobalMapCell
     public void BornArmy()
     {
 #if UNITY_EDITOR
-//        if (!_lockedInof)
-//        {
-//            _lockedInof = true;
-//            Debug.LogError("Born army locked");
-//        }
-//        return;
+        if (DebugParamsController.NoAmyBorn)
+        {
+            if (!_lockedInof)
+            {
+                _lockedInof = true;
+                Debug.LogError("Born army locked");
+            }
+
+            return;
+        }
 #endif
         if (MyExtensions.IsTrue01(0.15f))
         {

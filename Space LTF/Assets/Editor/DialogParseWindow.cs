@@ -61,7 +61,7 @@ public class DialogParseWindow : EditorWindow
             _lastList = res.val1.ToString();
             _lastLoc = res.val2.ToString();
         }
-        _nameDialog = EditorGUILayout.TextField(_nameDialog);
+        _nameDialog = EditorGUILayout.TextField("Name",_nameDialog);
         _stringToParse = EditorGUILayout.TextArea(_stringToParse);
         _lastList = EditorGUILayout.TextArea(_lastList);
         _lastLoc = EditorGUILayout.TextArea(_lastLoc);

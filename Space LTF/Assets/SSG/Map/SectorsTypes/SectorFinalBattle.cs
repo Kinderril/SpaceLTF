@@ -42,52 +42,52 @@ public class SectorFinalBattle : SectorData
     private void PopulateToSide2()
     {
         _isHide = true;
+
         ListCells = new HashSet<SectorCellContainer>();
         FreeActionGlobalMapCell _lastCell = null;
-        bool prevThisLevel = false;
+//        bool prevThisLevel = false;
         int id = 1;
-        for (int i = 0; i < Size; i++)
+        int pointsSetted = 0;
+        int pointsCount = 6;
+        int iteration = 0;
+        int level = 0;
+        while (pointsSetted < pointsCount || iteration > 100)
         {
-            if (i == 0 || i == Size - 1)
+            iteration++;
+            var posibleIndex = new List<int>();
+            for (int j = 0; j < Size; j++)
             {
-                var rndIndex = MyExtensions.Random(0, Size - 1);
-                var cell = PopulateCell(i, rndIndex,id);
+                var cellToTest = Cells[level, j];
+                if (cellToTest.Data == null)
+                {
+                    posibleIndex.Add(j);
+                }
+            }
+
+            if (posibleIndex.Count > 0)
+            {
+                var rndIndex = posibleIndex.RandomElement();
+                var cell = PopulateCell(level, rndIndex, id);
+                pointsSetted++;
                 if (_lastCell != null && cell != null)
                 {
                     id++;
                     _lastCell.AddWay(cell.Container);
                     cell.AddWay(_lastCell.Container);
-                    //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
                 }
+
+                if (pointsSetted == 1 || pointsSetted == 3)
+                {
+                    level++;
+                }
+
                 _lastCell = cell;
             }
             else
             {
-                bool thisLevel = MyExtensions.IsTrueEqual();
-                if (prevThisLevel)
-                {
-                    thisLevel = false;
-                }
-                var rndIndex = MyExtensions.Random(0, Size - 1);
-                var cell = PopulateCell(i, rndIndex, id);
-         
-                if (_lastCell != null && cell != null)
-                {
-                    id++;
-                    _lastCell.AddWay(cell.Container);
-                    cell.AddWay(_lastCell.Container);
-                    //                    Debug.LogError($":Link {_lastCell.indX}.{_lastCell.indZ} <> {cell.indX}.{cell.indZ}");
-                    _lastCell = cell;
-                }
-                if (thisLevel)
-                {
-                    i--;
-                }
-                prevThisLevel = thisLevel;
-
-
+                level--;
             }
-
+            level = Mathf.Clamp(level, 1, Size - 1);
         }
     }
 

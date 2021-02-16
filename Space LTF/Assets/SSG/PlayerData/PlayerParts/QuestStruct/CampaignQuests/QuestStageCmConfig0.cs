@@ -187,7 +187,7 @@ public class QuestStageCmConfig0 : QuestStage
         switch (_config)
         {
             case ShipConfig.raiders:
-                break;
+                return $"{Namings.Tag("cmStartQuestRdr0Desc")}";
             case ShipConfig.federation:
                 break;
             case ShipConfig.mercenary:

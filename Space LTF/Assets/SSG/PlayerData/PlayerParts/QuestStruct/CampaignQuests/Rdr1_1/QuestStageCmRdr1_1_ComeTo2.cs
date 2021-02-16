@@ -20,8 +20,13 @@ public class QuestStageCmRdr1_1_ComeTo2 : QuestStage
 
     protected override bool StageActivate(Player player)
     {
+        var sectorId = player.MapData.CurrentCell.Sector;
+        cell1 = FindAndMarkCellRandom(sectorId, GetDialog, player.MapData.CurrentCell) as FreeActionGlobalMapCell;
+        if (cell1 == null)
+        {
+            return false;
+        }
         return true;
-
     }
 
     private MessageDialogData GetDialog()

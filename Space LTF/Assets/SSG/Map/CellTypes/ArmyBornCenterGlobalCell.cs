@@ -30,7 +30,7 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
 
     public override void UpdateStep(int step)
     {
-        if (_sector.IsSectorMy)
+        if (_sector.IsMy)
         {
             if (_shallTryBornNextStep)
             {
@@ -68,7 +68,7 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
         string masinMsg;
         var ans = new List<AnswerDialogData>();
         //        ans.Add(new AnswerDialogData(Namings.Format(Namings.DialogTag("dungeogArmyFriendGoIn"), rep), null, null));
-        if (_sector.IsSectorMy)
+        if (_sector.IsMy)
         {
             return DialogAsMy();
 

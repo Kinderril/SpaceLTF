@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 
 public class ShipDesicionDataAttack : ShipDesicionDataBase
 {
 
     private ShipBase _shipToDefence;
+    private bool _firstTime;
     private bool _haveBaseToDefence;
     public ShipDesicionDataAttack(ShipBase owner, PilotTactic tactic)
         : base(owner, tactic)
@@ -110,6 +112,16 @@ public class ShipDesicionDataAttack : ShipDesicionDataBase
     {
         if (_owner.Enemies.Count > 0)
         {
+            if (_firstTime)
+            {
+                _firstTime = false;
+                var noBases = _owner.Enemies.Where(x => x.Key.ShipParameters.StartParams.ShipType != ShipType.Base).ToList();
+                if (noBases.Count > 1)
+                {
+                    ship = noBases.RandomElement().Key;
+                    return true;
+                }
+            }
             var enemy = CalcBestEnemy(out var enemyRating, _owner.Enemies);
             ship = enemy.ShipLink;
             return true;

@@ -3,8 +3,8 @@
 
     Properties
     {
-		_ColorRed("Main Color", Color) = (1,0,0,1)
-		_ColorGreen("Main Color", Color) = (0,1,0,1)
+		_ColorRed("Red Color", Color) = (1,0,0,1)
+		_ColorGreen("Green Color", Color) = (0,1,0,1)
 		_Lerp("Lerp", Float) = 0.7
     }
 	SubShader

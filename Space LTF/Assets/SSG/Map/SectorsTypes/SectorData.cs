@@ -19,10 +19,11 @@ public class SectorData
     public int Id { get; private set; }
     public bool IsPopulated { get; protected set; }
     public int StartPowerGalaxy { get; protected set; }
-    public bool IsSectorMy => _allArmiesDestryed;
+    public bool IsMy => _isUnderMyControl;
     protected int _power;
     private bool _isVisited;
-    private bool _allArmiesDestryed;
+    private bool _isUnderMyControl;
+    private bool _canBeUnderMyControl;
     public SectorCellContainer[,] Cells;
     protected float _powerPerTurn;
     public HashSet<SectorCellContainer> ListCells = new HashSet<SectorCellContainer>();
@@ -43,8 +44,9 @@ public class SectorData
 
     public SectorData(int startX, int startZ, int size, Dictionary<GlobalMapEventType, int> maxCountEvents,
          ShipConfig shipConfig,  int xIndex, float powerPerTurn, 
-         DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController)
+         DeleteWayDelegeate removeWayCallback, GalaxyEnemiesArmyController enemiesArmyController,bool canBeUnderMyControl = false)
     {
+        _canBeUnderMyControl = canBeUnderMyControl && shipConfig != ShipConfig.droid;
         _enemiesArmyController = enemiesArmyController;
         RemoveWayCallback = removeWayCallback;
         XIndex = xIndex;
@@ -187,7 +189,7 @@ public class SectorData
             }
         }
 
-        if (remainFreeCells.Count > 1)
+        if (remainFreeCells.Count > 1 && _canBeUnderMyControl)
         {
             var rndRemainCell = remainFreeCells.RandomElement();
             if (rndRemainCell != null)
@@ -245,6 +247,10 @@ public class SectorData
 
     private void CheckIsAllArmiesDestryoed()
     {
+        if (!_canBeUnderMyControl)
+        {
+             return;
+        }
         bool isAllArmiesDestyoyed = true;
         foreach (var sectorCellContainer in ListCells)
         {
@@ -254,15 +260,15 @@ public class SectorData
             }
         }
 
-        if (isAllArmiesDestyoyed)
+        if (isAllArmiesDestyoyed && ShipConfig != ShipConfig.droid)
         {
             var sectorCells = ListCells.Where(x => !(x.Data is GlobalMapNothing)).ToList();
             var completedCount = sectorCells.Count(x => x.Data.Completed);
             var totalCount = sectorCells.Count;
             var allCompleted = completedCount >= totalCount;
-            if (!_allArmiesDestryed && allCompleted)
+            if (!_isUnderMyControl && allCompleted)
             {
-                _allArmiesDestryed = true;
+                _isUnderMyControl = true;
                 OnBecomeMine?.Invoke(this);
             }
         }
@@ -573,5 +579,10 @@ public class SectorData
     public string IndexInfo()
     {
         return $"X:{StartX},Z:{StartZ}  Config:{ShipConfig.ToString()}";
+    }
+
+    public bool CanConcuqer()
+    {
+        return _canBeUnderMyControl;
     }
 }

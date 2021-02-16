@@ -55,7 +55,7 @@ public class ShopGlobalMapCell : GlobalMapCell
     {
         var rep = MainController.Instance.MainPlayer.ReputationData.GetStatus(ConfigOwner);
 
-        if (rep == EReputationStatus.enemy && ConfigOwner != ShipConfig.droid && !Sector.IsSectorMy)
+        if (rep == EReputationStatus.enemy && ConfigOwner != ShipConfig.droid && !Sector.IsMy)
         {
             var mesData = new MessageDialogData(Namings.Tag("dialog_shopEnemy"), new List<AnswerDialogData>
             {
@@ -71,7 +71,7 @@ public class ShopGlobalMapCell : GlobalMapCell
                 new AnswerDialogData(Namings.Tag("No"), null)
             };
             var cost = (int)(Level * 40f);
-            if (Sector.IsSectorMy)
+            if (Sector.IsMy)
             {
                 if (Level < MAX_LEVEL)
                 {
@@ -137,7 +137,7 @@ public class ShopGlobalMapCell : GlobalMapCell
     public override void UpdateStep(int step)
     {
         base.UpdateStep(step);
-        if (_sector.IsSectorMy)
+        if (_sector.IsMy)
         {
             float perTurn = 0f;
             switch (Level)

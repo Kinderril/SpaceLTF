@@ -15,6 +15,7 @@ public class MidChampaingGalaxyDataMap : GalaxyData
         _campSide = side;
         _act = act;
     }
+
     protected override StartGlobalCell ImpletemtSectors(int sectorCount, int sizeSector, int startPower, 
          ShipConfig playerShipConfig, int verticalCount, 
          GalaxyEnemiesArmyController enemiesArmyController, ExprolerCellMapType mapType)
@@ -114,16 +115,25 @@ public class MidChampaingGalaxyDataMap : GalaxyData
     }
 
     private SectorData AddNationSector(int x,int z, SectorData[,] sectors,ShipConfig config,
-        float powerPerTurn,GalaxyEnemiesArmyController enemiesArmyController,int startPower,List<SectorData> allSubSectors,int step)
+        float powerPerTurn,GalaxyEnemiesArmyController enemiesArmyController
+        ,int startPower,List<SectorData> allSubSectors,int step)
     {
         var xx = x * step;
         var zz = z * step;
+        var player = MainController.Instance.MainPlayer;
+        var allies = player.ReputationData.Allies;
         var startSector = sectors[x, z];
+        var canBeConquest = MyExtensions.IsTrue01(.33f);
+        if (allies.HasValue)
+        {
+            canBeConquest = canBeConquest && config != allies.Value;
+        }
+
         startSector = new SectorData(xx, zz, SizeOfSector, new Dictionary<GlobalMapEventType, int>(), config,
              x, powerPerTurn, to =>
             {
 
-            }, enemiesArmyController);
+            }, enemiesArmyController, canBeConquest);
 
         startSector.Populate(startPower);
         sectors[x, z] = startSector;

@@ -71,37 +71,6 @@ public class QuestStageCmOcr3_3_FightFinal : QuestStage
         playerEnemy.Army.SetArmy(army);
         return playerEnemy;
     }
-//    protected override Func<MessageDialogData> AfterCompleteDialog()
-//    {
-//        MessageDialogData dialog;
-//        var list = new List<string>();
-//        list.Add("cmOcr3_3_dialog_9_M1");
-//        list.Add("cmOcr3_3_dialog_9_A1");
-//        list.Add("cmOcr3_3_dialog_9_M2");
-//        list.Add("cmOcr3_3_dialog_9_A2");
-//        list.Add("cmOcr3_3_dialog_9_M3");
-//        list.Add("cmOcr3_3_dialog_9_A3");
-//        list.Add("cmOcr3_3_dialog_9_M4");
-//        list.Add("DC");
-//        list.Add("cmOcr3_3_dialog_9_M5");
-//        list.Add("DC");
-//        list.Add("cmOcr3_3_dialog_9_M6");
-//        list.Add("cmOcr3_3_dialog_9_A6");
-//        list.Add("cmOcr3_3_dialog_9_M7");
-//        list.Add("cmOcr3_3_dialog_9_A7");
-//        list.Add("cmOcr3_3_dialog_9_M8");
-//        list.Add("cmOcr3_3_dialog_9_A8");
-//        list.Add("cmOcr3_3_dialog_9_M9");
-//        list.Add("cmOcr3_3_dialog_9_A9");
-//        list.Add("cmOcr3_3_dialog_9_M10");
-//        list.Add("cmOcr3_3_dialog_9_A10");
-//        list.Add("cmOcr3_3_dialog_9_M11");
-//        list.Add("DC");
-////        list.Add("cmOcr3_3_dialog_9_M12");
-////        list.Add("DC");
-//        dialog = DialogsLibrary.GetPairDialogByTag(list, null);
-//        return () => dialog;
-//    }
 
     private void CompleteQuest()
     {
@@ -111,10 +80,9 @@ public class QuestStageCmOcr3_3_FightFinal : QuestStage
                 
     private void Fight()
     {
-        CompleteQuest();
         TextChangeEvent();
         cell1.SetQuestData(null);
-        MainController.Instance.PreBattle(_player, PlayerToDefeat2(), false, false);
+        MainController.Instance.PreBattle(_player, PlayerToDefeat2(), false, false, CompleteQuest);
 
     }
 

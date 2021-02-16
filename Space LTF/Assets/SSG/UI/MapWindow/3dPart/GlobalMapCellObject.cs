@@ -277,7 +277,7 @@ public class GlobalMapCellObject : MonoBehaviour
 
     private void TryRepaintIsMine()
     {
-        if (Cell.Sector.IsSectorMy)
+        if (Cell.Sector.IsMy)
         {
 
             if (ActiveRenderer != null)

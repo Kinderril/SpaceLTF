@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 [Serializable]
 public class CellArmyContainer
@@ -143,6 +144,10 @@ public class CellArmyContainer
         {
             return enemies.GetArmyToFight();
         }
+
+        var allise = Allies();
+        
+        Debug.LogError($" GetArmyToFight is null   allise:{allise != null}");
         return null;
 
     }

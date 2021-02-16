@@ -194,7 +194,7 @@ public class SpecOpsMovingArmy : MovingArmy
 
                 foreach (var way in posibleWays)
                 {
-                    if (way.Data.Sector.IsSectorMy)
+                    if (way.Data.Sector.IsMy)
                     {
                         if (posibleCells.Contains(way.Data))
                             return way.Data;
@@ -241,7 +241,7 @@ public class SpecOpsMovingArmy : MovingArmy
 
     public override GlobalMapCell FindCellToMove(HashSet<GlobalMapCell> posibleCells)
     {
-        if (CurCell.Data.Sector.IsSectorMy && !IsAllies)
+        if (CurCell.Data.Sector.IsMy && !IsAllies)
         {
             if (CurCell.Data is ShopGlobalMapCell || CurCell.Data is RepairStationGlobalCell)
             {

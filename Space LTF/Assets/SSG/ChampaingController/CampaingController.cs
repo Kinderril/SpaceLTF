@@ -36,7 +36,7 @@ public class CampaingController
 
     public void DebugNewChamp(int act)
     {
-        ShipConfig cfg = ShipConfig.ocrons;
+        ShipConfig cfg = ShipConfig.raiders;
         var playerChampaing = new PlayerChampaingContainer();
         PlayerChampaingContainer = playerChampaing;
         PlayerChampaingContainer.StartNewGame(cfg, EStartGameDifficulty.Normal);

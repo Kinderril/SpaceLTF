@@ -55,7 +55,7 @@ public class MercenaryHideout : BaseGlobalMapEvent
     private int creditsToEnter = 10;
     private List<MercsConfig> _mercsConfigs = null;
     private bool _feePayed = false;
-    public bool FeePayed => _feePayed || _cell.Sector.IsSectorMy;
+    public bool FeePayed => _feePayed || _cell.Sector.IsMy;
 
     public MercenaryHideout(ShipConfig config,GlobalMapCell cell)
         : base(config)

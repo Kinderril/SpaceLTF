@@ -130,6 +130,15 @@ public static class QuestsLib
     public static string QuestStageCmRdr2_4_Fight = "QuestStageCmRdr2_4_Fight";
     public static string QuestStageCmRdr2_4_End= "QuestStageCmRdr2_4_End";
     public static string QuestStageCmRdr2_4_ComeTo2 = "QuestStageCmRdr2_4_ComeTo2";
+    public static string QuestStageCmRdr3_1_Start = "QuestStageCmRdr3_1_Start";
+    public static string QuestStageCmRdr3_2_Start = "QuestStageCmRdr3_2_Start";
+    public static string QuestStageCmRdr3_2_Fight = "QuestStageCmRdr3_2_Fight";
+    public static string QuestStageCmRdr3_3_FightFinal = "QuestStageCmRdr3_3_FightFinal";
+    public static string QuestStageCmRdr3_3_Fight2 = "QuestStageCmRdr3_3_Fight2";
+    public static string QuestStageCmRdr3_3_Fight = "QuestStageCmRdr3_3_Fight";
+    public static string QuestStageCmRdr3_1_Fight = "QuestStageCmRdr3_1_Fight";
+    public static string QuestStageCmRdr3_3_ComeTo1 = "QuestStageCmRdr3_3_ComeTo1";
+    public static string QuestStageCmRdr3_3_Start = "QuestStageCmRdr3_3_Start";
 
 
     public static QuestContainer GetDeliverQuest(PlayerQuestData data,Player player)
@@ -304,7 +313,7 @@ public static class QuestsLib
             new QuestStageCmRdr1_1_Fight(1),
             new QuestStageCmRdr1_1_ComeToExit2(),
         };
-        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr1_1"), null, endCallback);
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr1_1"), null, endCallback);
         return qust1;
     }       
     
@@ -317,7 +326,7 @@ public static class QuestsLib
             new QuestStageCmRdr1_2_Fight(2), 
             new QuestStageCmRdr1_2_Fight(3), 
         };
-        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr1_2"), null, endCallback);
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr1_2"), null, endCallback);
         return qust1;
     }    
     public static QuestContainer CmRdr1_3(PlayerQuestData data, Player player, Action endCallback)
@@ -329,7 +338,7 @@ public static class QuestsLib
             new QuestStageCmRdr1_3_Fight2(1), 
             new QuestStageCmRdr1_3_Fight2(2), 
         };
-        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr1_3"), null, endCallback);
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr1_3"), null, endCallback);
         return qust1;
     }    
     public static QuestContainer CmRdr1_4(PlayerQuestData data, Player player, Action endCallback)
@@ -342,7 +351,7 @@ public static class QuestsLib
             new QuestStageCmRdr1_4_ComeTo3(), 
             new QuestStageCmRdr1_4_ComeTo4(), 
         };
-        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr1_4"), null, endCallback);
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr1_4"), null, endCallback);
         return qust1;
     }
 
@@ -358,7 +367,7 @@ public static class QuestsLib
             new QuestStageCmRdr2_1_Fight(1), 
             new QuestStageCmRdr2_1_Fight(2), 
         };
-        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr2_1"), null, endCallback);
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr2_1"), null, endCallback);
         return qust1;
     }    
     public static QuestContainer CmRdr2_2(PlayerQuestData data, Player player, Action endCallback)
@@ -370,7 +379,7 @@ public static class QuestsLib
             new QuestStageCmRdr2_2_ComeTo1(3), 
             new QuestStageCmRdr2_2_Fight2(1), 
         };
-        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr2_2"), null, endCallback);
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr2_2"), null, endCallback);
         return qust1;
     }   
     public static QuestContainer CmRdr2_3(PlayerQuestData data, Player player, Action endCallback)
@@ -384,7 +393,7 @@ public static class QuestsLib
             new QuestStageCmRdr2_3_Fight3(1),  
             new QuestStageCmRdr2_3_Fight3(2),  
         };
-        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr2_3"), null, endCallback);
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr2_3"), null, endCallback);
         return qust1;
     }     
     public static QuestContainer CmRdr2_4(PlayerQuestData data, Player player, Action endCallback)
@@ -397,13 +406,54 @@ public static class QuestsLib
             new QuestStageCmRdr2_4_Fight(1),  
             new QuestStageCmRdr2_4_End(),  
         };
-        QuestContainer qust1 = new QuestContainer(ShipConfig.mercenary, data, stages, player, Namings.Tag("CmRdr2_4"), null, endCallback);
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr2_4"), null, endCallback);
         return qust1;
     }
 
 
 
     #endregion
+
+    #region RAIDERS 3
+    public static QuestContainer CmRdr3_1(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr3_1_Start(),
+            new QuestStageCmRdr3_1_Fight(1),
+            new QuestStageCmRdr3_1_Fight(2),
+            new QuestStageCmRdr3_1_Fight(3),
+            new QuestStageCmRdr3_1_Fight(4),
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr3_1"), null, endCallback);
+        return qust1;
+    }      
+    public static QuestContainer CmRdr3_2(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr3_2_Fight(1),
+            new QuestStageCmRdr3_2_Fight(2),
+            new QuestStageCmRdr3_2_Fight(3),
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr3_2"), null, endCallback);
+        return qust1;
+    }          
+    public static QuestContainer CmRdr3_3(PlayerQuestData data, Player player, Action endCallback)
+    {
+        var stages = new QuestStage[]
+        {
+            new QuestStageCmRdr3_3_Start(),
+            new QuestStageCmRdr3_3_Fight(1,1),
+            new QuestStageCmRdr3_3_ComeTo1(1,2),
+            new QuestStageCmRdr3_3_Fight2(1,3),
+            new QuestStageCmRdr3_3_FightFinal(4),
+        };
+        QuestContainer qust1 = new QuestContainer(ShipConfig.raiders, data, stages, player, Namings.Tag("CmRdr3_3"), null, endCallback);
+        return qust1;
+    }
+    #endregion
+
 
     #region OCRONS 1
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MainController : Singleton<MainController>
 {
-    public static string VERSION = "017ea";
+    public static string VERSION = "018ea";
 
     public TimerManager BattleTimerManager = new TimerManager();
     public InputManager InputManager;
@@ -16,6 +16,7 @@ public class MainController : Singleton<MainController>
     public DataBaseController DataBase;
     public NextBattleData BattleData;
     public TutorialController TutorialController;
+    public PlayerSettings Settings;
 
     void Awake()
     {
@@ -106,9 +107,9 @@ public class MainController : Singleton<MainController>
         }
     }
 
-    public void PreBattle(Player player1, Player player2, bool isFinalBattle = false, bool canRetire = true)
+    public void PreBattle(Player player1, Player player2, bool isFinalBattle = false, bool canRetire = true,Action afterBattleCallback = null)
     {
-        BattleData.PreBattle(player1, player2, isFinalBattle, canRetire);
+        BattleData.PreBattle(player1, player2, isFinalBattle, canRetire, afterBattleCallback);
     }
 
     public void LaunchBattle(Player greenSide, Player redSide)

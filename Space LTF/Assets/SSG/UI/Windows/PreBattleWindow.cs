@@ -35,6 +35,10 @@ public class PreBattleWindow : BaseWindow
         {
             _greenPlayer = data.val1;
             _redPlayer = data.val2;
+            if (_redPlayer == null)
+            {
+                Debug.LogError($"red army is null");
+            }
             _isSimpleTutor = _redPlayer is PlayerAITutor;
             _isAdvTutor = _redPlayer is PlayerAITutorWearModuls;
             if (_isAdvTutor)

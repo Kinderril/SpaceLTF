@@ -288,6 +288,7 @@ public abstract class Bullet : MovingObject
         Weapon = weapon;
         _startTime = Time.time;
         _startPos = position;
+        distanceShoot = 0f;
         _endPos = _startPos + Utils.NormalizeFastSelf(dir) * distanceShoot;
         _distanceShoot = distanceShoot;
 

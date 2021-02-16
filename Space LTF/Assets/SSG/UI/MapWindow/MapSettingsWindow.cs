@@ -46,6 +46,7 @@ public class MapSettingsWindow : MonoBehaviour
     private EWindowSettingsLauch _settingsLauch;
     private bool _isDropDownInited = false;
     public SaveWindow SaveWindow;
+    public ColorChangeSettingsWindow ChangeSettingsWindow;
 
 
 
@@ -85,6 +86,8 @@ public class MapSettingsWindow : MonoBehaviour
 
     public void Init(EWindowSettingsLauch settingsLauch)
     {
+        ChangeSettingsWindow.Init();
+
         MouseSensivity.InitBorders(CamerasController.MIN_CAM_MOVE_SENS,CamerasController.MAX_CAM_MOVE_SENS,false,false);
         MouseSensivity.InitCallback(OnSensivityChange);
         MouseSensivity.InitName(Namings.Tag("CamMoveSens")); 

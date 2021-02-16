@@ -21,6 +21,8 @@ public class DebugParamsController
 
     }
 
+    public static bool NoAmyBorn { get; set; }
+
 
     public static void TestHire()
     {

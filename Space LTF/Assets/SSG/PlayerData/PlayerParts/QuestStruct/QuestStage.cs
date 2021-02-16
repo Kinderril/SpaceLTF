@@ -50,6 +50,40 @@ public abstract class QuestStage
         _idToComplete.Add(id,false);
     }
 
+    public GlobalMapCell FindAndMarkCell(SectorData posibleSector, Func<MessageDialogData> dialogFunc, int _index)
+    {
+        var cells = posibleSector.ListCells.Where(x => x.Data != null && x.Data is FreeActionGlobalMapCell && !(x.Data as FreeActionGlobalMapCell).HaveQuest).ToList();
+        if (cells.Count == 0)
+        {
+            return null;
+        }
+
+        cells.Sort(comparator);
+
+        var index = _index - 1;
+        SectorCellContainer container;
+        FreeActionGlobalMapCell cell;
+        if (index < cells.Count)
+        {
+            container = cells[index];
+            cell = container.Data as FreeActionGlobalMapCell;
+            cell.SetQuestData(dialogFunc);
+            return cell;
+        }
+
+        Debug.LogError($"Error final quest: _index :{_index}  cells.count:{cells.Count}");
+        foreach (var sectorCellContainer in cells)
+        {
+            var freeAction = sectorCellContainer.Data as FreeActionGlobalMapCell;
+
+            Debug.LogError($"All ids:{freeAction.Id}");
+        }
+        container = cells.RandomElement();
+        cell = container.Data as FreeActionGlobalMapCell;
+        cell.SetQuestData(dialogFunc);
+        return cell;
+    }
+
     protected QuestStage(params string[] id)
     {
         foreach (var s in id)
@@ -128,6 +162,8 @@ public abstract class QuestStage
                 _playerQuest.OnQuestId += OnQuestId;
             return false;
         }
+        _playerQuest.OnQuestId += OnQuestId;
+        _activated = true;
 #if UNITY_EDITOR
         if (_idToComplete.Count == 0)
         {
@@ -141,9 +177,7 @@ public abstract class QuestStage
             return false;
         }
 
-        _activated = true;
         SubAfterLoad();
-        _playerQuest.OnQuestId += OnQuestId;
         OnStageActivated?.Invoke(this);
         return true;
     }

@@ -5,7 +5,7 @@ using System.IO;
 
 public class CampaingLoader
 {
-    private const string PATH_CAMP = "CampSave/";
+    private static string PATH_CAMP = $"CampSave{MainController.VERSION}/";
     public const string AUTO_SAVE = "AUTO_SAVE";
     public string[] GetAllSaves()
     {

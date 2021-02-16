@@ -14,7 +14,7 @@ public class QuestStageCmRdr2_3_ComeTo2 : QuestStage
     private int _id = 0;
 
     public QuestStageCmRdr2_3_ComeTo2(int id)    
-        :base(QuestsLib.QuestStageCmRdr2_2_ComeTo1 + id.ToString())
+        :base(QuestsLib.QuestStageCmRdr2_3_ComeTo1 + id.ToString())
     {
         _id = id;
     }

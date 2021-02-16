@@ -74,7 +74,6 @@ public class QuestStageCmMerc3_3_FinalFight : QuestStage
 
     private void DialogEnds()
     {
-        _playerQuest.QuestIdComplete(QuestsLib.CmMerc3_3_FinalFight);
         Fight();
     }
 
@@ -82,8 +81,13 @@ public class QuestStageCmMerc3_3_FinalFight : QuestStage
     {
         cell1.SetQuestData(null);
         TextChangeEvent();
-        MainController.Instance.PreBattle(_player, PlayerToDefeat(), false, false);
+        MainController.Instance.PreBattle(_player, PlayerToDefeat(), true, false, CompleteQuest);
 
+    }
+
+    private void CompleteQuest()
+    {
+        _playerQuest.QuestIdComplete(QuestsLib.CmMerc3_3_FinalFight);
     }
 
     public Player PlayerToDefeat()

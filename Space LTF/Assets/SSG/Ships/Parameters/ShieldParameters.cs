@@ -43,11 +43,21 @@ public class ShieldParameters
         this._shieldCollider = shieldCollider;
         if (_shieldCollider != null)
         {
+            var settings = MainController.Instance.Settings;
             _shieldCollider.gameObject.layer = LayerMaskController.ShieldLayer;
             var renderer = _shieldCollider.gameObject.GetComponentInChildren<Renderer>();
             if (renderer != null)
             {
                 _materialToChange = Utils.CopyMaterial(renderer);
+                switch (shipBase.TeamIndex)
+                {
+                    case TeamIndex.red:
+                        _materialToChange.SetColor("_LitColor", settings.ShieldRed);
+                        break;
+                    case TeamIndex.green:
+                        _materialToChange.SetColor("_LitColor", settings.ShieldGreen);
+                        break;
+                }
             }
         }
         this.ShieldRegenPerSec = shiledRegen;
@@ -228,7 +238,7 @@ public class ShieldParameters
         _curDistValue = 0f;
         _distortionDirection = true;
         _isDistortion = true;
-        Debug.LogError("StartDistortion");
+//        Debug.LogError("StartDistortion");
     }
 
     private void UpdateDistortion()
@@ -261,7 +271,7 @@ public class ShieldParameters
 
             }
             _materialToChange.SetFloat("_DissortAmt",_curDistValue);
-            Debug.LogError($"SetFloat {_shipBase.Id}  :{_curDistValue}");
+//            Debug.LogError($"SetFloat {_shipBase.Id}  :{_curDistValue}");
         }
     }
 

@@ -23,7 +23,7 @@ public class QuestStageCmRdr2_3_SpecForce : QuestStage
     protected override bool StageActivate(Player player)
     {
         _player = player;
-        _shallFight = MyExtensions.IsTrueEqual();
+        _shallFight =  MyExtensions.IsTrueEqual();
         var sectorId = player.MapData.GalaxyData.AllSectors.FirstOrDefault(x => x.ShipConfig == ShipConfig.mercenary);
 
 
@@ -34,7 +34,7 @@ public class QuestStageCmRdr2_3_SpecForce : QuestStage
         if (cell != null)
         {
             _enemiesController = player.MapData.GalaxyData.GalaxyEnemiesArmyController;
-            _army = _enemiesController.BornArmyAtCell(cell.Data, false, 7);
+            _army = _enemiesController.BornArmyAtCell(cell.Data, false);
             _army.SetStartDialog(StartDialog);
             if (_shallFight)
                 _army.SetEndDialog(AfterDiallog);
@@ -46,7 +46,6 @@ public class QuestStageCmRdr2_3_SpecForce : QuestStage
 
     private MessageDialogData AfterDiallog()
     {
-
         var list = new List<string>();
         list.Add("cmRdr2_3_dialog_2_M1");
         list.Add("cmRdr2_3_dialog_2_A1");
@@ -79,7 +78,7 @@ public class QuestStageCmRdr2_3_SpecForce : QuestStage
             list.Add("cmRdr2_3_dialog_1_A5");
             list.Add("cmRdr2_3_dialog_1_M6");
             list.Add("cmRdr2_3_dialog_1_A7");
-
+            _playerQuest.QuestIdComplete(QuestsLib.QuestStageCmRdr2_3_SpecForce);
             return DialogsLibrary.GetPairDialogByTag(list, arg);
         }
         else
@@ -119,7 +118,7 @@ public class QuestStageCmRdr2_3_SpecForce : QuestStage
             list.Add("cmRdr2_3_dialog_3_A21");
 
 
-            return DialogsLibrary.GetPairDialogByTag(list,null);
+            return DialogsLibrary.GetPairDialogByTag(list,SComplete);
 
         }
 
