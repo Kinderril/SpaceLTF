@@ -31,6 +31,7 @@ public class DebugPanelWindow : EditorWindow
     public static bool AnyWay;
     public static bool NoAmyBorn;
     public static bool AllModuls;
+    public static bool AllSpells;
 
     [MenuItem("Tools/Debug Panel")]
     static void Init()
@@ -94,10 +95,17 @@ public class DebugPanelWindow : EditorWindow
             {
                 SwitchNoAmyBorn();
             }
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("AllModuls." + AllModuls))
             {
                 AllModuls = !AllModuls;
                 DebugParamsController.AllModuls = AllModuls;
+            }
+            if (GUILayout.Button("AllSpells." + AllSpells))
+            {
+                AllSpells = !AllSpells;
+                DebugParamsController.AllSpells = AllSpells;
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
@@ -282,7 +290,7 @@ public class DebugPanelWindow : EditorWindow
         var allSpellType = (SpellType[])Enum.GetValues(typeof(SpellType));
         foreach (var type in allSpellType)
         {
-            if (type != SpellType.BaitPriorityTarget && type != SpellType.priorityTarget && inventory.GetFreeSpellSlot(out var index1))
+            if (inventory.GetFreeSpellSlot(out var index1))
             {
                 var modul = Library.CreateSpell(type);
                 inventory.TryAddSpellModul(modul, index1);

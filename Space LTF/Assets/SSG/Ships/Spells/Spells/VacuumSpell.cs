@@ -2,7 +2,7 @@
 
 
 [System.Serializable]
-public class VacuumSpell : BaseSpellModulInv
+public class VacuumSpell : SpellWithSizeCoef
 {
     //A1 - more rad
     //B2 - less timer
@@ -10,10 +10,11 @@ public class VacuumSpell : BaseSpellModulInv
     private const float DIST_SHOT = 50;
     private const float DAMAGE_BASE = 8;
     private const float radBase = 4f;
+    private float _lastBulletCreate = 0f;
     private float shieldDmg => DAMAGE_BASE + Level * 2;
-    private float powerThrow => 3 + Level * 0.8f;
+    private float powerThrow => 2 + Level * 0.4f;
 
-    private float rad => RadCalc(Level, UpgradeType);
+    private float rad => RadCalc(Level, UpgradeType) * SizeCoef();
 
     private float RadCalc(int lvl, ESpellUpgradeType upg)
     {
@@ -27,6 +28,7 @@ public class VacuumSpell : BaseSpellModulInv
     }
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(shieldDmg, powerThrow);
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+    public override UpdateCastDelegate UpdateCast => PeriodCast;
 
     private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
     {
@@ -48,42 +50,50 @@ public class VacuumSpell : BaseSpellModulInv
     private const int _B2_costTime = 7;
 
     public VacuumSpell()
-        : base(SpellType.vacuum, 2, _baseCostTime,
+        : base(SpellType.vacuum, _baseCostTime,
              new BulleStartParameters(25, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-
+           _localSpellDamageData = new SpellDamageData(rad);
     }
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {
         return targetdistpos;
     }
+    private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+
+        var delta = Time.time - _lastBulletCreate;
+        _localSpellDamageData.AOERad = rad;
+        if (delta > CoinTempController.BATTERY_PERIOD)
+        {
+            _lastBulletCreate = Time.time;
+            modificatedCreateBullet(target, origin, weapon, shootpos, castdata.Bullestartparameters);
+        }
+
+
+    }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var period = 0.5f;
-        for (int i = 0; i < castData.ShootsCount; i++)
-        {
-            var pp = i * period;
-            if (pp > 0)
-            {
-                var timer =
-                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
-                timer.OnTimer += () =>
-                {
-                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-                };
-            }
-            else
-            {
-                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-            }
-        }
+        // var period = 0.5f;
+        // for (int i = 0; i < castData.ShootsCount; i++)
+        // {
+        //     var pp = i * period;
+        //     if (pp > 0)
+        //     {
+        //         var timer =
+        //             MainController.Instance.BattleTimerManager.MakeTimer(pp);
+        //         timer.OnTimer += () =>
+        //         {
+        //             modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+        //         };
+        //     }
+        //     else
+        //     {
+        //         modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+        //     }
+        // }
     }
-    public override SpellDamageData RadiusAOE()
-    {
-        return new SpellDamageData(rad);
-    }
-
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
@@ -100,8 +110,8 @@ public class VacuumSpell : BaseSpellModulInv
 
         var dir = target.Position - weapon.CurPosition;
         var d = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
-        bullestartparameters.distanceShoot = d;
-        bullestartparameters.radiusShoot = d;
+        // bullestartparameters.distanceShoot = d;
+        // bullestartparameters.radiusShoot = d;
         var b = Bullet.Create(origin, weapon, dir, weapon.CurPosition, null, bullestartparameters);
     }
 
@@ -140,12 +150,13 @@ public class VacuumSpell : BaseSpellModulInv
             var dist = dir.magnitude;
             if (dist < rad)
             {
-                var power = (dist / rad) * powerThrow;
+                var power = (dist / rad) * powerThrow * CoefPower();
                 power = MyExtensions.GreateRandom(power);
                 aiAsteroidPredata.Push(-dir, power);
             }
         }
     }
+
 
     private void AffectMovingObject(MovingObject obj, Vector3 startPos)
     {
@@ -155,7 +166,7 @@ public class VacuumSpell : BaseSpellModulInv
         {
             dir.y = 0f;
             var dirNorm = -Utils.NormalizeFastSelf(dir);
-            var powerFoShip = powerThrow * 1.5f;
+            var powerFoShip = powerThrow * 1.5f * CoefPower();
             obj.ExternalForce.Init(powerFoShip, 1f, dirNorm);
         }
     }
@@ -170,7 +181,7 @@ public class VacuumSpell : BaseSpellModulInv
         var dir2 = shipBase.Position - fromPos;
         dir2.y = 0f;
         var dir = -Utils.NormalizeFastSelf(dir2);
-        var powerFoShip = powerThrow * 1.5f;
+        var powerFoShip = powerThrow * 1.5f * CoefPower();
         shipBase.ExternalForce.Init(powerFoShip, 1f, dir);
 
     }

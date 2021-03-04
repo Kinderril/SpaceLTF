@@ -57,13 +57,13 @@ public class ShipVisibilityData : ShipData
         }
     }
 
-    public void SetInvisible(float period)
-    {
-        var effect2 = DataBaseController.Instance.SpellDataBase.InvisibleEffect;
-        EffectController.Instance.Create(effect2, _owner.transform, period + 0.4f);
-        SetInsivible(true);
-        _endInvisibleCast = Time.time + period;
-    }
+    // public void SetInvisible(float period)
+    // {
+    //     var effect2 = DataBaseController.Instance.SpellDataBase.InvisibleEffect;
+    //     EffectController.Instance.Create(effect2, _owner.transform, period + 0.4f);
+    //     SetInsivible(true);
+    //     _endInvisibleCast = Time.time + period;
+    // }
 
     public void Dispose()
     {

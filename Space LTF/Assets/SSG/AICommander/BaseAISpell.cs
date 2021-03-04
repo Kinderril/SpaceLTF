@@ -22,7 +22,7 @@ public abstract class BaseAISpell
     }
     protected bool CanCast()
     {
-        return _owner.CoinController.CanUseCoins(_spellData.CostCount);
+        return _owner.CoinController.CanStartCast();
     }
 
     protected Vector3 _modulPos()
@@ -81,7 +81,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         {
             Debug.LogError($"{this} Spell have BAD Shoot radius");
         }
-        var canUseSpell = _owner.CoinController.CanUseCoins(_spell.CostCount);
+        var canUseSpell = _owner.CoinController.CanStartCast();
         Debug.Log($"AI spell controller init: {spell.GetType()}  spell.AimRadius:{spell.AimRadius}   canUseSpell:{canUseSpell}");
         if (!canUseSpell)
         {
@@ -127,7 +127,7 @@ public abstract class BaseAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         if (CanCast())
         {
             Cast(v);
-            _owner.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
+            // _owner.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
             //            Debug.LogError($"_spell.TryCast {this}");
         }
     }

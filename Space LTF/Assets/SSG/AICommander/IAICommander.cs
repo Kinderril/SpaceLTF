@@ -45,7 +45,7 @@ public abstract class IAICommander
     {
         var mainShip = _shipControl;
         var spellInGame = new SpellInGame(baseSpellModul, () => mainShip.Position, mainShip.TeamIndex, mainShip, 1,
-            baseSpellModul.Name, baseSpellModul.CostTime, baseSpellModul.CostCount, baseSpellModul.SpellType
+            baseSpellModul.Name, baseSpellModul.CostTime,  baseSpellModul.SpellType
             , baseSpellModul.DescFull(), baseSpellModul.DiscCounter, 1f, baseSpellModul.CurrentDamage);
 
 

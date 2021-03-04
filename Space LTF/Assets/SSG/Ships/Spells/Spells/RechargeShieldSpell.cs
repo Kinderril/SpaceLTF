@@ -11,25 +11,29 @@ public class RechargeShieldSpell : BaseSpellModulInv
     public const float MINES_DIST = 7f;
     public const float OFF_PERIOD = 20f;
     private const float rad = 1f;
-    private const float AOE_rad = 4f;
+    private const float AOE_rad = 2f;
+    private const float PERIOD_COEF = 0.5f;
 
     private const float _sDistToShoot = 4 * 4;
     private bool _lastCheckIsOk = false;
-    [field: NonSerialized]
+    private float _nextBulletTime;
+    // [field: NonSerialized]
 //    private ShipBase _lastClosest;
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(HealPercent, HealPercent);
 
-    private float HealPercent => Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT + Level * 0.12f;
+    private float HealPercent => (Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT + Level * 0.12f) * PERIOD_COEF;
     public RechargeShieldSpell()
-        : base(SpellType.rechargeShield, 2, 30,
-             new BulleStartParameters(15f, 46f, 
+        : base(SpellType.rechargeShield, 20,
+             new BulleStartParameters(4f, 46f, 
                  MINES_DIST, MINES_DIST), false,TargetType.Ally)
     {
 
+        _localSpellDamageData =  new SpellDamageData(ShowCircle, false);
     }
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => UpdateCastInner;
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
     private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
@@ -45,25 +49,39 @@ public class RechargeShieldSpell : BaseSpellModulInv
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var period = 0.5f;
-        for (int i = 0; i < castData.ShootsCount; i++)
+        _localSpellDamageData.AOERad = ShowCircle;
+    }
+
+    private float Coef()
+    {
+
+        var deltaTime = Time.time - _castStartTime;
+        var coef = deltaTime * 0.7f + 1;
+        float p = Mathf.Clamp(coef, 1, 10);
+        return p;
+    }
+
+    private void UpdateCastInner(Vector3 trgpos,
+        BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
+    {
+        var p = Coef();
+        _localSpellDamageData.AOERad = ShowCircle * p;
+        if (_nextBulletTime < Time.time)
         {
-            var pp = i * period;
-            if (pp > 0)
-            {
-                var timer =
-                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
-                timer.OnTimer += () =>
-                {
-                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-                };
-            }
-            else
-            {
-                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-            }
+            _nextBulletTime = Time.time + CoinTempController.BATTERY_PERIOD * PERIOD_COEF;
+            castData.Bullestartparameters.size = castData.Bullestartparameters.size * p;
+            modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+            EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShieldRecharge,
+                target.Position, 1f,p);
         }
     }
+
+    protected override void EndCastSpell()
+    {
+        _localSpellDamageData.AOERad = ShowCircle;
+        base.EndCastSpell();
+    }
+
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {
         return targetdistpos;
@@ -73,18 +91,18 @@ public class RechargeShieldSpell : BaseSpellModulInv
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var startPos = target.Position;
-        var dir = target.Position - startPos;
+        var dir = startPos - weapon.CurPosition;
         bullestartparameters.distanceShoot = dir.magnitude;
         var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
     }
-
 
     private void MainAffect2(ShipParameters shipparameters, ShipBase target, Bullet bullet1,
         DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         var ship = target;
+
         var maxShield = shipparameters.ShieldParameters.MaxShield;
-        var countToHeal = maxShield * additional.CurrentDamage.ShieldDamage;
+        var countToHeal = maxShield * additional.CurrentDamage.ShieldDamage * 0.35f;
         ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
         shipparameters.ShieldParameters.HealShield(countToHeal);
         if (UpgradeType == ESpellUpgradeType.B2)
@@ -99,18 +117,11 @@ public class RechargeShieldSpell : BaseSpellModulInv
     private void MainAffect(ShipParameters shipparameters, ShipBase target, 
         Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-
-        if (UpgradeType == ESpellUpgradeType.A1)
+        var rad2 = ShowCircle;
+        var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position, target.TeamIndex, rad2);
+        foreach (var ship in closestsShips)
         {
-            var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position, target.TeamIndex, ShowCircle);
-            foreach (var ship in closestsShips)
-            {
-                MainAffect2(ship.ShipParameters, ship, null, null, additional);
-            }
-        }
-        else
-        {
-            MainAffect2(shipparameters, target, null, null, additional);
+            MainAffect2(ship.ShipParameters, ship, null, null, additional);
         }
     }
     public override bool ShowLine => false;
@@ -126,6 +137,8 @@ public class RechargeShieldSpell : BaseSpellModulInv
             return rad;
         }
     }
+
+    
     public override Bullet GetBulletPrefab()
     {
         var bullet = DataBaseController.Instance.GetBullet(WeaponType.nextFrameRepair);
@@ -141,32 +154,27 @@ public class RechargeShieldSpell : BaseSpellModulInv
 
     public override CanCastAtPoint CanCastAtPoint
     {
-        get { return pos => _lastCheckIsOk; }
+        get { return pos => true; }
+        // get { return pos => _lastCheckIsOk; }
     }
 
     protected void ShowOnShip(Vector3 pos, TeamIndex teamIndex, GameObject objectToShow)
     {
-        var closestsShip = BattleController.Instance.ClosestShipToPos(pos, teamIndex, out float sDist);
-        if (sDist < _sDistToShoot && closestsShip != null)
-        {
-            _lastCheckIsOk = true;
-            objectToShow.gameObject.SetActive(true);
-            objectToShow.transform.position = closestsShip.Position;
-//            _lastClosest = closestsShip;
-        }
-        else
-        {
-//            _lastClosest = null;
-            _lastCheckIsOk = false;
-            objectToShow.gameObject.SetActive(false);
-        }
-    }
-
-
-
-    public override SpellDamageData RadiusAOE()
-    {
-        return new SpellDamageData(ShowCircle,false);
+        // _localSpellDamageData.AOERad = ShowCircle;
+//         var closestsShip = BattleController.Instance.ClosestShipToPos(pos, teamIndex, out float sDist);
+//         if (sDist < _sDistToShoot && closestsShip != null)
+//         {
+//             _lastCheckIsOk = true;
+//             objectToShow.gameObject.SetActive(true);
+//             objectToShow.transform.position = closestsShip.Position;
+// //            _lastClosest = closestsShip;
+//         }
+//         else
+//         {
+// //            _lastClosest = null;
+//             _lastCheckIsOk = false;
+//             objectToShow.gameObject.SetActive(false);
+//         }
     }
     public override string Desc()
     {

@@ -19,12 +19,12 @@ public class ShipBoostRam : ShipBoostAbstract
     private const float SEC_DELAY_POWER = 2f;
     private const float DAMAGE_HEALTH_COEF = 0.11f;
 
-    private Vector3 _lookDirOnStart;
-    private float _speedOnStart;
-    private IShipData _target;
+    // private Vector3 _lookDirOnStart;
+    // private float _speedOnStart;
+    // private IShipData _target;
     private float _period;
-    private float _lastMoveSpeedCoef;
-    private float _maxSpeed;
+    // private float _lastMoveSpeedCoef;
+    // private float _maxSpeed;
     private float _damagePower;
     private HashSet<ShipPersonalInfo> _hitted = new HashSet<ShipPersonalInfo>();
 
@@ -42,10 +42,10 @@ public class ShipBoostRam : ShipBoostAbstract
 //        Debug.LogError($"Ram activated {_owner.Id}");
         _damagePower = _owner.ShipParameters.MaxHealth * DAMAGE_HEALTH_COEF;
         _hitted.Clear();
-        _maxSpeed = _owner.MaxSpeed();
+        // _maxSpeed = _owner.MaxSpeed();
 //        _target = target;
-        _speedOnStart = _owner.CurSpeed;
-        _lookDirOnStart = _owner.LookDirection;
+        // _speedOnStart = _owner.CurSpeed;
+        // _lookDirOnStart = _owner.LookDirection;
         IsActive = true;
         _owner.ExternalForce.Init(17, WORK_PERIOD, _owner.LookDirection);
         ActivateTime();
@@ -95,42 +95,43 @@ public class ShipBoostRam : ShipBoostAbstract
             Stop();
             return;
         }
-        CheckEnemies();
+        CheckEnemies(_owner,_hitted,_damagePower);
     }
 
-    private void CheckEnemies()
+    public static void CheckEnemies(ShipBase shipBase, HashSet<ShipPersonalInfo> hitted, float dmg)
     {
         if (Time.frameCount % 3 == 0)
         {
-            foreach (var shipPersonalInfo in _owner.Enemies)
+            foreach (var shipPersonalInfo in shipBase.Enemies)
             {
-                if (!_hitted.Contains(shipPersonalInfo.Value) && shipPersonalInfo.Value.Dist < 2)
+                if (!hitted.Contains(shipPersonalInfo.Value) && shipPersonalInfo.Value.Dist < 2)
                 {
-                    Hit(shipPersonalInfo);
+                    Hit(shipBase,shipPersonalInfo, hitted, dmg);
                 }
             }
         }
 
     }
 
-    private void Hit(KeyValuePair<ShipBase, ShipPersonalInfo> shipPersonalInfo)
+    private static void Hit(ShipBase shipBase,KeyValuePair<ShipBase, 
+        ShipPersonalInfo> shipPersonalInfo, HashSet<ShipPersonalInfo> hitted,float dmg)
     {
         DamageDoneDelegate damaged = (healthdelta, shielddelta, damageAppliyer) =>
         {
-            GlobalEventDispatcher.ShipDamage(_owner, healthdelta, shielddelta, WeaponType.ramStrike);
+            GlobalEventDispatcher.ShipDamage(shipBase, healthdelta, shielddelta, WeaponType.ramStrike);
             var coef = damageAppliyer != null ? damageAppliyer.ExpCoef : 0f;
-            _owner.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
+            shipBase.ShipInventory.LastBattleData.AddDamage(healthdelta, shielddelta, coef);
             if (damageAppliyer != null)
             {
                 if (damageAppliyer.IsDead)
                 {
-                    GlobalEventDispatcher.ShipDeath(damageAppliyer, _owner);
-                    _owner.ShipInventory.LastBattleData.AddKill();
+                    GlobalEventDispatcher.ShipDeath(damageAppliyer, shipBase);
+                    shipBase.ShipInventory.LastBattleData.AddKill();
                 }
             }
         };
-        _hitted.Add(shipPersonalInfo.Value);
-        shipPersonalInfo.Key.ShipParameters.Damage(_damagePower, _damagePower, damaged, _owner);
+        hitted.Add(shipPersonalInfo.Value);
+        shipPersonalInfo.Key.ShipParameters.Damage(dmg, dmg, damaged, shipBase);
         shipPersonalInfo.Key.ExternalForce.Init(THROW_POWER, SEC_DELAY_POWER, shipPersonalInfo.Value.DirNorm);
     }
 

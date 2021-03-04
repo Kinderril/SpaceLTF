@@ -10,60 +10,61 @@ using UnityEngine.UI;
 public class CoinUI : MonoBehaviour
 {
 //    public Image CoinImage;
-    private CommandCoin _coin;
-    private Action<CoinUI,bool> _usedCallback;
+    private TempCoin _coin;
     public Image Slider;
     public TextMeshProUGUI Field;
 
-    public void Init(CommandCoin coin, Action<CoinUI, bool> usedCallback)
+    public void Init(TempCoin coin)
     {
-        _usedCallback = usedCallback;
         _coin = coin;
-        _coin.OnUsed += OnUsed;
-        OnUsed(coin, coin.Used);
+        Slider.fillAmount = 0f;
+        _coin.OnStateChange += OnStateChange;
+        Field.text = "";
+    }
+
+    private void OnStateChange(TempCoin obj)
+    {
+        switch (_coin.State)
+        {
+            case CointState.Ready:
+                if (Field.gameObject.activeSelf)
+                {
+                    Field.gameObject.SetActive(false);
+                }
+
+                Slider.fillAmount = 0f;
+                break;    
+            case CointState.Block:
+            case CointState.Recharging:
+                if (!Field.gameObject.activeSelf)
+                {
+                    Field.gameObject.SetActive(true);
+                }
+                break;
+        }
     }
 
     void Update()
     {
-        if (_coin.Used)
+        switch (_coin.State)
         {
-            if (!Field.gameObject.activeSelf)
-            {
-                Field.gameObject.SetActive(true);
-            }
-            var remainTime = (int) (_coin.RemainTime() );
-            Field.text = remainTime.ToString("0");
-            Slider.fillAmount = 1f - _coin.Percent();
-        }
-        else
-        {
-            if (Field.gameObject.activeSelf)
-            {
-                Field.gameObject.SetActive(false);
-            }
-            Slider.fillAmount = _coin.BlockedPercent();
+            case CointState.Block:
+                Slider.fillAmount = _coin.Percent();
+                Field.text = _coin.RemainVal.ToString("0.0");
+                break;
+            case CointState.Ready:
+                break;
+            case CointState.Recharging:
+                Slider.fillAmount = _coin.Percent();
+                Field.text = _coin.RemainVal.ToString("0.0");
+                break;
         }
     }
 
-    private void OnUsed(CommandCoin arg1, bool arg2)
-    {
-
-        if (arg2)
-        {
-            Slider.fillAmount = 0f;
-//            Slider.gameObject.SetActive(true);
-        }
-        else
-        {
-            Slider.fillAmount = 1f;
-            //            Slider.gameObject.SetActive(false);
-        }
-        _usedCallback(this, arg2);
-    }
 
     public void Dispose()
     {
-        _coin.OnUsed -= OnUsed;
+        _coin.OnStateChange -= OnStateChange;
     }
 }
 

@@ -22,14 +22,15 @@ public class MineFieldSpell : BaseSpellModulInv
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(DAMAGE_SHIELD, DAMAGE_BODY);
 
     public MineFieldSpell()
-        : base(SpellType.mineField, 2, 14,
+        : base(SpellType.mineField, 14,
              new BulleStartParameters(8f, 36f, MINES_DIST, MINES_DIST), false,TargetType.Enemy)
     {
-
+         _localSpellDamageData = new SpellDamageData(rad, false);
     }
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => UpdateCastInner;
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
@@ -85,12 +86,46 @@ public class MineFieldSpell : BaseSpellModulInv
             additional.CurrentDamage.BodyDamage, damagedone, target);
     }
     public override bool ShowLine => false;
-    public override float ShowCircle => rad;
+    public override float ShowCircle => CalcRad();
     public override Bullet GetBulletPrefab()
     {
         var bullet = DataBaseController.Instance.GetBullet(WeaponType.castMine);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
+    }
+    private float _nextBulletTime;
+    private float CalcRad()
+    {
+        var baseRad = rad * 0.5f;
+        return baseRad;
+    }
+
+    private void UpdateCastInner(Vector3 trgpos,
+        BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+        if (_nextBulletTime < Time.time)
+        {
+            var battle = BattleController.Instance;
+            var periodCast = Time.time - _castStartTime;
+            float period = CoinTempController.BATTERY_PERIOD * .5f;
+            var coefNext = 1 - periodCast * 0.1f;
+            coefNext = Mathf.Clamp(coefNext, 0.2f, 1f);
+            _nextBulletTime = period * coefNext + Time.time;
+
+            var offset = CalcRad() * .3f;
+            for (int i = 0; i < castdata.ShootsCount; i++)
+            {
+                if (battle.State == BattleState.process)
+                {
+                    var xx = MyExtensions.Random(-offset, offset);
+                    var zz = MyExtensions.Random(-offset, offset);
+
+                    var nTargte = new BulletTarget(trgpos + new Vector3(xx, 0, zz));
+
+                    modificatedCreateBullet(nTargte, origin, weapon, weapon.CurPosition, castdata.Bullestartparameters);
+                }
+            }
+        }
     }
 
     protected override void CastAction(Vector3 pos)
@@ -99,10 +134,6 @@ public class MineFieldSpell : BaseSpellModulInv
 
     }
 
-    public override SpellDamageData RadiusAOE()
-    {
-        return new SpellDamageData(rad, false);
-    }
     public override string Desc()
     {
         return Namings.Format(Namings.Tag("MinesSpell"), MINES_COUNT, MineFieldSpell.MINES_PERIOD.ToString("0"), DAMAGE_SHIELD, DAMAGE_BODY);

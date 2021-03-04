@@ -24,6 +24,7 @@ public class ExternalForce
         Power = power * _coef;
         Period = delay * _coef;
         EndTime = Time.time + Period;
+        // Debug.LogError($"Init ext force power:{power} delay:{delay} dir:{dir}");
     }
 
     public Vector3 Update()
@@ -36,8 +37,10 @@ public class ExternalForce
         }
         var d = delta / Period;
         var p = Power * d;
+        var upd = p * Dir * Time.deltaTime;
+       // Debug.LogError($"Update ext force p:{p}");
 
-        return p * Dir * Time.deltaTime;
+        return upd;
     }
 
     public void Stop()

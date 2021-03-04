@@ -130,7 +130,6 @@ public class Pool
         if (!registeredEffects.ContainsKey(id))
         {
             registeredEffects.Add(id, effect);
-
         }
     }
 

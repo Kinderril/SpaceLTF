@@ -19,6 +19,7 @@ public class HookShotSpell : BaseSpellModulInv
 
     //    private float TotalDamage => DAMAGE_BASE + Level * 2;
     private float powerThrow => 0.84f;//3 * 0.28f;
+    private float _lastBulletCreate = 0;//3 * 0.28f;
 
     private float CalcPower(float x)
     {
@@ -49,9 +50,10 @@ public class HookShotSpell : BaseSpellModulInv
     private const int _B2_costTime = 7;
 
     public HookShotSpell()
-        : base(SpellType.hookShot, 2, _baseCostTime,
+        : base(SpellType.hookShot,  _baseCostTime,
             new BulleStartParameters(25, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
+        _localSpellDamageData = new SpellDamageData(rad);
     }
 
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
@@ -82,14 +84,10 @@ public class HookShotSpell : BaseSpellModulInv
         }
     }
 
-    public override SpellDamageData RadiusAOE()
-    {
-        return new SpellDamageData(rad);
-    }
-
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => PeriodCast;
     public override bool ShowLine => false;
     public override float ShowCircle => rad;
 
@@ -110,6 +108,20 @@ public class HookShotSpell : BaseSpellModulInv
         bullestartparameters.distanceShoot = d;
         bullestartparameters.radiusShoot = d;
         var b = Bullet.Create(origin, weapon, dir, weapon.CurPosition, null, bullestartparameters);
+    }
+
+    private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+
+        var delta = Time.time - _lastBulletCreate;
+        if (delta > CoinTempController.BATTERY_PERIOD)
+        {
+            _lastBulletCreate = Time.time;
+            modificatedCreateBullet(target, origin, weapon, shootpos, castdata.Bullestartparameters);
+            // EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE, origin.Position, 1f);
+        }
+
+
     }
 
     public override Bullet GetBulletPrefab()
@@ -239,6 +251,9 @@ public class HookShotSpell : BaseSpellModulInv
         var effert = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.HookShot, shipBase.Position, 3f);
         TurnToDir(effert, dir);
 
+        var delta = Time.time - _castStartTime;
+        var coef = Mathf.Clamp(Mathf.Pow(delta, 0.6f) * 0.25f, 0, 10);
+        powerFoShip *= coef;
         shipBase.ExternalForce.Init(powerFoShip, delay, dir);
     }
 

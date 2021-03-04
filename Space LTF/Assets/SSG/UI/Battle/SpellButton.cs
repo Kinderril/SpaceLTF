@@ -12,34 +12,33 @@ public class SpellButton : UIElementWithTooltip, IPointerClickHandler
     public Image Icon;
     public Image Selected;
     public TextMeshProUGUI TimeField;
-    public TextMeshProUGUI CostField;
+    // public TextMeshProUGUI CostField;
     public TextMeshProUGUI NameField;
     public Image ImageSlider;
     private InGameMainUI _inGameMain;
     private KeyCode _keyCode;
-    private AutoSpellContainer _autoSpell;
-    public GameObject AutoKey;
-    private SpellModulsContainer     _modulsContainer;
-    private bool _canAuto = true;
-    public GameObject AutoCastObject;
+    // private AutoSpellContainer _autoSpell;
+    // public GameObject AutoKey;
+    // private SpellModulsContainer     _modulsContainer;
+    // private bool _canAuto = true;
+    // public GameObject AutoCastObject;
     private string _cachedTooltip;
 
     public void Init(InGameMainUI inGameMain, SpellInGame spell, 
-        Action<SpellInGame> OnSpellClick, float speedCoef, int index, AutoSpellContainer autoSpell,SpellModulsContainer modulsContainer)
+        Action<SpellInGame> OnSpellClick, float speedCoef, int index)
     {
-        _modulsContainer = modulsContainer;
-        _modulsContainer.OnAutoModeSpell += OnAutoModeSpell;
-        AutoKey.SetActive(false);
-        AutoCastObject.SetActive(false);
-        _autoSpell = autoSpell;
-        _autoSpell.OnActive += OnAutoSpellActive;
+        // _modulsContainer = modulsContainer;
+        // _modulsContainer.OnAutoModeSpell += OnAutoModeSpell;
+        // AutoKey.SetActive(false);
+        // AutoCastObject.SetActive(false);
+        // _autoSpell = autoSpell;
+        // _autoSpell.OnActive += OnAutoSpellActive;
         _inGameMain = inGameMain;
         _inGameMain.SpellModulsContainer.OnSelectSpell += OnSelectSpell;
         _spell = spell;
         this.OnSpellClick = OnSpellClick;
         Selected.gameObject.SetActive(false);
         var a = DataBaseController.Instance.DataStructPrefabs.GetSpellIcon(spell.SpellType);
-        CostField.text = Namings.Format("{0}", _spell.CostCount.ToString("0"));
         TimeField.text = $"{(_spell.CostPeriod * speedCoef).ToString("0")}";
         NameField.text = _spell.Name;
         Icon.sprite = a; switch (index)
@@ -83,30 +82,30 @@ public class SpellButton : UIElementWithTooltip, IPointerClickHandler
         {
             OnClick();
         }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            OnRightClick();
-        }
+        // else if (eventData.button == PointerEventData.InputButton.Right)
+        // {
+        //     OnRightClick();
+        // }
     }
 
-    private void OnRightClick()
-    {
-        if (_autoSpell.IsActive)
-        {
-            _autoSpell.SetActive(false,null);
-        }
+    // private void OnRightClick()
+    // {
+    //     if (_autoSpell.IsActive)
+    //     {
+    //         _autoSpell.SetActive(false,null);
+    //     }
+    //
+    // }
 
-    }
+    // private void OnAutoModeSpell(bool obj)
+    // {
+    //     AutoCastObject.SetActive(obj);
+    // }
 
-    private void OnAutoModeSpell(bool obj)
-    {
-        AutoCastObject.SetActive(obj);
-    }
-
-    private void OnAutoSpellActive(AutoSpellContainer obj)
-    {
-            AutoKey.SetActive(obj.IsActive);
-    }
+    // private void OnAutoSpellActive(AutoSpellContainer obj)
+    // {
+    //         AutoKey.SetActive(obj.IsActive);
+    // }
 
     private void OnSelectSpell(SpellInGame obj)
     {
@@ -142,7 +141,7 @@ public class SpellButton : UIElementWithTooltip, IPointerClickHandler
 
     public void Dispose()
     {
-        _modulsContainer.OnAutoModeSpell -= OnAutoModeSpell;
+        // _modulsContainer.OnAutoModeSpell -= OnAutoModeSpell;
         _inGameMain.SpellModulsContainer.OnSelectSpell -= OnSelectSpell;
     }
 

@@ -33,17 +33,29 @@ public class BulleStartParameters
         float bulletSpeed,
         float turnSpeet,
         float distanceShoot,
-        float radiusShoot
+        float radiusShoot,
+        int power = 1,
+        float size = 1
     )
     {
         this.bulletSpeed = bulletSpeed;
         this.turnSpeed = turnSpeet;
         this.distanceShoot = distanceShoot;
         this.radiusShoot = radiusShoot;
+        this.size = size;
+        this.Power = power;
     }
 
+    public BulleStartParameters Copy()
+    {
+        var bsp = new BulleStartParameters(bulletSpeed, turnSpeed, distanceShoot, radiusShoot, Power, size);
+        return bsp;
+    }
+
+    public int Power;
     public float bulletSpeed;
     public float turnSpeed;
+    public float size;
     public float distanceShoot;
     public float radiusShoot;
 }
@@ -57,6 +69,7 @@ public abstract class Bullet : MovingObject
     protected Vector3 _startPos;
     protected float _maxSpeed = 0f;
     protected float _startTime;
+    public Transform SizeHolder;
 
     public float StartTime
     {
@@ -87,6 +100,12 @@ public abstract class Bullet : MovingObject
 
     protected override float TurnSpeed()
     {
+#if UNITY_EDITOR
+        if (_turnSpeed == Single.NaN)
+        {
+            Debug.LogError("try get NAN");
+        }
+#endif
         return _turnSpeed;
     }
 
@@ -128,17 +147,18 @@ public abstract class Bullet : MovingObject
     }
 
     public abstract BulletType GetType { get; }
+    public SpellBulletPower SpellBulletPower { get; set; }
 
     public static Bullet Create(Bullet origin, IWeapon weapon, Vector3 dir, Vector3 position,
         ShipBase target, BulleStartParameters bulleStartParameters)
     {
         //bulleStartParameters = weapon.ModifyParameters(bulleStartParameters);
         return Create(origin, weapon, dir, position, target, bulleStartParameters.bulletSpeed,
-            bulleStartParameters.turnSpeed, bulleStartParameters.distanceShoot);
+            bulleStartParameters.turnSpeed, bulleStartParameters.distanceShoot, bulleStartParameters.size);
     }
 
     private static Bullet Create(Bullet origin, IWeapon weapon, Vector3 dir, Vector3 position,
-        ShipBase target, float bulletSpeed, float turnSpeed, float distanceShoot)
+        ShipBase target, float bulletSpeed, float turnSpeed, float distanceShoot,float size)
     {
 #if UNITY_EDITOR
         if (origin == null)
@@ -148,6 +168,7 @@ public abstract class Bullet : MovingObject
         }
 #endif
         var bullet = DataBaseController.Instance.Pool.GetBullet(origin.ID);
+        bullet.SetSizeCoef(size);
         bullet.ClearHitList();
         switch (origin.GetType)
         {
@@ -185,6 +206,14 @@ public abstract class Bullet : MovingObject
         BattleController.Instance.AddBullet(bullet);
 
         return bullet;
+    }
+
+    private void SetSizeCoef(float size)
+    {
+        if (size > 1 && SizeHolder != null) 
+        {
+            SizeHolder.localScale = Vector3.one * size;
+        }
     }
 
     private void ClearHitList()
@@ -253,6 +282,13 @@ public abstract class Bullet : MovingObject
     private void InitDelayHoming(IWeapon weapon, Vector3 dir, Vector3 position, ShipBase target, float distanceShoot, float bulletSpeed, float turnSpeed)
     {
         _turnSpeed = turnSpeed;
+#if UNITY_EDITOR 
+        // if (_turnSpeed == Single.NaN)
+        // {
+        //     Debug.LogError($"Init rs:{_turnSpeed}");
+        // }
+        // Debug.LogError($"Init rs:{_turnSpeed}");
+#endif
         _curTime = 0;
         _curSpeed = _maxSpeed = bulletSpeed;
 #if UNITY_EDITOR

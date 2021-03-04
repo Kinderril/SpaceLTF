@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 
 [System.Serializable]
@@ -22,32 +23,34 @@ public class DistShotSpell : BaseSpellModulInv
     private const float BULLET_SPEED = 50f;
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 42;
+    [NonSerialized] private BeamBulletNoTarget ControlBullet;
     public DistShotSpell()
-        : base(SpellType.distShot, 5, 13, 
+        : base(SpellType.distShot,  13, 
             new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-        // CurWeaponDamage = new CurWeaponDamage(0, 12);
+        _localSpellDamageData = new SpellDamageData();
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var period = 0.5f;
-        for (int i = 0; i < castData.ShootsCount; i++)
-        {
-            var pp = i * period;
-            if (pp > 0)
-            {
-                var timer =
-                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
-                timer.OnTimer += () =>
-                {
-                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-                };
-            }
-            else
-            {
-                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-            }
-        }
+        modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+        // var period = 0.5f;
+        // for (int i = 0; i < castData.ShootsCount; i++)
+        // {
+        //     var pp = i * period;
+        //     if (pp > 0)
+        //     {
+        //         var timer =
+        //             MainController.Instance.BattleTimerManager.MakeTimer(pp);
+        //         timer.OnTimer += () =>
+        //         {
+        //             modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+        //         };
+        //     }
+        //     else
+        //     {
+        //         modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+        //     }
+        // }
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
@@ -61,19 +64,27 @@ public class DistShotSpell : BaseSpellModulInv
         IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
         var dir = target.Position - shootpos;
-//        Debug.LogError($"dir:{dir}    target.Position:{target.Position}");
+        //        Debug.LogError($"dir:{dir}    target.Position:{target.Position}");
+        bullestartparameters.distanceShoot = 0.25f;
         var b = Bullet.Create(origin, weapon, dir, shootpos, null, bullestartparameters);
-        var beamNoTrg = b as BeamBulletNoTarget;
-        if (beamNoTrg != null)
+        b.SpellBulletPower = new SpellBulletPower(bullestartparameters.Power);
+        ControlBullet = b as BeamBulletNoTarget;
+        if (ControlBullet != null)
         {
-            if (UpgradeType == ESpellUpgradeType.B2)
-            {
-                beamNoTrg.coefWidth = RAD_B2;
-            }
-            else
-            {
-                beamNoTrg.coefWidth = 1f;
-            }
+            ControlBullet.coefWidth = GetWidth();
+        }
+    }
+
+    private float GetWidth()
+    {
+
+        if (UpgradeType == ESpellUpgradeType.B2)
+        {
+            return RAD_B2;
+        }
+        else
+        {
+            return 1f;
         }
     }
 
@@ -87,24 +98,15 @@ public class DistShotSpell : BaseSpellModulInv
         var totalDistDamage = dist;// * DIST_COEF;
         int damage = (int)(additional.CurrentDamage.BodyDamage + Mathf.Clamp((int)totalDistDamage, 0, DIST_BASE_DAMAGE));
 
-        target.ShipParameters.Damage(0, damage, bullet1.Weapon.DamageDoneCallback, target);
+        var deltaTime = Time.time - _castStartTime;
+        var dmgShield = Mathf.Pow(deltaTime, 0.7f) - 2;
+        dmgShield = Mathf.Clamp(dmgShield, 0, 999);
+        target.ShipParameters.Damage(dmgShield, damage, bullet1.Weapon.DamageDoneCallback, target);
         switch (UpgradeType)
         {
             case ESpellUpgradeType.A1:
                 target.DamageData.ApplyEffect(ShipDamageType.engine, additional.CurrentDamage.ShieldDamage);
                 break;
-//            case ESpellUpgradeType.B2:
-//                var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position,
-//                    target.TeamIndex, RAD_B2);
-//                closestsShips.Remove(target);
-//                if (closestsShips.Count > 0)
-//                {
-//                    foreach (var ship in closestsShips)
-//                    {
-//                        ship.ShipParameters.Damage(0, totalDistDamage, bullet1.Weapon.DamageDoneCallback, target);
-//                    }
-//                }
-//                break;
         }
     }
 
@@ -121,6 +123,22 @@ public class DistShotSpell : BaseSpellModulInv
     protected override CreateBulletDelegate standartCreateBullet => DistShotCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => ProcessCast;
+
+    private void ProcessCast(Vector3 trgpos, BulletTarget target, 
+        Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+        var dir = Utils.NormalizeFastSelf(trgpos - shootpos);
+        var deltaTime = Time.time - _castStartTime;
+        Vector3 trg = shootpos + dir * deltaTime * 10;
+        if (ControlBullet != null && ControlBullet.IsAcive)
+        {
+            ControlBullet.MoveTargetTo(trg);
+            var p = Mathf.Clamp(Mathf.Pow(deltaTime, 0.4f) + 1, 1, 5);
+            ControlBullet.coefWidth = p;
+            ControlBullet.SetDeathTime(Time.time + 0.1f);
+        }
+    }
 
     protected override void CastAction(Vector3 pos)
     {

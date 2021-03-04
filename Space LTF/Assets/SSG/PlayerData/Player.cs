@@ -151,6 +151,21 @@ public class Player
         }
 
 
+        if (DebugParamsController.AllSpells)
+        {
+
+            var allSpellType = (SpellType[])Enum.GetValues(typeof(SpellType));
+            foreach (var type in allSpellType)
+            {
+                if (Inventory.GetFreeSpellSlot(out var index1))
+                {
+                    var modul = Library.CreateSpell(type);
+                    Inventory.TryAddSpellModul(modul, index1);
+                }
+
+            }
+        }
+
         if (DebugParamsController.AllModuls)
         {
 
@@ -175,16 +190,6 @@ public class Player
                 }
             }
 
-            var allSpellType = (SpellType[])Enum.GetValues(typeof(SpellType));
-            foreach (var type in allSpellType)
-            {
-                if (type != SpellType.BaitPriorityTarget && type != SpellType.priorityTarget && Inventory.GetFreeSpellSlot(out var index1))
-                {
-                    var modul = Library.CreateSpell(type);
-                    Inventory.TryAddSpellModul(modul, index1);
-                }
-
-            }
 
             var allWeaponType = new List<WeaponType>()
             {

@@ -9,9 +9,15 @@ public class SpellZoneVisualCircle : MonoBehaviour
 {
     public GameObject MainVisual;
 
-    public void SetSize(float val)
+    public void SetRad(float val)
     {
-        MainVisual.transform.localScale = Vector3.one*val/2f;
+#if UNITY_EDITOR
+        if (val == 0)
+        {
+            Debug.LogError("circle size is null");
+        }
+#endif
+        MainVisual.transform.localScale = Vector3.one*val;
     }
 }
 

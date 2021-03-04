@@ -8,8 +8,8 @@ public class EngineLockSpell : BaseSpellModulInv
     //B2 - less timer
 
     public const float DIST_SHOT = 62f;
-    public const float LOCK_PERIOD = 4;
-    public const float LOCK_LEVEL = 2f;
+    public const float LOCK_PERIOD = 1;
+    public const float LOCK_LEVEL = 0.5f;
 
     private float rad => GetRad(UpgradeType);
 
@@ -38,39 +38,29 @@ public class EngineLockSpell : BaseSpellModulInv
 
     private const int _baseCostTime = 13;
     private const int _B2_costTime = 9;
+    private float _lastBulletCreate = 0f;
 
     public float CurLockPeriod => LOCK_PERIOD + LOCK_LEVEL * Level;
 
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(CurLockPeriod, CurLockPeriod);
     public EngineLockSpell()
-        : base(SpellType.engineLock, 3, _baseCostTime,
+        : base(SpellType.engineLock,  _baseCostTime,
             new BulleStartParameters(15, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
 
+        _localSpellDamageData =  new SpellDamageData(rad);
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var period = 0.5f;
-        for (int i = 0; i < castData.ShootsCount; i++)
-        {
-            var pp = i * period;
-            if (pp > 0)
-            {
-                var timer =
-                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
-                timer.OnTimer += () =>
-                {
-                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-                };
-            }
-            else
-            {
-                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-            }
-        }
-
+        _lastBulletCreate = 0;
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
+
+    protected override void EndCastSpell()
+    {
+        _localSpellDamageData.AOERad = rad;
+        base.EndCastSpell();
+    }
 
     private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
     {
@@ -80,10 +70,6 @@ public class EngineLockSpell : BaseSpellModulInv
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {
         return targetdistpos;
-    }
-    public override SpellDamageData RadiusAOE()
-    {
-        return new SpellDamageData(rad);
     }
     public override bool ShowLine => false;
     public override float ShowCircle => rad;
@@ -101,42 +87,60 @@ public class EngineLockSpell : BaseSpellModulInv
 
     private void BulletDestroy(Bullet origin, IWeapon weapon, AICell cell)
     {
-        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE, origin.Position, 3f);
+
     }
 
     protected override CreateBulletDelegate standartCreateBullet => EngineCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => PeriodCast;
+
+
+    private float CoefSize()
+    {
+
+        var deltaTime = Time.time - _castStartTime;
+        var coef = Mathf.Pow(deltaTime, 0.9f) + 1;
+        float p = Mathf.Clamp(coef, 1, 5);
+        return p;
+    }
+
+    private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, 
+        IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+        var p = CoefSize();
+        _localSpellDamageData.AOERad = rad * p;
+        var delta = Time.time - _lastBulletCreate;
+        if (delta > CoinTempController.BATTERY_PERIOD)
+        {
+            _lastBulletCreate = Time.time;
+            castdata.Bullestartparameters.size = castdata.Bullestartparameters.size * p;
+            modificatedCreateBullet(target, origin, weapon, shootpos, castdata.Bullestartparameters);
+            EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE,
+                target.Position, 1f , p);
+        }
+
+
+    }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet,
         DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         if (target != null)
-            ActionShip(target, additional.CurrentDamage.BodyDamage);
-        //        var pos = bullet.Position;
-        //        var oppositeIndex = BattleController.OppositeIndex(bullet.Weapon.TeamIndex);
-        //        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.EngineLockAOE,pos, CurLockPeriod);
-        //        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, oppositeIndex, rad);
-        //        foreach (var shipBase in c1)
-        //        {
-        //            ActionShip(shipBase);
-        //        }
-        //        var c1 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.green, rad);
-        //        var c2 = BattleController.Instance.GetAllShipsInRadius(pos, TeamIndex.red, rad);
-        //        foreach (var shipBase in c1)
-        //        {
-        //            ActionShip(shipBase);
-        //        }
-        //        foreach (var shipBase in c2)
-        //        {
-        //            ActionShip(shipBase);
-        //        }
+        {
+
+            var delta = Time.time - _castStartTime;
+            var coef = Mathf.Clamp(Mathf.Pow(delta, 0.6f), 1, 10);
+            ActionShip(target, additional.CurrentDamage.BodyDamage * coef);
+        }
     }
 
 
 
     private void ActionShip(ShipBase shipBase,float period)
     {
+        // var p = CoefSize();
+        // var affectPeriod = period * p;
         shipBase.DamageData.ApplyEffect(ShipDamageType.engine, period);//.EngineStop.Stop(2.5f);
     }
 

@@ -17,10 +17,10 @@ public enum SpellType
 
     //    spaceWall = 9,//DO NOT USE!
     distShot = 10,
-    priorityTarget = 11,
+    // priorityTarget = 11,
 
     artilleryPeriod = 12,
-    BaitPriorityTarget = 13,
+    // BaitPriorityTarget = 13,
     repairDrones = 14,
 
     rechargeShield = 15,
@@ -42,28 +42,40 @@ public enum ESpellUpgradeType
 [Serializable]
 public abstract class BaseSpellModulInv : IItemInv, ISpellToGame, IAffectParameters, IAffectable
 {
+    protected float _castStartTime;
+    protected bool _isInProcess = false;
+    protected SpellDamageData _localSpellDamageData;
+
     protected BaseSpellModulInv(IInventory currentInventory)
     {
         CurrentInventory = currentInventory;
     }
 
 
-    protected BaseSpellModulInv(SpellType spell, int costCount, int costTime,
+
+    protected BaseSpellModulInv(SpellType spell, int costTime,
         BulleStartParameters bulleStartParameters, bool isHoming, TargetType targetType)
     {
         Level = 1;
         IsHoming = isHoming;
-        CastSpell = castActionSpell;
+        CastSpell =  CastActionSpellBase;
+        // CastSpell =  castActionSpell;
         BulleStartParameters = bulleStartParameters;
         AffectAction = new WeaponInventoryAffectTarget(affectAction, targetType);
 //        CreateBullet = createBullet;
         SpellType = spell;
-        CostCount = costCount;
         CostTime = costTime;
         ShootPerTime = 1;
     }
 
-    public virtual int CostCount { get; protected set; }
+    private void CastActionSpellBase(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+        _castStartTime = Time.time;
+        _isInProcess = true;
+        castActionSpell(target, origin, weapon, shootpos, castdata);
+    }
+
+    // public virtual int CostCount { get; protected set; }
     public virtual int CostTime { get; protected set; }
     public int Level { get; protected set; }
     public bool IsHoming { get; protected set; }
@@ -76,6 +88,15 @@ public abstract class BaseSpellModulInv : IItemInv, ISpellToGame, IAffectParamet
     protected CreateBulletDelegate modificatedCreateBullet { get;private set; } //Модифицированный делегат по созданию пули
     protected abstract CastActionSpell castActionSpell { get; }
     protected abstract AffectTargetDelegate affectAction { get; }
+    public abstract UpdateCastDelegate UpdateCast { get; }
+    public EndCastDelegateSpell EndCastPeriod => EndCastSpell;
+
+    protected virtual void EndCastSpell()
+    {
+        
+    }
+
+
     public WeaponInventoryAffectTarget AffectAction { get; private set; }
     public CreateBulletDelegate CreateBulletAction => modificatedCreateBullet;
     public abstract ShallCastToTaregtAI ShallCastToTaregtAIAction { get; }
@@ -123,7 +144,7 @@ public abstract class BaseSpellModulInv : IItemInv, ISpellToGame, IAffectParamet
 
     public string WideInfo()
     {
-        var cost = Namings.Format(Namings.Tag("SpellModulChargers"), CostCount, CostTime);
+        var cost = Namings.Format(Namings.Tag("SpellModulChargers"), CostTime);
         return GetInfo() + "\n" + cost
                + "\n" + DescFull();
     }
@@ -151,10 +172,7 @@ public abstract class BaseSpellModulInv : IItemInv, ISpellToGame, IAffectParamet
     public BulleStartParameters BulleStartParameters { get; private set; }
     public CastActionSpell CastSpell { get; private set; }
 
-    public virtual SpellDamageData RadiusAOE()
-    {
-        return new SpellDamageData();
-    }
+    public SpellDamageData RadiusAOE =>  _localSpellDamageData;
 
     [field: NonSerialized] public event Action<BaseSpellModulInv> OnUpgrade;
 

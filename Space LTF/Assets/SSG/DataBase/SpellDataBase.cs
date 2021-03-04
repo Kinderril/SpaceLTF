@@ -1,5 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
+[Serializable]
+public struct SpellVisualInfo
+{
+    public SpellType SpellType;
+    public SpellZoneVisualCircle SpellZoneCircle;
+    public SpellZoneVisualLine SpellZoneLine;
+    public SpellZoneVisualCircle RadiusAttackEffect;
+}
 
 public class SpellDataBase : MonoBehaviour
 {
@@ -9,12 +20,13 @@ public class SpellDataBase : MonoBehaviour
     public BulletKiller AntiEnergyEffect;
 //    public WallCatcher WallCatcher;
 
-    public SpellZoneVisualCircle SpellZoneCircle;
-    public SpellZoneVisualLine SpellZoneLine;
-    public SpellZoneVisualCircle RadiusAttackEffect;
+    public SpellVisualInfo[] SpellVisuals;
+    // public SpellZoneVisualCircle SpellZoneCircle;
+    // public SpellZoneVisualLine SpellZoneLine;
+    // public SpellZoneVisualCircle RadiusAttackEffect;
 
 //    public BaseEffectAbsorber ShieldDamageEffectAOE;//Расходящийся круг 
-    public BaseEffectAbsorber InvisibleEffect;
+    // public BaseEffectAbsorber InvisibleEffect;
 
     public BaseEffectAbsorber RoundStrikeEffect;//TMP NOT USING
     public BaseEffectAbsorber RoundStrikeEffectShip;//TMP NOT USING
@@ -23,6 +35,7 @@ public class SpellDataBase : MonoBehaviour
 
     public BaseEffectAbsorber BlinkPlaceEffect;//Спираль синяя
     public BaseEffectAbsorber BlinkTargetEffect;//Спираль обратная
+    public BaseEffectAbsorber ShieldRecharge;
     public BaseEffectAbsorber ShieldOffAOE;
     public BaseEffectAbsorber ShieldHitEffect;
     public BaseEffectAbsorber GoPlaceOk;
@@ -36,7 +49,7 @@ public class SpellDataBase : MonoBehaviour
 //        pool.RegisterEffect(Utils.GetId(), ShieldDamageEffectAOE);
         //        pool.RegisterEffect(2, ShieldDamageEffectSingle);
         //        pool.RegisterEffect(2, InvinsableEffect);
-        pool.RegisterEffect(Utils.GetId(), InvisibleEffect);
+        // pool.RegisterEffect(Utils.GetId(), InvisibleEffect);
 
         pool.RegisterEffect(Utils.GetId(), RoundStrikeEffect);
         pool.RegisterEffect(Utils.GetId(), RoundStrikeEffectShip);
@@ -48,11 +61,16 @@ public class SpellDataBase : MonoBehaviour
 
         pool.RegisterEffect(Utils.GetId(), BlinkTargetEffect);
         pool.RegisterEffect(Utils.GetId(), ShieldOffAOE);
+        pool.RegisterEffect(Utils.GetId(), ShieldRecharge);
         pool.RegisterEffect(Utils.GetId(), ShieldHitEffect);
         pool.RegisterEffect(Utils.GetId(), GoPlaceOk);
         pool.RegisterEffect(Utils.GetId(), GoPlaceFail);
         pool.RegisterEffect(Utils.GetId(), HookShot);
     }
 
+    public SpellVisualInfo? GetVisualInfo(SpellType spellType)
+    {
+        return SpellVisuals.FirstOrDefault(x => x.SpellType == spellType);
+    }
 }
 

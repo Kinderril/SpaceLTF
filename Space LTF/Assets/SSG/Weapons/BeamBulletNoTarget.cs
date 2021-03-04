@@ -23,6 +23,7 @@ public class BeamBulletNoTarget : Bullet
     public GameObject EdgeObject;
     private bool haveEdgeObject = false;
     private Vector3 _startScaleEdgeObject = Vector3.one;
+    private Vector3? _selectedTrg = null;
 
     public CurveLineAbsorber ProcessEvent;
     void Awake()
@@ -46,6 +47,7 @@ public class BeamBulletNoTarget : Bullet
     {
         _canActivate = false;
         ProcessEvent.gameObject.SetActive(false);
+        _selectedTrg = null;
         base.Init();
     }
 
@@ -59,6 +61,11 @@ public class BeamBulletNoTarget : Bullet
         _startOff = Time.time + _offStartTime;
         base.LateInit();
         _canActivate = true;
+    }
+
+    public void SetDeathTime(float dTime)
+    {
+        _deathTime = dTime;
     }
 
     protected override void ManualUpdate()
@@ -79,20 +86,26 @@ public class BeamBulletNoTarget : Bullet
 
             var period = (_startTime - Time.time);
             Vector3 trg;
-            if (period > 0)
+            if (_selectedTrg.HasValue)
             {
-                var p = 1f - period / _startPeriod;
-
-                var dir = _endPos - Weapon.CurPosition;
-                dir.y = 0;
-                dir = Utils.NormalizeFastSelf(dir);
-                trg = Weapon.CurPosition + dir * p * _distanceShoot;
+                trg = _selectedTrg.Value;
             }
             else
             {
-                trg = _endPos;
-            }
+                if (period > 0)
+                {
+                    var p = 1f - period / _startPeriod;
 
+                    var dir = _endPos - Weapon.CurPosition;
+                    dir.y = 0;
+                    dir = Utils.NormalizeFastSelf(dir);
+                    trg = Weapon.CurPosition + dir * p * _distanceShoot;
+                }
+                else
+                {
+                    trg = _endPos;
+                }
+            }
             Updatetickness();
             UpdateOffPeriod();
 
@@ -186,6 +199,12 @@ public class BeamBulletNoTarget : Bullet
             aiAsteroidPredata.Death();
         }
 
+    }
+
+    public void MoveTargetTo(Vector3 trg)
+    {
+        _selectedTrg = trg;
+        _deathTime = Time.time + 0.5f;
     }
 
     private float CalcDist(Vector3 p)

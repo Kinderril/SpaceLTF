@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Security.Cryptography.X509Certificates;
+using UnityEngine;
 
 
 [System.Serializable]
@@ -12,6 +13,10 @@ public class LineShotSpell : BaseSpellModulInv
     private const float DIST_SHOT = 38f;
 
     private const int FIRE_PERIOD = 6;
+
+    public override bool ShowLine => true;
+    public override float ShowCircle => -1;
+    private float _nextBulletTime;
 
     private float FireCoef
     {
@@ -56,33 +61,44 @@ public class LineShotSpell : BaseSpellModulInv
     private int Damage => 5 + Level;
 
     public LineShotSpell()
-        : base(SpellType.lineShot, 4, 11,
+        : base(SpellType.lineShot,  11,
              new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-
+        _localSpellDamageData = new SpellDamageData();
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var ANG_2 = 20f;
+        _nextBulletTime = 0f;
 
-        //        Debug.Log($"dir to shoot{dirToShoot}   targte{target.Position}   from{shootPos}");
-        for (int i = 0; i < castData.ShootsCount; i++)
+    }
+    private void UpdateCastInner(Vector3 trgpos,
+        BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
+    {
+        if (_nextBulletTime < Time.time)
         {
-            var dirToShoot = target.Position - shootPos;
-            modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-            var half = ANG_2 / 2f;
+            var ANG_2 = 20f;
+            var delta = Time.time - _castStartTime;
+            var period = CoinTempController.BATTERY_PERIOD / (0.22f * delta + 0.54f);
+            period = Mathf.Clamp(period, 0.2f, 1);
+            _nextBulletTime = Time.time + period;
+            //        Debug.Log($"dir to shoot{dirToShoot}   targte{target.Position}   from{shootPos}");
+            for (int i = 0; i < castData.ShootsCount; i++)
+            {
+                var dirToShoot = target.Position - shootPos;
+                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                var half = ANG_2 / 2f;
 
-            var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
-            var r2 = Utils.RotateOnAngUp(dirToShoot, half);
+                var r1 = Utils.RotateOnAngUp(dirToShoot, -half);
+                var r2 = Utils.RotateOnAngUp(dirToShoot, half);
 
-            var sp1 = target.Position + r1;
-            var sp2 = target.Position + r2;
+                var sp1 = target.Position + r1;
+                var sp2 = target.Position + r2;
 
-            modificatedCreateBullet(new BulletTarget(sp1), origin, weapon, shootPos, castData.Bullestartparameters);
-            modificatedCreateBullet(new BulletTarget(sp2), origin, weapon, shootPos, castData.Bullestartparameters);
+                modificatedCreateBullet(new BulletTarget(sp1), origin, weapon, shootPos, castData.Bullestartparameters);
+                modificatedCreateBullet(new BulletTarget(sp2), origin, weapon, shootPos, castData.Bullestartparameters);
+            }
         }
-
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
@@ -92,8 +108,6 @@ public class LineShotSpell : BaseSpellModulInv
         target.DamageData.ApplyEffect(ShipDamageType.fire, additional.CurrentDamage.ShieldDamage, FireCoef);
     }
 
-    public override bool ShowLine => true;
-    public override float ShowCircle => -1;
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, BulleStartParameters bullestartparameters)
     {
         var dirToShoot = target.Position - shootPos;
@@ -107,6 +121,7 @@ public class LineShotSpell : BaseSpellModulInv
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => UpdateCastInner;
 
     public override Bullet GetBulletPrefab()
     {

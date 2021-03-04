@@ -22,6 +22,9 @@ public delegate void AffectTargetDelegate(ShipParameters targetParameters, ShipB
     DamageDoneDelegate damageDone, WeaponAffectionAdditionalParams additional);
 
 [System.Serializable]
+public delegate void UpdateCastDelegate(Vector3 trgPos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castData);
+
+[System.Serializable]
 public delegate void CreateBulletDelegate(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos,
     BulleStartParameters bulleStartParameters);
 

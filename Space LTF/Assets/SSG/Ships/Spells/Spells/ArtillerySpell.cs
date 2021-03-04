@@ -8,8 +8,9 @@ public class ArtillerySpell : BaseSpellModulInv
     //B2 - faster shoot
 
     private const float DIST_SHOT = 40f;
+    private const float SPEED_COEF = 0.6f;
     // private const float baseDamage = 4;
-    private const float rad = 17f;
+    private const float rad = 16f;
 
 
     private float DmgHull => 3 + Level;
@@ -20,17 +21,17 @@ public class ArtillerySpell : BaseSpellModulInv
     {
         if (up == ESpellUpgradeType.A1)
         {
-            return l * 4 + 14;
+            return l * 3 + 4;
         }
-        return l * 3 + 11;
+        return l * 2 + 3;
     }
 
     public ArtillerySpell()
-        : base(SpellType.artilleryPeriod, 4, 20,
-            new BulleStartParameters(11.5f, 36f, DIST_SHOT, DIST_SHOT),
+        : base(SpellType.artilleryPeriod,  20,
+            new BulleStartParameters(9.5f, 36f, DIST_SHOT, DIST_SHOT),
             false,TargetType.Enemy)
     {
-
+        _localSpellDamageData =  new SpellDamageData(rad, false);
     }
 
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
@@ -40,17 +41,23 @@ public class ArtillerySpell : BaseSpellModulInv
     {
         return true;
     }
-    public override SpellDamageData RadiusAOE()
+
+    private float CalcRad()
     {
-        return new SpellDamageData(rad / 2f, false);
+        if (!_isInProcess)
+        {
+            return rad;
+        }
+        var coef = coefSize();
+        return rad * coef;
     }
 
     private float Period(ESpellUpgradeType upg)
     {
-        float period = 0.145f;
+        float period = 0.115f;
         if (upg == ESpellUpgradeType.B2)
         {
-            period = 0.095f;
+            period = 0.065f;
         }
 
         return period;
@@ -58,25 +65,61 @@ public class ArtillerySpell : BaseSpellModulInv
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castData)
     {
-        var battle = BattleController.Instance;
-        var offset = rad / 2;
-        float period = Period(UpgradeType);
-        for (int i = 0; i < BulletsCount + castData.ShootsCount - 1; i++)
+        _localSpellDamageData.AOERad = rad;
+    }
+
+    private float _nextBulletTime;
+
+    private void UpdateCastInner(Vector3 trgpos,
+        BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+        _localSpellDamageData.AOERad = CalcRad();
+        if (_nextBulletTime < Time.time)
         {
-            var timer =
-                MainController.Instance.BattleTimerManager.MakeTimer(i * period);
-            timer.OnTimer += () =>
+            for (int i = 0; i < castdata.ShootsCount; i++)
             {
+
+                float period = Period(UpgradeType);
+                _nextBulletTime = period + Time.time;
+                var offset = CalcRad() * .5f;
+                var battle = BattleController.Instance;
                 if (battle.State == BattleState.process)
                 {
                     var xx = MyExtensions.Random(-offset, offset);
                     var zz = MyExtensions.Random(-offset, offset);
 
-                    var nTargte = new BulletTarget(target.Position + new Vector3(xx, 0, zz));
-                    modificatedCreateBullet(nTargte, origin, weapon, weapon.CurPosition, castData.Bullestartparameters);
+                    var nTargte = new BulletTarget(trgpos + new Vector3(xx, 0, zz));
+
+                    var coef = coefSpeed();
+                    castdata.Bullestartparameters.bulletSpeed = castdata.Bullestartparameters.bulletSpeed * coef;
+                    modificatedCreateBullet(nTargte, origin, weapon, weapon.CurPosition, castdata.Bullestartparameters);
                 }
-            };
+            }
         }
+    }
+
+    protected override void EndCastSpell()
+    {
+        _localSpellDamageData.AOERad = rad;
+        base.EndCastSpell();
+    }
+
+    private float coefSpeed()
+    {
+
+        var deltaFromStart = Time.time - _castStartTime;
+        var res = Mathf.Pow(deltaFromStart, 0.7f);
+        res = res * 0.6f + 1;
+        return Mathf.Clamp(res, 1, 4) * SPEED_COEF;
+    }
+
+    // private const float _upperSIze = 3;
+
+    private float coefSize()
+    {
+        var deltaFromStart = Time.time - _castStartTime;
+        // return 1 - deltaFromStart
+        return Mathf.Clamp(1 - deltaFromStart * 0.18f,0.13f, 1f);
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target,
@@ -96,6 +139,8 @@ public class ArtillerySpell : BaseSpellModulInv
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => UpdateCastInner;
+
 
     public override Bullet GetBulletPrefab()
     {

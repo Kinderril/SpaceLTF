@@ -46,7 +46,7 @@ public class AffectMyShipAISpell<T> : BaseAISpell where T : BaseSpellModulInv
         if (CanCast())
         {
             Cast(v);
-            _owner.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
+            // _owner.CoinController.UseCoins(_spell.CostCount, _spell.CostTime);
             //            Debug.LogError($"_spell.TryCast {this}");
         }
     }

@@ -80,10 +80,10 @@ public class DragableSpellItem : DragableItem
 
     protected override void Dispose()
     {
+        ContainerItem.CurrentInventory.Owner.OnCreditsChange -= OnMoneyChange;
         if (Spell != null)
         {
             Spell.OnUpgrade -= OnUpgrade;
-            ContainerItem.CurrentInventory.Owner.OnCreditsChange -= OnMoneyChange;
         }
         _isSubscribed = false;
         base.Dispose();

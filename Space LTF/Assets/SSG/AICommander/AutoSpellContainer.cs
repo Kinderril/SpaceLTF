@@ -80,7 +80,6 @@ public class AutoSpellContainer
             {
                 _nextCheck = Time.time + 2f;
                 Cast(trg);
-                _owner.CoinController.UseCoins(_spellData.CostCount, _spellData.CostPeriod);
             }
         }
     }
@@ -228,14 +227,6 @@ public class AutoSpellContainer
 
     public void SetActive(bool val,ShipBase target)
     {
-//        if (val)
-//            Debug.LogError($"ActivateAiSpell {this._spellData.Name}");
-//        else
-//        {
-//
-//            Debug.LogError($"DISABLE {this._spellData.Name}");
-//        }
-
         if (val && Target != null && target != Target)
         {
             ActiveCallback(Target.Id,false);
@@ -317,7 +308,7 @@ public class AutoSpellContainer
 
     protected bool CanCast()
     {
-        return _owner.CoinController.CanUseCoins(_spellData.CostCount);
+        return _owner.CoinController.CanStartCast();
     }
 
     public void Dispose()

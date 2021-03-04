@@ -386,7 +386,7 @@ public static class RusLocalization
         {"sellModuls", "Продать модулей"},
         {"PriorityTargetDesc", "Все ваши корабли буду стараться атаковать выбранную цель."},
         {"BaitPriorityTargetDesc","Все корабли врага будут атаковать приманку" },
-        {"SpellModulChargers", "Требуется батарей: {0} на {1} сек."},
+        {"SpellModulChargers", "Блокировка батарей: {0} сек."},
         {"ArtillerySpell","Обстреливает зону. Всего выстрелов {0}. Урон от каждого попадания:{2}/{1}." },
         {"EnerguLockSpell","Отключает двигатели всем кораблям противника в радиусе {1} на {0} сек." },
         {"LineSHotSpell","Выстрел 3 зарядами в заданном направлении. Базовый урон: {0}/{1}. Период горения {2} сек. Общий урон от огня:{3}" },
@@ -477,7 +477,7 @@ public static class RusLocalization
 
         {"ShieldOffNameA1", "Батарея"},
         {"ShieldOffNameB2", "Поджог"},
-        {"ShieldOffDescA1", "Требует для использования меньше батарей"},
+        {"ShieldOffDescA1", "Уменьшает задержку батарей"},
         {"ShieldOffDescB2", "Добавляет урон от огня на {0} сек"},
 
         {"TrowAroundNameA1", "Разрушитель"},

@@ -24,7 +24,7 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
 
 
     public TextMeshProUGUI MaxLevel;
-    public TextMeshProUGUI CostCountField;
+    // public TextMeshProUGUI CostCountField;
     public TextMeshProUGUI CostDelayField;
     public TextMeshProUGUI WeaponLevelField;
     public TextMeshProUGUI UpgradeMicrochipsCount;
@@ -97,7 +97,6 @@ public class SpellBigInfoUI : AbstractBaseInfoUI
     private void DrawLevel()
     {
 
-        CostCountField.text = Namings.Format(Namings.Tag("ChargesCount"), _spell.CostCount);
         CostDelayField.text = Namings.Format(Namings.Tag("ChargesDelay"), _spell.CostTime);
         var canUpgrade = _spell.CanUpgradeByLevel();
         ButtonContainer.gameObject.SetActive(canUpgrade);

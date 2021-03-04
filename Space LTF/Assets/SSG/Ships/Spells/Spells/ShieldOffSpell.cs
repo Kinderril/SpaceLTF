@@ -12,12 +12,13 @@ public class ShieldOffSpell : BaseSpellModulInv
     private const float rad = 3.5f;
     private const float DIST_SHOT = 61f;
     private const float FIRE_PERIOD = 5f;
-    private const int cost_base = 3;
-    private const int cost_A1 = 2;
+    private const int cost_base = 20;
+    private const int cost_A1 = 15;
+    private float _nextBulletTime = 0f;
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(SHIELD_DAMAGE, Period);
 
 
-    public override int CostCount
+    public override int CostTime
     {
         get
         {
@@ -32,10 +33,12 @@ public class ShieldOffSpell : BaseSpellModulInv
     private float Period => PERIOD + Level * 3;
 
     public ShieldOffSpell()
-        : base(SpellType.shildDamage, 3, 15,
+        : base(SpellType.shildDamage,  15,
             new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-//        CurrentDamage = new CurWeaponDamage(2, 0);
+        _localSpellDamageData =  new SpellDamageData(rad);
+        _localSpellDamageData.AOERad = rad;
+        //        CurrentDamage = new CurWeaponDamage(2, 0);
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
@@ -50,26 +53,30 @@ public class ShieldOffSpell : BaseSpellModulInv
         return false;
 
     }
+    private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
+    {
+        var deltaTime = Time.time - _castStartTime;
+        var coef = Mathf.Pow(deltaTime, 0.8f) + 1;
+        float p = Mathf.Clamp(coef, 1, 5);
+        _localSpellDamageData.AOERad = rad * p;
+        // Debug.LogError($"deltaTime:{deltaTime}  coef:{coef}");
+        if (_nextBulletTime < Time.time)
+        {
+            _nextBulletTime = Time.time + 0.34f;
+            castData.Bullestartparameters.size = castData.Bullestartparameters.size * p;
+            modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+        }
+    }
+
+    protected override void EndCastSpell()
+    {
+        _localSpellDamageData.AOERad = rad;
+        base.EndCastSpell();
+    }
+
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var period = 0.5f;
-        for (int i = 0; i < castData.ShootsCount; i++)
-        {
-            var pp = i * period;
-            if (pp > 0)
-            {
-                var timer =
-                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
-                timer.OnTimer += () =>
-                {
-                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-                };
-            }
-            else
-            {
-                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-            }
-        }
+
     }
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {
@@ -78,6 +85,7 @@ public class ShieldOffSpell : BaseSpellModulInv
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => PeriodCast;
 
     public override bool ShowLine => false;
     public override float ShowCircle => rad;
@@ -109,10 +117,6 @@ public class ShieldOffSpell : BaseSpellModulInv
         var bullet = DataBaseController.Instance.GetBullet(WeaponType.nextFrame);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
-    }
-    public override SpellDamageData RadiusAOE()
-    {
-        return new SpellDamageData(rad);
     }
 
     protected override void CastAction(Vector3 pos)

@@ -18,7 +18,7 @@ public class SpellBigTooltip : ItemBigTooltip
 
 
 //    public TextMeshProUGUI MaxLevel;
-    public TextMeshProUGUI CostCountField;
+    // public TextMeshProUGUI CostCountField;
     public TextMeshProUGUI CostDelayField;
     public TextMeshProUGUI WeaponLevelField;
     private BaseSpellModulInv _spell;
@@ -36,7 +36,6 @@ public class SpellBigTooltip : ItemBigTooltip
     private void DrawLevel()
     {
 
-        CostCountField.text = Namings.Format(Namings.Tag("ChargesCount"), _spell.CostCount);
         CostDelayField.text = Namings.Format(Namings.Tag("ChargesDelay"), _spell.CostTime);
         var canUpgrade = _spell.CanUpgradeByLevel();
 //        MaxLevel.gameObject.SetActive(!canUpgrade);

@@ -2,25 +2,26 @@
 
 
 [System.Serializable]
-public class ThrowAroundSpell : BaseSpellModulInv
+public class ThrowAroundSpell : SpellWithSizeCoef
 {
     //A1 = lock engine
     //B2 = drop weapons load
 
     private const float DIST_SHOT = 50;
     private const float DAMAGE_BASE = 5;
-    private const float rad = 4f;
+    private float rad => 4f * SizeCoef();
     private const float powerAsteroidCoef = 2.25f;
     private const float timerToLockEngine = 3f;
     private float shieldDmg => DAMAGE_BASE + Level * 3;
     private float powerThrow => 7 + Level * 1.5f;
+    private float _lastBulletCreate = 0f;
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(shieldDmg, powerThrow);
 
     public ThrowAroundSpell()
-        : base(SpellType.throwAround, 2, 10,
+        : base(SpellType.throwAround,  10,
              new BulleStartParameters(19.7f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-
+        _localSpellDamageData = new SpellDamageData(rad);
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
@@ -44,9 +45,18 @@ public class ThrowAroundSpell : BaseSpellModulInv
             }
         }
     }
-    public override SpellDamageData RadiusAOE()
+    private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
     {
-        return new SpellDamageData(rad);
+
+        var delta = Time.time - _lastBulletCreate;
+        if (delta > CoinTempController.BATTERY_PERIOD)
+        {
+            _localSpellDamageData.AOERad = rad;
+            _lastBulletCreate = Time.time;
+            modificatedCreateBullet(target, origin, weapon, shootpos, castdata.Bullestartparameters);
+        }
+
+
     }
 
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
@@ -59,6 +69,7 @@ public class ThrowAroundSpell : BaseSpellModulInv
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => PeriodCast;
     public override bool ShowLine => true;
     public override float ShowCircle => rad;
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet,

@@ -24,21 +24,23 @@ public class EffectController : Singleton<EffectController>
 //        effect.transform.localPosition = Vector3.zero;
     }
 
-    public BaseEffectAbsorber Create(BaseEffectAbsorber ps, Transform transform, float delay)
+    public BaseEffectAbsorber Create(BaseEffectAbsorber ps, Transform transform, float delay, float size = 1f)
     {
         var effect = DataBaseController.Instance.Pool.GetEffect(ps);
         effect.Play();
         LeaveEffect(effect, EffectController.Instance.transform, delay, transform);
         effect.transform.localPosition = Vector3.zero;
+        effect.transform.localScale = Vector3.one * size;
         return effect;
     }
 
-    public BaseEffectAbsorber Create(BaseEffectAbsorber ps, Vector3 pos, float delay)
+    public BaseEffectAbsorber Create(BaseEffectAbsorber ps, Vector3 pos, float delay,float size = 1f)
     {
         var effect = DataBaseController.Instance.Pool.GetEffect(ps);
         effect.Play();
         LeaveEffect(effect, EffectController.Instance.transform, delay, transform);
         effect.transform.position = pos;
+        effect.transform.localScale = Vector3.one * size;
         return effect;
     }
 

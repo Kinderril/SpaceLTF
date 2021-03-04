@@ -10,6 +10,7 @@ public class DebugParamsController
     // public static bool NoMouseMove;
     public static bool FastRecharge;
     public static bool AllModuls = false;
+    public static bool AllSpells = false;
     public static bool AnyWay = false;
     public static bool AllTricks = false;
 

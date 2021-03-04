@@ -288,7 +288,7 @@ public static class EngLocalization
         {"sellModuls", "Sell modules"},
         {"PriorityTargetDesc", "All your ship will try to attack selected ship."},
         {"BaitPriorityTargetDesc","All enemies ships will try to attack selected ship" },
-        {"SpellModulChargers", "Charges require: {0} with delay {1} sec."},
+        {"SpellModulChargers", "Charges delay {0} sec."},
         {"ArtillerySpell","Starts fire at selected zone. Total bullets {0}. Damage of each bullet:{2}/{1}." },
         {"EnerguLockSpell","Destroy engines at all enemies ships in radius {1} for {0} sec." },
         {"LineSHotSpell","Triple shot by selected direction. Base damage: {0}/{1}. And starts fire for {2} sec. Total fire damage:{3}" },
@@ -426,7 +426,7 @@ public static class EngLocalization
 
         {"ShieldOffNameA1", "Battery"},
         {"ShieldOffNameB2", "Fire"},
-        {"ShieldOffDescA1", "Decrease batteries count"},
+        {"ShieldOffDescA1", "Decrease batteries delay"},
         {"ShieldOffDescB2", "Add fire damage for {0} sec"},
 
         {"TrowAroundNameA1", "Engines"},

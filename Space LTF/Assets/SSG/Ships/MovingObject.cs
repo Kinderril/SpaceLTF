@@ -145,7 +145,8 @@ public abstract class MovingObject : PoolElement
             return 1f;
         }
 
-        var turnResult = ApplyRotationXZ(dir, LookDirection, LookLeft, TurnSpeed, DebugMovingData, Position, _lastTurnResult);
+        var turnResult = ApplyRotationXZ(dir, 
+            LookDirection, LookLeft, TurnSpeed, DebugMovingData, Position, _lastTurnResult);
         BankingData.SetNewData(dir, turnResult.BankSteps);
         _lastTurnResult = turnResult;
         Rotation = turnResult.Quaternion;

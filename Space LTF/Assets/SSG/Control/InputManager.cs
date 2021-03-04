@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
     private InGameMainUI inGameMainUi;
 //    public Vector3 keybordDir;
     private float _rightDown;
+    private float _leftDown;
     private Commander _commander;
 
     public void Init(InGameMainUI inGameMainUi,Commander commander)
@@ -38,32 +39,51 @@ public class InputManager : MonoBehaviour
 
 //        Debug.LogError($"isLeftDown:{isRightDown}  isSame:{isSame} ");
 
-//        if (isLeftDown)
-//        {
+
         if (inGameMainUi.DoMouseButtonDown(isSame, isRightDown))
             return;
-//        }
+
         _prevLastLeft = isRightDown;
 
+        //LEFT BUTTON
+        if (Input.GetMouseButtonDown(0))
+        {
+            _leftDown = Time.time;
+            if (inGameMainUi.ClickStartCast(Input.mousePosition))
+            {
+                return;
+            }
+        }
+        if (Input.GetMouseButton(0))
+        {
+            var delta = Time.time - _leftDown;
+            isOverUI = EventSystem.current.IsPointerOverGameObject();
+            inGameMainUi.Hold(Input.mousePosition, true, delta);
+        }
         if (Input.GetMouseButtonUp(0))
         {
-//            Debug.Log("Pressed left click.");
+            var deta = Time.time - _leftDown;
+            Debug.Log("Pressed up left");
             isOverUI = EventSystem.current.IsPointerOverGameObject();
-            inGameMainUi.Clicked(Input.mousePosition,true,0);
+            inGameMainUi.Clicked(Input.mousePosition, true, 0);
             //            isLastFramePressed = true;
         }
+
+
+
+        //RIGHT BUTTON
         if (Input.GetMouseButtonDown(1))
         {
             _rightDown = Time.time;
-//            Debug.Log("d");
-//            isOverUI = EventSystem.current.IsPointerOverGameObject();
-//            inGameMainUi.Clicked(Input.mousePosition, false, delta);
+            //            Debug.Log("d");
+            //            isOverUI = EventSystem.current.IsPointerOverGameObject();
+            //            inGameMainUi.Clicked(Input.mousePosition, false, delta);
         }
         if (Input.GetMouseButton(1))
         {
             var delta = Time.time - _rightDown;
             isOverUI = EventSystem.current.IsPointerOverGameObject();
-            inGameMainUi.Hold(Input.mousePosition, true, delta);
+            inGameMainUi.Hold(Input.mousePosition, false, delta);
         }
 
         if (Input.GetMouseButtonUp(1))

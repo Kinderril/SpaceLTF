@@ -284,49 +284,7 @@ public class InGameMainUI : BaseWindow
             ShipsUIs.Remove(ship.Id);
         }
     }
-
-    private void OnDamageDone(ShipBase shipOwner, ShipDamageType arg1, bool arg2)
-    {
-        string info = "";
-        switch (arg1)
-        {
-            case ShipDamageType.engine:
-                info = Namings.Tag("EngineDest");
-                break;
-            //            case ShipDamageType.turnEngine:
-            //                info = "Turn engine destroyed";
-            //                break;
-            // case ShipDamageType.weapon:
-            //     info = Namings.WeaponDest; 
-            //     break;
-            case ShipDamageType.shiled:
-                info = Namings.Tag("ShieldDest");
-                break;
-            //            case ShipDamageType.moduls:
-            //                info = "Modul destroyed";
-            //                break;
-            case ShipDamageType.fire:
-                info = Namings.Tag("FireDest");
-                break;
-        }
-        Debug.LogError($"add {arg1}");
-        FlyNumberWithDependence.Create(shipOwner.transform, info, Color.red, FlyingInfosContainer, FlyNumerDirection.right);
-    }
-
-    private string GetDeltaStr(float delta)
-    {
-        return ((delta > 0) ? "+" : "") + delta.ToString("0");
-    }
-
-    public void Hold(Vector3 pos, bool left, float delta)
-    {
-        //        Debug.Log("hold...");
-        //        var pt = GetShipByPoint(pos);
-        //        if (pt != null)
-        //        {
-        //            HoldClearCoinUI.Hold(pt,left,delta);
-        //        }
-    }
+                   
 
     public void OnClickReinforsment()
     {
@@ -348,45 +306,66 @@ public class InGameMainUI : BaseWindow
         _battle.FastFinish();
     }
 
-    public void Clicked(Vector3 pos, bool left, float delta)
+    public void Hold(Vector3 pos, bool left, float delta)
     {
+        // Debug.LogError($"hold....:{delta}");
+        if (SpellModulsContainer.ActiveSpell != null)
+        {
+            var ray = GetPointByClick(pos);
+            if (ray.HasValue)
+                SpellModulsContainer.UpdateActivePeriod(ray.Value);
+        }
+    }
+    public bool ClickStartCast(Vector3 pos)
+    {
+
         var isOverUI = EventSystem.current.IsPointerOverGameObject();
         if (isOverUI)
         {
-            return;
+            return false;
         }
 
         if (SpellModulsContainer.SpellSelected != null)
         {
-            SpellModulsContainer.TryCast(left,pos);
+            return SpellModulsContainer.TryCast(true, pos);
         }
-        else
+
+        return false;
+
+    }
+
+    public void Clicked(Vector3 pos, bool left, float delta)
+    {
+        if (SpellModulsContainer.ActiveSpell != null)
         {
-            SpellModulsContainer.ManualAutoOff();
-            if (left)
+            SpellModulsContainer.EndCastActiveSpell();
+             return;
+        }
+        // SpellModulsContainer.ManualAutoOff();
+        if (left)
+        {
+            if (delta < HoldClearCoinUI.BOT_LINE)
             {
-                if (delta < HoldClearCoinUI.BOT_LINE)
+                var pt = GetShipByPoint(pos);
+                if (pt != null)
                 {
-                    var pt = GetShipByPoint(pos);
-                    if (pt != null)
+                    if (left)
                     {
-                        if (left)
-                        {
-                            SelectedShip = pt;
-                        }
+                        SelectedShip = pt;
                     }
                 }
             }
-            else
+        }
+        else
+        {
+            var myMainShip = MyCommander.MainShip;
+            var ray = GetPointByClick(pos);
+            if (ray.HasValue)
             {
-                var myMainShip = MyCommander.MainShip;
-                var ray = GetPointByClick(pos);
-                if (ray.HasValue)
-                {
-                    myMainShip.GoToPointAction(ray.Value, true);
-                }
+                myMainShip.GoToPointAction(ray.Value, true);
             }
         }
+        
     }
 
 
@@ -458,5 +437,6 @@ public class InGameMainUI : BaseWindow
     {
         return _manualWay.DoMouseButtonDown(isSame, mouseButtonDown);
     }
+
 }
 

@@ -10,7 +10,7 @@ public class ShipControlCenter : ShipBase
     private float dist2flow = 2f;
     private Vector3 StartPos;
     public TurretConnector Connector;
-    public CommanderCoinController CoinController { get; private set; }
+    public CoinTempController CoinController { get; private set; }
 
     public override void Init(TeamIndex teamIndex, ShipInventory shipInventory, ShipBornPosition pos, IPilotParameters pilotParams,
         Commander commander, Action<ShipBase> dealthCallback)
@@ -45,11 +45,28 @@ public class ShipControlCenter : ShipBase
             EngineUpdate();
             ApplyMove();
         }
+        else if (ExternalForce.IsActive)
+        {
+            EngineUpdate();
+            ApplyMove();
+        }
     }
 
     public override Vector3 PredictionPos()
     {
         return Position;
+    }
+
+    protected override float TurnSpeed()
+    {
+        if (ExternalForce.IsActive)
+        {
+            // Debug.LogError($"ExternalForce 140");
+            return 140;
+        }
+        var baseTs = base.TurnSpeed();
+        // Debug.LogError($"baseTs:{baseTs} ");
+        return baseTs;
     }
 
     protected override void GizmosSelected()
@@ -60,10 +77,9 @@ public class ShipControlCenter : ShipBase
 
 
 
-    public void SetCoinController(CommanderCoinController coinController)
+    public void SetCoinController(CoinTempController coinController)
     {
         CoinController = coinController;
-        CoinController.Init(this);
     }
 
     public override void Dispose()

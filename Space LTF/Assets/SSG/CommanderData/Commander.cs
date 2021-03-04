@@ -14,7 +14,7 @@ public class Commander
     private List<ShipBase> _shipsToPlayDeath = new List<ShipBase>();
     // private Dictionary<int, CommanderShipEnemy> _enemies = new Dictionary<int, CommanderShipEnemy>();
     public ShipControlCenter MainShip;
-    public CommanderCoinController CoinController;
+    public CoinTempController CoinController;
 
     public CommanderSpells SpellController;
     public CommaderBattleStats BattleStats;
@@ -60,7 +60,7 @@ public class Commander
         _paramsOfShips = battleController.BattleTypeEvent.RebuildArmy(teamIndex, _paramsOfShips,player);
         Battlefield = battlefield;
         _teamIndex = teamIndex;
-        CoinController = new CommanderCoinController(player.Parameters.GetChargesToBattle(), 
+        CoinController = new CoinTempController(player.Parameters.GetChargesToBattle(), 
             player.Parameters.ChargesSpeed.Level);
         //        RewardController= new CommanderRewardController(this);
         SpellController = new CommanderSpells(this);
@@ -361,7 +361,7 @@ public class Commander
             }
             else
             {
-                CommanderCoinController crollerToSet = CoinController;
+                CoinTempController crollerToSet = CoinController;
                 if (_oneCoinContrInited)
                 {
                     crollerToSet = CoinController.Copy();
@@ -444,7 +444,7 @@ public class Commander
         {
             return;
         }
-
+        CoinController.Update();
         if (_shipsToPlayDeath.Count > 0)
         {
             foreach (var shipBase in _shipsToPlayDeath)

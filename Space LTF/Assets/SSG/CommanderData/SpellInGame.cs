@@ -6,8 +6,12 @@ public class CastSpellData
 {
     public BulleStartParameters Bullestartparameters;
     public int ShootsCount = 1;
+    public int Power = 1;
 
 }
+
+[System.Serializable]
+public delegate void EndCastDelegateSpell();
 
 [System.Serializable]
 public delegate void CastActionSpell(BulletTarget target, Bullet origin, IWeapon weapon,
@@ -23,9 +27,11 @@ public delegate void SubUpdateShowCast(Vector3 pos, TeamIndex teamIndex, GameObj
 public delegate bool CanCastAtPoint(Vector3 pos);
 
 
+[Serializable]
 public class SpellDamageData
 {
-    public float AOERad;
+    public float _aoeRad;
+    // public float AOERad;
     public bool IsAOE;
 
     public SpellDamageData()
@@ -35,10 +41,21 @@ public class SpellDamageData
 
     public SpellDamageData(float rad, bool isAOE = true)
     {
-        AOERad = rad;
+        _aoeRad = rad;
+#if UNITY_EDITOR
+        if (_aoeRad == 0)
+        {
+            Debug.LogError("");
+        }
+#endif
         IsAOE = isAOE;
     }
 
+    public float AOERad
+    {
+        get => _aoeRad;
+        set => _aoeRad = value;
+    }
 }
 
 public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
@@ -52,10 +69,12 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     //    public BulleStartParameters BulletStartParams => _bulletStartParams;    
     public WeaponInventoryAffectTarget AffectAction => _affectAction;
     public CreateBulletDelegate CreateBulletAction => _spellData.CreateBulletAction;
+    public UpdateCastDelegate UpdateCastProcess => _spellData.UpdateCast;
 
     public BulleStartParameters BulletStartParams =>
         new BulleStartParameters(BulletSpeed, _bulletStartParams.turnSpeed, AimRadius, AimRadius);
 
+    private SpellZoneVisualCircle CircleActiveObj;
     private SpellZoneVisualCircle CircleObjectToShow;
     private SpellZoneVisualLine LineObjectToShow;
 
@@ -74,7 +93,7 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     public Vector3 CurPosition => _modulPos();
     public ShipBase Owner => _owner;
     public int Level { get; private set; }
-    public int CostCount { get; private set; }
+    // public int CostCount { get; private set; }
     public int CostPeriod { get; private set; }
     public CastActionSpell CastSpell { get; private set; }
     public SubUpdateShowCast SubUpdateShowCast { get; private set; }
@@ -96,18 +115,19 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     public string Desc { get; private set; }
     public SpellType SpellType { get; private set; }
     //    float ShowCircleRadius { get; }
-    bool ShowLine { get; }
-//    public float MaxDist => _maxDist;
-//    private float _maxDist;
+    bool ShowLine { get; set; }
+    //    public float MaxDist => _maxDist;
+    //    private float _maxDist;
     public CanUseDelayedAction DelayedAction;
     public bool ShowCircle { get; private set; }
+    public bool ShowActiveCircle { get; private set; }
     private DistCounter _distCounter;
     private ShipControlCenter _controlShip;
     private ISpellToGame _spellData;
 
     public SpellInGame(ISpellToGame spellData, Func<Vector3> modulPos,
         TeamIndex teamIndex, ShipBase owner, int level, string name, int period,
-        int count, SpellType spellType, string desc, 
+         SpellType spellType, string desc, 
         DistCounter distCounter, float delayPeriod,CurWeaponDamage damageAffection)
     {
         _reloadSec = 1f;
@@ -140,22 +160,70 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         _modulPos = modulPos;
         Name = name;
         CostPeriod = period;
-        CostCount = count;
         _bulletOrigin = spellData.GetBulletPrefab();
-        _spellDamageData = spellData.RadiusAOE();
+        _spellDamageData = spellData.RadiusAOE;
         _bulletStartParams = spellData.BulleStartParameters;
         _affectAction = new WeaponInventoryAffectTarget(spellData.AffectAction.Main, spellData.AffectAction.TargetType);
         CastSpell = spellData.CastSpell;
         SubUpdateShowCast = spellData.SubUpdateShowCast;
         CanCastAtPoint = spellData.CanCastAtPoint;
         spellData.ResetBulletCreateAtion();
-        //        _createBulletAction = spellData.CreateBulletAction;
-        ///
-        //        SetBulletCreateAction(_createBulletAction);
-        ///
         ShallCastToTaregtAIAction = spellData.ShallCastToTaregtAIAction;
         BulletDestroyAction = spellData.BulletDestroyDelegate;
+        Debug.Log($"Init spell:{_spellDamageData.AOERad}   spellData:{spellData}");
         ShowCircle = _spellDamageData.AOERad > 0;
+        InitActiveCircle();
+
+    }
+
+    private void InitActiveCircle()
+    {
+        var prefab = DataBaseController.Instance.SpellDataBase.GetVisualInfo(SpellType);
+        ShowActiveCircle = true;
+        if (prefab == null)
+        {
+            ShowActiveCircle = false;
+            ShowCircle = false;
+            ShowLine = false;
+            return;
+        }
+
+        if (prefab.Value.RadiusAttackEffect != null)
+        {
+            ShowActiveCircle = true;
+            CircleActiveObj = DataBaseController.GetItem(prefab.Value.RadiusAttackEffect);
+            CircleActiveObj.transform.SetParent(BattleController.Instance.OneBattleContainer);
+            CircleActiveObj.SetRad(_spellDamageData.AOERad);
+            CircleActiveObj.gameObject.SetActive(false);
+        }
+        else
+        {
+            ShowActiveCircle = false;
+        }
+
+        if (prefab.Value.SpellZoneCircle != null)
+        {
+            ShowCircle = true;
+            CircleObjectToShow = DataBaseController.GetItem(prefab.Value.SpellZoneCircle);
+            CircleObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
+            CircleObjectToShow.SetRad(_spellDamageData.AOERad);
+            CircleObjectToShow.gameObject.SetActive(false);
+        }
+        else
+        {
+            ShowCircle = false;
+        }
+
+        if (prefab.Value.SpellZoneLine != null)
+        {
+            ShowLine = true;
+            LineObjectToShow = DataBaseController.GetItem(prefab.Value.SpellZoneLine);
+            LineObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
+        }
+        else
+        {
+            ShowLine = false;
+        }
 
     }
 
@@ -177,12 +245,36 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         {
             return false;
         }
-        var canUse = _controlShip.CoinController.CanUseCoins(CostCount);
+        var canUse = _controlShip.CoinController.CanStartCast();
         if (!canUse)
         {
             return false;
         }
         return true;
+    }
+
+    public void UpdateActivePeriod(Vector3 pos)
+    {
+        if (ShowActiveCircle)
+        {
+            CircleActiveObj.transform.position = pos;
+            var rad = _spellData.RadiusAOE.AOERad;
+            rad = Mathf.Clamp(rad, 1, 100);
+            CircleActiveObj.SetRad(rad);
+            CircleActiveObj.gameObject.SetActive(true);
+        }
+
+        if (ShowLine)
+        {
+            if (!LineObjectToShow.gameObject.activeSelf)
+            {
+                LineObjectToShow.gameObject.SetActive(true);
+            }
+            var dir = (pos - _modulPos());
+            LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir, AimRadius);
+        }
+        UpdateCastProcess(pos, getBulletTarget(pos), _bulletOrigin,
+            this, _modulPos(), getCastSpellData());
     }
 
     public void UpdateShowCast(Vector3 pos)
@@ -202,30 +294,18 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
             LineObjectToShow.SetDirection(_modulPos(), _modulPos() + dir, AimRadius);
         }
     }
+
     public void StartShowCast()
     {
         _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.SelectSpell);
         if (ShowLine)
         {
-            if (LineObjectToShow == null)
-            {
-                var p = DataBaseController.Instance.SpellDataBase.SpellZoneLine;
-                LineObjectToShow = DataBaseController.GetItem(p);
-                LineObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
-            }
             LineObjectToShow.gameObject.SetActive(true);
         }
 
         if (ShowCircle)
         {
-            if (CircleObjectToShow == null)
-            {
-                CircleObjectToShow =
-                    DataBaseController.GetItem(DataBaseController.Instance.SpellDataBase.SpellZoneCircle);
-                CircleObjectToShow.transform.SetParent(BattleController.Instance.OneBattleContainer);
-                CircleObjectToShow.SetSize(_spellDamageData.AOERad * 4);
-            }
-
+            CircleObjectToShow.SetRad(_spellDamageData.AOERad);
             CircleObjectToShow.gameObject.SetActive(true);
         }
     }
@@ -233,6 +313,10 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
 
     public void EndShowCast()
     {
+        if (ShowActiveCircle)
+        {
+            CircleActiveObj.gameObject.SetActive(false);
+        }
         if (ShowCircle)
         {
             CircleObjectToShow.gameObject.SetActive(false);
@@ -246,36 +330,37 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     {
         _owner.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.GetCastSpell(SpellType));
         var startPos = _modulPos();
+        DelayedAction.Use();
+        // Debug.LogError($"Cast rad start:{AimRadius.ToString("0.00")}");
+ 
+        CastSpell(getBulletTarget(target), _bulletOrigin, this, startPos, getCastSpellData());
+        CircleActiveObj.gameObject.SetActive(true);
+        //        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
+    }
+
+    private BulletTarget getBulletTarget(Vector3 target)
+    {
+        var startPos = _modulPos();
         var dir = Utils.NormalizeFastSelf(target - startPos);
         var maxDistPos = startPos + dir * AimRadius;
         var distCal = _distCounter(maxDistPos, target);
-        DelayedAction.Use();
-        Debug.LogError($"Cast rad start:{AimRadius.ToString("0.00")}");
+        var bulletTarget = new BulletTarget(distCal);
+        return bulletTarget;
+    }
+
+    private CastSpellData getCastSpellData()
+    {
         var castData = new CastSpellData()
         {
             Bullestartparameters = BulletStartParams,
             ShootsCount = ShootPerTime,
         };
-        CastSpell(new BulletTarget(distCal), _bulletOrigin, this, startPos, castData);
-        //        CastSpell(new BulletTarget(target), _bulletOrigin, this, startPos, _bulletStartParams);
-    }
-
+        return castData;
+    }                   
 
     public void BulletCreateByDir(ShipBase target, Vector3 dir)
     {
         CreateBulletWithModif(dir);
-//        if (ShootPerTime > 0)
-//        {
-//            for (int i = 1; i < ShootPerTime; i++)
-//            {
-//                var timer = MainController.Instance.BattleTimerManager.MakeTimer(0.1f * i);
-//                timer.OnTimer += () =>
-//                {
-//                    if (!Owner.IsDead)
-//                        CreateBulletWithModif(dir);
-//                };
-//            }     
-//        }
     }
 
     protected void CreateBulletWithModif(ShipBase target)
@@ -364,7 +449,7 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
         {
             if (CanCastAtPoint(trg))
             {
-                _controlShip.CoinController.UseCoins(CostCount, CostPeriod);
+                // _controlShip.CoinController.UseCoins(CostCount, CostPeriod);
                 Cast(trg);
                 return true;
             }
@@ -388,5 +473,11 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     public void AddInfoForTooltip(string descSupport)
     {
         SupportDesc.Add(descSupport);
+    }
+
+    public void EndCastPeriod()
+    {
+        _spellData.EndCastPeriod();
+        CircleActiveObj.gameObject.SetActive(false);
     }
 }

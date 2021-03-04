@@ -10,18 +10,17 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     public const float HEAL_PERCENT = 0.28f;
     public const float SHIELD_PERCENT = 0.40f;
-    public const float MINES_DIST = 7f;
+    public const float MINES_DIST = 57f;
     private const float rad = 1f;
     private const float BUFF_TIME = 13f;
+    private const float CAST_COEF = .33f;
 
     private const float _sDistToShoot = 4 * 4;
-    private bool _lastCheckIsOk = false;
-    [field: NonSerialized]
-    private ShipBase _lastClosest;
-
     private int DronesCount => 1;//DRONES_COUNT + Level/2;
     private float HealPercent => CalcHealPercent(Level);
     private float HealPerTick => 8 + Level * 2;
+
+    private float _nextBulletTime;
 
     private float CalcHealPercent(int l)
     {
@@ -30,10 +29,10 @@ public class RepairDronesSpell : BaseSpellModulInv
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(HealPercent, HealPerTick);
 
     public RepairDronesSpell()
-        : base(SpellType.repairDrones, 3, 30,
-             new BulleStartParameters(15f, 46f, MINES_DIST, MINES_DIST), false,TargetType.Ally)
+        : base(SpellType.repairDrones,  20,
+             new BulleStartParameters(3f, 46f, MINES_DIST, MINES_DIST), false,TargetType.Ally)
     {
-
+        _localSpellDamageData = new SpellDamageData(rad, false);
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
@@ -52,44 +51,63 @@ public class RepairDronesSpell : BaseSpellModulInv
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
     protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => UpdateCastInner;
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        if (_lastClosest != null)
+
+    }
+
+    private void UpdateCastInner(Vector3 trgpos,
+        BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+
+        if (_nextBulletTime < Time.time)
         {
-            target = new BulletTarget(_lastClosest);
-            var period = 0.5f;
-            for (int i = 0; i < castData.ShootsCount; i++)
+            var btl = BattleController.Instance;
+            _nextBulletTime = CAST_COEF * CoinTempController.BATTERY_PERIOD + Time.time;
+            for (int i = 0; i < castdata.ShootsCount; i++)
             {
-                var pp = i * period;
-                if (pp > 0)
+                var battle = BattleController.Instance;
+                if (battle.State == BattleState.process)
                 {
-                    var timer =
-                        MainController.Instance.BattleTimerManager.MakeTimer(pp);
-                    timer.OnTimer += () =>
-                    {
-                        modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-                    };
-                }
-                else
-                {
-                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+                    var close = btl.GreenCommander.GetClosestShip(trgpos,false);
+                    var nTargte = new BulletTarget(close);
+
+                    // Debug.LogError("cat droid");
+                    modificatedCreateBullet(nTargte, origin, weapon, weapon.CurPosition, castdata.Bullestartparameters);
                 }
             }
         }
+    }
+    private float TimeCoef()
+    {
+        var delta = Time.time - _castStartTime;
+        var mm = delta * 0.25f + 1f;
+        var coef = Mathf.Clamp(mm, 1f, 6f);
+        return coef;
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
         Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        Vector3 dir = target.target!=null?(target.target.Position - weapon.CurPosition): (target.Position - weapon.CurPosition);
-        Bullet.Create(origin, weapon, dir, weapon.CurPosition, target.target, BulleStartParameters);
+        var xx = MyExtensions.Random(-1f, 1f);
+        var zz = MyExtensions.Random(-1f, 1f);
+        Vector3 dir = Utils.NormalizeFastSelf(new Vector3(xx, 00, zz));
+        var copy = bullestartparameters.Copy();
+        var coef = TimeCoef();
+
+
+        copy.turnSpeed = copy.turnSpeed * coef;
+        Bullet.Create(origin, weapon, dir, weapon.CurPosition, target.target, copy);
     }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         target.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
-        var addHealth = shipparameters.MaxHealth * additional.CurrentDamage.ShieldDamage;
+        var coef = TimeCoef() * .3f;
+        var clmap = Mathf.Clamp(coef, 1f, 3f);
+        var addHealth = shipparameters.MaxHealth * additional.CurrentDamage.ShieldDamage * clmap;
         shipparameters.HealthRegen.Start(addHealth, additional.CurrentDamage.BodyDamage);
         switch (UpgradeType)
         {
@@ -121,32 +139,16 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     public override CanCastAtPoint CanCastAtPoint
     {
-        get { return pos => _lastCheckIsOk; }
+        get { return pos => true; }
+        // get { return pos => _lastCheckIsOk; }
     }
 
     protected void ShowOnShip(Vector3 pos, TeamIndex teamIndex, GameObject objectToShow)
     {
-        var closestsShip = BattleController.Instance.ClosestShipToPos(pos, teamIndex, out float sDist);
-        if (sDist < _sDistToShoot && closestsShip != null)
-        {
-            _lastCheckIsOk = true;
-            objectToShow.gameObject.SetActive(true);
-            objectToShow.transform.position = closestsShip.Position;
-            _lastClosest = closestsShip;
-        }
-        else
-        {
-            _lastClosest = null;
-            _lastCheckIsOk = false;
-            objectToShow.gameObject.SetActive(false);
-        }
+   
     }
 
 
-    public override SpellDamageData RadiusAOE()
-    {
-        return new SpellDamageData(rad, false);
-    }
     public override string Desc()
     {
         return Namings.Format(Namings.Tag("RepairDroneSpell"), DronesCount, Utils.FloatToChance(HealPercent));

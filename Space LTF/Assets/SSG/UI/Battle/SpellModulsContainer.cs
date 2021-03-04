@@ -9,20 +9,27 @@ public class SpellModulsContainer : MonoBehaviour
     private List<SpellButton> _buttons = new List<SpellButton>();
     public Animator NotEnoughtBatteries;
     private SpellInGame _spellSelected;
+    private SpellInGame _activeSpell;
     public event Action<SpellInGame> OnSelectSpell;
-    public event Action<bool> OnAutoModeSpell;
+    public event Action<SpellInGame> OnActivateSpell;
+    public event Action<SpellInGame> OnDeactivateSpell;
+    // public event Action<bool> OnAutoModeSpell;
+    public SpellInGame ActiveSpell => _activeSpell;
     public SpellInGame SpellSelected => _spellSelected;
     private InGameMainUI _inGameMain;
     private Commander MyCommander;
-    private bool _isAutoMode = false;
-    public GameObject AutoActive;
+
+    private CoinTempController _coinController;
+    // private bool _isAutoMode = false;
+    // public GameObject AutoActive;
 
     public void Init(InGameMainUI inGameMain, CommanderSpells commanderSpells,
         ShipBase mainShip, //Action<SpellInGame> buttonCallback, 
-        CommanderCoinController coinController,AutoAICommander autoAICommander, Commander myCommander)
+        CoinTempController coinController,AutoAICommander autoAICommander, Commander myCommander)
     {
+        _coinController = coinController;
         _inGameMain = inGameMain;
-        AutoActive.gameObject.SetActive(false);
+        // AutoActive.gameObject.SetActive(false);
         MyCommander = myCommander;
         _buttons.Clear();
         SpellButton spPrefab = DataBaseController.Instance.SpellDataBase.SpellButton;
@@ -36,38 +43,37 @@ public class SpellModulsContainer : MonoBehaviour
                 b.Init(inGameMain, baseSpellModul, spell =>
                  {
                      OnSpellClicked(spell);
-                 }, coinController.CoefSpeed, index, autoAICommander.GetAutoSpell(baseSpellModul),this);
+                 }, coinController.CoefSpeed, index);
                 index++;
                 _buttons.Add(b);
             }
         }
     }
 
-    public void OnClickAuto()
-    {
-        AutoChange(!_isAutoMode);
-    }
+    // public void OnClickAuto()
+    // {
+    //     AutoChange(!_isAutoMode);
+    // }
 
-    private void AutoChange(bool to)
-    {
-        if (to == _isAutoMode)
-            return;
-
-        _isAutoMode = to;
-        AutoActive.gameObject.SetActive(_isAutoMode);
-        OnAutoModeSpell?.Invoke(_isAutoMode);
-    }
+    // private void AutoChange(bool to)
+    // {
+    //     if (to == _isAutoMode)
+    //         return;
+    //
+    //     _isAutoMode = to;
+    //     AutoActive.gameObject.SetActive(_isAutoMode);
+    //     OnAutoModeSpell?.Invoke(_isAutoMode);
+    // }
 
     void Update()
     {
-        var ray = _inGameMain.GetPointByClick(Input.mousePosition);
-        if (ray.HasValue)
+        if (_spellSelected != null)
         {
-            if (_spellSelected != null)
+            var ray = _inGameMain.GetPointByClick(Input.mousePosition);
+            if (_activeSpell == null && ray.HasValue)
             {
                 _spellSelected.UpdateShowCast(ray.Value);
             }
-
         }
     }
 
@@ -82,7 +88,7 @@ public class SpellModulsContainer : MonoBehaviour
 
     private void OnSpellClicked(SpellInGame spellToCast)
     {
-        if (_isAutoMode || spellToCast.CanCast())
+        if (spellToCast.CanCast())
         {
             if (_spellSelected != null)
             {
@@ -90,17 +96,14 @@ public class SpellModulsContainer : MonoBehaviour
             }
 
             _spellSelected = spellToCast;
-            if (OnSelectSpell != null)
-            {
-                OnSelectSpell(_spellSelected);
-            }
+            OnSelectSpell?.Invoke(_spellSelected);
             _spellSelected.StartShowCast();
             Debug.Log("spell select " + _spellSelected.Name);
         }
         else
         {
             CastFail();
-            Debug.Log("Can't cast spell " + spellToCast.Name + "   " + spellToCast.CostCount);
+            Debug.Log("Can't cast spell " + spellToCast.Name);
         }
     }
     public void UnselectSpell()
@@ -114,7 +117,7 @@ public class SpellModulsContainer : MonoBehaviour
 
     public void Dispose()
     {
-        OnAutoModeSpell = null;
+        // OnAutoModeSpell = null;
         if (_spellSelected != null)
         {
             _spellSelected.EndShowCast();
@@ -142,10 +145,9 @@ public class SpellModulsContainer : MonoBehaviour
     public void CastFail()
     {
         NotEnoughtBatteries.SetTrigger("Play");
-
     }
 
-    public void TryCast(bool left,Vector3 pos)
+    public bool TryCast(bool left,Vector3 pos)
     {
         var battle = BattleController.Instance;
  
@@ -156,41 +158,17 @@ public class SpellModulsContainer : MonoBehaviour
                 var ray = _inGameMain.GetPointByClick(pos);
                 if (ray.HasValue)
                 {
-                    if (_isAutoMode)
+                    if (MyCommander.SpellController.TryCastspell(_spellSelected, ray.Value))
                     {
-                        TeamIndex inedx;
-                        if (_spellSelected.AffectAction.TargetType == TargetType.Enemy)
-                        {
-                            inedx = TeamIndex.red;
-                        }
-                        else
-                        {
-                            inedx = TeamIndex.green;
-                        }
-
-                        var getClosest = BattleController.Instance.ClosestShipToPos(ray.Value, inedx, out float sDIst);
-                        if (getClosest != null && sDIst < 4)
-                        {
-                            battle.GreenAutoAICommander.ActivateAiSpell(_spellSelected, getClosest);
-                        }
-                        else
-                        {
-                            Debug.LogError($"No closest ship. dist: {Mathf.Sqrt(sDIst)}");
-                        }
-
-                        AutoChange(false);
-                    }
-                    else
-                    {
-                        if (MyCommander.SpellController.TryCastspell(_spellSelected, ray.Value))
-                        {
-                            Debug.Log("spell TryCast " + _spellSelected.Name);
-                            EndCastSpell();
-                            return;
-                        }
-
+                        // Debug.LogError("spell TryCast " + _spellSelected.Name);
+                        _activeSpell = _spellSelected;
+                        _coinController.StartUseSpell(_activeSpell);
+                        OnActivateSpell?.Invoke(_activeSpell);
                         EndCastSpell();
+                        return true;
                     }
+
+                    EndCastSpell();
                 }
 
                 EndCastSpell();
@@ -200,13 +178,28 @@ public class SpellModulsContainer : MonoBehaviour
         {
             EndCastSpell();
         }
-        
 
+        return false;
     }
 
-    public void ManualAutoOff()
+    public void EndCastActiveSpell()
     {
-        AutoChange(false);
+        // Debug.LogError($"EndCastActiveSpell....:");
+        _coinController.EndCastSpell();
+        _activeSpell.EndCastPeriod();
+        _activeSpell = null;
+    }
+
+    public void UpdateActivePeriod(Vector3 ray)
+    {
+        if (_coinController.TrySpellUsage())
+        {
+            ActiveSpell.UpdateActivePeriod(ray);
+        }
+        else
+        {
+            CastFail();
+        }
     }
 }
 
