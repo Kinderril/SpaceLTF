@@ -23,7 +23,10 @@ public class DistShotSpell : BaseSpellModulInv
     private const float BULLET_SPEED = 50f;
     private const float BULLET_TURN_SPEED = .2f;
     private const float DIST_SHOT = 42;
+
+    [NonSerialized] private Vector3 _prevTrg;
     [NonSerialized] private BeamBulletNoTarget ControlBullet;
+
     public DistShotSpell()
         : base(SpellType.distShot,  13, 
             new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
@@ -32,25 +35,9 @@ public class DistShotSpell : BaseSpellModulInv
     }
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
+        _prevTrg = target.Position;
         modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-        // var period = 0.5f;
-        // for (int i = 0; i < castData.ShootsCount; i++)
-        // {
-        //     var pp = i * period;
-        //     if (pp > 0)
-        //     {
-        //         var timer =
-        //             MainController.Instance.BattleTimerManager.MakeTimer(pp);
-        //         timer.OnTimer += () =>
-        //         {
-        //             modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-        //         };
-        //     }
-        //     else
-        //     {
-        //         modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-        //     }
-        // }
+
     }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
@@ -97,10 +84,8 @@ public class DistShotSpell : BaseSpellModulInv
         var dist = (target.Position - bullet1.Weapon.Owner.Position).magnitude;
         var totalDistDamage = dist;// * DIST_COEF;
         int damage = (int)(additional.CurrentDamage.BodyDamage + Mathf.Clamp((int)totalDistDamage, 0, DIST_BASE_DAMAGE));
-
-        var deltaTime = Time.time - _castStartTime;
-        var dmgShield = Mathf.Pow(deltaTime, 0.7f) - 2;
-        dmgShield = Mathf.Clamp(dmgShield, 0, 999);
+                                                          
+        var dmgShield = 2 * PowerInc();
         target.ShipParameters.Damage(dmgShield, damage, bullet1.Weapon.DamageDoneCallback, target);
         switch (UpgradeType)
         {
@@ -131,12 +116,13 @@ public class DistShotSpell : BaseSpellModulInv
         var dir = Utils.NormalizeFastSelf(trgpos - shootpos);
         var deltaTime = Time.time - _castStartTime;
         Vector3 trg = shootpos + dir * deltaTime * 10;
+        var nextTrg = Vector3.Lerp(trg, _prevTrg, .99f);
         if (ControlBullet != null && ControlBullet.IsAcive)
         {
-            ControlBullet.MoveTargetTo(trg);
-            var p = Mathf.Clamp(Mathf.Pow(deltaTime, 0.4f) + 1, 1, 5);
-            ControlBullet.coefWidth = p;
-            ControlBullet.SetDeathTime(Time.time + 0.1f);
+            ControlBullet.MoveTargetTo(nextTrg);
+            ControlBullet.coefWidth = PowerInc();
+            ControlBullet.SetDeathTime(Time.time +.1f);
+            _prevTrg = nextTrg;
         }
     }
 

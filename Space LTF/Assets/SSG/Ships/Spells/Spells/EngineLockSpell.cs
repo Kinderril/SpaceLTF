@@ -96,19 +96,19 @@ public class EngineLockSpell : BaseSpellModulInv
     public override UpdateCastDelegate UpdateCast => PeriodCast;
 
 
-    private float CoefSize()
-    {
-
-        var deltaTime = Time.time - _castStartTime;
-        var coef = Mathf.Pow(deltaTime, 0.9f) + 1;
-        float p = Mathf.Clamp(coef, 1, 5);
-        return p;
-    }
+    // private float CoefSize()
+    // {
+    //
+    //     var deltaTime = Time.time - _castStartTime;
+    //     var coef = Mathf.Pow(deltaTime, 0.9f) + 1;
+    //     float p = Mathf.Clamp(coef, 1, 5);
+    //     return p;
+    // }
 
     private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, 
         IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
     {
-        var p = CoefSize();
+        var p = PowerInc();
         _localSpellDamageData.AOERad = rad * p;
         var delta = Time.time - _lastBulletCreate;
         if (delta > CoinTempController.BATTERY_PERIOD)
@@ -128,9 +128,7 @@ public class EngineLockSpell : BaseSpellModulInv
     {
         if (target != null)
         {
-
-            var delta = Time.time - _castStartTime;
-            var coef = Mathf.Clamp(Mathf.Pow(delta, 0.6f), 1, 10);
+            var coef = PowerInc();
             ActionShip(target, additional.CurrentDamage.BodyDamage * coef);
         }
     }

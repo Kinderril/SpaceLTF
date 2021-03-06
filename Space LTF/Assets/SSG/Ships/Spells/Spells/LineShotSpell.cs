@@ -78,8 +78,7 @@ public class LineShotSpell : BaseSpellModulInv
         if (_nextBulletTime < Time.time)
         {
             var ANG_2 = 20f;
-            var delta = Time.time - _castStartTime;
-            var period = CoinTempController.BATTERY_PERIOD / (0.22f * delta + 0.54f);
+            var period = CoinTempController.BATTERY_PERIOD * PowerDec();
             period = Mathf.Clamp(period, 0.2f, 1);
             _nextBulletTime = Time.time + period;
             //        Debug.Log($"dir to shoot{dirToShoot}   targte{target.Position}   from{shootPos}");

@@ -11,7 +11,7 @@ public class ArmyBornCenterGlobalCell : GlobalMapCell
     private bool _shallTryBornNextStep = false;
     public bool FightComplete { get; private set; }     
     private int _nextBornStep = 15;
-    private const int _minBornStep = 15;
+    private const int _minBornStep = 10;
 //    private int _nextBornStep = 15;
     public ArmyBornCenterGlobalCell(int id, int iX, int iZ, SectorData sector, ShipConfig config) : base(id, iX, iZ, sector, config)
     {

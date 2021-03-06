@@ -11,6 +11,7 @@ public interface ISpellToGame
     CastActionSpell CastSpell { get; }
     SpellDamageData RadiusAOE { get; }
     Bullet GetBulletPrefab();
+    float PowerInc();
     //    float ShowCircle { get; }
     bool ShowLine { get; }
     void ResetBulletCreateAtion();

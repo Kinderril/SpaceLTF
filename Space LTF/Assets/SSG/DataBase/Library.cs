@@ -752,11 +752,11 @@ public static class Library
     public const float MIN_GLOBAL_MAP_ADDITIONAL_POWER = 1;
     public const float MAX_GLOBAL_MAP_ADDITIONAL_POWER = 10;
 
-    public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER = 8;
-    public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 9;
-    public const int MIN_GLOBAL_MAP_NORMAL_BASE_POWER = 11;
-    public const int MIN_GLOBAL_MAP_HARD_BASE_POWER = 13;
-    public const int MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER = 15;
+    public const int MAX_GLOBAL_MAP_VERYEASY_BASE_POWER =9;
+    public const int MIN_GLOBAL_MAP_EASY_BASE_POWER = 11;
+    public const int MIN_GLOBAL_MAP_NORMAL_BASE_POWER = 13;
+    public const int MIN_GLOBAL_MAP_HARD_BASE_POWER = 16;
+    public const int MIN_GLOBAL_MAP_IMPOSIBLE_BASE_POWER = 19;
 
 
     public const int MIN_GLOBAL_MAP_SECTOR_COUNT = 3;

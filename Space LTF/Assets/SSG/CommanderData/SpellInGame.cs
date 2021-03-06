@@ -176,6 +176,11 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
 
     }
 
+    public float PowerInc()
+    {
+        return _spellData.PowerInc();
+    }
+
     private void InitActiveCircle()
     {
         var prefab = DataBaseController.Instance.SpellDataBase.GetVisualInfo(SpellType);
@@ -478,6 +483,11 @@ public class SpellInGame : IWeapon , IAffectable  , IAffectParameters
     public void EndCastPeriod()
     {
         _spellData.EndCastPeriod();
-        CircleActiveObj.gameObject.SetActive(false);
+        if (ShowCircle)
+            CircleObjectToShow.gameObject.SetActive(false);
+        if (ShowActiveCircle)
+            CircleActiveObj.gameObject.SetActive(false);
+        if (ShowLine)
+            LineObjectToShow.gameObject.SetActive(false);
     }
 }

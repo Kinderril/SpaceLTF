@@ -52,19 +52,11 @@ public class RechargeShieldSpell : BaseSpellModulInv
         _localSpellDamageData.AOERad = ShowCircle;
     }
 
-    private float Coef()
-    {
-
-        var deltaTime = Time.time - _castStartTime;
-        var coef = deltaTime * 0.7f + 1;
-        float p = Mathf.Clamp(coef, 1, 10);
-        return p;
-    }
 
     private void UpdateCastInner(Vector3 trgpos,
         BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var p = Coef();
+        var p = PowerInc();
         _localSpellDamageData.AOERad = ShowCircle * p;
         if (_nextBulletTime < Time.time)
         {

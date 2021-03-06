@@ -52,7 +52,7 @@ public class FreeActionGlobalMapCell : GlobalMapCell
             return;
         }
 #endif
-        if (MyExtensions.IsTrue01(0.15f))
+        if (MyExtensions.IsTrue01(0.07f))
         {
             return;
         }

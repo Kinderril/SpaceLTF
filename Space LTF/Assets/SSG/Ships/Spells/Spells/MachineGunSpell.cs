@@ -108,7 +108,10 @@ public class MachineGunSpell : BaseSpellModulInv
     private void ShootToTarget(Vector3 pos
     , Bullet origin, IWeapon weapon, BulleStartParameters bullestartparameters)
     {
-        for (int i = 0; i < BulletsCount; i++)
+        var bullet = BulletsCount * PowerInc();
+        var shootCount = (int) (bullet + 0.5f);
+                     // Debug.LogError($"shootCount:{shootCount}");
+        for (int i = 0; i < shootCount; i++)
         {
             var timer =
                 MainController.Instance.BattleTimerManager.MakeTimer(.1f * i);
@@ -117,7 +120,7 @@ public class MachineGunSpell : BaseSpellModulInv
                 var battle = BattleController.Instance;
                 if (battle.State == BattleState.process)
                 {
-                    var coef = TimeCoef();
+                    var coef = PowerInc();
                     bullestartparameters.size = Mathf.Clamp(coef * 0.1f, 1, 2f);
                     modificatedCreateBullet(GetTrg(pos), origin, weapon, weapon.CurPosition, bullestartparameters);
                 }
@@ -146,19 +149,12 @@ public class MachineGunSpell : BaseSpellModulInv
         return nTargte;
     }
 
-    private float TimeCoef()
-    {
-        var delta = Time.time - _castStartTime;
-        var mm = Mathf.Pow(delta - 1, 0.5f);
-        var coef = Mathf.Clamp(mm, 1f, 6f);
-        return coef;
-    }
-
     private void MainAffect(ShipParameters shipparameters, ShipBase target,
         Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
-        var coef = TimeCoef();
-        ActionShip(target, additional.CurrentDamage.BodyDamage * coef, additional.CurrentDamage.ShieldDamage * coef, damagedone);
+        var coef = 1f;//PowerInc();
+        ActionShip(target, additional.CurrentDamage.BodyDamage * coef, 
+            additional.CurrentDamage.ShieldDamage * coef, damagedone);
     }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)

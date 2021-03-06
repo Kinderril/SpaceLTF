@@ -1,4 +1,5 @@
 ﻿using System;
+using Steamworks;
 using UnityEngine;
 
 public enum SpellType
@@ -66,6 +67,30 @@ public abstract class BaseSpellModulInv : IItemInv, ISpellToGame, IAffectParamet
         SpellType = spell;
         CostTime = costTime;
         ShootPerTime = 1;
+    }
+    protected float PowerDec()
+    {
+        var pInc = PowerInc();
+        var clamp = Mathf.Clamp(pInc, 0f, 2f);
+        return 2f - pInc;
+    }
+    public float PowerInc()
+    {
+        var x = Time.time - _castStartTime;
+        if (x < 1.07371753f)
+        {
+            return x * 0.5f + 1;
+        }
+
+        if (x < 6.4367)
+        {
+            var pow = Mathf.Pow((x * 1.3f - 0.8f), 0.5f);
+            return 2f - pow * 0.6f;
+        }
+
+        var d = 0.8f - x * 0.07f;
+        return Mathf.Clamp(d, 0.2f, 3f);
+
     }
 
     private void CastActionSpellBase(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)

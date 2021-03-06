@@ -65,7 +65,9 @@ public class BeamBulletNoTarget : Bullet
 
     public void SetDeathTime(float dTime)
     {
+        // Debug.LogError($"Ser dt:{dTime}");
         _deathTime = dTime;
+        _startOff = Time.time + _offStartTime;
     }
 
     protected override void ManualUpdate()
@@ -160,6 +162,7 @@ public class BeamBulletNoTarget : Bullet
     {
         if (Time.time > _deathTime)
         {
+            // Debug.LogError("TimeEndCheck");
             Death();
             return true;
         }
@@ -204,7 +207,6 @@ public class BeamBulletNoTarget : Bullet
     public void MoveTargetTo(Vector3 trg)
     {
         _selectedTrg = trg;
-        _deathTime = Time.time + 0.5f;
     }
 
     private float CalcDist(Vector3 p)
@@ -240,7 +242,7 @@ public class BeamBulletNoTarget : Bullet
     {
         ProcessEvent.gameObject.SetActive(false);
         _canActivate = false;
-        //        Debug.LogError($"Beam dead {Time.time}");
+        // Debug.LogError($"Beam dead {Time.time}");
         base.Death();
     }
 }

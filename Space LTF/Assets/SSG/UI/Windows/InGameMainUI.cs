@@ -313,7 +313,16 @@ public class InGameMainUI : BaseWindow
         {
             var ray = GetPointByClick(pos);
             if (ray.HasValue)
-                SpellModulsContainer.UpdateActivePeriod(ray.Value);
+            {
+                if (!SpellModulsContainer.UpdateActivePeriod(ray.Value))
+                {
+                    SpellModulsContainer.EndCastActiveSpell();
+                }
+            }
+            else
+            {
+                SpellModulsContainer.EndCastActiveSpell();
+            }
         }
     }
     public bool ClickStartCast(Vector3 pos)

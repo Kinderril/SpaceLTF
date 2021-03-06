@@ -48,7 +48,7 @@ public class ArtillerySpell : BaseSpellModulInv
         {
             return rad;
         }
-        var coef = coefSize();
+        var coef = PowerDec();
         return rad * coef;
     }
 
@@ -90,7 +90,7 @@ public class ArtillerySpell : BaseSpellModulInv
 
                     var nTargte = new BulletTarget(trgpos + new Vector3(xx, 0, zz));
 
-                    var coef = coefSpeed();
+                    var coef = PowerInc();
                     castdata.Bullestartparameters.bulletSpeed = castdata.Bullestartparameters.bulletSpeed * coef;
                     modificatedCreateBullet(nTargte, origin, weapon, weapon.CurPosition, castdata.Bullestartparameters);
                 }
@@ -104,23 +104,23 @@ public class ArtillerySpell : BaseSpellModulInv
         base.EndCastSpell();
     }
 
-    private float coefSpeed()
-    {
-
-        var deltaFromStart = Time.time - _castStartTime;
-        var res = Mathf.Pow(deltaFromStart, 0.7f);
-        res = res * 0.6f + 1;
-        return Mathf.Clamp(res, 1, 4) * SPEED_COEF;
-    }
-
-    // private const float _upperSIze = 3;
-
-    private float coefSize()
-    {
-        var deltaFromStart = Time.time - _castStartTime;
-        // return 1 - deltaFromStart
-        return Mathf.Clamp(1 - deltaFromStart * 0.18f,0.13f, 1f);
-    }
+    // private float coefSpeed()
+    // {
+    //
+    //     var deltaFromStart = Time.time - _castStartTime;
+    //     var res = Mathf.Pow(deltaFromStart, 0.7f);
+    //     res = res * 0.6f + 1;
+    //     return Mathf.Clamp(res, 1, 4) * SPEED_COEF;
+    // }
+    //
+    // // private const float _upperSIze = 3;
+    //
+    // private float coefSize()
+    // {
+    //     var deltaFromStart = Time.time - _castStartTime;
+    //     // return 1 - deltaFromStart
+    //     return Mathf.Clamp(1 - deltaFromStart * 0.18f,0.13f, 1f);
+    // }
 
     private void MainAffect(ShipParameters shipparameters, ShipBase target,
         Bullet bullet, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)

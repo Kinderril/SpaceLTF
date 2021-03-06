@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -18,8 +19,11 @@ public class SpellModulsContainer : MonoBehaviour
     public SpellInGame SpellSelected => _spellSelected;
     private InGameMainUI _inGameMain;
     private Commander MyCommander;
+    public TextMeshProUGUI PowerCoefField;
 
     private CoinTempController _coinController;
+
+    public Animator Animator;
     // private bool _isAutoMode = false;
     // public GameObject AutoActive;
 
@@ -165,6 +169,7 @@ public class SpellModulsContainer : MonoBehaviour
                         _coinController.StartUseSpell(_activeSpell);
                         OnActivateSpell?.Invoke(_activeSpell);
                         EndCastSpell();
+                        InitPowerField();
                         return true;
                     }
 
@@ -182,24 +187,55 @@ public class SpellModulsContainer : MonoBehaviour
         return false;
     }
 
+    private void InitPowerField()
+    {
+        Animator.SetTrigger("ScaleUp");
+        PowerCoefField.gameObject.SetActive(true);
+        SetText(1);
+        PowerCoefField.color = new Color(.5f,.5f,0f);// Color.Lerp(Color.red, Color.green, .5f); ;
+    }
+
+    public void SetText(float val)
+    {
+        var coef = (int)(val *100f);
+        // Debug.LogError($"val:{val}  coef:{coef}");
+        PowerCoefField.text =$"{Namings.Tag("Power")}:{coef}%" ;
+    }
+
     public void EndCastActiveSpell()
     {
         // Debug.LogError($"EndCastActiveSpell....:");
         _coinController.EndCastSpell();
         _activeSpell.EndCastPeriod();
+        PowerCoefField.gameObject.SetActive(false);
+        Animator.SetTrigger("ScaleDown");
         _activeSpell = null;
     }
 
-    public void UpdateActivePeriod(Vector3 ray)
+    public bool UpdateActivePeriod(Vector3 ray)
     {
+        UpdatePower();
         if (_coinController.TrySpellUsage())
         {
             ActiveSpell.UpdateActivePeriod(ray);
+            return true;
         }
         else
         {
             CastFail();
+            return false;
         }
+    }
+
+    private void UpdatePower()
+    {
+        var p = ActiveSpell.PowerInc();
+        var coef = Mathf.Clamp01((2f - p) * .5f);
+        var color = Color.Lerp(Color.red, Color.green, coef);
+
+        SetText(p);
+        PowerCoefField.color = color;
+
     }
 }
 

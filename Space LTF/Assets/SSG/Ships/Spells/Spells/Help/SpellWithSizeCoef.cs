@@ -18,18 +18,11 @@ public abstract class SpellWithSizeCoef : BaseSpellModulInv
     }
     protected float CoefPower()
     {
-        var deltaTime = Time.time - _castStartTime;
-        var coef = (0.2f * deltaTime + 1f);
-        float p = Mathf.Clamp(coef, 1, 5);
-        return p;
+        return PowerInc();
     }
 
     protected float SizeCoef()
     {
-
-        var deltaTime = Time.time - _castStartTime;
-        var coef = Mathf.Pow(deltaTime, 0.9f) + 1;
-        float p = Mathf.Clamp(coef, 1, 5);
-        return p;
+        return PowerInc();
     }
 }

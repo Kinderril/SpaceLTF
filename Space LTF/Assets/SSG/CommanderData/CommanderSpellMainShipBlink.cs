@@ -61,6 +61,11 @@ public class CommanderSpellMainShipBlink : ISpellToGame
         return bullet;
     }
 
+    public float PowerInc()
+    {
+        return 1f;
+    }
+
     public float ShowCircle => 1;
     public bool ShowLine => true;
     public void ResetBulletCreateAtion()

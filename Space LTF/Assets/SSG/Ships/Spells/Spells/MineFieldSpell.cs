@@ -106,9 +106,8 @@ public class MineFieldSpell : BaseSpellModulInv
         if (_nextBulletTime < Time.time)
         {
             var battle = BattleController.Instance;
-            var periodCast = Time.time - _castStartTime;
             float period = CoinTempController.BATTERY_PERIOD * .5f;
-            var coefNext = 1 - periodCast * 0.1f;
+            var coefNext = PowerDec();
             coefNext = Mathf.Clamp(coefNext, 0.2f, 1f);
             _nextBulletTime = period * coefNext + Time.time;
 

@@ -62,7 +62,7 @@ public class InputManager : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            var deta = Time.time - _leftDown;
+            // var deta = Time.time - _leftDown;
             Debug.Log("Pressed up left");
             isOverUI = EventSystem.current.IsPointerOverGameObject();
             inGameMainUi.Clicked(Input.mousePosition, true, 0);

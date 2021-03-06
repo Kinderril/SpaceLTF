@@ -26,24 +26,24 @@ public class ThrowAroundSpell : SpellWithSizeCoef
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var period = 0.5f;
-        for (int i = 0; i < castData.ShootsCount; i++)
-        {
-            var pp = i * period;
-            if (pp > 0)
-            {
-                var timer =
-                    MainController.Instance.BattleTimerManager.MakeTimer(pp);
-                timer.OnTimer += () =>
-                {
-                    modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-                };
-            }
-            else
-            {
-                modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-            }
-        }
+        // var period = 0.5f;
+        // for (int i = 0; i < castData.ShootsCount; i++)
+        // {
+        //     var pp = i * period;
+        //     if (pp > 0)
+        //     {
+        //         var timer =
+        //             MainController.Instance.BattleTimerManager.MakeTimer(pp);
+        //         timer.OnTimer += () =>
+        //         {
+        //             modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+        //         };
+        //     }
+        //     else
+        //     {
+        //         modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+        //     }
+        // }
     }
     private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
     {

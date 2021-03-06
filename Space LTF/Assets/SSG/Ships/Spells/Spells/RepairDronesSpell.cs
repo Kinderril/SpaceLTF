@@ -13,7 +13,7 @@ public class RepairDronesSpell : BaseSpellModulInv
     public const float MINES_DIST = 57f;
     private const float rad = 1f;
     private const float BUFF_TIME = 13f;
-    private const float CAST_COEF = .33f;
+    private const float CAST_COEF = CoinTempController.BATTERY_PERIOD * .5f;
 
     private const float _sDistToShoot = 4 * 4;
     private int DronesCount => 1;//DRONES_COUNT + Level/2;
@@ -24,7 +24,7 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     private float CalcHealPercent(int l)
     {
-        return HEAL_PERCENT + l * 0.16f;
+        return HEAL_PERCENT + l * 0.16f * CAST_COEF;
     }
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(HealPercent, HealPerTick);
 
@@ -80,13 +80,6 @@ public class RepairDronesSpell : BaseSpellModulInv
             }
         }
     }
-    private float TimeCoef()
-    {
-        var delta = Time.time - _castStartTime;
-        var mm = delta * 0.25f + 1f;
-        var coef = Mathf.Clamp(mm, 1f, 6f);
-        return coef;
-    }
 
     private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
         Vector3 shootpos, BulleStartParameters bullestartparameters)
@@ -95,7 +88,7 @@ public class RepairDronesSpell : BaseSpellModulInv
         var zz = MyExtensions.Random(-1f, 1f);
         Vector3 dir = Utils.NormalizeFastSelf(new Vector3(xx, 00, zz));
         var copy = bullestartparameters.Copy();
-        var coef = TimeCoef();
+        var coef = PowerInc();
 
 
         copy.turnSpeed = copy.turnSpeed * coef;
@@ -105,7 +98,7 @@ public class RepairDronesSpell : BaseSpellModulInv
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         target.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
-        var coef = TimeCoef() * .3f;
+        var coef = PowerInc();
         var clmap = Mathf.Clamp(coef, 1f, 3f);
         var addHealth = shipparameters.MaxHealth * additional.CurrentDamage.ShieldDamage * clmap;
         shipparameters.HealthRegen.Start(addHealth, additional.CurrentDamage.BodyDamage);

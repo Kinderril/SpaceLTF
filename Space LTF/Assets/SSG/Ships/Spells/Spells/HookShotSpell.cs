@@ -251,9 +251,7 @@ public class HookShotSpell : BaseSpellModulInv
         var effert = EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.HookShot, shipBase.Position, 3f);
         TurnToDir(effert, dir);
 
-        var delta = Time.time - _castStartTime;
-        var coef = Mathf.Clamp(Mathf.Pow(delta, 0.6f) * 0.25f, 0, 10);
-        powerFoShip *= coef;
+        powerFoShip *= PowerInc();
         shipBase.ExternalForce.Init(powerFoShip, delay, dir);
     }
 

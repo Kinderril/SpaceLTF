@@ -55,8 +55,7 @@ public class ShieldOffSpell : BaseSpellModulInv
     }
     private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        var deltaTime = Time.time - _castStartTime;
-        var coef = Mathf.Pow(deltaTime, 0.8f) + 1;
+        var coef = PowerDec();
         float p = Mathf.Clamp(coef, 1, 5);
         _localSpellDamageData.AOERad = rad * p;
         // Debug.LogError($"deltaTime:{deltaTime}  coef:{coef}");
