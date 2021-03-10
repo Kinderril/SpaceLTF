@@ -46,14 +46,15 @@ public class VacuumSpell : SpellWithSizeCoef
             return _baseCostTime;
         }
     }
-    private const int _baseCostTime = 10;
-    private const int _B2_costTime = 7;
+    private const int _baseCostTime = 8;
+    private const int _B2_costTime = 5;
 
     public VacuumSpell()
         : base(SpellType.vacuum, _baseCostTime,
              new BulleStartParameters(25, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-           _localSpellDamageData = new SpellDamageData(rad);
+           _localSpellDamageData = new SpellDamageData(RadCalc(Level, UpgradeType));
+           // _localSpellDamageData.AOERad = RadCalc(Level, UpgradeType);
     }
     public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
     {
@@ -61,7 +62,6 @@ public class VacuumSpell : SpellWithSizeCoef
     }
     private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
     {
-
         var delta = Time.time - _lastBulletCreate;
         _localSpellDamageData.AOERad = rad;
         if (delta > CoinTempController.BATTERY_PERIOD)
@@ -75,24 +75,7 @@ public class VacuumSpell : SpellWithSizeCoef
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        // var period = 0.5f;
-        // for (int i = 0; i < castData.ShootsCount; i++)
-        // {
-        //     var pp = i * period;
-        //     if (pp > 0)
-        //     {
-        //         var timer =
-        //             MainController.Instance.BattleTimerManager.MakeTimer(pp);
-        //         timer.OnTimer += () =>
-        //         {
-        //             modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-        //         };
-        //     }
-        //     else
-        //     {
-        //         modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-        //     }
-        // }
+
     }
     protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
     protected override CastActionSpell castActionSpell => CastSpell;
@@ -110,9 +93,16 @@ public class VacuumSpell : SpellWithSizeCoef
 
         var dir = target.Position - weapon.CurPosition;
         var d = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
-        // bullestartparameters.distanceShoot = d;
-        // bullestartparameters.radiusShoot = d;
+        bullestartparameters.distanceShoot = d;            
+        bullestartparameters.radiusShoot = d;
         var b = Bullet.Create(origin, weapon, dir, weapon.CurPosition, null, bullestartparameters);
+    }
+
+    protected override void EndCastSpell()
+    {
+
+        _localSpellDamageData.AOERad = RadCalc(Level, UpgradeType);
+        base.EndCastSpell();
     }
 
     public override Bullet GetBulletPrefab()
@@ -130,6 +120,8 @@ public class VacuumSpell : SpellWithSizeCoef
             ? BattleController.Instance.RedCommander
             : BattleController.Instance.GreenCommander;
 
+
+        DrawUtils.DebugCircle(origin.Position,Vector3.up, Color.cyan,rad,2f);
         foreach (var obj in commander.Connectors)
         {
             AffectMovingObject(obj, origin.Position);
@@ -143,14 +135,18 @@ public class VacuumSpell : SpellWithSizeCoef
             }
         }
 
+        var r = rad;
+        var sizeEffectCoef = SizeCoef();
+        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShockwaveIn,
+            origin.Position, 1f, sizeEffectCoef);
         var asteroids = cell.GetAllAsteroids();
         foreach (var aiAsteroidPredata in asteroids)
         {
             var dir = aiAsteroidPredata.Position - origin.Position;
             var dist = dir.magnitude;
-            if (dist < rad)
+            if (dist < r)
             {
-                var power = (dist / rad) * powerThrow * CoefPower();
+                var power = (dist / r) * powerThrow * CoefPower();
                 power = MyExtensions.GreateRandom(power);
                 aiAsteroidPredata.Push(-dir, power);
             }

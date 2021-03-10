@@ -8,7 +8,7 @@ public class RepairDronesSpell : BaseSpellModulInv
     //A1 - shield
     //B2 - speedBuff x sec
 
-    public const float HEAL_PERCENT = 0.28f;
+    public const float HEAL_PERCENT = 0.16f;
     public const float SHIELD_PERCENT = 0.40f;
     public const float MINES_DIST = 57f;
     private const float rad = 1f;
@@ -24,12 +24,12 @@ public class RepairDronesSpell : BaseSpellModulInv
 
     private float CalcHealPercent(int l)
     {
-        return HEAL_PERCENT + l * 0.16f * CAST_COEF;
+        return HEAL_PERCENT + l * 0.12f * CAST_COEF;
     }
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(HealPercent, HealPerTick);
 
     public RepairDronesSpell()
-        : base(SpellType.repairDrones,  20,
+        : base(SpellType.repairDrones,  12,
              new BulleStartParameters(3f, 46f, MINES_DIST, MINES_DIST), false,TargetType.Ally)
     {
         _localSpellDamageData = new SpellDamageData(rad, false);

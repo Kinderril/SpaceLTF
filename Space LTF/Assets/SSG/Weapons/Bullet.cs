@@ -324,8 +324,13 @@ public abstract class Bullet : MovingObject
         Weapon = weapon;
         _startTime = Time.time;
         _startPos = position;
-        distanceShoot = 0f;
+        // distanceShoot = 0f;
         _endPos = _startPos + Utils.NormalizeFastSelf(dir) * distanceShoot;
+
+        // Debug.LogError($"distanceShoot:{distanceShoot}  dir:{dir}");
+        DrawUtils.DebugPoint(_startPos, Color.red,1f,2f);
+        DrawUtils.DebugPoint(_endPos,Color.yellow,1f,2f);
+
         _distanceShoot = distanceShoot;
 
         Rotation = Quaternion.LookRotation(dir);

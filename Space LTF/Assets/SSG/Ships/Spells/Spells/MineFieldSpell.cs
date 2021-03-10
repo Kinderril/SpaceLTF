@@ -7,7 +7,7 @@ public class MineFieldSpell : BaseSpellModulInv
     //A1 - Fire
     //B2 - Engine
 
-    public const int BASE_MINES_COUNT = 3;
+    public const int BASE_MINES_COUNT = 1;
     public const float MINES_PERIOD = 20f;
     public const float MINES_DIST = 15f;
     private const float rad = 3.5f;
@@ -22,7 +22,7 @@ public class MineFieldSpell : BaseSpellModulInv
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(DAMAGE_SHIELD, DAMAGE_BODY);
 
     public MineFieldSpell()
-        : base(SpellType.mineField, 14,
+        : base(SpellType.mineField, 18,
              new BulleStartParameters(8f, 36f, MINES_DIST, MINES_DIST), false,TargetType.Enemy)
     {
          _localSpellDamageData = new SpellDamageData(rad, false);

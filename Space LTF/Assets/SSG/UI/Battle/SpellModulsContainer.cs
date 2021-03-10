@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class SpellModulsContainer : MonoBehaviour
 {
@@ -20,6 +20,9 @@ public class SpellModulsContainer : MonoBehaviour
     private InGameMainUI _inGameMain;
     private Commander MyCommander;
     public TextMeshProUGUI PowerCoefField;
+    public Transform PowerHolder;
+    public Image PowerImage;
+    private const float MAX_POWER = 2f;
 
     private CoinTempController _coinController;
 
@@ -31,6 +34,8 @@ public class SpellModulsContainer : MonoBehaviour
         ShipBase mainShip, //Action<SpellInGame> buttonCallback, 
         CoinTempController coinController,AutoAICommander autoAICommander, Commander myCommander)
     {
+        PowerHolder.gameObject.SetActive(false);
+        PowerCoefField.gameObject.SetActive(false);
         _coinController = coinController;
         _inGameMain = inGameMain;
         // AutoActive.gameObject.SetActive(false);
@@ -191,8 +196,9 @@ public class SpellModulsContainer : MonoBehaviour
     {
         Animator.SetTrigger("ScaleUp");
         PowerCoefField.gameObject.SetActive(true);
+        PowerHolder.gameObject.SetActive(true);
         SetText(1);
-        PowerCoefField.color = new Color(.5f,.5f,0f);// Color.Lerp(Color.red, Color.green, .5f); ;
+        PowerImage.color = PowerCoefField.color = new Color(.5f,.5f,0f);// Color.Lerp(Color.red, Color.green, .5f); ;
     }
 
     public void SetText(float val)
@@ -208,6 +214,7 @@ public class SpellModulsContainer : MonoBehaviour
         _coinController.EndCastSpell();
         _activeSpell.EndCastPeriod();
         PowerCoefField.gameObject.SetActive(false);
+        PowerHolder.gameObject.SetActive(false);
         Animator.SetTrigger("ScaleDown");
         _activeSpell = null;
     }
@@ -227,14 +234,19 @@ public class SpellModulsContainer : MonoBehaviour
         }
     }
 
+
     private void UpdatePower()
     {
         var p = ActiveSpell.PowerInc();
-        var coef = Mathf.Clamp01((2f - p) * .5f);
+        var coef = Mathf.Clamp01(p * .5f);
         var color = Color.Lerp(Color.red, Color.green, coef);
 
+        PowerHolder.transform.position = Input.mousePosition;
         SetText(p);
+        PowerImage.fillAmount = coef;
         PowerCoefField.color = color;
+        color.a = .5f;
+        PowerImage.color = color;
 
     }
 }

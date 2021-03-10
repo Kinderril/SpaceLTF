@@ -31,7 +31,9 @@ public class SpellDataBase : MonoBehaviour
     public BaseEffectAbsorber RoundStrikeEffect;//TMP NOT USING
     public BaseEffectAbsorber RoundStrikeEffectShip;//TMP NOT USING
 
-    public BaseEffectAbsorber EngineLockAOE;//Расходящийся круг 
+    public BaseEffectAbsorber EngineLockAOE;
+    public BaseEffectAbsorber ShockwaveOut;//Расходящийся круг 
+    public BaseEffectAbsorber ShockwaveIn;//Сходящийся круг 
 
     public BaseEffectAbsorber BlinkPlaceEffect;//Спираль синяя
     public BaseEffectAbsorber BlinkTargetEffect;//Спираль обратная
@@ -51,6 +53,8 @@ public class SpellDataBase : MonoBehaviour
         //        pool.RegisterEffect(2, InvinsableEffect);
         // pool.RegisterEffect(Utils.GetId(), InvisibleEffect);
 
+        pool.RegisterEffect(Utils.GetId(), ShockwaveIn);
+        pool.RegisterEffect(Utils.GetId(), ShockwaveOut);
         pool.RegisterEffect(Utils.GetId(), RoundStrikeEffect);
         pool.RegisterEffect(Utils.GetId(), RoundStrikeEffectShip);
         //        pool.RegisterEffect(6, AntiPhysicalEffect);

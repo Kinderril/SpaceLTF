@@ -9,54 +9,38 @@ public class ThrowAroundSpell : SpellWithSizeCoef
 
     private const float DIST_SHOT = 50;
     private const float DAMAGE_BASE = 5;
-    private float rad => 4f * SizeCoef();
+    private const float PERIOD_COEF = .5f;
+    private const float START_SIZE_COEF = 4f;
+    private float GetRad => START_SIZE_COEF * SizeCoef();
     private const float powerAsteroidCoef = 2.25f;
     private const float timerToLockEngine = 3f;
     private float shieldDmg => DAMAGE_BASE + Level * 3;
-    private float powerThrow => 7 + Level * 1.5f;
+    private float powerThrow => 5 + Level * 1.35f;
     private float _lastBulletCreate = 0f;
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(shieldDmg, powerThrow);
 
     public ThrowAroundSpell()
-        : base(SpellType.throwAround,  10,
+        : base(SpellType.throwAround,  8,
              new BulleStartParameters(19.7f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
-        _localSpellDamageData = new SpellDamageData(rad);
+        _localSpellDamageData = new SpellDamageData(START_SIZE_COEF);
     }
 
     private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
     {
-        // var period = 0.5f;
-        // for (int i = 0; i < castData.ShootsCount; i++)
-        // {
-        //     var pp = i * period;
-        //     if (pp > 0)
-        //     {
-        //         var timer =
-        //             MainController.Instance.BattleTimerManager.MakeTimer(pp);
-        //         timer.OnTimer += () =>
-        //         {
-        //             modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-        //         };
-        //     }
-        //     else
-        //     {
-        //         modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-        //     }
-        // }
+
     }
     private void PeriodCast(Vector3 trgpos, BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
     {
-
         var delta = Time.time - _lastBulletCreate;
-        if (delta > CoinTempController.BATTERY_PERIOD)
+        _localSpellDamageData.AOERad = GetRad;
+        if (delta > CoinTempController.BATTERY_PERIOD * PERIOD_COEF)
         {
-            _localSpellDamageData.AOERad = rad;
             _lastBulletCreate = Time.time;
+            target = new BulletTarget(trgpos);
+            // Debug.DrawRay(trgpos,Vector3.up*2,Color.magenta,3f);
             modificatedCreateBullet(target, origin, weapon, shootpos, castdata.Bullestartparameters);
         }
-
-
     }
 
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
@@ -71,7 +55,7 @@ public class ThrowAroundSpell : SpellWithSizeCoef
     protected override AffectTargetDelegate affectAction => MainAffect;
     public override UpdateCastDelegate UpdateCast => PeriodCast;
     public override bool ShowLine => true;
-    public override float ShowCircle => rad;
+    public override float ShowCircle => GetRad;
     private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet,
         DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
@@ -82,9 +66,17 @@ public class ThrowAroundSpell : SpellWithSizeCoef
         return targetdistpos;
     }
 
+
+    protected override void EndCastSpell()
+    {
+        _localSpellDamageData.AOERad = START_SIZE_COEF;
+        base.EndCastSpell(); 
+    }
+
     private void MainCreateBullet(BulletTarget target, 
         Bullet origin, IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
+        Debug.DrawRay(target.Position + new Vector3(0.1f,0), Vector3.up, Color.yellow, 5f);
         var dir = target.Position - weapon.CurPosition;
         var d = Mathf.Clamp(dir.magnitude, 1, DIST_SHOT);
         bullestartparameters.distanceShoot = d;
@@ -103,6 +95,8 @@ public class ThrowAroundSpell : SpellWithSizeCoef
 
     private void BulletDestroy(Bullet origin, IWeapon weapon, AICell cell)
     {
+        Debug.DrawRay(origin.Position,Vector3.up,Color.green,5f);
+        // Debug.LogError($"BulletDestroy:{origin.Position}");
         Commander commander = weapon.TeamIndex == TeamIndex.green
             ? BattleController.Instance.RedCommander
             : BattleController.Instance.GreenCommander;
@@ -121,7 +115,10 @@ public class ThrowAroundSpell : SpellWithSizeCoef
             }
         }
 
-
+        var rad = GetRad;
+        var sizeEffectCoef = rad / START_SIZE_COEF;
+        EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShockwaveOut,
+            origin.Position, 1f, sizeEffectCoef);
         var asteroids = cell.GetAllAsteroids();
         foreach (var aiAsteroidPredata in asteroids)
         {
@@ -140,7 +137,7 @@ public class ThrowAroundSpell : SpellWithSizeCoef
     {
         var dir = obj.Position - startPos;
         var dist = dir.magnitude;
-        if (dist < rad)
+        if (dist < GetRad)
         {
             dir.y = 0f;
             var dirNorm = Utils.NormalizeFastSelf(dir);

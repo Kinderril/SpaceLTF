@@ -8,87 +8,74 @@ public class RechargeShieldSpell : BaseSpellModulInv
     //A1 - AOE 
     //B2 - Resist X sec
 
-    public const float MINES_DIST = 7f;
+    public const float LEFRP_COEF = 0.8f;
     public const float OFF_PERIOD = 20f;
-    private const float rad = 1f;
-    private const float AOE_rad = 2f;
-    private const float PERIOD_COEF = 0.5f;
 
-    private const float _sDistToShoot = 4 * 4;
-    private bool _lastCheckIsOk = false;
-    private float _nextBulletTime;
-    // [field: NonSerialized]
-//    private ShipBase _lastClosest;
+    private const int RAD_B2 = 4;
+    private const float AOE_rad = 2f;
+
+    private const float BULLET_SPEED = 50f;
+    private const float BULLET_TURN_SPEED = .2f;
+    private const float DIST_SHOT = 42;
+    private const float PERIOD_COEF = 0.5f;
     public override CurWeaponDamage CurrentDamage => new CurWeaponDamage(HealPercent, HealPercent);
 
     private float HealPercent => (Library.CHARGE_SHIP_SHIELD_HEAL_PERCENT + Level * 0.12f) * PERIOD_COEF;
-    public RechargeShieldSpell()
-        : base(SpellType.rechargeShield, 20,
-             new BulleStartParameters(4f, 46f, 
-                 MINES_DIST, MINES_DIST), false,TargetType.Ally)
-    {
 
-        _localSpellDamageData =  new SpellDamageData(ShowCircle, false);
+
+    [NonSerialized] private Vector3 _prevTrg;
+    [NonSerialized] private BeamBulletNoTarget ControlBullet;
+
+    public RechargeShieldSpell()
+        : base(SpellType.rechargeShield,  15, 
+            new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED,
+                DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
+    {
+        _localSpellDamageData = new SpellDamageData();
     }
-    protected override CreateBulletDelegate standartCreateBullet => MainCreateBullet;
-    protected override CastActionSpell castActionSpell => CastSpell;
-    protected override AffectTargetDelegate affectAction => MainAffect;
-    public override UpdateCastDelegate UpdateCast => UpdateCastInner;
+    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
+    {
+        _prevTrg = target.Position;
+        modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
+
+    }
     public override ShallCastToTaregtAI ShallCastToTaregtAIAction => shallCastToTaregtAIAction;
 
     private bool shallCastToTaregtAIAction(ShipPersonalInfo info, ShipBase ship)
     {
-        var p = ship.ShipParameters.CurShiled / ship.ShipParameters.MaxShield;
-
-        if (p < .5f)
-        {
-            return true;
-        }
-
-        return false;
-    }
-    private void CastSpell(BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
-    {
-        _localSpellDamageData.AOERad = ShowCircle;
+        return true;
     }
 
-
-    private void UpdateCastInner(Vector3 trgpos,
-        BulletTarget target, Bullet origin, IWeapon weapon, Vector3 shootPos, CastSpellData castData)
+    private void DistShotCreateBullet(BulletTarget target, Bullet origin,
+        IWeapon weapon, Vector3 shootpos, BulleStartParameters bullestartparameters)
     {
-        var p = PowerInc();
-        _localSpellDamageData.AOERad = ShowCircle * p;
-        if (_nextBulletTime < Time.time)
+        var dir = target.Position - shootpos;
+        //        Debug.LogError($"dir:{dir}    target.Position:{target.Position}");
+        bullestartparameters.distanceShoot = 0.25f;
+        var b = Bullet.Create(origin, weapon, dir, shootpos, null, bullestartparameters);
+        b.SpellBulletPower = new SpellBulletPower(bullestartparameters.Power);
+        ControlBullet = b as BeamBulletNoTarget;
+        if (ControlBullet != null)
         {
-            _nextBulletTime = Time.time + CoinTempController.BATTERY_PERIOD * PERIOD_COEF;
-            castData.Bullestartparameters.size = castData.Bullestartparameters.size * p;
-            modificatedCreateBullet(target, origin, weapon, shootPos, castData.Bullestartparameters);
-            EffectController.Instance.Create(DataBaseController.Instance.SpellDataBase.ShieldRecharge,
-                target.Position, 1f,p);
+            ControlBullet.coefWidth = GetWidth();
         }
     }
 
-    protected override void EndCastSpell()
+    private float GetWidth()
     {
-        _localSpellDamageData.AOERad = ShowCircle;
-        base.EndCastSpell();
+
+        if (UpgradeType == ESpellUpgradeType.B2)
+        {
+            return RAD_B2;
+        }
+        else
+        {
+            return 1f;
+        }
     }
 
-    public override Vector3 DiscCounter(Vector3 maxdistpos, Vector3 targetdistpos)
-    {
-        return targetdistpos;
-    }
 
-    private void MainCreateBullet(BulletTarget target, Bullet origin, IWeapon weapon,
-        Vector3 shootpos, BulleStartParameters bullestartparameters)
-    {
-        var startPos = target.Position;
-        var dir = startPos - weapon.CurPosition;
-        bullestartparameters.distanceShoot = dir.magnitude;
-        var b = Bullet.Create(origin, weapon, dir, startPos, null, bullestartparameters);
-    }
-
-    private void MainAffect2(ShipParameters shipparameters, ShipBase target, Bullet bullet1,
+    private void MainAffect(ShipParameters shipparameters, ShipBase target, Bullet bullet1,
         DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
     {
         var ship = target;
@@ -96,6 +83,7 @@ public class RechargeShieldSpell : BaseSpellModulInv
         var maxShield = shipparameters.ShieldParameters.MaxShield;
         var countToHeal = maxShield * additional.CurrentDamage.ShieldDamage * 0.35f;
         ship.Audio.PlayOneShot(DataBaseController.Instance.AudioDataBase.HealSheild);
+        // Debug.LogError($"heqal shiedl:{countToHeal}");
         shipparameters.ShieldParameters.HealShield(countToHeal);
         if (UpgradeType == ESpellUpgradeType.B2)
         {
@@ -106,67 +94,41 @@ public class RechargeShieldSpell : BaseSpellModulInv
         }
     }
 
-    private void MainAffect(ShipParameters shipparameters, ShipBase target, 
-        Bullet bullet1, DamageDoneDelegate damagedone, WeaponAffectionAdditionalParams additional)
-    {
-        var rad2 = ShowCircle;
-        var closestsShips = BattleController.Instance.GetAllShipsInRadius(target.Position, target.TeamIndex, rad2);
-        foreach (var ship in closestsShips)
-        {
-            MainAffect2(ship.ShipParameters, ship, null, null, additional);
-        }
-    }
-    public override bool ShowLine => false;
 
-    public override float ShowCircle
-    {
-        get
-        {
-            if (UpgradeType == ESpellUpgradeType.A1)
-            {
-                return AOE_rad;
-            }
-            return rad;
-        }
-    }
-
-    
     public override Bullet GetBulletPrefab()
     {
-        var bullet = DataBaseController.Instance.GetBullet(WeaponType.nextFrameRepair);
+        var bullet = DataBaseController.Instance.GetBullet(WeaponType.beamRepair);
         DataBaseController.Instance.Pool.RegisterBullet(bullet);
         return bullet;
+    }
+    public override bool ShowLine => true;
+    public override float ShowCircle => -1;
+
+    protected override CreateBulletDelegate standartCreateBullet => DistShotCreateBullet;
+    protected override CastActionSpell castActionSpell => CastSpell;
+    protected override AffectTargetDelegate affectAction => MainAffect;
+    public override UpdateCastDelegate UpdateCast => ProcessCast;
+
+    private void ProcessCast(Vector3 trgpos, BulletTarget target, 
+        Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
+    {
+        var nextTrg = Vector3.Lerp(trgpos, _prevTrg, LEFRP_COEF);
+        var dir = Utils.NormalizeFastSelf(nextTrg - shootpos);
+        var deltaTime = Time.time - _castStartTime;
+        Vector3 trg = shootpos + dir * deltaTime * 10;
+        _prevTrg = nextTrg;
+
+        if (ControlBullet != null && ControlBullet.IsAcive)
+        {
+            ControlBullet.MoveTargetTo(trg);
+            ControlBullet.coefWidth = GetWidth() * PowerInc();
+            ControlBullet.SetDeathTime(Time.time +.1f);
+        }
     }
 
     protected override void CastAction(Vector3 pos)
     {
-    }
 
-    public override SubUpdateShowCast SubUpdateShowCast => ShowOnShip;
-
-    public override CanCastAtPoint CanCastAtPoint
-    {
-        get { return pos => true; }
-        // get { return pos => _lastCheckIsOk; }
-    }
-
-    protected void ShowOnShip(Vector3 pos, TeamIndex teamIndex, GameObject objectToShow)
-    {
-        // _localSpellDamageData.AOERad = ShowCircle;
-//         var closestsShip = BattleController.Instance.ClosestShipToPos(pos, teamIndex, out float sDist);
-//         if (sDist < _sDistToShoot && closestsShip != null)
-//         {
-//             _lastCheckIsOk = true;
-//             objectToShow.gameObject.SetActive(true);
-//             objectToShow.transform.position = closestsShip.Position;
-// //            _lastClosest = closestsShip;
-//         }
-//         else
-//         {
-// //            _lastClosest = null;
-//             _lastCheckIsOk = false;
-//             objectToShow.gameObject.SetActive(false);
-//         }
     }
     public override string Desc()
     {
@@ -188,5 +150,6 @@ public class RechargeShieldSpell : BaseSpellModulInv
         }
         return Namings.Format(Namings.Tag("RechargeSheildDescB2"), OFF_PERIOD);
     }
+
 }
 

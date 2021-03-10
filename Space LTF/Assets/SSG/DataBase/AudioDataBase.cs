@@ -126,6 +126,8 @@ public class AudioDataBase : MonoBehaviour
                 break;   
             case WeaponType.nextFrameRepair:
                 break;
+            case WeaponType.beamRepair:
+                break;
             case WeaponType.beam:
                 return BeamShot;
                 break;

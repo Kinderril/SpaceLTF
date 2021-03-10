@@ -8,7 +8,7 @@ public class EngineLockSpell : BaseSpellModulInv
     //B2 - less timer
 
     public const float DIST_SHOT = 62f;
-    public const float LOCK_PERIOD = 1;
+    public const float LOCK_PERIOD = 0.9f;
     public const float LOCK_LEVEL = 0.5f;
 
     private float rad => GetRad(UpgradeType);
@@ -17,9 +17,9 @@ public class EngineLockSpell : BaseSpellModulInv
     {
         if (upd == ESpellUpgradeType.A1)
         {
-            return 4;
+            return 3;
         }
-        return 2.5f;
+        return 2f;
     }
     // [NonSerialized]
     // private SpellZoneVisualCircle ObjectToShow;
@@ -36,8 +36,8 @@ public class EngineLockSpell : BaseSpellModulInv
         }
     }
 
-    private const int _baseCostTime = 13;
-    private const int _B2_costTime = 9;
+    private const int _baseCostTime = 11;
+    private const int _B2_costTime = 8;
     private float _lastBulletCreate = 0f;
 
     public float CurLockPeriod => LOCK_PERIOD + LOCK_LEVEL * Level;

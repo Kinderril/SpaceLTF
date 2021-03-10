@@ -53,8 +53,8 @@ public class MachineGunSpell : BaseSpellModulInv
     }
 
     public MachineGunSpell()
-        : base(SpellType.machineGun,  15, 
-            new BulleStartParameters(18f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
+        : base(SpellType.machineGun,  11, 
+            new BulleStartParameters(19f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
         _localSpellDamageData = new SpellDamageData();
     }

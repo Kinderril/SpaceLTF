@@ -8,11 +8,11 @@ public class LineShotSpell : BaseSpellModulInv
     //A1 - No death
     //B2 - more fire
 
-    private const float BULLET_SPEED = 10f;
+    private const float BULLET_SPEED = 9f;
     private const float BULLET_TURN_SPEED = .2f;
-    private const float DIST_SHOT = 38f;
+    private const float DIST_SHOT = 48f;
 
-    private const int FIRE_PERIOD = 6;
+    private const int FIRE_PERIOD = 5;
 
     public override bool ShowLine => true;
     public override float ShowCircle => -1;
@@ -38,19 +38,19 @@ public class LineShotSpell : BaseSpellModulInv
             switch (level)
             {
                 case 4:
-                    return 2.5f;
-                case 3:
                     return 2.2f;
+                case 3:
+                    return 2.1f;
             }
         }
         switch (level)
         {
             case 4:
-                return 1.9f;
+                return 1.7f;
             case 3:
-                return 1.6f;
+                return 1.4f;
             case 2:
-                return 1.3f;
+                return 1.1f;
             default:
             case 1:
                 return 1f;

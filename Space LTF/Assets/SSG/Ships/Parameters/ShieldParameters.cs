@@ -140,18 +140,11 @@ public class ShieldParameters
 
     public void ShiledAction(float delta)
     {
-//        if (ShieldBroken)
-//        {
-//            return;
-//        }
-        if (OnShildChanged != null)
-        {
-            OnShildChanged(CurShiled, MaxShield, delta, State,_shipBase);
-        }
+        OnShildChanged?.Invoke(CurShiled, MaxShield, delta, State,_shipBase);
     }
 
-    public void HealShield(float v)
-    {
+    public void HealShield(float v, bool withStateChange = false)
+    {           
 //        ShieldBroken = false;
         var c = CurShiled + v;
         var d = MaxShield - CurShiled;
@@ -167,6 +160,13 @@ public class ShieldParameters
         CurShiled = c;
         EffectController.Instance.Create(DataBaseController.Instance.DataStructPrefabs.ShieldChagedEffect, _shipBase.transform, 5f);
         ShiledAction(delta);
+        if (withStateChange)
+        {
+            if (State != ShieldChangeSt.active)
+            {
+                SetState(ShieldChangeSt.active);
+            }
+        }
     }
 
     private void RegenShield()

@@ -7,7 +7,7 @@ public class ShieldOffSpell : BaseSpellModulInv
     //A1 - -1 battly
     //B2 - fire on
 
-    public const float PERIOD = 13f;
+    public const float PERIOD = 8f;
     private const float SHIELD_DAMAGE = 3f;
     private const float rad = 3.5f;
     private const float DIST_SHOT = 61f;
@@ -30,10 +30,10 @@ public class ShieldOffSpell : BaseSpellModulInv
         }
     }
 
-    private float Period => PERIOD + Level * 3;
+    private float Period => PERIOD + Level * 2;
 
     public ShieldOffSpell()
-        : base(SpellType.shildDamage,  15,
+        : base(SpellType.shildDamage,  11,
             new BulleStartParameters(9.7f, 36f, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
         _localSpellDamageData =  new SpellDamageData(rad);

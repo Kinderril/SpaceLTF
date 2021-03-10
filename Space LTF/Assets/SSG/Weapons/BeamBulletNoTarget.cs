@@ -1,20 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+struct BeamTarget
+{
+    public BeamTarget(Dictionary<AIAsteroidPredata, Vector3> AsteroidPredatas
+        , Dictionary<ShipBase, Vector3> Ships)
+    {
+        this.AsteroidPredatas = AsteroidPredatas;
+        this.Ships = Ships;
+    }
+
+    public Dictionary<AIAsteroidPredata,Vector3> AsteroidPredatas;
+    public Dictionary<ShipBase, Vector3> Ships;
+}
 
 public class BeamBulletNoTarget : Bullet
 {
     private bool _canActivate;
     protected float _deathTime;
     protected float _startTime;
+    private const float SHIP_SIZE_SQRT = 2f;
     private const float _startPeriod = 0.4f;
     private const float _endPeriod = 1.6f;
     private const float _offPeriod = 0.1f;
     private const float _offStartTime = _endPeriod- _offPeriod;
     private const float _damagePeriod = 0.5f;
     private float _nextDamagePeriod = 1.5f;
+    private float _lastTargetPeriod = 0f;
     private float _startOff = 1.5f;
     private string _roadName;
+    private Vector3? _lastHitTarget = null;
+    private Vector3 _lastTarget;
 
     public float coefWidth = 1f;
 
@@ -45,6 +62,7 @@ public class BeamBulletNoTarget : Bullet
 
     public override void Init()
     {
+        _selectedTrg = null;
         _canActivate = false;
         ProcessEvent.gameObject.SetActive(false);
         _selectedTrg = null;
@@ -59,6 +77,7 @@ public class BeamBulletNoTarget : Bullet
         _startTime = Time.time + _startPeriod;
         _nextDamagePeriod = Time.time + _damagePeriod;
         _startOff = Time.time + _offStartTime;
+        _lastHitTarget = null;
         base.LateInit();
         _canActivate = true;
     }
@@ -76,7 +95,7 @@ public class BeamBulletNoTarget : Bullet
         {
             return;
         }
-        DoDamagePeriod();
+        var hittedTarget = DoDamagePeriod();
         if (!TimeEndCheck())
         {
             if (_canActivate)
@@ -88,7 +107,11 @@ public class BeamBulletNoTarget : Bullet
 
             var period = (_startTime - Time.time);
             Vector3 trg;
-            if (_selectedTrg.HasValue)
+            if (hittedTarget.HasValue)
+            {
+                trg = hittedTarget.Value;
+            }   
+            else if (_selectedTrg.HasValue)
             {
                 trg = _selectedTrg.Value;
             }
@@ -108,20 +131,88 @@ public class BeamBulletNoTarget : Bullet
                     trg = _endPos;
                 }
             }
+
             Updatetickness();
             UpdateOffPeriod();
-
-            MoveTo(trg, Weapon.CurPosition);
+            _lastTarget = Vector3.Lerp(_lastTarget, trg,0.3f);  
+            MoveTo(_lastTarget, Weapon.CurPosition);
         }
     }
 
-    private void DoDamagePeriod()
+    private Vector3? DoDamagePeriod()
     {
-        if (_nextDamagePeriod < Time.time)
+        if (_lastTargetPeriod < Time.time)
         {
-            _nextDamagePeriod = Time.time + _damagePeriod;
-            FindAllTargets();
-        }
+            _lastTargetPeriod = Time.time + 0.1f;
+            var targets = FindAllTargets();
+            var distAsteroid = Single.MaxValue;
+            Vector3? closestPrPoint = null;
+            AIAsteroidPredata closetsAsteroid = null;
+            ShipBase closetsShip = null;
+            foreach (var targetsAsteroidPredata in targets.AsteroidPredatas)
+            {
+                if (targetsAsteroidPredata.Key.IsDead)
+                {
+                    continue;
+                }
+                var sDist = (targetsAsteroidPredata.Value - Weapon.CurPosition).sqrMagnitude;
+                if (sDist < distAsteroid)
+                {
+                    distAsteroid = sDist;
+                    closetsAsteroid = targetsAsteroidPredata.Key;
+                    closestPrPoint = targetsAsteroidPredata.Value;
+                }
+            }
+            var distShip = Single.MaxValue;
+            foreach (var shipBase in targets.Ships)
+            {
+                var sDist = (shipBase.Value - Weapon.CurPosition).sqrMagnitude;
+                if (sDist < distAsteroid)
+                {
+                    distShip = sDist;
+                    closetsShip = shipBase.Key;
+                    closestPrPoint = shipBase.Value;
+                }
+            }
+
+            bool haveTrg = distShip < 99999 || distAsteroid < 99999;
+            _lastHitTarget = null;
+            if (haveTrg)
+            {
+                if (closestPrPoint != null)
+                {
+                    _lastHitTarget = closestPrPoint;
+                }
+            }
+
+            if (_nextDamagePeriod < Time.time)
+            {
+                // Debug.LogError($"_nextDamagePeriod:haveTrg:{haveTrg}");
+                _nextDamagePeriod = Time.time + _damagePeriod;
+                if (haveTrg)
+                {
+                    if (distShip < distAsteroid)
+                    {
+                        if (closetsShip != null)
+                        {
+                            // Debug.LogError($"closetsShip:haveTrg:");
+                            closetsShip.GetHit(Weapon, this);
+                        }
+                    }
+                    else
+                    {
+                        if (closetsAsteroid != null)
+                        {
+                            // Debug.LogError($"closetsAsteroid:haveTrg:{closetsAsteroid.Position}  id:{closetsAsteroid.Id}");
+                            closetsAsteroid.Death();
+                        }
+                    }
+                }
+            }
+        }                
+
+        return _lastHitTarget;
+
     }
 
     private void Updatetickness()
@@ -169,38 +260,56 @@ public class BeamBulletNoTarget : Bullet
         return false;
     }
 
-    private void FindAllTargets()
+    private BeamTarget FindAllTargets()
     {
         var bc = BattleController.Instance;
-        var commander = Weapon.TeamIndex == TeamIndex.green ? bc.RedCommander : bc.GreenCommander;
-
+        Commander commander;
+        if (AffectTypeHit == BulletAffectType.damage)
+        {
+            commander =  Weapon.TeamIndex == TeamIndex.green ? bc.RedCommander : bc.GreenCommander;
+        }
+        else
+        {
+            commander = Weapon.TeamIndex == TeamIndex.green ? bc.GreenCommander : bc.RedCommander;
+        }
+        var sDistShip =SHIP_SIZE_SQRT * coefWidth * coefWidth;
+        var ships = new Dictionary<ShipBase,Vector3>();
         foreach (var shipBase in commander.Ships)
         {
-            var p = shipBase.Value.Position;
-            var projectDist = CalcDist(p);
-            if (projectDist < 2f * coefWidth)
+            if (shipBase.Value.Id != Weapon.Owner.Id)
             {
-                shipBase.Value.GetHit(Weapon, this);
+                var p = shipBase.Value.Position;
+                var projectDist = CalcDistSqrDist(p, out var prPoint);
+                if (projectDist < sDistShip)
+                {
+                    ships.Add(shipBase.Value,prPoint);
+                    // shipBase.Value.GetHit(Weapon, this);
+                }
             }
         }
 
         var asteroids = bc.CellController.Data.Asteroids;
 
-        List<AIAsteroidPredata> toDelete = new List<AIAsteroidPredata>();
+        var asteroidsToAffect = new Dictionary<AIAsteroidPredata,Vector3>();
         foreach (var aiAsteroidPredata in asteroids)
         {
+            if (aiAsteroidPredata.IsDead || asteroidsToAffect.ContainsKey(aiAsteroidPredata))
+            {
+                continue;
+            }
             var p = aiAsteroidPredata.Position;
-            var projectDist = CalcDist(p);
+            var projectDist = CalcDistSqrDist(p,out var prPoint);
             if (projectDist < 1f)
             {
-                toDelete.Add(aiAsteroidPredata);
+                asteroidsToAffect.Add(aiAsteroidPredata,prPoint);
             }
         }
 
-        foreach (var aiAsteroidPredata in toDelete)
-        {
-            aiAsteroidPredata.Death();
-        }
+        // foreach (var aiAsteroidPredata in asteroidsToAffect)
+        // {
+        //     aiAsteroidPredata.Death();
+        // }
+        return new BeamTarget(asteroidsToAffect,ships);
 
     }
 
@@ -209,13 +318,38 @@ public class BeamBulletNoTarget : Bullet
         _selectedTrg = trg;
     }
 
-    private float CalcDist(Vector3 p)
+    private float CalcDistSqrDist(Vector3 p,out Vector3 projectionPoint)
     {
-        var projection = AIUtility.GetProjectionPoint(p, _endPos, Weapon.CurPosition);
-        var projectDir = projection - p;
-        projectDir.y = 0;
-        var projectDist = projectDir.magnitude;
-        return projectDist;
+        Vector3 trg;
+        if (_selectedTrg.HasValue)
+        {
+            trg = _selectedTrg.Value;
+        }
+        else
+        {
+            trg = _endPos;
+        }
+
+        var wPos = Weapon.CurPosition;
+        projectionPoint = AIUtility.GetProjectionPoint(p, trg, wPos);
+        // Debug.DrawLine(wPos, trg, Color.magenta, 5f);
+        var s1 = new SegmentPoints(trg, wPos);
+         var sPoint = 2 * projectionPoint - p;
+        var s2 = new SegmentPoints(sPoint, p);
+        var crossPoint = AIUtility.GetCrossPoint(s1, s2);
+        if (crossPoint.HasValue)
+        {
+            var projectDir = projectionPoint - p;
+            projectDir.y = 0;
+            var projectDist = projectDir.sqrMagnitude;
+            // Debug.DrawLine(p, projection,Color.yellow,5f);
+            return projectDist;
+        }
+        else
+        {
+            // Debug.DrawLine(p, projection, Color.red, 5f);
+        }
+        return Single.MaxValue;
     }
 
     protected override void DrawGizmosSelected()

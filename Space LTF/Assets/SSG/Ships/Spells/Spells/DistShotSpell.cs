@@ -9,8 +9,8 @@ public class DistShotSpell : BaseSpellModulInv
     //B2 - AOE
 
     private const int DIST_BASE_DAMAGE = 8;
-    private const int BASE_DAMAGE = 7;
-    private const int LEVEL_DAMAGE = 5;
+    private const int BASE_DAMAGE = 5;
+    private const int LEVEL_DAMAGE = 3;
 
     private const int RAD_B2 = 4;
 //    private const float DIST_COEF = 0.8f;
@@ -28,7 +28,7 @@ public class DistShotSpell : BaseSpellModulInv
     [NonSerialized] private BeamBulletNoTarget ControlBullet;
 
     public DistShotSpell()
-        : base(SpellType.distShot,  13, 
+        : base(SpellType.distShot,  8, 
             new BulleStartParameters(BULLET_SPEED, BULLET_TURN_SPEED, DIST_SHOT, DIST_SHOT), false,TargetType.Enemy)
     {
         _localSpellDamageData = new SpellDamageData();
@@ -71,7 +71,7 @@ public class DistShotSpell : BaseSpellModulInv
         }
         else
         {
-            return 1f;
+            return 2f;
         }
     }
 
@@ -110,19 +110,20 @@ public class DistShotSpell : BaseSpellModulInv
     protected override AffectTargetDelegate affectAction => MainAffect;
     public override UpdateCastDelegate UpdateCast => ProcessCast;
 
-    private void ProcessCast(Vector3 trgpos, BulletTarget target, 
+    private void ProcessCast(Vector3 trgpos, BulletTarget target,
         Bullet origin, IWeapon weapon, Vector3 shootpos, CastSpellData castdata)
     {
-        var dir = Utils.NormalizeFastSelf(trgpos - shootpos);
+        var nextTrg = Vector3.Lerp(trgpos, _prevTrg, RechargeShieldSpell.LEFRP_COEF);
+        var dir = Utils.NormalizeFastSelf(nextTrg - shootpos);
         var deltaTime = Time.time - _castStartTime;
         Vector3 trg = shootpos + dir * deltaTime * 10;
-        var nextTrg = Vector3.Lerp(trg, _prevTrg, .99f);
+        _prevTrg = nextTrg;
+
         if (ControlBullet != null && ControlBullet.IsAcive)
         {
-            ControlBullet.MoveTargetTo(nextTrg);
-            ControlBullet.coefWidth = PowerInc();
-            ControlBullet.SetDeathTime(Time.time +.1f);
-            _prevTrg = nextTrg;
+            ControlBullet.MoveTargetTo(trg);
+            ControlBullet.coefWidth = GetWidth()*PowerInc();
+            ControlBullet.SetDeathTime(Time.time + .1f);
         }
     }
 

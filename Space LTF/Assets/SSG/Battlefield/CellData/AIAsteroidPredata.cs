@@ -24,9 +24,12 @@ public class AIAsteroidPredata
     public event Action<AIAsteroidPredata, Vector3> OnMove;
     public const float SHIP_SIZE_COEF = 3f;
     private float _sizeCoef = 1f;
+    public int Id { get; private set; }
+    public bool IsDead { get; private set; }
 
     public AIAsteroidPredata(Vector3 ateroidPos)
     {
+        Id = Utils.GetId();
         this.Position = ateroidPos;
         _sizeCoef = MyExtensions.Random(1f - SIZE_DELTA, 1f + SIZE_DELTA);
         _curFriction = friction * (_sizeCoef / 2f);
@@ -35,6 +38,7 @@ public class AIAsteroidPredata
 
     public void Death()
     {
+        IsDead = true;
         OnMove = null;
         OnDeath?.Invoke();
 
